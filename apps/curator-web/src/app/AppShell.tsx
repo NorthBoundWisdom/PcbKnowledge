@@ -9,6 +9,7 @@ import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import WorkHistoryOutlinedIcon from "@mui/icons-material/WorkHistoryOutlined";
@@ -34,6 +35,8 @@ import {
 import type { ElementType } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
+import type { BrowserCapability } from "../auth/auth-types";
+import { useAuthentication } from "../auth/use-authentication";
 import { useShellStore } from "../state/shell-store";
 import { useRuntimeConfig } from "./use-runtime-config";
 
@@ -41,6 +44,7 @@ const expandedWidth = 224;
 const collapsedWidth = 64;
 
 interface NavigationItem {
+  capability: BrowserCapability;
   icon: ElementType;
   label: string;
   to: string;
@@ -55,42 +59,48 @@ const navigationGroups: readonly NavigationGroup[] = [
   {
     label: "Operate",
     items: [
-      { icon: DashboardOutlinedIcon, label: "Dashboard", to: "/dashboard" },
-      { icon: Inventory2OutlinedIcon, label: "Intake", to: "/intake" },
-      { icon: ArticleOutlinedIcon, label: "Documents", to: "/documents" },
-      { icon: AssignmentTurnedInOutlinedIcon, label: "Review", to: "/review" },
+      { capability: "workspace:access", icon: DashboardOutlinedIcon, label: "Dashboard", to: "/dashboard" },
+      { capability: "intake:prepare", icon: Inventory2OutlinedIcon, label: "Intake", to: "/intake" },
+      { capability: "evidence:read", icon: ArticleOutlinedIcon, label: "Documents", to: "/documents" },
+      { capability: "review:participate", icon: AssignmentTurnedInOutlinedIcon, label: "Review", to: "/review" },
     ],
   },
   {
     label: "Curate",
     items: [
-      { icon: AccountTreeOutlinedIcon, label: "Entities", to: "/entities" },
-      { icon: MenuBookOutlinedIcon, label: "Knowledge", to: "/knowledge" },
-      { icon: PlagiarismOutlinedIcon, label: "Search", to: "/search" },
+      { capability: "evidence:read", icon: AccountTreeOutlinedIcon, label: "Entities", to: "/entities" },
+      { capability: "evidence:read", icon: MenuBookOutlinedIcon, label: "Knowledge", to: "/knowledge" },
+      { capability: "evidence:read", icon: PlagiarismOutlinedIcon, label: "Search", to: "/search" },
     ],
   },
   {
     label: "Assure",
     items: [
-      { icon: FactCheckOutlinedIcon, label: "Evals", to: "/evals" },
-      { icon: HistoryOutlinedIcon, label: "Audit", to: "/audit" },
+      { capability: "evaluation:read", icon: FactCheckOutlinedIcon, label: "Evals", to: "/evals" },
+      { capability: "audit:read", icon: HistoryOutlinedIcon, label: "Audit", to: "/audit" },
     ],
   },
   {
     label: "Control",
     items: [
-      { icon: AdminPanelSettingsOutlinedIcon, label: "Admin", to: "/admin" },
-      { icon: WorkHistoryOutlinedIcon, label: "Jobs", to: "/jobs" },
+      { capability: "admin:operate", icon: AdminPanelSettingsOutlinedIcon, label: "Admin", to: "/admin" },
+      { capability: "admin:operate", icon: WorkHistoryOutlinedIcon, label: "Jobs", to: "/jobs" },
     ],
   },
 ];
 
 function Navigation({ collapsed }: { collapsed: boolean }) {
+  const auth = useAuthentication();
   const location = useLocation();
 
   return (
     <Box component="nav" sx={{ flex: 1, overflowY: "auto", px: 1, py: 1.5 }}>
-      {navigationGroups.map((group, groupIndex) => (
+      {navigationGroups.map((group, groupIndex) => {
+        const visibleItems = group.items.filter((item) => auth.can(item.capability));
+        if (visibleItems.length === 0) {
+          return null;
+        }
+        return (
         <Box key={group.label} sx={{ mb: 1.5 }}>
           {!collapsed && (
             <Typography color="text.secondary" sx={{ px: 1.5, py: 0.5 }} variant="overline">
@@ -98,7 +108,7 @@ function Navigation({ collapsed }: { collapsed: boolean }) {
             </Typography>
           )}
           <List dense disablePadding>
-            {group.items.map((item) => {
+            {visibleItems.map((item) => {
               const selected =
                 location.pathname === item.to || location.pathname.startsWith(`${item.to}/`);
               const Icon = item.icon;
@@ -128,16 +138,22 @@ function Navigation({ collapsed }: { collapsed: boolean }) {
           </List>
           {groupIndex < navigationGroups.length - 1 && collapsed && <Divider sx={{ my: 1.5 }} />}
         </Box>
-      ))}
+        );
+      })}
     </Box>
   );
 }
 
 export function AppShell() {
+  const auth = useAuthentication();
   const config = useRuntimeConfig();
   const navCollapsed = useShellStore((state) => state.navCollapsed);
   const toggleNav = useShellStore((state) => state.toggleNav);
   const drawerWidth = navCollapsed ? collapsedWidth : expandedWidth;
+  if (auth.session === undefined) {
+    return null;
+  }
+  const avatarLabel = auth.session.displayName.slice(0, 2).toUpperCase();
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh" }}>
@@ -171,9 +187,16 @@ export function AppShell() {
             sx={{ ml: "auto", width: 320 }}
           />
           <Chip color="primary" label={config.deploymentLabel} size="small" variant="outlined" />
-          <Avatar aria-label="Signed-out user placeholder" sx={{ bgcolor: "text.primary", fontSize: 12, height: 30, width: 30 }}>
-            M0
+          <Tooltip title={`Signed in as ${auth.session.displayName}`}>
+            <Avatar aria-label={`Signed in as ${auth.session.displayName}`} sx={{ bgcolor: "text.primary", fontSize: 12, height: 30, width: 30 }}>
+              {avatarLabel}
           </Avatar>
+          </Tooltip>
+          <Tooltip title="Sign out">
+            <IconButton aria-label="Sign out" onClick={() => void auth.signOut()} size="small">
+              <LogoutRoundedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
 

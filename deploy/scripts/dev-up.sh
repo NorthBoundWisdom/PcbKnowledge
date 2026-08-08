@@ -14,11 +14,14 @@ docker compose version >/dev/null
 cd "$repo_root"
 
 docker compose up --detach --wait postgres seaweedfs
-docker compose up --detach keycloak otel-collector prometheus grafana
-docker compose build api worker web migrate
+docker compose up --detach --wait keycloak
+docker compose run --rm keycloak-reconcile
+docker compose up --detach otel-collector prometheus grafana
+docker compose build api worker web migrate storage-init
 docker compose run --rm migrate
-docker compose run --rm worker
-docker compose up --detach --wait api web caddy
+docker compose run --rm postgres-reconcile
+docker compose run --rm storage-init
+docker compose up --detach --wait api worker web caddy
 
 docker compose ps
 echo "PcbKnowledge is available at http://localhost:${PCBKNOWLEDGE_HTTP_PORT:-8080}"

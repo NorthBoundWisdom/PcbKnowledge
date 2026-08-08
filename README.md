@@ -4,9 +4,9 @@ PcbKnowledge is an evidence-first engineering knowledge platform for PCB softwar
 
 ## Current state
 
-The repository is implementing the first MVP. The current executable baseline is a modular FastAPI application, a PostgreSQL-backed worker health boundary, a React curator shell, a committed OpenAPI artifact, and a Docker Compose development stack. Domain workflows beyond checked-in code and tests remain targets; do not infer production readiness from the architecture documents.
+The repository now has an executable M1 platform baseline: a modular FastAPI application with fail-closed PostgreSQL, OIDC, and private object-store readiness; bounded PostgreSQL job/outbox and storage primitives; a durable staging-cleanup worker; an OIDC Authorization Code + PKCE curator shell backed by the trusted `/session` projection; a committed OpenAPI artifact; and a Docker Compose development stack with Keycloak and baseline observability. This substrate is not the later document intake, extraction, review, publication, or retrieval workflow, and it is not production-ready.
 
-The MVP is intentionally limited to an evidence-first path: immutable source bytes, document revisions, typed facts, two-role review, exact/FTS retrieval, audit, and repeatable evaluation. Vector retrieval, LLM extraction, MCP, KnowledgeSnapshot pinning, and PCB mutation are not MVP capabilities.
+The intended first-MVP domain scope remains an evidence-first path: immutable source bytes, document revisions, typed facts, two-role review, exact/FTS retrieval, audit, and repeatable evaluation. Those domain workflows are targets until their executable code and verification land. Vector retrieval, LLM extraction, MCP, KnowledgeSnapshot pinning, and PCB mutation are not MVP capabilities.
 
 Authoritative project documents:
 
@@ -47,6 +47,7 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm test:e2e
 ```
 
 Regenerate the canonical OpenAPI artifact and its browser client after changing
@@ -62,13 +63,23 @@ pnpm generate:api
 The browser transport is created only through the generated OpenAPI boundary;
 route components do not maintain handwritten wire DTOs or call `fetch` directly.
 
+`uv run pytest` is useful for a source-tree run, but PostgreSQL- and
+SeaweedFS-gated tests can report skips when their explicit disposable-service
+configuration is absent. It is therefore not, by itself, a zero-skip
+integration receipt. The canonical M1 integration entry is the
+[`M1 PostgreSQL and SeaweedFS integration` CI job](.github/workflows/ci.yml),
+which provisions real disposable services, applies migrations, exercises the
+separate application and worker database roles plus the cleanup worker, and
+fails if either JUnit receipt contains a skipped case. The job runs on every
+push to `main` and every pull request.
+
 Start the local stack from an empty Docker volume set:
 
 ```bash
 ./deploy/scripts/dev-up.sh
 ```
 
-The script generates untracked local secrets, validates the resolved Compose model, builds API/worker/web images, applies migrations, and starts the stack. It never substitutes anonymous access or a known default password. See [local development](docs/operations/local-development.md) and [configuration](docs/operations/configuration.md).
+The script generates untracked runtime credentials and two rendered Keycloak JSON files, validates the resolved Compose model, builds API/worker/web images, applies migrations before reconciling runtime database roles, reconciles identity configuration, initializes object-store buckets, and starts the stack. It never substitutes anonymous access or a known default password. See [local development](docs/operations/local-development.md) and [configuration](docs/operations/configuration.md).
 
 Useful endpoints after startup:
 

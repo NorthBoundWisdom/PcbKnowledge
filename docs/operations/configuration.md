@@ -4,21 +4,28 @@ Configuration is validated at process startup. There are no implicit production 
 
 ## Local secret files
 
-Compose mounts these untracked files as read-only Docker secrets:
+Compose mounts these untracked credential files as read-only Docker secrets:
 
 | File | Consumer |
 |---|---|
-| `deploy/secrets/postgres_password` | PostgreSQL, API, worker |
+| `deploy/secrets/postgres_password` | PostgreSQL bootstrap administrator, migrations, runtime-role reconciliation |
+| `deploy/secrets/application_db_password` | API and object-store initializer as the constrained `pcbknowledge_app` role |
+| `deploy/secrets/worker_db_password` | Durable cleanup worker as the constrained `pcbknowledge_worker` role |
 | `deploy/secrets/keycloak_db_password` | PostgreSQL bootstrap, Keycloak |
 | `deploy/secrets/keycloak_admin_password` | Keycloak bootstrap administrator |
-| `deploy/secrets/seaweedfs_access_key` | SeaweedFS, API, worker |
-| `deploy/secrets/seaweedfs_secret_key` | SeaweedFS, API, worker |
+| `deploy/secrets/agent_service_client_secret` | Rendered confidential Keycloak service client and reconciliation |
+| `deploy/secrets/seaweedfs_access_key` / `seaweedfs_secret_key` | SeaweedFS and API; permanent read plus staging read/write only |
+| `deploy/secrets/seaweedfs_admin_access_key` / `seaweedfs_admin_secret_key` | SeaweedFS and the bounded bucket initializer only |
+| `deploy/secrets/seaweedfs_worker_access_key` / `seaweedfs_worker_secret_key` | SeaweedFS and durable cleanup worker; staging bucket write/delete only |
 | `deploy/secrets/grafana_admin_password` | Grafana |
 
-`bootstrap-secrets.sh` creates values only when files do not exist, refuses empty
-files, and enforces owner-only permissions. It does not rotate secrets. Rotation
-must coordinate dependent services and verify access before retiring the prior
-value.
+`bootstrap-secrets.sh` creates the credential set above only when files do not
+exist, refuses empty files, and enforces owner-only permissions. It also derives
+`keycloak-realm.json` and `keycloak-agent-client.json` from committed templates;
+both rendered files remain untracked and mode `0600`. Automation should verify
+the required filenames rather than depend on a hard-coded total. The script does
+not rotate secrets. Rotation must coordinate dependent services and verify
+access before retiring the prior value.
 
 ## Non-secret development settings
 

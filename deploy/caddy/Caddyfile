@@ -6,11 +6,19 @@
 :8080 {
 	encode zstd gzip
 
+	@oidc_callbacks path /auth/callback /auth/logout/callback
+	log_skip @oidc_callbacks
+
+	@internal_metrics path /metrics /api/v1/metrics
+	handle @internal_metrics {
+		respond "not found" 404
+	}
+
 	handle_path /api/v1/* {
 		reverse_proxy api:8000
 	}
 
-	@operations path /healthz /readyz /metrics
+	@operations path /healthz /readyz
 	handle @operations {
 		reverse_proxy api:8000
 	}

@@ -38,6 +38,7 @@ class ProblemException(Exception):
         detail: str,
         type_uri: str = "about:blank",
         extensions: Mapping[str, Any] | None = None,
+        headers: Mapping[str, str] | None = None,
     ) -> None:
         super().__init__(detail)
         if status < 400 or status > 599:
@@ -52,6 +53,16 @@ class ProblemException(Exception):
         self.detail = detail
         self.type_uri = type_uri
         self.extensions = supplied_extensions
+        self.headers = _validated_headers(headers)
+
+
+def _validated_headers(headers: Mapping[str, str] | None) -> dict[str, str]:
+    validated: dict[str, str] = {}
+    for name, value in (headers or {}).items():
+        if not name or "\r" in name or "\n" in name or "\r" in value or "\n" in value:
+            raise ValueError("problem response headers are invalid")
+        validated[name] = value
+    return validated
 
 
 def _response(
@@ -62,6 +73,7 @@ def _response(
     detail: str | None,
     type_uri: str = "about:blank",
     extensions: Mapping[str, Any] | None = None,
+    headers: Mapping[str, str] | None = None,
 ) -> JSONResponse:
     problem = ProblemDetail(
         type=type_uri,
@@ -72,11 +84,13 @@ def _response(
     )
     payload = problem.model_dump(mode="json", exclude_none=True)
     payload.update(extensions or {})
+    response_headers = {"Cache-Control": "no-store"}
+    response_headers.update(_validated_headers(headers))
     return JSONResponse(
         status_code=status,
         content=payload,
         media_type="application/problem+json",
-        headers={"Cache-Control": "no-store"},
+        headers=response_headers,
     )
 
 
@@ -89,6 +103,7 @@ async def _problem_exception_handler(request: Request, exc: Exception) -> JSONRe
         detail=exc.detail,
         type_uri=exc.type_uri,
         extensions=exc.extensions,
+        headers=exc.headers,
     )
 
 
@@ -100,6 +115,7 @@ async def _http_exception_handler(request: Request, exc: Exception) -> JSONRespo
         status=exc.status_code,
         title="HTTP request failed",
         detail=detail,
+        headers=exc.headers,
     )
 
 

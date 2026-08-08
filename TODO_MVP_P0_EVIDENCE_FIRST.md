@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge 第一轮 MVP：Evidence-first 纵向闭环
 
-> 状态：`IN_PROGRESS` — M0 已于 2026-08-08 完成，M1 尚未开始
+> 状态：`IN_PROGRESS` — M0 已于 2026-08-08 完成，M1 已于 2026-08-09 完成，M2 尚未开始
 > 创建日期：2026-08-08  
 > 目标阶段：第一轮 MVP，属于正式架构 P0 的最小可运营子集  
 > 执行入口：本文件  
@@ -196,27 +196,27 @@ M0 completion gate：
 
 目标：先建立所有后续领域功能共用的可靠边界。
 
-- [ ] Compose 启动 PostgreSQL、SeaweedFS、Keycloak、Caddy、API、Worker、Web 和 OTel Collector；
-- [ ] 建立 UUIDv7、UTC `timestamptz`、RFC 3339 和统一错误类型；
-- [ ] 建立 organization/project/external subject mapping；
-- [ ] 实现 OIDC Authorization Code + PKCE 和 service account 校验；
-- [ ] 实现 `DATA_CURATOR`、`DOMAIN_REVIEWER`、`KNOWLEDGE_ADMIN`、`AUDITOR`、`AGENT_SERVICE`；
-- [ ] 建立 RBAC + organization/project/access-scope 应用层授权；
-- [ ] 建立 PostgreSQL RLS 纵深防御和跨项目 negative tests；
-- [ ] 建立 source organization、license policy、access scope；
-- [ ] 建立 append-only `audit_event`，应用角色无 UPDATE/DELETE 权限；
-- [ ] 建立 `knowledge_job` 的 lease、`FOR UPDATE SKIP LOCKED`、幂等、重试和 dead letter；
-- [ ] 建立 transactional outbox；
-- [ ] 建立对象存储 adapter、content-addressed key 和预签名上传；
-- [ ] 接入结构化日志、trace ID 和基础指标；日志禁止包含 token、原文全文和机密 payload。
+- [x] Compose 启动 PostgreSQL、SeaweedFS、Keycloak、Caddy、API、Worker、Web 和 OTel Collector；
+- [x] 建立 UUIDv7、UTC `timestamptz`、RFC 3339 和统一错误类型；
+- [x] 建立 organization/project/external subject mapping；
+- [x] 实现 OIDC Authorization Code + PKCE 和 service account 校验；
+- [x] 实现 `DATA_CURATOR`、`DOMAIN_REVIEWER`、`KNOWLEDGE_ADMIN`、`AUDITOR`、`AGENT_SERVICE`；
+- [x] 建立 RBAC + organization/project/access-scope 应用层授权；
+- [x] 建立 PostgreSQL RLS 纵深防御和跨项目 negative tests；
+- [x] 建立 source organization、license policy、access scope；
+- [x] 建立 append-only `audit_event`，应用角色无 UPDATE/DELETE 权限；
+- [x] 建立 `knowledge_job` 的 lease、`FOR UPDATE SKIP LOCKED`、幂等、重试和 dead letter；
+- [x] 建立 transactional outbox；
+- [x] 建立对象存储 adapter、content-addressed key 和预签名上传；
+- [x] 接入结构化日志、trace ID 和基础指标；日志禁止包含 token、原文全文和机密 payload。
 
 M1 completion gate：
 
-- [ ] 两个 project 的用户不能互查对象、原文、审计或 job；
-- [ ] service account 与浏览器用户权限边界不同且可测试；
-- [ ] job lease 超时可恢复，同一 idempotency key 不重复产生领域副作用；
-- [ ] 审计写失败会使受审计业务事务失败；
-- [ ] 对象读取必须经过授权和审计，不能通过 object key 绕过 API。
+- [x] 两个 project 的用户不能互查对象、原文、审计或 job；
+- [x] service account 与浏览器用户权限边界不同且可测试；
+- [x] job lease 超时可恢复，同一 idempotency key 不重复产生领域副作用；
+- [x] 审计写失败会使受审计业务事务失败；
+- [x] 对象读取必须经过授权和审计，不能通过 object key 绕过 API。
 
 ### M2 — Intake 与不可变 Evidence Vault
 
@@ -476,6 +476,7 @@ MVP 不要求完整视觉打磨，但必须满足 1440 × 900、键盘可达、�
 | Published 事实后来发现错误 | withdraw 或新 version supersede，保留历史和引用 |
 | 与 PcbCore Evidence 概念重名 | 文献 anchor 与 domain validation receipt 分层，adapter 显式转换 |
 | MVP 被误当生产 Agent 知识快照 | KnowledgeSnapshot 未实现前明确禁止正式长任务 pinning 声明 |
+| cleanup scope 超过单轮上限时固定排序可能饥饿后序租户 | M1 记录为非阻断扩展债务；生产规模前改为按最老待办排序或持久游标并增加公平性回归 |
 
 ---
 
@@ -549,4 +550,65 @@ case 数：9 services；4 API health paths；1 migration head；2 fail-closed pr
 首个失败：首次发现 PostgreSQL 18 旧数据挂载路径；随后发现 BusyBox grep 长参数和
       Prometheus false flag；均已修正，最终从新建 volume 重跑通过
 下一步：M0 提交/推送后进入 M1 平台脊柱
+
+日期：2026-08-09
+里程碑/任务：M1 后端静态门禁、hermetic 回归与合同漂移
+命令：ruff format --check .；ruff check .；mypy src apps tests；排除明确外部依赖用例的 pytest；
+      pcbknowledge-openapi --check；git diff --check
+退出码：全部 0
+case 数：112 pytest，0 skipped；mypy 检查 102 个 source files；1 个 OpenAPI drift check
+耗时：hermetic pytest 0.57s；其余命令未单独记录总耗时
+结果：通过；队列 metadata 拒绝 float 与敏感 payload；job/outbox 在 claim、effect、complete、publish
+      边界重算 payload digest，损坏载荷 fail closed；OpenAPI 与生成 client 一致。
+首个失败：最终稳定门禁无失败
+下一步：以真实 PostgreSQL 18、实际 runtime login 和 SeaweedFS 3.85 验证权限与副作用边界
+
+日期：2026-08-09
+里程碑/任务：M1 PostgreSQL、runtime role、outbox worker 与对象存储真实依赖验收
+命令：CI 同款 PostgreSQL integration suites；分别以 pcbknowledge_app / pcbknowledge_worker LOGIN
+      运行 test_database_contract_postgres.py；运行 storage cleanup worker PostgreSQL + SeaweedFS E2E；
+      运行 test_storage_seaweedfs.py；执行 fresh 0001→0008、0008→0007→0008 和 legacy 0006→0008
+退出码：全部 0；带 verified receipt 的 0008→0007 downgrade 按合同返回 SQLSTATE 23514
+case 数：17 jobs/outbox/security PostgreSQL + 4 cleanup E2E + 2 app contract + 2 worker contract
+      + 1 SeaweedFS；全部 0 skipped
+耗时：cleanup E2E 4 cases 为 0.61s；其余命令未单独记录总耗时
+结果：通过；旧 receipt 的 lease attempt/owner 保持 UNKNOWN，不猜历史；新 receipt 必须绑定仍有效的
+      worker lease。应用与 worker 角色无 owner/RLS bypass/membership；worker 在同 scope 也看不到或更新不了
+      非 cleanup outbox。staging 清理、失败重试、过期 sweep 和跨 project negative path 均由真实依赖覆盖。
+首个失败：真实 PG 首轮有 2 个测试 SQL JSON literal 被 SQLAlchemy 当 bind 解析；改为参数化 JSONB 后
+      17/17 通过，生产逻辑与数据库合同未放宽
+下一步：验证浏览器、Keycloak、可观测性和空卷部署
+
+日期：2026-08-09
+里程碑/任务：M1 Curator Web、OIDC bootstrap 与生成 client
+命令：Node 24 / pnpm 11 下运行 pnpm check:generated；pnpm lint；pnpm typecheck；pnpm test；
+      pnpm build；pnpm test:e2e
+退出码：全部 0
+case 数：42 Vitest + 3 Playwright
+耗时：本轮未单独记录总耗时
+结果：通过；生成合同 SHA-256 为
+      980e5dde0bb05251ade88eba24d2b33ee632c934eaed523bc4c25e898c9560be。
+      浏览器使用 Authorization Code + PKCE，`/session` 通过同一 typed Bearer middleware 加载；
+      capability 仅来自数据库可信 membership/grant。Vite 仍报告约 765 KB 首包警告，列为非阻断性能债务。
+首个失败：最终 Node 24 工具链门禁无失败；宿主默认 Node 20 不作为有效验证环境
+下一步：从独立空 volume 执行完整单命令启动
+
+日期：2026-08-09
+里程碑/任务：M1 独立空卷 Compose、Keycloak、可观测性与安全路由验收
+命令：以 COMPOSE_PROJECT_NAME=pcbknowledge-m1-acceptance 和独立端口运行 ./deploy/scripts/dev-up.sh；
+      curl health/readiness/metrics/Keycloak discovery；Prometheus targets API；数据库 catalog receipt；
+      test-reconcile-realm.sh；smoke-keycloak.sh
+退出码：最终全部 0
+case 数：10 个长期服务；7 个显式 Docker health checks；4 个 readiness dependency checks；
+      5 个 Prometheus targets；13 个 FORCE RLS relations；3 个 queue integrity triggers；
+      1 次 realm drift convergence + second-run idempotency；1 组 PKCE/service-token claims smoke
+耗时：未单独计时（包含当前代码的 API/Worker/Web 镜像构建）
+结果：全新 PostgreSQL 从 0001 连续升级至 0008；API、Worker、Web、Caddy、PostgreSQL、SeaweedFS、
+      Keycloak healthy，OTel/Prometheus/Grafana running，Prometheus 全 targets UP。`/healthz` 与
+      `/readyz` 为 200；公网 `/metrics`、`/api/v1/metrics` 为 404，API 内部 `/metrics` 为 200；
+      runtime roles 安全且双向 membership 为 0；Keycloak realm 漂移可收敛，service token 只有
+      AGENT_SERVICE、SERVICE_ACCOUNT、正确 issuer/audience/azp。
+首个失败：初次额外运行 Keycloak 漂移测试时漏带隔离端口环境，随后 smoke curl 退出 7；恢复同一
+      隔离端口并重跑后两项均通过。基础空卷 dev-up 本身无失败。
+下一步：提交并推送 M1；M2 尚未开始，不把 intake、PDF parsing、知识审核或检索算作当前能力
 ```

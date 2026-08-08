@@ -15,13 +15,18 @@ def test_openapi_render_is_deterministic() -> None:
     assert render_openapi(app).endswith("\n")
 
 
-def test_openapi_declares_31_and_only_health_operations() -> None:
+def test_openapi_declares_31_health_and_authenticated_session_operations() -> None:
     document = app.openapi()
 
     assert document["openapi"].startswith("3.1.")
     assert document["servers"] == [
         {"url": "/api/v1", "description": "Versioned API gateway"},
     ]
-    assert set(document["paths"]) == {"/healthz", "/readyz"}
+    assert set(document["paths"]) == {"/healthz", "/readyz", "/session"}
     readiness_error = document["paths"]["/readyz"]["get"]["responses"]["503"]
     assert set(readiness_error["content"]) == {"application/problem+json"}
+    session_operation = document["paths"]["/session"]["get"]
+    assert session_operation["security"] == [{"HTTPBearer": []}]
+    assert session_operation["responses"]["200"]["content"]["application/json"]["schema"] == {
+        "$ref": "#/components/schemas/SessionResponse"
+    }

@@ -21,6 +21,12 @@ Caddy is the public ingress. Keycloak is the identity authority. The API is the 
 | Parser exploit | MIME/magic/size checks; no-network constrained parser; read-only input; bounded CPU/memory/time |
 | License-policy bypass | Policy check before parse/index/model/raw access; default licensed material blocked for AI |
 
+Permanent-object write authority is not present in the long-lived API or
+cleanup worker. The API can sign staging uploads and audited permanent reads;
+the cleanup worker can delete staging keys only. The M2 verifier/promotion
+boundary must be isolated, hash-derived, create-only in normal operation, and
+covered by real-backend canonical-preservation tests before intake is enabled.
+
 ## Security verification gate
 
 Required tests cover wrong issuer/audience/expiry, browser versus service-account permissions, two-project non-interference, object access without API authorization, restricted-license actions, audit atomicity, concurrent review, wrong entity/revision, malicious PDF actions/attachments, and log redaction. A skip or mock-only result is not a production-path pass.

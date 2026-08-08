@@ -5,47 +5,115 @@ import {
   type RouteObject,
 } from "react-router-dom";
 
+import { AuthenticationBoundary } from "../auth/AuthenticationBoundary";
+import { RequireCapability } from "../auth/RequireCapability";
+import type { BrowserCapability } from "../auth/auth-types";
 import { FoundationPage } from "../routes/FoundationPage";
 import { NotFoundPage } from "../routes/NotFoundPage";
+import { AuthCallbackPage } from "../routes/auth/AuthCallbackPage";
+import { AuthErrorPage } from "../routes/auth/AuthErrorPage";
+import { LogoutCallbackPage } from "../routes/auth/LogoutCallbackPage";
+import { SessionExpiredPage } from "../routes/auth/SessionExpiredPage";
 import { foundationRoutes } from "../routes/route-definitions";
 import { AppShell } from "./AppShell";
 
+function protectedFoundationPage(
+  definition: (typeof foundationRoutes)[keyof typeof foundationRoutes],
+  capability: BrowserCapability,
+) {
+  return (
+    <RequireCapability capability={capability}>
+      <FoundationPage definition={definition} />
+    </RequireCapability>
+  );
+}
+
 export const applicationRouteObjects: RouteObject[] = [
+  { path: "/auth/callback", element: <AuthCallbackPage /> },
+  { path: "/auth/logout/callback", element: <LogoutCallbackPage /> },
+  { path: "/auth/error", element: <AuthErrorPage /> },
+  { path: "/auth/session-expired", element: <SessionExpiredPage /> },
   {
     path: "/",
-    element: <AppShell />,
+    element: (
+      <AuthenticationBoundary>
+        <AppShell />
+      </AuthenticationBoundary>
+    ),
     children: [
       { index: true, element: <Navigate replace to="/dashboard" /> },
-      { path: "dashboard", element: <FoundationPage definition={foundationRoutes.dashboard} /> },
-      { path: "intake", element: <FoundationPage definition={foundationRoutes.intake} /> },
-      { path: "intake/new", element: <FoundationPage definition={foundationRoutes.intakeNew} /> },
-      { path: "documents", element: <FoundationPage definition={foundationRoutes.documents} /> },
+      {
+        path: "dashboard",
+        element: protectedFoundationPage(foundationRoutes.dashboard, "workspace:access"),
+      },
+      {
+        path: "intake",
+        element: protectedFoundationPage(foundationRoutes.intake, "intake:prepare"),
+      },
+      {
+        path: "intake/new",
+        element: protectedFoundationPage(foundationRoutes.intakeNew, "intake:prepare"),
+      },
+      {
+        path: "documents",
+        element: protectedFoundationPage(foundationRoutes.documents, "evidence:read"),
+      },
       {
         path: "documents/:revisionId",
-        element: <FoundationPage definition={foundationRoutes.documentDetail} />,
+        element: protectedFoundationPage(foundationRoutes.documentDetail, "evidence:read"),
       },
-      { path: "review", element: <FoundationPage definition={foundationRoutes.review} /> },
+      {
+        path: "review",
+        element: protectedFoundationPage(foundationRoutes.review, "review:participate"),
+      },
       {
         path: "review/:taskId",
-        element: <FoundationPage definition={foundationRoutes.reviewWorkbench} />,
+        element: protectedFoundationPage(foundationRoutes.reviewWorkbench, "review:participate"),
       },
-      { path: "entities", element: <FoundationPage definition={foundationRoutes.entities} /> },
+      {
+        path: "entities",
+        element: protectedFoundationPage(foundationRoutes.entities, "evidence:read"),
+      },
       {
         path: "entities/resolve",
-        element: <FoundationPage definition={foundationRoutes.entityResolver} />,
+        element: protectedFoundationPage(foundationRoutes.entityResolver, "review:participate"),
       },
-      { path: "knowledge", element: <FoundationPage definition={foundationRoutes.knowledge} /> },
+      {
+        path: "knowledge",
+        element: protectedFoundationPage(foundationRoutes.knowledge, "evidence:read"),
+      },
       {
         path: "knowledge/:recordId",
-        element: <FoundationPage definition={foundationRoutes.knowledgeDetail} />,
+        element: protectedFoundationPage(foundationRoutes.knowledgeDetail, "evidence:read"),
       },
-      { path: "search", element: <FoundationPage definition={foundationRoutes.search} /> },
-      { path: "evals", element: <FoundationPage definition={foundationRoutes.evals} /> },
-      { path: "audit", element: <FoundationPage definition={foundationRoutes.audit} /> },
-      { path: "admin", element: <FoundationPage definition={foundationRoutes.admin} /> },
-      { path: "admin/sources", element: <FoundationPage definition={foundationRoutes.sources} /> },
-      { path: "admin/jobs", element: <FoundationPage definition={foundationRoutes.jobs} /> },
-      { path: "jobs", element: <FoundationPage definition={foundationRoutes.jobs} /> },
+      {
+        path: "search",
+        element: protectedFoundationPage(foundationRoutes.search, "evidence:read"),
+      },
+      {
+        path: "evals",
+        element: protectedFoundationPage(foundationRoutes.evals, "evaluation:read"),
+      },
+      {
+        path: "audit",
+        element: protectedFoundationPage(foundationRoutes.audit, "audit:read"),
+      },
+      {
+        path: "admin",
+        element: protectedFoundationPage(foundationRoutes.admin, "admin:operate"),
+      },
+      {
+        path: "admin/sources",
+        element: protectedFoundationPage(foundationRoutes.sources, "admin:operate"),
+      },
+      {
+        path: "admin/jobs",
+        element: protectedFoundationPage(foundationRoutes.jobs, "admin:operate"),
+      },
+      {
+        path: "jobs",
+        element: protectedFoundationPage(foundationRoutes.jobs, "admin:operate"),
+      },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

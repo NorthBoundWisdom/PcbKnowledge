@@ -1,5 +1,6 @@
 from typing import Literal
 
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from pcbknowledge.api import create_app
@@ -64,3 +65,47 @@ def test_framework_404_is_also_problem_details() -> None:
     assert response.status_code == 404
     assert response.headers["content-type"] == "application/problem+json"
     assert response.json()["instance"] == "/not-an-endpoint"
+
+
+def test_metrics_are_available_but_not_part_of_public_openapi() -> None:
+    with TestClient(create_app(readiness_probe=StubProbe(ready=True))) as client:
+        response = client.get("/metrics")
+        openapi = client.get("/openapi.json").json()
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/plain")
+    assert b"pcbknowledge_http_requests_total" in response.content
+    assert "/metrics" not in openapi["paths"]
+
+
+def test_observability_reuses_only_safe_request_ids() -> None:
+    application = create_app(
+        readiness_probe=StubProbe(ready=True),
+        enable_observability=True,
+    )
+    with TestClient(application) as client:
+        accepted = client.get("/healthz", headers={"x-request-id": "trusted-request.1"})
+        replaced = client.get("/healthz", headers={"x-request-id": "unsafe request value"})
+
+    assert accepted.headers["x-request-id"] == "trusted-request.1"
+    assert replaced.headers["x-request-id"] != "unsafe request value"
+    assert len(replaced.headers["x-request-id"]) == 32
+
+
+def test_framework_authentication_header_survives_problem_conversion() -> None:
+    application = create_app(readiness_probe=StubProbe(ready=True))
+
+    @application.get("/protected-for-test")
+    async def protected_for_test() -> None:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication is required.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    with TestClient(application) as client:
+        response = client.get("/protected-for-test")
+
+    assert response.status_code == 401
+    assert response.headers["www-authenticate"] == "Bearer"
+    assert response.headers["cache-control"] == "no-store"

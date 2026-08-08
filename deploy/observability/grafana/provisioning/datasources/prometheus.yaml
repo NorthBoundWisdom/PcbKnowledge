@@ -2,6 +2,7 @@ apiVersion: 1
 
 deleteDatasources:
   - name: Prometheus
+    uid: prometheus
     orgId: 1
 
 datasources:

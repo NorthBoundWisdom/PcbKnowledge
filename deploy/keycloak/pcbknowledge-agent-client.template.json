@@ -1,0 +1,60 @@
+{
+  "clientId": "pcbknowledge-agent-service",
+  "name": "PcbKnowledge Agent Service",
+  "enabled": true,
+  "bearerOnly": false,
+  "publicClient": false,
+  "clientAuthenticatorType": "client-secret",
+  "secret": "__PCBKNOWLEDGE_AGENT_SERVICE_SECRET__",
+  "standardFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "implicitFlowEnabled": false,
+  "serviceAccountsEnabled": true,
+  "fullScopeAllowed": false,
+  "protocol": "openid-connect",
+  "defaultClientScopes": ["roles"],
+  "protocolMappers": [
+    {
+      "name": "pcbknowledge-service-subject-kind",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-hardcoded-claim-mapper",
+      "consentRequired": false,
+      "config": {
+        "claim.name": "pcbknowledge_subject_kind",
+        "claim.value": "SERVICE_ACCOUNT",
+        "jsonType.label": "String",
+        "access.token.claim": "true",
+        "id.token.claim": "false",
+        "userinfo.token.claim": "false",
+        "introspection.token.claim": "true"
+      }
+    },
+    {
+      "name": "pcbknowledge-service-realm-roles",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-usermodel-realm-role-mapper",
+      "consentRequired": false,
+      "config": {
+        "multivalued": "true",
+        "claim.name": "realm_access.roles",
+        "jsonType.label": "String",
+        "access.token.claim": "true",
+        "id.token.claim": "false",
+        "userinfo.token.claim": "false",
+        "introspection.token.claim": "true"
+      }
+    },
+    {
+      "name": "pcbknowledge-api-audience",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "consentRequired": false,
+      "config": {
+        "included.client.audience": "pcbknowledge-api",
+        "id.token.claim": "false",
+        "access.token.claim": "true",
+        "introspection.token.claim": "true"
+      }
+    }
+  ]
+}

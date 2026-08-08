@@ -25,9 +25,16 @@ services:
   seaweedfs:
     image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.85}
     entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-seaweedfs.sh"]
+    environment:
+      PCBKNOWLEDGE_S3_BUCKET: pcbknowledge-assets
+      PCBKNOWLEDGE_S3_STAGING_BUCKET: pcbknowledge-staging
     secrets:
       - seaweedfs_access_key
       - seaweedfs_secret_key
+      - seaweedfs_admin_access_key
+      - seaweedfs_admin_secret_key
+      - seaweedfs_worker_access_key
+      - seaweedfs_worker_secret_key
     volumes:
       - seaweedfs_data:/data
       - ./deploy/seaweedfs/start-seaweedfs.sh:/opt/pcbknowledge/start-seaweedfs.sh:ro
@@ -40,6 +47,55 @@ services:
       retries: 30
       start_period: 10s
     restart: unless-stopped
+    networks: [backend]
+
+  postgres-reconcile:
+    profiles: [tools]
+    image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg18}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/reconcile-application-role.sh"]
+    secrets:
+      - postgres_password
+      - application_db_password
+      - worker_db_password
+    volumes:
+      - ./deploy/postgres/reconcile-application-role.sh:/opt/pcbknowledge/reconcile-application-role.sh:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    networks: [backend]
+
+  storage-init:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
+        UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
+    command: ["python", "-m", "pcbknowledge.storage_cli", "init"]
+    environment:
+      PCBKNOWLEDGE_ENVIRONMENT: local
+      PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-storage-init
+      PCBKNOWLEDGE_DATABASE_USERNAME: pcbknowledge_app
+      PCBKNOWLEDGE_S3_ENDPOINT_URL: http://seaweedfs:8333
+      PCBKNOWLEDGE_S3_PUBLIC_ENDPOINT_URL: http://localhost:${PCBKNOWLEDGE_S3_PORT:-8333}
+      PCBKNOWLEDGE_S3_BUCKET: pcbknowledge-assets
+      PCBKNOWLEDGE_S3_STAGING_BUCKET: pcbknowledge-staging
+      PCBKNOWLEDGE_S3_REGION: us-east-1
+      PCBKNOWLEDGE_S3_ACCESS_MODE: admin
+    secrets:
+      - application_db_password
+      - source: seaweedfs_admin_access_key
+        target: seaweedfs_access_key
+      - source: seaweedfs_admin_secret_key
+        target: seaweedfs_secret_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+    restart: "no"
     networks: [backend]
 
   keycloak:
@@ -63,13 +119,45 @@ services:
       - keycloak_admin_password
     volumes:
       - ./deploy/keycloak/start-keycloak.sh:/opt/pcbknowledge/start-keycloak.sh:ro
-      - ./deploy/keycloak/pcbknowledge-realm.json:/opt/keycloak/data/import/pcbknowledge-realm.json:ro
+      - ./deploy/secrets/keycloak-realm.json:/opt/keycloak/data/import/pcbknowledge-realm.json:ro
     ports:
       - "127.0.0.1:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}:8080"
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          bash -ec 'exec 3<>/dev/tcp/127.0.0.1/9000;
+          printf "GET /health/ready HTTP/1.0\r\n\r\n" >&3;
+          while IFS= read -r line <&3; do
+            case "$$line" in *\"status\"*UP*) exit 0;; esac;
+          done;
+          exit 1'
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
     restart: unless-stopped
+    networks: [backend]
+
+  keycloak-reconcile:
+    profiles: [tools]
+    image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/keycloak/reconcile-keycloak.sh"]
+    secrets:
+      - keycloak_admin_password
+      - source: keycloak_agent_client_config
+        target: keycloak-agent-client.json
+    volumes:
+      - ./deploy/keycloak/reconcile-keycloak.sh:/opt/pcbknowledge/keycloak/reconcile-keycloak.sh:ro
+      - ./deploy/keycloak/pcbknowledge-api-client.json:/opt/pcbknowledge/keycloak/pcbknowledge-api-client.json:ro
+      - ./deploy/keycloak/pcbknowledge-curator-client.json:/opt/pcbknowledge/keycloak/pcbknowledge-curator-client.json:ro
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    restart: "no"
     networks: [backend]
 
   api:
@@ -83,18 +171,31 @@ services:
     environment:
       PCBKNOWLEDGE_ENVIRONMENT: local
       PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-api
+      PCBKNOWLEDGE_DATABASE_USERNAME: pcbknowledge_app
+      PCBKNOWLEDGE_OIDC_ISSUER_URL: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}/realms/pcbknowledge
+      PCBKNOWLEDGE_OIDC_JWKS_URL: http://keycloak:8080/realms/pcbknowledge/protocol/openid-connect/certs
+      PCBKNOWLEDGE_OIDC_AUDIENCE: pcbknowledge-api
+      PCBKNOWLEDGE_OIDC_BROWSER_CLIENT_ID: pcbknowledge-curator-web
+      PCBKNOWLEDGE_OIDC_SERVICE_CLIENT_ID: pcbknowledge-agent-service
       PCBKNOWLEDGE_S3_ENDPOINT_URL: http://seaweedfs:8333
+      PCBKNOWLEDGE_S3_PUBLIC_ENDPOINT_URL: http://localhost:${PCBKNOWLEDGE_S3_PORT:-8333}
+      PCBKNOWLEDGE_S3_BUCKET: pcbknowledge-assets
+      PCBKNOWLEDGE_S3_STAGING_BUCKET: pcbknowledge-staging
+      PCBKNOWLEDGE_S3_REGION: us-east-1
+      PCBKNOWLEDGE_S3_ACCESS_MODE: api
       OTEL_SERVICE_NAME: pcbknowledge-api
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     secrets:
-      - postgres_password
+      - application_db_password
       - seaweedfs_access_key
       - seaweedfs_secret_key
     depends_on:
       postgres:
         condition: service_healthy
       seaweedfs:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
     healthcheck:
       test:
@@ -110,31 +211,51 @@ services:
     networks: [backend]
 
   worker:
-    profiles: [tools]
     build:
       context: .
       dockerfile: deploy/docker/backend.Dockerfile
       args:
         PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
         UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
-    command: ["python", "-m", "pcbknowledge.worker", "health-check"]
+    command: ["python", "-m", "pcbknowledge.worker", "serve"]
     environment:
       PCBKNOWLEDGE_ENVIRONMENT: local
       PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-worker
+      PCBKNOWLEDGE_DATABASE_USERNAME: pcbknowledge_worker
       PCBKNOWLEDGE_S3_ENDPOINT_URL: http://seaweedfs:8333
+      PCBKNOWLEDGE_S3_PUBLIC_ENDPOINT_URL: http://localhost:${PCBKNOWLEDGE_S3_PORT:-8333}
+      PCBKNOWLEDGE_S3_BUCKET: pcbknowledge-assets
+      PCBKNOWLEDGE_S3_STAGING_BUCKET: pcbknowledge-staging
+      PCBKNOWLEDGE_S3_REGION: us-east-1
+      PCBKNOWLEDGE_S3_ACCESS_MODE: worker
       OTEL_SERVICE_NAME: pcbknowledge-worker
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     secrets:
-      - postgres_password
-      - seaweedfs_access_key
-      - seaweedfs_secret_key
+      - worker_db_password
+      - source: seaweedfs_worker_access_key
+        target: seaweedfs_access_key
+      - source: seaweedfs_worker_secret_key
+        target: seaweedfs_secret_key
     depends_on:
       postgres:
         condition: service_healthy
       seaweedfs:
         condition: service_healthy
-    restart: "no"
+    healthcheck:
+      test:
+        - CMD
+        - /bin/sh
+        - /workspace/deploy/docker/backend-entrypoint.sh
+        - python
+        - -m
+        - pcbknowledge.worker
+        - health-check
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
     networks: [backend]
 
   migrate:
@@ -149,6 +270,8 @@ services:
     environment:
       PCBKNOWLEDGE_ENVIRONMENT: local
       PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-migrate
+      PCBKNOWLEDGE_DATABASE_ACCESS_MODE: migration
+      PCBKNOWLEDGE_DATABASE_USERNAME: pcbknowledge
     secrets:
       - postgres_password
       - seaweedfs_access_key
@@ -169,7 +292,7 @@ services:
         VITE_API_BASE_URL: /api/v1
         VITE_OIDC_ISSUER_URL: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}/realms/pcbknowledge
         VITE_OIDC_CLIENT_ID: pcbknowledge-curator-web
-        VITE_DEPLOYMENT_LABEL: Local M0
+        VITE_DEPLOYMENT_LABEL: Local M1
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz | grep -q '^ok$'"]
       interval: 10s
@@ -218,6 +341,7 @@ services:
       - --storage.tsdb.path=/prometheus
     volumes:
       - ./deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/observability/rules:/etc/prometheus/rules:ro
       - prometheus_data:/prometheus
     ports:
       - "127.0.0.1:${PCBKNOWLEDGE_PROMETHEUS_PORT:-9090}:9090"
@@ -234,11 +358,14 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      GF_SNAPSHOTS_EXTERNAL_ENABLED: "false"
     secrets:
       - grafana_admin_password
     volumes:
       - grafana_data:/var/lib/grafana
       - ./deploy/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./deploy/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports:
       - "127.0.0.1:${PCBKNOWLEDGE_GRAFANA_PORT:-3000}:3000"
     depends_on: [prometheus]
@@ -248,14 +375,30 @@ services:
 secrets:
   postgres_password:
     file: ./deploy/secrets/postgres_password
+  application_db_password:
+    file: ./deploy/secrets/application_db_password
+  worker_db_password:
+    file: ./deploy/secrets/worker_db_password
   keycloak_db_password:
     file: ./deploy/secrets/keycloak_db_password
   keycloak_admin_password:
     file: ./deploy/secrets/keycloak_admin_password
+  agent_service_client_secret:
+    file: ./deploy/secrets/agent_service_client_secret
+  keycloak_agent_client_config:
+    file: ./deploy/secrets/keycloak-agent-client.json
   seaweedfs_access_key:
     file: ./deploy/secrets/seaweedfs_access_key
   seaweedfs_secret_key:
     file: ./deploy/secrets/seaweedfs_secret_key
+  seaweedfs_admin_access_key:
+    file: ./deploy/secrets/seaweedfs_admin_access_key
+  seaweedfs_admin_secret_key:
+    file: ./deploy/secrets/seaweedfs_admin_secret_key
+  seaweedfs_worker_access_key:
+    file: ./deploy/secrets/seaweedfs_worker_access_key
+  seaweedfs_worker_secret_key:
+    file: ./deploy/secrets/seaweedfs_worker_secret_key
   grafana_admin_password:
     file: ./deploy/secrets/grafana_admin_password
 

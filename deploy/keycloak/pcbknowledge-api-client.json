@@ -1,0 +1,12 @@
+{
+  "clientId": "pcbknowledge-api",
+  "name": "PcbKnowledge API audience",
+  "enabled": true,
+  "bearerOnly": true,
+  "publicClient": false,
+  "standardFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "serviceAccountsEnabled": false,
+  "fullScopeAllowed": false,
+  "protocol": "openid-connect"
+}
