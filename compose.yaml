@@ -1,0 +1,270 @@
+name: pcbknowledge
+
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg18}
+    environment:
+      POSTGRES_DB: pcbknowledge
+      POSTGRES_USER: pcbknowledge
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+      - keycloak_db_password
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./deploy/postgres/init/001-keycloak-database.sh:/docker-entrypoint-initdb.d/001-keycloak-database.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready --username=pcbknowledge --dbname=pcbknowledge"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+    networks: [backend]
+
+  seaweedfs:
+    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.85}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-seaweedfs.sh"]
+    secrets:
+      - seaweedfs_access_key
+      - seaweedfs_secret_key
+    volumes:
+      - seaweedfs_data:/data
+      - ./deploy/seaweedfs/start-seaweedfs.sh:/opt/pcbknowledge/start-seaweedfs.sh:ro
+    ports:
+      - "127.0.0.1:${PCBKNOWLEDGE_S3_PORT:-8333}:8333"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --output-document=- http://127.0.0.1:9333/cluster/status >/dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    restart: unless-stopped
+    networks: [backend]
+
+  keycloak:
+    image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-keycloak.sh"]
+    command:
+      - start-dev
+      - --import-realm
+      - --health-enabled=true
+      - --metrics-enabled=true
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: pcbknowledge-admin
+      KC_HOSTNAME: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "true"
+    secrets:
+      - keycloak_db_password
+      - keycloak_admin_password
+    volumes:
+      - ./deploy/keycloak/start-keycloak.sh:/opt/pcbknowledge/start-keycloak.sh:ro
+      - ./deploy/keycloak/pcbknowledge-realm.json:/opt/keycloak/data/import/pcbknowledge-realm.json:ro
+    ports:
+      - "127.0.0.1:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [backend]
+
+  api:
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
+        UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
+    command: ["uvicorn", "pcbknowledge.api:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      PCBKNOWLEDGE_ENVIRONMENT: local
+      PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-api
+      PCBKNOWLEDGE_S3_ENDPOINT_URL: http://seaweedfs:8333
+      OTEL_SERVICE_NAME: pcbknowledge-api
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    secrets:
+      - postgres_password
+      - seaweedfs_access_key
+      - seaweedfs_secret_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=3).read()"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+    networks: [backend]
+
+  worker:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
+        UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
+    command: ["python", "-m", "pcbknowledge.worker", "health-check"]
+    environment:
+      PCBKNOWLEDGE_ENVIRONMENT: local
+      PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-worker
+      PCBKNOWLEDGE_S3_ENDPOINT_URL: http://seaweedfs:8333
+      OTEL_SERVICE_NAME: pcbknowledge-worker
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    secrets:
+      - postgres_password
+      - seaweedfs_access_key
+      - seaweedfs_secret_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+    restart: "no"
+    networks: [backend]
+
+  migrate:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
+        UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
+    command: ["alembic", "-c", "migrations/alembic.ini", "upgrade", "head"]
+    environment:
+      PCBKNOWLEDGE_ENVIRONMENT: local
+      PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-migrate
+    secrets:
+      - postgres_password
+      - seaweedfs_access_key
+      - seaweedfs_secret_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    networks: [backend]
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/docker/web.Dockerfile
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:24.11.1-alpine}
+        NGINX_IMAGE: ${NGINX_IMAGE:-nginx:1.29.2-alpine}
+        VITE_API_BASE_URL: /api/v1
+        VITE_OIDC_ISSUER_URL: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}/realms/pcbknowledge
+        VITE_OIDC_CLIENT_ID: pcbknowledge-curator-web
+        VITE_DEPLOYMENT_LABEL: Local M0
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz | grep -q '^ok$'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    restart: unless-stopped
+    networks: [backend]
+
+  caddy:
+    image: ${CADDY_IMAGE:-caddy:2.10.2-alpine}
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    ports:
+      - "${PCBKNOWLEDGE_HTTP_PORT:-8080}:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          wget -qO- http://127.0.0.1:8080/api/v1/healthz |
+          grep -q '"status":"alive"'
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    restart: unless-stopped
+    networks: [backend]
+
+  otel-collector:
+    image: ${OTEL_COLLECTOR_IMAGE:-otel/opentelemetry-collector-contrib:0.139.0}
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./deploy/observability/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+    restart: unless-stopped
+    networks: [backend]
+
+  prometheus:
+    image: ${PROMETHEUS_IMAGE:-prom/prometheus:v3.7.3}
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+    volumes:
+      - ./deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:${PCBKNOWLEDGE_PROMETHEUS_PORT:-9090}:9090"
+    depends_on: [otel-collector]
+    restart: unless-stopped
+    networks: [backend]
+
+  grafana:
+    image: ${GRAFANA_IMAGE:-grafana/grafana:12.2.0}
+    environment:
+      GF_SECURITY_ADMIN_USER: pcbknowledge-admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+    secrets:
+      - grafana_admin_password
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deploy/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "127.0.0.1:${PCBKNOWLEDGE_GRAFANA_PORT:-3000}:3000"
+    depends_on: [prometheus]
+    restart: unless-stopped
+    networks: [backend]
+
+secrets:
+  postgres_password:
+    file: ./deploy/secrets/postgres_password
+  keycloak_db_password:
+    file: ./deploy/secrets/keycloak_db_password
+  keycloak_admin_password:
+    file: ./deploy/secrets/keycloak_admin_password
+  seaweedfs_access_key:
+    file: ./deploy/secrets/seaweedfs_access_key
+  seaweedfs_secret_key:
+    file: ./deploy/secrets/seaweedfs_secret_key
+  grafana_admin_password:
+    file: ./deploy/secrets/grafana_admin_password
+
+volumes:
+  postgres_data:
+  seaweedfs_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  backend:
+    driver: bridge

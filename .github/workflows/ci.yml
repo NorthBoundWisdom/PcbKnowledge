@@ -1,0 +1,144 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend lint, types, tests, contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.12.3"
+          enable-cache: true
+      - name: Install locked dependencies
+        run: uv sync --frozen --all-groups
+      - name: Check formatting
+        run: uv run ruff format --check .
+      - name: Lint
+        run: uv run ruff check .
+      - name: Type check
+        run: uv run mypy src apps tests
+      - name: Unit tests
+        run: uv run pytest
+      - name: OpenAPI drift
+        run: uv run pcbknowledge-openapi --check
+
+  migrations:
+    name: PostgreSQL migration round trip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.12.3"
+          enable-cache: true
+      - name: Install locked dependencies
+        run: uv sync --frozen --all-groups
+      - name: Start PostgreSQL with a runtime-generated credential
+        shell: bash
+        run: |
+          set -euo pipefail
+          database_password=$(openssl rand -hex 32)
+          echo "::add-mask::$database_password"
+          echo "PCBKNOWLEDGE_DATABASE_DSN=postgresql+psycopg://pcbknowledge:${database_password}@127.0.0.1:55432/pcbknowledge" >>"$GITHUB_ENV"
+          docker run --detach --name pcbknowledge-ci-postgres \
+            --env POSTGRES_DB=pcbknowledge \
+            --env POSTGRES_USER=pcbknowledge \
+            --env POSTGRES_PASSWORD="$database_password" \
+            --publish 127.0.0.1:55432:5432 \
+            pgvector/pgvector:pg18
+          for attempt in $(seq 1 30); do
+            if docker exec pcbknowledge-ci-postgres pg_isready --username=pcbknowledge --dbname=pcbknowledge; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs pcbknowledge-ci-postgres
+          exit 1
+      - name: Upgrade, downgrade, and re-upgrade
+        run: |
+          uv run alembic -c migrations/alembic.ini upgrade head
+          uv run alembic -c migrations/alembic.ini downgrade base
+          uv run alembic -c migrations/alembic.ini upgrade head
+      - name: Stop PostgreSQL
+        if: always()
+        run: docker rm --force pcbknowledge-ci-postgres || true
+
+  frontend:
+    name: Frontend lint, types, tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "11.20.0"
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generated API client drift
+        run: pnpm check:generated
+      - name: Lint
+        run: pnpm lint
+      - name: Type check
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test
+      - name: Build
+        run: pnpm build
+
+  deployment:
+    name: Deployment configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate shell and JSON syntax
+        run: |
+          find deploy -type f -name '*.sh' -exec sh -n {} \;
+          python -m json.tool deploy/keycloak/pcbknowledge-realm.json >/dev/null
+      - name: Validate Compose model
+        run: ./deploy/scripts/compose-check.sh
+      - name: Validate Caddy configuration
+        run: >-
+          docker run --rm
+          --volume "$PWD/deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro"
+          caddy:2.10.2-alpine
+          caddy validate --config /etc/caddy/Caddyfile
+      - name: Validate Prometheus configuration
+        run: >-
+          docker run --rm
+          --entrypoint /bin/promtool
+          --volume "$PWD/deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+          prom/prometheus:v3.7.3
+          check config /etc/prometheus/prometheus.yml
+      - name: Reject tracked runtime secret values
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Fxq 'deploy/secrets' .dockerignore
+          unexpected=$(git ls-files deploy/secrets | grep -Ev '^deploy/secrets/(\.gitignore|README\.md)$' || true)
+          test -z "$unexpected" || {
+            printf 'tracked runtime secrets are forbidden:\n%s\n' "$unexpected" >&2
+            exit 1
+          }

@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge 第一轮 MVP：Evidence-first 纵向闭环
 
-> 状态：`READY_FOR_IMPLEMENTATION`  
+> 状态：`IN_PROGRESS` — M0 已于 2026-08-08 完成，M1 尚未开始
 > 创建日期：2026-08-08  
 > 目标阶段：第一轮 MVP，属于正式架构 P0 的最小可运营子集  
 > 执行入口：本文件  
@@ -169,28 +169,28 @@ completion gate。
 
 目标：形成可重复启动、可静态验证、没有业务假实现的 monorepo 骨架。
 
-- [ ] 建立架构文档规定的 `apps/`、`packages/`、`src/pcbknowledge/`、`migrations/`、`deploy/`、
+- [x] 建立架构文档规定的 `apps/`、`packages/`、`src/pcbknowledge/`、`migrations/`、`deploy/`、
   `knowledge-schemas/`、`evals/`、`docs/` 目录；
-- [ ] 建立根 `README.md`、`AGENTS.md`、`.gitignore`、许可证与安全说明；
-- [ ] 初始化 Python 3.14 + `uv`，提交 `pyproject.toml` 与 `uv.lock`；
-- [ ] 初始化 Node.js 24 LTS + `pnpm` workspace，提交 lockfile；
-- [ ] 初始化 React/TypeScript/Vite/MUI Web shell；
-- [ ] 初始化 FastAPI API 与 Worker 入口；
-- [ ] 固定 Ruff、mypy、pytest、ESLint、TypeScript、Vitest 和 Playwright 的入口；
-- [ ] 建立 OpenAPI 生成 TypeScript client 的唯一流程；
-- [ ] 建立 configuration schema，secret 只来自受控运行时注入，不进入 Git；
-- [ ] 把架构基线列出的 ADR-001 至 ADR-017 建立为独立文件；MVP 无关 ADR 可以保持 Accepted/Deferred，
+- [x] 建立根 `README.md`、`AGENTS.md`、`.gitignore`、许可证与安全说明；
+- [x] 初始化 Python 3.14 + `uv`，提交 `pyproject.toml` 与 `uv.lock`；
+- [x] 初始化 Node.js 24 LTS + `pnpm` workspace，提交 lockfile；
+- [x] 初始化 React/TypeScript/Vite/MUI Web shell；
+- [x] 初始化 FastAPI API 与 Worker 入口；
+- [x] 固定 Ruff、mypy、pytest、ESLint、TypeScript、Vitest 和 Playwright 的入口；
+- [x] 建立 OpenAPI 生成 TypeScript client 的唯一流程；
+- [x] 建立 configuration schema，secret 只来自受控运行时注入，不进入 Git；
+- [x] 把架构基线列出的 ADR-001 至 ADR-017 建立为独立文件；MVP 无关 ADR 可以保持 Accepted/Deferred，
   但不得缺失决策状态；
-- [ ] 建立基础 CI：格式、lint、type check、unit test、migration smoke、frontend build；
-- [ ] 校验架构文档中的固定依赖在当前日期仍兼容；需要改变时先写 ADR，不静默漂移。
+- [x] 建立基础 CI：格式、lint、type check、unit test、migration smoke、frontend build；
+- [x] 校验架构文档中的固定依赖在当前日期仍兼容；需要改变时先写 ADR，不静默漂移。
 
 M0 completion gate：
 
-- [ ] 空数据库环境可以通过单一文档化命令启动；
-- [ ] API、Worker、Web 均有健康检查；
-- [ ] OpenAPI client 可重复生成且 `git diff` 为空；
-- [ ] 所有 lint/type/unit/build 基线通过；
-- [ ] 尚无伪造的业务 success endpoint 或内存 fallback。
+- [x] 空数据库环境可以通过单一文档化命令启动；
+- [x] API、Worker、Web 均有健康检查；
+- [x] OpenAPI client 可重复生成且 `git diff` 为空；
+- [x] 所有 lint/type/unit/build 基线通过；
+- [x] 尚无伪造的业务 success endpoint 或内存 fallback。
 
 ### M1 — 平台脊柱：数据库、对象存储、身份、任务和审计
 
@@ -495,4 +495,58 @@ case 数：
 下一步：
 ```
 
-当前尚未开始实现，因此没有 build、test、migration、security 或恢复通过记录。
+```text
+日期：2026-08-08
+里程碑/任务：M0 版本兼容性基线
+命令：Python/uv/Node/pnpm/PostgreSQL/Docker Compose 版本检查；官方发布页复核
+退出码：0
+case 数：7 个运行时/工具版本
+耗时：< 2s（不含网页复核）
+结果：Python 3.14.6 host / 3.14.7 image、uv 0.12.3、Node 24.19.0
+      validation / 24.11.1 image、pnpm 11.20.0、PostgreSQL 18.4、Compose 5.3.1；
+      架构固定 major 均保留。OpenAPI generator 要求 TypeScript 5.x，因此锁定 5.9.3；
+      架构未固定 TypeScript major，无 ADR 漂移。
+首个失败：无
+下一步：以 lockfile 和镜像实际构建验证兼容性
+
+日期：2026-08-08
+里程碑/任务：M0 后端、契约和迁移
+命令：uv sync --frozen --all-groups；ruff format/check；mypy src apps tests；pytest；
+      pcbknowledge-openapi --check；Alembic downgrade base / upgrade head（真实 PostgreSQL）
+退出码：全部 0
+case 数：17 pytest；1 个 migration round trip；2 个 contract drift check
+耗时：pytest 0.24s；migration round trip 2.8s
+结果：通过；OpenAPI 3.1 仅含 health/readiness，server 为 /api/v1；迁移 head 为
+      20260808_0001。
+首个失败：无
+下一步：验证浏览器生成合同和部署路径
+
+日期：2026-08-08
+里程碑/任务：M0 Curator Web 与生成 client
+命令：pnpm install --frozen-lockfile；pnpm check:generated；pnpm lint；pnpm typecheck；
+      pnpm test；pnpm build；pnpm test:e2e
+退出码：全部 0
+case 数：25 Vitest + 2 Playwright
+耗时：Vitest 1.48s；build 0.58s；Playwright 1.3s
+结果：通过；生成合同 SHA-256 为
+      2cd16d33d34c118b562ea04c7fa684a9ca4d1973db57ad7da0acb724fbc01663。
+      组件业务 fetch 调用为 0。Vite 报告约 675 KB 首包警告，M0 不宣称性能达标。
+首个失败：Playwright 初次缺 Chromium；安装匹配版本后 2/2 通过
+下一步：从空 volume 验证真实栈
+
+日期：2026-08-08
+里程碑/任务：M0 空 volume Compose、健康和失败关闭
+命令：删除本轮专用四个 Compose volume 后执行 ./deploy/scripts/dev-up.sh；curl health/ready；
+      Keycloak discovery；Prometheus/Grafana/OTel health；SeaweedFS anonymous request；
+      停止/恢复 PostgreSQL 后重复 API 与 Worker probe
+退出码：最终冷启动及恢复全部 0；依赖中断时 Worker 预期退出 1
+case 数：9 services；4 API health paths；1 migration head；2 fail-closed probes
+耗时：缓存镜像后的最终空 volume 启动约 34s
+结果：最终单命令冷启动通过；API/Worker/Web/Caddy/PostgreSQL/SeaweedFS healthy；
+      Keycloak realm 可发现；Prometheus、Grafana、OTel ready；匿名 S3 返回 403；
+      PostgreSQL 中断时 liveness=200、readiness=503 problem+json、Worker not_ready，
+      恢复后均重新 ready。
+首个失败：首次发现 PostgreSQL 18 旧数据挂载路径；随后发现 BusyBox grep 长参数和
+      Prometheus false flag；均已修正，最终从新建 volume 重跑通过
+下一步：M0 提交/推送后进入 M1 平台脊柱
+```
