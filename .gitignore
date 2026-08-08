@@ -1,0 +1,27 @@
+# Python and local checks
+__pycache__/
+*.py[cod]
+.venv/
+.coverage
+.cache/
+.pnpm-store/
+
+# Project-command receipts and derived local state
+/.freecm/
+/.freecm.workspace.lock
+/.pcbknowledge/
+/build/
+
+# Retired-service recovery material kept only on existing workstations
+/backups/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local scratch files
+*.log
+*.tmp
+*.pid

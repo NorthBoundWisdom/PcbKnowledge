@@ -1,0 +1,4 @@
+interface:
+  display_name: "Extract Component Facts"
+  short_description: "Prepare evidence-anchored pin and limit facts"
+  default_prompt: "Use $extract-component-facts to prepare typed pin and parameter facts from an authorized source."

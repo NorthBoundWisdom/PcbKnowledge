@@ -1,0 +1,70 @@
+{
+  "version": 2,
+  "commands": {
+    "config": [
+      {
+        "id": "git-native-local",
+        "label": "Local Git Workspace",
+        "description": "Check Python and Git, then prepare the local repository editor",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "config"],
+        "platforms": ["darwin", "linux"],
+        "default": true,
+        "defaults": {
+          "build": "local-checks",
+          "run": "local-editor",
+          "test": "local-tests",
+          "package": "data-snapshot"
+        },
+        "readiness": {
+          "inputs": [
+            "configs/freecm.commands.jsonc",
+            "configs/pcbknowledge_workflow.py",
+            "source_roots.lock.jsonc.in"
+          ],
+          "outputs": [".freecm/pcbknowledge-config.json"]
+        }
+      }
+    ],
+    "build": [
+      {
+        "id": "local-checks",
+        "label": "Check Local Editor",
+        "description": "Compile, test and validate the Git-native editor without containers or downloads",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "build"],
+        "configurations": ["git-native-local"]
+      }
+    ],
+    "run": [
+      {
+        "id": "local-editor",
+        "label": "Open Knowledge Editor",
+        "description": "Open the no-login local GUI; Ctrl+C closes only this editor",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "run"],
+        "configurations": ["git-native-local"]
+      }
+    ],
+    "test": [
+      {
+        "id": "local-tests",
+        "label": "Run Local Tests",
+        "description": "Run standard-library tests and validate all repository knowledge data",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "test"],
+        "configurations": ["git-native-local"]
+      }
+    ],
+    "package": [
+      {
+        "id": "data-snapshot",
+        "label": "Export Data Snapshot",
+        "description": "Create a reproducible ZIP of validated records, evidence and schema",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "package"],
+        "configurations": ["git-native-local"]
+      }
+    ]
+  }
+}

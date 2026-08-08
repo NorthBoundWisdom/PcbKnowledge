@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcbknowledge.local/schemas/source-record.schema.json",
+  "title": "PcbKnowledge SourceRecordV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "source_type",
+    "status",
+    "prepared_by",
+    "title",
+    "document_number",
+    "revision",
+    "source",
+    "license",
+    "evidence",
+    "preparation_note",
+    "review_history",
+    "review",
+    "supersedes"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^pk_[0-9a-f]{24,32}$" },
+    "source_type": {
+      "enum": [
+        "DATASHEET",
+        "APPLICATION_NOTE",
+        "REFERENCE_DESIGN",
+        "PCN",
+        "FAB_CAPABILITY",
+        "INTERNAL_GUIDELINE"
+      ]
+    },
+    "status": {
+      "enum": ["DRAFT", "READY_FOR_REVIEW", "APPROVED", "REJECTED"]
+    },
+    "prepared_by": { "enum": ["HUMAN", "AGENT"] },
+    "title": { "type": ["string", "null"], "minLength": 1, "maxLength": 500 },
+    "document_number": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "revision": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "source": { "$ref": "#/$defs/sourceLocation" },
+    "license": { "$ref": "#/$defs/license" },
+    "evidence": { "$ref": "#/$defs/evidence" },
+    "preparation_note": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "review_history": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reviewEvent" }
+    },
+    "review": { "$ref": "#/$defs/review" },
+    "supersedes": {
+      "type": ["string", "null"],
+      "pattern": "^pk_[0-9a-f]{24,32}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "APPROVED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "revision": { "type": "string", "minLength": 1 },
+          "source": {
+            "anyOf": [
+              {
+                "properties": {
+                  "locator": { "type": "string", "minLength": 1 }
+                }
+              },
+              {
+                "properties": {
+                  "publisher": { "type": "string", "minLength": 1 }
+                }
+              }
+            ]
+          },
+          "license": {
+            "properties": {
+              "class": {
+                "enum": [
+                  "PUBLIC_REFERENCE",
+                  "OPEN_LICENSE",
+                  "INTERNAL",
+                  "RESTRICTED",
+                  "LICENSED_BLOCKED_FOR_AI"
+                ]
+              }
+            }
+          },
+          "evidence": { "$ref": "#/$defs/presentEvidence" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "license": {
+            "properties": {
+              "class": {
+                "enum": ["RESTRICTED", "LICENSED_BLOCKED_FOR_AI"]
+              }
+            }
+          },
+          "status": { "const": "APPROVED" }
+        }
+      },
+      "then": {
+        "properties": {
+          "license": {
+            "properties": {
+              "note": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sourceLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locator", "publisher"],
+      "properties": {
+        "locator": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "publisher": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "note"],
+      "properties": {
+        "class": {
+          "enum": [
+            "UNKNOWN",
+            "PUBLIC_REFERENCE",
+            "OPEN_LICENSE",
+            "INTERNAL",
+            "RESTRICTED",
+            "LICENSED_BLOCKED_FOR_AI"
+          ]
+        },
+        "note": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "evidence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "byte_size", "media_type"],
+          "properties": {
+            "path": { "type": "null" },
+            "sha256": { "type": "null" },
+            "byte_size": { "type": "null" },
+            "media_type": { "type": "null" }
+          }
+        },
+        { "$ref": "#/$defs/presentEvidence" }
+      ]
+    },
+    "presentEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "byte_size", "media_type"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^evidence/sha256/[0-9a-f]{2}/[0-9a-f]{64}\\.pdf$"
+        },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "byte_size": { "type": "integer", "minimum": 1 },
+        "media_type": { "const": "application/pdf" }
+      }
+    },
+    "reviewEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "comment"],
+      "properties": {
+        "action": { "enum": ["SUBMITTED", "APPROVED", "REJECTED"] },
+        "comment": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 4000
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "comment"],
+      "properties": {
+        "decision": { "enum": ["APPROVED", "REJECTED", null] },
+        "comment": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 4000
+        }
+      }
+    }
+  }
+}

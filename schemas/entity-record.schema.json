@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcbknowledge.local/schemas/entity-record.schema.json",
+  "title": "PcbKnowledge EntityRecordV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "kind",
+    "prepared_by",
+    "raw_name",
+    "normalized_key",
+    "manufacturer_id",
+    "raw_mpn",
+    "normalized_mpn",
+    "family",
+    "note"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^ent_[0-9a-f]{24,32}$" },
+    "kind": { "enum": ["MANUFACTURER", "COMPONENT", "PACKAGE"] },
+    "prepared_by": { "enum": ["HUMAN", "AGENT"] },
+    "raw_name": { "type": ["string", "null"], "minLength": 1, "maxLength": 300 },
+    "normalized_key": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "manufacturer_id": {
+      "type": ["string", "null"],
+      "pattern": "^ent_[0-9a-f]{24,32}$"
+    },
+    "raw_mpn": { "type": ["string", "null"], "minLength": 1, "maxLength": 300 },
+    "normalized_mpn": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "family": { "type": ["string", "null"], "minLength": 1, "maxLength": 300 },
+    "note": { "type": ["string", "null"], "minLength": 1, "maxLength": 2000 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "kind": { "enum": ["MANUFACTURER", "PACKAGE"] } },
+        "required": ["kind"]
+      },
+      "then": {
+        "properties": {
+          "raw_name": { "type": "string", "minLength": 1 },
+          "normalized_key": { "type": "string", "minLength": 1 },
+          "manufacturer_id": { "type": "null" },
+          "raw_mpn": { "type": "null" },
+          "normalized_mpn": { "type": "null" },
+          "family": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "kind": { "const": "COMPONENT" } },
+        "required": ["kind"]
+      },
+      "then": {
+        "properties": {
+          "raw_name": { "type": "null" },
+          "normalized_key": { "type": "null" },
+          "manufacturer_id": {
+            "type": "string",
+            "pattern": "^ent_[0-9a-f]{24,32}$"
+          },
+          "raw_mpn": { "type": "string", "minLength": 1 },
+          "normalized_mpn": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  ]
+}
