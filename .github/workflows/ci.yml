@@ -388,11 +388,14 @@ jobs:
           ! grep -q '__PCBKNOWLEDGE_AGENT_SERVICE_SECRET__' \
             deploy/secrets/keycloak-realm.json deploy/secrets/keycloak-agent-client.json
       - name: Validate Keycloak realm import
-        run: >-
-          docker run --rm
-          --volume "$PWD/deploy/secrets/keycloak-realm.json:/tmp/pcbknowledge-realm.json:ro"
-          quay.io/keycloak/keycloak:26.4.7
-          import --file /tmp/pcbknowledge-realm.json
+        run: |
+          # The rendered secret remains owner-only on the runner. Root is scoped to this
+          # throwaway nonserver container so Keycloak can read the bind mount on Linux.
+          docker run --rm \
+            --user 0:0 \
+            --volume "$PWD/deploy/secrets/keycloak-realm.json:/tmp/pcbknowledge-realm.json:ro" \
+            quay.io/keycloak/keycloak:26.4.7 \
+            import --file /tmp/pcbknowledge-realm.json
       - name: Validate Compose model
         run: ./deploy/scripts/compose-check.sh
       - name: Validate OIDC callback log policy and nginx configuration
