@@ -700,4 +700,24 @@ case 数：149 backend pytest，0 skipped；102 frontend Vitest；3 Playwright h
 首个失败：Test 镜像最初未复制 CI workflow，147/148 后修复；Package 最初重跑 Build 导致 provenance
       image ID 改变并使 Run 收据失效，改为 receipt-bound export 并增加行为回归后最终全绿
 下一步：提交、推送 main，并等待远端 canonical CI 全绿后关闭 M2a 主分支收口项
+
+日期：2026-08-09
+里程碑/任务：M2a Linux file-secret 可移植性与 shell/Python 职责收口
+命令：FreeCM Config/Build/Test/Package；configs.test_local_stack_acceptance；Build 内实际 UID 999
+      entrypoint replacement/PATH poisoning negative；ruff format/check；mypy；OpenAPI drift；
+      FreeCM validator；Compose config；shell syntax；runtime receipt/package SHA 核对
+退出码：全部 0；FreeCM Run 的预期 SIGINT 退出码为 130
+case 数：152 backend pytest，0 skipped；102 frontend Vitest；4 Playwright live；24 workflow tests；
+      Ruff 164 files；mypy 119 source files；6 个归档镜像
+耗时：live Playwright 4 cases 为 10.1s；其余本轮命令未单独记录总耗时
+结果：复杂编排、超时、收据和进程生命周期继续由 typed Python 管理；shell 只保留 file-secret
+      staging、setpriv/chroot/su 与直接服务 CLI 边界。Linux file-backed secret 的宿主 UID 不再要求放宽
+      0600：PostgreSQL、Keycloak、Grafana 和 backend 在短时 root bootstrap 后以 999/1000/472/999
+      运行。Backend 特权入口为 root-owned 0555，root 阶段固定 trusted PATH。PostgreSQL wrapper 变化会
+      强制 recreate 容器但保留命名卷。Package SHA-256 为
+      7128ee1d14e37f683a120e7556acfef4a6dfafd40b33800f9c9ac21f9e6d6d68，导出后 Run 收据仍有效。
+首个失败：远端 run 31316885716 的 fresh stack 在 PostgreSQL health 前失败；官方 Compose file-secret
+      bind ownership 语义定位为 Linux 下 0600 宿主文件对非 root 容器 UID 不可读。随后本地 acceptance
+      首跑因宿主 PATH 无 pnpm 立即失败；改用仓库固定的临时 Node 24.11.1 工具链后 4/4 live 通过。
+下一步：推送 main，以 fresh Linux hosted runner 重跑 canonical CI 后关闭 M2a 主分支收口项
 ```

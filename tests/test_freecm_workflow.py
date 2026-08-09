@@ -233,6 +233,15 @@ def test_prepare_runtime_owns_slow_setup_and_creates_stopped_apps(
         "--detach",
         "--wait",
         "--force-recreate",
+        "postgres",
+    ) in checked
+    assert (
+        "docker",
+        "compose",
+        "up",
+        "--detach",
+        "--wait",
+        "--force-recreate",
         "seaweedfs",
     ) in checked
     assert (
@@ -270,6 +279,42 @@ def test_prepare_runtime_owns_slow_setup_and_creates_stopped_apps(
         "--no-deps",
         *workflow.APPLICATION_SERVICES,
     )
+
+
+def test_build_verifies_the_privileged_backend_entrypoint_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    checked: list[tuple[str, ...]] = []
+    monkeypatch.setattr(
+        workflow,
+        "_run_checked",
+        lambda command, *, environment: checked.append(tuple(command)),
+    )
+
+    workflow._build_images({"TEST": "1"})
+
+    assert checked[0] == (
+        "docker",
+        "compose",
+        "--profile",
+        "tools",
+        "build",
+        *workflow.BUILD_SERVICES,
+    )
+    assert checked[1][:7] == (
+        "docker",
+        "run",
+        "--rm",
+        "--entrypoint",
+        "/bin/sh",
+        "pcbknowledge-freecm-api:latest",
+        "-ec",
+    )
+    boundary = checked[1][7]
+    assert "/usr/local/bin/pcbknowledge-backend-entrypoint" in boundary
+    assert "--reuid=pcbknowledge" in boundary
+    assert "/workspace/.venv/bin/tr" in boundary
+    assert "untrusted-runtime-tool-executed" in boundary
 
 
 def test_package_uses_only_repository_owned_images() -> None:

@@ -51,6 +51,12 @@ CMD ["/bin/sh", "/workspace/deploy/scripts/test-backend-hermetic.sh"]
 
 FROM application AS runtime
 
-USER pcbknowledge
-ENTRYPOINT ["/bin/sh", "/workspace/deploy/docker/backend-entrypoint.sh"]
+# Docker Compose file-backed secrets preserve host ownership on Linux. The
+# entrypoint reads only this service's granted secrets as root, then drops to
+# `pcbknowledge` with setpriv before starting any application command.
+USER root
+RUN install --owner=root --group=root --mode=0555 \
+    /workspace/deploy/docker/backend-entrypoint.sh \
+    /usr/local/bin/pcbknowledge-backend-entrypoint
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/pcbknowledge-backend-entrypoint"]
 CMD ["uvicorn", "pcbknowledge.api:app", "--host", "0.0.0.0", "--port", "8000"]

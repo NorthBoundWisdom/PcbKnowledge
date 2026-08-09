@@ -41,16 +41,19 @@ CONFIG_INPUTS = (
     Path("deploy/keycloak/pcbknowledge-realm.template.json"),
     Path("deploy/keycloak/bootstrap-local-curator.sh"),
     Path("deploy/keycloak/reconcile-keycloak.sh"),
+    Path("deploy/keycloak/run-as-keycloak.sh"),
     Path("deploy/keycloak/start-keycloak.sh"),
     Path("deploy/observability/grafana/dashboards/m1-platform.json"),
     Path("deploy/observability/grafana/provisioning/dashboards/pcbknowledge.yaml"),
     Path("deploy/observability/grafana/provisioning/datasources/prometheus.yaml"),
+    Path("deploy/observability/grafana/start-grafana.sh"),
     Path("deploy/observability/otel-collector.yaml"),
     Path("deploy/observability/prometheus.yml"),
     Path("deploy/observability/rules/platform.yml"),
     Path("deploy/postgres/bootstrap-local-development-data.sh"),
     Path("deploy/postgres/init/001-keycloak-database.sh"),
     Path("deploy/postgres/reconcile-application-role.sh"),
+    Path("deploy/postgres/start-postgres.sh"),
     Path("deploy/seaweedfs/start-seaweedfs.sh"),
     Path("deploy/scripts/bootstrap-secrets.sh"),
     Path("deploy/scripts/bootstrap-local-development.sh"),
@@ -142,6 +145,45 @@ INFRASTRUCTURE_SERVICES = (
     "prometheus",
     "grafana",
 )
+_BACKEND_RUNTIME_BOUNDARY_CHECK = r"""
+entrypoint=/usr/local/bin/pcbknowledge-backend-entrypoint
+test "$(stat -c '%u:%g:%a' "$entrypoint")" = 0:0:555
+test "$(stat -c '%u:%g' /usr/local/bin)" = 0:0
+
+replacement=/tmp/pcbknowledge-entrypoint-replacement
+printf 'replacement\n' >"$replacement"
+chown pcbknowledge:pcbknowledge "$replacement"
+if /usr/bin/setpriv --reuid=pcbknowledge --regid=pcbknowledge --init-groups -- \
+  /bin/mv "$replacement" "$entrypoint" 2>/dev/null; then
+  echo "backend runtime account replaced the privileged entrypoint" >&2
+  exit 1
+fi
+
+/usr/bin/setpriv --reuid=pcbknowledge --regid=pcbknowledge --init-groups -- \
+  /bin/sh -ec '
+    printf "#!/bin/sh\n" > /workspace/.venv/bin/tr
+    printf "/usr/bin/touch /tmp/untrusted-runtime-tool-executed\n" >> /workspace/.venv/bin/tr
+    printf "exec /usr/bin/tr \"\$@\"\n" >> /workspace/.venv/bin/tr
+    printf "#!/bin/sh\n" > /workspace/.venv/bin/id
+    printf "/usr/bin/touch /tmp/untrusted-runtime-tool-executed\n" >> /workspace/.venv/bin/id
+    printf "exec /usr/bin/id \"\$@\"\n" >> /workspace/.venv/bin/id
+    chmod 755 /workspace/.venv/bin/tr /workspace/.venv/bin/id
+  '
+
+secret_directory=/tmp/pcbknowledge-runtime-boundary-secrets
+mkdir -p "$secret_directory"
+printf 'database-password\n' >"$secret_directory/application_db_password"
+printf 's3-access-key\n' >"$secret_directory/seaweedfs_access_key"
+printf 's3-secret-key\n' >"$secret_directory/seaweedfs_secret_key"
+chmod 600 "$secret_directory"/*
+
+PCBKNOWLEDGE_SECRET_DIRECTORY=$secret_directory \
+PCBKNOWLEDGE_DATABASE_USERNAME=pcbknowledge_app \
+  /bin/sh "$entrypoint" /bin/sh -ec '
+    test "$(/usr/bin/id -u)" -eq 999
+    test ! -e /tmp/untrusted-runtime-tool-executed
+  '
+""".strip()
 
 
 class WorkflowError(RuntimeError):
@@ -339,6 +381,19 @@ def _build_images(environment: Mapping[str, str]) -> None:
         ["docker", "compose", "--profile", "tools", "build", *BUILD_SERVICES],
         environment=environment,
     )
+    _run_checked(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "--entrypoint",
+            "/bin/sh",
+            package_image_names()[0],
+            "-ec",
+            _BACKEND_RUNTIME_BOUNDARY_CHECK,
+        ],
+        environment=environment,
+    )
 
 
 def _runtime_image_ids(environment: Mapping[str, str]) -> dict[str, str]:
@@ -450,7 +505,15 @@ def _prepare_runtime(environment: Mapping[str, str]) -> None:
     )
     _build_images(environment)
     _run_checked(
-        ["docker", "compose", "up", "--detach", "--wait", "postgres"],
+        [
+            "docker",
+            "compose",
+            "up",
+            "--detach",
+            "--wait",
+            "--force-recreate",
+            "postgres",
+        ],
         environment=environment,
     )
     _run_checked(

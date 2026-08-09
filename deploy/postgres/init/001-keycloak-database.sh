@@ -1,7 +1,8 @@
 #!/bin/sh
 set -eu
 
-secret_file=/run/secrets/keycloak_db_password
+secret_directory=${PCBKNOWLEDGE_SECRET_DIRECTORY:-/run/secrets}
+secret_file=$secret_directory/keycloak_db_password
 if [ ! -s "$secret_file" ]; then
   echo "Keycloak database password secret is required" >&2
   exit 1

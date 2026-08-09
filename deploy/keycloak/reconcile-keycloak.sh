@@ -14,7 +14,8 @@ read_secret() {
   tr -d '\r\n' <"$1"
 }
 
-admin_password=$(read_secret /run/secrets/keycloak_admin_password)
+secret_directory=${PCBKNOWLEDGE_SECRET_DIRECTORY:-/run/secrets}
+admin_password=$(read_secret "$secret_directory/keycloak_admin_password")
 
 export KC_CLI_PASSWORD=$admin_password
 "$kcadm" config credentials \
@@ -61,7 +62,11 @@ reconcile_client() {
 
 api_uuid=$(reconcile_client pcbknowledge-api /opt/pcbknowledge/keycloak/pcbknowledge-api-client.json)
 curator_uuid=$(reconcile_client pcbknowledge-curator-web /opt/pcbknowledge/keycloak/pcbknowledge-curator-client.json)
-service_uuid=$(reconcile_client pcbknowledge-agent-service /run/secrets/keycloak-agent-client.json)
+service_uuid=$(
+  reconcile_client \
+    pcbknowledge-agent-service \
+    "$secret_directory/keycloak-agent-client.json"
+)
 
 test -n "$api_uuid"
 test -n "$curator_uuid"

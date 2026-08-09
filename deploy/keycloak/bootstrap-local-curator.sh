@@ -152,7 +152,8 @@ assert_enabled() {
     }
 }
 
-admin_password=$(read_secret /run/secrets/keycloak_admin_password)
+secret_directory=${PCBKNOWLEDGE_SECRET_DIRECTORY:-/run/secrets}
+admin_password=$(read_secret "$secret_directory/keycloak_admin_password")
 export KC_CLI_PASSWORD=$admin_password
 "$kcadm" config credentials \
   --config "$config_file" \
@@ -161,7 +162,7 @@ export KC_CLI_PASSWORD=$admin_password
   --user pcbknowledge-admin >/dev/null
 unset KC_CLI_PASSWORD admin_password
 
-managed_marker=$(read_secret /run/secrets/local_curator_marker)
+managed_marker=$(read_secret "$secret_directory/local_curator_marker")
 case "$managed_marker" in
   *[!0-9a-f]* | "")
     echo "local curator managed marker must be random lowercase hexadecimal" >&2
@@ -211,7 +212,7 @@ case "$action" in
       -s emailVerified=true \
       -s 'requiredActions=[]' >/dev/null
 
-    local_password=$(read_secret /run/secrets/local_curator_password)
+    local_password=$(read_secret "$secret_directory/local_curator_password")
     case "$local_password" in
       *[!0-9a-f]* | "")
         echo "local curator password must be random lowercase hexadecimal" >&2

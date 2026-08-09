@@ -14,7 +14,8 @@ read_required_secret() {
   export "$1=$value"
 }
 
-read_required_secret KC_DB_PASSWORD /run/secrets/keycloak_db_password
-read_required_secret KC_BOOTSTRAP_ADMIN_PASSWORD /run/secrets/keycloak_admin_password
+secret_directory=${PCBKNOWLEDGE_SECRET_DIRECTORY:-/run/secrets}
+read_required_secret KC_DB_PASSWORD "$secret_directory/keycloak_db_password"
+read_required_secret KC_BOOTSTRAP_ADMIN_PASSWORD "$secret_directory/keycloak_admin_password"
 
 exec /opt/keycloak/bin/kc.sh "$@"

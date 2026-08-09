@@ -3,15 +3,18 @@ name: pcbknowledge
 services:
   postgres:
     image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg18}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-postgres.sh"]
+    command: ["postgres"]
     environment:
       POSTGRES_DB: pcbknowledge
       POSTGRES_USER: pcbknowledge
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_PASSWORD_FILE: /run/pcbknowledge-postgres-secrets/postgres_password
     secrets:
       - postgres_password
       - keycloak_db_password
     volumes:
       - postgres_data:/var/lib/postgresql
+      - ./deploy/postgres/start-postgres.sh:/opt/pcbknowledge/start-postgres.sh:ro
       - ./deploy/postgres/init/001-keycloak-database.sh:/docker-entrypoint-initdb.d/001-keycloak-database.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready --username=pcbknowledge --dbname=pcbknowledge"]
@@ -131,7 +134,12 @@ services:
 
   keycloak:
     image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
-    entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-keycloak.sh"]
+    user: "0:0"
+    entrypoint:
+      - /bin/sh
+      - /opt/pcbknowledge/run-as-keycloak.sh
+      - /bin/sh
+      - /opt/pcbknowledge/start-keycloak.sh
     command:
       - start-dev
       - --import-realm
@@ -148,9 +156,11 @@ services:
     secrets:
       - keycloak_db_password
       - keycloak_admin_password
+      - source: keycloak_realm_config
+        target: pcbknowledge-realm.json
     volumes:
+      - ./deploy/keycloak/run-as-keycloak.sh:/opt/pcbknowledge/run-as-keycloak.sh:ro
       - ./deploy/keycloak/start-keycloak.sh:/opt/pcbknowledge/start-keycloak.sh:ro
-      - ./deploy/secrets/keycloak-realm.json:/opt/keycloak/data/import/pcbknowledge-realm.json:ro
     ports:
       - "127.0.0.1:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}:8080"
     depends_on:
@@ -176,12 +186,18 @@ services:
   keycloak-reconcile:
     profiles: [tools]
     image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
-    entrypoint: ["/bin/sh", "/opt/pcbknowledge/keycloak/reconcile-keycloak.sh"]
+    user: "0:0"
+    entrypoint:
+      - /bin/sh
+      - /opt/pcbknowledge/keycloak/run-as-keycloak.sh
+      - /bin/sh
+      - /opt/pcbknowledge/keycloak/reconcile-keycloak.sh
     secrets:
       - keycloak_admin_password
       - source: keycloak_agent_client_config
         target: keycloak-agent-client.json
     volumes:
+      - ./deploy/keycloak/run-as-keycloak.sh:/opt/pcbknowledge/keycloak/run-as-keycloak.sh:ro
       - ./deploy/keycloak/reconcile-keycloak.sh:/opt/pcbknowledge/keycloak/reconcile-keycloak.sh:ro
       - ./deploy/keycloak/pcbknowledge-api-client.json:/opt/pcbknowledge/keycloak/pcbknowledge-api-client.json:ro
       - ./deploy/keycloak/pcbknowledge-curator-client.json:/opt/pcbknowledge/keycloak/pcbknowledge-curator-client.json:ro
@@ -194,7 +210,12 @@ services:
   local-curator-keycloak:
     profiles: [tools]
     image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
-    entrypoint: ["/bin/sh", "/opt/pcbknowledge/keycloak/bootstrap-local-curator.sh"]
+    user: "0:0"
+    entrypoint:
+      - /bin/sh
+      - /opt/pcbknowledge/keycloak/run-as-keycloak.sh
+      - /bin/sh
+      - /opt/pcbknowledge/keycloak/bootstrap-local-curator.sh
     environment:
       PCBKNOWLEDGE_LOCAL_CURATOR_ACTION: ${PCBKNOWLEDGE_LOCAL_CURATOR_ACTION:-}
     secrets:
@@ -202,6 +223,7 @@ services:
       - local_curator_password
       - local_curator_marker
     volumes:
+      - ./deploy/keycloak/run-as-keycloak.sh:/opt/pcbknowledge/keycloak/run-as-keycloak.sh:ro
       - ./deploy/keycloak/bootstrap-local-curator.sh:/opt/pcbknowledge/keycloak/bootstrap-local-curator.sh:ro
     depends_on:
       keycloak:
@@ -266,6 +288,11 @@ services:
     healthcheck:
       test:
         - CMD
+        - /usr/bin/setpriv
+        - --reuid=pcbknowledge
+        - --regid=pcbknowledge
+        - --init-groups
+        - --
         - python
         - -c
         - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=3).read()"
@@ -313,7 +340,7 @@ services:
       test:
         - CMD
         - /bin/sh
-        - /workspace/deploy/docker/backend-entrypoint.sh
+        - /usr/local/bin/pcbknowledge-backend-entrypoint
         - python
         - -m
         - pcbknowledge.worker
@@ -362,7 +389,7 @@ services:
       test:
         - CMD
         - /bin/sh
-        - /workspace/deploy/docker/backend-entrypoint.sh
+        - /usr/local/bin/pcbknowledge-backend-entrypoint
         - python
         - -m
         - pcbknowledge.document.verifier
@@ -470,6 +497,8 @@ services:
 
   grafana:
     image: ${GRAFANA_IMAGE:-grafana/grafana:12.2.0}
+    user: "0:0"
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-grafana.sh"]
     environment:
       GF_SECURITY_ADMIN_USER: pcbknowledge-admin
       GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
@@ -483,6 +512,7 @@ services:
       - grafana_admin_password
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./deploy/observability/grafana/start-grafana.sh:/opt/pcbknowledge/start-grafana.sh:ro
       - ./deploy/observability/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./deploy/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports:
@@ -502,6 +532,8 @@ secrets:
     file: ./deploy/secrets/verifier_db_password
   keycloak_db_password:
     file: ./deploy/secrets/keycloak_db_password
+  keycloak_realm_config:
+    file: ./deploy/secrets/keycloak-realm.json
   keycloak_admin_password:
     file: ./deploy/secrets/keycloak_admin_password
   agent_service_client_secret:

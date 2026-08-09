@@ -31,6 +31,14 @@ the required filenames rather than depend on a hard-coded total. The script does
 not rotate secrets. Rotation must coordinate dependent services and verify
 access before retiring the prior value.
 
+Docker Compose implements file-backed secrets as bind mounts, so Linux preserves
+the host UID instead of remapping it to a non-root container account. The
+PostgreSQL, Keycloak, backend, and Grafana entrypoints therefore use a narrow
+bootstrap boundary: they read or stage only the secrets granted to that service
+while privileged, then execute the long-running process as its dedicated
+non-root account. Host files remain mode `0600`; making them world-readable is
+not a supported workaround.
+
 ## Non-secret development settings
 
 Ports and image references can be overridden in the shell or an untracked `.env` file. See `deploy/.env.example`. The managed local identity accepts an exact `http://localhost:<port>/realms/pcbknowledge` issuer with a numeric port from 1 through 65535; userinfo, another host, malformed ports, extra paths, queries, and fragments fail closed. Values prefixed with `VITE_` are public browser configuration and must never contain credentials.

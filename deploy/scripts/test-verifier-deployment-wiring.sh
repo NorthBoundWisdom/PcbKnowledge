@@ -23,6 +23,27 @@ import sys
 
 model = json.load(sys.stdin)
 services = model["services"]
+postgres = services["postgres"]
+assert postgres["entrypoint"] == ["/bin/sh", "/opt/pcbknowledge/start-postgres.sh"]
+assert postgres["environment"]["POSTGRES_PASSWORD_FILE"] == (
+    "/run/pcbknowledge-postgres-secrets/postgres_password"
+)
+
+keycloak_runner = [
+    "/bin/sh",
+    "/opt/pcbknowledge/run-as-keycloak.sh",
+    "/bin/sh",
+    "/opt/pcbknowledge/start-keycloak.sh",
+]
+assert services["keycloak"]["user"] == "0:0"
+assert services["keycloak"]["entrypoint"] == keycloak_runner
+assert services["keycloak-reconcile"]["user"] == "0:0"
+assert services["local-curator-keycloak"]["user"] == "0:0"
+assert services["grafana"]["user"] == "0:0"
+assert services["grafana"]["entrypoint"] == [
+    "/bin/sh", "/opt/pcbknowledge/start-grafana.sh"
+]
+
 verifier = services["verifier"]
 assert verifier["command"] == [
     "python", "-m", "pcbknowledge.document.verifier", "serve"
@@ -34,7 +55,7 @@ assert verifier["depends_on"]["seaweedfs"]["condition"] == "service_healthy"
 assert verifier["healthcheck"]["test"] == [
     "CMD",
     "/bin/sh",
-    "/workspace/deploy/docker/backend-entrypoint.sh",
+    "/usr/local/bin/pcbknowledge-backend-entrypoint",
     "python",
     "-m",
     "pcbknowledge.document.verifier",
@@ -118,7 +139,30 @@ assert "REVOKE pcbknowledge_verifier FROM %I" in role_script
 
 entrypoint = Path("deploy/docker/backend-entrypoint.sh").read_text(encoding="utf-8")
 assert "pcbknowledge_verifier)" in entrypoint
-assert "/run/secrets/verifier_db_password" in entrypoint
+assert '"$secret_directory/verifier_db_password"' in entrypoint
+assert "--reuid=pcbknowledge" in entrypoint
+assert "PATH=$trusted_path" in entrypoint
+assert "PATH=$application_path" in entrypoint
+
+dockerfile = Path("deploy/docker/backend.Dockerfile").read_text(encoding="utf-8")
+runtime = dockerfile.split("FROM application AS runtime", 1)[1]
+assert "USER root" in runtime
+assert "/usr/local/bin/pcbknowledge-backend-entrypoint" in runtime
+assert "--mode=0555" in runtime
+
+postgres_start = Path("deploy/postgres/start-postgres.sh").read_text(encoding="utf-8")
+assert "chown root:postgres" in postgres_start
+assert "exec docker-entrypoint.sh" in postgres_start
+
+keycloak_runner = Path("deploy/keycloak/run-as-keycloak.sh").read_text(encoding="utf-8")
+assert "chmod 440" in keycloak_runner
+assert "chroot --userspec=1000:0" in keycloak_runner
+
+grafana_start = Path("deploy/observability/grafana/start-grafana.sh").read_text(
+    encoding="utf-8"
+)
+assert "chmod 440" in grafana_start
+assert "su -s /bin/sh grafana" in grafana_start
 PY
 
 echo "Verifier Compose, secret, database-role, entrypoint, and S3 policy wiring is exact."
