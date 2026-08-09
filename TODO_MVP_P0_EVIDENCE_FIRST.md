@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge 第一轮 MVP：Evidence-first 纵向闭环
 
-> 状态：`IN_PROGRESS` — M0 已于 2026-08-08 完成，M1 与 M2a 首个本地可用 Intake 子切片的功能和本地验收已于 2026-08-09 完成；M2a 待主分支/CI 收口，M2 的页面解析资产尚未开始
+> 状态：`IN_PROGRESS` — M0、M1 与 M2a 首个本地可用 Intake 子切片已于 2026-08-09 完成并通过主分支 Linux CI；M2 的页面解析资产尚未开始
 > 创建日期：2026-08-08  
 > 目标阶段：第一轮 MVP，属于正式架构 P0 的最小可运营子集  
 > 执行入口：本文件  
@@ -257,7 +257,7 @@ M2 completion gate：
 - [x] hash、size、magic、租户范围、lease、状态机或 audit 不成立时不得产生 `STORED` revision；
 - [x] 前端可以选择 project、上传并轮询、浏览 document/revision，并经授权审计打开原件；
 - [x] 从 fresh FreeCM Config/Build 开始完成真实 Keycloak → 浏览器 → PostgreSQL → SeaweedFS 纵向验收；
-- [ ] canonical CI、FreeCM Test/Package 和主分支推送收口。
+- [x] canonical CI、FreeCM Test/Package 和主分支推送收口。
 
 ### M3 — 实体、EvidenceAnchor、审核与不可变发布
 
@@ -724,5 +724,22 @@ case 数：152 backend pytest，0 skipped；102 frontend Vitest；4 Playwright l
       PostgreSQL fresh volume health 与目录/密钥权限断言通过。下一轮 run 31319403510 的 fresh Build 已通过，
       随后的身份验收暴露 BSD/GNU `stat` 探测把 GNU 失败命令的 stdout 与 fallback 拼接；平台探测与取值已
       分离，失败探测输出被丢弃。
-下一步：推送 main，以 fresh Linux hosted runner 重跑 canonical CI 后关闭 M2a 主分支收口项
+下一步：在主分支 fresh Linux hosted runner 完成 canonical CI 后关闭 M2a 主分支收口项
+
+日期：2026-08-09
+里程碑/任务：M2a 主分支 Linux canonical CI 收口
+命令：GitHub Actions run 31319903673（commit abad6fed59a45c77ff7e97bb9269c32e1800d454）；
+      Frontend、Deployment、Backend、PostgreSQL/SeaweedFS integration、fresh local-stack acceptance、
+      migration round trip 六个 jobs
+退出码：六个 jobs 全部 success；真实 PostgreSQL/SeaweedFS 测试及三类 runtime contract 均由 JUnit gate
+      断言非空且 0 skipped；失败诊断步骤按预期 skipped，不属于测试跳过
+case 数：152 backend hermetic pytest，0 skipped；102 frontend Vitest；4 Playwright live；三类 runtime
+      contract 与 PostgreSQL/SeaweedFS suites 全部 0 skipped
+耗时：完整 workflow 约 11m38s；fresh Config→Build 4m55s；本地身份、verifier、Run 与浏览器闭环 4m26s
+结果：fresh Ubuntu runner 从空卷完成 Config→Build→随机本地身份→真实 PostgreSQL/SeaweedFS verifier→
+      PKCE 浏览器上传/读取→Run SIGINT=130，并清理 disposable stack。FreeCM Test/Package、本地热 Run 与
+      主分支推送收口均已有对应收据，M2a 首个本地可用 Intake 子切片完成。
+首个失败：前两轮 Linux run 分别暴露 file-secret UID/permission、wrapper umask 继承和 BSD/GNU stat 探测
+      差异；修复后 run 31319903673 六项全绿。
+下一步：进入 M2 页面解析、文本块与缩略图资产，不把 M2a 能力扩大表述为完整 M2。
 ```
