@@ -594,6 +594,11 @@ jobs:
         run: python3 configs/pcbknowledge_workflow.py build
       - name: Qualify local identity, verifier boundary, Run, and browser intake
         run: python3 -m configs.test_local_stack_acceptance
+      - name: Report failed local-stack services
+        if: failure()
+        run: |
+          docker compose ps --all || true
+          docker compose logs --no-color --tail 200 postgres keycloak seaweedfs api worker verifier web caddy || true
       - name: Remove the disposable local stack
         if: always()
         run: docker compose down --volumes --remove-orphans || true

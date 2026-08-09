@@ -15,6 +15,7 @@ if [ ! -s "$source_file" ]; then
   exit 1
 fi
 
+original_umask=$(umask)
 umask 077
 mkdir -p "$target_directory"
 chown root:root "$target_directory"
@@ -25,4 +26,5 @@ chmod 440 "$temporary_file"
 mv -f "$temporary_file" "$target_file"
 
 export GF_SECURITY_ADMIN_PASSWORD__FILE=$target_file
+umask "$original_umask"
 exec su -s /bin/sh grafana -c 'exec /run.sh'

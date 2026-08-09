@@ -475,6 +475,11 @@ def test_ci_invokes_python_local_stack_acceptance() -> None:
 
     assert "python3 -m configs.test_local_stack_acceptance" in workflow_text
     assert "timeout-minutes: 60" in workflow_text
+    acceptance_job = workflow_text.split("\n  local-stack-acceptance:\n", 1)[1]
+    assert acceptance_job.index("Report failed local-stack services") < acceptance_job.index(
+        "Remove the disposable local stack"
+    )
+    assert "docker compose logs --no-color --tail 200" in acceptance_job
     assert not (workflow.REPO_ROOT / "deploy/scripts/test-local-stack-acceptance.sh").exists()
 
 

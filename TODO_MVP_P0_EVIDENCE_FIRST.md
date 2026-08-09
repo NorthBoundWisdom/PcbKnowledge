@@ -718,6 +718,9 @@ case 数：152 backend pytest，0 skipped；102 frontend Vitest；4 Playwright l
       7128ee1d14e37f683a120e7556acfef4a6dfafd40b33800f9c9ac21f9e6d6d68，导出后 Run 收据仍有效。
 首个失败：远端 run 31316885716 的 fresh stack 在 PostgreSQL health 前失败；官方 Compose file-secret
       bind ownership 语义定位为 Linux 下 0600 宿主文件对非 root 容器 UID 不可读。随后本地 acceptance
-      首跑因宿主 PATH 无 pnpm 立即失败；改用仓库固定的临时 Node 24.11.1 工具链后 4/4 live 通过。
+      首跑因宿主 PATH 无 pnpm 立即失败；改用仓库固定的临时 Node 24.11.1 工具链后 4/4 live 通过。首轮
+      Linux 修复 run 31318766938 又暴露 wrapper 的 `umask 077` 被官方 PostgreSQL 18 entrypoint 继承，
+      PGDATA 父目录成为 root-only；隔离空卷复现后改为只在 staging 期间收紧并在降权前恢复原 umask，
+      PostgreSQL fresh volume health 与目录/密钥权限断言通过。
 下一步：推送 main，以 fresh Linux hosted runner 重跑 canonical CI 后关闭 M2a 主分支收口项
 ```

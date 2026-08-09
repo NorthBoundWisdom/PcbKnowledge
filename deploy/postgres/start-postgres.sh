@@ -25,6 +25,7 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
+original_umask=$(umask)
 umask 077
 mkdir -p "$target_directory"
 chown root:root "$target_directory"
@@ -34,5 +35,6 @@ stage_secret keycloak_db_password
 
 export PCBKNOWLEDGE_SECRET_DIRECTORY=$target_directory
 export POSTGRES_PASSWORD_FILE=$target_directory/postgres_password
+umask "$original_umask"
 
 exec docker-entrypoint.sh "$@"

@@ -13,6 +13,7 @@ if [ "$#" -eq 0 ]; then
   exit 1
 fi
 
+original_umask=$(umask)
 umask 077
 mkdir -p "$target_directory"
 chown root:root "$target_directory"
@@ -54,4 +55,5 @@ if [ -f "$realm_file" ]; then
 fi
 
 export PCBKNOWLEDGE_SECRET_DIRECTORY=$target_directory
+umask "$original_umask"
 exec /usr/sbin/chroot --userspec=1000:0 / "$@"

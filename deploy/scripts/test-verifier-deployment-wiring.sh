@@ -153,16 +153,22 @@ assert "--mode=0555" in runtime
 postgres_start = Path("deploy/postgres/start-postgres.sh").read_text(encoding="utf-8")
 assert "chown root:postgres" in postgres_start
 assert "exec docker-entrypoint.sh" in postgres_start
+assert "original_umask=$(umask)" in postgres_start
+assert 'umask "$original_umask"' in postgres_start
 
 keycloak_runner = Path("deploy/keycloak/run-as-keycloak.sh").read_text(encoding="utf-8")
 assert "chmod 440" in keycloak_runner
 assert "chroot --userspec=1000:0" in keycloak_runner
+assert "original_umask=$(umask)" in keycloak_runner
+assert 'umask "$original_umask"' in keycloak_runner
 
 grafana_start = Path("deploy/observability/grafana/start-grafana.sh").read_text(
     encoding="utf-8"
 )
 assert "chmod 440" in grafana_start
 assert "su -s /bin/sh grafana" in grafana_start
+assert "original_umask=$(umask)" in grafana_start
+assert 'umask "$original_umask"' in grafana_start
 PY
 
 echo "Verifier Compose, secret, database-role, entrypoint, and S3 policy wiring is exact."
