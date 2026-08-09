@@ -29,6 +29,59 @@ Authoritative project documents:
 - Docker Engine with Docker Compose v2
 - `openssl` for local secret generation
 
+Initialize the repository-pinned FreeCM tooling after cloning:
+
+```bash
+git submodule update --init --recursive FreeCM
+```
+
+## FreeCM plugin workflow
+
+The repository declares Config, Build, Run, Test, and Package actions in
+`configs/freecm.commands.jsonc`. In the FreeCM workflow view, run **Config** once and then
+choose **Run → Full Service Stack**. Run starts the complete service stack, waits for its
+health checks, and keeps the FreeCM terminal attached to service logs. The curator is
+available at <http://localhost:18080>; press Ctrl+C in that terminal to stop only the
+FreeCM-managed stack while preserving its Docker volumes.
+
+The plugin actions are deliberately isolated under the `pcbknowledge-freecm` Compose
+project, so they do not reuse or stop a stack started with `deploy/scripts/dev-up.sh`.
+Their fixed local endpoints are:
+
+- curator/Caddy: <http://localhost:18080>
+- Keycloak: <http://localhost:18081>
+- S3: <http://localhost:18333>
+- Prometheus: <http://localhost:19090>
+- Grafana: <http://localhost:13000>
+
+The other actions use the same pinned workflow:
+
+- **Config** generates untracked development secrets, validates the resolved Compose
+  model, and writes an input-bound receipt under `.freecm/`.
+- **Build** builds the API, worker, web, migration, and storage-initializer images.
+- **Test** runs backend formatting/lint/type/unit/OpenAPI checks and frontend generated
+  client/lint/type/unit/build checks in the repository-pinned containers.
+- **Package** exports the five repository-owned images as a gzip-compressed,
+  `docker image load`-compatible archive, SHA-256 sidecar, and JSON manifest under
+  `build/package/`.
+
+The same actions can be reproduced without the UI:
+
+```bash
+python3 configs/pcbknowledge_workflow.py config
+python3 configs/pcbknowledge_workflow.py run
+python3 configs/pcbknowledge_workflow.py test
+python3 configs/pcbknowledge_workflow.py package
+```
+
+After editing the FreeCM command manifest or its workflow, validate it against the pinned
+plugin checkout:
+
+```bash
+npm ci --no-audit --prefix FreeCM/vscode-extension
+python3 configs/validate_freecm_repo_commands.py
+```
+
 ## Canonical commands
 
 Install and verify the source tree:
@@ -39,7 +92,7 @@ corepack enable
 pnpm install --frozen-lockfile
 uv run ruff format --check .
 uv run ruff check .
-uv run mypy src apps tests
+uv run mypy src apps tests configs
 uv run pytest
 uv run pcbknowledge-openapi --check
 pnpm check:generated

@@ -1,0 +1,103 @@
+{
+  "version": 2,
+  "commands": {
+    "config": [
+      {
+        "id": "freecm-compose",
+        "label": "FreeCM Local Compose",
+        "description": "Generate local secrets and validate the isolated FreeCM Compose profile",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "config"],
+        "platforms": ["darwin", "linux"],
+        "default": true,
+        "defaults": {
+          "build": "compose-images",
+          "run": "compose-stack",
+          "test": "hermetic",
+          "package": "compose-image-archive"
+        },
+        "readiness": {
+          "inputs": [
+            ".dockerignore",
+            "configs/freecm.commands.jsonc",
+            "configs/pcbknowledge_workflow.py",
+            "compose.yaml",
+            "deploy/docker/backend.Dockerfile",
+            "deploy/docker/web.Dockerfile",
+            "deploy/keycloak/pcbknowledge-agent-client.template.json",
+            "deploy/keycloak/pcbknowledge-realm.template.json",
+            "deploy/scripts/bootstrap-secrets.sh",
+            "deploy/scripts/compose-check.sh",
+            "deploy/scripts/dev-up.sh",
+            "deploy/scripts/dev-down.sh",
+            "deploy/scripts/test-backend-hermetic.sh",
+            "deploy/scripts/test-frontend-hermetic.sh",
+            "package.json",
+            "pnpm-lock.yaml",
+            "pnpm-workspace.yaml",
+            "pyproject.toml",
+            "uv.lock"
+          ],
+          "outputs": [
+            ".freecm/pcbknowledge-compose.json",
+            "deploy/secrets/postgres_password",
+            "deploy/secrets/application_db_password",
+            "deploy/secrets/worker_db_password",
+            "deploy/secrets/keycloak_db_password",
+            "deploy/secrets/keycloak_admin_password",
+            "deploy/secrets/agent_service_client_secret",
+            "deploy/secrets/seaweedfs_access_key",
+            "deploy/secrets/seaweedfs_secret_key",
+            "deploy/secrets/seaweedfs_admin_access_key",
+            "deploy/secrets/seaweedfs_admin_secret_key",
+            "deploy/secrets/seaweedfs_worker_access_key",
+            "deploy/secrets/seaweedfs_worker_secret_key",
+            "deploy/secrets/grafana_admin_password",
+            "deploy/secrets/keycloak-realm.json",
+            "deploy/secrets/keycloak-agent-client.json"
+          ]
+        }
+      }
+    ],
+    "build": [
+      {
+        "id": "compose-images",
+        "label": "Compose Images",
+        "description": "Build the API, worker, web, migration, and storage-init images",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "build"],
+        "configurations": ["freecm-compose"]
+      }
+    ],
+    "run": [
+      {
+        "id": "compose-stack",
+        "label": "Full Service Stack",
+        "description": "Start the isolated PcbKnowledge stack, stream service logs, and stop it on Ctrl+C",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "run"],
+        "configurations": ["freecm-compose"]
+      }
+    ],
+    "test": [
+      {
+        "id": "hermetic",
+        "label": "Hermetic Repository Tests",
+        "description": "Run backend lint/types/unit/OpenAPI and frontend generated/lint/types/unit/build checks in pinned containers",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "test"],
+        "configurations": ["freecm-compose"]
+      }
+    ],
+    "package": [
+      {
+        "id": "compose-image-archive",
+        "label": "Compose Image Archive",
+        "description": "Build and export the five PcbKnowledge-owned images as a Docker-loadable archive with a SHA-256 manifest",
+        "command": "python3",
+        "args": ["configs/pcbknowledge_workflow.py", "package"],
+        "configurations": ["freecm-compose"]
+      }
+    ]
+  }
+}

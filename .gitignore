@@ -9,6 +9,9 @@ __pycache__/
 coverage.xml
 htmlcov/
 .venv/
+/build/
+/.freecm/
+/.freecm.workspace.lock
 
 # Node / browser tooling
 node_modules/

@@ -98,6 +98,34 @@ services:
     restart: "no"
     networks: [backend]
 
+  backend-test:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+      target: test
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
+        UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
+    restart: "no"
+    networks: [backend]
+
+  frontend-test:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: deploy/docker/web.Dockerfile
+      target: test
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:24.11.1-alpine}
+        NGINX_IMAGE: ${NGINX_IMAGE:-nginx:1.29.2-alpine}
+        VITE_API_BASE_URL: /api/v1
+        VITE_OIDC_ISSUER_URL: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}/realms/pcbknowledge
+        VITE_OIDC_CLIENT_ID: pcbknowledge-curator-web
+        VITE_DEPLOYMENT_LABEL: ${PCBKNOWLEDGE_DEPLOYMENT_LABEL:-Local M1}
+    restart: "no"
+    networks: [backend]
+
   keycloak:
     image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
     entrypoint: ["/bin/sh", "/opt/pcbknowledge/start-keycloak.sh"]

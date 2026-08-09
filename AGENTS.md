@@ -26,6 +26,27 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 - Do not hand-edit generated files. Change their source or generator, regenerate, and review both changes.
 - Parsed blocks, thumbnails, FTS/vector indexes, caches, and model output are derived artifacts. Tests must prove they can be rebuilt from permanent assets.
 
+## FreeCM repository workflow
+
+- This owner-managed repository tracks the latest validated `FreeCM/master` as the
+  `FreeCM/` submodule on `main`. Refresh it only from the host repository root with
+  `git submodule update --remote --checkout FreeCM`; never run `git -C FreeCM pull`.
+- A routine FreeCM refresh requires both the host and submodule worktrees to be clean.
+  If the gitlink does not change, stay silent and do not create an empty commit. If it
+  changes, validate the host workflow, commit the gitlink and any required compatibility
+  changes together, and push the existing `main` branch without opening a pull request.
+- `configs/freecm.commands.jsonc` is the plugin action manifest. Keep orchestration in
+  `configs/pcbknowledge_workflow.py`, require the declared Config receipt before every
+  downstream action, and keep Run terminal-owned so interrupting it shuts down only the
+  `pcbknowledge-freecm` Compose project without deleting volumes.
+- Python, JavaScript, container, and service-image dependencies remain governed by
+  `uv.lock`, `pnpm-lock.yaml`, and `compose.yaml`. Do not add an empty source-root lock or
+  materialization flow until a real source dependency requires one.
+- After changing the FreeCM manifest or workflow, run
+  `python3 configs/validate_freecm_repo_commands.py`; this wrapper rebuilds and invokes
+  the validator from the pinned submodule and must not be replaced by a cached generated
+  validator call.
+
 ## Verification and handoff
 
 - Run the narrowest relevant checks while iterating, then the canonical lint, type, unit, migration, contract-generation, and build checks for the touched surfaces.

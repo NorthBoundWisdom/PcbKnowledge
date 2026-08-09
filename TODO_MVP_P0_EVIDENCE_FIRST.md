@@ -611,4 +611,18 @@ case 数：10 个长期服务；7 个显式 Docker health checks；4 个 readine
 首个失败：初次额外运行 Keycloak 漂移测试时漏带隔离端口环境，随后 smoke curl 退出 7；恢复同一
       隔离端口并重跑后两项均通过。基础空卷 dev-up 本身无失败。
 下一步：提交并推送 M1；M2 尚未开始，不把 intake、PDF parsing、知识审核或检索算作当前能力
+
+日期：2026-08-09
+里程碑/任务：M1 工程工作流 — FreeCM Config/Build/Run/Test/Package 接线
+命令：npm ci --prefix FreeCM/vscode-extension；validate_freecm_repo_commands.py；
+      pcbknowledge_workflow.py config/build/test/package；Run 启动后 curl health/ready，再 Ctrl+C；
+      shasum/gzip -t/docker image load；ruff format/check；mypy；hermetic pytest；OpenAPI drift
+退出码：除人工 Ctrl+C 后 Run 按终端合同返回 130 外全部 0；Run 的 dev-down 清理退出 0
+case 数：123 backend pytest，0 skipped；42 frontend Vitest；10 个健康服务；5 个可重新 load 的镜像
+耗时：最终 Test 约 24s；Package 约 6s；Run 包含首次独立卷初始化，未单独计时
+结果：FreeCM v0.1.141 以 submodule 固定；插件工作流使用独立 pcbknowledge-freecm Compose project
+      和端口。Run 的 API health/readiness 为 200；中断后容器为 0、状态卷保留，原开发栈 10 个服务
+      不受影响。Package 的 Docker image archive 通过 SHA-256、gzip 和实际 docker image load 验证。
+首个失败：首次宿主 Ruff 全仓门禁进入新 submodule；根配置显式排除 FreeCM/build 后最终门禁通过
+下一步：保持 FreeCM owner-managed latest 策略；M2 开始前不增加虚假的 source-root dependency lock
 ```

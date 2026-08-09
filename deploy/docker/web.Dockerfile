@@ -25,6 +25,13 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL \
 
 RUN test -n "$VITE_OIDC_ISSUER_URL" && pnpm build
 
+FROM build AS test
+
+COPY eslint.config.mjs ./eslint.config.mjs
+COPY packages/contracts ./packages/contracts
+COPY deploy/scripts/test-frontend-hermetic.sh ./deploy/scripts/test-frontend-hermetic.sh
+CMD ["/bin/sh", "/workspace/deploy/scripts/test-frontend-hermetic.sh"]
+
 FROM ${NGINX_IMAGE} AS runtime
 COPY deploy/docker/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /workspace/apps/curator-web/dist /usr/share/nginx/html

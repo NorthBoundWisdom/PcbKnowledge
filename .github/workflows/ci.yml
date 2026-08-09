@@ -32,7 +32,7 @@ jobs:
       - name: Lint
         run: uv run ruff check .
       - name: Type check
-        run: uv run mypy src apps tests
+        run: uv run mypy src apps tests configs
       - name: Hermetic unit tests
         run: >-
           uv run pytest
@@ -350,6 +350,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: FreeCM/vscode-extension/package-lock.json
+      - name: Validate FreeCM repository commands
+        run: |
+          npm ci --no-audit --prefix FreeCM/vscode-extension
+          python3 configs/validate_freecm_repo_commands.py
       - name: Validate shell and committed JSON syntax
         run: |
           find deploy -type f -name '*.sh' -exec sh -n {} \;

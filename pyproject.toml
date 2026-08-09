@@ -52,6 +52,7 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py314"
+extend-exclude = ["FreeCM", "build"]
 
 [tool.ruff.lint]
 select = ["B", "E", "F", "I", "RUF", "SIM", "UP"]
@@ -62,7 +63,7 @@ select = ["B", "E", "F", "I", "RUF", "SIM", "UP"]
 [tool.mypy]
 python_version = "3.14"
 strict = true
-files = ["src", "apps", "tests"]
+files = ["src", "apps", "tests", "configs"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
