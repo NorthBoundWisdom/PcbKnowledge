@@ -14,15 +14,21 @@ from pcbknowledge.platform.database import (
 from pcbknowledge.platform.database.health import EXPECTED_DATABASE_REVISION
 
 _EXPECTED_ROLE_ENV = "PCBKNOWLEDGE_EXPECTED_RUNTIME_ROLE"
+_RUNTIME_ROLES = frozenset({"pcbknowledge_app", "pcbknowledge_worker", "pcbknowledge_verifier"})
 
-pytestmark = pytest.mark.skipif(
-    os.getenv(_EXPECTED_ROLE_ENV) not in {"pcbknowledge_app", "pcbknowledge_worker"},
-    reason=f"set {_EXPECTED_ROLE_ENV} to an actual runtime login role",
-)
+
+def _expected_runtime_role() -> str:
+    expected_role = os.getenv(_EXPECTED_ROLE_ENV)
+    if expected_role not in _RUNTIME_ROLES:
+        pytest.fail(
+            f"set {_EXPECTED_ROLE_ENV} to an actual runtime login role; skipping is forbidden",
+            pytrace=False,
+        )
+    return expected_role
 
 
 def test_actual_runtime_login_satisfies_database_contract() -> None:
-    expected_role = os.environ[_EXPECTED_ROLE_ENV]
+    expected_role = _expected_runtime_role()
     dsn = os.environ["PCBKNOWLEDGE_DATABASE_DSN"]
     engine = create_engine(dsn)
     try:
@@ -76,7 +82,7 @@ def test_actual_runtime_login_satisfies_database_contract() -> None:
 
 
 def test_app_runtime_rejects_identity_and_grant_drift() -> None:
-    if os.environ[_EXPECTED_ROLE_ENV] != "pcbknowledge_app":
+    if _expected_runtime_role() != "pcbknowledge_app":
         return
     admin_dsn = os.environ["PCBKNOWLEDGE_M1_TEST_DATABASE_DSN"]
     runtime_engine = create_engine(os.environ["PCBKNOWLEDGE_DATABASE_DSN"])

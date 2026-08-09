@@ -54,6 +54,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Reclaim runner disk for real-service tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo rm -rf \
+            /opt/ghc \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/lib/android \
+            /usr/share/dotnet
+          docker system prune --all --force --volumes
+          df -h /
       - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
@@ -198,19 +209,43 @@ jobs:
           PCBKNOWLEDGE_EXPECTED_RUNTIME_ROLE: pcbknowledge_app
         run: |
           PCBKNOWLEDGE_DATABASE_DSN="$PCBKNOWLEDGE_M1_APP_DATABASE_DSN" \
-            uv run pytest -ra tests/test_database_contract_postgres.py
+            uv run pytest -ra \
+              --junitxml="$RUNNER_TEMP/runtime-contract-app.xml" \
+              tests/test_database_contract_postgres.py
       - name: Actual worker runtime contract
         env:
           PCBKNOWLEDGE_EXPECTED_RUNTIME_ROLE: pcbknowledge_worker
         run: |
           PCBKNOWLEDGE_DATABASE_DSN="$PCBKNOWLEDGE_M1_WORKER_DATABASE_DSN" \
-            uv run pytest -ra tests/test_database_contract_postgres.py
+            uv run pytest -ra \
+              --junitxml="$RUNNER_TEMP/runtime-contract-worker.xml" \
+              tests/test_database_contract_postgres.py
       - name: Actual verifier runtime contract
         env:
           PCBKNOWLEDGE_EXPECTED_RUNTIME_ROLE: pcbknowledge_verifier
         run: |
           PCBKNOWLEDGE_DATABASE_DSN="$PCBKNOWLEDGE_M2_VERIFIER_DATABASE_DSN" \
-            uv run pytest -ra tests/test_database_contract_postgres.py
+            uv run pytest -ra \
+              --junitxml="$RUNNER_TEMP/runtime-contract-verifier.xml" \
+              tests/test_database_contract_postgres.py
+      - name: Assert runtime contract tests did not skip
+        env:
+          REPORT_DIRECTORY: ${{ runner.temp }}
+        run: |
+          python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          report_directory = Path(os.environ["REPORT_DIRECTORY"])
+          for role in ("app", "worker", "verifier"):
+              report = report_directory / f"runtime-contract-{role}.xml"
+              cases = ET.parse(report).findall(".//testcase")
+              skipped = [case for case in cases if case.find("skipped") is not None]
+              print(f"{role} runtime contract receipt: {len(cases)} tests, {len(skipped)} skipped")
+              if not cases or skipped:
+                  raise SystemExit(f"{role} runtime contract tests must run without skips")
+          PY
       - name: Assert PostgreSQL tests did not skip
         env:
           REPORT_PATH: ${{ runner.temp }}/m1-postgres.xml
@@ -525,6 +560,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Reclaim runner disk for real-service tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo rm -rf \
+            /opt/ghc \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/lib/android \
+            /usr/share/dotnet
+          docker system prune --all --force --volumes
+          df -h /
       - uses: actions/setup-python@v6
         with:
           python-version: "3.14"

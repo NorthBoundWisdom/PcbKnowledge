@@ -433,6 +433,40 @@ def test_ci_invokes_python_local_stack_acceptance() -> None:
     assert not (workflow.REPO_ROOT / "deploy/scripts/test-local-stack-acceptance.sh").exists()
 
 
+def test_real_service_ci_jobs_reclaim_hosted_runner_disk() -> None:
+    workflow_text = (workflow.REPO_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    integration_job = workflow_text.split("\n  m1-integration:\n", 1)[1].split(
+        "\n  migrations:\n", 1
+    )[0]
+    acceptance_job = workflow_text.split("\n  local-stack-acceptance:\n", 1)[1]
+
+    for job in (integration_job, acceptance_job):
+        assert job.count("Reclaim runner disk for real-service tests") == 1
+        assert job.count("/opt/hostedtoolcache/CodeQL") == 1
+        assert job.count("/usr/local/lib/android") == 1
+        assert job.count("docker system prune --all --force --volumes") == 1
+        assert job.index("Reclaim runner disk for real-service tests") < job.index(
+            "actions/setup-python@v6"
+        )
+
+
+def test_ci_runtime_contract_receipts_forbid_skips() -> None:
+    workflow_text = (workflow.REPO_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    integration_job = workflow_text.split("\n  m1-integration:\n", 1)[1].split(
+        "\n  migrations:\n", 1
+    )[0]
+    runtime_contract_test = (
+        workflow.REPO_ROOT / "tests/test_database_contract_postgres.py"
+    ).read_text(encoding="utf-8")
+
+    for role in ("app", "worker", "verifier"):
+        assert f'--junitxml="$RUNNER_TEMP/runtime-contract-{role}.xml"' in integration_job
+    assert "Assert runtime contract tests did not skip" in integration_job
+    assert "if not cases or skipped:" in integration_job
+    assert "pytest.mark.skip" not in runtime_contract_test
+    assert "skipping is forbidden" in runtime_contract_test
+
+
 def test_package_platform_comes_from_built_images() -> None:
     metadata = [
         {"Os": "linux", "Architecture": "arm64"},
