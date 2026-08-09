@@ -40,8 +40,9 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
   downstream action, and keep Run terminal-owned so interrupting it shuts down only the
   `pcbknowledge-freecm` Compose project without deleting volumes.
 - Python, JavaScript, container, and service-image dependencies remain governed by
-  `uv.lock`, `pnpm-lock.yaml`, and `compose.yaml`. Do not add an empty source-root lock or
-  materialization flow until a real source dependency requires one.
+  `uv.lock`, `pnpm-lock.yaml`, and `compose.yaml`. Keep the reviewed
+  `source_roots.lock.jsonc.in` template empty until a real source dependency is approved;
+  do not add an active source-root lock or materialization flow before then.
 - After changing the FreeCM manifest or workflow, run
   `python3 configs/validate_freecm_repo_commands.py`; this wrapper rebuilds and invokes
   the validator from the pinned submodule and must not be replaced by a cached generated
