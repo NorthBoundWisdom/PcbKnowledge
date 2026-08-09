@@ -54,6 +54,11 @@ entire prepared FreeCM environment while preserving its volumes, run:
 COMPOSE_PROJECT_NAME=pcbknowledge-freecm ./deploy/scripts/dev-down.sh
 ```
 
+The M1 stack wires OIDC but does not create a human user or default password. A Curator
+login needs both a Keycloak realm user and its trusted PostgreSQL identity/membership;
+the Keycloak bootstrap administrator is not an application user. See
+[authentication operations](docs/operations/authentication.md#human-account-status).
+
 The plugin actions are deliberately isolated under the `pcbknowledge-freecm` Compose
 project, so they do not reuse or stop a stack started with `deploy/scripts/dev-up.sh`.
 Their fixed local endpoints are:

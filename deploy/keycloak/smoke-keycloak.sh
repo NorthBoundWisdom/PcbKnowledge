@@ -3,6 +3,7 @@ set -eu
 umask 077
 
 issuer=${PCBKNOWLEDGE_KEYCLOAK_ISSUER_URL:-http://localhost:8081/realms/pcbknowledge}
+curator_redirect_uri=${PCBKNOWLEDGE_CURATOR_REDIRECT_URI:-http://localhost:8080/auth/callback}
 secret_file=${PCBKNOWLEDGE_AGENT_SERVICE_SECRET_FILE:-deploy/secrets/agent_service_client_secret}
 
 for dependency in curl jq openssl; do
@@ -58,7 +59,7 @@ authorization_status=$(
     --data-urlencode client_id=pcbknowledge-curator-web \
     --data-urlencode response_type=code \
     --data-urlencode scope='openid profile email roles' \
-    --data-urlencode redirect_uri=http://localhost:8080/auth/callback \
+    --data-urlencode "redirect_uri=$curator_redirect_uri" \
     --data-urlencode code_challenge="$challenge" \
     --data-urlencode code_challenge_method=S256 \
     --data-urlencode state=nonsecret-smoke-state \

@@ -14,6 +14,22 @@ Keycloak adds the API audience and subject-kind claim with client-specific mappe
 
 Token roles never grant Curator Web capabilities. After OIDC validation, the browser calls the generated, Bearer-authenticated `GET /session` transport. Only its trusted database `external_subject` mapping, organization roles, and explicit project grants are converted to bounded UI capabilities. Project roles enable only project-scoped workspace operations; in particular, project-only `KNOWLEDGE_ADMIN` never grants organization-global `admin:operate`. Missing, denied, unavailable, malformed, service-kind, or roleless session projections clear the in-memory user and fail closed before a workspace route loads. The API remains the final authorization boundary for every operation and validates signature, issuer, audience, expiry, subject kind, organization/project scope, trusted role, and requested action.
 
+## Human account status
+
+The M1 reference stack configures the login protocol, but deliberately provisions no
+human account or default password. The `pcbknowledge-admin` bootstrap identity belongs
+to Keycloak's management realm and is not a Curator Web user. A usable human session
+requires both an enabled user in the `pcbknowledge` realm and a matching trusted
+`identity.external_subject` plus at least one organization or project membership in
+PostgreSQL. Creating only one side fails closed. Human onboarding and its audited
+administration workflow are not implemented in M1; do not work around that boundary by
+using the Keycloak administrator or inserting an anonymous/default application user.
+
+The local client registers exact callbacks for the normal Compose origin on port 8080,
+the isolated FreeCM origin on port 18080, and the frontend development/test origins.
+After any client-definition change, rerun FreeCM Config and Build so the input-bound
+receipt and the existing Keycloak database are reconciled before Run.
+
 ## Browser storage policy
 
 Access token, refresh token, and the OIDC `User` object are held by an `InMemoryWebStorage` user store. A reload therefore signs the browser out locally. They are never written to `localStorage` or `sessionStorage`.
@@ -60,6 +76,14 @@ The test deliberately enables insecure realm settings, verifies that the drift t
 With Keycloak running and reconciled:
 
 ```bash
+./deploy/keycloak/smoke-keycloak.sh
+```
+
+For the isolated FreeCM endpoints, exercise its exact callback with:
+
+```bash
+PCBKNOWLEDGE_KEYCLOAK_ISSUER_URL=http://localhost:18081/realms/pcbknowledge \
+PCBKNOWLEDGE_CURATOR_REDIRECT_URI=http://localhost:18080/auth/callback \
 ./deploy/keycloak/smoke-keycloak.sh
 ```
 

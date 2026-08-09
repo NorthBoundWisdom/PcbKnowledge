@@ -89,6 +89,33 @@ def test_manifest_readiness_matches_workflow_contract() -> None:
     assert configuration["defaults"]["run"] == "start-built-apps"
 
 
+def test_freecm_curator_origin_is_an_exact_oidc_redirect() -> None:
+    origin = f"http://localhost:{workflow.FREECM_ENVIRONMENT['PCBKNOWLEDGE_HTTP_PORT']}"
+    expected_callback = f"{origin}/auth/callback"
+    expected_logout_callback = f"{origin}/auth/logout/callback"
+    definitions = (
+        workflow.REPO_ROOT / "deploy/keycloak/pcbknowledge-curator-client.json",
+        workflow.REPO_ROOT / "deploy/keycloak/pcbknowledge-realm.template.json",
+    )
+
+    for definition in definitions:
+        payload = json.loads(definition.read_text(encoding="utf-8"))
+        if "clients" in payload:
+            client = next(
+                item
+                for item in payload["clients"]
+                if item["clientId"] == "pcbknowledge-curator-web"
+            )
+        else:
+            client = payload
+
+        assert expected_callback in client["redirectUris"]
+        assert origin in client["webOrigins"]
+        assert expected_logout_callback in client["attributes"]["post.logout.redirect.uris"].split(
+            "##"
+        )
+
+
 def test_runtime_receipt_binds_configuration_images_and_ready_infrastructure(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

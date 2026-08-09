@@ -13,11 +13,13 @@
   "baseUrl": "/",
   "redirectUris": [
     "http://localhost:8080/auth/callback",
+    "http://localhost:18080/auth/callback",
     "http://localhost:5173/auth/callback",
     "http://127.0.0.1:4173/auth/callback"
   ],
   "webOrigins": [
     "http://localhost:8080",
+    "http://localhost:18080",
     "http://localhost:5173",
     "http://127.0.0.1:4173"
   ],
@@ -31,7 +33,7 @@
   ],
   "attributes": {
     "pkce.code.challenge.method": "S256",
-    "post.logout.redirect.uris": "http://localhost:8080/auth/logout/callback##http://localhost:5173/auth/logout/callback##http://127.0.0.1:4173/auth/logout/callback"
+    "post.logout.redirect.uris": "http://localhost:8080/auth/logout/callback##http://localhost:18080/auth/logout/callback##http://localhost:5173/auth/logout/callback##http://127.0.0.1:4173/auth/logout/callback"
   },
   "protocolMappers": [
     {

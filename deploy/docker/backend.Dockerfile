@@ -33,6 +33,7 @@ FROM application AS test
 
 USER root
 COPY configs ./configs
+COPY deploy/keycloak ./deploy/keycloak
 COPY packages/contracts ./packages/contracts
 COPY tests ./tests
 COPY deploy/scripts/test-backend-hermetic.sh ./deploy/scripts/test-backend-hermetic.sh
