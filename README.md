@@ -56,7 +56,9 @@ and Keycloak, bootstraps the explicitly managed local Curator, and initializes s
 Run never builds or migrates; it only starts the already-created API, cleanup worker,
 document verifier, web, and gateway containers. Its terminal view hides successful periodic
 health probes while preserving failures and real work; the ready banner prints the page,
-managed username, password-file path, and the command for unfiltered logs.
+managed username, password-file path, and the command for unfiltered logs. In an interactive
+local terminal it also opens the Curator in the default browser; CI and headless acceptance
+disable that behavior explicitly.
 
 The curator is available at <http://localhost:18080>. Press Ctrl+C in the Run terminal to
 stop those five application containers. PostgreSQL, Keycloak, SeaweedFS, and observability
@@ -71,7 +73,11 @@ Build creates one fail-closed local human identity for development. Sign in as
 `pcbknowledge-curator` and read its random password from the owner-only, ignored
 `deploy/secrets/local_curator_password` file at the interactive login boundary. It has
 only `DATA_CURATOR` access to the managed default project; it is neither a reviewer nor an
-administrator. The Keycloak bootstrap administrator is not an application user. See
+administrator. Save this generated credential in the browser password manager after the
+first login; the Keycloak SSO session avoids repeated credential entry while it remains
+active. This bootstrap identity is not the production onboarding model: a shared deployment
+must issue individual accounts to data curators, preferably by federating Keycloak with the
+organization's identity provider. The Keycloak bootstrap administrator is not an application user. See
 [authentication operations](docs/operations/authentication.md#local-development-human).
 
 For the first end-to-end use, open **Intake → New intake**, select the managed default

@@ -120,6 +120,7 @@ def run_acceptance() -> None:
         raise AcceptanceError("pnpm is required for the live browser acceptance test")
 
     environment = workflow_environment()
+    environment["PCBKNOWLEDGE_DISABLE_BROWSER_OPEN"] = "1"
     _run_checked(["/bin/sh", "deploy/scripts/test-local-development-bootstrap.sh"], environment)
     _run_checked(["/bin/sh", "deploy/scripts/test-verifier-runtime-boundary.sh"], environment)
 

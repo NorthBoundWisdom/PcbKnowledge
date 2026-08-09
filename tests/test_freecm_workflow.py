@@ -545,6 +545,7 @@ def test_run_never_builds_and_stops_only_application_services(
     checked: list[tuple[str, ...]] = []
     unchecked: list[tuple[str, ...]] = []
     followed: list[dict[str, str]] = []
+    opened: list[dict[str, str]] = []
 
     monkeypatch.setattr(workflow, "require_configuration", lambda: None)
     monkeypatch.setattr(workflow, "require_docker", lambda _environment: None)
@@ -569,6 +570,12 @@ def test_run_never_builds_and_stops_only_application_services(
 
     monkeypatch.setattr(workflow, "_follow_application_logs", follow_application_logs)
 
+    def open_curator(environment: dict[str, str]) -> bool:
+        opened.append(dict(environment))
+        return True
+
+    monkeypatch.setattr(workflow, "_open_curator", open_curator)
+
     assert workflow.cmd_run() == 0
     assert checked == [
         (
@@ -584,6 +591,7 @@ def test_run_never_builds_and_stops_only_application_services(
             *workflow.APPLICATION_SERVICES,
         )
     ]
+    assert opened == [{"TEST": "1"}]
     assert followed == [{"TEST": "1"}]
     assert unchecked == [
         (
@@ -625,6 +633,43 @@ def test_run_log_filter_hides_only_successful_idle_probes(line: str) -> None:
 )
 def test_run_log_filter_preserves_work_and_failures(line: str) -> None:
     assert not workflow._is_idle_application_log(line)
+
+
+def test_run_opens_only_the_fixed_local_curator_origin(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    opened: list[tuple[str, int, bool]] = []
+
+    def record_open(url: str, new: int, autoraise: bool) -> bool:
+        opened.append((url, new, autoraise))
+        return True
+
+    monkeypatch.setattr(
+        "configs.pcbknowledge_workflow.webbrowser.open",
+        record_open,
+    )
+
+    assert workflow._open_curator({})
+    assert opened == [("http://localhost:18080", 2, True)]
+
+
+@pytest.mark.parametrize(
+    "environment",
+    [
+        {"CI": "true"},
+        {"PCBKNOWLEDGE_DISABLE_BROWSER_OPEN": "1"},
+    ],
+)
+def test_run_does_not_open_a_browser_in_automation(
+    monkeypatch: pytest.MonkeyPatch,
+    environment: dict[str, str],
+) -> None:
+    monkeypatch.setattr(
+        "configs.pcbknowledge_workflow.webbrowser.open",
+        lambda *_arguments, **_keywords: pytest.fail("browser open must remain disabled"),
+    )
+
+    assert not workflow._open_curator(environment)
 
 
 def test_validator_fails_closed_when_submodule_is_missing(

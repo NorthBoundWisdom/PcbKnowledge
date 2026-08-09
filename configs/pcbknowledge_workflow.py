@@ -17,6 +17,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import webbrowser
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
@@ -128,6 +129,7 @@ FREECM_ENVIRONMENT = {
     "PCBKNOWLEDGE_PROMETHEUS_PORT": "19090",
     "PCBKNOWLEDGE_GRAFANA_PORT": "13000",
 }
+CURATOR_URL = "http://localhost:18080"
 BUILD_SERVICES = ("api", "worker", "verifier", "web", "migrate", "storage-init")
 TEST_SERVICES = ("backend-test", "frontend-test")
 APPLICATION_SERVICES = (
@@ -267,14 +269,25 @@ def _is_idle_application_log(line: str) -> bool:
     )
 
 
+def _open_curator(environment: Mapping[str, str]) -> bool:
+    if environment.get("CI") or environment.get("PCBKNOWLEDGE_DISABLE_BROWSER_OPEN") == "1":
+        return False
+    try:
+        return webbrowser.open(CURATOR_URL, new=2, autoraise=True)
+    except webbrowser.Error:
+        return False
+    except OSError:
+        return False
+
+
 def _follow_application_logs(*, environment: Mapping[str, str]) -> int:
     command = [
         "docker",
         "compose",
         "logs",
         "--follow",
-        "--since",
-        "10s",
+        "--tail",
+        "0",
         *APPLICATION_SERVICES,
     ]
     _display_command(command)
@@ -733,7 +746,7 @@ def cmd_run() -> int:
             "\n".join(
                 (
                     "[pcbknowledge] applications ready",
-                    "[pcbknowledge] open: http://localhost:18080",
+                    f"[pcbknowledge] open: {CURATOR_URL}",
                     "[pcbknowledge] sign in as: pcbknowledge-curator",
                     "[pcbknowledge] password file: deploy/secrets/local_curator_password",
                     "[pcbknowledge] idle health probes are hidden; full logs: "
@@ -744,6 +757,10 @@ def cmd_run() -> int:
             ),
             flush=True,
         )
+        if _open_curator(environment):
+            print("[pcbknowledge] opened the curator in the default browser", flush=True)
+        else:
+            print("[pcbknowledge] browser was not opened; use the URL above", flush=True)
         exit_code = _follow_application_logs(environment=environment)
     except KeyboardInterrupt:
         exit_code = 130
