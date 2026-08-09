@@ -721,6 +721,8 @@ case 数：152 backend pytest，0 skipped；102 frontend Vitest；4 Playwright l
       首跑因宿主 PATH 无 pnpm 立即失败；改用仓库固定的临时 Node 24.11.1 工具链后 4/4 live 通过。首轮
       Linux 修复 run 31318766938 又暴露 wrapper 的 `umask 077` 被官方 PostgreSQL 18 entrypoint 继承，
       PGDATA 父目录成为 root-only；隔离空卷复现后改为只在 staging 期间收紧并在降权前恢复原 umask，
-      PostgreSQL fresh volume health 与目录/密钥权限断言通过。
+      PostgreSQL fresh volume health 与目录/密钥权限断言通过。下一轮 run 31319403510 的 fresh Build 已通过，
+      随后的身份验收暴露 BSD/GNU `stat` 探测把 GNU 失败命令的 stdout 与 fallback 拼接；平台探测与取值已
+      分离，失败探测输出被丢弃。
 下一步：推送 main，以 fresh Linux hosted runner 重跑 canonical CI 后关闭 M2a 主分支收口项
 ```

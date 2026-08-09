@@ -483,6 +483,16 @@ def test_ci_invokes_python_local_stack_acceptance() -> None:
     assert not (workflow.REPO_ROOT / "deploy/scripts/test-local-stack-acceptance.sh").exists()
 
 
+def test_local_identity_permission_probe_discards_failed_platform_output() -> None:
+    script = (workflow.REPO_ROOT / "deploy/scripts/test-local-development-bootstrap.sh").read_text(
+        encoding="utf-8"
+    )
+
+    assert "stat -f '%Lp' \"$path\" >/dev/null 2>&1" in script
+    assert "stat -c '%a' \"$path\"" in script
+    assert "stat -f '%Lp' deploy/secrets/local_curator_password" not in script
+
+
 def test_real_service_ci_jobs_reclaim_hosted_runner_disk() -> None:
     workflow_text = (workflow.REPO_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     integration_job = workflow_text.split("\n  m1-integration:\n", 1)[1].split(

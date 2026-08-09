@@ -14,18 +14,21 @@ if ! docker compose ps --status running --services | grep -Fxq postgres; then
   exit 1
 fi
 
-permissions=$(
-  stat -f '%Lp' deploy/secrets/local_curator_password 2>/dev/null ||
-    stat -c '%a' deploy/secrets/local_curator_password
-)
+file_permissions() {
+  path=$1
+  if stat -f '%Lp' "$path" >/dev/null 2>&1; then
+    stat -f '%Lp' "$path"
+  else
+    stat -c '%a' "$path"
+  fi
+}
+
+permissions=$(file_permissions deploy/secrets/local_curator_password)
 if [ "$permissions" != 600 ]; then
   echo "local curator password is not owner-only" >&2
   exit 1
 fi
-marker_permissions=$(
-  stat -f '%Lp' deploy/secrets/local_curator_marker 2>/dev/null ||
-    stat -c '%a' deploy/secrets/local_curator_marker
-)
+marker_permissions=$(file_permissions deploy/secrets/local_curator_marker)
 if [ "$marker_permissions" != 600 ]; then
   echo "local curator managed marker is not owner-only" >&2
   exit 1
