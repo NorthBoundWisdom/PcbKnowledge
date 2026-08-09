@@ -221,6 +221,89 @@ def _run_unchecked(command: Sequence[str], *, environment: Mapping[str, str]) ->
     return result.returncode
 
 
+def _application_log_payload(line: str) -> str:
+    _prefix, separator, payload = line.partition(" | ")
+    return payload.strip() if separator else line.strip()
+
+
+def _is_idle_application_log(line: str) -> bool:
+    """Hide successful periodic probes while preserving failures and real work."""
+
+    payload = _application_log_payload(line)
+    try:
+        event = json.loads(payload)
+    except json.JSONDecodeError:
+        event = None
+
+    if isinstance(event, dict):
+        if event == {"verified": 0}:
+            return True
+        if event.get("event") == "worker_cycle" and event.get("published_events") == 0:
+            return True
+        if (
+            event.get("status") == "ready"
+            and "checks" in event
+            and set(event) <= {"checks", "reason", "status"}
+        ):
+            return True
+        if event.get("logger") == "pcbknowledge.http":
+            message = event.get("message")
+            if isinstance(message, str) and any(
+                f"route={route} status=200" in message
+                for route in ("/healthz", "/readyz", "/metrics")
+            ):
+                return True
+        request = event.get("request")
+        if (
+            isinstance(request, dict)
+            and event.get("status") == 200
+            and request.get("method") == "GET"
+            and request.get("uri") in {"/healthz", "/readyz", "/api/v1/healthz"}
+        ):
+            return True
+
+    return payload.endswith(" 200 OK") and any(
+        f'"GET {route} HTTP/' in payload for route in ("/healthz", "/readyz", "/metrics")
+    )
+
+
+def _follow_application_logs(*, environment: Mapping[str, str]) -> int:
+    command = [
+        "docker",
+        "compose",
+        "logs",
+        "--follow",
+        "--since",
+        "10s",
+        *APPLICATION_SERVICES,
+    ]
+    _display_command(command)
+    process = subprocess.Popen(
+        command,
+        cwd=REPO_ROOT,
+        env=dict(environment),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
+    )
+    try:
+        if process.stdout is None:
+            raise WorkflowError("docker compose logs did not expose an output stream")
+        for line in process.stdout:
+            if not _is_idle_application_log(line):
+                print(line, end="", flush=True)
+        return process.wait()
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait()
+
+
 def _capture(
     command: Sequence[str],
     *,
@@ -647,21 +730,21 @@ def cmd_run() -> int:
             environment=environment,
         )
         print(
-            "[pcbknowledge] applications ready at http://localhost:18080; "
-            "Ctrl+C stops applications and leaves infrastructure warm"
+            "\n".join(
+                (
+                    "[pcbknowledge] applications ready",
+                    "[pcbknowledge] open: http://localhost:18080",
+                    "[pcbknowledge] sign in as: pcbknowledge-curator",
+                    "[pcbknowledge] password file: deploy/secrets/local_curator_password",
+                    "[pcbknowledge] idle health probes are hidden; full logs: "
+                    "docker compose -p pcbknowledge-freecm logs --follow "
+                    "api worker verifier web caddy",
+                    "[pcbknowledge] Ctrl+C stops applications and leaves infrastructure warm",
+                )
+            ),
+            flush=True,
         )
-        exit_code = _run_unchecked(
-            [
-                "docker",
-                "compose",
-                "logs",
-                "--follow",
-                "--since",
-                "10s",
-                *APPLICATION_SERVICES,
-            ],
-            environment=environment,
-        )
+        exit_code = _follow_application_logs(environment=environment)
     except KeyboardInterrupt:
         exit_code = 130
     finally:

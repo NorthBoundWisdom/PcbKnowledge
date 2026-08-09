@@ -544,6 +544,7 @@ def test_run_never_builds_and_stops_only_application_services(
 ) -> None:
     checked: list[tuple[str, ...]] = []
     unchecked: list[tuple[str, ...]] = []
+    followed: list[dict[str, str]] = []
 
     monkeypatch.setattr(workflow, "require_configuration", lambda: None)
     monkeypatch.setattr(workflow, "require_docker", lambda _environment: None)
@@ -562,6 +563,12 @@ def test_run_never_builds_and_stops_only_application_services(
 
     monkeypatch.setattr(workflow, "_run_unchecked", run_unchecked)
 
+    def follow_application_logs(*, environment: dict[str, str]) -> int:
+        followed.append(dict(environment))
+        return 0
+
+    monkeypatch.setattr(workflow, "_follow_application_logs", follow_application_logs)
+
     assert workflow.cmd_run() == 0
     assert checked == [
         (
@@ -577,21 +584,47 @@ def test_run_never_builds_and_stops_only_application_services(
             *workflow.APPLICATION_SERVICES,
         )
     ]
-    assert unchecked[0] == (
-        "docker",
-        "compose",
-        "logs",
-        "--follow",
-        "--since",
-        "10s",
-        *workflow.APPLICATION_SERVICES,
-    )
-    assert unchecked[-1] == (
-        "docker",
-        "compose",
-        "stop",
-        *reversed(workflow.APPLICATION_SERVICES),
-    )
+    assert followed == [{"TEST": "1"}]
+    assert unchecked == [
+        (
+            "docker",
+            "compose",
+            "stop",
+            *reversed(workflow.APPLICATION_SERVICES),
+        )
+    ]
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        'verifier-1 | {"verified": 0}',
+        'worker-1 | {"event": "worker_cycle", "published_events": 0}',
+        ('worker-1 | {"checks": {"database": "ok"}, "status": "ready"}'),
+        (
+            'api-1 | {"logger":"pcbknowledge.http",'
+            '"message":"request_completed method=GET route=/readyz status=200 duration_ms=1"}'
+        ),
+        'api-1 | INFO: 127.0.0.1 - "GET /metrics HTTP/1.1" 200 OK',
+        ('caddy-1 | {"request":{"method":"GET","uri":"/api/v1/healthz"},"status":200}'),
+    ],
+)
+def test_run_log_filter_hides_only_successful_idle_probes(line: str) -> None:
+    assert workflow._is_idle_application_log(line)
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        'verifier-1 | {"verified": 1}',
+        'worker-1 | {"event": "worker_cycle", "published_events": 1}',
+        'api-1 | INFO: 127.0.0.1 - "GET /readyz HTTP/1.1" 503 Service Unavailable',
+        ('caddy-1 | {"request":{"method":"GET","uri":"/api/v1/healthz"},"status":503}'),
+        "api-1 | ERROR: database unavailable",
+    ],
+)
+def test_run_log_filter_preserves_work_and_failures(line: str) -> None:
+    assert not workflow._is_idle_application_log(line)
 
 
 def test_validator_fails_closed_when_submodule_is_missing(

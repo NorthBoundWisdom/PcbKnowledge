@@ -54,7 +54,9 @@ The repository declares Config, Build, Run, Test, and Package actions in
 builds the images, starts and warms infrastructure, applies migrations, reconciles roles
 and Keycloak, bootstraps the explicitly managed local Curator, and initializes storage.
 Run never builds or migrates; it only starts the already-created API, cleanup worker,
-document verifier, web, and gateway containers and attaches their logs.
+document verifier, web, and gateway containers. Its terminal view hides successful periodic
+health probes while preserving failures and real work; the ready banner prints the page,
+managed username, password-file path, and the command for unfiltered logs.
 
 The curator is available at <http://localhost:18080>. Press Ctrl+C in the Run terminal to
 stop those five application containers. PostgreSQL, Keycloak, SeaweedFS, and observability
