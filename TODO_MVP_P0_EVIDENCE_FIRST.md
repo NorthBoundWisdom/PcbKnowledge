@@ -624,5 +624,19 @@ case 数：123 backend pytest，0 skipped；42 frontend Vitest；10 个健康服
       和端口。Run 的 API health/readiness 为 200；中断后容器为 0、状态卷保留，原开发栈 10 个服务
       不受影响。Package 的 Docker image archive 通过 SHA-256、gzip 和实际 docker image load 验证。
 首个失败：首次宿主 Ruff 全仓门禁进入新 submodule；根配置显式排除 FreeCM/build 后最终门禁通过
-下一步：保持 FreeCM owner-managed latest 策略；M2 开始前不增加虚假的 source-root dependency lock
+下一步：保持 FreeCM owner-managed latest 策略；source-roots 模板保持空依赖，直到真实源码依赖获批
+
+日期：2026-08-09
+里程碑/任务：M1 工程工作流 — FreeCM 轻量 Run 语义
+命令：pcbknowledge_workflow.py config/build；连续两次 pcbknowledge_workflow.py run 并在 ready 后
+      Ctrl+C；Compose 状态核验；FreeCM Test；ruff format/check；mypy；hermetic pytest；OpenAPI drift
+退出码：除人工 Ctrl+C 后两次 Run 按终端合同返回 130 外全部 0
+case 数：126 backend pytest，0 skipped；42 frontend Vitest；4 个应用服务；6 个常驻基础设施服务
+耗时：缓存 Build 22.86s；热 Run 中 API/Worker/Web/Caddy 全部 healthy 为约 2.2s；应用停止约 0.6s
+结果：Build 现在独占镜像构建、迁移、角色/Keycloak 收敛和存储初始化，并创建停止状态的应用容器；
+      PostgreSQL、Keycloak、SeaweedFS、OTel、Prometheus、Grafana 保持 warm。Run 使用 --no-build 与
+      --no-deps，只启动 API/Worker/Web/Caddy；Ctrl+C 只停止这四项，下一次 Run 不再冷启动依赖。
+      应用 healthcheck 使用 1s start interval、10s 稳态 interval，日志仅显示本次启动窗口。
+首个失败：初次定向 format gate 发现 workflow/test 两处格式差异；修正后全仓门禁与真实重复 Run 通过
+下一步：推送并以远端 CI 复核 FreeCM validator、Compose 模型及全套 M1 门禁
 ```

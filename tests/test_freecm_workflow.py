@@ -77,13 +77,88 @@ def test_configuration_rejects_non_owner_only_secret_output(tmp_path: Path) -> N
 
 def test_manifest_readiness_matches_workflow_contract() -> None:
     manifest = json.loads((workflow.REPO_ROOT / "configs/freecm.commands.jsonc").read_text())
-    readiness = manifest["commands"]["config"][0]["readiness"]
+    configuration = manifest["commands"]["config"][0]
+    readiness = configuration["readiness"]
 
     assert readiness["inputs"] == [str(path) for path in workflow.CONFIG_INPUTS]
     assert readiness["outputs"] == [
         str(workflow.CONFIG_RECEIPT),
         *(str(path) for path in workflow.CONFIG_SECRET_OUTPUTS),
     ]
+    assert configuration["defaults"]["build"] == "prepare-runtime"
+    assert configuration["defaults"]["run"] == "start-built-apps"
+
+
+def test_runtime_receipt_binds_configuration_images_and_ready_infrastructure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_configuration_inputs(tmp_path)
+    image_ids = {
+        service: f"sha256:{index}" for index, service in enumerate(workflow.BUILD_SERVICES)
+    }
+    readiness_checks: list[dict[str, str]] = []
+    monkeypatch.setattr(workflow, "_runtime_image_ids", lambda _environment: image_ids)
+    monkeypatch.setattr(
+        workflow,
+        "_require_infrastructure_ready",
+        lambda environment: readiness_checks.append(dict(environment)),
+    )
+
+    receipt_path = workflow.write_runtime_receipt({"TEST": "1"}, tmp_path)
+    workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    assert receipt["images"] == image_ids
+    assert receipt["configurationSignature"] == workflow.configuration_signature(tmp_path)
+    assert readiness_checks == [{"TEST": "1"}]
+
+    monkeypatch.setattr(
+        workflow,
+        "_runtime_image_ids",
+        lambda _environment: {**image_ids, "api": "sha256:changed"},
+    )
+    with pytest.raises(workflow.WorkflowError, match="images changed"):
+        workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+
+
+def test_run_requires_an_explicit_prepared_runtime(tmp_path: Path) -> None:
+    with pytest.raises(workflow.WorkflowError, match="run FreeCM Build before Run"):
+        workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+
+
+def test_prepare_runtime_owns_slow_setup_and_creates_stopped_apps(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    checked: list[tuple[str, ...]] = []
+    built: list[dict[str, str]] = []
+    environment = {"TEST": "1"}
+    monkeypatch.setattr(
+        workflow,
+        "_run_checked",
+        lambda command, *, environment: checked.append(tuple(command)),
+    )
+    monkeypatch.setattr(
+        workflow,
+        "_build_images",
+        lambda environment: built.append(dict(environment)),
+    )
+
+    workflow._prepare_runtime(environment)
+
+    assert built == [environment]
+    assert checked[0] == ("docker", "compose", "stop", *workflow.APPLICATION_SERVICES)
+    assert ("docker", "compose", "run", "--rm", "migrate") in checked
+    assert ("docker", "compose", "run", "--rm", "postgres-reconcile") in checked
+    assert ("docker", "compose", "run", "--rm", "storage-init") in checked
+    assert checked[-1] == (
+        "docker",
+        "compose",
+        "up",
+        "--no-start",
+        "--no-build",
+        "--no-deps",
+        *workflow.APPLICATION_SERVICES,
+    )
 
 
 def test_package_uses_only_repository_owned_images() -> None:
@@ -108,13 +183,16 @@ def test_package_platform_comes_from_built_images() -> None:
         workflow._image_platform([*metadata, {"Os": "linux", "Architecture": "amd64"}])
 
 
-def test_run_always_stops_its_isolated_compose_project(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_run_never_builds_and_stops_only_application_services(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     checked: list[tuple[str, ...]] = []
     unchecked: list[tuple[str, ...]] = []
 
     monkeypatch.setattr(workflow, "require_configuration", lambda: None)
     monkeypatch.setattr(workflow, "require_docker", lambda _environment: None)
     monkeypatch.setattr(workflow, "workflow_environment", lambda: {"TEST": "1"})
+    monkeypatch.setattr(workflow, "require_runtime_prepared", lambda _environment: None)
     monkeypatch.setattr(
         workflow,
         "_run_checked",
@@ -129,9 +207,35 @@ def test_run_always_stops_its_isolated_compose_project(monkeypatch: pytest.Monke
     monkeypatch.setattr(workflow, "_run_unchecked", run_unchecked)
 
     assert workflow.cmd_run() == 0
-    assert checked == [("/bin/sh", "deploy/scripts/dev-up.sh", "--skip-config")]
-    assert unchecked[0][:4] == ("docker", "compose", "logs", "--follow")
-    assert unchecked[-1] == ("/bin/sh", "deploy/scripts/dev-down.sh")
+    assert checked == [
+        (
+            "docker",
+            "compose",
+            "up",
+            "--detach",
+            "--wait",
+            "--wait-timeout",
+            "60",
+            "--no-build",
+            "--no-deps",
+            *workflow.APPLICATION_SERVICES,
+        )
+    ]
+    assert unchecked[0] == (
+        "docker",
+        "compose",
+        "logs",
+        "--follow",
+        "--since",
+        "10s",
+        *workflow.APPLICATION_SERVICES,
+    )
+    assert unchecked[-1] == (
+        "docker",
+        "compose",
+        "stop",
+        *reversed(workflow.APPLICATION_SERVICES),
+    )
 
 
 def test_validator_fails_closed_when_submodule_is_missing(

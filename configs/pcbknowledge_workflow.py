@@ -25,6 +25,7 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIGURATION_ID = "freecm-compose"
 CONFIG_RECEIPT = Path(".freecm/pcbknowledge-compose.json")
+RUNTIME_RECEIPT = Path(".freecm/pcbknowledge-runtime.json")
 CONFIG_INPUTS = (
     Path(".dockerignore"),
     Path("configs/freecm.commands.jsonc"),
@@ -36,8 +37,6 @@ CONFIG_INPUTS = (
     Path("deploy/keycloak/pcbknowledge-realm.template.json"),
     Path("deploy/scripts/bootstrap-secrets.sh"),
     Path("deploy/scripts/compose-check.sh"),
-    Path("deploy/scripts/dev-up.sh"),
-    Path("deploy/scripts/dev-down.sh"),
     Path("deploy/scripts/test-backend-hermetic.sh"),
     Path("deploy/scripts/test-frontend-hermetic.sh"),
     Path("package.json"),
@@ -73,11 +72,13 @@ FREECM_ENVIRONMENT = {
 }
 BUILD_SERVICES = ("api", "worker", "web", "migrate", "storage-init")
 TEST_SERVICES = ("backend-test", "frontend-test")
-LOG_SERVICES = (
+APPLICATION_SERVICES = (
     "api",
     "worker",
     "web",
     "caddy",
+)
+INFRASTRUCTURE_SERVICES = (
     "keycloak",
     "postgres",
     "seaweedfs",
@@ -122,8 +123,14 @@ def _run_unchecked(command: Sequence[str], *, environment: Mapping[str, str]) ->
     return result.returncode
 
 
-def _capture(command: Sequence[str], *, environment: Mapping[str, str]) -> str:
-    _display_command(command)
+def _capture(
+    command: Sequence[str],
+    *,
+    environment: Mapping[str, str],
+    display: bool = True,
+) -> str:
+    if display:
+        _display_command(command)
     result = subprocess.run(
         list(command),
         cwd=REPO_ROOT,
@@ -235,11 +242,162 @@ def _build_images(environment: Mapping[str, str]) -> None:
     )
 
 
+def _runtime_image_ids(environment: Mapping[str, str]) -> dict[str, str]:
+    image_ids: dict[str, str] = {}
+    for service, image_name in zip(BUILD_SERVICES, package_image_names(), strict=True):
+        try:
+            image_id = _capture(
+                ["docker", "image", "inspect", "--format", "{{.Id}}", image_name],
+                environment=environment,
+                display=False,
+            )
+        except subprocess.CalledProcessError as error:
+            raise WorkflowError(
+                f"prepared image is missing for {service}; run FreeCM Build"
+            ) from error
+        if not image_id:
+            raise WorkflowError(f"prepared image is missing for {service}; run FreeCM Build")
+        image_ids[service] = image_id
+    return image_ids
+
+
+def write_runtime_receipt(
+    environment: Mapping[str, str],
+    repo_root: Path = REPO_ROOT,
+) -> Path:
+    receipt_path = repo_root / RUNTIME_RECEIPT
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    receipt = {
+        "schemaVersion": 1,
+        "configurationId": CONFIGURATION_ID,
+        "configurationSignature": configuration_signature(repo_root),
+        "composeProject": FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"],
+        "images": _runtime_image_ids(environment),
+        "preparedAt": datetime.now(UTC).isoformat(),
+    }
+    temporary = receipt_path.with_name(f"{receipt_path.name}.tmp")
+    temporary.write_text(f"{json.dumps(receipt, indent=2, sort_keys=True)}\n", encoding="utf-8")
+    os.replace(temporary, receipt_path)
+    return receipt_path
+
+
+def _require_infrastructure_ready(environment: Mapping[str, str]) -> None:
+    failures: list[str] = []
+    for service in INFRASTRUCTURE_SERVICES:
+        container_id = _capture(
+            ["docker", "compose", "ps", "--all", "--quiet", service],
+            environment=environment,
+            display=False,
+        )
+        if not container_id:
+            failures.append(f"{service}=missing")
+            continue
+        try:
+            state_value: Any = json.loads(
+                _capture(
+                    ["docker", "inspect", "--format", "{{json .State}}", container_id],
+                    environment=environment,
+                    display=False,
+                )
+            )
+        except json.JSONDecodeError:
+            failures.append(f"{service}=unavailable")
+            continue
+        except subprocess.CalledProcessError:
+            failures.append(f"{service}=unavailable")
+            continue
+        if not isinstance(state_value, dict) or state_value.get("Status") != "running":
+            failures.append(f"{service}=not-running")
+            continue
+        health_value = state_value.get("Health")
+        if isinstance(health_value, dict) and health_value.get("Status") != "healthy":
+            failures.append(f"{service}=not-healthy")
+    if failures:
+        raise WorkflowError(
+            f"prepared runtime is not ready ({', '.join(failures)}); run FreeCM Build before Run"
+        )
+
+
+def require_runtime_prepared(
+    environment: Mapping[str, str],
+    repo_root: Path = REPO_ROOT,
+) -> None:
+    receipt_path = repo_root / RUNTIME_RECEIPT
+    try:
+        receipt: Any = json.loads(receipt_path.read_text(encoding="utf-8"))
+    except FileNotFoundError as error:
+        raise WorkflowError("prepared runtime is missing; run FreeCM Build before Run") from error
+    except (OSError, json.JSONDecodeError) as error:
+        raise WorkflowError(f"prepared runtime receipt is invalid: {error}") from error
+
+    if not isinstance(receipt, dict) or receipt.get("configurationId") != CONFIGURATION_ID:
+        raise WorkflowError("prepared runtime receipt is invalid; rerun FreeCM Build")
+    if receipt.get("configurationSignature") != configuration_signature(repo_root):
+        raise WorkflowError("runtime inputs changed; rerun FreeCM Config and Build")
+    if receipt.get("composeProject") != FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"]:
+        raise WorkflowError("prepared runtime belongs to another Compose project")
+    if receipt.get("images") != _runtime_image_ids(environment):
+        raise WorkflowError("prepared runtime images changed; rerun FreeCM Build")
+    _require_infrastructure_ready(environment)
+
+
+def _prepare_runtime(environment: Mapping[str, str]) -> None:
+    _run_checked(
+        ["docker", "compose", "stop", *APPLICATION_SERVICES],
+        environment=environment,
+    )
+    _build_images(environment)
+    _run_checked(
+        ["docker", "compose", "up", "--detach", "--wait", "postgres", "seaweedfs"],
+        environment=environment,
+    )
+    _run_checked(
+        ["docker", "compose", "up", "--detach", "--wait", "keycloak"],
+        environment=environment,
+    )
+    _run_checked(
+        ["docker", "compose", "run", "--rm", "keycloak-reconcile"],
+        environment=environment,
+    )
+    _run_checked(
+        [
+            "docker",
+            "compose",
+            "up",
+            "--detach",
+            "otel-collector",
+            "prometheus",
+            "grafana",
+        ],
+        environment=environment,
+    )
+    for service in ("migrate", "postgres-reconcile", "storage-init"):
+        _run_checked(
+            ["docker", "compose", "run", "--rm", service],
+            environment=environment,
+        )
+    _run_checked(
+        [
+            "docker",
+            "compose",
+            "up",
+            "--no-start",
+            "--no-build",
+            "--no-deps",
+            *APPLICATION_SERVICES,
+        ],
+        environment=environment,
+    )
+
+
 def cmd_build() -> int:
     require_configuration()
     environment = workflow_environment()
     require_docker(environment)
-    _build_images(environment)
+    _prepare_runtime(environment)
+    receipt_path = write_runtime_receipt(environment)
+    print(f"[pcbknowledge] prepared runtime receipt: {receipt_path.relative_to(REPO_ROOT)}")
+    print("[pcbknowledge] infrastructure is warm; FreeCM Run now starts only application services")
     return 0
 
 
@@ -272,23 +430,46 @@ def cmd_run() -> int:
     require_configuration()
     environment = workflow_environment()
     require_docker(environment)
+    require_runtime_prepared(environment)
     exit_code = 1
     try:
         _run_checked(
-            ["/bin/sh", "deploy/scripts/dev-up.sh", "--skip-config"],
+            [
+                "docker",
+                "compose",
+                "up",
+                "--detach",
+                "--wait",
+                "--wait-timeout",
+                "60",
+                "--no-build",
+                "--no-deps",
+                *APPLICATION_SERVICES,
+            ],
             environment=environment,
         )
-        print("[pcbknowledge] stack ready; Ctrl+C stops the FreeCM Compose project")
+        print(
+            "[pcbknowledge] applications ready at http://localhost:18080; "
+            "Ctrl+C stops applications and leaves infrastructure warm"
+        )
         exit_code = _run_unchecked(
-            ["docker", "compose", "logs", "--follow", "--tail", "100", *LOG_SERVICES],
+            [
+                "docker",
+                "compose",
+                "logs",
+                "--follow",
+                "--since",
+                "10s",
+                *APPLICATION_SERVICES,
+            ],
             environment=environment,
         )
     except KeyboardInterrupt:
         exit_code = 130
     finally:
-        print("[pcbknowledge] stopping the FreeCM Compose project", flush=True)
+        print("[pcbknowledge] stopping application services; infrastructure stays warm", flush=True)
         stop_code = _run_unchecked(
-            ["/bin/sh", "deploy/scripts/dev-down.sh"],
+            ["docker", "compose", "stop", *reversed(APPLICATION_SERVICES)],
             environment=environment,
         )
         if exit_code == 0 and stop_code != 0:

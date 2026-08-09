@@ -232,6 +232,7 @@ services:
         - -c
         - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=3).read()"
       interval: 10s
+      start_interval: 1s
       timeout: 5s
       retries: 12
       start_period: 10s
@@ -280,6 +281,7 @@ services:
         - pcbknowledge.worker
         - health-check
       interval: 10s
+      start_interval: 1s
       timeout: 5s
       retries: 12
       start_period: 10s
@@ -324,6 +326,7 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz | grep -q '^ok$'"]
       interval: 10s
+      start_interval: 1s
       timeout: 5s
       retries: 12
       start_period: 5s
@@ -348,6 +351,7 @@ services:
           wget -qO- http://127.0.0.1:8080/api/v1/healthz |
           grep -q '"status":"alive"'
       interval: 10s
+      start_interval: 1s
       timeout: 5s
       retries: 12
       start_period: 5s

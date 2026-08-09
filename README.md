@@ -38,11 +38,21 @@ git submodule update --init --recursive FreeCM
 ## FreeCM plugin workflow
 
 The repository declares Config, Build, Run, Test, and Package actions in
-`configs/freecm.commands.jsonc`. In the FreeCM workflow view, run **Config** once and then
-choose **Run → Full Service Stack**. Run starts the complete service stack, waits for its
-health checks, and keeps the FreeCM terminal attached to service logs. The curator is
-available at <http://localhost:18080>; press Ctrl+C in that terminal to stop only the
-FreeCM-managed stack while preserving its Docker volumes.
+`configs/freecm.commands.jsonc`. In the FreeCM workflow view, run **Config** once, run
+**Build → Prepare Runtime** whenever the source or runtime contract changes, and then use
+**Run → Start Built Apps** for the normal edit/run cycle. Build owns the slower work: it
+builds the images, starts and warms infrastructure, applies migrations, reconciles roles
+and Keycloak, and initializes storage. Run never builds or migrates; it only starts the
+already-created API, worker, web, and gateway containers and attaches their logs.
+
+The curator is available at <http://localhost:18080>. Press Ctrl+C in the Run terminal to
+stop those four application containers. PostgreSQL, Keycloak, SeaweedFS, and observability
+services stay warm, so the next Run avoids their cold-start delay. To explicitly stop the
+entire prepared FreeCM environment while preserving its volumes, run:
+
+```bash
+COMPOSE_PROJECT_NAME=pcbknowledge-freecm ./deploy/scripts/dev-down.sh
+```
 
 The plugin actions are deliberately isolated under the `pcbknowledge-freecm` Compose
 project, so they do not reuse or stop a stack started with `deploy/scripts/dev-up.sh`.
@@ -58,7 +68,10 @@ The other actions use the same pinned workflow:
 
 - **Config** generates untracked development secrets, validates the resolved Compose
   model, and writes an input-bound receipt under `.freecm/`.
-- **Build** builds the API, worker, web, migration, and storage-initializer images.
+- **Build** builds the repository-owned images, prepares migrations and external-service
+  state, creates the stopped application containers, and leaves infrastructure running.
+- **Run** fails quickly with an instruction to run Build if that prepared environment is
+  missing, stopped, or stale. It passes `--no-build` and never performs setup work.
 - **Test** runs backend formatting/lint/type/unit/OpenAPI checks and frontend generated
   client/lint/type/unit/build checks in the repository-pinned containers.
 - **Package** exports the five repository-owned images as a gzip-compressed,
@@ -69,6 +82,7 @@ The same actions can be reproduced without the UI:
 
 ```bash
 python3 configs/pcbknowledge_workflow.py config
+python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_workflow.py run
 python3 configs/pcbknowledge_workflow.py test
 python3 configs/pcbknowledge_workflow.py package

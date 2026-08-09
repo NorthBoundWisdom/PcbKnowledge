@@ -37,8 +37,10 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
   changes together, and push the existing `main` branch without opening a pull request.
 - `configs/freecm.commands.jsonc` is the plugin action manifest. Keep orchestration in
   `configs/pcbknowledge_workflow.py`, require the declared Config receipt before every
-  downstream action, and keep Run terminal-owned so interrupting it shuts down only the
-  `pcbknowledge-freecm` Compose project without deleting volumes.
+  downstream action. Build owns image creation, migrations, reconciliation, storage
+  initialization, and warming infrastructure. Keep Run terminal-owned and lightweight:
+  it must never build or migrate, and interrupting it stops only the application
+  containers while preserving the prepared infrastructure and volumes.
 - Python, JavaScript, container, and service-image dependencies remain governed by
   `uv.lock`, `pnpm-lock.yaml`, and `compose.yaml`. Keep the reviewed
   `source_roots.lock.jsonc.in` template empty until a real source dependency is approved;
