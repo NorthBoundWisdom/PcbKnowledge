@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import json
+import signal
 import subprocess
 from pathlib import Path
 from types import SimpleNamespace
+from typing import cast
 
 import pytest
 
 from configs import pcbknowledge_workflow as workflow
+from configs import test_local_stack_acceptance as acceptance
 from configs import validate_freecm_repo_commands as validator
 
 
@@ -24,6 +27,17 @@ def _write_configuration_secret_outputs(repo_root: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("secret\n", encoding="utf-8")
         path.chmod(0o600)
+
+
+def _write_build_inputs(repo_root: Path) -> None:
+    for index, relative_path in enumerate(workflow.BUILD_INPUT_FILES):
+        path = repo_root / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"build-input-{index}\n", encoding="utf-8")
+    for index, relative_root in enumerate(workflow.BUILD_INPUT_ROOTS):
+        root = repo_root / relative_root
+        root.mkdir(parents=True, exist_ok=True)
+        (root / "owned-source.txt").write_text(f"build-root-{index}\n", encoding="utf-8")
 
 
 def test_workflow_environment_owns_isolated_compose_settings() -> None:
@@ -120,6 +134,7 @@ def test_runtime_receipt_binds_configuration_images_and_ready_infrastructure(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     _write_configuration_inputs(tmp_path)
+    _write_build_inputs(tmp_path)
     image_ids = {
         service: f"sha256:{index}" for index, service in enumerate(workflow.BUILD_SERVICES)
     }
@@ -137,6 +152,7 @@ def test_runtime_receipt_binds_configuration_images_and_ready_infrastructure(
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     assert receipt["images"] == image_ids
     assert receipt["configurationSignature"] == workflow.configuration_signature(tmp_path)
+    assert receipt["buildInputSignature"] == workflow.build_input_signature(tmp_path)
     assert readiness_checks == [{"TEST": "1"}]
 
     monkeypatch.setattr(
@@ -145,6 +161,42 @@ def test_runtime_receipt_binds_configuration_images_and_ready_infrastructure(
         lambda _environment: {**image_ids, "api": "sha256:changed"},
     )
     with pytest.raises(workflow.WorkflowError, match="images changed"):
+        workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+
+
+def test_runtime_receipt_rejects_source_or_migration_changes_without_rebuilding(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_configuration_inputs(tmp_path)
+    _write_build_inputs(tmp_path)
+    image_ids = {
+        service: f"sha256:{index}" for index, service in enumerate(workflow.BUILD_SERVICES)
+    }
+    monkeypatch.setattr(workflow, "_runtime_image_ids", lambda _environment: image_ids)
+    monkeypatch.setattr(workflow, "_require_infrastructure_ready", lambda _environment: None)
+    workflow.write_runtime_receipt({"TEST": "1"}, tmp_path)
+
+    source = tmp_path / "src" / "owned-source.txt"
+    source.write_text("changed after Build\n", encoding="utf-8")
+    with pytest.raises(workflow.WorkflowError, match="build inputs changed"):
+        workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+
+    source.write_text("build-root-5\n", encoding="utf-8")
+    ignored_cache = source.parent / "__pycache__" / "ignored.pyc"
+    ignored_cache.parent.mkdir()
+    ignored_cache.write_bytes(b"not a Docker build input")
+    workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+
+    nginx_configuration = tmp_path / "deploy/docker/nginx.conf"
+    original_nginx_configuration = nginx_configuration.read_text(encoding="utf-8")
+    nginx_configuration.write_text("changed after Build\n", encoding="utf-8")
+    with pytest.raises(workflow.WorkflowError, match="build inputs changed"):
+        workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
+    nginx_configuration.write_text(original_nginx_configuration, encoding="utf-8")
+
+    migration = tmp_path / "migrations" / "new_revision.py"
+    migration.write_text("revision = 'new'\n", encoding="utf-8")
+    with pytest.raises(workflow.WorkflowError, match="build inputs changed"):
         workflow.require_runtime_prepared({"TEST": "1"}, tmp_path)
 
 
@@ -174,9 +226,41 @@ def test_prepare_runtime_owns_slow_setup_and_creates_stopped_apps(
 
     assert built == [environment]
     assert checked[0] == ("docker", "compose", "stop", *workflow.APPLICATION_SERVICES)
-    assert ("docker", "compose", "run", "--rm", "migrate") in checked
-    assert ("docker", "compose", "run", "--rm", "postgres-reconcile") in checked
-    assert ("docker", "compose", "run", "--rm", "storage-init") in checked
+    assert (
+        "docker",
+        "compose",
+        "up",
+        "--detach",
+        "--wait",
+        "--force-recreate",
+        "seaweedfs",
+    ) in checked
+    assert (
+        "docker",
+        "compose",
+        "up",
+        "--detach",
+        "--wait",
+        "--force-recreate",
+        "keycloak",
+    ) in checked
+    assert (
+        "docker",
+        "compose",
+        "up",
+        "--detach",
+        "--force-recreate",
+        "otel-collector",
+        "prometheus",
+        "grafana",
+    ) in checked
+    migration = ("docker", "compose", "run", "--rm", "migrate")
+    reconciliation = ("docker", "compose", "run", "--rm", "postgres-reconcile")
+    identity_bootstrap = ("/bin/sh", "deploy/scripts/bootstrap-local-development.sh")
+    storage_initialization = ("docker", "compose", "run", "--rm", "storage-init")
+    assert checked.index(migration) < checked.index(reconciliation)
+    assert checked.index(reconciliation) < checked.index(identity_bootstrap)
+    assert checked.index(identity_bootstrap) < checked.index(storage_initialization)
     assert checked[-1] == (
         "docker",
         "compose",
@@ -192,10 +276,161 @@ def test_package_uses_only_repository_owned_images() -> None:
     assert workflow.package_image_names() == (
         "pcbknowledge-freecm-api:latest",
         "pcbknowledge-freecm-worker:latest",
+        "pcbknowledge-freecm-verifier:latest",
         "pcbknowledge-freecm-web:latest",
         "pcbknowledge-freecm-migrate:latest",
         "pcbknowledge-freecm-storage-init:latest",
     )
+
+
+def test_package_archives_the_prepared_images_without_rebuilding(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    environment = {"TEST": "1"}
+    prepared: list[dict[str, str]] = []
+    image_names = workflow.package_image_names()
+    image_metadata = [
+        {
+            "Id": f"sha256:{index}",
+            "RepoTags": [image_name],
+            "Os": "linux",
+            "Architecture": "arm64",
+        }
+        for index, image_name in enumerate(image_names)
+    ]
+
+    monkeypatch.setattr(workflow, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(workflow, "require_configuration", lambda: None)
+    monkeypatch.setattr(workflow, "require_docker", lambda _environment: None)
+    monkeypatch.setattr(workflow, "workflow_environment", lambda: environment)
+    monkeypatch.setattr(
+        workflow,
+        "require_runtime_prepared",
+        lambda actual: prepared.append(dict(actual)),
+    )
+    monkeypatch.setattr(
+        workflow,
+        "_build_images",
+        lambda _environment: pytest.fail("Package must not rebuild prepared images"),
+    )
+    monkeypatch.setattr(
+        workflow,
+        "_capture",
+        lambda command, *, environment: json.dumps(image_metadata),
+    )
+    monkeypatch.setattr(workflow, "_working_tree_identity", lambda _environment: ("abc123", False))
+
+    def create_archive(
+        images: tuple[str, ...],
+        output_path: Path,
+        *,
+        environment: dict[str, str],
+    ) -> None:
+        assert images == image_names
+        assert environment == {"TEST": "1"}
+        output_path.write_bytes(b"prepared images")
+
+    monkeypatch.setattr(workflow, "_create_image_archive", create_archive)
+
+    assert workflow.cmd_package() == 0
+    assert prepared == [environment]
+
+
+def test_test_action_checks_deployment_wiring_before_container_suites(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    checked: list[tuple[str, ...]] = []
+    monkeypatch.setattr(workflow, "require_configuration", lambda: None)
+    monkeypatch.setattr(workflow, "require_docker", lambda _environment: None)
+    monkeypatch.setattr(workflow, "workflow_environment", lambda: {"TEST": "1"})
+    monkeypatch.setattr(
+        workflow,
+        "_run_checked",
+        lambda command, *, environment: checked.append(tuple(command)),
+    )
+
+    assert workflow.cmd_test() == 0
+    assert checked[0] == (
+        "/bin/sh",
+        "deploy/scripts/test-verifier-deployment-wiring.sh",
+    )
+    assert checked[1] == (
+        "docker",
+        "compose",
+        "--profile",
+        "tools",
+        "build",
+        *workflow.TEST_SERVICES,
+    )
+    assert checked[2:] == [
+        (
+            "docker",
+            "compose",
+            "--profile",
+            "tools",
+            "run",
+            "--rm",
+            "--no-deps",
+            service,
+        )
+        for service in workflow.TEST_SERVICES
+    ]
+
+
+def test_local_stack_acceptance_uses_the_freecm_service_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        acceptance,
+        "_running_services",
+        lambda _environment: frozenset(workflow.INFRASTRUCTURE_SERVICES),
+    )
+    acceptance._assert_interruption_boundary({"TEST": "1"})
+
+    monkeypatch.setattr(
+        acceptance,
+        "_running_services",
+        lambda _environment: frozenset(
+            (*workflow.INFRASTRUCTURE_SERVICES, workflow.APPLICATION_SERVICES[0])
+        ),
+    )
+    with pytest.raises(acceptance.AcceptanceError, match="left application services running"):
+        acceptance._assert_interruption_boundary({"TEST": "1"})
+
+
+def test_local_stack_acceptance_requires_sigint_exit_130() -> None:
+    class FakeProcess:
+        sent_signals: list[int]
+
+        def __init__(self, *, return_code: int) -> None:
+            self.return_code = return_code
+            self.sent_signals = []
+
+        def poll(self) -> None:
+            return None
+
+        def send_signal(self, signal_number: int) -> None:
+            self.sent_signals.append(signal_number)
+
+        def wait(self, timeout: float | None = None) -> int:
+            assert timeout == 20
+            return self.return_code
+
+    accepted = FakeProcess(return_code=130)
+    acceptance._interrupt_run(cast("subprocess.Popen[bytes]", accepted))
+    assert accepted.sent_signals == [signal.SIGINT]
+
+    rejected = FakeProcess(return_code=0)
+    with pytest.raises(acceptance.AcceptanceError, match="instead of 130"):
+        acceptance._interrupt_run(cast("subprocess.Popen[bytes]", rejected))
+
+
+def test_ci_invokes_python_local_stack_acceptance() -> None:
+    workflow_text = (workflow.REPO_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    assert "python3 -m configs.test_local_stack_acceptance" in workflow_text
+    assert "timeout-minutes: 60" in workflow_text
+    assert not (workflow.REPO_ROOT / "deploy/scripts/test-local-stack-acceptance.sh").exists()
 
 
 def test_package_platform_comes_from_built_images() -> None:

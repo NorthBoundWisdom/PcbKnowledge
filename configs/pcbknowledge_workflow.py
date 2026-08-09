@@ -31,17 +31,33 @@ CONFIG_INPUTS = (
     Path("configs/freecm.commands.jsonc"),
     Path("configs/pcbknowledge_workflow.py"),
     Path("compose.yaml"),
+    Path("deploy/caddy/Caddyfile"),
+    Path("deploy/docker/backend-entrypoint.sh"),
     Path("deploy/docker/backend.Dockerfile"),
     Path("deploy/docker/web.Dockerfile"),
     Path("deploy/keycloak/pcbknowledge-agent-client.template.json"),
     Path("deploy/keycloak/pcbknowledge-api-client.json"),
     Path("deploy/keycloak/pcbknowledge-curator-client.json"),
     Path("deploy/keycloak/pcbknowledge-realm.template.json"),
+    Path("deploy/keycloak/bootstrap-local-curator.sh"),
     Path("deploy/keycloak/reconcile-keycloak.sh"),
+    Path("deploy/keycloak/start-keycloak.sh"),
+    Path("deploy/observability/grafana/dashboards/m1-platform.json"),
+    Path("deploy/observability/grafana/provisioning/dashboards/pcbknowledge.yaml"),
+    Path("deploy/observability/grafana/provisioning/datasources/prometheus.yaml"),
+    Path("deploy/observability/otel-collector.yaml"),
+    Path("deploy/observability/prometheus.yml"),
+    Path("deploy/observability/rules/platform.yml"),
+    Path("deploy/postgres/bootstrap-local-development-data.sh"),
+    Path("deploy/postgres/init/001-keycloak-database.sh"),
+    Path("deploy/postgres/reconcile-application-role.sh"),
+    Path("deploy/seaweedfs/start-seaweedfs.sh"),
     Path("deploy/scripts/bootstrap-secrets.sh"),
+    Path("deploy/scripts/bootstrap-local-development.sh"),
     Path("deploy/scripts/compose-check.sh"),
     Path("deploy/scripts/test-backend-hermetic.sh"),
     Path("deploy/scripts/test-frontend-hermetic.sh"),
+    Path("deploy/scripts/test-verifier-deployment-wiring.sh"),
     Path("package.json"),
     Path("pnpm-lock.yaml"),
     Path("pnpm-workspace.yaml"),
@@ -52,18 +68,54 @@ CONFIG_SECRET_OUTPUTS = (
     Path("deploy/secrets/postgres_password"),
     Path("deploy/secrets/application_db_password"),
     Path("deploy/secrets/worker_db_password"),
+    Path("deploy/secrets/verifier_db_password"),
     Path("deploy/secrets/keycloak_db_password"),
     Path("deploy/secrets/keycloak_admin_password"),
     Path("deploy/secrets/agent_service_client_secret"),
+    Path("deploy/secrets/local_curator_password"),
+    Path("deploy/secrets/local_curator_marker"),
     Path("deploy/secrets/seaweedfs_access_key"),
     Path("deploy/secrets/seaweedfs_secret_key"),
     Path("deploy/secrets/seaweedfs_admin_access_key"),
     Path("deploy/secrets/seaweedfs_admin_secret_key"),
     Path("deploy/secrets/seaweedfs_worker_access_key"),
     Path("deploy/secrets/seaweedfs_worker_secret_key"),
+    Path("deploy/secrets/seaweedfs_verifier_access_key"),
+    Path("deploy/secrets/seaweedfs_verifier_secret_key"),
     Path("deploy/secrets/grafana_admin_password"),
     Path("deploy/secrets/keycloak-realm.json"),
     Path("deploy/secrets/keycloak-agent-client.json"),
+)
+BUILD_INPUT_FILES = (
+    Path("README.md"),
+    Path("deploy/docker/nginx.conf"),
+    Path("package.json"),
+    Path("pnpm-lock.yaml"),
+    Path("pnpm-workspace.yaml"),
+    Path("pyproject.toml"),
+    Path("uv.lock"),
+)
+BUILD_INPUT_ROOTS = (
+    Path("apps/api"),
+    Path("apps/curator-web"),
+    Path("apps/worker"),
+    Path("migrations"),
+    Path("packages/ui-kit"),
+    Path("src"),
+)
+_IGNORED_BUILD_INPUT_PARTS = frozenset(
+    {
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".vite",
+        "__pycache__",
+        "coverage",
+        "dist",
+        "node_modules",
+        "playwright-report",
+        "test-results",
+    }
 )
 FREECM_ENVIRONMENT = {
     "COMPOSE_PROJECT_NAME": "pcbknowledge-freecm",
@@ -73,11 +125,12 @@ FREECM_ENVIRONMENT = {
     "PCBKNOWLEDGE_PROMETHEUS_PORT": "19090",
     "PCBKNOWLEDGE_GRAFANA_PORT": "13000",
 }
-BUILD_SERVICES = ("api", "worker", "web", "migrate", "storage-init")
+BUILD_SERVICES = ("api", "worker", "verifier", "web", "migrate", "storage-init")
 TEST_SERVICES = ("backend-test", "frontend-test")
 APPLICATION_SERVICES = (
     "api",
     "worker",
+    "verifier",
     "web",
     "caddy",
 )
@@ -153,6 +206,49 @@ def configuration_signature(repo_root: Path = REPO_ROOT) -> str:
         if not path.is_file():
             raise WorkflowError(f"configuration input is missing: {relative_path}")
         digest.update(str(relative_path).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def build_input_signature(repo_root: Path = REPO_ROOT) -> str:
+    """Hash every source file copied into a repository-owned runtime image."""
+
+    digest = hashlib.sha256()
+    candidates: list[Path] = []
+    for relative_path in BUILD_INPUT_FILES:
+        path = repo_root / relative_path
+        if not path.is_file() or path.is_symlink():
+            raise WorkflowError(f"application build input is missing or unsafe: {relative_path}")
+        candidates.append(path)
+    for relative_root in BUILD_INPUT_ROOTS:
+        root = repo_root / relative_root
+        if not root.is_dir() or root.is_symlink():
+            raise WorkflowError(
+                f"application build input root is missing or unsafe: {relative_root}"
+            )
+        for path in root.rglob("*"):
+            relative_path = path.relative_to(repo_root)
+            if any(part in _IGNORED_BUILD_INPUT_PARTS for part in relative_path.parts):
+                continue
+            if (
+                path.suffix in {".log", ".pid", ".pyc", ".pyo", ".tmp"}
+                or path.name == ".DS_Store"
+                or path.name.endswith(".tsbuildinfo")
+            ):
+                continue
+            if path.is_symlink():
+                raise WorkflowError(
+                    f"application build input is an unsafe symlink: {relative_path}"
+                )
+            if path.is_file():
+                candidates.append(path)
+    for path in sorted(
+        candidates, key=lambda candidate: candidate.relative_to(repo_root).as_posix()
+    ):
+        relative_path = path.relative_to(repo_root)
+        digest.update(relative_path.as_posix().encode())
         digest.update(b"\0")
         digest.update(path.read_bytes())
         digest.update(b"\0")
@@ -271,9 +367,10 @@ def write_runtime_receipt(
     receipt_path = repo_root / RUNTIME_RECEIPT
     receipt_path.parent.mkdir(parents=True, exist_ok=True)
     receipt = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "configurationId": CONFIGURATION_ID,
         "configurationSignature": configuration_signature(repo_root),
+        "buildInputSignature": build_input_signature(repo_root),
         "composeProject": FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"],
         "images": _runtime_image_ids(environment),
         "preparedAt": datetime.now(UTC).isoformat(),
@@ -337,6 +434,8 @@ def require_runtime_prepared(
         raise WorkflowError("prepared runtime receipt is invalid; rerun FreeCM Build")
     if receipt.get("configurationSignature") != configuration_signature(repo_root):
         raise WorkflowError("runtime inputs changed; rerun FreeCM Config and Build")
+    if receipt.get("buildInputSignature") != build_input_signature(repo_root):
+        raise WorkflowError("application build inputs changed; rerun FreeCM Build")
     if receipt.get("composeProject") != FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"]:
         raise WorkflowError("prepared runtime belongs to another Compose project")
     if receipt.get("images") != _runtime_image_ids(environment):
@@ -351,11 +450,31 @@ def _prepare_runtime(environment: Mapping[str, str]) -> None:
     )
     _build_images(environment)
     _run_checked(
-        ["docker", "compose", "up", "--detach", "--wait", "postgres", "seaweedfs"],
+        ["docker", "compose", "up", "--detach", "--wait", "postgres"],
         environment=environment,
     )
     _run_checked(
-        ["docker", "compose", "up", "--detach", "--wait", "keycloak"],
+        [
+            "docker",
+            "compose",
+            "up",
+            "--detach",
+            "--wait",
+            "--force-recreate",
+            "seaweedfs",
+        ],
+        environment=environment,
+    )
+    _run_checked(
+        [
+            "docker",
+            "compose",
+            "up",
+            "--detach",
+            "--wait",
+            "--force-recreate",
+            "keycloak",
+        ],
         environment=environment,
     )
     _run_checked(
@@ -368,17 +487,26 @@ def _prepare_runtime(environment: Mapping[str, str]) -> None:
             "compose",
             "up",
             "--detach",
+            "--force-recreate",
             "otel-collector",
             "prometheus",
             "grafana",
         ],
         environment=environment,
     )
-    for service in ("migrate", "postgres-reconcile", "storage-init"):
+    for service in ("migrate", "postgres-reconcile"):
         _run_checked(
             ["docker", "compose", "run", "--rm", service],
             environment=environment,
         )
+    _run_checked(
+        ["/bin/sh", "deploy/scripts/bootstrap-local-development.sh"],
+        environment=environment,
+    )
+    _run_checked(
+        ["docker", "compose", "run", "--rm", "storage-init"],
+        environment=environment,
+    )
     _run_checked(
         [
             "docker",
@@ -408,6 +536,10 @@ def cmd_test() -> int:
     require_configuration()
     environment = workflow_environment()
     require_docker(environment)
+    _run_checked(
+        ["/bin/sh", "deploy/scripts/test-verifier-deployment-wiring.sh"],
+        environment=environment,
+    )
     _run_checked(
         ["docker", "compose", "--profile", "tools", "build", *TEST_SERVICES],
         environment=environment,
@@ -589,7 +721,7 @@ def cmd_package() -> int:
     require_configuration()
     environment = workflow_environment()
     require_docker(environment)
-    _build_images(environment)
+    require_runtime_prepared(environment)
 
     image_names = package_image_names()
     metadata_value: Any = json.loads(

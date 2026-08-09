@@ -14,7 +14,7 @@ class DatabaseContractError(RuntimeError):
     """Raised when the connected database is not at the executable M1 contract."""
 
 
-EXPECTED_DATABASE_REVISION = "20260808_0008"
+EXPECTED_DATABASE_REVISION = "20260809_0009"
 
 
 def require_restricted_database_role(connection: Connection) -> None:
@@ -35,21 +35,24 @@ def require_restricted_database_role(connection: Connection) -> None:
             "EXISTS ("
             "SELECT 1 FROM pg_catalog.pg_namespace AS namespace "
             "WHERE namespace.nspowner = role.oid "
-            "AND namespace.nspname IN ('identity', 'source', 'audit', 'platform')"
+            "AND namespace.nspname IN "
+            "('identity', 'source', 'audit', 'platform', 'document')"
             ") AS owns_protected_schema, "
             "EXISTS ("
             "SELECT 1 FROM pg_catalog.pg_class AS relation "
             "JOIN pg_catalog.pg_namespace AS namespace "
             "ON namespace.oid = relation.relnamespace "
             "WHERE relation.relowner = role.oid "
-            "AND namespace.nspname IN ('identity', 'source', 'audit', 'platform')"
+            "AND namespace.nspname IN "
+            "('identity', 'source', 'audit', 'platform', 'document')"
             ") AS owns_protected_relation, "
             "EXISTS ("
             "SELECT 1 FROM pg_catalog.pg_proc AS routine "
             "JOIN pg_catalog.pg_namespace AS namespace "
             "ON namespace.oid = routine.pronamespace "
             "WHERE routine.proowner = role.oid "
-            "AND namespace.nspname IN ('identity', 'source', 'audit', 'platform')"
+            "AND namespace.nspname IN "
+            "('identity', 'source', 'audit', 'platform', 'document')"
             ") AS owns_protected_function "
             "FROM pg_catalog.pg_roles AS role "
             "WHERE role.rolname = CURRENT_USER"
@@ -79,7 +82,8 @@ def require_database_contract(connection: Connection) -> None:
         text("SELECT SESSION_USER AS session_user, CURRENT_USER AS current_user")
     ).one()
     if (
-        identity.session_user not in {"pcbknowledge_app", "pcbknowledge_worker"}
+        identity.session_user
+        not in {"pcbknowledge_app", "pcbknowledge_worker", "pcbknowledge_verifier"}
         or identity.current_user != identity.session_user
     ):
         raise DatabaseContractError("database runtime identity is not supported")
@@ -89,6 +93,11 @@ def require_database_contract(connection: Connection) -> None:
     )
     if revision != EXPECTED_DATABASE_REVISION:
         raise DatabaseContractError("database schema revision is not supported")
+    _require_document_database_contract(connection)
+    if identity.current_user == "pcbknowledge_verifier":
+        _require_verifier_database_contract(connection)
+        _require_exact_runtime_grants(connection, role_name=identity.current_user)
+        return
     contract = connection.execute(
         text(
             "WITH contract_relations AS ("
@@ -259,6 +268,276 @@ def require_database_contract(connection: Connection) -> None:
     _require_exact_runtime_grants(connection, role_name=identity.current_user)
 
 
+def _require_document_database_contract(connection: Connection) -> None:
+    """Require immutable FORCE-RLS document relations and isolated verifier fences.
+
+    Policy fingerprints are over PostgreSQL 18's ``pg_get_expr`` normalized
+    output. Exact fingerprints intentionally reject seemingly harmless extra
+    branches such as ``OR true`` on this security boundary.
+    """
+
+    contract = connection.execute(
+        text(
+            """
+            WITH document_relations AS (
+                SELECT relation.relname, relation.relrowsecurity,
+                       relation.relforcerowsecurity
+                FROM pg_catalog.pg_class AS relation
+                JOIN pg_catalog.pg_namespace AS namespace
+                  ON namespace.oid = relation.relnamespace
+                WHERE namespace.nspname = 'document'
+                  AND relation.relname IN (
+                      'upload_session', 'document',
+                      'document_revision', 'document_asset'
+                  )
+            ), required_triggers(schema_name, table_name, trigger_name) AS (
+                VALUES
+                    ('document', 'upload_session',
+                     'enforce_upload_session_binding'),
+                    ('document', 'upload_session',
+                     'enforce_upload_session_transition'),
+                    ('document', 'upload_session',
+                     'require_upload_reservation_lifecycle'),
+                    ('document', 'document', 'reject_document_mutation'),
+                    ('document', 'document',
+                     'enforce_document_insert_upload_binding'),
+                    ('document', 'document', 'require_closed_document_insert'),
+                    ('document', 'document_revision',
+                     'reject_document_revision_mutation'),
+                    ('document', 'document_revision', 'enforce_revision_scope'),
+                    ('document', 'document_revision',
+                     'enforce_revision_insert_upload_binding'),
+                    ('document', 'document_revision',
+                     'require_closed_revision_insert'),
+                    ('document', 'document_asset',
+                     'reject_document_asset_mutation'),
+                    ('document', 'document_asset',
+                     'enforce_document_asset_binding'),
+                    ('document', 'document_asset',
+                     'enforce_asset_insert_upload_binding'),
+                    ('document', 'document_asset',
+                     'require_closed_document_asset_insert'),
+                    ('platform', 'object_asset',
+                     'require_closed_object_asset_insert'),
+                    ('platform', 'staging_upload_reservation',
+                     'enforce_verifier_staging_transition'),
+                    ('platform', 'staging_upload_reservation',
+                     'require_document_upload_lifecycle')
+            ), installed_triggers AS (
+                SELECT namespace.nspname AS schema_name,
+                       relation.relname AS table_name,
+                       trigger.tgname AS trigger_name
+                FROM pg_catalog.pg_trigger AS trigger
+                JOIN pg_catalog.pg_class AS relation
+                  ON relation.oid = trigger.tgrelid
+                JOIN pg_catalog.pg_namespace AS namespace
+                  ON namespace.oid = relation.relnamespace
+                WHERE NOT trigger.tgisinternal AND trigger.tgenabled = 'O'
+            ), required_policies(
+                table_name, policy_name,
+                expected_using_md5, expected_check_md5
+            ) AS (
+                VALUES
+                    (
+                        'knowledge_job', 'knowledge_job_verifier_only',
+                        '259d3ab37c236d5915d3ca85b2860724',
+                        '259d3ab37c236d5915d3ca85b2860724'
+                    ),
+                    ('job_effect_receipt',
+                     'job_effect_receipt_verifier_only',
+                     '125cff282e125222e96489ad27c5a7bc',
+                     '125cff282e125222e96489ad27c5a7bc'),
+                    ('staging_upload_reservation',
+                     'staging_upload_verifier_only',
+                     '1604016d275877430628f263579fbd9d',
+                     '1604016d275877430628f263579fbd9d'),
+                    ('object_asset', 'object_asset_verifier_only',
+                     '214ca1a2c65e535920de9008ccecf9cb',
+                     'b69028fcfcaf6f4ad2a645c62324e9fb'),
+                    ('outbox_event', 'outbox_verifier_cleanup_only',
+                     '2d19fbb288c08f33eefb078da9dd839b',
+                     '2d19fbb288c08f33eefb078da9dd839b')
+            ), installed_policies AS (
+                SELECT relation.relname AS table_name,
+                       policy.polname AS policy_name,
+                       policy.polpermissive,
+                       policy.polroles,
+                       policy.polcmd,
+                       pg_catalog.pg_get_expr(
+                           policy.polqual, policy.polrelid
+                       ) AS using_expression,
+                       pg_catalog.pg_get_expr(
+                           policy.polwithcheck, policy.polrelid
+                       ) AS check_expression
+                FROM pg_catalog.pg_policy AS policy
+                JOIN pg_catalog.pg_class AS relation
+                  ON relation.oid = policy.polrelid
+                JOIN pg_catalog.pg_namespace AS namespace
+                  ON namespace.oid = relation.relnamespace
+                WHERE namespace.nspname = 'platform'
+            ), discovery AS (
+                SELECT routine.oid, routine.prosecdef,
+                       routine.proconfig
+                FROM pg_catalog.pg_proc AS routine
+                JOIN pg_catalog.pg_namespace AS namespace
+                  ON namespace.oid = routine.pronamespace
+                WHERE namespace.nspname = 'platform'
+                  AND routine.proname =
+                      'claimable_document_intake_scopes'
+                  AND routine.proargtypes = '23'::pg_catalog.oidvector
+            ), closure AS (
+                SELECT routine.oid, routine.prosecdef,
+                       routine.proconfig, routine.proacl, routine.proowner
+                FROM pg_catalog.pg_proc AS routine
+                JOIN pg_catalog.pg_namespace AS namespace
+                  ON namespace.oid = routine.pronamespace
+                WHERE namespace.nspname = 'document'
+                  AND routine.proname = 'enforce_closed_stored_upload'
+                  AND routine.proargtypes = ''::pg_catalog.oidvector
+            )
+            SELECT
+                (SELECT count(*) = 4
+                   AND bool_and(relrowsecurity AND relforcerowsecurity)
+                 FROM document_relations) AS relations_ready,
+                NOT EXISTS (
+                    SELECT 1 FROM required_triggers AS required
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM installed_triggers AS installed
+                        WHERE installed.schema_name = required.schema_name
+                          AND installed.table_name = required.table_name
+                          AND installed.trigger_name = required.trigger_name
+                    )
+                ) AS triggers_ready,
+                NOT EXISTS (
+                    SELECT 1 FROM required_policies AS required
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM installed_policies AS installed
+                        WHERE installed.table_name = required.table_name
+                          AND installed.policy_name = required.policy_name
+                          AND NOT installed.polpermissive
+                          AND installed.polcmd = '*'
+                          AND installed.polroles = ARRAY[(
+                              SELECT oid FROM pg_catalog.pg_roles
+                              WHERE rolname = 'pcbknowledge_verifier'
+                          )]::pg_catalog.oid[]
+                          AND installed.using_expression IS NOT NULL
+                          AND installed.check_expression IS NOT NULL
+                          AND pg_catalog.md5(
+                              installed.using_expression
+                          ) = required.expected_using_md5
+                          AND pg_catalog.md5(
+                              installed.check_expression
+                          ) = required.expected_check_md5
+                    )
+                ) AS policies_ready,
+                EXISTS (
+                    SELECT 1 FROM discovery
+                    WHERE prosecdef
+                      AND proconfig = ARRAY[
+                          'search_path=pg_catalog, pg_temp'
+                      ]::text[]
+                ) AS discovery_ready,
+                NOT has_function_privilege(
+                    'pcbknowledge_app', (SELECT oid FROM discovery), 'EXECUTE'
+                )
+                AND NOT has_function_privilege(
+                    'pcbknowledge_worker', (SELECT oid FROM discovery), 'EXECUTE'
+                )
+                AND has_function_privilege(
+                    'pcbknowledge_verifier', (SELECT oid FROM discovery),
+                    'EXECUTE'
+                ) AS discovery_acl_ready,
+                EXISTS (
+                    SELECT 1 FROM closure
+                    WHERE prosecdef
+                      AND proconfig = ARRAY[
+                          'search_path=pg_catalog, pg_temp'
+                      ]::text[]
+                )
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM closure,
+                         pg_catalog.aclexplode(
+                             COALESCE(
+                                 closure.proacl,
+                                 pg_catalog.acldefault(
+                                     'f', closure.proowner
+                                 )
+                             )
+                         ) AS acl
+                    WHERE acl.grantee = 0
+                      AND acl.privilege_type = 'EXECUTE'
+                )
+                AND NOT has_function_privilege(
+                    'pcbknowledge_verifier', (SELECT oid FROM closure),
+                    'EXECUTE'
+                ) AS closure_ready
+            """
+        )
+    ).one()
+    if not all(contract):
+        raise DatabaseContractError("document database contract is incomplete")
+
+
+def _require_verifier_database_contract(connection: Connection) -> None:
+    """Require the verifier's narrow write surface before it can claim work."""
+
+    ready = connection.scalar(
+        text(
+            """
+            SELECT
+                has_schema_privilege(
+                    CURRENT_USER, 'document', 'USAGE'
+                )
+                AND has_function_privilege(
+                    CURRENT_USER,
+                    'platform.claimable_document_intake_scopes(integer)',
+                    'EXECUTE'
+                )
+                AND has_table_privilege(
+                    CURRENT_USER, 'platform.knowledge_job', 'SELECT'
+                )
+                AND has_column_privilege(
+                    CURRENT_USER, 'platform.knowledge_job',
+                    'state', 'UPDATE'
+                )
+                AND has_table_privilege(
+                    CURRENT_USER, 'platform.staging_upload_reservation',
+                    'SELECT'
+                )
+                AND has_column_privilege(
+                    CURRENT_USER, 'platform.staging_upload_reservation',
+                    'asset_id', 'UPDATE'
+                )
+                AND has_table_privilege(
+                    CURRENT_USER, 'platform.object_asset', 'SELECT'
+                )
+                AND has_column_privilege(
+                    CURRENT_USER, 'platform.object_asset', 'id', 'INSERT'
+                )
+                AND has_table_privilege(
+                    CURRENT_USER, 'document.upload_session', 'SELECT'
+                )
+                AND has_column_privilege(
+                    CURRENT_USER, 'document.upload_session',
+                    'state', 'UPDATE'
+                )
+                AND has_table_privilege(
+                    CURRENT_USER, 'document.document', 'SELECT'
+                )
+                AND has_column_privilege(
+                    CURRENT_USER, 'document.document', 'id', 'INSERT'
+                )
+                AND NOT has_table_privilege(
+                    CURRENT_USER, 'document.document', 'UPDATE,DELETE'
+                )
+            """
+        )
+    )
+    if not ready:
+        raise DatabaseContractError("verifier database grants are incomplete")
+
+
 def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> None:
     unexpected = connection.scalar(
         text(
@@ -272,7 +551,9 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                 JOIN pg_catalog.pg_namespace AS namespace
                   ON namespace.oid = relation.relnamespace
                 WHERE (
-                    namespace.nspname IN ('identity', 'source', 'audit', 'platform')
+                    namespace.nspname IN (
+                        'identity', 'source', 'audit', 'platform', 'document'
+                    )
                     OR (
                         namespace.nspname = 'public'
                         AND relation.relname = 'alembic_version'
@@ -306,6 +587,16 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                     ('pcbknowledge_app', 'platform', 'object_asset', 'SELECT'),
                     ('pcbknowledge_app', 'platform', 'object_asset', 'INSERT'),
                     ('pcbknowledge_app', 'public', 'alembic_version', 'SELECT'),
+                    ('pcbknowledge_app', 'document', 'upload_session', 'SELECT'),
+                    ('pcbknowledge_app', 'document', 'document', 'SELECT'),
+                    (
+                        'pcbknowledge_app', 'document',
+                        'document_revision', 'SELECT'
+                    ),
+                    (
+                        'pcbknowledge_app', 'document',
+                        'document_asset', 'SELECT'
+                    ),
                     (
                         'pcbknowledge_app', 'platform',
                         'staging_upload_reservation', 'SELECT'
@@ -315,7 +606,31 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                     (
                         'pcbknowledge_worker', 'platform',
                         'staging_upload_reservation', 'SELECT'
-                    )
+                    ),
+                    ('pcbknowledge_verifier', 'public',
+                     'alembic_version', 'SELECT'),
+                    ('pcbknowledge_verifier', 'source',
+                     'access_scope', 'SELECT'),
+                    ('pcbknowledge_verifier', 'source',
+                     'license_policy', 'SELECT'),
+                    ('pcbknowledge_verifier', 'platform',
+                     'knowledge_job', 'SELECT'),
+                    ('pcbknowledge_verifier', 'platform',
+                     'job_effect_receipt', 'SELECT'),
+                    ('pcbknowledge_verifier', 'platform',
+                     'staging_upload_reservation', 'SELECT'),
+                    ('pcbknowledge_verifier', 'platform',
+                     'object_asset', 'SELECT'),
+                    ('pcbknowledge_verifier', 'platform',
+                     'outbox_event', 'SELECT'),
+                    ('pcbknowledge_verifier', 'document',
+                     'upload_session', 'SELECT'),
+                    ('pcbknowledge_verifier', 'document',
+                     'document', 'SELECT'),
+                    ('pcbknowledge_verifier', 'document',
+                     'document_revision', 'SELECT'),
+                    ('pcbknowledge_verifier', 'document',
+                     'document_asset', 'SELECT')
             ),
             allowed_columns(
                 role_name, schema_name, table_name, column_name, privilege
@@ -467,6 +782,259 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                      'state', 'UPDATE'),
                     ('pcbknowledge_worker', 'platform', 'staging_upload_reservation',
                      'cleaned_at', 'UPDATE')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'organization_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'project_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'access_scope', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'access_scope_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'license_policy_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'source_organization_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'target_document_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'target_revision_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'creates_document', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'title', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'document_number', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'revision_label', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'original_filename', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'media_type', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'expected_byte_size', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'idempotency_key', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'request_sha256', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'state', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'created_by_subject_id', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'created_at', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'updated_at', 'INSERT')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'state', 'UPDATE')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'expected_sha256', 'UPDATE')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'completion_job_id', 'UPDATE')
+                    ,('pcbknowledge_app', 'document', 'upload_session',
+                      'updated_at', 'UPDATE')
+
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'state', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'available_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'lease_owner', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'lease_expires_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'attempts', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'last_failure_code', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'updated_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'completed_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'knowledge_job',
+                      'cancelled_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'job_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'access_scope', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'effect_name', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'effect_sha256', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'lease_attempt', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'lease_owner', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'job_effect_receipt', 'recorded_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'staging_upload_reservation', 'state', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'staging_upload_reservation', 'asset_id', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform',
+                      'staging_upload_reservation', 'finalized_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'access_scope', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'access_scope_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'license_policy_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'asset_kind', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'bucket', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'object_key', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'sha256', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'byte_size', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'media_type', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'state', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'created_by_subject_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'object_asset',
+                      'created_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'access_scope', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'event_type', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'aggregate_type', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'aggregate_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'payload', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'payload_sha256', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'idempotency_key', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'state', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'available_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'attempts', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'max_attempts', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'created_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'platform', 'outbox_event',
+                      'updated_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'occurred_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'actor_subject_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'actor_kind', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'action', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'resource_type', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'resource_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'outcome', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'request_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'detail', 'INSERT')
+                    ,('pcbknowledge_verifier', 'audit', 'audit_event',
+                      'occurred_at', 'SELECT')
+                    ,('pcbknowledge_verifier', 'document', 'upload_session',
+                      'state', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'document', 'upload_session',
+                      'actual_sha256', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'document', 'upload_session',
+                      'object_asset_id', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'document', 'upload_session',
+                      'failure_code', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'document', 'upload_session',
+                      'updated_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'document', 'upload_session',
+                      'completed_at', 'UPDATE')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'title', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'document_number', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'created_by_subject_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document',
+                      'created_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'document_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'source_organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'access_scope', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'access_scope_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'license_policy_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'revision_label', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'original_filename', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'media_type', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'state', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'created_by_subject_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document',
+                      'document_revision', 'created_at', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'organization_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'project_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'revision_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'object_asset_id', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'asset_kind', 'INSERT')
+                    ,('pcbknowledge_verifier', 'document', 'document_asset',
+                      'created_at', 'INSERT')
             ),
             allowed_schemas(role_name, schema_name, privilege) AS (
                 VALUES
@@ -474,10 +1042,17 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                     ('pcbknowledge_app', 'source', 'USAGE'),
                     ('pcbknowledge_app', 'audit', 'USAGE'),
                     ('pcbknowledge_app', 'platform', 'USAGE'),
+                    ('pcbknowledge_app', 'document', 'USAGE'),
                     ('pcbknowledge_app', 'public', 'USAGE'),
                     ('pcbknowledge_worker', 'identity', 'USAGE'),
                     ('pcbknowledge_worker', 'platform', 'USAGE'),
-                    ('pcbknowledge_worker', 'public', 'USAGE')
+                    ('pcbknowledge_worker', 'public', 'USAGE'),
+                    ('pcbknowledge_verifier', 'public', 'USAGE'),
+                    ('pcbknowledge_verifier', 'identity', 'USAGE'),
+                    ('pcbknowledge_verifier', 'source', 'USAGE'),
+                    ('pcbknowledge_verifier', 'audit', 'USAGE'),
+                    ('pcbknowledge_verifier', 'platform', 'USAGE'),
+                    ('pcbknowledge_verifier', 'document', 'USAGE')
             ),
             allowed_functions(
                 role_name, schema_name, function_name, argument_types
@@ -500,6 +1075,18 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                     (
                         'pcbknowledge_worker', 'platform',
                         'claimable_storage_cleanup_scopes', '23'
+                    ),
+                    (
+                        'pcbknowledge_verifier', 'identity',
+                        'current_organization_id', ''
+                    ),
+                    (
+                        'pcbknowledge_verifier', 'identity',
+                        'can_access_project', '2950'
+                    ),
+                    (
+                        'pcbknowledge_verifier', 'platform',
+                        'claimable_document_intake_scopes', '23'
                     )
             )
             SELECT EXISTS (
@@ -594,7 +1181,8 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                 FROM pg_catalog.pg_namespace AS namespace
                 CROSS JOIN (VALUES ('USAGE'), ('CREATE')) AS held(privilege)
                 WHERE namespace.nspname IN (
-                    'identity', 'source', 'audit', 'platform', 'public'
+                    'identity', 'source', 'audit', 'platform',
+                    'document', 'public'
                 )
                   AND pg_catalog.has_schema_privilege(
                     CURRENT_USER, namespace.oid, held.privilege
@@ -610,7 +1198,9 @@ def _require_exact_runtime_grants(connection: Connection, *, role_name: str) -> 
                 FROM pg_catalog.pg_proc AS routine
                 JOIN pg_catalog.pg_namespace AS namespace
                   ON namespace.oid = routine.pronamespace
-                WHERE namespace.nspname IN ('identity', 'source', 'audit', 'platform')
+                WHERE namespace.nspname IN (
+                    'identity', 'source', 'audit', 'platform', 'document'
+                )
                   AND pg_catalog.has_function_privilege(
                     CURRENT_USER, routine.oid, 'EXECUTE'
                   )

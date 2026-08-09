@@ -9,6 +9,7 @@ import { AuthenticationProvider } from "../auth/AuthenticationProvider";
 import type { AuthClient } from "../auth/auth-types";
 import { createOidcClient } from "../auth/oidc-client";
 import type { RuntimeConfig } from "../config/runtime-config";
+import { AuthenticatedQueryCacheBoundary } from "./AuthenticatedQueryCacheBoundary";
 import { RuntimeConfigContext } from "./runtime-config-context";
 
 interface AppProvidersProps extends PropsWithChildren {
@@ -52,10 +53,12 @@ export function AppProviders({
       >
         <ApiClientBoundaryContext.Provider value={apiClientBoundary}>
           <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={curatorTheme}>
-              <CssBaseline />
-              {children}
-            </ThemeProvider>
+            <AuthenticatedQueryCacheBoundary>
+              <ThemeProvider theme={curatorTheme}>
+                <CssBaseline />
+                {children}
+              </ThemeProvider>
+            </AuthenticatedQueryCacheBoundary>
           </QueryClientProvider>
         </ApiClientBoundaryContext.Provider>
       </AuthenticationProvider>

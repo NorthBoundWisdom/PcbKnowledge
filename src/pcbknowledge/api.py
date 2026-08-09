@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel, ConfigDict
 
 from pcbknowledge import __version__
+from pcbknowledge.document.api import router as document_router
 from pcbknowledge.platform.audit import AuditEventDraft, AuditOutcome, AuditWriter
 from pcbknowledge.platform.config import get_observability_settings
 from pcbknowledge.platform.http import PrincipalDependency, SessionDependency
@@ -88,6 +89,7 @@ def create_app(
         servers=[{"url": "/api/v1", "description": "Versioned API gateway"}],
     )
     install_problem_handlers(application)
+    application.include_router(document_router)
     application.state.readiness_probe = readiness_probe or ApplicationReadinessProbe()
 
     if enable_observability:

@@ -8,6 +8,7 @@ def load_platform_models() -> None:
     hub exists only for migration/autogeneration and schema-consistency tests.
     """
 
+    from pcbknowledge.document import models as document_models
     from pcbknowledge.platform.audit import models as audit_models
     from pcbknowledge.platform.authorization import models as authorization_models
     from pcbknowledge.platform.identity import models as identity_models
@@ -24,5 +25,6 @@ def load_platform_models() -> None:
             job_models,
             outbox_models,
             storage_models,
+            document_models,
         )
     )

@@ -27,15 +27,20 @@ generate_hex() {
 generate_hex "$secret_dir/postgres_password" 32
 generate_hex "$secret_dir/application_db_password" 32
 generate_hex "$secret_dir/worker_db_password" 32
+generate_hex "$secret_dir/verifier_db_password" 32
 generate_hex "$secret_dir/keycloak_db_password" 32
 generate_hex "$secret_dir/keycloak_admin_password" 32
 generate_hex "$secret_dir/agent_service_client_secret" 32
+generate_hex "$secret_dir/local_curator_password" 32
+generate_hex "$secret_dir/local_curator_marker" 32
 generate_hex "$secret_dir/seaweedfs_access_key" 16
 generate_hex "$secret_dir/seaweedfs_secret_key" 32
 generate_hex "$secret_dir/seaweedfs_admin_access_key" 16
 generate_hex "$secret_dir/seaweedfs_admin_secret_key" 32
 generate_hex "$secret_dir/seaweedfs_worker_access_key" 16
 generate_hex "$secret_dir/seaweedfs_worker_secret_key" 32
+generate_hex "$secret_dir/seaweedfs_verifier_access_key" 16
+generate_hex "$secret_dir/seaweedfs_verifier_secret_key" 32
 generate_hex "$secret_dir/grafana_admin_password" 32
 
 render_secret_template() {

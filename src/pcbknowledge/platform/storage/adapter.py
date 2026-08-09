@@ -7,13 +7,19 @@ import hmac
 import importlib
 import re
 import secrets
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Protocol, cast
+from urllib.parse import urlsplit
+from urllib.request import Request as UrlRequest
+from urllib.request import urlopen
 from uuid import UUID
 
 from pcbknowledge.platform.storage.errors import (
+    ObjectDigestMismatchError,
     ObjectIntegrityError,
+    ObjectMagicMismatchError,
+    ObjectSizeMismatchError,
     ObjectStoreUnavailableError,
 )
 from pcbknowledge.platform.storage.keys import (
@@ -50,6 +56,10 @@ class S3Client(Protocol):
     def copy_object(self, **kwargs: object) -> object: ...
 
     def delete_object(self, **kwargs: object) -> object: ...
+
+    def put_bucket_cors(self, **kwargs: object) -> object: ...
+
+    def put_object(self, **kwargs: object) -> object: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,6 +123,12 @@ class SeaweedFsS3Adapter:
         self._staging_bucket = staging_bucket
         self._max_upload_bytes = max_upload_bytes
         self._allow_content_write = allow_content_write
+
+    @property
+    def maximum_upload_bytes(self) -> int:
+        """Return the configured qualified bound without exposing credentials."""
+
+        return self._max_upload_bytes
 
     @classmethod
     def from_credentials(
@@ -221,6 +237,33 @@ class SeaweedFsS3Adapter:
         except Exception:
             raise ObjectStoreUnavailableError() from None
 
+    def probe_verifier_access(self) -> None:
+        """Prove staging read/write/delete and permanent read without List/Admin."""
+
+        staging_key = f"system/health/{secrets.token_hex(16)}"
+        permanent_key = f"system/health/missing-{secrets.token_hex(16)}"
+        try:
+            self._internal.put_object(
+                Bucket=self._staging_bucket,
+                Key=staging_key,
+                Body=b"pcbknowledge-verifier-health",
+                ContentType="application/octet-stream",
+            )
+            inspection = self._inspect_key(self._staging_bucket, staging_key)
+            if inspection.byte_size != len(b"pcbknowledge-verifier-health"):
+                raise ObjectStoreUnavailableError()
+            if self._inspect_key_if_exists(self._bucket, permanent_key) is not None:
+                raise ObjectStoreUnavailableError()
+        except ObjectStoreUnavailableError:
+            raise
+        except Exception:
+            raise ObjectStoreUnavailableError() from None
+        finally:
+            try:
+                self._internal.delete_object(Bucket=self._staging_bucket, Key=staging_key)
+            except Exception:
+                raise ObjectStoreUnavailableError() from None
+
     def probe_buckets(self) -> None:
         self.probe_content_bucket()
         self.probe_staging_bucket()
@@ -236,6 +279,96 @@ class SeaweedFsS3Adapter:
         for bucket in (self._bucket, self._staging_bucket):
             created = self._ensure_bucket(bucket) or created
         return created
+
+    def configure_staging_cors(self, *, allowed_origins: Sequence[str]) -> None:
+        """Install or qualify an externally managed exact browser-origin gate."""
+
+        origins = tuple(dict.fromkeys(allowed_origins))
+        if not 1 <= len(origins) <= 32:
+            raise ValueError("at least one bounded staging CORS origin is required")
+        for origin in origins:
+            parsed = urlsplit(origin)
+            if (
+                "*" in origin
+                or parsed.scheme not in {"http", "https"}
+                or not parsed.netloc
+                or parsed.username is not None
+                or parsed.password is not None
+                or parsed.path not in {"", "/"}
+                or parsed.query
+                or parsed.fragment
+            ):
+                raise ValueError("staging CORS origins must be exact HTTP origins")
+        try:
+            self._internal.put_bucket_cors(
+                Bucket=self._staging_bucket,
+                CORSConfiguration={
+                    "CORSRules": [
+                        {
+                            "AllowedOrigins": list(origins),
+                            "AllowedMethods": ["PUT"],
+                            "AllowedHeaders": ["Content-Type"],
+                            "ExposeHeaders": ["ETag"],
+                            "MaxAgeSeconds": 600,
+                        }
+                    ]
+                },
+            )
+        except Exception as error:
+            if not self._is_not_implemented(error):
+                raise ObjectStoreUnavailableError() from None
+            self._qualify_external_staging_cors(origins)
+
+    def _qualify_external_staging_cors(self, origins: tuple[str, ...]) -> None:
+        """Qualify SeaweedFS 3.85's exact process-level CORS configuration."""
+
+        try:
+            # This deployment-only probe runs inside the Compose network. The
+            # browser signer points at host loopback, which is intentionally
+            # unreachable here, so qualify via the authenticated internal
+            # endpoint while exercising the same bucket and object contract.
+            url = self._internal.generate_presigned_url(
+                "put_object",
+                Params={
+                    "Bucket": self._staging_bucket,
+                    "Key": f"system/cors/{secrets.token_hex(16)}",
+                    "ContentType": "application/pdf",
+                    "ContentLength": 1,
+                },
+                ExpiresIn=60,
+                HttpMethod="PUT",
+            )
+            if not isinstance(url, str) or not url:
+                raise ObjectStoreUnavailableError()
+            for origin in origins:
+                request = UrlRequest(
+                    url,
+                    method="OPTIONS",
+                    headers={
+                        "Origin": origin,
+                        "Access-Control-Request-Method": "PUT",
+                        "Access-Control-Request-Headers": "content-type",
+                    },
+                )
+                with urlopen(request, timeout=10) as response:
+                    allowed_origin = response.headers.get("Access-Control-Allow-Origin")
+                    allowed_methods = response.headers.get("Access-Control-Allow-Methods", "")
+                    allowed_headers = response.headers.get("Access-Control-Allow-Headers", "")
+                    if (
+                        response.status not in {200, 204}
+                        or allowed_origin not in {origin, "*"}
+                        or not ("PUT" in allowed_methods.upper() or allowed_methods.strip() == "*")
+                        or not (
+                            "content-type" in allowed_headers.casefold()
+                            or allowed_headers.strip() == "*"
+                        )
+                    ):
+                        raise ObjectStoreUnavailableError()
+
+        except ObjectStoreUnavailableError:
+            raise
+        except Exception:
+            raise ObjectStoreUnavailableError() from None
 
     def _ensure_bucket(self, bucket: str) -> bool:
 
@@ -267,10 +400,13 @@ class SeaweedFsS3Adapter:
         *,
         organization_id: UUID,
         upload_id: UUID,
-        expected_sha256: str,
+        expected_sha256: str | None = None,
         expected_byte_size: int | None = None,
+        required_prefix: bytes | None = None,
     ) -> VerifiedStagingSnapshot:
-        expected = require_sha256(expected_sha256)
+        expected = require_sha256(expected_sha256) if expected_sha256 is not None else None
+        if required_prefix is not None and not 1 <= len(required_prefix) <= 64:
+            raise ValueError("required object prefix is invalid")
         source_key = staging_object_key(organization_id, upload_id)
         snapshot_key = verification_object_key(organization_id, upload_id)
         try:
@@ -280,19 +416,33 @@ class SeaweedFsS3Adapter:
                 CopySource={"Bucket": self._staging_bucket, "Key": source_key},
                 MetadataDirective="COPY",
             )
+            inspection = self._inspect_key(
+                self._staging_bucket,
+                snapshot_key,
+                required_prefix=required_prefix,
+            )
+            if expected_byte_size is not None and inspection.byte_size != expected_byte_size:
+                raise ObjectSizeMismatchError()
+            if expected is not None and not hmac.compare_digest(inspection.sha256, expected):
+                raise ObjectDigestMismatchError()
+        except ObjectIntegrityError, ObjectStoreUnavailableError:
+            self._discard_failed_snapshot(snapshot_key)
+            raise
         except Exception:
+            self._discard_failed_snapshot(snapshot_key)
             raise ObjectStoreUnavailableError() from None
-        inspection = self._inspect_key(self._staging_bucket, snapshot_key)
-        if expected_byte_size is not None and inspection.byte_size != expected_byte_size:
-            raise ObjectIntegrityError()
-        if not hmac.compare_digest(inspection.sha256, expected):
-            raise ObjectIntegrityError()
         return VerifiedStagingSnapshot(
             organization_id=organization_id,
             upload_id=upload_id,
             inspection=inspection,
             key=snapshot_key,
         )
+
+    def _discard_failed_snapshot(self, snapshot_key: str) -> None:
+        try:
+            self._internal.delete_object(Bucket=self._staging_bucket, Key=snapshot_key)
+        except Exception:
+            raise ObjectStoreUnavailableError() from None
 
     def promote_snapshot(self, snapshot: VerifiedStagingSnapshot) -> StoredObjectRef:
         """Promote under the caller's PostgreSQL content lock without overwrite.
@@ -375,8 +525,18 @@ class SeaweedFsS3Adapter:
             raise ObjectStoreUnavailableError()
         return PresignedRequest(url=url, headers={}, expires_in_seconds=expires_in_seconds)
 
-    def _inspect_key(self, bucket: str, key: str) -> ObjectInspection:
-        inspection = self._inspect_key_or_none(bucket, key)
+    def _inspect_key(
+        self,
+        bucket: str,
+        key: str,
+        *,
+        required_prefix: bytes | None = None,
+    ) -> ObjectInspection:
+        inspection = self._inspect_key_or_none(
+            bucket,
+            key,
+            required_prefix=required_prefix,
+        )
         if inspection is None:
             raise ObjectStoreUnavailableError()
         return inspection
@@ -384,7 +544,13 @@ class SeaweedFsS3Adapter:
     def _inspect_key_if_exists(self, bucket: str, key: str) -> ObjectInspection | None:
         return self._inspect_key_or_none(bucket, key)
 
-    def _inspect_key_or_none(self, bucket: str, key: str) -> ObjectInspection | None:
+    def _inspect_key_or_none(
+        self,
+        bucket: str,
+        key: str,
+        *,
+        required_prefix: bytes | None = None,
+    ) -> ObjectInspection | None:
         try:
             response = self._internal.get_object(Bucket=bucket, Key=key)
             raw_body = response.get("Body")
@@ -394,14 +560,22 @@ class SeaweedFsS3Adapter:
             body = cast(StreamingBody, raw_body)
             digest = hashlib.sha256()
             byte_size = 0
+            prefix = bytearray()
             try:
                 while chunk := body.read(1024 * 1024):
+                    if required_prefix is not None and len(prefix) < len(required_prefix):
+                        missing = len(required_prefix) - len(prefix)
+                        prefix.extend(chunk[:missing])
                     digest.update(chunk)
                     byte_size += len(chunk)
                     if byte_size > self._max_upload_bytes:
                         raise ObjectIntegrityError()
             finally:
                 body.close()
+            if required_prefix is not None and not hmac.compare_digest(
+                bytes(prefix), required_prefix
+            ):
+                raise ObjectMagicMismatchError()
             return ObjectInspection(
                 sha256=digest.hexdigest(),
                 byte_size=byte_size,
@@ -426,6 +600,17 @@ class SeaweedFsS3Adapter:
         metadata = response.get("ResponseMetadata")
         status = metadata.get("HTTPStatusCode") if isinstance(metadata, Mapping) else None
         return code in {"404", "NoSuchKey", "NotFound"} or status == 404
+
+    @staticmethod
+    def _is_not_implemented(error: Exception) -> bool:
+        response = getattr(error, "response", None)
+        if not isinstance(response, Mapping):
+            return False
+        details = response.get("Error")
+        code = details.get("Code") if isinstance(details, Mapping) else None
+        metadata = response.get("ResponseMetadata")
+        status = metadata.get("HTTPStatusCode") if isinstance(metadata, Mapping) else None
+        return code in {"501", "NotImplemented"} or status == 501
 
     @staticmethod
     def _validate_expiry(value: int) -> None:

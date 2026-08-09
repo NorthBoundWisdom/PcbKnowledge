@@ -4,9 +4,19 @@ PcbKnowledge is an evidence-first engineering knowledge platform for PCB softwar
 
 ## Current state
 
-The repository now has an executable M1 platform baseline: a modular FastAPI application with fail-closed PostgreSQL, OIDC, and private object-store readiness; bounded PostgreSQL job/outbox and storage primitives; a durable staging-cleanup worker; an OIDC Authorization Code + PKCE curator shell backed by the trusted `/session` projection; a committed OpenAPI artifact; and a Docker Compose development stack with Keycloak and baseline observability. This substrate is not the later document intake, extraction, review, publication, or retrieval workflow, and it is not production-ready.
+The repository now has a first usable local intake slice on top of the M1 platform. A
+managed development Curator can sign in with OIDC Authorization Code + PKCE, upload a PDF
+directly to private staging, let an isolated verifier compute the authoritative SHA-256
+and byte size, store one content-addressed original, browse the resulting immutable
+document revision, and request a short-lived audited original-file download. PostgreSQL
+RLS, bounded jobs/outbox, the cleanup worker, generated OpenAPI browser transport, and
+real PostgreSQL/SeaweedFS integration tests protect that path.
 
-The intended first-MVP domain scope remains an evidence-first path: immutable source bytes, document revisions, typed facts, two-role review, exact/FTS retrieval, audit, and repeatable evaluation. Those domain workflows are targets until their executable code and verification land. Vector retrieval, LLM extraction, MCP, KnowledgeSnapshot pinning, and PCB mutation are not MVP capabilities.
+This is an M2 intake subset, not the completed evidence-first MVP and not a production
+deployment. Page parsing, thumbnails, extracted text, entity resolution, evidence
+anchors, typed facts, two-person review, publication, and retrieval remain targets.
+Vector retrieval, LLM extraction, MCP, KnowledgeSnapshot pinning, and PCB mutation are
+not current capabilities.
 
 Authoritative project documents:
 
@@ -42,11 +52,12 @@ The repository declares Config, Build, Run, Test, and Package actions in
 **Build → Prepare Runtime** whenever the source or runtime contract changes, and then use
 **Run → Start Built Apps** for the normal edit/run cycle. Build owns the slower work: it
 builds the images, starts and warms infrastructure, applies migrations, reconciles roles
-and Keycloak, and initializes storage. Run never builds or migrates; it only starts the
-already-created API, worker, web, and gateway containers and attaches their logs.
+and Keycloak, bootstraps the explicitly managed local Curator, and initializes storage.
+Run never builds or migrates; it only starts the already-created API, cleanup worker,
+document verifier, web, and gateway containers and attaches their logs.
 
 The curator is available at <http://localhost:18080>. Press Ctrl+C in the Run terminal to
-stop those four application containers. PostgreSQL, Keycloak, SeaweedFS, and observability
+stop those five application containers. PostgreSQL, Keycloak, SeaweedFS, and observability
 services stay warm, so the next Run avoids their cold-start delay. To explicitly stop the
 entire prepared FreeCM environment while preserving its volumes, run:
 
@@ -54,10 +65,19 @@ entire prepared FreeCM environment while preserving its volumes, run:
 COMPOSE_PROJECT_NAME=pcbknowledge-freecm ./deploy/scripts/dev-down.sh
 ```
 
-The M1 stack wires OIDC but does not create a human user or default password. A Curator
-login needs both a Keycloak realm user and its trusted PostgreSQL identity/membership;
-the Keycloak bootstrap administrator is not an application user. See
-[authentication operations](docs/operations/authentication.md#human-account-status).
+Build creates one fail-closed local human identity for development. Sign in as
+`pcbknowledge-curator` and read its random password from the owner-only, ignored
+`deploy/secrets/local_curator_password` file at the interactive login boundary. It has
+only `DATA_CURATOR` access to the managed default project; it is neither a reviewer nor an
+administrator. The Keycloak bootstrap administrator is not an application user. See
+[authentication operations](docs/operations/authentication.md#local-development-human).
+
+For the first end-to-end use, open **Intake → New intake**, select the managed default
+project and its source/scope/license options, choose an `application/pdf` file of at most
+256 MiB, confirm the metadata, and submit. The UI uploads directly to staging and polls
+the durable verifier until the revision is `STORED` or reports a stable failure. A stored
+revision appears under **Documents**, where **Open authorized original** performs a fresh
+authorization and audit before navigating to the short-lived object URL.
 
 The plugin actions are deliberately isolated under the `pcbknowledge-freecm` Compose
 project, so they do not reuse or stop a stack started with `deploy/scripts/dev-up.sh`.
@@ -79,9 +99,10 @@ The other actions use the same pinned workflow:
   missing, stopped, or stale. It passes `--no-build` and never performs setup work.
 - **Test** runs backend formatting/lint/type/unit/OpenAPI checks and frontend generated
   client/lint/type/unit/build checks in the repository-pinned containers.
-- **Package** exports the five repository-owned images as a gzip-compressed,
-  `docker image load`-compatible archive, SHA-256 sidecar, and JSON manifest under
-  `build/package/`.
+- **Package** verifies and exports the exact six images recorded by Build as a
+  gzip-compressed, `docker image load`-compatible archive, SHA-256 sidecar, and JSON
+  manifest under `build/package/`. It never rebuilds or retags them, and fails if the
+  prepared runtime receipt is stale.
 
 The same actions can be reproduced without the UI:
 
@@ -138,10 +159,10 @@ route components do not maintain handwritten wire DTOs or call `fetch` directly.
 `uv run pytest` is useful for a source-tree run, but PostgreSQL- and
 SeaweedFS-gated tests can report skips when their explicit disposable-service
 configuration is absent. It is therefore not, by itself, a zero-skip
-integration receipt. The canonical M1 integration entry is the
-[`M1 PostgreSQL and SeaweedFS integration` CI job](.github/workflows/ci.yml),
+integration receipt. The canonical persistence integration entry is the
+[`Platform and document PostgreSQL/SeaweedFS integration` CI job](.github/workflows/ci.yml),
 which provisions real disposable services, applies migrations, exercises the
-separate application and worker database roles plus the cleanup worker, and
+separate application, cleanup-worker, and document-verifier database roles, and
 fails if either JUnit receipt contains a skipped case. The job runs on every
 push to `main` and every pull request.
 
@@ -151,7 +172,13 @@ Start the local stack from an empty Docker volume set:
 ./deploy/scripts/dev-up.sh
 ```
 
-The script generates untracked runtime credentials and two rendered Keycloak JSON files, validates the resolved Compose model, builds API/worker/web images, applies migrations before reconciling runtime database roles, reconciles identity configuration, initializes object-store buckets, and starts the stack. It never substitutes anonymous access or a known default password. See [local development](docs/operations/local-development.md) and [configuration](docs/operations/configuration.md).
+The script generates untracked runtime credentials and two rendered Keycloak JSON files,
+validates the resolved Compose model, builds API/worker/verifier/web images, applies
+migrations before reconciling runtime database roles, bootstraps the managed local
+Curator, initializes object-store buckets, and starts the stack. It never substitutes
+anonymous access or a known default password. See
+[local development](docs/operations/local-development.md) and
+[configuration](docs/operations/configuration.md).
 
 Useful endpoints after startup:
 

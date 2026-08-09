@@ -15,6 +15,8 @@ admin_access_key=$(read_secret /run/secrets/seaweedfs_admin_access_key)
 admin_secret_key=$(read_secret /run/secrets/seaweedfs_admin_secret_key)
 worker_access_key=$(read_secret /run/secrets/seaweedfs_worker_access_key)
 worker_secret_key=$(read_secret /run/secrets/seaweedfs_worker_secret_key)
+verifier_access_key=$(read_secret /run/secrets/seaweedfs_verifier_access_key)
+verifier_secret_key=$(read_secret /run/secrets/seaweedfs_verifier_secret_key)
 content_bucket=${PCBKNOWLEDGE_S3_BUCKET:-pcbknowledge-assets}
 staging_bucket=${PCBKNOWLEDGE_S3_STAGING_BUCKET:-pcbknowledge-staging}
 runtime_config=/tmp/pcbknowledge-s3.json
@@ -37,12 +39,25 @@ if [ "$content_bucket" = "$staging_bucket" ]; then
   echo "permanent and staging SeaweedFS buckets must differ" >&2
   exit 1
 fi
+for other_access_key in "$api_access_key" "$admin_access_key" "$worker_access_key"; do
+  if [ "$verifier_access_key" = "$other_access_key" ]; then
+    echo "SeaweedFS verifier access key must be independent" >&2
+    exit 1
+  fi
+done
+for other_secret_key in "$api_secret_key" "$admin_secret_key" "$worker_secret_key"; do
+  if [ "$verifier_secret_key" = "$other_secret_key" ]; then
+    echo "SeaweedFS verifier secret key must be independent" >&2
+    exit 1
+  fi
+done
 
 printf '%s\n' \
   '{"identities":[' \
   '{"name":"pcbknowledge-admin","credentials":[{"accessKey":"'"$admin_access_key"'","secretKey":"'"$admin_secret_key"'"}],"actions":["Admin"]},' \
   '{"name":"pcbknowledge-api","credentials":[{"accessKey":"'"$api_access_key"'","secretKey":"'"$api_secret_key"'"}],"actions":["Read:'"$content_bucket"'","List:'"$content_bucket"'","Read:'"$staging_bucket"'","Write:'"$staging_bucket"'","List:'"$staging_bucket"'"]},' \
-  '{"name":"pcbknowledge-worker","credentials":[{"accessKey":"'"$worker_access_key"'","secretKey":"'"$worker_secret_key"'"}],"actions":["Write:'"$staging_bucket"'"]}' \
+  '{"name":"pcbknowledge-worker","credentials":[{"accessKey":"'"$worker_access_key"'","secretKey":"'"$worker_secret_key"'"}],"actions":["Write:'"$staging_bucket"'"]},' \
+  '{"name":"pcbknowledge-verifier","credentials":[{"accessKey":"'"$verifier_access_key"'","secretKey":"'"$verifier_secret_key"'"}],"actions":["Read:'"$staging_bucket"'","Write:'"$staging_bucket"'","Read:'"$content_bucket"'","Write:'"$content_bucket"'"]}' \
   ']}' \
   >"$runtime_config"
 chmod 600 "$runtime_config"
@@ -51,8 +66,10 @@ exec /usr/bin/weed server \
   -dir=/data \
   -master.port=9333 \
   -volume.port=8080 \
+  -volume.max=32 \
   -filer \
   -filer.port=8888 \
   -s3 \
   -s3.port=8333 \
+  -s3.allowedOrigins=http://localhost:8080,http://localhost:18080,http://localhost:5173,http://127.0.0.1:4173 \
   -s3.config="$runtime_config"

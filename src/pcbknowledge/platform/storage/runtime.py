@@ -5,6 +5,13 @@ from functools import lru_cache
 from pcbknowledge.platform.config import ObjectStorageSettings, get_object_storage_settings
 from pcbknowledge.platform.storage.adapter import SeaweedFsS3Adapter
 
+LOCAL_BROWSER_UPLOAD_ORIGINS = (
+    "http://localhost:8080",
+    "http://localhost:18080",
+    "http://localhost:5173",
+    "http://127.0.0.1:4173",
+)
+
 
 def build_object_storage_adapter(settings: ObjectStorageSettings) -> SeaweedFsS3Adapter:
     """Build the S3 boundary without exposing credentials through repr or logs."""
@@ -18,7 +25,7 @@ def build_object_storage_adapter(settings: ObjectStorageSettings) -> SeaweedFsS3
         staging_bucket=settings.staging_bucket,
         region_name=settings.region,
         max_upload_bytes=settings.max_upload_bytes,
-        allow_content_write=settings.access_mode == "admin",
+        allow_content_write=settings.access_mode in {"admin", "verifier"},
     )
 
 
@@ -35,6 +42,8 @@ def probe_object_storage(settings: ObjectStorageSettings) -> None:
     adapter = build_object_storage_adapter(settings)
     if settings.access_mode == "worker":
         adapter.probe_cleanup_access()
+    elif settings.access_mode == "verifier":
+        adapter.probe_verifier_access()
     else:
         adapter.probe_buckets()
 
@@ -44,7 +53,17 @@ def initialize_object_storage(settings: ObjectStorageSettings) -> bool:
 
     if settings.access_mode != "admin":
         raise ValueError("object storage initialization requires admin access mode")
-    return build_object_storage_adapter(settings).ensure_buckets()
+    adapter = build_object_storage_adapter(settings)
+    created = adapter.ensure_buckets()
+    configured_origins = tuple(
+        str(origin).rstrip("/") for origin in settings.browser_allowed_origins
+    )
+    if not configured_origins:
+        if settings.environment not in {"local", "test"}:
+            raise ValueError("browser upload origins are required outside local environments")
+        configured_origins = LOCAL_BROWSER_UPLOAD_ORIGINS
+    adapter.configure_staging_cors(allowed_origins=configured_origins)
+    return created
 
 
 def reset_object_storage_adapter() -> None:

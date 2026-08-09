@@ -17,27 +17,32 @@ WORKDIR /workspace
 RUN groupadd --system pcbknowledge \
     && useradd --system --gid pcbknowledge --home-dir /workspace pcbknowledge
 
-COPY pyproject.toml uv.lock README.md ./
-RUN uv sync --frozen --no-dev --no-install-project
+COPY pyproject.toml uv.lock ./
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --no-install-project
 
+COPY README.md ./
 COPY src ./src
 COPY apps/api ./apps/api
 COPY apps/worker ./apps/worker
 COPY migrations ./migrations
 COPY deploy/docker/backend-entrypoint.sh ./deploy/docker/backend-entrypoint.sh
 
-RUN uv sync --frozen --no-dev \
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev \
     && chown -R pcbknowledge:pcbknowledge /workspace
 
 FROM application AS test
 
 USER root
 COPY configs ./configs
+COPY .github/workflows/ci.yml ./.github/workflows/ci.yml
 COPY deploy/keycloak ./deploy/keycloak
 COPY packages/contracts ./packages/contracts
 COPY tests ./tests
 COPY deploy/scripts/test-backend-hermetic.sh ./deploy/scripts/test-backend-hermetic.sh
-RUN uv sync --frozen --all-groups \
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --all-groups \
     && chown -R pcbknowledge:pcbknowledge /workspace
 
 USER pcbknowledge

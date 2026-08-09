@@ -35,6 +35,8 @@ services:
       - seaweedfs_admin_secret_key
       - seaweedfs_worker_access_key
       - seaweedfs_worker_secret_key
+      - seaweedfs_verifier_access_key
+      - seaweedfs_verifier_secret_key
     volumes:
       - seaweedfs_data:/data
       - ./deploy/seaweedfs/start-seaweedfs.sh:/opt/pcbknowledge/start-seaweedfs.sh:ro
@@ -57,6 +59,7 @@ services:
       - postgres_password
       - application_db_password
       - worker_db_password
+      - verifier_db_password
     volumes:
       - ./deploy/postgres/reconcile-application-role.sh:/opt/pcbknowledge/reconcile-application-role.sh:ro
     depends_on:
@@ -122,7 +125,7 @@ services:
         VITE_API_BASE_URL: /api/v1
         VITE_OIDC_ISSUER_URL: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}/realms/pcbknowledge
         VITE_OIDC_CLIENT_ID: pcbknowledge-curator-web
-        VITE_DEPLOYMENT_LABEL: ${PCBKNOWLEDGE_DEPLOYMENT_LABEL:-Local M1}
+        VITE_DEPLOYMENT_LABEL: ${PCBKNOWLEDGE_DEPLOYMENT_LABEL:-Local M2a}
     restart: "no"
     networks: [backend]
 
@@ -184,6 +187,41 @@ services:
       - ./deploy/keycloak/pcbknowledge-curator-client.json:/opt/pcbknowledge/keycloak/pcbknowledge-curator-client.json:ro
     depends_on:
       keycloak:
+        condition: service_healthy
+    restart: "no"
+    networks: [backend]
+
+  local-curator-keycloak:
+    profiles: [tools]
+    image: ${KEYCLOAK_IMAGE:-quay.io/keycloak/keycloak:26.4.7}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/keycloak/bootstrap-local-curator.sh"]
+    environment:
+      PCBKNOWLEDGE_LOCAL_CURATOR_ACTION: ${PCBKNOWLEDGE_LOCAL_CURATOR_ACTION:-}
+    secrets:
+      - keycloak_admin_password
+      - local_curator_password
+      - local_curator_marker
+    volumes:
+      - ./deploy/keycloak/bootstrap-local-curator.sh:/opt/pcbknowledge/keycloak/bootstrap-local-curator.sh:ro
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    restart: "no"
+    networks: [backend]
+
+  local-development-data:
+    profiles: [tools]
+    image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg18}
+    entrypoint: ["/bin/sh", "/opt/pcbknowledge/bootstrap-local-development-data.sh"]
+    environment:
+      PCBKNOWLEDGE_LOCAL_CURATOR_SUBJECT: ${PCBKNOWLEDGE_LOCAL_CURATOR_SUBJECT:-}
+      PCBKNOWLEDGE_LOCAL_OIDC_ISSUER: ${PCBKNOWLEDGE_LOCAL_OIDC_ISSUER:-}
+    secrets:
+      - postgres_password
+    volumes:
+      - ./deploy/postgres/bootstrap-local-development-data.sh:/opt/pcbknowledge/bootstrap-local-development-data.sh:ro
+    depends_on:
+      postgres:
         condition: service_healthy
     restart: "no"
     networks: [backend]
@@ -288,6 +326,55 @@ services:
     restart: unless-stopped
     networks: [backend]
 
+  verifier:
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.14-slim-bookworm}
+        UV_IMAGE: ${UV_IMAGE:-ghcr.io/astral-sh/uv:0.12.3}
+    command: ["python", "-m", "pcbknowledge.document.verifier", "serve"]
+    environment:
+      PCBKNOWLEDGE_ENVIRONMENT: local
+      PCBKNOWLEDGE_SERVICE_NAME: pcbknowledge-document-verifier
+      PCBKNOWLEDGE_DATABASE_USERNAME: pcbknowledge_verifier
+      PCBKNOWLEDGE_S3_ENDPOINT_URL: http://seaweedfs:8333
+      PCBKNOWLEDGE_S3_PUBLIC_ENDPOINT_URL: http://localhost:${PCBKNOWLEDGE_S3_PORT:-8333}
+      PCBKNOWLEDGE_S3_BUCKET: pcbknowledge-assets
+      PCBKNOWLEDGE_S3_STAGING_BUCKET: pcbknowledge-staging
+      PCBKNOWLEDGE_S3_REGION: us-east-1
+      PCBKNOWLEDGE_S3_ACCESS_MODE: verifier
+      OTEL_SERVICE_NAME: pcbknowledge-document-verifier
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    secrets:
+      - verifier_db_password
+      - source: seaweedfs_verifier_access_key
+        target: seaweedfs_access_key
+      - source: seaweedfs_verifier_secret_key
+        target: seaweedfs_secret_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - /bin/sh
+        - /workspace/deploy/docker/backend-entrypoint.sh
+        - python
+        - -m
+        - pcbknowledge.document.verifier
+        - health-check
+      interval: 10s
+      start_interval: 1s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+    networks: [backend]
+
   migrate:
     profiles: [tools]
     build:
@@ -322,7 +409,7 @@ services:
         VITE_API_BASE_URL: /api/v1
         VITE_OIDC_ISSUER_URL: http://localhost:${PCBKNOWLEDGE_KEYCLOAK_PORT:-8081}/realms/pcbknowledge
         VITE_OIDC_CLIENT_ID: pcbknowledge-curator-web
-        VITE_DEPLOYMENT_LABEL: Local M1
+        VITE_DEPLOYMENT_LABEL: Local M2a
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz | grep -q '^ok$'"]
       interval: 10s
@@ -411,12 +498,18 @@ secrets:
     file: ./deploy/secrets/application_db_password
   worker_db_password:
     file: ./deploy/secrets/worker_db_password
+  verifier_db_password:
+    file: ./deploy/secrets/verifier_db_password
   keycloak_db_password:
     file: ./deploy/secrets/keycloak_db_password
   keycloak_admin_password:
     file: ./deploy/secrets/keycloak_admin_password
   agent_service_client_secret:
     file: ./deploy/secrets/agent_service_client_secret
+  local_curator_password:
+    file: ./deploy/secrets/local_curator_password
+  local_curator_marker:
+    file: ./deploy/secrets/local_curator_marker
   keycloak_agent_client_config:
     file: ./deploy/secrets/keycloak-agent-client.json
   seaweedfs_access_key:
@@ -431,6 +524,10 @@ secrets:
     file: ./deploy/secrets/seaweedfs_worker_access_key
   seaweedfs_worker_secret_key:
     file: ./deploy/secrets/seaweedfs_worker_secret_key
+  seaweedfs_verifier_access_key:
+    file: ./deploy/secrets/seaweedfs_verifier_access_key
+  seaweedfs_verifier_secret_key:
+    file: ./deploy/secrets/seaweedfs_verifier_secret_key
   grafana_admin_password:
     file: ./deploy/secrets/grafana_admin_password
 

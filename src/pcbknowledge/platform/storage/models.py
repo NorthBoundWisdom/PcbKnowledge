@@ -35,6 +35,7 @@ class ObjectAssetState(StrEnum):
 
 class StagingUploadState(StrEnum):
     PENDING = "PENDING"
+    SUBMITTED = "SUBMITTED"
     FINALIZED = "FINALIZED"
     CLEANED = "CLEANED"
     EXPIRED = "EXPIRED"
@@ -187,11 +188,13 @@ class StagingUploadReservation(Base):
             name="ck_staging_upload_scope_project",
         ),
         CheckConstraint(
-            "state IN ('PENDING', 'FINALIZED', 'CLEANED', 'EXPIRED')",
+            "state IN ('PENDING', 'SUBMITTED', 'FINALIZED', 'CLEANED', 'EXPIRED')",
             name="ck_staging_upload_state",
         ),
         CheckConstraint(
             "(state = 'PENDING' AND asset_id IS NULL AND finalized_at IS NULL "
+            "AND cleaned_at IS NULL) OR "
+            "(state = 'SUBMITTED' AND asset_id IS NULL AND finalized_at IS NULL "
             "AND cleaned_at IS NULL) OR "
             "(state = 'FINALIZED' AND asset_id IS NOT NULL AND finalized_at IS NOT NULL "
             "AND cleaned_at IS NULL) OR "

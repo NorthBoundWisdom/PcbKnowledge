@@ -15,6 +15,21 @@ class ObjectIntegrityError(StorageError):
         super().__init__("stored object does not match the claimed digest")
 
 
+class ObjectDigestMismatchError(ObjectIntegrityError):
+    def __init__(self) -> None:
+        StorageError.__init__(self, "stored object does not match the optional client digest")
+
+
+class ObjectSizeMismatchError(ObjectIntegrityError):
+    def __init__(self) -> None:
+        StorageError.__init__(self, "stored object does not match the reserved byte size")
+
+
+class ObjectMagicMismatchError(ObjectIntegrityError):
+    def __init__(self) -> None:
+        StorageError.__init__(self, "stored object does not have the required file signature")
+
+
 class ObjectStoreUnavailableError(StorageError):
     def __init__(self) -> None:
         super().__init__("object store operation failed")

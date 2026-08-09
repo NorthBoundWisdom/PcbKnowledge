@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { validRuntimeConfig } from "../test/test-config";
@@ -44,7 +44,10 @@ describe("AuthenticationProvider", () => {
     );
     expect(await screen.findByText("authenticated")).toBeVisible();
 
-    client.emitSilentRenewError();
+    await act(async () => {
+      client.emitSilentRenewError();
+      await Promise.resolve();
+    });
 
     await waitFor(() => expect(screen.getByText("session_expired")).toBeVisible());
     expect(await client.getUser()).toBeNull();

@@ -18,6 +18,11 @@ objects. M1 deliberately does not give either process permanent-bucket write
 access; M2 must introduce and qualify an isolated verifier/promotion boundary
 before wiring upload finalization into a runtime endpoint.
 
+M2 uses a separate `pcbknowledge_verifier` database login and SeaweedFS identity
+for that promotion boundary. It may read/write staging and permanent content but
+has neither SeaweedFS Admin nor List. The API and cleanup worker still cannot
+write permanent content.
+
 ## Alternatives
 
 - PostgreSQL large objects.
@@ -33,8 +38,22 @@ SeaweedFS 3.85 does not enforce the conditional-copy semantics required as an
 object immutability boundary. The adapter therefore uses a verified private
 snapshot and a PostgreSQL advisory lock, never copies onto an existing
 content-addressed key, and keeps permanent write credentials out of the
-long-lived API and cleanup worker. A future promotion process remains a trusted,
-isolated component and must retain these negative tests.
+long-lived API and cleanup worker. The verifier/promotion process remains a
+trusted, isolated component and must retain these negative tests.
+
+The reference verifier is that trusted component, not a storage-level WORM
+boundary. SeaweedFS 3.85 cannot grant create-only permanent writes, so compromise
+of the verifier credential could overwrite or delete a known key. The local
+qualification proves normal code never copies onto an existing canonical key;
+production requires a bounded promotion broker or a backend qualified for
+conditional create/object lock before claiming credential-compromise resistance.
+
+SeaweedFS 3.85 also lacks `PutBucketCors`. Its process-level `allowedOrigins`
+option gates the exact local browser origins, but successful preflights use
+wildcard allow-method/header response fields. The local browser therefore uses
+credential-free presigned PUT with only `Content-Type`, and tests both an allowed
+upload and denial of an untrusted origin. This behavior is not an exact
+production CORS policy.
 
 ## Rollback
 

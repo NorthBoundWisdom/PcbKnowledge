@@ -190,8 +190,14 @@ class JobEffectReceipt(Base):
     access_scope: Mapped[str] = mapped_column(String(32), nullable=False)
     effect_name: Mapped[str] = mapped_column(String(128), nullable=False)
     effect_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
-    lease_attempt: Mapped[int | None] = mapped_column(Integer)
-    lease_owner: Mapped[str | None] = mapped_column(String(200))
+    lease_attempt: Mapped[int | None] = mapped_column(
+        Integer,
+        comment="NULL with lease_owner NULL means pre-0008 lease provenance is UNKNOWN",
+    )
+    lease_owner: Mapped[str | None] = mapped_column(
+        String(200),
+        comment="NULL with lease_attempt NULL means pre-0008 lease provenance is UNKNOWN",
+    )
     recorded_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=utc_now
     )

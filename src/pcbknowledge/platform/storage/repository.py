@@ -174,6 +174,34 @@ class StagingUploadRepository:
             raise StagingUploadStateError()
         return reservation
 
+    def require_submitted(
+        self,
+        session: Session,
+        *,
+        scope: TenantScope,
+        upload_id: UUID,
+        access_scope_id: UUID,
+        license_policy_id: UUID,
+        created_by_subject_id: UUID,
+        media_type: str,
+    ) -> StagingUploadReservation:
+        """Lock an accepted upload; queue latency must not invalidate its bytes."""
+
+        reservation = session.scalar(
+            self._scoped(scope).where(StagingUploadReservation.id == upload_id).with_for_update()
+        )
+        if reservation is None:
+            raise StagingUploadNotFoundError()
+        if (
+            reservation.state != StagingUploadState.SUBMITTED.value
+            or reservation.access_scope_id != access_scope_id
+            or reservation.license_policy_id != license_policy_id
+            or reservation.created_by_subject_id != created_by_subject_id
+            or reservation.media_type != media_type
+        ):
+            raise StagingUploadStateError()
+        return reservation
+
     @staticmethod
     def acquire_content_lock(session: Session, *, organization_id: UUID, sha256: str) -> None:
         """Serialize canonical first-write per organization/digest until commit."""
@@ -182,6 +210,14 @@ class StagingUploadRepository:
             text("SELECT pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(:key, 0))"),
             {"key": f"{organization_id}:{sha256}"},
         )
+
+    @staticmethod
+    def mark_submitted(reservation: StagingUploadReservation) -> None:
+        reservation.state = StagingUploadState.SUBMITTED.value
+
+    @staticmethod
+    def mark_pending_after_terminal_failure(reservation: StagingUploadReservation) -> None:
+        reservation.state = StagingUploadState.PENDING.value
 
     @staticmethod
     def mark_finalized(

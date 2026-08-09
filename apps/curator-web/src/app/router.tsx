@@ -8,6 +8,10 @@ import {
 import { AuthenticationBoundary } from "../auth/AuthenticationBoundary";
 import { RequireCapability } from "../auth/RequireCapability";
 import type { BrowserCapability } from "../auth/auth-types";
+import { DocumentRevisionPage } from "../features/documents/DocumentRevisionPage";
+import { DocumentsPage } from "../features/documents/DocumentsPage";
+import { IntakeInboxPage } from "../features/intake/IntakeInboxPage";
+import { NewIntakePage } from "../features/intake/NewIntakePage";
 import { FoundationPage } from "../routes/FoundationPage";
 import { NotFoundPage } from "../routes/NotFoundPage";
 import { AuthCallbackPage } from "../routes/auth/AuthCallbackPage";
@@ -48,19 +52,35 @@ export const applicationRouteObjects: RouteObject[] = [
       },
       {
         path: "intake",
-        element: protectedFoundationPage(foundationRoutes.intake, "intake:prepare"),
+        element: (
+          <RequireCapability capability="intake:prepare">
+            <IntakeInboxPage />
+          </RequireCapability>
+        ),
       },
       {
         path: "intake/new",
-        element: protectedFoundationPage(foundationRoutes.intakeNew, "intake:prepare"),
+        element: (
+          <RequireCapability capability="intake:prepare">
+            <NewIntakePage />
+          </RequireCapability>
+        ),
       },
       {
         path: "documents",
-        element: protectedFoundationPage(foundationRoutes.documents, "evidence:read"),
+        element: (
+          <RequireCapability capability="evidence:read">
+            <DocumentsPage />
+          </RequireCapability>
+        ),
       },
       {
         path: "documents/:revisionId",
-        element: protectedFoundationPage(foundationRoutes.documentDetail, "evidence:read"),
+        element: (
+          <RequireCapability capability="evidence:read">
+            <DocumentRevisionPage />
+          </RequireCapability>
+        ),
       },
       {
         path: "review",

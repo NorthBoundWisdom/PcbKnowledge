@@ -15,14 +15,25 @@ def test_openapi_render_is_deterministic() -> None:
     assert render_openapi(app).endswith("\n")
 
 
-def test_openapi_declares_31_health_and_authenticated_session_operations() -> None:
+def test_openapi_declares_health_session_and_document_intake_operations() -> None:
     document = app.openapi()
 
     assert document["openapi"].startswith("3.1.")
     assert document["servers"] == [
         {"url": "/api/v1", "description": "Versioned API gateway"},
     ]
-    assert set(document["paths"]) == {"/healthz", "/readyz", "/session"}
+    assert set(document["paths"]) == {
+        "/document-revisions/{revision_id}",
+        "/document-revisions/{revision_id}/original-download",
+        "/documents",
+        "/healthz",
+        "/intake/options",
+        "/readyz",
+        "/session",
+        "/upload-sessions",
+        "/upload-sessions/{upload_session_id}",
+        "/upload-sessions/{upload_session_id}/complete",
+    }
     readiness_error = document["paths"]["/readyz"]["get"]["responses"]["503"]
     assert set(readiness_error["content"]) == {"application/problem+json"}
     session_operation = document["paths"]["/session"]["get"]

@@ -22,6 +22,9 @@ case "$database_username" in
   pcbknowledge_worker)
     read_secret PCBKNOWLEDGE_DATABASE_PASSWORD /run/secrets/worker_db_password
     ;;
+  pcbknowledge_verifier)
+    read_secret PCBKNOWLEDGE_DATABASE_PASSWORD /run/secrets/verifier_db_password
+    ;;
   pcbknowledge)
     read_secret PCBKNOWLEDGE_DATABASE_PASSWORD /run/secrets/postgres_password
     ;;

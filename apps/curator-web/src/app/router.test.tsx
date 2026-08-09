@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { RouterProvider } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { validRuntimeConfig } from "../test/test-config";
 import {
@@ -14,10 +14,6 @@ import { createTestRouter } from "./router";
 
 const routeCases = [
   ["/dashboard", "Dashboard"],
-  ["/intake", "Intake inbox"],
-  ["/intake/new", "New document intake"],
-  ["/documents", "Documents"],
-  ["/documents/revision-123", "Document revision"],
   ["/review", "Review queue"],
   ["/review/task-123", "Review workbench"],
   ["/entities", "Entities"],
@@ -32,6 +28,8 @@ const routeCases = [
   ["/admin/jobs", "Job monitor"],
   ["/jobs", "Job monitor"],
 ] as const;
+
+afterEach(() => vi.restoreAllMocks());
 
 describe.each(routeCases)("route %s", (path, heading) => {
   it(`renders the ${heading} foundation surface`, async () => {
@@ -50,6 +48,91 @@ describe.each(routeCases)("route %s", (path, heading) => {
     expect(await screen.findByRole("heading", { level: 1, name: heading })).toBeVisible();
     expect(screen.getByText("M0 foundation only · No business data")).toBeVisible();
   });
+});
+
+describe.each([
+  ["/intake", "Intake inbox"],
+  ["/documents", "Documents"],
+  ["/documents/revision-123", "Document revision"],
+] as const)("live M2 route %s", (path, heading) => {
+  it(`renders the ${heading} surface without a foundation placeholder`, async () => {
+    const router = createTestRouter([path]);
+    const authClient = new FakeAuthClient(createHumanUser(["DATA_CURATOR"]));
+    render(
+      <AppProviders
+        authClient={authClient}
+        config={validRuntimeConfig}
+        loadTrustedSession={() => Promise.resolve(createTrustedSession(["DATA_CURATOR"]))}
+      >
+        <RouterProvider router={router} />
+      </AppProviders>,
+    );
+
+    expect(await screen.findByRole("heading", { level: 1, name: heading })).toBeVisible();
+    expect(screen.queryByText("M0 foundation only · No business data")).not.toBeInTheDocument();
+  });
+});
+
+it("loads intake choices through the generated Bearer client", async () => {
+  const projectId = "00000000-0000-7000-8000-000000000021";
+  const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+    new Response(
+      JSON.stringify({
+        access_scopes: [
+          {
+            id: "00000000-0000-7000-8000-000000000022",
+            name: "Project evidence",
+            project_id: projectId,
+          },
+        ],
+        license_policies: [
+          {
+            access_scope_id: "00000000-0000-7000-8000-000000000022",
+            allow_human_raw_access: true,
+            allow_parse: true,
+            id: "00000000-0000-7000-8000-000000000023",
+            license_class: "PUBLIC_REFERENCE",
+            name: "Public reference",
+          },
+        ],
+        projects: [{ display_name: "Component Research", id: projectId }],
+        source_organizations: [
+          {
+            authority_tier: "MANUFACTURER_PRIMARY",
+            id: "00000000-0000-7000-8000-000000000024",
+            name: "Example Semiconductor",
+          },
+        ],
+      }),
+      { headers: { "Content-Type": "application/json" }, status: 200 },
+    ),
+  );
+  const router = createTestRouter(["/intake/new"]);
+  const authClient = new FakeAuthClient(createHumanUser(["DATA_CURATOR"]));
+  render(
+    <AppProviders
+      authClient={authClient}
+      config={{ ...validRuntimeConfig, apiBaseUrl: "https://knowledge.example.test/api/v1" }}
+      loadTrustedSession={() =>
+        Promise.resolve(
+          createTrustedSession([], [{ id: projectId, roles: ["DATA_CURATOR"] }]),
+        )
+      }
+    >
+      <RouterProvider router={router} />
+    </AppProviders>,
+  );
+
+  expect(await screen.findByLabelText("PDF file")).toBeVisible();
+  expect(screen.getByRole("combobox", { name: "Intake project" })).toHaveTextContent(
+    "Component Research",
+  );
+  const request = fetchSpy.mock.calls[0]?.[0];
+  expect(request).toBeInstanceOf(Request);
+  expect((request as Request).headers.get("Authorization")).toBe(
+    "Bearer synthetic-access-token-held-only-by-the-test-object",
+  );
+  expect((request as Request).url).toContain("/intake/options");
 });
 
 it("redirects the workspace root to dashboard", async () => {

@@ -14,16 +14,21 @@ Keycloak adds the API audience and subject-kind claim with client-specific mappe
 
 Token roles never grant Curator Web capabilities. After OIDC validation, the browser calls the generated, Bearer-authenticated `GET /session` transport. Only its trusted database `external_subject` mapping, organization roles, and explicit project grants are converted to bounded UI capabilities. Project roles enable only project-scoped workspace operations; in particular, project-only `KNOWLEDGE_ADMIN` never grants organization-global `admin:operate`. Missing, denied, unavailable, malformed, service-kind, or roleless session projections clear the in-memory user and fail closed before a workspace route loads. The API remains the final authorization boundary for every operation and validates signature, issuer, audience, expiry, subject kind, organization/project scope, trusted role, and requested action.
 
-## Human account status
+## Local development human
 
-The M1 reference stack configures the login protocol, but deliberately provisions no
-human account or default password. The `pcbknowledge-admin` bootstrap identity belongs
-to Keycloak's management realm and is not a Curator Web user. A usable human session
-requires both an enabled user in the `pcbknowledge` realm and a matching trusted
-`identity.external_subject` plus at least one organization or project membership in
-PostgreSQL. Creating only one side fails closed. Human onboarding and its audited
-administration workflow are not implemented in M1; do not work around that boundary by
-using the Keycloak administrator or inserting an anonymous/default application user.
+The `pcbknowledge-admin` bootstrap identity belongs to Keycloak's management realm and is
+not a Curator Web user. A usable human session requires both an enabled user in the
+`pcbknowledge` realm and a matching trusted `identity.external_subject` plus an explicit
+organization or project membership in PostgreSQL. Creating only one side fails closed.
+Production human onboarding and its audited administration workflow are not implemented;
+do not work around that boundary with the Keycloak administrator or an anonymous/default
+application user.
+
+For a personal development stack, Build bootstraps one explicitly managed
+`pcbknowledge-curator` identity. Its random password exists only in the owner-readable,
+ignored `deploy/secrets/local_curator_password` file. The user receives only the
+`DATA_CURATOR` role and a membership in the managed `Default Project`; it is not a reviewer
+or administrator.
 
 The local client registers exact callbacks for the normal Compose origin on port 8080,
 the isolated FreeCM origin on port 18080, and the frontend development/test origins.
@@ -62,6 +67,36 @@ docker compose run --rm keycloak-reconcile
 ```
 
 Reconciliation also reapplies the realm-level login posture that a normal import cannot update on an existing volume: self-registration, password reset, and remember-me are disabled; brute-force protection is enabled; and `sslRequired=external`. The latter permits loopback/private-network HTTP for this local Compose topology while requiring reviewed TLS/proxy settings for external production traffic. It then creates missing fixed roles and clients, updates the public/confidential client safety settings and runtime secret, reapplies role scopes, and assigns only `AGENT_SERVICE` to the service account. It writes its temporary admin token only inside the short-lived container and truncates that file before exit. It never prints an access token or secret.
+
+After migrations and reconciliation, local Build runs:
+
+```bash
+./deploy/scripts/bootstrap-local-development.sh
+```
+
+The command first disables the managed Curator in Keycloak, resets its password from the
+local secret, removes every other PcbKnowledge privileged business role, and grants only
+`DATA_CURATOR`. Keycloak's own required default roles remain untouched. It then commits the exact
+Keycloak subject mapping, project membership, internal source organization, project access
+scope, and local human-intake license policy in one PostgreSQL owner transaction. Only after
+that transaction and an exact subject check does it enable the user. A failure leaves the
+user disabled. Repeating the command is idempotent; identity or policy drift fails closed
+instead of being silently overwritten. The local policy permits metadata and human raw-file
+access but keeps parsing, models, embeddings, agent raw access, and redistribution denied.
+
+Build reports the username and password-file path but never the password. Read or copy that
+owner-only file only at the interactive login boundary; do not paste it into logs, shell
+history, documentation, or test fixtures. A separate human identity is required for any
+independent reviewer decision.
+
+Against a disposable or personal local stack, verify idempotence, exact Keycloak roles,
+subject-drift rejection, trusted membership, and the deny-by-default policy with:
+
+```bash
+./deploy/scripts/test-local-development-bootstrap.sh
+```
+
+Do not run this state-convergence test against a shared or production realm.
 
 To prove an existing realm converges rather than merely checking committed JSON, run the live drift test against the local stack:
 

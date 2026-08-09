@@ -168,6 +168,11 @@ export function AuthenticationProvider({
     [client],
   );
 
+  const invalidateSession = useCallback(
+    () => expireSession("session_renewal_failed"),
+    [expireSession],
+  );
+
   const completeSignIn = useCallback(async () => {
     try {
       const user = await client.signinRedirectCallback();
@@ -216,10 +221,11 @@ export function AuthenticationProvider({
         hasCapability(state.session, capability),
       completeSignIn,
       completeSignOut,
+      invalidateSession,
       signIn,
       signOut,
     }),
-    [completeSignIn, completeSignOut, signIn, signOut, state],
+    [completeSignIn, completeSignOut, invalidateSession, signIn, signOut, state],
   );
 
   return <AuthenticationContext.Provider value={value}>{children}</AuthenticationContext.Provider>;

@@ -97,6 +97,11 @@ export class FakeAuthClient implements AuthClient {
     this.silentRenewError.emit();
   }
 
+  emitUserLoaded(user: User): void {
+    this.currentUser = user;
+    this.userLoaded.emit(user);
+  }
+
   emitUserSignedOut(): void {
     this.userSignedOut.emit();
   }
@@ -105,6 +110,7 @@ export class FakeAuthClient implements AuthClient {
 export function createHumanUser(
   roles: string[],
   userState?: unknown,
+  subject = "00000000-0000-7000-8000-000000000001",
 ): User {
   const issuedAt = Math.floor(Date.now() / 1000);
   return new User({
@@ -119,7 +125,7 @@ export function createHumanUser(
       pcbknowledge_subject_kind: "HUMAN",
       preferred_username: "mina",
       realm_access: { roles },
-      sub: "00000000-0000-7000-8000-000000000001",
+      sub: subject,
     },
     refresh_token: "synthetic-refresh-token-held-only-by-the-test-object",
     token_type: "Bearer",

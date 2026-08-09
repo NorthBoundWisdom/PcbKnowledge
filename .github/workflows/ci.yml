@@ -36,6 +36,8 @@ jobs:
       - name: Hermetic unit tests
         run: >-
           uv run pytest
+          --ignore=tests/document/test_document_postgres.py
+          --ignore=tests/document/test_document_seaweedfs.py
           --ignore=tests/test_m1_postgres_security.py
           --ignore=tests/test_m1_security_repair_postgres.py
           --ignore=tests/test_database_contract_postgres.py
@@ -48,7 +50,7 @@ jobs:
         run: uv run pcbknowledge-openapi --check
 
   m1-integration:
-    name: M1 PostgreSQL and SeaweedFS integration
+    name: Platform and document PostgreSQL/SeaweedFS integration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,9 +70,11 @@ jobs:
           database_password=$(openssl rand -hex 32)
           application_password=$(openssl rand -hex 32)
           worker_password=$(openssl rand -hex 32)
+          verifier_password=$(openssl rand -hex 32)
           echo "::add-mask::$database_password"
           echo "::add-mask::$application_password"
           echo "::add-mask::$worker_password"
+          echo "::add-mask::$verifier_password"
           database_name=pcbknowledge_m1_test_ci
           database_dsn="postgresql+psycopg://pcbknowledge:${database_password}@127.0.0.1:55432/${database_name}"
           echo "PCBKNOWLEDGE_DATABASE_DSN=$database_dsn" >>"$GITHUB_ENV"
@@ -78,8 +82,10 @@ jobs:
           echo "PCBKNOWLEDGE_RUN_POSTGRES_TESTS=1" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_APP_PASSWORD=$application_password" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_WORKER_PASSWORD=$worker_password" >>"$GITHUB_ENV"
+          echo "PCBKNOWLEDGE_M2_VERIFIER_PASSWORD=$verifier_password" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_APP_DATABASE_DSN=postgresql+psycopg://pcbknowledge_app:${application_password}@127.0.0.1:55432/${database_name}" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_WORKER_DATABASE_DSN=postgresql+psycopg://pcbknowledge_worker:${worker_password}@127.0.0.1:55432/${database_name}" >>"$GITHUB_ENV"
+          echo "PCBKNOWLEDGE_M2_VERIFIER_DATABASE_DSN=postgresql+psycopg://pcbknowledge_verifier:${verifier_password}@127.0.0.1:55432/${database_name}" >>"$GITHUB_ENV"
           postgres_environment="$RUNNER_TEMP/pcbknowledge-postgres.env"
           printf 'POSTGRES_DB=%s\nPOSTGRES_USER=pcbknowledge\nPOSTGRES_PASSWORD=%s\n' \
             "$database_name" "$database_password" >"$postgres_environment"
@@ -105,13 +111,17 @@ jobs:
             psql --username=pcbknowledge --dbname=pcbknowledge_m1_test_ci \
             --set ON_ERROR_STOP=1 \
             --set application_password="$PCBKNOWLEDGE_M1_APP_PASSWORD" \
-            --set worker_password="$PCBKNOWLEDGE_M1_WORKER_PASSWORD" <<'SQL'
+            --set worker_password="$PCBKNOWLEDGE_M1_WORKER_PASSWORD" \
+            --set verifier_password="$PCBKNOWLEDGE_M2_VERIFIER_PASSWORD" <<'SQL'
           ALTER ROLE pcbknowledge_app
             WITH LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE
             NOREPLICATION NOBYPASSRLS PASSWORD :'application_password';
           ALTER ROLE pcbknowledge_worker
             WITH LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE
             NOREPLICATION NOBYPASSRLS PASSWORD :'worker_password';
+          ALTER ROLE pcbknowledge_verifier
+            WITH LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE
+            NOREPLICATION NOBYPASSRLS PASSWORD :'verifier_password';
           SQL
       - name: Start disposable SeaweedFS S3
         shell: bash
@@ -123,9 +133,12 @@ jobs:
           admin_secret_key=$(openssl rand -hex 32)
           worker_access_key=$(openssl rand -hex 16)
           worker_secret_key=$(openssl rand -hex 32)
+          verifier_access_key=$(openssl rand -hex 16)
+          verifier_secret_key=$(openssl rand -hex 32)
           for secret in "$api_access_key" "$api_secret_key" \
             "$admin_access_key" "$admin_secret_key" \
-            "$worker_access_key" "$worker_secret_key"; do
+            "$worker_access_key" "$worker_secret_key" \
+            "$verifier_access_key" "$verifier_secret_key"; do
             echo "::add-mask::$secret"
           done
           content_bucket=pcbknowledge-m1-ci
@@ -135,7 +148,8 @@ jobs:
             '{"identities":[' \
             '{"name":"admin","credentials":[{"accessKey":"'"$admin_access_key"'","secretKey":"'"$admin_secret_key"'"}],"actions":["Admin"]},' \
             '{"name":"api","credentials":[{"accessKey":"'"$api_access_key"'","secretKey":"'"$api_secret_key"'"}],"actions":["Read:'"$content_bucket"'","List:'"$content_bucket"'","Read:'"$staging_bucket"'","Write:'"$staging_bucket"'","List:'"$staging_bucket"'"]},' \
-            '{"name":"worker","credentials":[{"accessKey":"'"$worker_access_key"'","secretKey":"'"$worker_secret_key"'"}],"actions":["Write:'"$staging_bucket"'"]}' \
+            '{"name":"worker","credentials":[{"accessKey":"'"$worker_access_key"'","secretKey":"'"$worker_secret_key"'"}],"actions":["Write:'"$staging_bucket"'"]},' \
+            '{"name":"verifier","credentials":[{"accessKey":"'"$verifier_access_key"'","secretKey":"'"$verifier_secret_key"'"}],"actions":["Read:'"$staging_bucket"'","Write:'"$staging_bucket"'","Read:'"$content_bucket"'","Write:'"$content_bucket"'"]}' \
             ']}' \
             >"$s3_config"
           chmod 600 "$s3_config"
@@ -147,6 +161,8 @@ jobs:
           echo "PCBKNOWLEDGE_M1_S3_ADMIN_SECRET_KEY=$admin_secret_key" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_S3_WORKER_ACCESS_KEY=$worker_access_key" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_S3_WORKER_SECRET_KEY=$worker_secret_key" >>"$GITHUB_ENV"
+          echo "PCBKNOWLEDGE_M2_S3_VERIFIER_ACCESS_KEY=$verifier_access_key" >>"$GITHUB_ENV"
+          echo "PCBKNOWLEDGE_M2_S3_VERIFIER_SECRET_KEY=$verifier_secret_key" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_S3_BUCKET=$content_bucket" >>"$GITHUB_ENV"
           echo "PCBKNOWLEDGE_M1_S3_STAGING_BUCKET=$staging_bucket" >>"$GITHUB_ENV"
           docker run --detach --name pcbknowledge-ci-m1-seaweedfs \
@@ -154,8 +170,9 @@ jobs:
             --publish 127.0.0.1:58333:8333 \
             --publish 127.0.0.1:59333:9333 \
             chrislusf/seaweedfs:3.85 \
-            server -dir=/data -master.port=9333 -volume.port=8080 \
+            server -dir=/data -master.port=9333 -volume.port=8080 -volume.max=32 \
             -filer -filer.port=8888 -s3 -s3.port=8333 \
+            -s3.allowedOrigins=http://localhost:8080,http://localhost:18080,http://localhost:5173,http://127.0.0.1:4173 \
             -s3.config=/etc/seaweedfs/pcbknowledge-s3.json
           for attempt in $(seq 1 45); do
             if curl --fail --silent --show-error \
@@ -169,6 +186,7 @@ jobs:
         run: >-
           uv run pytest -ra
           --junitxml="$RUNNER_TEMP/m1-postgres.xml"
+          tests/document/test_document_postgres.py
           tests/test_m1_postgres_security.py
           tests/test_m1_security_repair_postgres.py
           tests/platform_jobs/test_jobs_postgres.py
@@ -186,6 +204,12 @@ jobs:
           PCBKNOWLEDGE_EXPECTED_RUNTIME_ROLE: pcbknowledge_worker
         run: |
           PCBKNOWLEDGE_DATABASE_DSN="$PCBKNOWLEDGE_M1_WORKER_DATABASE_DSN" \
+            uv run pytest -ra tests/test_database_contract_postgres.py
+      - name: Actual verifier runtime contract
+        env:
+          PCBKNOWLEDGE_EXPECTED_RUNTIME_ROLE: pcbknowledge_verifier
+        run: |
+          PCBKNOWLEDGE_DATABASE_DSN="$PCBKNOWLEDGE_M2_VERIFIER_DATABASE_DSN" \
             uv run pytest -ra tests/test_database_contract_postgres.py
       - name: Assert PostgreSQL tests did not skip
         env:
@@ -205,6 +229,7 @@ jobs:
         run: >-
           uv run pytest -ra
           --junitxml="$RUNNER_TEMP/m1-seaweedfs.xml"
+          tests/document/test_document_seaweedfs.py
           tests/platform_storage/test_storage_seaweedfs.py
       - name: Assert SeaweedFS tests did not skip
         env:
@@ -385,7 +410,9 @@ jobs:
           ]
           migration = commands.index("docker compose run --rm migrate")
           roles = commands.index("docker compose run --rm postgres-reconcile")
-          runtime = commands.index("docker compose up --detach --wait api worker web caddy")
+          runtime = commands.index(
+              "docker compose up --detach --wait api worker verifier web caddy"
+          )
           if not migration < roles < runtime:
               raise SystemExit("runtime roles must be reconciled after migration and before startup")
           PY
@@ -409,6 +436,8 @@ jobs:
             import --file /tmp/pcbknowledge-realm.json
       - name: Validate Compose model
         run: ./deploy/scripts/compose-check.sh
+      - name: Validate verifier deployment boundary
+        run: ./deploy/scripts/test-verifier-deployment-wiring.sh
       - name: Validate OIDC callback log policy and nginx configuration
         run: |
           ./deploy/scripts/check-oidc-log-policy.sh
@@ -480,3 +509,45 @@ jobs:
             printf 'tracked runtime secrets are forbidden:\n%s\n' "$unexpected" >&2
             exit 1
           }
+
+  local-stack-acceptance:
+    name: Fresh local identity and browser intake acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      COMPOSE_PROJECT_NAME: pcbknowledge-freecm
+      PCBKNOWLEDGE_HTTP_PORT: "18080"
+      PCBKNOWLEDGE_KEYCLOAK_PORT: "18081"
+      PCBKNOWLEDGE_S3_PORT: "18333"
+      PCBKNOWLEDGE_PROMETHEUS_PORT: "19090"
+      PCBKNOWLEDGE_GRAFANA_PORT: "13000"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "11.20.0"
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+      - name: Install locked browser dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --dir apps/curator-web exec playwright install --with-deps chromium
+      - name: Configure a fresh FreeCM runtime
+        run: |
+          python3 configs/pcbknowledge_workflow.py config
+          docker compose down --volumes --remove-orphans
+      - name: Build and prepare the runtime
+        run: python3 configs/pcbknowledge_workflow.py build
+      - name: Qualify local identity, verifier boundary, Run, and browser intake
+        run: python3 -m configs.test_local_stack_acceptance
+      - name: Remove the disposable local stack
+        if: always()
+        run: docker compose down --volumes --remove-orphans || true

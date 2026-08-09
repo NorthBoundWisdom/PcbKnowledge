@@ -25,15 +25,17 @@ if [ "$run_config" = true ]; then
 fi
 cd "$repo_root"
 
-docker compose up --detach --wait postgres seaweedfs
-docker compose up --detach --wait keycloak
+docker compose up --detach --wait postgres
+docker compose up --detach --wait --force-recreate seaweedfs
+docker compose up --detach --wait --force-recreate keycloak
 docker compose run --rm keycloak-reconcile
-docker compose up --detach otel-collector prometheus grafana
-docker compose build api worker web migrate storage-init
+docker compose up --detach --force-recreate otel-collector prometheus grafana
+docker compose build api worker verifier web migrate storage-init
 docker compose run --rm migrate
 docker compose run --rm postgres-reconcile
+"$script_dir/bootstrap-local-development.sh"
 docker compose run --rm storage-init
-docker compose up --detach --wait api worker web caddy
+docker compose up --detach --wait api worker verifier web caddy
 
 docker compose ps
 echo "PcbKnowledge is available at http://localhost:${PCBKNOWLEDGE_HTTP_PORT:-8080}"

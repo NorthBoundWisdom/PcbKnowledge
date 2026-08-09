@@ -1,11 +1,28 @@
 import { expect, test } from "@playwright/test";
 
-test("serves a static health artifact", async ({ request }) => {
-  const response = await request.get("/healthz");
+import { resolveLiveE2eBaseUrl } from "../src/config/live-e2e-origin";
 
-  expect(response.ok()).toBe(true);
-  expect((await response.text()).trim()).toBe("ok");
-});
+const liveBaseUrl = resolveLiveE2eBaseUrl(process.env);
+
+if (liveBaseUrl === undefined) {
+  test("serves a static health artifact", async ({ request }) => {
+    const response = await request.get("/healthz");
+
+    expect(response.ok()).toBe(true);
+    expect((await response.text()).trim()).toBe("ok");
+  });
+} else {
+  test("serves API liveness through the live gateway", async ({ request }) => {
+    const response = await request.get("/healthz");
+
+    expect(response.ok()).toBe(true);
+    expect(await response.json()).toEqual({
+      service: "pcbknowledge-api",
+      status: "alive",
+      version: "0.1.0",
+    });
+  });
+}
 
 test("fails closed before loading a protected workspace route", async ({ page }) => {
   await page.goto("/dashboard");

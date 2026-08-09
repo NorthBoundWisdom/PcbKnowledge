@@ -93,10 +93,16 @@ class JobService:
         scope: TenantScope,
         worker_id: str,
         batch_size: int = 1,
+        job_types: frozenset[str] | None = None,
     ) -> list[KnowledgeJob]:
         self._require_identifier(worker_id)
         if not 1 <= batch_size <= 100:
             raise ValueError("batch size must be between 1 and 100")
+        if job_types is not None:
+            if not job_types:
+                raise ValueError("job type filter cannot be empty")
+            for job_type in job_types:
+                self._require_identifier(job_type)
         now = self._now()
         self._repository.recover_expired_leases(session, scope=scope, now=now)
         return self._repository.claim_ready(
@@ -106,6 +112,7 @@ class JobService:
             now=now,
             lease_duration=self._lease_duration,
             batch_size=batch_size,
+            job_types=job_types,
         )
 
     def renew_lease(

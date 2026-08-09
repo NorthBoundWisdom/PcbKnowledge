@@ -18,7 +18,7 @@ const relativeOrHttpUrl = z.string().trim().min(1).refine(
 
 const runtimeConfigSchema = z.object({
   VITE_API_BASE_URL: relativeOrHttpUrl,
-  VITE_DEPLOYMENT_LABEL: z.string().trim().min(1).max(48).default("M0 Foundation"),
+  VITE_DEPLOYMENT_LABEL: z.string().trim().min(1).max(48).default("M2a Intake"),
   VITE_OIDC_CLIENT_ID: z.string().trim().min(1),
   VITE_OIDC_ISSUER_URL: relativeOrHttpUrl,
 });

@@ -14,6 +14,7 @@ export interface AuthenticationContextValue {
   can(capability: BrowserCapability): boolean;
   completeSignIn(): Promise<string>;
   completeSignOut(): Promise<void>;
+  invalidateSession(): Promise<void>;
   signIn(returnUrl?: string): Promise<void>;
   signOut(): Promise<void>;
 }

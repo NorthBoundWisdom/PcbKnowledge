@@ -6,9 +6,16 @@ export interface PageHeaderProps {
   title: string;
   description: string;
   action?: ReactNode;
+  badge?: string;
 }
 
-export function PageHeader({ action, description, eyebrow, title }: PageHeaderProps) {
+export function PageHeader({
+  action,
+  badge = "Foundation",
+  description,
+  eyebrow,
+  title,
+}: PageHeaderProps) {
   return (
     <Stack direction="row" spacing={3} sx={{ alignItems: "flex-start", justifyContent: "space-between" }}>
       <Box sx={{ minWidth: 0 }}>
@@ -16,7 +23,7 @@ export function PageHeader({ action, description, eyebrow, title }: PageHeaderPr
           <Typography color="primary.dark" variant="overline">
             {eyebrow}
           </Typography>
-          <Chip color="default" label="Foundation" size="small" variant="outlined" />
+          <Chip color="default" label={badge} size="small" variant="outlined" />
         </Stack>
         <Typography component="h1" sx={{ mt: 0.5 }} variant="h1">
           {title}

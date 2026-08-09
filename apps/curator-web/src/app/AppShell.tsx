@@ -37,7 +37,10 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import type { BrowserCapability } from "../auth/auth-types";
 import { useAuthentication } from "../auth/use-authentication";
+import { ProjectSelector } from "../features/workspace/ProjectSelector";
+import { useProjectSelection } from "../features/workspace/use-project-selection";
 import { useShellStore } from "../state/shell-store";
+import { useWorkspaceStore } from "../state/workspace-store";
 import { useRuntimeConfig } from "./use-runtime-config";
 
 const expandedWidth = 224;
@@ -147,6 +150,8 @@ function Navigation({ collapsed }: { collapsed: boolean }) {
 export function AppShell() {
   const auth = useAuthentication();
   const config = useRuntimeConfig();
+  const projectSelection = useProjectSelection();
+  const projectLabelsById = useWorkspaceStore((state) => state.projectLabelsById);
   const navCollapsed = useShellStore((state) => state.navCollapsed);
   const toggleNav = useShellStore((state) => state.toggleNav);
   const drawerWidth = navCollapsed ? collapsedWidth : expandedWidth;
@@ -168,7 +173,15 @@ export function AppShell() {
             <Typography sx={{ fontWeight: 700 }} variant="body2">
               Evidence Workspace
             </Typography>
-            <Chip label="No project selected" size="small" variant="outlined" />
+            <ProjectSelector
+              label="Workspace project"
+              onChange={projectSelection.selectProject}
+              projects={projectSelection.projects.map((project) => ({
+                id: project.id,
+                label: projectLabelsById[project.id] ?? `Project ${project.id.slice(-8)}`,
+              }))}
+              selectedProjectId={projectSelection.selectedProjectId}
+            />
           </Stack>
           <TextField
             aria-label="Global search unavailable in foundation"

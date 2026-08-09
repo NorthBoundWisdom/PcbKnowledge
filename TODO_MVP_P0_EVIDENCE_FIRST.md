@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge 第一轮 MVP：Evidence-first 纵向闭环
 
-> 状态：`IN_PROGRESS` — M0 已于 2026-08-08 完成，M1 已于 2026-08-09 完成，M2 尚未开始
+> 状态：`IN_PROGRESS` — M0 已于 2026-08-08 完成，M1 与 M2a 首个本地可用 Intake 子切片的功能和本地验收已于 2026-08-09 完成；M2a 待主分支/CI 收口，M2 的页面解析资产尚未开始
 > 创建日期：2026-08-08  
 > 目标阶段：第一轮 MVP，属于正式架构 P0 的最小可运营子集  
 > 执行入口：本文件  
@@ -224,8 +224,8 @@ M1 completion gate：
 
 - [ ] 建立 `Document`、`DocumentRevision`、`DocumentAsset`、`DocumentPage`、`ParsedDocument`；
 - [ ] 实现五步上传向导的 MVP 版本：文件、来源/许可、文档身份、实体候选、确认；
-- [ ] 浏览器直传 staging，完成后由 Worker 流式计算 SHA-256；
-- [ ] 实现 organization 内字节级去重，但保留逻辑文档/revision alias 和审计；
+- [x] 浏览器直传 staging，完成后由独立 verifier Worker 流式计算 SHA-256；
+- [x] 实现 organization 内字节级去重，但保留逻辑文档/revision alias 和审计；
 - [ ] 校验 MIME/magic bytes、大小、页数、加密、嵌入附件和 PDF action；
 - [ ] 解析器在无网络、只读输入、CPU/内存/时长受限的进程或容器中执行；
 - [ ] 用内部 `CanonicalDocumentV1` 包装 Docling 结果，不向领域层泄漏第三方格式；
@@ -233,15 +233,31 @@ M1 completion gate：
 - [ ] 原生文本 PDF 生成 page text/block；
 - [ ] 纯扫描、加密、损坏和不支持文档进入明确失败/人工准备状态；
 - [ ] 保存 parser name/version/config hash/artifact hash 和 warnings；
-- [ ] 原始文件按 SHA-256 内容寻址，不允许原地覆盖。
+- [x] 原始文件按 SHA-256 内容寻址，不允许可信应用路径原地覆盖。
 
 M2 completion gate：
 
-- [ ] 相同 bytes 重复上传不会产生第二份原始对象；
-- [ ] revision metadata 仍能表达两个逻辑引用，且不会删除已被引用 revision；
+- [x] 相同 bytes 重复上传不会产生第二份原始对象；
+- [x] revision metadata 仍能表达两个逻辑引用，且不会删除已被引用 revision；
 - [ ] hash 不匹配、encrypted/corrupt/oversized 输入 fail closed；
 - [ ] 任一页面可以加载原始 PDF、缩略图和解析文本；
 - [ ] 删除全部解析/缩略图派生物后可以从原始 PDF 重建。
+
+#### M2a — 首个本地可用 Intake 子切片
+
+该子切片用于尽早形成真实用户闭环，不等同于 M2 completion gate，也不把解析、页面资产或后续知识能力
+提前记为完成。
+
+- [x] FreeCM Build 幂等创建随机密码的本地 `DATA_CURATOR`、默认 project、source、scope 与最小 license；
+- [x] Curator Web 通过真实 OIDC PKCE 登录，不含 auth bypass 或已知默认密码；
+- [x] 生成契约覆盖 intake options、上传会话、状态、document list/revision detail 和审计原件下载；
+- [x] 浏览器以不带 Bearer/cookie 的预签名 PUT 直传 PDF staging；
+- [x] 独立 verifier 以单独 PostgreSQL/S3 身份计算真实大小、magic 与 SHA-256，再建立不可变 revision；
+- [x] 相同 bytes 在 organization 内复用 canonical object，同时保留独立 document/revision/audit；
+- [x] hash、size、magic、租户范围、lease、状态机或 audit 不成立时不得产生 `STORED` revision；
+- [x] 前端可以选择 project、上传并轮询、浏览 document/revision，并经授权审计打开原件；
+- [x] 从 fresh FreeCM Config/Build 开始完成真实 Keycloak → 浏览器 → PostgreSQL → SeaweedFS 纵向验收；
+- [ ] canonical CI、FreeCM Test/Package 和主分支推送收口。
 
 ### M3 — 实体、EvidenceAnchor、审核与不可变发布
 
@@ -477,6 +493,8 @@ MVP 不要求完整视觉打磨，但必须满足 1440 × 900、键盘可达、�
 | 与 PcbCore Evidence 概念重名 | 文献 anchor 与 domain validation receipt 分层，adapter 显式转换 |
 | MVP 被误当生产 Agent 知识快照 | KnowledgeSnapshot 未实现前明确禁止正式长任务 pinning 声明 |
 | cleanup scope 超过单轮上限时固定排序可能饥饿后序租户 | M1 记录为非阻断扩展债务；生产规模前改为按最老待办排序或持久游标并增加公平性回归 |
+| SeaweedFS 3.85 无 create-only/WORM 与精确 CORS 响应 | 仅资格化可信 verifier 的本地路径；生产前引入 bounded promotion broker 或支持 conditional-create/object-lock 的后端，并通过 exact CORS negative tests |
+| 宿主编排继续膨胀为复杂 shell | 分支、超时、收据和子进程生命周期进入 typed Python；shell 只保留 secret/entrypoint/原生 CLI 薄边界 |
 
 ---
 
@@ -639,4 +657,47 @@ case 数：126 backend pytest，0 skipped；42 frontend Vitest；4 个应用服�
       应用 healthcheck 使用 1s start interval、10s 稳态 interval，日志仅显示本次启动窗口。
 首个失败：初次定向 format gate 发现 workflow/test 两处格式差异；修正后全仓门禁与真实重复 Run 通过
 下一步：推送并以远端 CI 复核 FreeCM validator、Compose 模型及全套 M1 门禁
+
+日期：2026-08-09
+里程碑/任务：M2a Document intake、不可变 revision 与独立 verifier
+命令：ruff format/check；mypy；真实 PostgreSQL 18 document unit/integration；0001→0009、
+      0009→0008→0009；真实 SeaweedFS 3.85 verifier E2E；alembic check
+退出码：全部 0
+case 数：32 个 document unit/PostgreSQL cases；4 个 PostgreSQL + SeaweedFS cases；全部 0 skipped
+耗时：最终 PostgreSQL 组约 5s；SeaweedFS 组约 4s
+结果：上传会话、Document/Revision/ORIGINAL link、独立 verifier、SUBMITTED 交接状态、lease fencing、
+      RLS/最小权限、审计闭包与 organization 内内容寻址去重通过真实依赖验证；magic、size、digest、
+      跨 scope、过期 lease、cleanup/complete 竞争和重复 revision 均 fail closed。
+首个失败：曾在未重建的一次性数据库复用同一 0009 revision 号而加载旧 trigger；改用 fresh 数据库后
+      当前迁移与完整成功/负路径全部通过，用户现有 FreeCM 数据库当时仍为 0008，不受该漂移影响
+下一步：实现页面解析/缩略图等 M2 剩余能力，不把 M2a 记为完整 M2
+
+日期：2026-08-09
+里程碑/任务：M2a Curator Web 与 fresh 本地纵向验收
+命令：Node 24 / pnpm 11 下 generated/lint/type/Vitest/build；Playwright hermetic；从 fresh FreeCM
+      Config/空 volume/Build 后运行 configs.test_local_stack_acceptance
+退出码：全部 0；FreeCM Run 的预期 SIGINT 退出码为 130
+case 数：102 Vitest；3 Playwright hermetic；4 Playwright live；5 个应用与 6 个基础设施服务
+耗时：最终 live Playwright 4 cases 为 11.0s；热 Run 全部 healthy 约 2.2s
+结果：真实 PKCE 登录、project 选择、PDF 预签名直传、异步 STORED、列表/详情和受审计原件访问闭环
+      通过；身份 bootstrap 两次幂等与漂移负例、verifier DB/S3 边界通过；中断只停止应用并保留基础设施。
+首个失败：依次发现 storage-init 用浏览器公开 S3 endpoint 做容器内 CORS 资格化、SeaweedFS ListBuckets
+      语义、宿主 pnpm 工具链和 live/static health 断言差异；逐项收紧后从 fresh 路径重跑通过
+下一步：以远端 fresh acceptance 复核相同纵向闭环
+
+日期：2026-08-09
+里程碑/任务：M2a FreeCM Test/Package 与轻量 Run 最终收口
+命令：pcbknowledge_workflow.py config/test/build/package；runtime receipt/package manifest 六镜像 ID 对照；
+      Package 后再次 require_runtime_prepared；Run ready 后 Ctrl+C；FreeCM validator；全仓静态门禁
+退出码：除 Run 的预期 SIGINT=130 外全部 0
+case 数：149 backend pytest，0 skipped；102 frontend Vitest；3 Playwright hermetic；6 个归档镜像；
+      Ruff 164 files；mypy 119 source files
+耗时：冷 Test 首次下载开发 wheel 为 34m19s；缓存后的最终 Test 约 29s；热 Run ready 约 2.2s
+结果：Package 仅导出 Build receipt 绑定的六镜像，不 build/retag；归档 SHA-256 为
+      4be339e994e7cd22f65237ee41de4d3313c61f19628f9a37b247752722ba30f3。Package 后 Run 收据仍有效，
+      应用停止、六个基础设施保持运行；OpenAPI/generated client SHA 为
+      a6727445923afd001839e8bb88acabd8a8a3a9e9a4b2627a867920841ec930ff。
+首个失败：Test 镜像最初未复制 CI workflow，147/148 后修复；Package 最初重跑 Build 导致 provenance
+      image ID 改变并使 Run 收据失效，改为 receipt-bound export 并增加行为回归后最终全绿
+下一步：提交、推送 main，并等待远端 canonical CI 全绿后关闭 M2a 主分支收口项
 ```

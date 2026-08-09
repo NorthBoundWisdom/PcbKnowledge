@@ -135,12 +135,13 @@ class ObjectStorageSettings(BaseSettings):
         max_length=63,
         pattern=r"^[a-z0-9][a-z0-9.-]+[a-z0-9]$",
     )
-    access_mode: Literal["api", "worker", "admin"] = "api"
+    access_mode: Literal["api", "worker", "verifier", "admin"] = "api"
     region: str = Field(default="us-east-1", min_length=1, max_length=64)
     access_key: SecretStr
     secret_key: SecretStr
     presign_ttl_seconds: int = Field(default=300, ge=30, le=900)
     max_upload_bytes: int = Field(default=268_435_456, ge=1, le=2_147_483_648)
+    browser_allowed_origins: tuple[AnyHttpUrl, ...] = ()
 
     @field_validator("endpoint_url", "public_endpoint_url")
     @classmethod
@@ -168,6 +169,16 @@ class ObjectStorageSettings(BaseSettings):
             raise ValueError("staging and production public object storage must use HTTPS")
         if self.bucket == self.staging_bucket:
             raise ValueError("permanent and staging objects must use separate buckets")
+        for origin in self.browser_allowed_origins:
+            if (
+                origin.path not in {None, "", "/"}
+                or origin.query is not None
+                or origin.fragment is not None
+                or "*" in str(origin)
+            ):
+                raise ValueError("browser upload origins must be exact origins")
+            if self.environment in {"staging", "production"} and origin.scheme != "https":
+                raise ValueError("production browser upload origins must use HTTPS")
         return self
 
 

@@ -150,6 +150,7 @@ class JobRepository:
         now: datetime,
         lease_duration: timedelta,
         batch_size: int,
+        job_types: frozenset[str] | None = None,
     ) -> list[KnowledgeJob]:
         statement = (
             self._scoped_jobs(scope)
@@ -162,6 +163,8 @@ class JobRepository:
             .with_for_update(skip_locked=True)
             .limit(batch_size)
         )
+        if job_types is not None:
+            statement = statement.where(KnowledgeJob.job_type.in_(job_types))
         jobs: list[KnowledgeJob] = []
         for job in session.scalars(statement):
             if not payload_digest_matches(job.payload, job.payload_sha256):

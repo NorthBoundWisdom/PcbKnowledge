@@ -5,6 +5,8 @@ ruff format --check .
 ruff check .
 mypy src apps tests configs
 pytest \
+  --ignore=tests/document/test_document_postgres.py \
+  --ignore=tests/document/test_document_seaweedfs.py \
   --ignore=tests/test_m1_postgres_security.py \
   --ignore=tests/test_m1_security_repair_postgres.py \
   --ignore=tests/test_database_contract_postgres.py \
