@@ -41,7 +41,9 @@ BUILD_INPUT_FILES = (
     Path("Open PcbKnowledge.command"),
     Path("configs/pcbknowledge_agent.py"),
     Path("configs/pcbknowledge_workflow.py"),
-    Path("schemas/knowledge-record.schema.json"),
+    Path("schemas/source-record.schema.json"),
+    Path("schemas/entity-record.schema.json"),
+    Path("schemas/fact-record.schema.json"),
 )
 BUILD_INPUT_ROOTS = (
     Path("src/pcbknowledge/git_native"),
@@ -49,7 +51,7 @@ BUILD_INPUT_ROOTS = (
 )
 IGNORED_SOURCE_NAMES = frozenset({"__pycache__", ".DS_Store"})
 PACKAGE_DIRECTORY = Path("build/package")
-PACKAGE_FORMAT = "pcbknowledge-git-native-snapshot"
+PACKAGE_FORMAT = "pcbknowledge-git-native-typed-snapshot-v1"
 MINIMUM_PYTHON = (3, 11)
 
 
@@ -227,9 +229,15 @@ def require_build(root: Path = REPO_ROOT) -> dict[str, Any]:
 def _validate_knowledge(root: Path = REPO_ROOT) -> int:
     repository = KnowledgeRepository(root)
     repository.ensure_layout()
-    records = repository.validate_all(require_canonical=True)
-    print(f"[pcbknowledge] validated {len(records)} knowledge records", flush=True)
-    return len(records)
+    snapshot = repository.validate_all(require_canonical=True)
+    print(
+        "[pcbknowledge] validated "
+        f"{len(snapshot.sources)} sources, "
+        f"{len(snapshot.entities)} entities, "
+        f"{len(snapshot.facts)} facts",
+        flush=True,
+    )
+    return len(snapshot)
 
 
 def _run_checks(root: Path = REPO_ROOT) -> None:
@@ -342,12 +350,20 @@ def cmd_open(*, port: int, no_browser: bool) -> int:
 
 def package_files(root: Path = REPO_ROOT) -> tuple[Path, ...]:
     repository = KnowledgeRepository(root)
-    records = repository.validate_all(require_canonical=True)
-    paths = {Path("schemas/knowledge-record.schema.json")}
-    for record in records:
-        paths.add(repository.record_path(record.id).relative_to(repository.root))
-        if record.evidence.path is not None:
-            paths.add(Path(record.evidence.path))
+    snapshot = repository.validate_all(require_canonical=True)
+    paths = {
+        Path("schemas/source-record.schema.json"),
+        Path("schemas/entity-record.schema.json"),
+        Path("schemas/fact-record.schema.json"),
+    }
+    for source in snapshot.sources:
+        paths.add(repository.source_path(source.id).relative_to(repository.root))
+        if source.evidence.path is not None:
+            paths.add(Path(source.evidence.path))
+    for entity in snapshot.entities:
+        paths.add(repository.entity_path(entity.id).relative_to(repository.root))
+    for fact in snapshot.facts:
+        paths.add(repository.fact_path(fact.id).relative_to(repository.root))
     return tuple(sorted(paths, key=lambda item: item.as_posix()))
 
 

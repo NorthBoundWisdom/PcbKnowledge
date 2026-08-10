@@ -17,12 +17,12 @@ from urllib.parse import parse_qs, urlsplit
 
 from pcbknowledge.git_native.model import (
     Evidence,
-    KnowledgeRecord,
     LicenseClass,
     PreparedBy,
     RecordStatus,
     RecordTransitionError,
     RecordValidationError,
+    SourceRecord,
 )
 from pcbknowledge.git_native.store import (
     EvidenceError,
@@ -49,6 +49,7 @@ MISSING_LABELS = {
     "source": "来源",
     "license": "许可",
     "evidence": "PDF 原件",
+    "license_note": "许可说明",
 }
 
 
@@ -115,9 +116,11 @@ def _textarea(label: str, name: str, value: str | None, *, placeholder: str = ""
 def _license_select(selected: LicenseClass) -> str:
     labels = {
         LicenseClass.UNKNOWN: "未知（不能批准）",
-        LicenseClass.OPEN: "开放资料",
+        LicenseClass.PUBLIC_REFERENCE: "公开参考资料",
+        LicenseClass.OPEN_LICENSE: "开放许可资料",
         LicenseClass.INTERNAL: "内部可用",
         LicenseClass.RESTRICTED: "受限资料",
+        LicenseClass.LICENSED_BLOCKED_FOR_AI: "许可资料（禁止 AI 处理）",
     }
     options = "".join(
         f'<option value="{item.value}"{" selected" if item is selected else ""}>'
@@ -134,7 +137,7 @@ def _record_form(
     *,
     action: str,
     csrf_token: str,
-    record: KnowledgeRecord,
+    record: SourceRecord,
     submit_label: str,
     expected_revision: str | None,
 ) -> str:
@@ -176,12 +179,12 @@ def _record_form(
     )
 
 
-def _status_badge(record: KnowledgeRecord) -> str:
+def _status_badge(record: SourceRecord) -> str:
     css = record.status.value.lower()
     return f'<span class="badge status-{css}">{STATUS_LABELS[record.status]}</span>'
 
 
-def _missing_badges(record: KnowledgeRecord) -> str:
+def _missing_badges(record: SourceRecord) -> str:
     if not record.missing_fields:
         return '<span class="badge complete">必需信息完整</span>'
     return "".join(
@@ -296,7 +299,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             self._dashboard(selected)
             return
         if path == "/records/new":
-            record = KnowledgeRecord.new(
+            record = SourceRecord.new(
                 f"pk_{secrets.token_hex(12)}", prepared_by=PreparedBy.HUMAN
             )
             changes = self.repository.git_changes().count
@@ -330,7 +333,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
     def _dispatch_post(self, form: FormData) -> None:
         path = urlsplit(self.path).path
         if path == "/records/new":
-            base = KnowledgeRecord.new(
+            base = SourceRecord.new(
                 f"pk_{secrets.token_hex(12)}", prepared_by=PreparedBy.HUMAN
             )
             record = self._apply_form(base, form)
@@ -358,7 +361,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         self.repository.save(current, updated, expected)
         self._redirect(f"/records/{record_id}")
 
-    def _apply_form(self, record: KnowledgeRecord, form: FormData) -> KnowledgeRecord:
+    def _apply_form(self, record: SourceRecord, form: FormData) -> SourceRecord:
         raw_license = form.fields.get("license_class", LicenseClass.UNKNOWN.value)
         try:
             license_class = LicenseClass(raw_license)
@@ -494,7 +497,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             )
         )
 
-    def _readonly_record(self, record: KnowledgeRecord) -> str:
+    def _readonly_record(self, record: SourceRecord) -> str:
         evidence = "未提供"
         if record.evidence.present:
             evidence = (

@@ -30,10 +30,11 @@ class WorkflowTestCase(unittest.TestCase):
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(source.read_bytes())
         for relative in workflow.BUILD_INPUT_FILES:
+            source = workflow.REPO_ROOT / relative
             destination = self.root / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             if not destination.exists():
-                destination.write_text(f"build input {relative}\n", encoding="utf-8")
+                destination.write_bytes(source.read_bytes())
         for relative in workflow.BUILD_INPUT_ROOTS:
             directory = self.root / relative
             directory.mkdir(parents=True, exist_ok=True)
@@ -63,7 +64,7 @@ class LocalWorkflowTests(WorkflowTestCase):
         self.prepare_receipts()
         workflow.require_build(self.root)
 
-        knowledge = self.root / "knowledge/records/local-note.txt"
+        knowledge = self.root / "knowledge/facts/local-note.txt"
         knowledge.parent.mkdir(parents=True)
         knowledge.write_text("a data edit does not rebuild the editor\n", encoding="utf-8")
         workflow.require_build(self.root)
@@ -122,9 +123,11 @@ class LocalWorkflowTests(WorkflowTestCase):
         with zipfile.ZipFile(first) as archive:
             names = archive.namelist()
             self.assertIn("MANIFEST.json", names)
-            self.assertIn(f"knowledge/records/{record.id}.json", names)
+            self.assertIn(f"knowledge/sources/{record.id}.json", names)
             self.assertIn(evidence.path, names)
-            self.assertIn("schemas/knowledge-record.schema.json", names)
+            self.assertIn("schemas/source-record.schema.json", names)
+            self.assertIn("schemas/entity-record.schema.json", names)
+            self.assertIn("schemas/fact-record.schema.json", names)
             manifest = json.loads(archive.read("MANIFEST.json"))
             self.assertEqual(manifest["format"], workflow.PACKAGE_FORMAT)
         sidecar = first.with_suffix(first.suffix + ".sha256")

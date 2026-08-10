@@ -27,6 +27,7 @@ class AgentCliTests(RepositoryTestCase):
         self.assertEqual((code, errors), (0, ""))
         created = json.loads(output)
         self.assertEqual(created["prepared_by"], "AGENT")
+        self.assertEqual(created["source_type"], "DATASHEET")
         self.assertFalse(created["replayed"])
 
         code, output, _ = self.call("list")
@@ -85,11 +86,32 @@ class AgentCliTests(RepositoryTestCase):
             str(pdf),
             "--supersedes",
             "not-a-record-id",
+            "--license-class",
+            "PUBLIC_REFERENCE",
         )
 
         self.assertEqual(code, 2)
         self.assertIn("supersedes", errors)
         self.assertEqual(list(self.repository.records_dir.glob("*.json")), [])
+        self.assertEqual(list(self.repository.evidence_dir.rglob("*.pdf")), [])
+
+    def test_agent_pdf_processing_fails_closed_for_unknown_or_blocked_license(self) -> None:
+        pdf = self.root / "blocked.pdf"
+        pdf.write_bytes(b"not even opened as a PDF")
+        for license_class in ("UNKNOWN", "LICENSED_BLOCKED_FOR_AI", "RESTRICTED"):
+            with self.subTest(license_class=license_class):
+                code, _, errors = self.call(
+                    "create",
+                    "--idempotency-key",
+                    f"blocked-{license_class}",
+                    "--license-class",
+                    license_class,
+                    "--pdf",
+                    str(pdf),
+                )
+                self.assertEqual(code, 2)
+                self.assertIn("processing is blocked", errors)
+        self.assertEqual(list(self.repository.sources_dir.glob("*.json")), [])
         self.assertEqual(list(self.repository.evidence_dir.rglob("*.pdf")), [])
 
 

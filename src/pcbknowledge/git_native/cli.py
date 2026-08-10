@@ -9,10 +9,11 @@ from pathlib import Path
 from typing import Any
 
 from pcbknowledge.git_native.model import (
-    KnowledgeRecord,
     LicenseClass,
     PreparedBy,
     RecordStatus,
+    SourceRecord,
+    SourceType,
     deterministic_record_id,
 )
 from pcbknowledge.git_native.store import (
@@ -36,7 +37,7 @@ EDITABLE_FIELDS = (
 )
 
 
-def _projection(record: KnowledgeRecord) -> dict[str, Any]:
+def _projection(record: SourceRecord) -> dict[str, Any]:
     return {
         **record.to_dict(),
         "revision_token": record.revision_token,
@@ -58,7 +59,11 @@ def _repository(root: str) -> KnowledgeRepository:
 
 def _create(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     record_id = deterministic_record_id(arguments.idempotency_key)
-    blank = KnowledgeRecord.new(record_id, prepared_by=PreparedBy.AGENT)
+    blank = SourceRecord.new(
+        record_id,
+        prepared_by=PreparedBy.AGENT,
+        source_type=arguments.source_type,
+    )
     supplied = any(
         getattr(arguments, name) is not None
         for name in (
@@ -73,6 +78,11 @@ def _create(repository: KnowledgeRepository, arguments: argparse.Namespace) -> i
             "pdf",
         )
     ) or arguments.license_class is not LicenseClass.UNKNOWN
+
+    if arguments.pdf is not None and not arguments.license_class.agent_processing_allowed:
+        raise RepositoryError(
+            "Agent PDF processing is blocked until an allowed license class is explicit"
+        )
 
     try:
         existing = repository.load(record_id)
@@ -98,6 +108,7 @@ def _create(repository: KnowledgeRepository, arguments: argparse.Namespace) -> i
                 evidence=desired_evidence,
                 preparation_note=arguments.preparation_note,
                 supersedes=arguments.supersedes,
+                source_type=arguments.source_type,
             )
             if desired != existing:
                 raise RepositoryError(
@@ -117,6 +128,7 @@ def _create(repository: KnowledgeRepository, arguments: argparse.Namespace) -> i
         evidence=blank.evidence,
         preparation_note=arguments.preparation_note,
         supersedes=arguments.supersedes,
+        source_type=arguments.source_type,
     )
     evidence = (
         repository.import_pdf_path(Path(arguments.pdf))
@@ -134,6 +146,7 @@ def _create(repository: KnowledgeRepository, arguments: argparse.Namespace) -> i
         evidence=evidence,
         preparation_note=arguments.preparation_note,
         supersedes=arguments.supersedes,
+        source_type=arguments.source_type,
     )
     repository.insert(updated)
     _print({**_projection(updated), "replayed": False})
@@ -178,7 +191,12 @@ def _update(repository: KnowledgeRepository, arguments: argparse.Namespace) -> i
             arguments, clear, "preparation_note", record.preparation_note
         ),
         "supersedes": _updated_value(arguments, clear, "supersedes", record.supersedes),
+        "source_type": arguments.source_type,
     }
+    if arguments.pdf is not None and not values["license_class"].agent_processing_allowed:
+        raise RepositoryError(
+            "Agent PDF processing is blocked for this source license class"
+        )
     updated = record.edit(evidence=evidence, **values)
     if arguments.pdf is not None:
         evidence = repository.import_pdf_path(Path(arguments.pdf))
@@ -212,12 +230,17 @@ def _show(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int
 
 
 def _validate(repository: KnowledgeRepository, _arguments: argparse.Namespace) -> int:
-    records = repository.validate_all(require_canonical=True)
+    snapshot = repository.validate_all(require_canonical=True)
+    published = repository.read_published_snapshot()
     _print(
         {
             "status": "valid",
-            "records": len(records),
-            "published_records": len(repository.list_published()),
+            "sources": len(snapshot.sources),
+            "entities": len(snapshot.entities),
+            "facts": len(snapshot.facts),
+            "conflicts": len(snapshot.conflicts),
+            "published_sources": len(published.sources),
+            "published_facts": len(published.facts),
         }
     )
     return 0
@@ -256,6 +279,7 @@ def _add_edit_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--preparation-note")
     parser.add_argument("--supersedes")
     parser.add_argument("--pdf")
+    parser.add_argument("--source-type", type=SourceType, choices=tuple(SourceType))
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -280,7 +304,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     create_parser = subparsers.add_parser("create")
     create_parser.add_argument("--idempotency-key", required=True)
     _add_edit_arguments(create_parser)
-    create_parser.set_defaults(handler=_create, license_class=LicenseClass.UNKNOWN)
+    create_parser.set_defaults(
+        handler=_create,
+        license_class=LicenseClass.UNKNOWN,
+        source_type=SourceType.DATASHEET,
+    )
 
     update_parser = subparsers.add_parser("update")
     update_parser.add_argument("record_id")

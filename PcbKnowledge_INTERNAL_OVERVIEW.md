@@ -98,7 +98,7 @@ VIN absolute maximum = ...
 
 这些内容属于下一层 **FactRecord**。
 
-## 5. P0.1 后数据会分成三类
+## 5. 当前 typed authority 的三类数据
 
 ### Source：资料是什么
 
@@ -111,7 +111,7 @@ SourceRecord
 
 ### Entity：资料在说谁
 
-P0.1 第一批只做：
+当前最小实体集合是：
 
 ```text
 Manufacturer
@@ -131,7 +131,7 @@ Package = SOIC-8
 
 ### Fact：资料明确说了什么
 
-P0.1 第一批做两类：
+当前第一批事实类型是：
 
 ```text
 ComponentPinFactV1
@@ -253,7 +253,7 @@ Agent 先修改“什么算合法”
 
 “官网能下载”不等于“开放许可证”。
 
-P0.1 会明确区分：
+SourceRecordV1 已明确区分：
 
 ```text
 PUBLIC_REFERENCE
@@ -317,9 +317,10 @@ P0.0 publication / evidence hardening
     IMPLEMENTED
 
 P0.1 typed Source / Entity / Fact / EvidenceAnchor
-    当前开发目标
+    COMPLETE
 
 P0.2 Agent-native ingestion
+    NEXT
 P0.3 Review Workbench
 P0.4 First real dataset + golden evals
 P1 SQLite exact + FTS
@@ -327,7 +328,7 @@ P2 broader PCB knowledge/integration
 P3 vector retrieval only if eval proves useful
 ```
 
-当前阶段最重要的不是把几万份 PDF 尽快塞进去，而是先让第一批 20–30 个器件能形成：
+下一阶段最重要的不是把几万份 PDF 尽快塞进去，而是让第一批 20–30 个器件形成：
 
 ```text
 原文

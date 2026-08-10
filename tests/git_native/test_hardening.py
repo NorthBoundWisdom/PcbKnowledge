@@ -9,9 +9,9 @@ import threading
 from pcbknowledge.git_native.cli import main
 from pcbknowledge.git_native.model import (
     Evidence,
-    KnowledgeRecord,
     LicenseClass,
     PreparedBy,
+    SourceRecord,
     deterministic_record_id,
 )
 from pcbknowledge.git_native.store import (
@@ -31,7 +31,7 @@ class GitNativeHardeningTests(RepositoryTestCase):
             revision="A",
             source_locator="https://example.test/d.pdf",
             source_publisher="Example",
-            license_class=LicenseClass.OPEN,
+            license_class=LicenseClass.PUBLIC_REFERENCE,
             license_note=None,
             evidence=evidence,
             preparation_note=None,
@@ -112,10 +112,10 @@ class GitNativeHardeningTests(RepositoryTestCase):
             self.repository.list_published()
 
     def test_published_view_rejects_record_filename_identity_mismatch(self) -> None:
-        record = KnowledgeRecord.new(
+        record = SourceRecord.new(
             "pk_aaaaaaaaaaaaaaaaaaaaaaaa", prepared_by=PreparedBy.HUMAN
         )
-        wrong_path = self.root / "knowledge/records/pk_bbbbbbbbbbbbbbbbbbbbbbbb.json"
+        wrong_path = self.root / "knowledge/sources/pk_bbbbbbbbbbbbbbbbbbbbbbbb.json"
         wrong_path.write_text(record.canonical_json(), encoding="utf-8")
         subprocess.run(["git", "add", "knowledge"], cwd=self.root, check=True)
         subprocess.run(
@@ -138,10 +138,10 @@ class GitNativeHardeningTests(RepositoryTestCase):
             self.repository.list_published()
 
     def test_published_view_rejects_git_symlinks(self) -> None:
-        record = KnowledgeRecord.new(
+        record = SourceRecord.new(
             "pk_aaaaaaaaaaaaaaaaaaaaaaaa", prepared_by=PreparedBy.HUMAN
         )
-        path = self.root / f"knowledge/records/{record.id}.json"
+        path = self.root / f"knowledge/sources/{record.id}.json"
         path.symlink_to(record.canonical_json())
         subprocess.run(["git", "add", "knowledge"], cwd=self.root, check=True)
         subprocess.run(
@@ -161,6 +161,30 @@ class GitNativeHardeningTests(RepositoryTestCase):
         )
 
         with self.assertRaisesRegex(RepositoryError, "not a regular"):
+            self.repository.list_published()
+
+    def test_published_view_rejects_retired_legacy_authority(self) -> None:
+        legacy = self.root / "knowledge/records/pk_aaaaaaaaaaaaaaaaaaaaaaaa.json"
+        legacy.parent.mkdir(parents=True, exist_ok=True)
+        legacy.write_text("{}\n", encoding="utf-8")
+        subprocess.run(["git", "add", "knowledge"], cwd=self.root, check=True)
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "user.name=Test",
+                "-c",
+                "user.email=test@example.invalid",
+                "commit",
+                "-q",
+                "-m",
+                "retired legacy authority",
+            ],
+            cwd=self.root,
+            check=True,
+        )
+
+        with self.assertRaisesRegex(ValueError, "retired knowledge/records"):
             self.repository.list_published()
 
     def test_change_scope_rejects_mixed_candidate(self) -> None:
@@ -216,7 +240,7 @@ class GitNativeHardeningTests(RepositoryTestCase):
             cwd=self.root,
             check=True,
         )
-        data = self.root / "knowledge/records/staged-note.txt"
+        data = self.root / "knowledge/sources/staged-note.txt"
         data.write_text("data candidate\n", encoding="utf-8")
         subprocess.run(["git", "add", data.relative_to(self.root)], cwd=self.root, check=True)
         readme.write_text("unstaged code change\n", encoding="utf-8")
@@ -255,7 +279,7 @@ class GitNativeHardeningTests(RepositoryTestCase):
             preparation_note=initial.preparation_note,
             supersedes=initial.supersedes,
         )
-        concurrent = KnowledgeRecord.new(
+        concurrent = SourceRecord.new(
             deterministic_record_id("concurrent-reference"),
             prepared_by=PreparedBy.AGENT,
         ).edit(
@@ -264,7 +288,7 @@ class GitNativeHardeningTests(RepositoryTestCase):
             revision="A",
             source_locator=None,
             source_publisher="Example",
-            license_class=LicenseClass.OPEN,
+            license_class=LicenseClass.PUBLIC_REFERENCE,
             license_note=None,
             evidence=old,
             preparation_note=None,

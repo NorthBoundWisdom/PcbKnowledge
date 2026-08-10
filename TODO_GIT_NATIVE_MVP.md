@@ -12,7 +12,7 @@
 MVP 完成后又发生了两类演进：
 
 1. P0.0 对 publication snapshot、review history、evidence cleanup、并发写入与 change-scope 做了 hardening；
-2. P0.1 将把过渡性的 `knowledge/records/` 资料登记模型迁移为正式 `sources/entities/facts` typed authority。
+2. P0.1 已把过渡性的 `knowledge/records/` 资料登记模型迁移为正式 `sources/entities/facts` typed authority。
 
 因此本文件中的 `knowledge/records/`、Schema v2 等描述应理解为“该历史里程碑的可执行形态”，不能覆盖最新 [架构文档](PcbKnowledge_ARCHITECTURE.md) 和 P0 TODO。
 
@@ -42,7 +42,7 @@ schemas/knowledge-record.schema.json
 - [x] `.pcbknowledge/`、索引、预览、package 都是可删除派生物。
 - [x] SQLite/FTS 不作为 authority。
 
-说明：`knowledge/records/` 是 MVP 的资料级过渡模型；P0.1 计划在零真实数据窗口迁移到 `knowledge/sources|entities|facts`，不是长期双写格式。
+说明：`knowledge/records/` 是 MVP 的资料级过渡模型；P0.1 已在零真实数据窗口迁移到 `knowledge/sources|entities|facts`，没有保留双写格式。
 
 ## 3. MVP 最小记录模型
 

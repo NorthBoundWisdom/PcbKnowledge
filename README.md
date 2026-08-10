@@ -62,13 +62,17 @@ GUI 的工作流很短：
 权威数据布局：
 
 ```text
-knowledge/records/<stable-id>.json
+knowledge/sources/<source-id>.json
+knowledge/entities/<entity-id>.json
+knowledge/facts/<fact-id>.json
 evidence/sha256/<digest-prefix>/<sha256>.pdf
-schemas/knowledge-record.schema.json
+schemas/source-record.schema.json
+schemas/entity-record.schema.json
+schemas/fact-record.schema.json
 ```
 
 建议在开始录入前先拉取最新 `main`，完成后在 GUI 的“查看变化”页或 Git 客户端检查差异。
-JSON 是稳定排序的文本；PDF 的 digest、大小、来源、许可与关联记录在 JSON diff 中可见。
+JSON 使用确定字段顺序；PDF 的 digest、大小、来源、许可与关联记录在 JSON diff 中可见。
 
 ## 批准与发布不是一回事
 
@@ -91,9 +95,10 @@ main/HEAD 中 committed APPROVED
 python3 configs/pcbknowledge_agent.py list --published
 ```
 
-它从 Git `HEAD` 读取 committed `APPROVED`，不会把本机未提交的草稿或刚批准记录当成正式知识。
-读取时会验证同一 commit 内的规范 JSON、record ID、supersedes 闭包以及 PDF bytes/hash/size；只提交
-JSON、不提交证据原件会直接失败，不会降级成“有元数据也算发布”。
+它从 Git `HEAD` 读取 committed `APPROVED` Source，typed published snapshot 同时提供 committed
+`APPROVED` Fact 与 Entity closure，不会把本机未提交的草稿或刚批准记录当成正式知识。读取时会验证
+同一 commit 内的三份 Schema、规范 JSON、record ID、Source/Entity/Fact 引用、supersedes 闭包、
+EvidenceAnchor 以及 PDF bytes/hash/size；只提交 JSON、不提交证据原件会直接失败。
 
 ## 数据提交与代码提交必须分开
 
@@ -137,19 +142,22 @@ python3 configs/pcbknowledge_agent.py create \
   --title "TPS5430 数据手册" \
   --revision "Rev. G" \
   --source-publisher "Texas Instruments" \
-  --license-class OPEN \
+  --license-class PUBLIC_REFERENCE \
   --pdf /path/to/tps5430.pdf
 python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_agent.py diff
 python3 configs/pcbknowledge_agent.py change-scope
 ```
 
-CLI 会返回 `revision_token`、`missing_fields`、`agent_processing_allowed` 和下一步动作。Agent 可以
-创建、修改和送审草稿，但没有批准、退回、提交或推送命令；最终判断留给人。
+当前 CLI 是 Source 草稿入口，会返回 `revision_token`、`missing_fields`、
+`agent_processing_allowed` 和下一步动作。Agent 可以创建、修改和送审草稿，但没有批准、退回、
+提交或推送命令；Entity/Fact 的 Agent-native 命令属于 P0.2，底层 typed repository API 已完成。
 
-Schema v2 中 `RESTRICTED` 是当前对 ADR-015 `LICENSED_BLOCKED_FOR_AI` 的可执行表示：
-`UNKNOWN` 或 `RESTRICTED` 资料不得向 Agent/模型暴露原文或派生内容。IPC 与同类受限标准默认按
-该规则处理。`OPEN`/`INTERNAL` 仍需遵守来源、项目和安全约束。
+SourceRecordV1 明确区分 `UNKNOWN`、`PUBLIC_REFERENCE`、`OPEN_LICENSE`、`INTERNAL`、
+`RESTRICTED` 与 `LICENSED_BLOCKED_FOR_AI`。`UNKNOWN`、`RESTRICTED` 和
+`LICENSED_BLOCKED_FOR_AI` 都 fail closed，不允许 Agent CLI 打开 PDF；IPC 与同类受限标准默认使用
+`LICENSED_BLOCKED_FOR_AI`。公开可下载的厂商 datasheet 通常是 `PUBLIC_REFERENCE`，不等同于
+开放版权许可。
 
 ## 本地检查与数据快照
 
@@ -171,11 +179,12 @@ python3 configs/validate_freecm_repo_commands.py
 
 ## 当前能力与下一阶段
 
-当前可执行模型已经解决资料登记、证据原件、人工 review、Git publication 与 Agent draft workflow；
-它仍不是完整的 PCB typed knowledge model。
+P0.1 typed authority 已完成：SourceRecordV1、Manufacturer/Component/Package EntityRecordV1、
+EvidenceAnchorV1、ComponentPinFactV1 与 ParameterLimitFactV1 共用同一 validator、published reader
+和 Package 闭环。当前 GUI 仍是 Source Corpus editor，不是完整 Fact Review Workbench。
 
-下一阶段见 [`TODO_GIT_NATIVE_KNOWLEDGE_P0.md`](TODO_GIT_NATIVE_KNOWLEDGE_P0.md)，会在保持 Git-native
-边界的前提下分离：
+下一阶段见 [`TODO_GIT_NATIVE_KNOWLEDGE_P0.md`](TODO_GIT_NATIVE_KNOWLEDGE_P0.md)：P0.2 增加
+Agent-native typed ingestion，P0.3 增加 Fact Review Workbench。当前 authority 已经分离为：
 
 ```text
 SourceRecord
@@ -184,8 +193,8 @@ FactRecord
 EvidenceAnchor
 ```
 
-第一批事实类型是 `ComponentPinFactV1` 与 `ParameterLimitFactV1`。之后才建设 SQLite exact/FTS
-派生索引；vector RAG 继续后移，不作为 P0 前置条件。
+第一批事实类型是 `ComponentPinFactV1` 与 `ParameterLimitFactV1`。SQLite exact/FTS 仍在 P1；
+vector RAG 继续后移，不作为 P0 前置条件。
 
 ## 边界与恢复
 

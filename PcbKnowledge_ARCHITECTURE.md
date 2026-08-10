@@ -1,8 +1,8 @@
 # PcbKnowledge Git-native 架构
 
-> 状态：当前实现 + P0 演进基线
+> 状态：P0.1 typed authority 已实现 + P0 后续演进基线
 > 日期：2026-08-10
-> 当前代码基线：`dd83d34bda5dff9513e15baffe49508be4b3911f`
+> 当前实现阶段：P0.1 complete，P0.2 next
 > 主要决策：[ADR-018](docs/adr/ADR-018-git-native-local-editor.md)、[ADR-019](docs/adr/ADR-019-git-publication-boundary.md)
 
 ## 1. 产品定位
@@ -61,7 +61,8 @@ committed APPROVED in publication ref
 - 关联 PDF bytes；
 - PDF SHA-256、size 和 content-addressed path。
 
-当前 v2 CLI 的 `list --published` 已实现这一原则，并且不会借用工作树中尚未提交的 PDF。
+当前 typed published reader 与 CLI 的 `list --published` 已实现这一原则，并且不会借用工作树中
+尚未提交的 JSON、Schema 或 PDF。
 
 ### 3.2 数据提交与代码提交分离
 
@@ -78,11 +79,11 @@ MIXED
 
 `MIXED` 不能成为一个 commit。原因是不能让同一个 Agent 在一个提交中既修改 validator/schema/policy，又提交依赖新规则才能通过的数据。
 
-## 4. 当前 Source Corpus 层（P0.0）
+## 4. 历史 Source Corpus 过渡层（P0.0，已退役）
 
 当前 GUI 截图中的“建立一条可审阅的记录”属于 Source Corpus 录入，不是最终 Fact Editor。
 
-现有 Schema v2 的一条记录代表：
+历史 Schema v2 的一条记录代表：
 
 ```text
 一个确定来源
@@ -92,7 +93,7 @@ MIXED
 + 审阅历史
 ```
 
-当前 authority：
+当时的 authority：
 
 ```text
 knowledge/records/<stable-id>.json
@@ -100,11 +101,12 @@ evidence/sha256/<prefix>/<sha256>.pdf
 schemas/knowledge-record.schema.json
 ```
 
-现有记录包含 title、document number、revision、publisher/locator、license、PDF、preparation note、append-only review history 与 supersedes。
+历史记录包含 title、document number、revision、publisher/locator、license、PDF、preparation note、append-only review history 与 supersedes。
 
-这套 v2 是 Git-native MVP 的过渡 Source 模型。仓库当前没有真实 record，因此 P0.1 会一次性迁移到正式 typed knowledge layout，不维护双写兼容层。
+这套 v2 是 Git-native MVP 的过渡 Source 模型。P0.1 已在仓库没有真实 record 的窗口一次性迁移到
+正式 typed knowledge layout；validator 不读取该旧 root，也没有双写兼容层。
 
-## 5. P0.1 正式 authority 模型
+## 5. P0.1 正式 authority 模型（已实现）
 
 P0.1 把“资料”和“资料中的工程事实”拆开：
 
@@ -234,7 +236,7 @@ P0.1 不实现复杂 Conflict Center，但 validator 必须能发现语义重复
 
 ## 7. 许可与 Agent 处理
 
-当前 v2 `RESTRICTED` 是 ADR-015 `LICENSED_BLOCKED_FOR_AI` 的临时执行表示。P0.1 SourceRecord 将把 taxonomy 明确化：
+P0.1 SourceRecordV1 已把历史 v2 的临时许可表示替换为明确 taxonomy：
 
 ```text
 UNKNOWN
@@ -369,8 +371,8 @@ PcbCore 继续负责：
 
 ```text
 P0.0 Git-native hardening        COMPLETE except real-checkout receipt refresh
-P0.1 typed authority model       NEXT
-P0.2 Agent-native ingestion
+P0.1 typed authority model       COMPLETE
+P0.2 Agent-native ingestion      NEXT
 P0.3 Local Review Workbench
 P0.4 First real dataset + evals
 P1    SQLite exact + FTS

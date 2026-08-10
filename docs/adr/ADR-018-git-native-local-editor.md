@@ -1,6 +1,6 @@
 # ADR-018: Git-native local editor supersedes the service-platform MVP
 
-- Status: Accepted
+- Status: Accepted; authority layout amended by P0.1
 - Date: 2026-08-10
 - Supersedes for the current MVP: ADR-002, ADR-003, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009, ADR-017
 - Preserves: ADR-001, ADR-004, ADR-012, ADR-013, ADR-015, ADR-016
@@ -38,6 +38,13 @@ The current MVP is a local, Git-native editor:
 The prior service implementation is removed rather than maintained as a second runtime. The old
 ADRs remain as historical records and may inform a future shared-service product, but they no
 longer govern the executable MVP.
+
+### P0.1 authority-layout amendment
+
+The local/Git-native decision remains unchanged. P0.1 retired the transitional
+`knowledge/records/` wire format in the zero-real-data window. Canonical JSON now lives under
+`knowledge/sources/`, `knowledge/entities/` and `knowledge/facts/`, with three corresponding
+schemas. There is no legacy read or dual-write path.
 
 ## Security and evidence consequences
 

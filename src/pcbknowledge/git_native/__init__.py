@@ -5,26 +5,51 @@ no database, network identity, object-store, or container dependency.
 """
 
 from pcbknowledge.git_native.model import (
+    ComponentPinPayload,
+    EntityKind,
+    EntityRecord,
     Evidence,
-    KnowledgeRecord,
+    EvidenceAnchor,
+    FactRecord,
+    FactType,
     LicenseClass,
+    ParameterLimitKind,
+    ParameterLimitPayload,
     RecordStatus,
     ReviewAction,
     ReviewDecision,
     ReviewEvent,
-    Source,
+    SourceLocation,
+    SourceRecord,
+    SourceType,
 )
-from pcbknowledge.git_native.store import ChangeScope, KnowledgeRepository
+from pcbknowledge.git_native.store import (
+    AuthoritySnapshot,
+    ChangeScope,
+    FactConflict,
+    KnowledgeRepository,
+)
 
 __all__ = [
+    "AuthoritySnapshot",
     "ChangeScope",
+    "ComponentPinPayload",
+    "EntityKind",
+    "EntityRecord",
     "Evidence",
-    "KnowledgeRecord",
+    "EvidenceAnchor",
+    "FactConflict",
+    "FactRecord",
+    "FactType",
     "KnowledgeRepository",
     "LicenseClass",
+    "ParameterLimitKind",
+    "ParameterLimitPayload",
     "RecordStatus",
     "ReviewAction",
     "ReviewDecision",
     "ReviewEvent",
-    "Source",
+    "SourceLocation",
+    "SourceRecord",
+    "SourceType",
 ]

@@ -108,7 +108,7 @@ class LocalEditorServerTests(RepositoryTestCase):
                 "revision": "G",
                 "source_publisher": "Texas Instruments",
                 "source_locator": "https://example.test/tps5430.pdf",
-                "license_class": "OPEN",
+                "license_class": "PUBLIC_REFERENCE",
                 "license_note": "公开资料",
                 "preparation_note": "人工核对版本",
                 "supersedes": "",
@@ -161,6 +161,7 @@ class LocalEditorServerTests(RepositoryTestCase):
         self.assertIn("AI 准备", text)
 
     def test_create_submit_approve_diff_and_evidence_vertical_flow(self) -> None:
+        index_before = self.root.joinpath(".git", "index").read_bytes()
         record_id = self.create_complete_record()
         draft = self.repository.load(record_id)
         self.assertEqual(draft.status, RecordStatus.DRAFT)
@@ -200,10 +201,8 @@ class LocalEditorServerTests(RepositoryTestCase):
         self.assertIn(record_id, diff_text)
         self.assertIn("new binary evidence", diff_text)
         self.assertEqual(
-            self.root.joinpath(".git", "index").read_bytes()
-            if self.root.joinpath(".git", "index").exists()
-            else None,
-            None,
+            self.root.joinpath(".git", "index").read_bytes(),
+            index_before,
             "the GUI must not stage files",
         )
 
