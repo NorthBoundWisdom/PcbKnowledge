@@ -125,6 +125,24 @@ class KnowledgeRecordTests(unittest.TestCase):
         with self.assertRaisesRegex(RecordValidationError, "trailing SUBMITTED"):
             KnowledgeRecord.from_dict(value)
 
+        value = record.to_dict()
+        value["review_history"] = [
+            {"action": "REJECTED", "comment": "impossible without submission"}
+        ]
+        with self.assertRaisesRegex(RecordValidationError, "start or resume with SUBMITTED"):
+            KnowledgeRecord.from_dict(value)
+
+        value = record.submit().to_dict()
+        value["review_history"].append({"action": "SUBMITTED", "comment": None})
+        with self.assertRaisesRegex(RecordValidationError, "requires APPROVED or REJECTED"):
+            KnowledgeRecord.from_dict(value)
+
+        rejected = record.submit().reject("original reason")
+        value = rejected.to_dict()
+        value["review"]["comment"] = "contradictory current reason"
+        with self.assertRaisesRegex(RecordValidationError, "must match"):
+            KnowledgeRecord.from_dict(value)
+
     def test_deterministic_id_is_stable_and_bounded(self) -> None:
         first = deterministic_record_id("agent-task-42")
         self.assertEqual(first, deterministic_record_id("agent-task-42"))

@@ -22,11 +22,14 @@ cannot weaken evidence, immutability, local-only or repository-boundary requirem
 - `.pcbknowledge/`, indexes, previews and packages are derived state. They must be ignored and
   rebuildable from canonical files.
 - Do not introduce a mutable database as an authority, hidden sidecar state, or a second write path.
-- Working-tree `APPROVED` is not published knowledge. Formal reads use committed `APPROVED` records
-  from the publication Git ref (`main`/`HEAD` in the current workflow).
+- Working-tree `APPROVED` is not published knowledge. Formal reads use a fully validated publication
+  Git snapshot (`main`/`HEAD` in the current workflow): canonical record identity, referenced evidence
+  bytes, hashes and supersedes closure must all exist in that same ref.
 - Before a requested commit, run `python3 configs/pcbknowledge_agent.py change-scope`. A `MIXED`
-  workspace must be split: `knowledge/**`/`evidence/**` data cannot share one commit with code,
-  schema, validator, policy or documentation changes.
+  commit candidate must be split: when the index is non-empty it is classified exactly; otherwise the
+  unstaged/untracked workspace is classified. Both sides of rename/copy operations count.
+  `knowledge/**`/`evidence/**` data cannot share one commit with code, schema, validator, policy or
+  documentation changes.
 
 ## Evidence and review invariants
 
@@ -41,7 +44,8 @@ cannot weaken evidence, immutability, local-only or repository-boundary requirem
 - A committed `APPROVED` record is immutable. Correct it with a new record and `supersedes`; do not
   overwrite or delete the prior record or evidence.
 - Preserve `review_history`. Rejection and resubmission history is part of the review receipt and
-  must not be rewritten to make a record look cleaner.
+  must follow the executable submit/decision state machine and must not be rewritten to make a record
+  look cleaner.
 - Agent interfaces may create, edit and submit drafts. They must not approve, reject, stage, commit or
   push. Human review and the Git commit remain deliberate boundaries.
 

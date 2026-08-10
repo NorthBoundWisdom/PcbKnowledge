@@ -43,9 +43,13 @@ be reviewed as a clean knowledge ingestion event.
 
 ## Implementation
 
-- `KnowledgeRepository.list_published()` reads committed `APPROVED` records from a Git ref.
+- `KnowledgeRepository.list_published()` validates canonical records, filename identity, supersedes
+  closure, and content-addressed evidence from one immutable Git commit before returning its
+  `APPROVED` records. It never borrows evidence from the working tree.
 - Agent CLI supports `list --published`.
 - `KnowledgeRepository.git_change_scope()` and Agent CLI `change-scope` expose the commit classifier.
+  A non-empty index is the commit candidate; otherwise unstaged/untracked paths are the preview.
+  Rename/copy classification includes both source and destination.
 - Schema v2 preserves review decisions in append-only `review_history` so publication does not erase
   prior rejection/resubmission context.
 

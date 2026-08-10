@@ -218,13 +218,29 @@ class ReviewEvent:
     def from_dict(cls, value: object) -> ReviewEvent:
         data = _required_mapping(value, "review_history item")
         _reject_extra_keys(data, {"action", "comment"}, "review_history item")
-        action = ReviewAction(_enum_value(ReviewAction, data.get("action"), "review_history.action"))
+        action = ReviewAction(
+            _enum_value(ReviewAction, data.get("action"), "review_history.action")
+        )
         comment = _optional_text(data.get("comment"), "review_history.comment", limit=4000)
         if action is ReviewAction.REJECTED and comment is None:
             raise RecordValidationError("a rejected review history event requires comment")
         if action is ReviewAction.SUBMITTED and comment is not None:
             raise RecordValidationError("a submitted review history event cannot carry comment")
-        return cls(action=action, comment=comment)
+        return cls(action=action, comment=comment).validate()
+
+    def validate(self) -> ReviewEvent:
+        if not isinstance(self.action, ReviewAction):
+            raise RecordValidationError("review_history.action has an unsupported value")
+        normalized = _optional_text(
+            self.comment, "review_history.comment", limit=4000
+        )
+        if normalized != self.comment:
+            raise RecordValidationError("review_history.comment must be normalized")
+        if self.action is ReviewAction.REJECTED and self.comment is None:
+            raise RecordValidationError("a rejected review history event requires comment")
+        if self.action is ReviewAction.SUBMITTED and self.comment is not None:
+            raise RecordValidationError("a submitted review history event cannot carry comment")
+        return self
 
     def to_dict(self) -> dict[str, object]:
         return {"action": self.action.value, "comment": self.comment}
@@ -308,34 +324,73 @@ class KnowledgeRecord:
             if self.supersedes == self.id:
                 raise RecordValidationError("a record cannot supersede itself")
 
-        if any(event.action is ReviewAction.APPROVED for event in self.review_history[:-1]):
-            raise RecordValidationError("review history cannot continue after approval")
-
+        last_action = self._validate_review_history_sequence()
         if self.status is RecordStatus.DRAFT:
-            if self.review.decision is not None:
-                raise RecordValidationError("DRAFT cannot carry a review decision")
-            if self.review_history and self.review_history[-1].action is ReviewAction.APPROVED:
-                raise RecordValidationError("an approved record cannot return to DRAFT")
+            if last_action not in {None, ReviewAction.REJECTED}:
+                raise RecordValidationError(
+                    "DRAFT review history must be empty or end with REJECTED"
+                )
+            if self.review != Review():
+                raise RecordValidationError("DRAFT cannot carry a current review decision")
         elif self.status is RecordStatus.READY_FOR_REVIEW:
-            if self.review.decision is not None:
-                raise RecordValidationError("READY_FOR_REVIEW cannot carry a review decision")
-            if not self.review_history or self.review_history[-1].action is not ReviewAction.SUBMITTED:
+            if last_action is not ReviewAction.SUBMITTED:
                 raise RecordValidationError("READY_FOR_REVIEW requires a trailing SUBMITTED event")
+            if self.review != Review():
+                raise RecordValidationError(
+                    "READY_FOR_REVIEW cannot carry a current review decision"
+                )
         elif self.status is RecordStatus.APPROVED:
-            if self.review.decision is not ReviewDecision.APPROVED:
-                raise RecordValidationError("APPROVED requires an APPROVED review decision")
-            if not self.review_history or self.review_history[-1].action is not ReviewAction.APPROVED:
+            if last_action is not ReviewAction.APPROVED:
                 raise RecordValidationError("APPROVED requires a trailing APPROVED review event")
+            expected = Review(
+                decision=ReviewDecision.APPROVED,
+                comment=self.review_history[-1].comment,
+            )
+            if self.review != expected:
+                raise RecordValidationError(
+                    "APPROVED current review must match its trailing history event"
+                )
             if self.missing_fields:
                 raise RecordValidationError(
                     "APPROVED is missing required fields: " + ", ".join(self.missing_fields)
                 )
         elif self.status is RecordStatus.REJECTED:
-            if self.review.decision is not ReviewDecision.REJECTED:
-                raise RecordValidationError("REJECTED requires a REJECTED review decision")
-            if not self.review_history or self.review_history[-1].action is not ReviewAction.REJECTED:
+            if last_action is not ReviewAction.REJECTED:
                 raise RecordValidationError("REJECTED requires a trailing REJECTED review event")
+            expected = Review(
+                decision=ReviewDecision.REJECTED,
+                comment=self.review_history[-1].comment,
+            )
+            if self.review != expected:
+                raise RecordValidationError(
+                    "REJECTED current review must match its trailing history event"
+                )
         return self
+
+    def _validate_review_history_sequence(self) -> ReviewAction | None:
+        index = 0
+        last_action: ReviewAction | None = None
+        while index < len(self.review_history):
+            submitted = self.review_history[index].validate()
+            if submitted.action is not ReviewAction.SUBMITTED:
+                raise RecordValidationError(
+                    "review history must start or resume with SUBMITTED"
+                )
+            last_action = submitted.action
+            index += 1
+            if index == len(self.review_history):
+                break
+
+            decision = self.review_history[index].validate()
+            if decision.action not in {ReviewAction.APPROVED, ReviewAction.REJECTED}:
+                raise RecordValidationError(
+                    "review history requires APPROVED or REJECTED after SUBMITTED"
+                )
+            last_action = decision.action
+            index += 1
+            if decision.action is ReviewAction.APPROVED and index != len(self.review_history):
+                raise RecordValidationError("review history cannot continue after approval")
+        return last_action
 
     @property
     def missing_fields(self) -> tuple[str, ...]:

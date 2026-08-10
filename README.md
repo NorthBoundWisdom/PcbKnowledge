@@ -92,6 +92,8 @@ python3 configs/pcbknowledge_agent.py list --published
 ```
 
 它从 Git `HEAD` 读取 committed `APPROVED`，不会把本机未提交的草稿或刚批准记录当成正式知识。
+读取时会验证同一 commit 内的规范 JSON、record ID、supersedes 闭包以及 PDF bytes/hash/size；只提交
+JSON、不提交证据原件会直接失败，不会降级成“有元数据也算发布”。
 
 ## 数据提交与代码提交必须分开
 
@@ -118,6 +120,9 @@ MIXED
 - `knowledge/**`、`evidence/**` 属于数据；
 - 其他仓库路径属于代码、Schema、文档或策略；
 - `MIXED` 必须拆成两个 commit。
+
+如果已经暂存文件，命令只判断 Git index 中真正将进入下一次 commit 的路径；尚未暂存时才判断整个
+未暂存/未跟踪工作区。rename/copy 的来源和目标都会计入，因此不能用跨边界改名绕过分类。
 
 这可以避免“同一个 Agent 一边改变验收规则，一边提交依赖新规则的数据”。
 

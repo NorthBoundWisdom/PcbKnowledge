@@ -1,8 +1,8 @@
 # TODO — Git-native PCB Knowledge P0
 
-> 状态：`IN_PROGRESS`  
-> 建立日期：2026-08-10  
-> 前置里程碑：[`TODO_GIT_NATIVE_MVP.md`](TODO_GIT_NATIVE_MVP.md) 已完成  
+> 状态：`IN_PROGRESS`
+> 建立日期：2026-08-10
+> 前置里程碑：[`TODO_GIT_NATIVE_MVP.md`](TODO_GIT_NATIVE_MVP.md) 已完成
 > 目标：在不恢复 Docker、登录、数据库和在线服务的前提下，把当前“资料登记器”推进为
 > Git-native PCB structured knowledge repository。
 

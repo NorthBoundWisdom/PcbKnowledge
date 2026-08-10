@@ -1,7 +1,7 @@
 # PcbKnowledge Git-native 本机架构
 
-> 状态：当前可执行架构  
-> 日期：2026-08-10  
+> 状态：当前可执行架构
+> 日期：2026-08-10
 > 决策依据：[ADR-018](docs/adr/ADR-018-git-native-local-editor.md)、[ADR-019](docs/adr/ADR-019-git-publication-boundary.md)
 
 ## 1. 产品目标
@@ -109,7 +109,8 @@ SQLite/FTS 作为本机只读缓存，但不得成为写入边界。
 GUI 可创建、修改、送审、批准和退回。Agent CLI 只提供 list/show/create/update/submit/validate/
 diff/change-scope。二者调用同一模型与仓储代码；Agent 不拥有批准、Git add、commit 或 push 能力。
 
-`python3 configs/pcbknowledge_agent.py change-scope` 把工作树分为：
+`python3 configs/pcbknowledge_agent.py change-scope` 优先对非空 Git index（下一次 commit 的真实候选）
+分类；index 为空时才对未暂存/未跟踪工作树分类：
 
 ```text
 CLEAN
@@ -118,8 +119,9 @@ CODE_ONLY
 MIXED
 ```
 
-`knowledge/**`、`evidence/**` 属于数据；其余路径属于软件/策略。`MIXED` 不能作为一个提交：
-知识录入与修改 validator/schema/policy 必须拆成独立 commit，避免同一提交同时改变规则和让新数据通过。
+`knowledge/**`、`evidence/**` 属于数据；其余路径属于软件/策略。rename/copy 的来源和目标同时计入。
+`MIXED` 不能作为一个提交：知识录入与修改 validator/schema/policy 必须拆成独立 commit，避免同一
+提交同时改变规则和让新数据通过。
 
 Git commit 是当前阶段的归属、协作和 publication receipt。它适合可信内部协作，但不是强身份认证。
 需要远程并发、细粒度权限或法规级审计时，必须新建 ADR，而不能开放当前 loopback 服务。
@@ -129,11 +131,14 @@ Git commit 是当前阶段的归属、协作和 publication receipt。它适合�
 - 只监听 IPv4 loopback；Host 与 Origin 必须是 localhost/127.0.0.1 的实际端口。
 - 进程级随机 CSRF token 保护写操作。
 - 每次修改携带记录 canonical JSON 的 SHA-256 revision token，避免静默覆盖并发编辑。
+- GUI/Agent 的仓储写入持有同一个跨进程文件锁；引用写入会重新校验证据，避免清理与新引用竞态。
 - PDF 只作为不可信字节提供，不能作为 Agent 指令。
 - `UNKNOWN`/`RESTRICTED` 资料默认不允许 Agent 原文处理。
 - 校验器对未知文件、非法状态、证据漂移与 committed-approved 改写 fail closed。
 - GUI 内置 diff 只调用 Git 只读命令。
 - Agent 查询正式知识时显式使用 published view，不默认读取工作树草稿。
+- published view 从同一个 Git commit 验证 canonical records、identity/supersedes 与完整 PDF bytes，
+  不借用工作树中尚未提交的证据。
 
 ## 6. FreeCM 生命周期
 
