@@ -1,37 +1,19 @@
-# Python
+# Python and local checks
 __pycache__/
 *.py[cod]
-*.pyo
-.mypy_cache/
-.pytest_cache/
-.ruff_cache/
-.coverage
-coverage.xml
-htmlcov/
 .venv/
-/build/
+.coverage
+.cache/
+.pnpm-store/
+
+# FreeCM and derived local state
 /.freecm/
 /.freecm.workspace.lock
+/.pcbknowledge/
+/build/
 
-# Node / browser tooling
-node_modules/
-.pnpm-store/
-dist/
-coverage/
-playwright-report/
-test-results/
-*.tsbuildinfo
-
-# Local runtime data and secrets
-.env
-.env.*
-!.env.example
-deploy/secrets/*
-!deploy/secrets/.gitignore
-!deploy/secrets/README.md
-var/
-data/
-backups/
+# Retired-service recovery material kept only on existing workstations
+/backups/
 
 # Editors and operating systems
 .DS_Store
@@ -39,7 +21,7 @@ backups/
 .vscode/
 *.swp
 
-# Logs and temporary files
+# Local scratch files
 *.log
 *.tmp
 *.pid

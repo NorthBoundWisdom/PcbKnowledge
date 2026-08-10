@@ -1,1 +1,0 @@
-"""Deployable worker process wrapper."""

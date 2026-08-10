@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcbknowledge.local/schemas/knowledge-record.schema.json",
+  "title": "PcbKnowledge Git-native record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "status",
+    "prepared_by",
+    "title",
+    "document_number",
+    "revision",
+    "source",
+    "license",
+    "evidence",
+    "preparation_note",
+    "review",
+    "supersedes"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^pk_[0-9a-f]{24,32}$" },
+    "status": {
+      "enum": ["DRAFT", "READY_FOR_REVIEW", "APPROVED", "REJECTED"]
+    },
+    "prepared_by": { "enum": ["HUMAN", "AGENT"] },
+    "title": { "type": ["string", "null"], "maxLength": 500 },
+    "document_number": { "type": ["string", "null"], "maxLength": 200 },
+    "revision": { "type": ["string", "null"], "maxLength": 200 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locator", "publisher"],
+      "properties": {
+        "locator": { "type": ["string", "null"], "maxLength": 2048 },
+        "publisher": { "type": ["string", "null"], "maxLength": 256 }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "note"],
+      "properties": {
+        "class": { "enum": ["UNKNOWN", "OPEN", "INTERNAL", "RESTRICTED"] },
+        "note": { "type": ["string", "null"], "maxLength": 2000 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "byte_size", "media_type"],
+      "properties": {
+        "path": { "type": ["string", "null"] },
+        "sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_size": { "type": ["integer", "null"], "minimum": 1 },
+        "media_type": { "enum": ["application/pdf", null] }
+      }
+    },
+    "preparation_note": { "type": ["string", "null"], "maxLength": 4000 },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "comment"],
+      "properties": {
+        "decision": { "enum": ["APPROVED", "REJECTED", null] },
+        "comment": { "type": ["string", "null"], "maxLength": 4000 }
+      }
+    },
+    "supersedes": {
+      "type": ["string", "null"],
+      "pattern": "^pk_[0-9a-f]{24,32}$"
+    }
+  }
+}

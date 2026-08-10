@@ -3,125 +3,67 @@
   "commands": {
     "config": [
       {
-        "id": "freecm-compose",
-        "label": "FreeCM Local Compose",
-        "description": "Generate local secrets and validate the isolated FreeCM Compose profile",
+        "id": "git-native-local",
+        "label": "Local Git Workspace",
+        "description": "Check Python and Git, then prepare the local repository editor",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "config"],
         "platforms": ["darwin", "linux"],
         "default": true,
         "defaults": {
-          "build": "prepare-runtime",
-          "run": "start-built-apps",
-          "test": "hermetic",
-          "package": "compose-image-archive"
+          "build": "local-checks",
+          "run": "local-editor",
+          "test": "local-tests",
+          "package": "data-snapshot"
         },
         "readiness": {
           "inputs": [
-            ".dockerignore",
             "configs/freecm.commands.jsonc",
             "configs/pcbknowledge_workflow.py",
-            "compose.yaml",
-            "deploy/caddy/Caddyfile",
-            "deploy/docker/backend-entrypoint.sh",
-            "deploy/docker/backend.Dockerfile",
-            "deploy/docker/web.Dockerfile",
-            "deploy/keycloak/pcbknowledge-agent-client.template.json",
-            "deploy/keycloak/pcbknowledge-api-client.json",
-            "deploy/keycloak/pcbknowledge-curator-client.json",
-            "deploy/keycloak/pcbknowledge-realm.template.json",
-            "deploy/keycloak/bootstrap-local-curator.sh",
-            "deploy/keycloak/reconcile-keycloak.sh",
-            "deploy/keycloak/run-as-keycloak.sh",
-            "deploy/keycloak/start-keycloak.sh",
-            "deploy/observability/grafana/dashboards/m1-platform.json",
-            "deploy/observability/grafana/provisioning/dashboards/pcbknowledge.yaml",
-            "deploy/observability/grafana/provisioning/datasources/prometheus.yaml",
-            "deploy/observability/grafana/start-grafana.sh",
-            "deploy/observability/otel-collector.yaml",
-            "deploy/observability/prometheus.yml",
-            "deploy/observability/rules/platform.yml",
-            "deploy/postgres/bootstrap-local-development-data.sh",
-            "deploy/postgres/init/001-keycloak-database.sh",
-            "deploy/postgres/reconcile-application-role.sh",
-            "deploy/postgres/start-postgres.sh",
-            "deploy/seaweedfs/start-seaweedfs.sh",
-            "deploy/scripts/bootstrap-secrets.sh",
-            "deploy/scripts/bootstrap-local-development.sh",
-            "deploy/scripts/compose-check.sh",
-            "deploy/scripts/test-backend-hermetic.sh",
-            "deploy/scripts/test-frontend-hermetic.sh",
-            "deploy/scripts/test-verifier-deployment-wiring.sh",
-            "package.json",
-            "pnpm-lock.yaml",
-            "pnpm-workspace.yaml",
-            "pyproject.toml",
-            "uv.lock"
+            "source_roots.lock.jsonc.in"
           ],
-          "outputs": [
-            ".freecm/pcbknowledge-compose.json",
-            "deploy/secrets/postgres_password",
-            "deploy/secrets/application_db_password",
-            "deploy/secrets/worker_db_password",
-            "deploy/secrets/verifier_db_password",
-            "deploy/secrets/keycloak_db_password",
-            "deploy/secrets/keycloak_admin_password",
-            "deploy/secrets/agent_service_client_secret",
-            "deploy/secrets/local_curator_password",
-            "deploy/secrets/local_curator_marker",
-            "deploy/secrets/seaweedfs_access_key",
-            "deploy/secrets/seaweedfs_secret_key",
-            "deploy/secrets/seaweedfs_admin_access_key",
-            "deploy/secrets/seaweedfs_admin_secret_key",
-            "deploy/secrets/seaweedfs_worker_access_key",
-            "deploy/secrets/seaweedfs_worker_secret_key",
-            "deploy/secrets/seaweedfs_verifier_access_key",
-            "deploy/secrets/seaweedfs_verifier_secret_key",
-            "deploy/secrets/grafana_admin_password",
-            "deploy/secrets/keycloak-realm.json",
-            "deploy/secrets/keycloak-agent-client.json"
-          ]
+          "outputs": [".freecm/pcbknowledge-config.json"]
         }
       }
     ],
     "build": [
       {
-        "id": "prepare-runtime",
-        "label": "Prepare Runtime",
-        "description": "Build application images, migrate and reconcile dependencies, and leave infrastructure warm",
+        "id": "local-checks",
+        "label": "Check Local Editor",
+        "description": "Compile, test and validate the Git-native editor without containers or downloads",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "build"],
-        "configurations": ["freecm-compose"]
+        "configurations": ["git-native-local"]
       }
     ],
     "run": [
       {
-        "id": "start-built-apps",
-        "label": "Start Built Apps",
-        "description": "Start only the prepared API, cleanup worker, document verifier, web, and gateway without rebuilding or cold-starting infrastructure",
+        "id": "local-editor",
+        "label": "Open Knowledge Editor",
+        "description": "Open the no-login local GUI; Ctrl+C closes only this editor",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "run"],
-        "configurations": ["freecm-compose"]
+        "configurations": ["git-native-local"]
       }
     ],
     "test": [
       {
-        "id": "hermetic",
-        "label": "Hermetic Repository Tests",
-        "description": "Run backend lint/types/unit/OpenAPI and frontend generated/lint/types/unit/build checks in pinned containers",
+        "id": "local-tests",
+        "label": "Run Local Tests",
+        "description": "Run standard-library tests and validate all repository knowledge data",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "test"],
-        "configurations": ["freecm-compose"]
+        "configurations": ["git-native-local"]
       }
     ],
     "package": [
       {
-        "id": "compose-image-archive",
-        "label": "Compose Image Archive",
-        "description": "Export the six Build-prepared PcbKnowledge images as a Docker-loadable archive with a SHA-256 manifest",
+        "id": "data-snapshot",
+        "label": "Export Data Snapshot",
+        "description": "Create a reproducible ZIP of validated records, evidence and schema",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "package"],
-        "configurations": ["freecm-compose"]
+        "configurations": ["git-native-local"]
       }
     ]
   }

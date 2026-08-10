@@ -1,948 +1,456 @@
 #!/usr/bin/env python3
-# Usage:
-#   python3 configs/pcbknowledge_workflow.py config
-#   python3 configs/pcbknowledge_workflow.py build
-#   python3 configs/pcbknowledge_workflow.py run
-#   python3 configs/pcbknowledge_workflow.py test
-#   python3 configs/pcbknowledge_workflow.py package
+"""Lightweight FreeCM workflow for the Git-native local editor."""
 
 from __future__ import annotations
 
 import argparse
-import gzip
+import compileall
 import hashlib
 import json
 import os
-import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 import webbrowser
-from collections.abc import Mapping, Sequence
-from datetime import UTC, datetime
+import zipfile
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import Any
 
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CONFIGURATION_ID = "freecm-compose"
-CONFIG_RECEIPT = Path(".freecm/pcbknowledge-compose.json")
-RUNTIME_RECEIPT = Path(".freecm/pcbknowledge-runtime.json")
+SOURCE_ROOT = REPO_ROOT / "src"
+if str(SOURCE_ROOT) not in sys.path:
+    sys.path.insert(0, str(SOURCE_ROOT))
+
+from pcbknowledge.git_native.server import DEFAULT_PORT, create_server  # noqa: E402
+from pcbknowledge.git_native.store import KnowledgeRepository, RepositoryError  # noqa: E402
+
+
+CONFIGURATION_ID = "git-native-local"
+RECEIPT_SCHEMA_VERSION = 1
+CONFIG_RECEIPT = Path(".freecm/pcbknowledge-config.json")
+BUILD_RECEIPT = Path(".freecm/pcbknowledge-build.json")
 CONFIG_INPUTS = (
-    Path(".dockerignore"),
     Path("configs/freecm.commands.jsonc"),
     Path("configs/pcbknowledge_workflow.py"),
-    Path("compose.yaml"),
-    Path("deploy/caddy/Caddyfile"),
-    Path("deploy/docker/backend-entrypoint.sh"),
-    Path("deploy/docker/backend.Dockerfile"),
-    Path("deploy/docker/web.Dockerfile"),
-    Path("deploy/keycloak/pcbknowledge-agent-client.template.json"),
-    Path("deploy/keycloak/pcbknowledge-api-client.json"),
-    Path("deploy/keycloak/pcbknowledge-curator-client.json"),
-    Path("deploy/keycloak/pcbknowledge-realm.template.json"),
-    Path("deploy/keycloak/bootstrap-local-curator.sh"),
-    Path("deploy/keycloak/reconcile-keycloak.sh"),
-    Path("deploy/keycloak/run-as-keycloak.sh"),
-    Path("deploy/keycloak/start-keycloak.sh"),
-    Path("deploy/observability/grafana/dashboards/m1-platform.json"),
-    Path("deploy/observability/grafana/provisioning/dashboards/pcbknowledge.yaml"),
-    Path("deploy/observability/grafana/provisioning/datasources/prometheus.yaml"),
-    Path("deploy/observability/grafana/start-grafana.sh"),
-    Path("deploy/observability/otel-collector.yaml"),
-    Path("deploy/observability/prometheus.yml"),
-    Path("deploy/observability/rules/platform.yml"),
-    Path("deploy/postgres/bootstrap-local-development-data.sh"),
-    Path("deploy/postgres/init/001-keycloak-database.sh"),
-    Path("deploy/postgres/reconcile-application-role.sh"),
-    Path("deploy/postgres/start-postgres.sh"),
-    Path("deploy/seaweedfs/start-seaweedfs.sh"),
-    Path("deploy/scripts/bootstrap-secrets.sh"),
-    Path("deploy/scripts/bootstrap-local-development.sh"),
-    Path("deploy/scripts/compose-check.sh"),
-    Path("deploy/scripts/test-backend-hermetic.sh"),
-    Path("deploy/scripts/test-frontend-hermetic.sh"),
-    Path("deploy/scripts/test-verifier-deployment-wiring.sh"),
-    Path("package.json"),
-    Path("pnpm-lock.yaml"),
-    Path("pnpm-workspace.yaml"),
-    Path("pyproject.toml"),
-    Path("uv.lock"),
-)
-CONFIG_SECRET_OUTPUTS = (
-    Path("deploy/secrets/postgres_password"),
-    Path("deploy/secrets/application_db_password"),
-    Path("deploy/secrets/worker_db_password"),
-    Path("deploy/secrets/verifier_db_password"),
-    Path("deploy/secrets/keycloak_db_password"),
-    Path("deploy/secrets/keycloak_admin_password"),
-    Path("deploy/secrets/agent_service_client_secret"),
-    Path("deploy/secrets/local_curator_password"),
-    Path("deploy/secrets/local_curator_marker"),
-    Path("deploy/secrets/seaweedfs_access_key"),
-    Path("deploy/secrets/seaweedfs_secret_key"),
-    Path("deploy/secrets/seaweedfs_admin_access_key"),
-    Path("deploy/secrets/seaweedfs_admin_secret_key"),
-    Path("deploy/secrets/seaweedfs_worker_access_key"),
-    Path("deploy/secrets/seaweedfs_worker_secret_key"),
-    Path("deploy/secrets/seaweedfs_verifier_access_key"),
-    Path("deploy/secrets/seaweedfs_verifier_secret_key"),
-    Path("deploy/secrets/grafana_admin_password"),
-    Path("deploy/secrets/keycloak-realm.json"),
-    Path("deploy/secrets/keycloak-agent-client.json"),
+    Path("source_roots.lock.jsonc.in"),
 )
 BUILD_INPUT_FILES = (
-    Path("README.md"),
-    Path("deploy/docker/nginx.conf"),
-    Path("package.json"),
-    Path("pnpm-lock.yaml"),
-    Path("pnpm-workspace.yaml"),
-    Path("pyproject.toml"),
-    Path("uv.lock"),
+    Path("Open PcbKnowledge.command"),
+    Path("configs/pcbknowledge_agent.py"),
+    Path("configs/pcbknowledge_workflow.py"),
+    Path("schemas/knowledge-record.schema.json"),
 )
 BUILD_INPUT_ROOTS = (
-    Path("apps/api"),
-    Path("apps/curator-web"),
-    Path("apps/worker"),
-    Path("migrations"),
-    Path("packages/ui-kit"),
-    Path("src"),
+    Path("src/pcbknowledge/git_native"),
+    Path("tests/git_native"),
 )
-_IGNORED_BUILD_INPUT_PARTS = frozenset(
-    {
-        ".mypy_cache",
-        ".pytest_cache",
-        ".ruff_cache",
-        ".vite",
-        "__pycache__",
-        "coverage",
-        "dist",
-        "node_modules",
-        "playwright-report",
-        "test-results",
-    }
-)
-FREECM_ENVIRONMENT = {
-    "COMPOSE_PROJECT_NAME": "pcbknowledge-freecm",
-    "PCBKNOWLEDGE_HTTP_PORT": "18080",
-    "PCBKNOWLEDGE_KEYCLOAK_PORT": "18081",
-    "PCBKNOWLEDGE_S3_PORT": "18333",
-    "PCBKNOWLEDGE_PROMETHEUS_PORT": "19090",
-    "PCBKNOWLEDGE_GRAFANA_PORT": "13000",
-}
-CURATOR_URL = "http://localhost:18080"
-BUILD_SERVICES = ("api", "worker", "verifier", "web", "migrate", "storage-init")
-TEST_SERVICES = ("backend-test", "frontend-test")
-APPLICATION_SERVICES = (
-    "api",
-    "worker",
-    "verifier",
-    "web",
-    "caddy",
-)
-INFRASTRUCTURE_SERVICES = (
-    "keycloak",
-    "postgres",
-    "seaweedfs",
-    "otel-collector",
-    "prometheus",
-    "grafana",
-)
-_BACKEND_RUNTIME_BOUNDARY_CHECK = r"""
-entrypoint=/usr/local/bin/pcbknowledge-backend-entrypoint
-test "$(stat -c '%u:%g:%a' "$entrypoint")" = 0:0:555
-test "$(stat -c '%u:%g' /usr/local/bin)" = 0:0
-
-replacement=/tmp/pcbknowledge-entrypoint-replacement
-printf 'replacement\n' >"$replacement"
-chown pcbknowledge:pcbknowledge "$replacement"
-if /usr/bin/setpriv --reuid=pcbknowledge --regid=pcbknowledge --init-groups -- \
-  /bin/mv "$replacement" "$entrypoint" 2>/dev/null; then
-  echo "backend runtime account replaced the privileged entrypoint" >&2
-  exit 1
-fi
-
-/usr/bin/setpriv --reuid=pcbknowledge --regid=pcbknowledge --init-groups -- \
-  /bin/sh -ec '
-    printf "#!/bin/sh\n" > /workspace/.venv/bin/tr
-    printf "/usr/bin/touch /tmp/untrusted-runtime-tool-executed\n" >> /workspace/.venv/bin/tr
-    printf "exec /usr/bin/tr \"\$@\"\n" >> /workspace/.venv/bin/tr
-    printf "#!/bin/sh\n" > /workspace/.venv/bin/id
-    printf "/usr/bin/touch /tmp/untrusted-runtime-tool-executed\n" >> /workspace/.venv/bin/id
-    printf "exec /usr/bin/id \"\$@\"\n" >> /workspace/.venv/bin/id
-    chmod 755 /workspace/.venv/bin/tr /workspace/.venv/bin/id
-  '
-
-secret_directory=/tmp/pcbknowledge-runtime-boundary-secrets
-mkdir -p "$secret_directory"
-printf 'database-password\n' >"$secret_directory/application_db_password"
-printf 's3-access-key\n' >"$secret_directory/seaweedfs_access_key"
-printf 's3-secret-key\n' >"$secret_directory/seaweedfs_secret_key"
-chmod 600 "$secret_directory"/*
-
-PCBKNOWLEDGE_SECRET_DIRECTORY=$secret_directory \
-PCBKNOWLEDGE_DATABASE_USERNAME=pcbknowledge_app \
-  /bin/sh "$entrypoint" /bin/sh -ec '
-    test "$(/usr/bin/id -u)" -eq 999
-    test ! -e /tmp/untrusted-runtime-tool-executed
-  '
-""".strip()
+IGNORED_SOURCE_NAMES = frozenset({"__pycache__", ".DS_Store"})
+PACKAGE_DIRECTORY = Path("build/package")
+PACKAGE_FORMAT = "pcbknowledge-git-native-snapshot"
+MINIMUM_PYTHON = (3, 11)
 
 
 class WorkflowError(RuntimeError):
-    """A deterministic repository workflow contract failure."""
+    """A local workflow precondition or receipt is invalid."""
 
 
-def workflow_environment(base: Mapping[str, str] | None = None) -> dict[str, str]:
-    environment = dict(os.environ if base is None else base)
-    environment.update(FREECM_ENVIRONMENT)
-    return environment
+def _display(command: Sequence[str]) -> None:
+    print("[pcbknowledge] " + " ".join(command), flush=True)
 
 
-def _display_command(command: Sequence[str]) -> None:
-    print(f"[pcbknowledge] {shlex.join(command)}", flush=True)
-
-
-def _run_checked(command: Sequence[str], *, environment: Mapping[str, str]) -> None:
-    _display_command(command)
-    subprocess.run(
-        list(command),
-        cwd=REPO_ROOT,
-        env=dict(environment),
-        check=True,
-    )
-
-
-def _run_unchecked(command: Sequence[str], *, environment: Mapping[str, str]) -> int:
-    _display_command(command)
-    result = subprocess.run(
-        list(command),
-        cwd=REPO_ROOT,
-        env=dict(environment),
-        check=False,
-    )
-    return result.returncode
-
-
-def _application_log_payload(line: str) -> str:
-    _prefix, separator, payload = line.partition(" | ")
-    return payload.strip() if separator else line.strip()
-
-
-def _is_idle_application_log(line: str) -> bool:
-    """Hide successful periodic probes while preserving failures and real work."""
-
-    payload = _application_log_payload(line)
-    try:
-        event = json.loads(payload)
-    except json.JSONDecodeError:
-        event = None
-
-    if isinstance(event, dict):
-        if event == {"verified": 0}:
-            return True
-        if event.get("event") == "worker_cycle" and event.get("published_events") == 0:
-            return True
-        if (
-            event.get("status") == "ready"
-            and "checks" in event
-            and set(event) <= {"checks", "reason", "status"}
-        ):
-            return True
-        if event.get("logger") == "pcbknowledge.http":
-            message = event.get("message")
-            if isinstance(message, str) and any(
-                f"route={route} status=200" in message
-                for route in ("/healthz", "/readyz", "/metrics")
-            ):
-                return True
-        request = event.get("request")
-        if (
-            isinstance(request, dict)
-            and event.get("status") == 200
-            and request.get("method") == "GET"
-            and request.get("uri") in {"/healthz", "/readyz", "/api/v1/healthz"}
-        ):
-            return True
-
-    return payload.endswith(" 200 OK") and any(
-        f'"GET {route} HTTP/' in payload for route in ("/healthz", "/readyz", "/metrics")
-    )
-
-
-def _open_curator(environment: Mapping[str, str]) -> bool:
-    if environment.get("CI") or environment.get("PCBKNOWLEDGE_DISABLE_BROWSER_OPEN") == "1":
-        return False
-    try:
-        return webbrowser.open(CURATOR_URL, new=2, autoraise=True)
-    except webbrowser.Error:
-        return False
-    except OSError:
-        return False
-
-
-def _follow_application_logs(*, environment: Mapping[str, str]) -> int:
-    command = [
-        "docker",
-        "compose",
-        "logs",
-        "--follow",
-        "--tail",
-        "0",
-        *APPLICATION_SERVICES,
-    ]
-    _display_command(command)
-    process = subprocess.Popen(
-        command,
-        cwd=REPO_ROOT,
-        env=dict(environment),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        bufsize=1,
-    )
-    try:
-        if process.stdout is None:
-            raise WorkflowError("docker compose logs did not expose an output stream")
-        for line in process.stdout:
-            if not _is_idle_application_log(line):
-                print(line, end="", flush=True)
-        return process.wait()
-    finally:
-        if process.poll() is None:
-            process.terminate()
-            try:
-                process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.wait()
-
-
-def _capture(
-    command: Sequence[str],
-    *,
-    environment: Mapping[str, str],
-    display: bool = True,
-) -> str:
-    if display:
-        _display_command(command)
-    result = subprocess.run(
-        list(command),
-        cwd=REPO_ROOT,
-        env=dict(environment),
-        check=True,
-        stdout=subprocess.PIPE,
-        text=True,
-    )
-    return result.stdout.strip()
-
-
-def configuration_signature(repo_root: Path = REPO_ROOT) -> str:
-    digest = hashlib.sha256()
-    digest.update(json.dumps(FREECM_ENVIRONMENT, sort_keys=True).encode())
-    for relative_path in CONFIG_INPUTS:
-        path = repo_root / relative_path
-        if not path.is_file():
-            raise WorkflowError(f"configuration input is missing: {relative_path}")
-        digest.update(str(relative_path).encode())
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
-    return digest.hexdigest()
-
-
-def build_input_signature(repo_root: Path = REPO_ROOT) -> str:
-    """Hash every source file copied into a repository-owned runtime image."""
-
-    digest = hashlib.sha256()
-    candidates: list[Path] = []
-    for relative_path in BUILD_INPUT_FILES:
-        path = repo_root / relative_path
-        if not path.is_file() or path.is_symlink():
-            raise WorkflowError(f"application build input is missing or unsafe: {relative_path}")
-        candidates.append(path)
-    for relative_root in BUILD_INPUT_ROOTS:
-        root = repo_root / relative_root
-        if not root.is_dir() or root.is_symlink():
-            raise WorkflowError(
-                f"application build input root is missing or unsafe: {relative_root}"
-            )
-        for path in root.rglob("*"):
-            relative_path = path.relative_to(repo_root)
-            if any(part in _IGNORED_BUILD_INPUT_PARTS for part in relative_path.parts):
-                continue
-            if (
-                path.suffix in {".log", ".pid", ".pyc", ".pyo", ".tmp"}
-                or path.name == ".DS_Store"
-                or path.name.endswith(".tsbuildinfo")
-            ):
-                continue
-            if path.is_symlink():
-                raise WorkflowError(
-                    f"application build input is an unsafe symlink: {relative_path}"
-                )
-            if path.is_file():
-                candidates.append(path)
-    for path in sorted(
-        candidates, key=lambda candidate: candidate.relative_to(repo_root).as_posix()
-    ):
-        relative_path = path.relative_to(repo_root)
-        digest.update(relative_path.as_posix().encode())
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
-    return digest.hexdigest()
-
-
-def _receipt_path(repo_root: Path) -> Path:
-    return repo_root / CONFIG_RECEIPT
-
-
-def write_configuration_receipt(repo_root: Path = REPO_ROOT) -> Path:
-    receipt_path = _receipt_path(repo_root)
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
-    receipt = {
-        "schemaVersion": 1,
-        "configurationId": CONFIGURATION_ID,
-        "signature": configuration_signature(repo_root),
-        "composeProject": FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"],
-        "endpoints": {
-            "curator": "http://localhost:18080",
-            "keycloak": "http://localhost:18081",
-            "s3": "http://localhost:18333",
-            "prometheus": "http://localhost:19090",
-            "grafana": "http://localhost:13000",
-        },
-        "configuredAt": datetime.now(UTC).isoformat(),
-    }
-    temporary = receipt_path.with_name(f"{receipt_path.name}.tmp")
-    temporary.write_text(f"{json.dumps(receipt, indent=2, sort_keys=True)}\n", encoding="utf-8")
-    os.replace(temporary, receipt_path)
-    return receipt_path
-
-
-def require_configuration(repo_root: Path = REPO_ROOT) -> None:
-    receipt_path = _receipt_path(repo_root)
-    try:
-        receipt: Any = json.loads(receipt_path.read_text(encoding="utf-8"))
-    except FileNotFoundError as error:
-        raise WorkflowError(
-            "FreeCM configuration is missing; run "
-            "`python3 configs/pcbknowledge_workflow.py config` first"
-        ) from error
-    except (OSError, json.JSONDecodeError) as error:
-        raise WorkflowError(f"FreeCM configuration receipt is invalid: {error}") from error
-
-    if not isinstance(receipt, dict) or receipt.get("configurationId") != CONFIGURATION_ID:
-        raise WorkflowError("FreeCM configuration receipt has the wrong configuration ID")
-    if receipt.get("signature") != configuration_signature(repo_root):
-        raise WorkflowError(
-            "FreeCM configuration inputs changed; rerun "
-            "`python3 configs/pcbknowledge_workflow.py config`"
-        )
-    for relative_path in CONFIG_SECRET_OUTPUTS:
-        path = repo_root / relative_path
-        if path.is_symlink() or not path.is_file() or path.stat().st_size == 0:
-            raise WorkflowError(
-                f"FreeCM configuration output is missing or invalid: {relative_path}; "
-                "rerun `python3 configs/pcbknowledge_workflow.py config`"
-            )
-        if path.stat().st_mode & 0o077:
-            raise WorkflowError(
-                f"FreeCM configuration output is not owner-only: {relative_path}; "
-                "rerun `python3 configs/pcbknowledge_workflow.py config`"
-            )
-
-
-def require_docker(environment: Mapping[str, str]) -> None:
-    if shutil.which("docker") is None:
-        raise WorkflowError("docker is required for the PcbKnowledge FreeCM workflow")
-    _run_checked(["docker", "compose", "version"], environment=environment)
-
-
-def cmd_config() -> int:
-    environment = workflow_environment()
-    require_docker(environment)
-    _run_checked(
-        ["/bin/sh", "deploy/scripts/compose-check.sh"],
-        environment=environment,
-    )
-    receipt_path = write_configuration_receipt()
-    print(f"[pcbknowledge] configuration receipt: {receipt_path.relative_to(REPO_ROOT)}")
-    print("[pcbknowledge] curator: http://localhost:18080")
-    return 0
-
-
-def _build_images(environment: Mapping[str, str]) -> None:
-    _run_checked(
-        ["docker", "compose", "--profile", "tools", "build", *BUILD_SERVICES],
-        environment=environment,
-    )
-    _run_checked(
-        [
-            "docker",
-            "run",
-            "--rm",
-            "--entrypoint",
-            "/bin/sh",
-            package_image_names()[0],
-            "-ec",
-            _BACKEND_RUNTIME_BOUNDARY_CHECK,
-        ],
-        environment=environment,
-    )
-
-
-def _runtime_image_ids(environment: Mapping[str, str]) -> dict[str, str]:
-    image_ids: dict[str, str] = {}
-    for service, image_name in zip(BUILD_SERVICES, package_image_names(), strict=True):
-        try:
-            image_id = _capture(
-                ["docker", "image", "inspect", "--format", "{{.Id}}", image_name],
-                environment=environment,
-                display=False,
-            )
-        except subprocess.CalledProcessError as error:
-            raise WorkflowError(
-                f"prepared image is missing for {service}; run FreeCM Build"
-            ) from error
-        if not image_id:
-            raise WorkflowError(f"prepared image is missing for {service}; run FreeCM Build")
-        image_ids[service] = image_id
-    return image_ids
-
-
-def write_runtime_receipt(
-    environment: Mapping[str, str],
-    repo_root: Path = REPO_ROOT,
-) -> Path:
-    receipt_path = repo_root / RUNTIME_RECEIPT
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
-    receipt = {
-        "schemaVersion": 2,
-        "configurationId": CONFIGURATION_ID,
-        "configurationSignature": configuration_signature(repo_root),
-        "buildInputSignature": build_input_signature(repo_root),
-        "composeProject": FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"],
-        "images": _runtime_image_ids(environment),
-        "preparedAt": datetime.now(UTC).isoformat(),
-    }
-    temporary = receipt_path.with_name(f"{receipt_path.name}.tmp")
-    temporary.write_text(f"{json.dumps(receipt, indent=2, sort_keys=True)}\n", encoding="utf-8")
-    os.replace(temporary, receipt_path)
-    return receipt_path
-
-
-def _require_infrastructure_ready(environment: Mapping[str, str]) -> None:
-    failures: list[str] = []
-    for service in INFRASTRUCTURE_SERVICES:
-        container_id = _capture(
-            ["docker", "compose", "ps", "--all", "--quiet", service],
-            environment=environment,
-            display=False,
-        )
-        if not container_id:
-            failures.append(f"{service}=missing")
-            continue
-        try:
-            state_value: Any = json.loads(
-                _capture(
-                    ["docker", "inspect", "--format", "{{json .State}}", container_id],
-                    environment=environment,
-                    display=False,
-                )
-            )
-        except json.JSONDecodeError:
-            failures.append(f"{service}=unavailable")
-            continue
-        except subprocess.CalledProcessError:
-            failures.append(f"{service}=unavailable")
-            continue
-        if not isinstance(state_value, dict) or state_value.get("Status") != "running":
-            failures.append(f"{service}=not-running")
-            continue
-        health_value = state_value.get("Health")
-        if isinstance(health_value, dict) and health_value.get("Status") != "healthy":
-            failures.append(f"{service}=not-healthy")
-    if failures:
-        raise WorkflowError(
-            f"prepared runtime is not ready ({', '.join(failures)}); run FreeCM Build before Run"
-        )
-
-
-def require_runtime_prepared(
-    environment: Mapping[str, str],
-    repo_root: Path = REPO_ROOT,
-) -> None:
-    receipt_path = repo_root / RUNTIME_RECEIPT
-    try:
-        receipt: Any = json.loads(receipt_path.read_text(encoding="utf-8"))
-    except FileNotFoundError as error:
-        raise WorkflowError("prepared runtime is missing; run FreeCM Build before Run") from error
-    except (OSError, json.JSONDecodeError) as error:
-        raise WorkflowError(f"prepared runtime receipt is invalid: {error}") from error
-
-    if not isinstance(receipt, dict) or receipt.get("configurationId") != CONFIGURATION_ID:
-        raise WorkflowError("prepared runtime receipt is invalid; rerun FreeCM Build")
-    if receipt.get("configurationSignature") != configuration_signature(repo_root):
-        raise WorkflowError("runtime inputs changed; rerun FreeCM Config and Build")
-    if receipt.get("buildInputSignature") != build_input_signature(repo_root):
-        raise WorkflowError("application build inputs changed; rerun FreeCM Build")
-    if receipt.get("composeProject") != FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"]:
-        raise WorkflowError("prepared runtime belongs to another Compose project")
-    if receipt.get("images") != _runtime_image_ids(environment):
-        raise WorkflowError("prepared runtime images changed; rerun FreeCM Build")
-    _require_infrastructure_ready(environment)
-
-
-def _prepare_runtime(environment: Mapping[str, str]) -> None:
-    _run_checked(
-        ["docker", "compose", "stop", *APPLICATION_SERVICES],
-        environment=environment,
-    )
-    _build_images(environment)
-    _run_checked(
-        [
-            "docker",
-            "compose",
-            "up",
-            "--detach",
-            "--wait",
-            "--force-recreate",
-            "postgres",
-        ],
-        environment=environment,
-    )
-    _run_checked(
-        [
-            "docker",
-            "compose",
-            "up",
-            "--detach",
-            "--wait",
-            "--force-recreate",
-            "seaweedfs",
-        ],
-        environment=environment,
-    )
-    _run_checked(
-        [
-            "docker",
-            "compose",
-            "up",
-            "--detach",
-            "--wait",
-            "--force-recreate",
-            "keycloak",
-        ],
-        environment=environment,
-    )
-    _run_checked(
-        ["docker", "compose", "run", "--rm", "keycloak-reconcile"],
-        environment=environment,
-    )
-    _run_checked(
-        [
-            "docker",
-            "compose",
-            "up",
-            "--detach",
-            "--force-recreate",
-            "otel-collector",
-            "prometheus",
-            "grafana",
-        ],
-        environment=environment,
-    )
-    for service in ("migrate", "postgres-reconcile"):
-        _run_checked(
-            ["docker", "compose", "run", "--rm", service],
-            environment=environment,
-        )
-    _run_checked(
-        ["/bin/sh", "deploy/scripts/bootstrap-local-development.sh"],
-        environment=environment,
-    )
-    _run_checked(
-        ["docker", "compose", "run", "--rm", "storage-init"],
-        environment=environment,
-    )
-    _run_checked(
-        [
-            "docker",
-            "compose",
-            "up",
-            "--no-start",
-            "--no-build",
-            "--no-deps",
-            *APPLICATION_SERVICES,
-        ],
-        environment=environment,
-    )
-
-
-def cmd_build() -> int:
-    require_configuration()
-    environment = workflow_environment()
-    require_docker(environment)
-    _prepare_runtime(environment)
-    receipt_path = write_runtime_receipt(environment)
-    print(f"[pcbknowledge] prepared runtime receipt: {receipt_path.relative_to(REPO_ROOT)}")
-    print("[pcbknowledge] infrastructure is warm; FreeCM Run now starts only application services")
-    return 0
-
-
-def cmd_test() -> int:
-    require_configuration()
-    environment = workflow_environment()
-    require_docker(environment)
-    _run_checked(
-        ["/bin/sh", "deploy/scripts/test-verifier-deployment-wiring.sh"],
-        environment=environment,
-    )
-    _run_checked(
-        ["docker", "compose", "--profile", "tools", "build", *TEST_SERVICES],
-        environment=environment,
-    )
-    for service in TEST_SERVICES:
-        _run_checked(
-            [
-                "docker",
-                "compose",
-                "--profile",
-                "tools",
-                "run",
-                "--rm",
-                "--no-deps",
-                service,
-            ],
-            environment=environment,
-        )
-    return 0
-
-
-def cmd_run() -> int:
-    require_configuration()
-    environment = workflow_environment()
-    require_docker(environment)
-    require_runtime_prepared(environment)
-    exit_code = 1
-    try:
-        _run_checked(
-            [
-                "docker",
-                "compose",
-                "up",
-                "--detach",
-                "--wait",
-                "--wait-timeout",
-                "60",
-                "--no-build",
-                "--no-deps",
-                *APPLICATION_SERVICES,
-            ],
-            environment=environment,
-        )
-        print(
-            "\n".join(
-                (
-                    "[pcbknowledge] applications ready",
-                    f"[pcbknowledge] open: {CURATOR_URL}",
-                    "[pcbknowledge] sign in as: pcbknowledge-curator",
-                    "[pcbknowledge] password file: deploy/secrets/local_curator_password",
-                    "[pcbknowledge] idle health probes are hidden; full logs: "
-                    "docker compose -p pcbknowledge-freecm logs --follow "
-                    "api worker verifier web caddy",
-                    "[pcbknowledge] Ctrl+C stops applications and leaves infrastructure warm",
-                )
-            ),
-            flush=True,
-        )
-        if _open_curator(environment):
-            print("[pcbknowledge] opened the curator in the default browser", flush=True)
-        else:
-            print("[pcbknowledge] browser was not opened; use the URL above", flush=True)
-        exit_code = _follow_application_logs(environment=environment)
-    except KeyboardInterrupt:
-        exit_code = 130
-    finally:
-        print("[pcbknowledge] stopping application services; infrastructure stays warm", flush=True)
-        stop_code = _run_unchecked(
-            ["docker", "compose", "stop", *reversed(APPLICATION_SERVICES)],
-            environment=environment,
-        )
-        if exit_code == 0 and stop_code != 0:
-            exit_code = stop_code
-    return exit_code
-
-
-def package_image_names() -> tuple[str, ...]:
-    project = FREECM_ENVIRONMENT["COMPOSE_PROJECT_NAME"]
-    return tuple(f"{project}-{service}:latest" for service in BUILD_SERVICES)
-
-
-def _working_tree_identity(environment: Mapping[str, str]) -> tuple[str, bool]:
-    revision = _capture(
-        ["git", "rev-parse", "--short=12", "HEAD"],
-        environment=environment,
-    )
-    dirty = bool(_capture(["git", "status", "--porcelain"], environment=environment))
-    return revision, dirty
-
-
-def _create_image_archive(
-    images: Sequence[str],
-    output_path: Path,
-    *,
-    environment: Mapping[str, str],
-) -> None:
-    temporary = output_path.with_name(f"{output_path.name}.tmp")
-    command = ["docker", "image", "save", *images]
-    _display_command(command)
-    process = subprocess.Popen(
-        command,
-        cwd=REPO_ROOT,
-        env=dict(environment),
-        stdout=subprocess.PIPE,
-    )
-    if process.stdout is None:
-        process.kill()
-        raise WorkflowError("docker image save did not provide an output stream")
-    try:
-        with (
-            temporary.open("wb") as stream,
-            gzip.GzipFile(filename="", mode="wb", fileobj=stream, mtime=0) as compressed,
-        ):
-            shutil.copyfileobj(process.stdout, compressed)
-        process.stdout.close()
-        return_code = process.wait()
-        if return_code != 0:
-            raise subprocess.CalledProcessError(return_code, command)
-        os.replace(temporary, output_path)
-    except BaseException:
-        process.stdout.close()
-        if process.poll() is None:
-            process.terminate()
-            process.wait()
-        temporary.unlink(missing_ok=True)
-        raise
+def _run(command: Sequence[str], *, root: Path = REPO_ROOT) -> None:
+    _display(command)
+    environment = dict(os.environ)
+    environment["PYTHONPATH"] = str(root / "src")
+    subprocess.run(list(command), cwd=root, env=environment, check=True)
 
 
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+        while chunk := stream.read(1024 * 1024):
             digest.update(chunk)
     return digest.hexdigest()
 
 
-def _write_package_manifest(
-    path: Path,
-    *,
-    revision: str,
-    dirty: bool,
-    archive: Path,
-    archive_sha256: str,
-    image_metadata: Sequence[Mapping[str, Any]],
-) -> None:
-    images = [
+def _atomic_json(path: Path, value: object) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent, text=True
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return path
+
+
+def _read_json(path: Path, *, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise WorkflowError(f"{label} is missing or invalid; run FreeCM Config again") from error
+    if not isinstance(value, dict):
+        raise WorkflowError(f"{label} is invalid; run FreeCM Config again")
+    return value
+
+
+def _input_signature(paths: Iterable[Path], root: Path) -> str:
+    digest = hashlib.sha256()
+    for relative in sorted(paths, key=lambda item: item.as_posix()):
+        path = root / relative
+        if path.is_symlink() or not path.is_file():
+            raise WorkflowError(f"required input is missing or unsafe: {relative}")
+        digest.update(relative.as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def configuration_signature(root: Path = REPO_ROOT) -> str:
+    return _input_signature(CONFIG_INPUTS, root)
+
+
+def build_inputs(root: Path = REPO_ROOT) -> tuple[Path, ...]:
+    paths = list(BUILD_INPUT_FILES)
+    for relative_root in BUILD_INPUT_ROOTS:
+        directory = root / relative_root
+        if directory.is_symlink() or not directory.is_dir():
+            raise WorkflowError(f"build input directory is missing or unsafe: {relative_root}")
+        for path in directory.rglob("*"):
+            relative = path.relative_to(root)
+            if any(part in IGNORED_SOURCE_NAMES for part in relative.parts):
+                continue
+            if path.is_symlink():
+                raise WorkflowError(f"build input is an unsafe symlink: {relative}")
+            if path.is_file() and path.suffix not in {".pyc", ".pyo"}:
+                paths.append(relative)
+    return tuple(sorted(set(paths), key=lambda item: item.as_posix()))
+
+
+def build_signature(root: Path = REPO_ROOT) -> str:
+    return _input_signature(build_inputs(root), root)
+
+
+def _python_identity() -> str:
+    return f"{sys.version_info.major}.{sys.version_info.minor}"
+
+
+def _require_prerequisites(root: Path = REPO_ROOT) -> None:
+    if sys.version_info < MINIMUM_PYTHON:
+        raise WorkflowError(
+            f"Python {MINIMUM_PYTHON[0]}.{MINIMUM_PYTHON[1]} or newer is required"
+        )
+    git = shutil.which("git")
+    if git is None:
+        raise WorkflowError("Git is required")
+    result = subprocess.run(
+        [git, "rev-parse", "--show-toplevel"],
+        cwd=root,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if result.returncode != 0 or Path(result.stdout.strip()).resolve() != root.resolve():
+        raise WorkflowError("run this workflow from the PcbKnowledge Git repository")
+
+    template = _read_json(root / "source_roots.lock.jsonc.in", label="source root template")
+    if template.get("dependencies") != {}:
+        raise WorkflowError("source_roots.lock.jsonc.in must keep dependencies empty")
+    if (root / "source_roots.lock.jsonc").exists():
+        raise WorkflowError("an active source-root lock is not allowed before a dependency is approved")
+
+
+def write_configuration_receipt(root: Path = REPO_ROOT) -> Path:
+    return _atomic_json(
+        root / CONFIG_RECEIPT,
         {
-            "id": metadata.get("Id"),
-            "repoTags": metadata.get("RepoTags", []),
-            "os": metadata.get("Os"),
-            "architecture": metadata.get("Architecture"),
-        }
-        for metadata in image_metadata
-    ]
-    manifest = {
-        "schemaVersion": 1,
-        "archiveFormat": "docker-image-archive+gzip",
-        "sourceRevision": revision,
-        "sourceDirty": dirty,
-        "archive": archive.name,
-        "archiveSha256": archive_sha256,
-        "images": images,
-        "createdAt": datetime.now(UTC).isoformat(),
+            "schemaVersion": RECEIPT_SCHEMA_VERSION,
+            "configurationId": CONFIGURATION_ID,
+            "python": _python_identity(),
+            "configurationSignature": configuration_signature(root),
+        },
+    )
+
+
+def require_configuration(root: Path = REPO_ROOT) -> dict[str, Any]:
+    receipt = _read_json(root / CONFIG_RECEIPT, label="FreeCM Config receipt")
+    expected = {
+        "schemaVersion": RECEIPT_SCHEMA_VERSION,
+        "configurationId": CONFIGURATION_ID,
+        "python": _python_identity(),
+        "configurationSignature": configuration_signature(root),
     }
-    temporary = path.with_name(f"{path.name}.tmp")
-    temporary.write_text(f"{json.dumps(manifest, indent=2, sort_keys=True)}\n", encoding="utf-8")
-    os.replace(temporary, path)
+    if receipt != expected:
+        raise WorkflowError("FreeCM Config inputs changed; run FreeCM Config again")
+    return receipt
 
 
-def _image_platform(image_metadata: Sequence[Mapping[str, Any]]) -> str:
-    platforms = {(metadata.get("Os"), metadata.get("Architecture")) for metadata in image_metadata}
-    if len(platforms) != 1:
-        raise WorkflowError("package images do not share one operating system and architecture")
-    image_os, image_architecture = platforms.pop()
-    if not isinstance(image_os, str) or not image_os:
-        raise WorkflowError("package image operating system metadata is missing")
-    if not isinstance(image_architecture, str) or not image_architecture:
-        raise WorkflowError("package image architecture metadata is missing")
-    return f"{image_os.lower()}-{image_architecture.lower()}"
-
-
-def cmd_package() -> int:
-    require_configuration()
-    environment = workflow_environment()
-    require_docker(environment)
-    require_runtime_prepared(environment)
-
-    image_names = package_image_names()
-    metadata_value: Any = json.loads(
-        _capture(["docker", "image", "inspect", *image_names], environment=environment)
+def write_build_receipt(root: Path = REPO_ROOT) -> Path:
+    configuration = require_configuration(root)
+    return _atomic_json(
+        root / BUILD_RECEIPT,
+        {
+            "schemaVersion": RECEIPT_SCHEMA_VERSION,
+            "configurationSignature": configuration["configurationSignature"],
+            "python": _python_identity(),
+            "buildSignature": build_signature(root),
+        },
     )
-    if not isinstance(metadata_value, list) or len(metadata_value) != len(image_names):
-        raise WorkflowError("docker returned incomplete image metadata for the package")
 
-    revision, dirty = _working_tree_identity(environment)
-    platform_slug = _image_platform(metadata_value)
-    source_slug = f"{revision}-dirty" if dirty else revision
-    package_dir = REPO_ROOT / "build" / "package"
-    package_dir.mkdir(parents=True, exist_ok=True)
-    archive = package_dir / f"PcbKnowledge_{source_slug}_{platform_slug}_docker-images.tar.gz"
-    _create_image_archive(image_names, archive, environment=environment)
-    archive_sha256 = _sha256(archive)
 
-    checksum = archive.with_suffix(f"{archive.suffix}.sha256")
-    checksum.write_text(f"{archive_sha256}  {archive.name}\n", encoding="utf-8")
-    manifest = archive.with_suffix(f"{archive.suffix}.manifest.json")
-    _write_package_manifest(
-        manifest,
-        revision=revision,
-        dirty=dirty,
-        archive=archive,
-        archive_sha256=archive_sha256,
-        image_metadata=metadata_value,
+def require_build(root: Path = REPO_ROOT) -> dict[str, Any]:
+    configuration = require_configuration(root)
+    receipt = _read_json(root / BUILD_RECEIPT, label="FreeCM Build receipt")
+    expected = {
+        "schemaVersion": RECEIPT_SCHEMA_VERSION,
+        "configurationSignature": configuration["configurationSignature"],
+        "python": _python_identity(),
+        "buildSignature": build_signature(root),
+    }
+    if receipt != expected:
+        raise WorkflowError("editor source changed; run FreeCM Build again")
+    return receipt
+
+
+def _validate_knowledge(root: Path = REPO_ROOT) -> int:
+    repository = KnowledgeRepository(root)
+    repository.ensure_layout()
+    records = repository.validate_all(require_canonical=True)
+    print(f"[pcbknowledge] validated {len(records)} knowledge records", flush=True)
+    return len(records)
+
+
+def _run_checks(root: Path = REPO_ROOT) -> None:
+    compile_targets = [
+        "src/pcbknowledge/git_native",
+        "configs/pcbknowledge_workflow.py",
+        "configs/pcbknowledge_agent.py",
+        "tests/git_native",
+    ]
+    print("[pcbknowledge] compile local editor", flush=True)
+    if not compileall.compile_dir(
+        str(root / "src/pcbknowledge/git_native"), quiet=1, force=True
+    ):
+        raise WorkflowError("Python compilation failed")
+    for relative in compile_targets[1:3]:
+        if not compileall.compile_file(str(root / relative), quiet=1, force=True):
+            raise WorkflowError(f"Python compilation failed: {relative}")
+    _run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests/git_native",
+            "-t",
+            ".",
+            "-v",
+        ],
+        root=root,
     )
-    print(f"[pcbknowledge] package archive: {archive.relative_to(REPO_ROOT)}")
-    print(f"[pcbknowledge] package sha256: {archive_sha256}")
+    _validate_knowledge(root)
+
+
+def cmd_config() -> int:
+    _require_prerequisites()
+    repository = KnowledgeRepository(REPO_ROOT)
+    repository.ensure_layout()
+    receipt = write_configuration_receipt()
+    print(f"[pcbknowledge] ready: {receipt.relative_to(REPO_ROOT)}", flush=True)
+    print("[pcbknowledge] no containers, services, accounts or downloads are required", flush=True)
     return 0
 
 
-def parse_args(argv: Sequence[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="PcbKnowledge FreeCM repository workflow.")
-    parser.add_argument("action", choices=("config", "build", "run", "test", "package"))
-    return parser.parse_args(argv)
+def cmd_build() -> int:
+    _require_prerequisites()
+    require_configuration()
+    _run_checks()
+    receipt = write_build_receipt()
+    print(f"[pcbknowledge] build receipt: {receipt.relative_to(REPO_ROOT)}", flush=True)
+    return 0
 
 
-def main(argv: Sequence[str] | None = None) -> int:
-    args = parse_args(sys.argv[1:] if argv is None else argv)
+def cmd_test() -> int:
+    _require_prerequisites()
+    require_configuration()
+    _run_checks()
+    _run(["git", "diff", "--check"], root=REPO_ROOT)
+    return 0
+
+
+def _open_editor(url: str) -> bool:
+    if os.environ.get("CI") or os.environ.get("PCBKNOWLEDGE_DISABLE_BROWSER_OPEN") == "1":
+        return False
     try:
-        if args.action == "config":
-            return cmd_config()
-        if args.action == "build":
-            return cmd_build()
-        if args.action == "run":
-            return cmd_run()
-        if args.action == "test":
-            return cmd_test()
-        return cmd_package()
-    except WorkflowError as error:
-        print(f"[pcbknowledge] {error}", file=sys.stderr)
-        return 1
-    except subprocess.CalledProcessError as error:
-        return error.returncode if error.returncode > 0 else 1
+        return bool(webbrowser.open(url, new=2, autoraise=True))
+    except (OSError, webbrowser.Error):
+        return False
+
+
+def cmd_run(*, port: int, no_browser: bool) -> int:
+    _require_prerequisites()
+    require_build()
+    _validate_knowledge()
+    try:
+        server = create_server(REPO_ROOT, port)
+    except OSError as error:
+        raise WorkflowError(
+            f"cannot start the editor on 127.0.0.1:{port}; close the program using that port"
+        ) from error
+    url = f"http://127.0.0.1:{server.server_port}"
+    print("[pcbknowledge] local editor ready", flush=True)
+    print(f"[pcbknowledge] open: {url}", flush=True)
+    print("[pcbknowledge] no login or password", flush=True)
+    print("[pcbknowledge] Ctrl+C closes the editor; saved files stay in the Git worktree", flush=True)
+    if not no_browser and not _open_editor(url):
+        print("[pcbknowledge] the browser did not open automatically; use the URL above", flush=True)
+    try:
+        server.serve_forever(poll_interval=0.25)
     except KeyboardInterrupt:
+        print("\n[pcbknowledge] editor stopped", flush=True)
         return 130
+    finally:
+        server.server_close()
+    return 0
+
+
+def cmd_open(*, port: int, no_browser: bool) -> int:
+    """Prepare an unconfigured checkout once, then open the local editor."""
+
+    _require_prerequisites()
+    try:
+        require_build()
+    except WorkflowError:
+        print("[pcbknowledge] first use or editor source changed; running local checks", flush=True)
+        cmd_config()
+        cmd_build()
+    return cmd_run(port=port, no_browser=no_browser)
+
+
+def package_files(root: Path = REPO_ROOT) -> tuple[Path, ...]:
+    repository = KnowledgeRepository(root)
+    records = repository.validate_all(require_canonical=True)
+    paths = {Path("schemas/knowledge-record.schema.json")}
+    for record in records:
+        paths.add(repository.record_path(record.id).relative_to(repository.root))
+        if record.evidence.path is not None:
+            paths.add(Path(record.evidence.path))
+    return tuple(sorted(paths, key=lambda item: item.as_posix()))
+
+
+def _snapshot_manifest(files: Sequence[Path], root: Path) -> dict[str, object]:
+    return {
+        "schemaVersion": 1,
+        "format": PACKAGE_FORMAT,
+        "files": [
+            {
+                "path": relative.as_posix(),
+                "sha256": _sha256(root / relative),
+                "byteSize": (root / relative).stat().st_size,
+            }
+            for relative in files
+        ],
+    }
+
+
+def create_package(root: Path = REPO_ROOT) -> Path:
+    require_build(root)
+    files = package_files(root)
+    manifest = _snapshot_manifest(files, root)
+    manifest_payload = (
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    ).encode("utf-8")
+    identity = hashlib.sha256(manifest_payload).hexdigest()[:16]
+    output_directory = root / PACKAGE_DIRECTORY
+    output_directory.mkdir(parents=True, exist_ok=True)
+    output = output_directory / f"PcbKnowledge_{identity}.zip"
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{output.name}.", suffix=".tmp", dir=output_directory
+    )
+    os.close(descriptor)
+    temporary = Path(temporary_name)
+    try:
+        with zipfile.ZipFile(
+            temporary, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+        ) as archive:
+            for relative in files:
+                info = zipfile.ZipInfo(relative.as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o100644 << 16
+                archive.writestr(info, (root / relative).read_bytes(), compresslevel=9)
+            manifest_info = zipfile.ZipInfo(
+                "MANIFEST.json", date_time=(1980, 1, 1, 0, 0, 0)
+            )
+            manifest_info.compress_type = zipfile.ZIP_DEFLATED
+            manifest_info.external_attr = 0o100644 << 16
+            archive.writestr(manifest_info, manifest_payload, compresslevel=9)
+        os.replace(temporary, output)
+    finally:
+        temporary.unlink(missing_ok=True)
+    digest = _sha256(output)
+    output.with_suffix(output.suffix + ".sha256").write_text(
+        f"{digest}  {output.name}\n", encoding="ascii", newline="\n"
+    )
+    return output
+
+
+def cmd_package() -> int:
+    _require_prerequisites()
+    output = create_package()
+    print(f"[pcbknowledge] data snapshot: {output.relative_to(REPO_ROOT)}", flush=True)
+    print(f"[pcbknowledge] sha256: {_sha256(output)}", flush=True)
+    return 0
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="PcbKnowledge local FreeCM workflow")
+    parser.add_argument(
+        "action", choices=("config", "build", "run", "open", "test", "package")
+    )
+    parser.add_argument("--port", type=int, default=DEFAULT_PORT)
+    parser.add_argument("--no-browser", action="store_true")
+    arguments = parser.parse_args(argv)
+    if arguments.port < 1 or arguments.port > 65535:
+        parser.error("--port must be between 1 and 65535")
+    if arguments.action not in {"run", "open"} and (
+        arguments.no_browser or arguments.port != DEFAULT_PORT
+    ):
+        parser.error("--port and --no-browser are only valid for run/open")
+    return arguments
+
+
+def main(argv: list[str] | None = None) -> int:
+    arguments = parse_args(argv)
+    try:
+        if arguments.action == "config":
+            return cmd_config()
+        if arguments.action == "build":
+            return cmd_build()
+        if arguments.action == "test":
+            return cmd_test()
+        if arguments.action == "package":
+            return cmd_package()
+        if arguments.action == "open":
+            return cmd_open(port=arguments.port, no_browser=arguments.no_browser)
+        return cmd_run(port=arguments.port, no_browser=arguments.no_browser)
+    except (WorkflowError, RepositoryError) as error:
+        print(f"pcbknowledge: {error}", file=sys.stderr)
+        return 2
+    except subprocess.CalledProcessError as error:
+        return error.returncode or 1
 
 
 if __name__ == "__main__":

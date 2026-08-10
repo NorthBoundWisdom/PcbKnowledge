@@ -1,1 +1,1 @@
-"""Repository test package."""
+"""PcbKnowledge local test suite."""
