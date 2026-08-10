@@ -12,6 +12,7 @@ from pcbknowledge.git_native.model import (
     RecordStatus,
     RecordTransitionError,
     RecordValidationError,
+    ReviewAction,
     deterministic_record_id,
 )
 
@@ -37,7 +38,8 @@ class KnowledgeRecordTests(unittest.TestCase):
         self.assertEqual(KnowledgeRecord.from_json(payload), edited)
         self.assertTrue(payload.endswith("\n"))
         self.assertIn("电源数据手册", payload)
-        self.assertEqual(json.loads(payload)["schema_version"], 1)
+        self.assertEqual(json.loads(payload)["schema_version"], 2)
+        self.assertEqual(json.loads(payload)["review_history"], [])
 
     def test_extra_fields_and_invalid_evidence_paths_fail_closed(self) -> None:
         record = KnowledgeRecord.new("pk_0123456789abcdef01234567", prepared_by=PreparedBy.AGENT)
@@ -63,7 +65,7 @@ class KnowledgeRecordTests(unittest.TestCase):
         with self.assertRaisesRegex(RecordTransitionError, "fields are missing"):
             ready.approve("looks good")
 
-    def test_rejection_requires_comment_and_edit_returns_to_draft(self) -> None:
+    def test_rejection_history_survives_edit_and_resubmit(self) -> None:
         record = KnowledgeRecord.new("pk_0123456789abcdef01234567", prepared_by=PreparedBy.AGENT)
         ready = record.submit()
         with self.assertRaisesRegex(RecordTransitionError, "requires a review comment"):
@@ -84,6 +86,44 @@ class KnowledgeRecordTests(unittest.TestCase):
         )
         self.assertEqual(edited.status, RecordStatus.DRAFT)
         self.assertIsNone(edited.review.decision)
+        self.assertEqual(
+            [event.action for event in edited.review_history],
+            [ReviewAction.SUBMITTED, ReviewAction.REJECTED],
+        )
+        self.assertEqual(edited.review_history[-1].comment, "请补版本")
+
+        resubmitted = edited.submit()
+        self.assertEqual(
+            [event.action for event in resubmitted.review_history],
+            [ReviewAction.SUBMITTED, ReviewAction.REJECTED, ReviewAction.SUBMITTED],
+        )
+
+    def test_restricted_license_blocks_agent_processing(self) -> None:
+        restricted = KnowledgeRecord.new(
+            "pk_0123456789abcdef01234567", prepared_by=PreparedBy.HUMAN
+        ).edit(
+            title="Licensed standard",
+            document_number=None,
+            revision="A",
+            source_locator=None,
+            source_publisher="Publisher",
+            license_class=LicenseClass.RESTRICTED,
+            license_note="No AI/TDM",
+            evidence=Evidence(),
+            preparation_note=None,
+            supersedes=None,
+        )
+        self.assertFalse(restricted.agent_processing_allowed)
+        self.assertTrue(LicenseClass.OPEN.agent_processing_allowed)
+        self.assertTrue(LicenseClass.INTERNAL.agent_processing_allowed)
+        self.assertFalse(LicenseClass.UNKNOWN.agent_processing_allowed)
+
+    def test_review_history_tampering_fails_closed(self) -> None:
+        record = KnowledgeRecord.new("pk_0123456789abcdef01234567", prepared_by=PreparedBy.AGENT)
+        value = record.to_dict()
+        value["status"] = "READY_FOR_REVIEW"
+        with self.assertRaisesRegex(RecordValidationError, "trailing SUBMITTED"):
+            KnowledgeRecord.from_dict(value)
 
     def test_deterministic_id_is_stable_and_bounded(self) -> None:
         first = deterministic_record_id("agent-task-42")
@@ -99,6 +139,7 @@ class KnowledgeRecordTests(unittest.TestCase):
         )
 
         self.assertEqual(set(schema["required"]), set(record.to_dict()))
+        self.assertEqual(schema["properties"]["schema_version"]["const"], 2)
         self.assertEqual(
             set(schema["properties"]["status"]["enum"]),
             {item.value for item in RecordStatus},

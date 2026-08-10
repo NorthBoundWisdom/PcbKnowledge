@@ -16,6 +16,7 @@ from pcbknowledge.git_native.model import (
     deterministic_record_id,
 )
 from pcbknowledge.git_native.store import (
+    ChangeScope,
     KnowledgeRepository,
     RecordConflictError,
     RecordNotFoundError,
@@ -41,6 +42,7 @@ def _projection(record: KnowledgeRecord) -> dict[str, Any]:
         "revision_token": record.revision_token,
         "missing_fields": list(record.missing_fields),
         "next_actions": list(record.next_actions),
+        "agent_processing_allowed": record.agent_processing_allowed,
     }
 
 
@@ -195,7 +197,11 @@ def _submit(repository: KnowledgeRepository, arguments: argparse.Namespace) -> i
 
 
 def _list(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
-    records = repository.list(status=arguments.status)
+    records = (
+        repository.list_published()
+        if arguments.published
+        else repository.list(status=arguments.status)
+    )
     _print([_projection(record) for record in records])
     return 0
 
@@ -207,7 +213,13 @@ def _show(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int
 
 def _validate(repository: KnowledgeRepository, _arguments: argparse.Namespace) -> int:
     records = repository.validate_all(require_canonical=True)
-    _print({"status": "valid", "records": len(records)})
+    _print(
+        {
+            "status": "valid",
+            "records": len(records),
+            "published_records": len(repository.list_published()),
+        }
+    )
     return 0
 
 
@@ -219,6 +231,18 @@ def _diff(repository: KnowledgeRepository, _arguments: argparse.Namespace) -> in
     if changes.untracked_preview:
         print(changes.untracked_preview, end="")
     return 0
+
+
+def _change_scope(repository: KnowledgeRepository, _arguments: argparse.Namespace) -> int:
+    scope = repository.git_change_scope()
+    _print(
+        {
+            "scope": scope.value,
+            "valid_for_single_commit": scope is not ChangeScope.MIXED,
+            "rule": "knowledge/evidence data and software/policy changes must be separate commits",
+        }
+    )
+    return 2 if scope is ChangeScope.MIXED else 0
 
 
 def _add_edit_arguments(parser: argparse.ArgumentParser) -> None:
@@ -240,8 +264,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     list_parser = subparsers.add_parser("list")
-    list_parser.add_argument("--status", type=RecordStatus, choices=tuple(RecordStatus))
-    list_parser.set_defaults(handler=_list)
+    list_mode = list_parser.add_mutually_exclusive_group()
+    list_mode.add_argument("--status", type=RecordStatus, choices=tuple(RecordStatus))
+    list_mode.add_argument(
+        "--published",
+        action="store_true",
+        help="read committed APPROVED records from HEAD instead of the working tree",
+    )
+    list_parser.set_defaults(handler=_list, published=False)
 
     show_parser = subparsers.add_parser("show")
     show_parser.add_argument("record_id")
@@ -270,6 +300,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
     diff_parser = subparsers.add_parser("diff")
     diff_parser.set_defaults(handler=_diff)
+
+    scope_parser = subparsers.add_parser("change-scope")
+    scope_parser.set_defaults(handler=_change_scope)
 
     return parser.parse_args(argv)
 

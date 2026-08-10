@@ -9,6 +9,7 @@ import secrets
 import subprocess
 import tempfile
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 from typing import Iterable
 
@@ -29,6 +30,7 @@ _RECORD_FILENAME = re.compile(r"pk_[0-9a-f]{24,32}\.json\Z")
 _EVIDENCE_PATH = re.compile(
     r"evidence/sha256/(?P<prefix>[0-9a-f]{2})/(?P<digest>[0-9a-f]{64})\.pdf\Z"
 )
+_DATA_ROOTS = ("knowledge/", "evidence/")
 
 
 class RepositoryError(RuntimeError):
@@ -45,6 +47,13 @@ class RecordConflictError(RepositoryError):
 
 class EvidenceError(RepositoryError):
     """A PDF is malformed or conflicts with existing evidence."""
+
+
+class ChangeScope(StrEnum):
+    CLEAN = "CLEAN"
+    DATA_ONLY = "DATA_ONLY"
+    CODE_ONLY = "CODE_ONLY"
+    MIXED = "MIXED"
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,7 +114,35 @@ class KnowledgeRepository:
             record = self.load(path.stem)
             if status is None or record.status is status:
                 records.append(record)
-        return sorted(records, key=lambda item: ((item.title or "").casefold(), item.id))
+        return self._sorted_records(records)
+
+    def list_published(self, *, ref: str = "HEAD") -> list[KnowledgeRecord]:
+        """Read committed APPROVED records from a Git ref, never from workspace drafts."""
+        if not self._git_ref_exists(ref):
+            return []
+        paths = self._git(
+            "ls-tree", "-r", "--name-only", ref, "--", "knowledge/records"
+        )
+        records: list[KnowledgeRecord] = []
+        for relative in paths.splitlines():
+            name = Path(relative).name
+            if _RECORD_FILENAME.fullmatch(name) is None:
+                continue
+            result = subprocess.run(
+                ["git", "show", f"{ref}:{relative}"],
+                cwd=self.root,
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding="utf-8",
+            )
+            if result.returncode != 0:
+                raise RecordValidationError(f"cannot read published record: {relative}")
+            record = KnowledgeRecord.from_json(result.stdout)
+            if record.status is RecordStatus.APPROVED:
+                records.append(record)
+        return self._sorted_records(records)
 
     def validate_all(self, *, require_canonical: bool = True) -> list[KnowledgeRecord]:
         self.ensure_layout()
@@ -166,8 +203,14 @@ class KnowledgeRepository:
             raise RecordConflictError("record id cannot change")
         if previous.status is RecordStatus.APPROVED and updated != previous:
             raise RecordTransitionError("approved records are immutable; create a superseding record")
+        if (
+            len(updated.review_history) < len(previous.review_history)
+            or updated.review_history[: len(previous.review_history)] != previous.review_history
+        ):
+            raise RecordTransitionError("review_history is append-only")
         updated.validate()
         self._atomic_replace(self.record_path(updated.id), updated.canonical_json())
+        self._prune_replaced_evidence(previous.evidence, updated.evidence)
 
     def import_pdf_bytes(self, payload: bytes) -> Evidence:
         evidence = self.inspect_pdf_bytes(payload)
@@ -203,7 +246,6 @@ class KnowledgeRepository:
 
     def inspect_pdf_bytes(self, payload: bytes) -> Evidence:
         """Validate and describe PDF bytes without mutating the repository."""
-
         if not payload.startswith(b"%PDF-"):
             raise EvidenceError("the selected file is not a PDF")
         if not payload or len(payload) > MAX_PDF_BYTES:
@@ -290,6 +332,37 @@ class KnowledgeRepository:
             untracked_preview="".join(previews),
         )
 
+    def git_change_scope(self) -> ChangeScope:
+        """Classify current workspace changes so data and executable policy are not committed together."""
+        status = self._git("status", "--short", "--untracked-files=all")
+        data = False
+        code = False
+        for line in status.splitlines():
+            if not line:
+                continue
+            relative = line[3:]
+            if " -> " in relative:
+                relative = relative.split(" -> ", 1)[1]
+            if relative.startswith(_DATA_ROOTS):
+                data = True
+            else:
+                code = True
+        if data and code:
+            return ChangeScope.MIXED
+        if data:
+            return ChangeScope.DATA_ONLY
+        if code:
+            return ChangeScope.CODE_ONLY
+        return ChangeScope.CLEAN
+
+    def validate_change_scope(self) -> ChangeScope:
+        scope = self.git_change_scope()
+        if scope is ChangeScope.MIXED:
+            raise RepositoryError(
+                "mixed knowledge/evidence and software changes are not allowed in one commit"
+            )
+        return scope
+
     def _git(self, *arguments: str) -> str:
         result = subprocess.run(
             ["git", *arguments],
@@ -303,6 +376,43 @@ class KnowledgeRepository:
         if result.returncode != 0:
             raise RepositoryError(result.stderr.strip() or "git command failed")
         return result.stdout
+
+    def _git_ref_exists(self, ref: str) -> bool:
+        result = subprocess.run(
+            ["git", "rev-parse", "--verify", "--quiet", ref],
+            cwd=self.root,
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        return result.returncode == 0
+
+    def _prune_replaced_evidence(self, previous: Evidence, updated: Evidence) -> None:
+        if not previous.present or previous.path == updated.path:
+            return
+        assert previous.path is not None
+
+        # Current records are the first authority. Shared evidence must never be removed.
+        for record in self.list():
+            if record.evidence.path == previous.path:
+                return
+
+        # A committed APPROVED record may still need the bytes even if the workspace is already
+        # inconsistent for another reason. Preserve that evidence and let validation report the
+        # immutable-record violation rather than deleting authoritative bytes.
+        for record in self.list_published():
+            if record.evidence.path == previous.path:
+                return
+
+        candidate = self.root / previous.path
+        if candidate.exists():
+            if candidate.is_symlink() or not candidate.is_file():
+                raise EvidenceError(f"replaced evidence path is unsafe: {previous.path}")
+            candidate.unlink()
+            try:
+                candidate.parent.rmdir()
+            except OSError:
+                pass
 
     def _validate_record_layout(self) -> None:
         for path in sorted(self.records_dir.iterdir()):
@@ -341,14 +451,7 @@ class KnowledgeRepository:
             raise EvidenceError("unreferenced evidence file: " + orphaned[0])
 
     def _validate_committed_approved_records(self) -> None:
-        head = subprocess.run(
-            ["git", "rev-parse", "--verify", "HEAD"],
-            cwd=self.root,
-            check=False,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        if head.returncode != 0:
+        if not self._git_ref_exists("HEAD"):
             return
         paths = self._git(
             "ls-tree", "-r", "--name-only", "HEAD", "--", "knowledge/records"
@@ -369,18 +472,34 @@ class KnowledgeRepository:
             if result.returncode != 0:
                 raise RecordValidationError(f"cannot read committed record: {relative}")
             committed = KnowledgeRecord.from_json(result.stdout)
-            if committed.status is not RecordStatus.APPROVED:
-                continue
             current_path = self.root / relative
+            if committed.status is RecordStatus.APPROVED:
+                if not current_path.is_file() or current_path.is_symlink():
+                    raise RecordValidationError(
+                        f"committed approved record cannot be deleted: {relative}"
+                    )
+                current = self.load(Path(relative).stem)
+                if current != committed:
+                    raise RecordValidationError(
+                        f"committed approved record is immutable: {relative}"
+                    )
+                continue
+
             if not current_path.is_file() or current_path.is_symlink():
-                raise RecordValidationError(
-                    f"committed approved record cannot be deleted: {relative}"
-                )
+                continue
             current = self.load(Path(relative).stem)
-            if current != committed:
+            if (
+                len(current.review_history) < len(committed.review_history)
+                or current.review_history[: len(committed.review_history)]
+                != committed.review_history
+            ):
                 raise RecordValidationError(
-                    f"committed approved record is immutable: {relative}"
+                    f"committed review_history is append-only: {relative}"
                 )
+
+    @staticmethod
+    def _sorted_records(records: Iterable[KnowledgeRecord]) -> list[KnowledgeRecord]:
+        return sorted(records, key=lambda item: ((item.title or "").casefold(), item.id))
 
     @staticmethod
     def _write_new(path: Path, payload: str) -> None:

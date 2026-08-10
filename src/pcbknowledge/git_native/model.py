@@ -10,7 +10,7 @@ from enum import StrEnum
 from typing import Any, Mapping
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 _ID_PATTERN = re.compile(r"pk_[0-9a-f]{24,32}\Z")
 _SHA256_PATTERN = re.compile(r"[0-9a-f]{64}\Z")
 _RECORD_KEYS = {
@@ -25,6 +25,7 @@ _RECORD_KEYS = {
     "license",
     "evidence",
     "preparation_note",
+    "review_history",
     "review",
     "supersedes",
 }
@@ -56,8 +57,24 @@ class LicenseClass(StrEnum):
     INTERNAL = "INTERNAL"
     RESTRICTED = "RESTRICTED"
 
+    @property
+    def agent_processing_allowed(self) -> bool:
+        """Whether repository policy permits Agent/model processing of source contents.
+
+        Schema v2 intentionally keeps the existing four-value wire format. RESTRICTED is the
+        executable local representation for material covered by ADR-015's
+        LICENSED_BLOCKED_FOR_AI policy until the broader SourceRecord schema lands.
+        """
+        return self in {LicenseClass.OPEN, LicenseClass.INTERNAL}
+
 
 class ReviewDecision(StrEnum):
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+
+
+class ReviewAction(StrEnum):
+    SUBMITTED = "SUBMITTED"
     APPROVED = "APPROVED"
     REJECTED = "REJECTED"
 
@@ -193,6 +210,27 @@ class Review:
 
 
 @dataclass(frozen=True, slots=True)
+class ReviewEvent:
+    action: ReviewAction
+    comment: str | None = None
+
+    @classmethod
+    def from_dict(cls, value: object) -> ReviewEvent:
+        data = _required_mapping(value, "review_history item")
+        _reject_extra_keys(data, {"action", "comment"}, "review_history item")
+        action = ReviewAction(_enum_value(ReviewAction, data.get("action"), "review_history.action"))
+        comment = _optional_text(data.get("comment"), "review_history.comment", limit=4000)
+        if action is ReviewAction.REJECTED and comment is None:
+            raise RecordValidationError("a rejected review history event requires comment")
+        if action is ReviewAction.SUBMITTED and comment is not None:
+            raise RecordValidationError("a submitted review history event cannot carry comment")
+        return cls(action=action, comment=comment)
+
+    def to_dict(self) -> dict[str, object]:
+        return {"action": self.action.value, "comment": self.comment}
+
+
+@dataclass(frozen=True, slots=True)
 class KnowledgeRecord:
     id: str
     status: RecordStatus = RecordStatus.DRAFT
@@ -205,6 +243,7 @@ class KnowledgeRecord:
     license_note: str | None = None
     evidence: Evidence = Evidence()
     preparation_note: str | None = None
+    review_history: tuple[ReviewEvent, ...] = ()
     review: Review = Review()
     supersedes: str | None = None
     schema_version: int = SCHEMA_VERSION
@@ -222,6 +261,9 @@ class KnowledgeRecord:
             raise RecordValidationError(f"schema_version must equal {SCHEMA_VERSION}")
         license_data = _required_mapping(data.get("license"), "license")
         _reject_extra_keys(license_data, {"class", "note"}, "license")
+        raw_history = data.get("review_history")
+        if not isinstance(raw_history, list):
+            raise RecordValidationError("review_history must be an array")
         record = cls(
             schema_version=SCHEMA_VERSION,
             id=_optional_text(data.get("id"), "id", limit=35) or "",
@@ -243,6 +285,7 @@ class KnowledgeRecord:
             preparation_note=_optional_text(
                 data.get("preparation_note"), "preparation_note", limit=4000
             ),
+            review_history=tuple(ReviewEvent.from_dict(item) for item in raw_history),
             review=Review.from_dict(data.get("review")),
             supersedes=_optional_text(data.get("supersedes"), "supersedes", limit=35),
         )
@@ -265,12 +308,24 @@ class KnowledgeRecord:
             if self.supersedes == self.id:
                 raise RecordValidationError("a record cannot supersede itself")
 
-        if self.status in {RecordStatus.DRAFT, RecordStatus.READY_FOR_REVIEW}:
+        if any(event.action is ReviewAction.APPROVED for event in self.review_history[:-1]):
+            raise RecordValidationError("review history cannot continue after approval")
+
+        if self.status is RecordStatus.DRAFT:
             if self.review.decision is not None:
-                raise RecordValidationError("unreviewed states cannot carry a review decision")
+                raise RecordValidationError("DRAFT cannot carry a review decision")
+            if self.review_history and self.review_history[-1].action is ReviewAction.APPROVED:
+                raise RecordValidationError("an approved record cannot return to DRAFT")
+        elif self.status is RecordStatus.READY_FOR_REVIEW:
+            if self.review.decision is not None:
+                raise RecordValidationError("READY_FOR_REVIEW cannot carry a review decision")
+            if not self.review_history or self.review_history[-1].action is not ReviewAction.SUBMITTED:
+                raise RecordValidationError("READY_FOR_REVIEW requires a trailing SUBMITTED event")
         elif self.status is RecordStatus.APPROVED:
             if self.review.decision is not ReviewDecision.APPROVED:
                 raise RecordValidationError("APPROVED requires an APPROVED review decision")
+            if not self.review_history or self.review_history[-1].action is not ReviewAction.APPROVED:
+                raise RecordValidationError("APPROVED requires a trailing APPROVED review event")
             if self.missing_fields:
                 raise RecordValidationError(
                     "APPROVED is missing required fields: " + ", ".join(self.missing_fields)
@@ -278,6 +333,8 @@ class KnowledgeRecord:
         elif self.status is RecordStatus.REJECTED:
             if self.review.decision is not ReviewDecision.REJECTED:
                 raise RecordValidationError("REJECTED requires a REJECTED review decision")
+            if not self.review_history or self.review_history[-1].action is not ReviewAction.REJECTED:
+                raise RecordValidationError("REJECTED requires a trailing REJECTED review event")
         return self
 
     @property
@@ -294,6 +351,10 @@ class KnowledgeRecord:
         if not self.evidence.present:
             missing.append("evidence")
         return tuple(missing)
+
+    @property
+    def agent_processing_allowed(self) -> bool:
+        return self.license_class.agent_processing_allowed
 
     @property
     def next_actions(self) -> tuple[str, ...]:
@@ -316,6 +377,7 @@ class KnowledgeRecord:
             "license": {"class": self.license_class.value, "note": self.license_note},
             "evidence": self.evidence.to_dict(),
             "preparation_note": self.preparation_note,
+            "review_history": [event.to_dict() for event in self.review_history],
             "review": self.review.to_dict(),
             "supersedes": self.supersedes,
         }
@@ -367,7 +429,13 @@ class KnowledgeRecord:
     def submit(self) -> KnowledgeRecord:
         if self.status not in {RecordStatus.DRAFT, RecordStatus.REJECTED}:
             raise RecordTransitionError("only DRAFT or REJECTED records can be submitted")
-        return replace(self, status=RecordStatus.READY_FOR_REVIEW, review=Review()).validate()
+        history = (*self.review_history, ReviewEvent(action=ReviewAction.SUBMITTED))
+        return replace(
+            self,
+            status=RecordStatus.READY_FOR_REVIEW,
+            review_history=history,
+            review=Review(),
+        ).validate()
 
     def approve(self, comment: str | None) -> KnowledgeRecord:
         if self.status is not RecordStatus.READY_FOR_REVIEW:
@@ -376,12 +444,18 @@ class KnowledgeRecord:
             raise RecordTransitionError(
                 "cannot approve while fields are missing: " + ", ".join(self.missing_fields)
             )
+        normalized = _optional_text(comment, "review.comment", limit=4000)
+        history = (
+            *self.review_history,
+            ReviewEvent(action=ReviewAction.APPROVED, comment=normalized),
+        )
         return replace(
             self,
             status=RecordStatus.APPROVED,
+            review_history=history,
             review=Review(
                 decision=ReviewDecision.APPROVED,
-                comment=_optional_text(comment, "review.comment", limit=4000),
+                comment=normalized,
             ),
         ).validate()
 
@@ -391,9 +465,14 @@ class KnowledgeRecord:
         normalized = _optional_text(comment, "review.comment", limit=4000)
         if normalized is None:
             raise RecordTransitionError("rejection requires a review comment")
+        history = (
+            *self.review_history,
+            ReviewEvent(action=ReviewAction.REJECTED, comment=normalized),
+        )
         return replace(
             self,
             status=RecordStatus.REJECTED,
+            review_history=history,
             review=Review(decision=ReviewDecision.REJECTED, comment=normalized),
         ).validate()
 
