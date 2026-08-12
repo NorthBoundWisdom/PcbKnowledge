@@ -7,11 +7,7 @@ PDF，保存后马上可以查看 Git diff；人确认后再用熟悉的 Git GUI
 
 ## 最快开始
 
-要求只有 Git 和 Python 3.11 或更新版本。首次克隆后初始化 FreeCM：
-
-```bash
-git submodule update --init --recursive FreeCM
-```
+要求只有 Git 和 Python 3.11 或更新版本。首次克隆不需要初始化 submodule 或安装额外工具链。
 
 产品经理或工程师在 Finder 中双击仓库根目录的 **`Open PcbKnowledge.command`** 即可。首次会在
 本机完成约 4–5 秒检查，随后自动打开 GUI；以后源代码没有变化时会直接打开。
@@ -19,7 +15,7 @@ git submodule update --init --recursive FreeCM
 如果 macOS 第一次阻止从 Finder 打开，可右键该文件选择“打开”；之后正常双击即可。启动器不安装
 依赖、不运行 Docker，也不读取账号密码。
 
-在 FreeCM 中也可以依次点击：
+安装 FreeCM VS Code / Cursor 扩展后，也可以依次点击：
 
 1. **Config → Local Git Workspace**：检查本机环境，不下载依赖。
 2. **Build → Check Local Editor**：编译、测试和现有资料校验。
@@ -170,11 +166,12 @@ python3 configs/pcbknowledge_workflow.py package
 Test 只使用 Python 标准库，不启动外部服务。Package 在 `build/package/` 生成可复现 ZIP、内部
 manifest 与 SHA-256 sidecar；它是交换/备份便利件，Git 仓库仍是权威来源。
 
-本仓库有意不配置托管 CI，所有门禁在本机 FreeCM Test 中运行。修改 FreeCM manifest 或工作流
-后，还要执行：
+本仓库有意不配置托管 CI，所有门禁在本机 FreeCM Test 中运行。仓库仅维护
+`configs/freecm.commands.jsonc` 协议文件，不携带 FreeCM submodule 或独立 validator；扩展加载
+workspace 时会直接校验 manifest。修改 manifest 或工作流后，运行聚焦测试：
 
 ```bash
-python3 configs/validate_freecm_repo_commands.py
+python3 -m unittest tests.git_native.test_workflow
 ```
 
 ## 当前能力与下一阶段

@@ -63,12 +63,13 @@ cannot weaken evidence, immutability, local-only or repository-boundary requirem
 - Runtime and tests use the Python standard library. A new third-party dependency requires explicit
   approval and a lockfile decision.
 
-## FreeCM workflow
+## FreeCM command protocol
 
-- This repository tracks validated `FreeCM/master` as the `FreeCM/` submodule. Refresh only from the host
-  root with `git submodule update --remote --checkout FreeCM`; never run `git -C FreeCM pull`.
+- This repository is a protocol-only FreeCM consumer. It keeps `configs/freecm.commands.jsonc`, but it
+  does not vendor the FreeCM implementation or require a FreeCM checkout.
 - `configs/freecm.commands.jsonc` is the action manifest; orchestration belongs in
-  `configs/pcbknowledge_workflow.py`.
+  `configs/pcbknowledge_workflow.py`. The installed FreeCM extension discovers and validates the
+  manifest directly.
 - Every downstream action requires the Config receipt. Build compiles, tests and validates data; Run only
   verifies the Build receipt, starts the editor and opens the browser; Test stays local; Package only
   exports validated canonical data.
@@ -76,13 +77,14 @@ cannot weaken evidence, immutability, local-only or repository-boundary requirem
   infrastructure.
 - Keep `source_roots.lock.jsonc.in` dependencies empty and do not add an active source-root lock before a
   real source dependency is approved.
-- After manifest/workflow changes run `python3 configs/validate_freecm_repo_commands.py` using the pinned
-  submodule validator.
+- Do not add a repository-local copy of the FreeCM validator or install Node/npm solely for manifest
+  validation. Manifest/workflow changes are covered by the focused workflow tests and are validated by
+  the installed extension when the workspace is loaded.
 
 ## Verification
 
-- Iterate with the narrowest tests, then run Config, Build, Test, Package, the FreeCM validator and a real
-  loopback GUI smoke test for touched workflow/runtime surfaces.
+- Iterate with the narrowest tests, then run Config, Build, Test, Package and a real loopback GUI smoke
+  test for touched workflow/runtime surfaces.
 - Record commands, exit codes, test counts, skips and first failures. Skipped, interrupted or truncated
   runs are not passes.
 - Never claim a capability that lacks executable code and a verification receipt in this repository.

@@ -122,7 +122,8 @@ MVP 以后增加的 published read、change-scope、license processing gate 不�
 - `build`：exit 0，33/33 tests passed，0 skipped，0 records validated。
 - `test`：exit 0，33/33 tests passed，0 skipped；`git diff --check` 通过。
 - `package`：exit 0；`build/package/PcbKnowledge_aced0464d948a291.zip`；SHA-256 `77e66577b6f2a40cd8508fe55c674875b0bbe2d4b58cf51e7139dcf545bd04de`。
-- `validate_freecm_repo_commands.py`：exit 0，Config/Build/Run/Test/Package 五个动作均解析为 Git-native 命令。
+- 当时的 repository-pinned FreeCM validator：exit 0，Config/Build/Run/Test/Package 五个动作均解析
+  为 Git-native 命令；该 Node/submodule 校验链后来已从协议型仓库移除。
 - 最终真实 Run：首秒 ready；HTTP 200；无登录；相关 Docker 容器数 0；Ctrl+C exit 130。
 - 根启动器首次约 4 秒完成当时 33 个检查并打开首页；第二次首秒 ready。
 

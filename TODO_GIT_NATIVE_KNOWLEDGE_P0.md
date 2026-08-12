@@ -208,8 +208,8 @@ synthetic datasheet Source
 - `python3 configs/pcbknowledge_workflow.py package`：exit 0；生成
   `PcbKnowledge_a2f89fd66a6f5cea.zip`，SHA-256
   `c6406225fe0835ea5c995907b984d35edce06d4f04c90cd8ca0ba12ead214420`。
-- `python3 configs/validate_freecm_repo_commands.py`：exit 0；pinned FreeCM
-  `0.1.141` validator/TypeScript compile passed。
+- 当时的 repository-pinned FreeCM validator：exit 0；FreeCM `0.1.141` validator/TypeScript
+  compile passed。该 Node/submodule 校验链后来已从协议型仓库移除。
 - real loopback GUI smoke：`run --port 18082 --no-browser` ready；`/healthz` 返回 `ok`；
   首页 HTTP 200，包含 CSP / `X-Frame-Options: DENY`，无登录步骤；`SIGINT` 后 exit 130。
 
@@ -294,7 +294,7 @@ python3 configs/pcbknowledge_workflow.py test
 python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_agent.py change-scope
 python3 configs/pcbknowledge_workflow.py package
-python3 configs/validate_freecm_repo_commands.py
 ```
 
-涉及 GUI 时再做 loopback smoke。未运行、被截断或 skipped 的检查不能记为通过。
+涉及 GUI 时再做 loopback smoke。FreeCM manifest 由 workflow tests 覆盖，并由已安装扩展加载时
+执行协议校验；仓库不携带独立 validator。未运行、被截断或 skipped 的检查不能记为通过。

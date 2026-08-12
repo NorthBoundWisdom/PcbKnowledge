@@ -3,12 +3,12 @@
 ## 首次准备
 
 ```bash
-git submodule update --init --recursive FreeCM
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 ```
 
-Config 不创建账号或密钥。Build 不联网、不下载、不运行 Docker，通常几秒完成。
+仓库不需要初始化 submodule。Config 不创建账号或密钥。Build 不联网、不下载、不运行 Docker，
+通常几秒完成。
 
 ## 打开与关闭
 

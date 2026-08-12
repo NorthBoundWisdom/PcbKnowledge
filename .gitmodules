@@ -1,4 +1,0 @@
-[submodule "FreeCM"]
-	path = FreeCM
-	url = git@github.com:NorthBoundWisdom/FreeCM.git
-	branch = master

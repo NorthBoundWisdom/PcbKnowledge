@@ -6,7 +6,7 @@ __pycache__/
 .cache/
 .pnpm-store/
 
-# FreeCM and derived local state
+# Project-command receipts and derived local state
 /.freecm/
 /.freecm.workspace.lock
 /.pcbknowledge/
