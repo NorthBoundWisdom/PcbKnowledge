@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ingest Engineering Source"
+  short_description: "Register licensed engineering PDFs safely"
+  default_prompt: "Use $ingest-engineering-source to register this engineering document as a reviewable Source draft."

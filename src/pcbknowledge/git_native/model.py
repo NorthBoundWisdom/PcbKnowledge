@@ -1414,6 +1414,7 @@ class FactRecord:
         conditions: tuple[str, ...] = (),
         applicability: tuple[str, ...] = (),
         evidence_anchors: tuple[EvidenceAnchor, ...] = (),
+        supersedes: str | None = None,
     ) -> FactRecord:
         return cls(
             id=fact_id,
@@ -1423,6 +1424,7 @@ class FactRecord:
             conditions=conditions,
             applicability=applicability,
             evidence_anchors=evidence_anchors,
+            supersedes=_optional_text(supersedes, "supersedes", limit=50),
         ).validate()
 
     @classmethod

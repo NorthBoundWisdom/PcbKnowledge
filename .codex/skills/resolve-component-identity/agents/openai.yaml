@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve Component Identity"
+  short_description: "Resolve exact manufacturer, MPN, and package IDs"
+  default_prompt: "Use $resolve-component-identity to resolve and create exact typed identities for this component."

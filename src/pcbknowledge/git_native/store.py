@@ -43,6 +43,7 @@ from pcbknowledge.git_native.model import (
     deterministic_entity_id,
     deterministic_fact_id,
     deterministic_source_id,
+    normalize_lookup,
 )
 
 
@@ -462,6 +463,39 @@ class KnowledgeRepository:
         )
         return self._insert_or_replay_entity(entity)
 
+    def find_manufacturers_exact(self, raw_name: str) -> list[EntityRecord]:
+        """Return exact normalized manufacturer matches without fuzzy inference."""
+
+        key = normalize_lookup(raw_name)
+        return self._sorted_entities(
+            entity
+            for entity in self.list_entities(kind=EntityKind.MANUFACTURER)
+            if entity.normalized_key == key
+        )
+
+    def find_components_exact(
+        self, manufacturer_id: str, raw_mpn: str
+    ) -> list[EntityRecord]:
+        """Return exact manufacturer/MPN matches without suffix inference."""
+
+        key = normalize_lookup(raw_mpn)
+        return self._sorted_entities(
+            entity
+            for entity in self.list_entities(kind=EntityKind.COMPONENT)
+            if entity.manufacturer_id == manufacturer_id
+            and entity.normalized_mpn == key
+        )
+
+    def find_packages_exact(self, raw_name: str) -> list[EntityRecord]:
+        """Return exact normalized package matches without MPN inference."""
+
+        key = normalize_lookup(raw_name)
+        return self._sorted_entities(
+            entity
+            for entity in self.list_entities(kind=EntityKind.PACKAGE)
+            if entity.normalized_key == key
+        )
+
     def _insert_or_replay_entity(self, entity: EntityRecord) -> EntityRecord:
         with self._write_lock():
             self.ensure_layout()
@@ -513,6 +547,7 @@ class KnowledgeRepository:
         conditions: tuple[str, ...] = (),
         applicability: tuple[str, ...] = (),
         evidence_anchors: Sequence[object] = (),
+        supersedes: str | None = None,
     ) -> FactRecord:
         fact = FactRecord.new(
             deterministic_fact_id(idempotency_key),
@@ -522,6 +557,7 @@ class KnowledgeRepository:
             conditions=conditions,
             applicability=applicability,
             evidence_anchors=tuple(evidence_anchors),  # type: ignore[arg-type]
+            supersedes=supersedes,
         )
         with self._write_lock():
             self.ensure_layout()
@@ -942,6 +978,11 @@ class KnowledgeRepository:
 
     def list_published_facts(self, *, ref: str = "HEAD") -> list[FactRecord]:
         return self._sorted_facts(self.read_published_snapshot(ref=ref).facts)
+
+    def fact_conflicts(self, *, approved_only: bool = False) -> tuple[FactConflict, ...]:
+        """Expose unresolved semantic conflicts without choosing a winner."""
+
+        return self._fact_conflicts(self.list_facts(), approved_only=approved_only)
 
     def _validated_ref_snapshot(self, ref: str) -> AuthoritySnapshot:
         commit = self._resolve_git_ref(ref)
@@ -1630,6 +1671,11 @@ class KnowledgeRepository:
         if code:
             return ChangeScope.CODE_ONLY
         return ChangeScope.CLEAN
+
+    def git_candidate_paths(self) -> tuple[str, ...]:
+        """Return the paths considered by change-scope using the same index rule."""
+
+        return self._candidate_change_paths()
 
     def validate_change_scope(self) -> ChangeScope:
         scope = self.git_change_scope()

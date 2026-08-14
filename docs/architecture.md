@@ -1,13 +1,23 @@
 # PcbKnowledge Git-native 架构
 
-> 状态：P0.1 typed authority 已实现 + P0 后续演进基线
-> 日期：2026-08-10
-> 当前实现阶段：P0.1 complete，P0.2 next
-> 主要决策：[ADR-018](docs/adr/ADR-018-git-native-local-editor.md)、[ADR-019](docs/adr/ADR-019-git-publication-boundary.md)
+> 状态：P0.2 Agent-native ingestion 已实现 + P0 后续演进基线
+> 更新日期：2026-08-14
+> 当前实现阶段：P0.2 complete，P0.3 next
+> 主要决策：[ADR-018](adr/ADR-018-git-native-local-editor.md)、[ADR-019](adr/ADR-019-git-publication-boundary.md)
 
 ## 1. 产品定位
 
 PcbKnowledge 是 PCB 工程知识与证据仓库。当前阶段服务少量可信内部使用者：Agent 负责资料准备和结构化候选，PCB 工程师或产品经理在本机 GUI 中检查、退回和批准，Git 负责差异审阅、协作、归属和最终发布。
+
+PCB 软件本身知道当前板卡里的元件、网络、几何、规则和 DRC 结果，但大量设计决策依赖板卡之外的知识，例如：
+
+- datasheet 的 pin function、absolute maximum 与 recommended operating condition；
+- 电源时序、去耦、晶振、复位和启动配置；
+- 厂商 layout/application guide 与 reference design；
+- 板厂工艺能力、内部设计规范、历史 review 与 waiver；
+- PCN、EOL、器件生命周期和替代关系。
+
+这些资料会更新并存在不同 revision，工程结论必须能回答“来自哪份资料、哪个版本、哪一页和哪一块原文”。因此 PcbKnowledge 同时保存不可变证据与结构化工程事实，而不是只依赖模型记忆或“PDF 切块 + 向量搜索”。
 
 它不是共享在线服务，也不是 PcbCore 的一部分。当前产品优先保证：
 
@@ -232,6 +242,8 @@ DRAFT -> READY_FOR_REVIEW -> APPROVED
 - unresolved conflict 必须显式存在，不能依据模型置信度静默选 winner；
 - working-tree approval 不等于 publication。
 
+PCB 工程师或产品经理负责核对文档版本、来源、许可、结构化事实与原文是否一致，退回不完整或错误候选，并只批准自己有能力负责的内容。高风险工程事实仍需具备相应领域判断能力的人审阅。
+
 P0.1 不实现复杂 Conflict Center，但 validator 必须能发现语义重复/冲突，并阻止“多个相互冲突的事实同时被当作唯一 authoritative answer”。
 
 ## 7. 许可与 Agent 处理
@@ -304,6 +316,15 @@ P0/P0.1 不需要 vector RAG。P1 才建立本机 SQLite exact index + FTS5；ve
 
 ## 10. Agent 边界
 
+P0.2 已把底层 typed repository API 暴露为显式 `source` / `entity` / `fact` 命令组，并用四个
+repository-local skill 编排 Source 录入、Entity 精确解析、Fact 提取与人工交接。普通 Source 投影
+不返回 evidence path；只有 `source authorize-read` 在许可检查和 bytes 验证均通过后才返回只读路径。
+
+Entity resolution 只输出 `EXACT / UNKNOWN / CONFLICT`。Fact 投影显式输出 optional unknown、
+missing anchor 和 semantic conflict，不使用 fuzzy match 或模型置信度选 winner。`review-status` 对选中
+记录及其 Source/Entity closure 做最终检查，只有完整、无冲突、许可允许、已送审并且 change scope 为
+`DATA_ONLY` 时才给出 `WAIT_FOR_HUMAN_REVIEW`。
+
 Agent 可以：
 
 - 创建和修改 Draft；
@@ -325,7 +346,7 @@ Agent 不可以：
 
 当前 GUI 是 Source Corpus editor：用于建立文档记录、关联 PDF、送审、批准和看 Git diff。
 
-P0.1 只要求 authority model 与验证闭环；P0.3 再完成 Review Workbench：
+P0.1/P0.2 已完成 authority、Agent 命令与交接闭环；P0.3 再完成 Review Workbench：
 
 ```text
 /sources
@@ -350,7 +371,8 @@ PDF page + normalized bbox overlay
 - Test：完整本地门禁 + `git diff --check`；
 - Package：从 validated authority 生成确定性 ZIP + manifest + SHA-256 sidecar。
 
-所有新 P0.1 Schema 与 authority roots 必须进入 Build signature、validate 和 Package；不能成为测试未覆盖的隐藏写路径。
+所有 Schema、authority roots、Agent CLI、repository-local skills 与聚焦测试都进入 Build signature；
+canonical data 继续进入 validate 和 Package，不能产生测试未覆盖的隐藏写路径。
 
 ## 13. 与 PcbCore / PCBAtlas 的边界
 
@@ -365,17 +387,38 @@ PcbCore 继续负责：
 
 因此 RAG/knowledge retrieval 负责“应该参考什么”，PcbCore/验证器负责“修改后是否正确”。
 
-## 14. 演进顺序
+## 14. 主要使用场景
 
-当前执行计划见 [TODO_GIT_NATIVE_KNOWLEDGE_P0.md](TODO_GIT_NATIVE_KNOWLEDGE_P0.md)：
+- **器件选型 / BOM**：查询工作电压、absolute maximum、package、生命周期与替代关系，并同时返回来源、适用条件和冲突。
+- **原理图检查**：核对 pin function、alternate function、电源/复位/晶振连接和推荐工作条件。
+- **PCB 布局**：查询厂商布局指南、reference design 与去耦要求；实际坐标、间距和 DRC 仍由 PcbCore 验证。
+- **自动布线 / ECO**：提供约束依据和历史案例；router、DRC 与 evaluator 决定修改是否可接受。
+- **Design Review**：把历史 review、approved waiver 和内部 guideline 变成可追溯的查询证据。
+- **PCBAtlas 离线知识**：从 Git authority 构建项目级只读 snapshot，只下发当前板卡相关 Fact、Source 与 evidence，而不是完整公司语料。
+
+## 15. 演进顺序
+
+当前执行计划见 [TODO.md](../TODO.md)：
 
 ```text
-P0.0 Git-native hardening        COMPLETE except real-checkout receipt refresh
+P0.0 Git-native hardening        COMPLETE
 P0.1 typed authority model       COMPLETE
-P0.2 Agent-native ingestion      NEXT
-P0.3 Local Review Workbench
+P0.2 Agent-native ingestion      COMPLETE
+P0.3 Local Review Workbench      NEXT
 P0.4 First real dataset + evals
 P1    SQLite exact + FTS
 P2    broader PCB knowledge + integration
 P3    vector retrieval only if eval justifies it
+```
+
+第一批真实数据的重点不是尽快导入大量 PDF，而是让 20–30 个常用器件形成稳定闭环：
+
+```text
+原文
+→ entity
+→ typed fact
+→ exact evidence
+→ human review
+→ Git publication
+→ published query
 ```

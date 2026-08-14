@@ -38,7 +38,6 @@ CONFIG_INPUTS = (
     Path("source_roots.lock.jsonc.in"),
 )
 BUILD_INPUT_FILES = (
-    Path("Open PcbKnowledge.command"),
     Path("configs/pcbknowledge_agent.py"),
     Path("configs/pcbknowledge_workflow.py"),
     Path("schemas/source-record.schema.json"),
@@ -46,6 +45,7 @@ BUILD_INPUT_FILES = (
     Path("schemas/fact-record.schema.json"),
 )
 BUILD_INPUT_ROOTS = (
+    Path(".codex/skills"),
     Path("src/pcbknowledge/git_native"),
     Path("tests/git_native"),
 )

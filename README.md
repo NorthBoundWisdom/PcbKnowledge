@@ -9,13 +9,7 @@ PDF，保存后马上可以查看 Git diff；人确认后再用熟悉的 Git GUI
 
 要求只有 Git 和 Python 3.11 或更新版本。首次克隆不需要初始化 submodule 或安装额外工具链。
 
-产品经理或工程师在 Finder 中双击仓库根目录的 **`Open PcbKnowledge.command`** 即可。首次会在
-本机完成约 4–5 秒检查，随后自动打开 GUI；以后源代码没有变化时会直接打开。
-
-如果 macOS 第一次阻止从 Finder 打开，可右键该文件选择“打开”；之后正常双击即可。启动器不安装
-依赖、不运行 Docker，也不读取账号密码。
-
-安装 FreeCM VS Code / Cursor 扩展后，也可以依次点击：
+团队统一通过 FreeCM VS Code / Cursor 扩展启动，依次点击：
 
 1. **Config → Local Git Workspace**：检查本机环境，不下载依赖。
 2. **Build → Check Local Editor**：编译、测试和现有资料校验。
@@ -24,7 +18,7 @@ PDF，保存后马上可以查看 Git diff；人确认后再用熟悉的 Git GUI
 Run 会自动打开浏览器。页面没有登录步骤；按 `Ctrl+C` 只关闭本机编辑器，已经保存的文件
 仍留在 Git 工作树中。
 
-相同的一键准备并打开流程也可以直接运行：
+没有图形化编辑器时，可用终端完成相同的一键准备并打开流程：
 
 ```bash
 python3 configs/pcbknowledge_workflow.py open
@@ -88,7 +82,7 @@ main/HEAD 中 committed APPROVED
 未来检索和 Agent 正式消费默认只能读取 Published Knowledge。当前 Agent CLI 已支持：
 
 ```bash
-python3 configs/pcbknowledge_agent.py list --published
+python3 configs/pcbknowledge_agent.py source list --published
 ```
 
 它从 Git `HEAD` 读取 committed `APPROVED` Source，typed published snapshot 同时提供 committed
@@ -132,22 +126,35 @@ MIXED
 Agent 使用同一套文件模型，无需服务凭据：
 
 ```bash
-python3 configs/pcbknowledge_agent.py list
-python3 configs/pcbknowledge_agent.py create \
+python3 configs/pcbknowledge_agent.py source list
+python3 configs/pcbknowledge_agent.py source create \
   --idempotency-key ti-tps5430-rev-g \
   --title "TPS5430 数据手册" \
   --revision "Rev. G" \
   --source-publisher "Texas Instruments" \
   --license-class PUBLIC_REFERENCE \
   --pdf /path/to/tps5430.pdf
+python3 configs/pcbknowledge_agent.py source authorize-read <source-id>
+python3 configs/pcbknowledge_agent.py entity resolve-manufacturer --name "Texas Instruments"
+python3 configs/pcbknowledge_agent.py fact list
+python3 configs/pcbknowledge_agent.py review-status --source-id <source-id> --fact-id <fact-id>
 python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_agent.py diff
 python3 configs/pcbknowledge_agent.py change-scope
 ```
 
-当前 CLI 是 Source 草稿入口，会返回 `revision_token`、`missing_fields`、
-`agent_processing_allowed` 和下一步动作。Agent 可以创建、修改和送审草稿，但没有批准、退回、
-提交或推送命令；Entity/Fact 的 Agent-native 命令属于 P0.2，底层 typed repository API 已完成。
+P0.2 CLI 已提供显式的 `source` / `entity` / `fact` typed commands；旧的 Source 顶层命令仍作为
+兼容别名。Source 普通输出不暴露 evidence path，Agent 必须先执行 `source authorize-read`，由许可
+门禁检查并验证 bytes 后才会得到只读路径。Entity resolver 只返回 `EXACT / UNKNOWN / CONFLICT`，
+不做模糊匹配；Fact 命令显式返回 `unknown_fields`、`missing_anchors` 和冲突关系。
+
+`review-status` 对选中的 Source/Entity/Fact closure 做最终 handoff 检查。只有完整、无冲突、许可允许、
+已送审且工作树为 `DATA_ONLY` 时才返回 `review_ready: true` 与
+`WAIT_FOR_HUMAN_REVIEW`；exit 2 表示仍有明确阻塞项。Agent 可以创建、修改和送审草稿，但 CLI 没有
+批准、退回、stage、commit 或 push 命令。
+
+仓库内四个可组合 skill 固化相同边界：`ingest-engineering-source`、
+`resolve-component-identity`、`extract-component-facts` 和 `prepare-knowledge-review`。
 
 SourceRecordV1 明确区分 `UNKNOWN`、`PUBLIC_REFERENCE`、`OPEN_LICENSE`、`INTERNAL`、
 `RESTRICTED` 与 `LICENSED_BLOCKED_FOR_AI`。`UNKNOWN`、`RESTRICTED` 和
@@ -176,12 +183,13 @@ python3 -m unittest tests.git_native.test_workflow
 
 ## 当前能力与下一阶段
 
-P0.1 typed authority 已完成：SourceRecordV1、Manufacturer/Component/Package EntityRecordV1、
-EvidenceAnchorV1、ComponentPinFactV1 与 ParameterLimitFactV1 共用同一 validator、published reader
-和 Package 闭环。当前 GUI 仍是 Source Corpus editor，不是完整 Fact Review Workbench。
+P0.2 Agent-native ingestion 已完成：SourceRecordV1、Manufacturer/Component/Package
+EntityRecordV1、EvidenceAnchorV1、ComponentPinFactV1 与 ParameterLimitFactV1 已贯通 typed CLI、
+四个 ingestion/review skill、许可前置门禁、显式 unknown/conflict/missing-anchor 输出和
+`DATA_ONLY` 人工交接闭环。当前 GUI 仍是 Source Corpus editor，不是完整 Fact Review Workbench。
 
-下一阶段见 [`TODO_GIT_NATIVE_KNOWLEDGE_P0.md`](TODO_GIT_NATIVE_KNOWLEDGE_P0.md)：P0.2 增加
-Agent-native typed ingestion，P0.3 增加 Fact Review Workbench。当前 authority 已经分离为：
+下一阶段见 [`TODO.md`](TODO.md)：P0.3 增加
+Fact Review Workbench。当前 authority 已经分离为：
 
 ```text
 SourceRecord
@@ -203,9 +211,9 @@ vector RAG 继续后移，不作为 P0 前置条件。
 - 未来若需要多人在线共享、细粒度权限或强审计，应另立 ADR 后重新引入身份与服务架构，而不是
   把本机编辑器暴露到网络。
 
-PcbKnowledge 不依赖 PcbCore，也不会修改 PCB 状态。项目边界与完整设计见
-[架构](PcbKnowledge_ARCHITECTURE.md)、[内部介绍](PcbKnowledge_INTERNAL_OVERVIEW.md)、
+PcbKnowledge 不依赖 PcbCore，也不会修改 PCB 状态。项目边界、内部产品语境与完整设计统一见
+[架构文档](docs/architecture.md)、
 [ADR-018](docs/adr/ADR-018-git-native-local-editor.md) 和
-[ADR-019](docs/adr/ADR-019-git-publication-boundary.md)。
+[ADR-019](docs/adr/ADR-019-git-publication-boundary.md)；其余入口见 [文档索引](docs/README.md)。
 
 本仓库为专有软件，除非权利人另行授权，保留所有权利；见 [LICENSE](LICENSE)。

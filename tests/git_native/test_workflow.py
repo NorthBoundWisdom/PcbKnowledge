@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import contextlib
 import io
-import os
 import subprocess
 import tempfile
 import unittest
@@ -151,17 +150,6 @@ class LocalWorkflowTests(WorkflowTestCase):
         self.assertEqual(configuration["defaults"]["run"], "local-editor")
         self.assertNotIn("docker", json.dumps(manifest).lower())
         self.assertNotIn("docker", (workflow.REPO_ROOT / "configs/pcbknowledge_workflow.py").read_text("utf-8").lower())
-
-    def test_double_click_launcher_is_safe_and_build_receipt_bound(self) -> None:
-        launcher = workflow.REPO_ROOT / "Open PcbKnowledge.command"
-        source = launcher.read_text("utf-8")
-
-        self.assertIn(Path("Open PcbKnowledge.command"), workflow.BUILD_INPUT_FILES)
-        self.assertTrue(os.access(launcher, os.X_OK))
-        self.assertIn("pcbknowledge_workflow.py open", source)
-        self.assertNotIn("docker", source.lower())
-        self.assertNotIn("git commit", source.lower())
-        self.assertNotIn("password", source.lower())
 
     def test_run_only_arguments_are_rejected_for_other_actions(self) -> None:
         with contextlib.redirect_stderr(io.StringIO()):
