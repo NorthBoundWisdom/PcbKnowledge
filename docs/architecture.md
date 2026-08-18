@@ -1,21 +1,16 @@
 # PcbKnowledge Git-native architecture
 
-> Status: P0.3a Typed Workbench Foundation complete; P0.3b Evidence Review next
+> Status: P0.3b visual Evidence Review complete; P0.3c Review Closure next
 > Updated: 2026-08-18
 > Primary decisions: [ADR-018](adr/ADR-018-git-native-local-editor.md), [ADR-019](adr/ADR-019-git-publication-boundary.md), [ADR-020](adr/ADR-020-knowledge-workspace-boundary.md)
+> Evidence coordinates: [ADR-013](adr/ADR-013-evidence-anchor-coordinates.md)
 > Open-source boundary: [`open-source-boundary.md`](open-source-boundary.md)
 
 ## 1. Product role
 
 PcbKnowledge is a repository for PCB engineering knowledge and source evidence. Agents prepare sources and structured candidates; engineers or product managers inspect source material, reject or approve candidates, and use Git for attribution, collaboration, and final publication.
 
-PCB software already knows the live board: components, nets, geometry, rules, connectivity, and deterministic DRC state. Many engineering decisions depend on information outside the board model, including:
-
-- datasheet pin functions, absolute maximums, and recommended operating conditions;
-- power sequencing, decoupling, clocks, reset behavior, and boot configuration;
-- manufacturer layout/application guides and reference designs;
-- fabrication capabilities, internal engineering rules, historical reviews, and waivers;
-- PCNs, EOL information, lifecycle state, and replacement relationships.
+PCB software already knows the live board: components, nets, geometry, rules, connectivity, and deterministic DRC state. Many engineering decisions depend on information outside the board model, including datasheet limits and pin functions, manufacturer application/layout guidance, fabrication capabilities, internal rules, historical reviews, waivers, lifecycle state, and replacement relationships.
 
 These materials change by revision. An engineering conclusion therefore needs to answer which document, which revision, which page, and which source passage supports it. PcbKnowledge stores immutable evidence together with typed engineering facts instead of relying only on model memory or generic PDF chunk/vector retrieval.
 
@@ -67,7 +62,7 @@ schema_digest     SHA-256 contract digest
 created_with      PcbKnowledge
 ```
 
-The schema digest covers the exact bytes of all three workspace schemas through their deterministic Git blob identities plus their repository paths. A mismatch between manifest and schema bytes fails closed. Existing workspaces are never silently upgraded by `init`; schema migration requires an explicit future upgrade workflow.
+The schema digest covers the exact bytes of all three workspace schemas through their deterministic Git blob identities plus repository paths. A mismatch between manifest and schema bytes fails closed. Existing workspaces are never silently upgraded by `init`; schema migration requires an explicit future upgrade workflow.
 
 ### 2.2 Runtime selection
 
@@ -80,7 +75,7 @@ Run/Open/Test/Package      --workspace <workspace>
 
 No explicitly selected invalid workspace falls back to the public source checkout. Terminal receipts and the GUI show the concrete selected root.
 
-Source code, Python modules, CSS, and other application assets come from the PcbKnowledge software installation. Source/Entity/Fact authority, evidence, review state, and Git diffs come only from the selected workspace.
+Source code, Python modules, CSS, PDF.js assets, and other application assets come from the PcbKnowledge software installation. Source/Entity/Fact authority, evidence, review state, and Git diffs come only from the selected workspace.
 
 ## 3. Current runtime structure
 
@@ -89,14 +84,12 @@ PcbKnowledge software checkout
         |
         | run/open --workspace <path>
         v
-loopback Python typed workbench (127.0.0.1:18080)
+loopback Python editor (127.0.0.1:18080)
         |
-        | HTTP handler
-        v
-WorkbenchApplication / typed view models
-        |
-        v
-KnowledgeRepository / domain model
+        +--> typed HTTP/application/view-model layer
+        |       |
+        |       +--> /review /sources /entities /facts /diff
+        |       +--> local PDF.js canvas + normalized evidence overlay
         |
         v
 selected knowledge Git workspace
@@ -109,11 +102,9 @@ selected knowledge Git workspace
 Git diff / human review / commit
 ```
 
-HTML rendering is a pure projection of typed view models. HTTP handlers parse transport input, enforce loopback/CSRF/revision boundaries, invoke application operations, and map results to responses. The renderer does not rediscover Source/Entity/Fact relationships and no UI-side authority graph is stored.
+The runtime is one Python process with server-rendered HTML, repository-owned CSS/JavaScript, and a pinned local PDF.js display layer. It has no Node build chain at runtime, Docker runtime, reverse proxy, database, queue, object store, identity provider, or background worker.
 
-The runtime is one Python process with server-rendered HTML and repository-owned CSS. It has no Node build chain, Docker runtime, reverse proxy, database, queue, object store, identity provider, or background worker.
-
-Local operating-system permissions and Git repository permissions define the current trusted-user boundary. A future shared online editor, enterprise SSO, fine-grained ACL, or compliance-grade audit system requires a new threat model and a new ADR; exposing the loopback editor to a network is not an incremental deployment option.
+Local operating-system permissions and Git repository permissions define the current trusted-user boundary. A future shared online editor, enterprise SSO, fine-grained ACL, or compliance-grade audit system requires a new threat model and ADR; exposing the loopback editor to a network is not an incremental deployment option.
 
 ## 4. Git authority and publication boundary
 
@@ -168,7 +159,7 @@ knowledge/
 evidence/sha256/ immutable PDF originals
 ```
 
-The retired `knowledge/records/` Source-only wire format is historical and has no active read or dual-write path. The P0.3a HTTP UI also removes the retired `/records` route family rather than maintaining an alias.
+The retired `knowledge/records/` Source-only wire format is historical and has no active read or dual-write path.
 
 ### 5.1 SourceRecordV1
 
@@ -201,6 +192,8 @@ quote
 quote_sha256
 ```
 
+`PDF_NORMALIZED_V1` uses the displayed PDF page after intrinsic crop and intrinsic rotation: top-left origin, positive X right, positive Y down, and coordinates divided by displayed viewport width/height. Browser zoom and device-pixel ratio do not change the anchor identity.
+
 An anchor binds to one immutable Source revision and never migrates automatically to another revision. Draft Facts may temporarily use page-only/incomplete anchors, but approval requires complete anchors.
 
 ### 5.4 FactRecordV1
@@ -226,9 +219,9 @@ DRAFT -> READY_FOR_REVIEW -> APPROVED
 - unresolved semantic conflicts remain explicit and are never resolved by model confidence;
 - working-tree approval remains distinct from publication.
 
-P0.3a exposes READY_FOR_REVIEW Source and Fact records through one typed queue. The queue projects missing Fact anchors, semantic conflicts, and Source approval/evidence closure as explicit blockers. It does not mutate or auto-resolve those blockers.
+P0.3c owns the final typed human decision surface for Facts, conflict/missing/license decision gates, and DATA_ONLY closure. P0.3b does not move those authority transitions into JavaScript.
 
-## 7. Source licensing and Agent processing
+## 7. Source licensing and evidence exposure
 
 `SourceRecordV1` uses:
 
@@ -245,7 +238,9 @@ LICENSED_BLOCKED_FOR_AI
 
 Normal Agent Source projections do not reveal the evidence path. `source authorize-read` returns a path only after policy and bytes both pass validation.
 
-## 8. Evidence lifecycle
+The local visual evidence viewer follows the same policy. Evidence-review view models omit a PDF URL for a blocked Source, and the loopback HTTP evidence endpoint independently returns 403 for blocked classes. Browser UI therefore cannot bypass the domain license gate by constructing a Source URL manually.
+
+## 8. Evidence lifecycle and visual review
 
 PDF originals are addressed by actual SHA-256 bytes:
 
@@ -255,7 +250,36 @@ evidence/sha256/<first-two>/<sha256>.pdf
 
 The repository creates missing digest objects, reuses identical content, rejects hash/size/path mismatch and symlinks, validates orphan evidence, protects committed/published evidence, and serializes writes with a repository lock.
 
-## 9. Derived data and packaging
+P0.3b adds a read-only evidence projection:
+
+```text
+Fact
+  |
+  +-- exact Source revision
+  +-- page
+  +-- PDF_NORMALIZED_V1 bbox
+  +-- quote + quote_sha256
+  +-- component/package + conditions/applicability
+          |
+          v
+same-origin PDF.js canvas + normalized SVG overlay
+```
+
+The overlay is derived UI state and never rewrites an anchor. Multiple anchors remain independent; the workbench does not merge them or pick a preferred Source.
+
+## 9. Pinned PDF.js runtime dependency
+
+P0.3b vendors only the `pdfjs-dist` 6.2.108 legacy display-layer module, its worker, and upstream Apache-2.0 license. It does not vendor the generic viewer UI, CMaps, WASM modules, or standard-font assets at this stage.
+
+The committed vendor contract records package integrity/SHA-1 plus exact per-file SHA-256 and byte sizes. `configs/check_pdfjs_vendor.py` verifies the contract in CI; server startup repeats the validation before exposing visual evidence review. Static serving is allowlisted to the display module and worker rather than the whole vendor directory.
+
+Runtime CSP keeps script, worker, PDF fetch, style, and image resources local/same-origin. PDF.js receives verified Source bytes via the loopback endpoint; no CDN fetch is a runtime fallback.
+
+Real-data P0.4 evaluation is responsible for exercising intrinsic page rotation/crop boxes and complex-font documents before the viewer contract expands.
+
+See [`../THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
+
+## 10. Derived data and packaging
 
 Permanent workspace assets are:
 
@@ -269,11 +293,11 @@ review / supersedes / conflict relationships
 Git history
 ```
 
-Rebuildable state includes `.pcbknowledge/`, SQLite indexes, FTS, page text, thumbnails/previews, embeddings, summaries, caches, and package ZIPs.
+Rebuildable state includes `.pcbknowledge/`, SQLite indexes, FTS, page text, thumbnails/previews, embeddings, summaries, caches, rendered canvases, and package ZIPs.
 
 `package --workspace <path>` validates and reads only the selected workspace. Its archive includes the workspace manifest, pinned schemas, authority, and referenced evidence. The ZIP and SHA-256 sidecar are written under the software checkout's ignored `build/package/` directory.
 
-## 10. Agent boundary
+## 11. Agent boundary
 
 P0.2 exposes typed `source`, `entity`, and `fact` command groups plus four repository-local skills. P0.2.5 makes workspace selection part of every skill contract.
 
@@ -281,49 +305,36 @@ Agents may create/edit drafts, create typed candidates, attach verified anchors,
 
 Agents may not approve/reject, stage/commit/push, read blocked content, fill facts from approximate identities/model priors, silently switch workspaces, or mutate PCB board state.
 
-## 11. Typed review workbench
+## 12. Current GUI structure
 
-P0.3a replaces the Source Corpus UI foundation with typed routes:
+P0.3a hard-cut the old Source Corpus UI. Active routes are:
 
 ```text
-/review                primary Source/Fact review queue
-/sources               Source list
-/sources/<id>          exact Source revision and human Source workflow
-/entities              Manufacturer / Component / Package list
-/entities/<id>         exact identity and related records
-/facts                  typed engineering Fact list
-/facts/<id>             typed payload, applicability, anchors, conflicts
-/diff                   read-only workspace Git diff
+/review
+/sources
+/sources/<id>
+/entities
+/entities/<id>
+/facts
+/facts/<id>
+/diff
 ```
 
-The old `/records` route family is intentionally retired rather than retained as a compatibility alias.
+The HTTP handler owns transport and security checks. `WorkbenchApplication` and evidence-review application code construct typed projections from one `KnowledgeRepository`; HTML renderers consume those projections. Source human operations remain in the application/repository layer. The GUI never executes Git write commands.
 
-The application layer constructs typed view models from one validated workspace snapshot. It derives:
+P0.3b extends Fact detail with local visual evidence review. P0.3c next adds typed Fact approve/reject and makes missing-anchor, semantic-conflict, license, and change-scope state enforceable human-decision gates.
 
-- Source -> referencing Facts, predecessor/successor revisions;
-- Manufacturer -> Components;
-- Component/Package -> related Facts;
-- Fact -> Component/Package identities, Source revisions, EvidenceAnchors, semantic conflicts, predecessor/successor Facts;
-- READY_FOR_REVIEW Source/Fact queue items and current closure blockers;
-- working-tree Git change count and change scope.
-
-Source create/edit/submit/approve/reject remains available through `/sources/**` and continues to use optimistic revision tokens, append-only review history, evidence validation, and no Git write. Entity and Fact views are read-only in P0.3a.
-
-P0.3b adds local visual evidence review: pinned PDF viewer assets, exact page rendering, and normalized bounding-box overlays. P0.3c adds Fact approve/reject controls plus final missing/conflict/license/change-scope closure in the typed review view.
-
-The runtime remains server-rendered Python plus repository-owned static assets. P0.3a introduces no Node build chain and no JavaScript requirement.
-
-## 12. FreeCM lifecycle
+## 13. FreeCM lifecycle
 
 - **Config** validates the software checkout and writes a configuration receipt.
 - **Build** compiles, runs focused tests, validates the empty source-checkout workspace, and writes a build receipt.
-- **Run/Open** require the software build, validate the selected workspace, and start the loopback editor.
+- **Run/Open** require the software build, validate the selected workspace and pinned viewer assets, and start the loopback editor.
 - **Test** runs software tests and may additionally validate an external `--workspace`.
 - **Package** requires the software build and exports the selected validated workspace.
 
 FreeCM's default actions continue to target the source checkout for development convenience. Terminal users select production/private workspaces explicitly with `--workspace`.
 
-## 13. Retrieval and product integration direction
+## 14. Retrieval and product integration direction
 
 P1 query order remains:
 
@@ -337,6 +348,6 @@ exact entity
 
 Broader Fact types are added only after the first real dataset validates the initial schema and review UX. P2 introduces immutable KnowledgeSnapshot consumption and read-only PCBAtlas/PcbCore-facing Agent adapters without making PcbKnowledge a live board dependency.
 
-## 14. Explicitly deferred capabilities
+## 15. Explicitly deferred capabilities
 
-The following are not P0 requirements: hosted multi-user service, login infrastructure, database/object-store authority, MCP as a domain protocol, vector retrieval without evaluation evidence, automatic Git publication, and automatic PCB board mutation. Changing these boundaries requires an explicit ADR rather than silently reviving a superseded design.
+The following are not P0 requirements: hosted multi-user service, login infrastructure, database/object-store authority, MCP as a domain protocol, vector retrieval without evaluation evidence, automatic Git publication, automatic PCB board mutation, or a second browser-framework build system. Changing these boundaries requires an explicit ADR rather than silently reviving a superseded design.

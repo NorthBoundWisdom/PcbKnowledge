@@ -4,7 +4,7 @@
 
 PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering knowledge repository and local review tool. It turns engineering statements from datasheets, application notes, reference designs, and similar sources into validated `Source`, `Entity`, `Fact`, and `EvidenceAnchor` records, with human review and Git publication as explicit boundaries.
 
-> **Open-source boundary:** this repository publishes software, schemas, documentation, and Agent workflows under Apache-2.0. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals live in separately controlled knowledge workspaces. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
+> **Open-source boundary:** this repository publishes software, schemas, documentation, Agent workflows, and explicitly reviewed runtime dependencies under Apache-2.0-compatible terms. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals live in separately controlled knowledge workspaces. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
 
 ## Current status
 
@@ -14,12 +14,12 @@ P0.1 Typed authority model            COMPLETE
 P0.2 Agent-native ingestion           COMPLETE
 P0.2.5 Knowledge Workspace boundary   COMPLETE
 P0.3a Typed Workbench Foundation      COMPLETE
-P0.3b Evidence Review                 NEXT
-P0.3c Review Closure
+P0.3b Evidence Review                 COMPLETE
+P0.3c Review Closure                  NEXT
 P0.4 First real dataset + evals
 ```
 
-The software/knowledge boundary and typed workbench foundation are executable. The public checkout stays data-empty, while real authority is stored in an explicitly selected self-contained Git workspace with a canonical manifest and pinned schema snapshot. The local GUI now opens a typed review queue plus Source, Entity, and Fact views instead of the retired Source Corpus `/records` UI. See [`TODO.md`](TODO.md) and [`docs/architecture.md`](docs/architecture.md).
+The software/knowledge boundary, typed workbench, and visual evidence-review surface are executable. The public checkout stays data-empty, while real authority is stored in an explicitly selected self-contained Git workspace with a canonical manifest and pinned schema snapshot. The local GUI exposes `/review`, typed Source/Entity/Fact views, and a Fact-to-PDF evidence inspector with exact Source revision/page context and normalized bbox overlays. See [`TODO.md`](TODO.md) and [`docs/architecture.md`](docs/architecture.md).
 
 ## Core model
 
@@ -81,14 +81,14 @@ python3 configs/pcbknowledge_workspace.py validate-ref ../PcbKnowledgeData --ref
 
 A schema/manifest mismatch fails closed. Schema upgrades are explicit contract changes; PcbKnowledge never silently overwrites an existing workspace with a newer schema snapshot.
 
-## Local typed workbench and FreeCM workflow
+## Local editor and evidence review
 
 Requirements:
 
 - Git
 - Python 3.11+
 
-No Docker, database, account system, Node runtime, or hosted service is required.
+No Docker, database, account system, Node runtime, or hosted service is required at runtime.
 
 Prepare the software checkout once:
 
@@ -105,22 +105,11 @@ python3 configs/pcbknowledge_workflow.py run --workspace ../PcbKnowledgeData
 python3 configs/pcbknowledge_workflow.py open --workspace ../PcbKnowledgeData
 ```
 
-The editor binds only to loopback and every page identifies the exact selected workspace. Current typed routes are:
+The editor binds only to loopback and every page shows the selected workspace root. Source/Entity/Fact/evidence changes and Git diffs come only from that workspace; code and static assets come from the PcbKnowledge software checkout.
 
-```text
-/review              primary Source/Fact human queue
-/sources             Source list and human Source workflow
-/sources/<id>        exact revision, evidence, history, relations
-/entities            Manufacturer / Component / Package identities
-/entities/<id>       exact identity and related Facts/entities
-/facts               typed engineering Fact list
-/facts/<id>          payload, applicability, anchors, conflicts, relations
-/diff                read-only Git working-tree preview
-```
+Fact detail includes a local visual evidence-review section. For every anchor it keeps the typed Fact context visible, identifies the exact Source revision and page, displays quote/hash metadata, and renders the PDF page with a `PDF_NORMALIZED_V1` bbox overlay. Multiple anchors remain independently navigable.
 
-HTTP/security transport, typed application/view-model construction, repository/domain logic, and pure HTML rendering are separate layers. The workbench derives Source/Entity/Fact/supersedes/conflict navigation directly from canonical authority; it does not store a second graph or UI-side knowledge model.
-
-P0.3a deliberately does **not** implement visual PDF page/bounding-box rendering or Fact approve/reject controls. Those are P0.3b and P0.3c respectively. Source create/edit/submit/approve/reject remains available through `/sources/**`.
+PDF rendering uses the pinned local `pdfjs-dist` 6.2.108 legacy display-layer module and worker. The runtime does not fetch viewer code from a CDN. Source evidence is served only when the Source license policy permits Agent/model processing; a blocked Source is rejected by the backend evidence endpoint, not merely hidden in the browser. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and [`ADR-013`](docs/adr/ADR-013-evidence-anchor-coordinates.md).
 
 Test or package a selected workspace:
 
@@ -189,6 +178,7 @@ Run the local gates before publishing code changes:
 ```bash
 python3 configs/check_english_repo.py
 python3 configs/check_public_repo.py
+python3 configs/check_pdfjs_vendor.py
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_workflow.py test
@@ -196,14 +186,16 @@ python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-Workspace-boundary and GUI changes additionally use synthetic external Git repositories, typed view-model tests, real loopback HTTP tests, schema/manifest tamper tests, and external packaging tests.
+Workspace-boundary changes additionally use synthetic external Git repositories and schema/manifest tamper tests. GUI changes require focused HTTP/view-model tests plus a real loopback smoke. The PDF.js checker pins the exact vendor file set, byte sizes, SHA-256 values, package integrity, and version before the evidence-review server starts.
+
+Browser-canvas placement is a visual acceptance surface: before reviewing production data, open at least one representative Fact in a desktop browser and verify that its highlighted bbox covers the quoted Source region. P0.4 expands this to rotated/cropped and complex-font PDFs.
 
 ## Contributing
 
-Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before opening a pull request. Do not place internal company material, unlicensed PDFs, real credentials, or production knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before opening a pull request. Do not place internal company material, unlicensed PDFs, real credentials, or production knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
 
 Report security issues privately according to [`SECURITY.md`](SECURITY.md).
 
 ## License
 
-PcbKnowledge software and repository documentation are licensed under the [Apache License 2.0](LICENSE), unless a file explicitly states otherwise. Third-party engineering documents and knowledge datasets retain their own rights and licenses.
+PcbKnowledge software and repository documentation are licensed under the [Apache License 2.0](LICENSE), unless a file explicitly states otherwise. Vendored third-party assets retain their upstream notices and licenses. Third-party engineering documents and knowledge datasets retain their own rights and licenses.

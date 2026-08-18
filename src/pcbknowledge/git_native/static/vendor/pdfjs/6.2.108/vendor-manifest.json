@@ -1,0 +1,22 @@
+{
+  "build": "legacy",
+  "files": {
+    "LICENSE": {
+      "byte_size": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    },
+    "pdf.min.mjs": {
+      "byte_size": 512483,
+      "sha256": "9fab0c910bf1484835c5c2aeb68f7eb3dfce7f9eb435a004526c5af86d70890c"
+    },
+    "pdf.worker.min.mjs": {
+      "byte_size": 1312452,
+      "sha256": "bc0d1b88ea0b66196b1d36a58ac243c6d92adfe725624e2a9fdd381bdf8ef434"
+    }
+  },
+  "package": "pdfjs-dist",
+  "package_integrity": "sha512-YxFb+SQcodN2rnX9Tn3dHYlqfb7NjlzzfONPpJd+AKoKtUjEdevTfbC07d5TcczzOK6261auRkP/M8OBHs9vFQ==",
+  "package_shasum": "1e0ce0f4b3a034f953dbbe2334ab01fbddf0eb30",
+  "registry": "https://registry.npmjs.org",
+  "version": "6.2.108"
+}

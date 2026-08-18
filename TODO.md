@@ -1,12 +1,12 @@
 # TODO — PcbKnowledge Roadmap
 
-> Status: `P0.3A_COMPLETE_P0.3B_NEXT`
+> Status: `P0.3B_COMPLETE_P0.3C_NEXT`
 > Updated: 2026-08-18
-> Goal: evolve the completed Git-native typed-authority, Agent-ingestion, workspace-boundary, and typed-workbench foundations into a practical evidence-review and retrieval system for PCB engineering Agents.
+> Goal: evolve the completed Git-native typed-authority, Agent-ingestion, workspace-boundary, typed-workbench, and visual-evidence foundations into a practical review and retrieval system for PCB engineering Agents.
 
 ## 0. Permanent boundaries
 
-- The public PcbKnowledge repository contains software, schemas, documentation, Agent skills, and synthetic tests, but no production knowledge/evidence.
+- The public PcbKnowledge repository contains software, schemas, documentation, Agent skills, synthetic tests, and explicitly reviewed runtime dependencies, but no production knowledge/evidence.
 - Real Source / Entity / Fact authority, internal rules, reviews, waivers, and third-party PDF evidence live in a separately controlled knowledge Git workspace.
 - A knowledge workspace is self-contained: its manifest, pinned schemas, authority, evidence, and Git history define publication.
 - PDF originals are content-addressed from actual SHA-256 bytes.
@@ -211,43 +211,77 @@ Package: PASS
 
 Focused coverage includes typed review queue projection, Source/Entity/Fact relationship navigation, Source human review flow, Fact typed inspector, retired `/records` rejection, workspace identity, loopback Host/Origin, CSRF, stale revision tokens, evidence serving, and GUI no-stage behavior.
 
-Manual visual acceptance for a local checkout:
+### P0.3b — Evidence Review — COMPLETE
 
-1. run `python3 configs/pcbknowledge_workflow.py open --workspace <workspace>`;
-2. confirm `/review`, `/sources`, `/entities`, `/facts`, and `/diff` share one workspace banner;
-3. confirm Source creation/review remains usable through `/sources/**`;
-4. confirm Fact detail shows typed payload, identities, Source revision links, anchors, conflicts, and review history;
-5. confirm `/records/new` returns 404 rather than silently falling back to the retired UI.
+Fact detail now contains a local visual evidence-review surface without adding a second authority or write path.
 
-### P0.3b — Evidence Review — NEXT
+Completed:
 
-The primary next product loop is Fact-to-source visual evidence review.
+- [x] vendor and pin `pdfjs-dist` 6.2.108 legacy display-layer and worker assets plus the upstream Apache-2.0 license;
+- [x] exact PDF.js package integrity/SHA-1 and per-file SHA-256/byte-size manifest;
+- [x] independent `check_pdfjs_vendor.py` gate and runtime startup validation;
+- [x] render the exact referenced Source PDF page in a local canvas;
+- [x] `PDF_NORMALIZED_V1` bbox overlay over the displayed page viewport;
+- [x] quote and `quote_sha256` displayed next to the visual anchor;
+- [x] multiple-anchor navigation with Source revision/page context;
+- [x] component/package, conditions, and applicability remain visible beside evidence review;
+- [x] Source license policy enforced in the application projection and again at the PDF HTTP endpoint;
+- [x] `UNKNOWN`, `RESTRICTED`, and `LICENSED_BLOCKED_FOR_AI` sources are not exposed to the viewer;
+- [x] viewer code, worker, CSS, and PDF fetches are same-origin only under explicit CSP;
+- [x] vendor manifest/license are not served as generic static files;
+- [x] ADR-013 now defines crop/rotation/origin/axis semantics for `PDF_NORMALIZED_V1` before production authority is introduced.
 
-- [ ] vendor and pin an approved PDF.js build or equivalent reviewed local PDF viewer asset;
-- [ ] render the exact Source revision and PDF page;
-- [ ] normalized bbox overlay;
-- [ ] quote/hash display next to the visual anchor;
-- [ ] navigate multiple anchors;
-- [ ] show package/revision/applicability beside the typed Fact;
-- [ ] never expose evidence that fails Source processing policy;
-- [ ] keep viewer assets local and covered by CSP/supply-chain review.
+#### P0.3b verification receipt
 
-Target composition:
+Implementation/fix commits:
 
 ```text
-Agent-prepared Fact
-        |
-        v
-/review or /facts/<id>
-        |
-        +-- source revision + PDF page + bbox
-        +-- typed Fact payload + conditions/applicability
-        +-- Entity/package identity
-        +-- unknown/conflict/license/missing gates
-        +-- review history
+8a4382eb71c7ea2115245697878f50a7b1738041
+[feat]: add visual PDF evidence review P0.3b
+
+dfbca5e65a53919a741f1dced16bc763df7bb459
+[fix]: preserve typed application in workspace server
 ```
 
-### P0.3c — Review Closure
+The first integration run exposed one shared server-wrapper regression: the P0.3b workspace server subclass failed to initialize the P0.3a `WorkbenchApplication`. The second commit repaired that root cause; no platform-specific fallback was added.
+
+Validation-only PR #5 uses the pre-P0.3b main snapshot as its base; development itself remains directly on `main`.
+
+CI run `32141380432` passed on:
+
+- Ubuntu / Python 3.11 — full Core Config -> Build -> Test -> Agent validate -> Package;
+- Ubuntu / Python 3.14;
+- macOS / Python 3.11;
+- Windows / Python 3.11.
+
+Core receipt:
+
+```text
+88 tests
+0 failures
+0 errors
+0 skips
+English-only guard: PASS
+public-source guard: PASS
+PDF.js vendor SHA-256 gate: PASS
+workspace contract validation: PASS
+Agent validate: PASS
+Package: PASS
+```
+
+Focused P0.3b coverage verifies exact Source revision/page/bbox/quote projection, multiple-anchor navigation, normalized SVG overlay geometry, backend license blocking, same-origin CSP, local-only viewer asset references, vendor file-set/hash drift rejection, and preservation of the P0.3a workspace application layer.
+
+Browser-canvas rendering is intentionally a manual visual acceptance surface rather than a second JS/browser test stack in P0.3b. Before using a real knowledge workspace for review, verify one representative PDF in a desktop browser:
+
+1. run `python3 configs/pcbknowledge_workflow.py open --workspace <workspace>`;
+2. open a Fact with a complete evidence anchor;
+3. confirm the exact Source revision/page renders and the highlighted box covers the quoted source region;
+4. resize/zoom the browser and confirm the normalized overlay remains attached to the same region;
+5. confirm a license-blocked Source shows policy state and cannot return PDF bytes through its evidence URL.
+
+P0.4 real-data evaluation must add rotated/cropped and complex-font PDFs before expanding the coordinate or viewer contract.
+
+### P0.3c — Review Closure — NEXT
 
 - [ ] approve/reject Source and Fact from the typed review view;
 - [ ] preserve rejection comment and resubmission history;
@@ -262,11 +296,11 @@ Agent-prepared Fact
 ### P0.3 completion gate
 
 - [ ] a human can review an Agent-created Source + Entity + Fact closure entirely from the workbench;
-- [ ] the PDF evidence anchor can be inspected visually;
-- [ ] approve/reject history is preserved;
-- [ ] conflicts/missing/license blockers are visible and fail closed;
+- [x] the PDF evidence anchor has an implemented local visual inspection surface;
+- [ ] approve/reject history is preserved for the full Source + Fact review closure;
+- [ ] conflicts/missing/license blockers are visible and fail closed at decision time;
 - [ ] the resulting change is reviewable as a `DATA_ONLY` Git diff;
-- [ ] loopback/security tests and a real external-workspace GUI smoke pass.
+- [ ] loopback/security tests and a real external-workspace GUI acceptance pass.
 
 ---
 
@@ -284,7 +318,7 @@ Start with 3–5 common ICs and deliberately stress the model:
 - [ ] parameter limits with footnotes/conditions;
 - [ ] at least one intentionally unresolved unknown case.
 
-Evaluate table-cell anchors, multi-line/multi-page conditions, package-specific applicability, footnote-linked constraints, multiple anchors per Fact, and revision drift before changing or expanding the schema.
+Evaluate table-cell anchors, multi-line/multi-page conditions, package-specific applicability, footnote-linked constraints, multiple anchors per Fact, revision drift, intrinsic page rotation/crop boxes, and complex-font rendering before changing or expanding the schema/viewer contract.
 
 ### P0.4b — First production-scale dataset
 
