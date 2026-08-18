@@ -1,6 +1,6 @@
 # PcbKnowledge Git-native architecture
 
-> Status: P0.2.5 Knowledge Workspace boundary complete; P0.3 Review Workbench next
+> Status: P0.3a Typed Workbench Foundation complete; P0.3b Evidence Review next
 > Updated: 2026-08-18
 > Primary decisions: [ADR-018](adr/ADR-018-git-native-local-editor.md), [ADR-019](adr/ADR-019-git-publication-boundary.md), [ADR-020](adr/ADR-020-knowledge-workspace-boundary.md)
 > Open-source boundary: [`open-source-boundary.md`](open-source-boundary.md)
@@ -89,7 +89,14 @@ PcbKnowledge software checkout
         |
         | run/open --workspace <path>
         v
-loopback Python editor (127.0.0.1:18080)
+loopback Python typed workbench (127.0.0.1:18080)
+        |
+        | HTTP handler
+        v
+WorkbenchApplication / typed view models
+        |
+        v
+KnowledgeRepository / domain model
         |
         v
 selected knowledge Git workspace
@@ -101,6 +108,8 @@ selected knowledge Git workspace
         v
 Git diff / human review / commit
 ```
+
+HTML rendering is a pure projection of typed view models. HTTP handlers parse transport input, enforce loopback/CSRF/revision boundaries, invoke application operations, and map results to responses. The renderer does not rediscover Source/Entity/Fact relationships and no UI-side authority graph is stored.
 
 The runtime is one Python process with server-rendered HTML and repository-owned CSS. It has no Node build chain, Docker runtime, reverse proxy, database, queue, object store, identity provider, or background worker.
 
@@ -159,7 +168,7 @@ knowledge/
 evidence/sha256/ immutable PDF originals
 ```
 
-The retired `knowledge/records/` Source-only wire format is historical and has no active read or dual-write path.
+The retired `knowledge/records/` Source-only wire format is historical and has no active read or dual-write path. The P0.3a HTTP UI also removes the retired `/records` route family rather than maintaining an alias.
 
 ### 5.1 SourceRecordV1
 
@@ -217,6 +226,8 @@ DRAFT -> READY_FOR_REVIEW -> APPROVED
 - unresolved semantic conflicts remain explicit and are never resolved by model confidence;
 - working-tree approval remains distinct from publication.
 
+P0.3a exposes READY_FOR_REVIEW Source and Fact records through one typed queue. The queue projects missing Fact anchors, semantic conflicts, and Source approval/evidence closure as explicit blockers. It does not mutate or auto-resolve those blockers.
+
 ## 7. Source licensing and Agent processing
 
 `SourceRecordV1` uses:
@@ -270,27 +281,37 @@ Agents may create/edit drafts, create typed candidates, attach verified anchors,
 
 Agents may not approve/reject, stage/commit/push, read blocked content, fill facts from approximate identities/model priors, silently switch workspaces, or mutate PCB board state.
 
-## 11. GUI evolution
+## 11. Typed review workbench
 
-The current GUI remains the Source Corpus editor. P0.2.5 wraps the stable server with a workspace-aware runtime that validates the selected workspace and injects the exact workspace root into every rendered page. Existing Host/Origin, CSRF, optimistic-revision, and no-Git-write boundaries are unchanged.
-
-P0.3 now evolves the UI toward:
+P0.3a replaces the Source Corpus UI foundation with typed routes:
 
 ```text
-/review                primary review queue
-/sources
-/entities
-/facts
-
-PDF page + normalized bbox overlay
-+ typed fact inspector
-+ review history
-+ source/entity/fact/supersedes navigation
-+ missing/conflict/license gates
-+ Git diff and change-scope state
+/review                primary Source/Fact review queue
+/sources               Source list
+/sources/<id>          exact Source revision and human Source workflow
+/entities              Manufacturer / Component / Package list
+/entities/<id>         exact identity and related records
+/facts                  typed engineering Fact list
+/facts/<id>             typed payload, applicability, anchors, conflicts
+/diff                   read-only workspace Git diff
 ```
 
-The runtime remains server-rendered Python plus a small amount of native JavaScript, with no Node build chain for the P0 workbench.
+The old `/records` route family is intentionally retired rather than retained as a compatibility alias.
+
+The application layer constructs typed view models from one validated workspace snapshot. It derives:
+
+- Source -> referencing Facts, predecessor/successor revisions;
+- Manufacturer -> Components;
+- Component/Package -> related Facts;
+- Fact -> Component/Package identities, Source revisions, EvidenceAnchors, semantic conflicts, predecessor/successor Facts;
+- READY_FOR_REVIEW Source/Fact queue items and current closure blockers;
+- working-tree Git change count and change scope.
+
+Source create/edit/submit/approve/reject remains available through `/sources/**` and continues to use optimistic revision tokens, append-only review history, evidence validation, and no Git write. Entity and Fact views are read-only in P0.3a.
+
+P0.3b adds local visual evidence review: pinned PDF viewer assets, exact page rendering, and normalized bounding-box overlays. P0.3c adds Fact approve/reject controls plus final missing/conflict/license/change-scope closure in the typed review view.
+
+The runtime remains server-rendered Python plus repository-owned static assets. P0.3a introduces no Node build chain and no JavaScript requirement.
 
 ## 12. FreeCM lifecycle
 

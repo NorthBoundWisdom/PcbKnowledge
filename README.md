@@ -13,11 +13,13 @@ P0.0 Git-native hardening             COMPLETE
 P0.1 Typed authority model            COMPLETE
 P0.2 Agent-native ingestion           COMPLETE
 P0.2.5 Knowledge Workspace boundary   COMPLETE
-P0.3 Local Review Workbench           NEXT
+P0.3a Typed Workbench Foundation      COMPLETE
+P0.3b Evidence Review                 NEXT
+P0.3c Review Closure
 P0.4 First real dataset + evals
 ```
 
-The software/knowledge boundary is now executable: the public checkout stays data-empty, while real authority is stored in an explicitly selected self-contained Git workspace with a canonical manifest and pinned schema snapshot. The current GUI is still the Source Corpus editor; P0.3 evolves it into the typed Fact Review Workbench. See [`TODO.md`](TODO.md) and [`docs/architecture.md`](docs/architecture.md).
+The software/knowledge boundary and typed workbench foundation are executable. The public checkout stays data-empty, while real authority is stored in an explicitly selected self-contained Git workspace with a canonical manifest and pinned schema snapshot. The local GUI now opens a typed review queue plus Source, Entity, and Fact views instead of the retired Source Corpus `/records` UI. See [`TODO.md`](TODO.md) and [`docs/architecture.md`](docs/architecture.md).
 
 ## Core model
 
@@ -79,7 +81,7 @@ python3 configs/pcbknowledge_workspace.py validate-ref ../PcbKnowledgeData --ref
 
 A schema/manifest mismatch fails closed. Schema upgrades are explicit contract changes; PcbKnowledge never silently overwrites an existing workspace with a newer schema snapshot.
 
-## Local editor and FreeCM workflow
+## Local typed workbench and FreeCM workflow
 
 Requirements:
 
@@ -103,7 +105,22 @@ python3 configs/pcbknowledge_workflow.py run --workspace ../PcbKnowledgeData
 python3 configs/pcbknowledge_workflow.py open --workspace ../PcbKnowledgeData
 ```
 
-The editor binds only to loopback. The page explicitly shows the selected workspace root. Source/Entity/Fact/evidence changes and Git diffs come only from that workspace; code and static assets come from the PcbKnowledge software checkout.
+The editor binds only to loopback and every page identifies the exact selected workspace. Current typed routes are:
+
+```text
+/review              primary Source/Fact human queue
+/sources             Source list and human Source workflow
+/sources/<id>        exact revision, evidence, history, relations
+/entities            Manufacturer / Component / Package identities
+/entities/<id>       exact identity and related Facts/entities
+/facts               typed engineering Fact list
+/facts/<id>          payload, applicability, anchors, conflicts, relations
+/diff                read-only Git working-tree preview
+```
+
+HTTP/security transport, typed application/view-model construction, repository/domain logic, and pure HTML rendering are separate layers. The workbench derives Source/Entity/Fact/supersedes/conflict navigation directly from canonical authority; it does not store a second graph or UI-side knowledge model.
+
+P0.3a deliberately does **not** implement visual PDF page/bounding-box rendering or Fact approve/reject controls. Those are P0.3b and P0.3c respectively. Source create/edit/submit/approve/reject remains available through `/sources/**`.
 
 Test or package a selected workspace:
 
@@ -179,7 +196,7 @@ python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-Workspace-boundary changes additionally use synthetic external Git repositories, schema/manifest tamper tests, external GUI smoke, and external packaging tests.
+Workspace-boundary and GUI changes additionally use synthetic external Git repositories, typed view-model tests, real loopback HTTP tests, schema/manifest tamper tests, and external packaging tests.
 
 ## Contributing
 
