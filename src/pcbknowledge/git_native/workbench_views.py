@@ -6,6 +6,12 @@ import html
 from pathlib import Path
 from typing import Iterable
 
+from pcbknowledge.git_native.review_closure import ReviewDecisionView
+from pcbknowledge.git_native.review_closure_views import (
+    VISUAL_EVIDENCE_SLOT,
+    render_review_decision_panel,
+)
+
 from pcbknowledge.git_native.workbench import (
     EntityView,
     FactView,
@@ -185,7 +191,7 @@ def render_review(
         '</section>'
         '<div class="section-heading workbench-heading"><div><p class="eyebrow">Human queue</p>'
         f'<h2>{len(overview.review_items)} items ready for review</h2></div>'
-        '<p>P0.3a exposes typed closure and navigation. Fact approval/rejection is completed in P0.3c.</p></div>'
+        '<p>Approval and rejection are revalidated against typed closure and the current next-commit scope at decision time.</p></div>'
         f'<section class="review-grid">{queue}</section>'
     )
     return page(
@@ -389,6 +395,7 @@ def render_source_detail(
     workspace: Path,
     change_count: int,
     csrf_token: str,
+    decision: ReviewDecisionView | None = None,
 ) -> str:
     missing = (
         "".join(badge(f"Missing {field}", "missing") for field in source.missing_fields)
@@ -424,21 +431,16 @@ def render_source_detail(
             '<button class="button primary" type="submit">Submit source</button></form>'
         )
     elif source.status == "READY_FOR_REVIEW":
+        if decision is None:
+            raise ValueError("READY_FOR_REVIEW Source requires review decision projection")
         content = _source_details(source)
-        content += (
-            '<section class="panel review-panel"><p class="eyebrow">Human decision</p>'
-            '<h2>Verify Source revision, license, and PDF original</h2>'
-            '<p>Source review remains available while P0.3a adds typed workbench navigation.</p>'
-            f'<form action="/sources/{escape(source.id)}/approve" method="post">'
-            f"{hidden('csrf_token', csrf_token)}{hidden('expected_revision', source.revision_token)}"
-            '<label class="field field-wide"><span>Approval note (optional)</span>'
-            '<textarea name="review_comment"></textarea></label>'
-            '<button class="button primary" type="submit">Approve source</button></form>'
-            f'<form action="/sources/{escape(source.id)}/reject" method="post">'
-            f"{hidden('csrf_token', csrf_token)}{hidden('expected_revision', source.revision_token)}"
-            '<label class="field field-wide"><span>Rejection reason (required)</span>'
-            '<textarea name="review_comment" required></textarea></label>'
-            '<button class="button danger" type="submit">Reject for revision</button></form></section>'
+        content += render_review_decision_panel(
+            decision,
+            csrf_token=csrf_token,
+            expected_revision=source.revision_token,
+            approve_action=f"/sources/{source.id}/approve",
+            reject_action=f"/sources/{source.id}/reject",
+            subject_label="Source",
         )
     else:
         content = (
@@ -656,7 +658,12 @@ def _anchor_cards(fact: FactView) -> str:
 
 
 def render_fact_detail(
-    fact: FactView, *, workspace: Path, change_count: int
+    fact: FactView,
+    *,
+    workspace: Path,
+    change_count: int,
+    csrf_token: str,
+    decision: ReviewDecisionView | None = None,
 ) -> str:
     blockers = (
         "".join(badge(value, "missing") for value in fact.blockers)
@@ -668,6 +675,24 @@ def render_fact_detail(
         for label, value in fact.payload_rows
     )
     predecessor = () if fact.supersedes is None else (fact.supersedes,)
+    state_notice = ""
+    if fact.status == "APPROVED":
+        state_notice = (
+            '<div class="notice success"><strong>This Fact is approved and immutable in place</strong>'
+            '<p>Corrections require a new Fact with explicit supersedes; the workbench exposes no edit path for approved authority.</p></div>'
+        )
+    elif fact.status == "REJECTED" and fact.review_history:
+        state_notice = (
+            '<div class="notice warning"><strong>This Fact was rejected</strong>'
+            f'<p>{escape(fact.review_history[-1].comment or "No comment")}</p>'
+            '<p>An Agent or author must revise and resubmit it before another human decision.</p></div>'
+        )
+    elif fact.status == "DRAFT":
+        state_notice = (
+            '<div class="notice"><strong>This Fact is still a draft</strong>'
+            '<p>Human decision actions appear only after Agent or author submission.</p></div>'
+        )
+
     body = (
         '<div class="page-heading"><div>'
         f'<p class="eyebrow">{escape(fact.fact_type)} · {escape(fact.prepared_by)}</p>'
@@ -675,6 +700,7 @@ def render_fact_detail(
         f'<div class="heading-actions">{status_badge(fact.status)}'
         '<a class="button secondary" href="/facts">Back to facts</a></div></div>'
         f'<div class="badges record-missing">{blockers}</div>'
+        f"{state_notice}"
         '<section class="typed-layout"><section class="panel"><h2>Typed payload</h2>'
         f'<dl class="record-details">{payload}</dl>'
         '<div class="typed-list"><h3>Conditions</h3>'
@@ -687,7 +713,7 @@ def render_fact_detail(
         f'<div class="relation-stack">{link_list(fact.sources)}</div></section></section>'
         '<section class="panel"><div class="section-heading"><div><p class="eyebrow">Evidence anchors</p>'
         f'<h2>{len(fact.anchors)} anchors</h2></div>'
-        '<p>P0.3a exposes anchor identity and quote data. Visual PDF page/bbox rendering is P0.3b.</p></div>'
+        '<p>Canonical page/bbox/quote metadata is shown here. The workspace runtime renders the exact PDF evidence below.</p></div>'
         f'<div class="anchor-grid">{_anchor_cards(fact)}</div></section>'
         '<section class="panel relation-panel"><div><h2>Fact relationships</h2>'
         '<p class="muted">Conflicts and supersedes remain explicit; the UI does not choose a winner.</p></div>'
@@ -697,6 +723,20 @@ def render_fact_detail(
         f"{link_list(predecessor)}</div>"
         '<div class="relation-group"><h3>Superseded by</h3>'
         f"{link_list(fact.successors)}</div></section>"
+        f"{VISUAL_EVIDENCE_SLOT}"
+    )
+    if fact.status == "READY_FOR_REVIEW":
+        if decision is None:
+            raise ValueError("READY_FOR_REVIEW Fact requires review decision projection")
+        body += render_review_decision_panel(
+            decision,
+            csrf_token=csrf_token,
+            expected_revision=fact.revision_token,
+            approve_action=f"/facts/{fact.id}/approve",
+            reject_action=f"/facts/{fact.id}/reject",
+            subject_label="Fact",
+        )
+    body += (
         '<section class="panel"><h2>Review history</h2>'
         f"{review_history(fact.review_history)}</section>"
     )

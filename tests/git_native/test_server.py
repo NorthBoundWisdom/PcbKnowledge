@@ -384,7 +384,7 @@ class TypedWorkbenchServerTests(RepositoryTestCase):
         text = body.decode("utf-8")
         self.assertIn("Missing evidence_anchors", text)
         self.assertIn("Typed payload", text)
-        self.assertIn("Visual PDF page/bbox rendering is P0.3b", text)
+        self.assertIn("workspace runtime renders the exact PDF evidence below", text)
 
     def test_retired_record_routes_are_not_compatibility_aliases(self) -> None:
         for path in ("/records/new", "/records/pk_aaaaaaaaaaaaaaaaaaaaaaaa"):

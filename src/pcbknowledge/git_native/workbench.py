@@ -18,6 +18,10 @@ from pcbknowledge.git_native.model import (
     RecordValidationError,
     SourceRecord,
 )
+from pcbknowledge.git_native.review_closure import (
+    ReviewClosureApplication,
+    ReviewDecisionView,
+)
 from pcbknowledge.git_native.store import (
     AuthoritySnapshot,
     FactConflict,
@@ -149,10 +153,11 @@ class WorkbenchOverview:
 
 
 class WorkbenchApplication:
-    """Build typed UI projections and execute human Source operations."""
+    """Build typed UI projections and execute human review operations."""
 
     def __init__(self, repository: KnowledgeRepository) -> None:
         self.repository = repository
+        self.review_closure = ReviewClosureApplication(repository)
 
     def _snapshot(self) -> AuthoritySnapshot:
         return self.repository.validate_all(require_canonical=True)
@@ -301,6 +306,9 @@ class WorkbenchApplication:
         assert isinstance(source, SourceRecord)
         return self._source_view(source, snapshot)
 
+    def source_review_decision(self, source_id: str) -> ReviewDecisionView:
+        return self.review_closure.source_decision(source_id)
+
     def _source_view(
         self, source: SourceRecord, snapshot: AuthoritySnapshot
     ) -> SourceView:
@@ -420,6 +428,9 @@ class WorkbenchApplication:
         assert isinstance(fact, FactRecord)
         return self._fact_view(fact, snapshot)
 
+    def fact_review_decision(self, fact_id: str) -> ReviewDecisionView:
+        return self.review_closure.fact_decision(fact_id)
+
     def _fact_view(self, fact: FactRecord, snapshot: AuthoritySnapshot) -> FactView:
         entity_map = {entity.id: entity for entity in snapshot.entities}
         source_map = {source.id: source for source in snapshot.sources}
@@ -535,6 +546,11 @@ class WorkbenchApplication:
                 )
             if not source.evidence.present:
                 blockers.append(f"Source {source_id} has no PDF evidence")
+            if not source.agent_processing_allowed:
+                blockers.append(
+                    f"Source {source_id} license {source.license_class.value} "
+                    "blocks evidence review"
+                )
         return tuple(dict.fromkeys(blockers))
 
     def create_source(
@@ -634,6 +650,8 @@ class WorkbenchApplication:
         expected_revision: str,
         comment: str | None,
     ) -> SourceRecord:
+        decision = self.source_review_decision(source_id)
+        self.review_closure.require_approval(decision)
         return self.repository.approve_source(
             source_id,
             expected_revision=expected_revision,
@@ -647,8 +665,40 @@ class WorkbenchApplication:
         expected_revision: str,
         comment: str,
     ) -> SourceRecord:
+        decision = self.source_review_decision(source_id)
+        self.review_closure.require_rejection(decision)
         return self.repository.reject_source(
             source_id,
+            expected_revision=expected_revision,
+            comment=comment,
+        )
+
+    def approve_fact(
+        self,
+        fact_id: str,
+        *,
+        expected_revision: str,
+        comment: str | None,
+    ) -> FactRecord:
+        decision = self.fact_review_decision(fact_id)
+        self.review_closure.require_approval(decision)
+        return self.repository.approve_fact(
+            fact_id,
+            expected_revision=expected_revision,
+            comment=comment,
+        )
+
+    def reject_fact(
+        self,
+        fact_id: str,
+        *,
+        expected_revision: str,
+        comment: str,
+    ) -> FactRecord:
+        decision = self.fact_review_decision(fact_id)
+        self.review_closure.require_rejection(decision)
+        return self.repository.reject_fact(
+            fact_id,
             expected_revision=expected_revision,
             comment=comment,
         )
