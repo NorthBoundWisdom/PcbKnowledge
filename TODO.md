@@ -1,8 +1,8 @@
 # TODO — PcbKnowledge Roadmap
 
-> Status: `P0.2.5_COMPLETE_P0.3_NEXT`
+> Status: `P0.3A_COMPLETE_P0.3B_NEXT`
 > Updated: 2026-08-18
-> Goal: evolve the completed Git-native typed-authority, Agent-ingestion, and workspace-boundary core into a practical evidence-review and retrieval system for PCB engineering Agents.
+> Goal: evolve the completed Git-native typed-authority, Agent-ingestion, workspace-boundary, and typed-workbench foundations into a practical evidence-review and retrieval system for PCB engineering Agents.
 
 ## 0. Permanent boundaries
 
@@ -77,8 +77,8 @@ Implemented:
 - English-only source-repository policy and CI gate;
 - public-source data/evidence guard;
 - GitHub Actions, CodeQL, and Dependabot configuration;
-- CONTRIBUTING / SECURITY / PR contracts;
-- rewritten clean public branch history.
+- CONTRIBUTING / SECURITY / AGENTS contracts;
+- clean public software/production-data boundary.
 
 ---
 
@@ -86,9 +86,7 @@ Implemented:
 
 ADR: [`ADR-020`](docs/adr/ADR-020-knowledge-workspace-boundary.md)
 
-### 2.1 Workspace contract
-
-Implemented target layout:
+Implemented workspace layout:
 
 ```text
 PcbKnowledge/                     public software
@@ -111,156 +109,128 @@ Completed:
 
 - [x] canonical `pcbknowledge.workspace.json`;
 - [x] `pcbknowledge-workspace-v1` format and `typed-v1` schema contract;
-- [x] deterministic SHA-256 schema digest over exact schema byte identities and paths;
-- [x] strict field/canonical-JSON validation;
-- [x] working-tree manifest/schema validation;
-- [x] immutable-ref manifest/schema validation;
-- [x] explicit failure on manifest/schema drift;
-- [x] no silent schema upgrade.
+- [x] deterministic schema digest over exact schema byte identities and paths;
+- [x] working-tree and immutable-ref manifest/schema validation;
+- [x] explicit failure on manifest/schema drift and no silent schema upgrade;
+- [x] deterministic workspace initialization with no automatic data/stage/commit/push;
+- [x] explicit Agent `--repo <workspace>` boundary;
+- [x] `run/open/test/package --workspace <path>`;
+- [x] workspace-aware GUI and external-workspace packaging;
+- [x] all four Agent skills require one explicit workspace.
 
-### 2.2 Workspace initialization
-
-Implemented:
-
-```bash
-python3 configs/pcbknowledge_workspace.py init <workspace>
-python3 configs/pcbknowledge_workspace.py init <workspace> --init-git
-python3 configs/pcbknowledge_workspace.py validate <workspace>
-python3 configs/pcbknowledge_workspace.py validate-ref <workspace> --ref HEAD
-```
-
-Completed:
-
-- [x] existing clean Git repository requirement by default;
-- [x] `--init-git` only for missing/empty targets;
-- [x] pinned schema copy;
-- [x] manifest generation;
-- [x] authority/evidence placeholders;
-- [x] rejection of conflicting existing authority/layout;
-- [x] idempotent replay only for the exact same contract;
-- [x] no automatic production data;
-- [x] no stage/commit/push behavior.
-
-### 2.3 Runtime selection
-
-Completed:
-
-- [x] Agent wrapper validates `--repo <workspace>` before dispatch;
-- [x] published Agent reads validate the workspace contract from `HEAD` before typed published access;
-- [x] `run --workspace <path>`;
-- [x] `open --workspace <path>`;
-- [x] `test --workspace <path>`;
-- [x] `package --workspace <path>`;
-- [x] Config/Build remain software-checkout operations;
-- [x] invalid explicit workspace never falls back silently;
-- [x] terminal output reports the selected workspace.
-
-### 2.4 GUI boundary
-
-Completed with a workspace-aware wrapper around the stable Source Corpus server:
-
-- [x] selected workspace is validated before server startup;
-- [x] all Source/evidence/review/Git-diff operations use only the selected repository;
-- [x] every rendered page shows the exact selected workspace root;
-- [x] static UI assets continue to come from the software installation;
-- [x] existing loopback Host/Origin, CSRF, optimistic revision, and no-Git-write boundaries are preserved.
-
-### 2.5 Packaging boundary
-
-Completed:
-
-- [x] package contents come from the selected workspace;
-- [x] archive includes `pcbknowledge.workspace.json` and pinned schemas;
-- [x] authority/evidence are validated before packaging;
-- [x] ZIP/SHA-256 output remains under the software checkout's ignored `build/package/` directory;
-- [x] package creation does not write derived files into the knowledge workspace.
-
-### 2.6 Agent skill boundary
-
-Completed:
-
-- [x] all four skills validate `<workspace>` before ingestion/review;
-- [x] all Agent command examples use `--repo '<workspace>'`;
-- [x] `INVALID_WORKSPACE` is a stop condition;
-- [x] skills explicitly forbid silent public/private workspace switching.
-
-### 2.7 Automated coverage
-
-Added synthetic coverage for:
-
-- [x] deterministic initialization and replay;
-- [x] non-Git and conflicting-layout rejection;
-- [x] explicit `--init-git` behavior;
-- [x] working and committed schema/manifest tamper detection;
-- [x] Agent writes constrained to an external workspace;
-- [x] public-source checkout remains data-empty;
-- [x] GUI workspace identity;
-- [x] external-workspace packaging;
-- [x] workflow argument contract;
-- [x] Agent skill explicit-workspace contract.
-
-### 2.8 Completion receipt — 2026-08-18
-
-Validated candidate head: `89b1356f9b4951f88174785f9701b96e2fc1da5e`.
-
-GitHub Actions CI run `32129686030` completed successfully:
-
-- Ubuntu / Python 3.11 core: English guard, public-source guard, workspace contract validation, Config, Build, Test, Agent validate, and Package all passed;
-- Ubuntu / Python 3.14: full public cross-platform test job passed;
-- macOS / Python 3.11: full public cross-platform test job passed;
-- Windows / Python 3.11: full public cross-platform test job passed;
-- the integrated test suite ran 78 tests with 0 failures/errors/skips on the validated head;
-- CodeQL run `32129686024` completed successfully;
-- source-checkout authority remained 0 Source / 0 Entity / 0 Fact;
-- deterministic package output was `PcbKnowledge_f58e138fd4337765.zip` with SHA-256 `d5ee3feb43616470703cbc98dd98b67f8f66fee9b278f0403cc6df3dd61987c6`.
-
-Cross-platform validation also exposed and closed two pre-existing portability issues before the milestone was published:
-
-- the repository write lock no longer depends on an unavailable Windows `fcntl` module; POSIX preserves native `flock(2)` semantics while Windows uses the standard-library `msvcrt.locking` primitive;
-- the published-symlink hardening test now constructs a Git mode-`120000` entry directly instead of requiring host OS symlink privileges.
-
-The validated commit chain was fast-forwarded directly to `main`; the temporary validation PR was closed after its head became the mainline, with no separate merge commit required.
+P0.2.5 completion receipt is recorded by the validated main history preceding P0.3a: cross-platform CI and CodeQL passed, with 78 tests at that milestone.
 
 ---
 
-## 3. P0.3 — Local Review Workbench — NEXT
+## 3. P0.3 — Local Review Workbench — IN PROGRESS
 
-P0.3 now builds on an explicit external workspace rather than the public software checkout.
+P0.3 builds on an explicit external workspace rather than treating the public software checkout as production data authority.
 
-### P0.3a — Typed Workbench Foundation
+### P0.3a — Typed Workbench Foundation — COMPLETE
 
-Refactor the current Source-only GUI into a small application/view layer while retaining the standard-library server and no Node build chain.
+The Source-only GUI foundation has been hard-cut into a typed application/view architecture while retaining the standard-library server and no Node build chain.
 
-Target routes:
+Implemented runtime layers:
 
 ```text
-/review                 primary task queue
-/sources
-/entities
-/facts
+HTTP handler
+    |
+    v
+WorkbenchApplication / typed view models
+    |
+    v
+KnowledgeRepository / domain model
+    |
+    v
+selected Git workspace
+
+HTML renderer <- typed view models only
 ```
 
-Tasks:
+Implemented routes:
 
-- [ ] keep HTTP/security routing separate from typed view-model construction;
-- [ ] Source list/detail;
-- [ ] Entity list/detail with manufacturer/component/package identity;
-- [ ] Fact list/detail with typed payload inspector;
-- [ ] Source/Entity/Fact/supersedes navigation;
-- [ ] selected workspace identity in every review page;
-- [ ] preserve all existing loopback security and Git-write boundaries.
+```text
+/review                 primary Source/Fact human queue
+/sources                Source list
+/sources/<id>           exact Source revision and human Source workflow
+/entities               Manufacturer / Component / Package list
+/entities/<id>          exact identity and related records
+/facts                  typed engineering Fact list
+/facts/<id>             typed payload, applicability, anchors, conflicts
+/diff                   read-only workspace Git diff
+```
 
-### P0.3b — Evidence Review
+Completed:
 
-The primary product loop becomes Fact-to-source review rather than generic CRUD pages.
+- [x] HTTP/security routing separated from typed view-model construction and HTML rendering;
+- [x] Source list/detail;
+- [x] existing Source create/edit/submit/approve/reject migrated to `/sources/**`;
+- [x] Entity list/detail with manufacturer/component/package identity;
+- [x] Fact list/detail with typed payload inspector;
+- [x] Source/Entity/Fact/supersedes navigation derived from canonical authority;
+- [x] semantic Fact conflict navigation without winner selection;
+- [x] EvidenceAnchor page/bbox/quote/hash metadata exposed in Fact detail;
+- [x] READY_FOR_REVIEW Source/Fact queue with explicit current closure blockers;
+- [x] selected workspace identity rendered on every workbench page;
+- [x] Git change count and change scope shown in the review foundation;
+- [x] retired `/records` HTTP route family removed with no compatibility alias;
+- [x] loopback Host/Origin, CSRF, optimistic revision, evidence validation, and no-Git-write boundaries preserved;
+- [x] Entity and Fact UI remains read-only until the later review/mutation stages require additional human actions.
+
+#### P0.3a verification receipt
+
+Implementation commit:
+
+```text
+f4ff4e28de9077ed44959d15aa5700be26225053
+[feat]: build typed workbench foundation P0.3a
+```
+
+Validation-only PR #4 used the pre-P0.3a main snapshot as its base; development itself remained directly on `main`.
+
+CI run `32133271445` passed on:
+
+- Ubuntu / Python 3.11 — full Core Config -> Build -> Test -> Validate -> Package;
+- Ubuntu / Python 3.14;
+- macOS / Python 3.11;
+- Windows / Python 3.11.
+
+Core receipt:
+
+```text
+83 tests
+0 failures
+0 errors
+0 skips
+English-only guard: PASS
+public-source guard: PASS
+workspace contract validation: PASS
+Agent validate: PASS
+Package: PASS
+```
+
+Focused coverage includes typed review queue projection, Source/Entity/Fact relationship navigation, Source human review flow, Fact typed inspector, retired `/records` rejection, workspace identity, loopback Host/Origin, CSRF, stale revision tokens, evidence serving, and GUI no-stage behavior.
+
+Manual visual acceptance for a local checkout:
+
+1. run `python3 configs/pcbknowledge_workflow.py open --workspace <workspace>`;
+2. confirm `/review`, `/sources`, `/entities`, `/facts`, and `/diff` share one workspace banner;
+3. confirm Source creation/review remains usable through `/sources/**`;
+4. confirm Fact detail shows typed payload, identities, Source revision links, anchors, conflicts, and review history;
+5. confirm `/records/new` returns 404 rather than silently falling back to the retired UI.
+
+### P0.3b — Evidence Review — NEXT
+
+The primary next product loop is Fact-to-source visual evidence review.
 
 - [ ] vendor and pin an approved PDF.js build or equivalent reviewed local PDF viewer asset;
-- [ ] render exact Source revision and page;
+- [ ] render the exact Source revision and PDF page;
 - [ ] normalized bbox overlay;
-- [ ] quote/hash display;
+- [ ] quote/hash display next to the visual anchor;
 - [ ] navigate multiple anchors;
-- [ ] show package/revision/applicability next to the typed Fact;
-- [ ] never expose evidence that fails Source processing policy.
+- [ ] show package/revision/applicability beside the typed Fact;
+- [ ] never expose evidence that fails Source processing policy;
+- [ ] keep viewer assets local and covered by CSP/supply-chain review.
 
 Target composition:
 
@@ -268,7 +238,7 @@ Target composition:
 Agent-prepared Fact
         |
         v
-/review
+/review or /facts/<id>
         |
         +-- source revision + PDF page + bbox
         +-- typed Fact payload + conditions/applicability
@@ -280,11 +250,11 @@ Agent-prepared Fact
 ### P0.3c — Review Closure
 
 - [ ] approve/reject Source and Fact from the typed review view;
-- [ ] rejection comment and resubmission history;
+- [ ] preserve rejection comment and resubmission history;
 - [ ] missing-anchor gate;
 - [ ] semantic-conflict gate;
 - [ ] license-block gate;
-- [ ] DATA_ONLY/MIXED state in the UI;
+- [ ] DATA_ONLY/MIXED state as a decision gate, not only informational UI;
 - [ ] selected change diff;
 - [ ] immutable approved-state UX;
 - [ ] no Git stage/commit/push operations.
@@ -401,4 +371,4 @@ Historical pgvector plans do not automatically reactivate.
 
 ## 9. Verification contract
 
-Every development round runs the narrowest relevant tests first, then applicable repository gates. Workspace changes require a temporary external Git repository and tamper tests. GUI changes additionally require a real loopback smoke test. Commands that were not run, were interrupted, were truncated, or skipped required checks must not be recorded as passes.
+Every development round runs the narrowest relevant tests first, then applicable repository gates. Workspace changes require a temporary external Git repository and tamper tests. GUI changes additionally require focused HTTP/view-model coverage and a real loopback smoke against a selected workspace. Commands that were not run, were interrupted, were truncated, or skipped required checks must not be recorded as passes.
