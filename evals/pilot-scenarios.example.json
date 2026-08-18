@@ -1,0 +1,92 @@
+{
+  "format": "pcbknowledge-pilot-scenarios-v1",
+  "dataset_name": "private-pcb-pilot",
+  "scenarios": [
+    {
+      "id": "scenario_wrong_mpn",
+      "pilot_case_id": "case_wrong_mpn",
+      "kind": "COMPONENT_LOOKUP",
+      "expected_code": "UNKNOWN",
+      "snapshot": "WORKING",
+      "parameters": {
+        "manufacturer_id": "ent_111111111111111111111111",
+        "raw_mpn": "INTENTIONALLY-WRONG-MPN"
+      },
+      "notes": "Wrong raw input belongs here, never in canonical Entity authority."
+    },
+    {
+      "id": "scenario_wrong_package",
+      "pilot_case_id": "case_wrong_package",
+      "kind": "PIN_FACT_LOOKUP",
+      "expected_code": "UNKNOWN",
+      "snapshot": "WORKING",
+      "parameters": {
+        "component_id": "ent_222222222222222222222222",
+        "package_id": "ent_333333333333333333333333",
+        "pin_number": "999"
+      },
+      "notes": null
+    },
+    {
+      "id": "scenario_wrong_revision",
+      "pilot_case_id": "case_wrong_revision",
+      "kind": "SOURCE_REVISION_LOOKUP",
+      "expected_code": "UNKNOWN",
+      "snapshot": "WORKING",
+      "parameters": {
+        "document_number": "REPLACE-WITH-DOCUMENT-NUMBER",
+        "revision": "INTENTIONALLY-WRONG"
+      },
+      "notes": null
+    },
+    {
+      "id": "scenario_limit_distinction",
+      "pilot_case_id": "case_abs_max_recommended",
+      "kind": "PARAMETER_LIMIT_DISTINCTION",
+      "expected_code": "DISTINCT",
+      "snapshot": "WORKING",
+      "parameters": {
+        "component_id": "ent_222222222222222222222222",
+        "parameter": "Input voltage"
+      },
+      "notes": null
+    },
+    {
+      "id": "scenario_license_block",
+      "pilot_case_id": "case_license_block",
+      "kind": "SOURCE_LICENSE_GATE",
+      "expected_code": "BLOCKED",
+      "snapshot": "WORKING",
+      "parameters": {
+        "source_id": "pk_444444444444444444444444"
+      },
+      "notes": "Point this at a deliberately blocked Source used only for policy evaluation."
+    },
+    {
+      "id": "scenario_supersedes",
+      "pilot_case_id": "case_supersede",
+      "kind": "SOURCE_SUPERSEDES",
+      "expected_code": "MATCH",
+      "snapshot": "WORKING",
+      "parameters": {
+        "source_id": "pk_444444444444444444444444",
+        "target_source_id": "pk_555555555555555555555555"
+      },
+      "notes": null
+    },
+    {
+      "id": "scenario_anchor_integrity",
+      "pilot_case_id": "case_anchor_drift",
+      "kind": "ANCHOR_INTEGRITY",
+      "expected_code": "MATCH",
+      "snapshot": "WORKING",
+      "parameters": {
+        "fact_id": "fact_666666666666666666666666",
+        "source_id": "pk_444444444444444444444444",
+        "page": 1
+      },
+      "notes": null
+    }
+  ],
+  "notes": "Replace placeholder canonical IDs after private ingestion. Add review-history, publication-visibility, conflict, and change-scope scenarios as the pilot needs them."
+}

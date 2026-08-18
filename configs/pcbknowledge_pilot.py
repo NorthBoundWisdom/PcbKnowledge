@@ -22,6 +22,14 @@ from pcbknowledge.git_native.pilot_eval import (  # noqa: E402
     measure_snapshot,
     write_example_manifest,
 )
+from pcbknowledge.git_native.pilot_scenarios import (  # noqa: E402
+    PilotScenarioReport,
+    PilotScenarioSuite,
+    apply_scenario_report,
+    example_scenario_suite_payload,
+    run_pilot_scenarios,
+    write_example_scenario_suite,
+)
 from pcbknowledge.git_native.store import KnowledgeRepository  # noqa: E402
 from pcbknowledge.git_native.workspace import (  # noqa: E402
     WorkspaceError,
@@ -37,7 +45,7 @@ def _write_report(path: Path, payload: str) -> None:
 
 
 def _scaffold(path: Path) -> Path:
-    """Create the example manifest, or replay only the exact same template."""
+    """Create the example evaluation manifest, or replay only the exact template."""
 
     resolved = path.expanduser().resolve()
     if not resolved.exists():
@@ -59,6 +67,29 @@ def _scaffold(path: Path) -> Path:
     return resolved
 
 
+def _scenario_scaffold(path: Path) -> Path:
+    """Create the example executable suite, replaying only identical templates."""
+
+    resolved = path.expanduser().resolve()
+    if not resolved.exists():
+        return write_example_scenario_suite(resolved)
+    if not resolved.is_file():
+        raise PilotEvaluationError(
+            f"refusing to overwrite non-file scenario scaffold path: {resolved}"
+        )
+    try:
+        existing = json.loads(resolved.read_text(encoding="utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise PilotEvaluationError(
+            f"refusing to overwrite non-template scenario file: {resolved}"
+        ) from error
+    if existing != example_scenario_suite_payload():
+        raise PilotEvaluationError(
+            f"refusing to overwrite existing scenario file: {resolved}"
+        )
+    return resolved
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -73,17 +104,38 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     scaffold.add_argument("--output", required=True)
 
+    scenario_scaffold = commands.add_parser(
+        "scenario-scaffold",
+        help="write an editable executable-scenario suite template",
+    )
+    scenario_scaffold.add_argument("--output", required=True)
+
     metrics = commands.add_parser(
         "metrics", help="show working and published workspace coverage metrics"
     )
     metrics.add_argument("--workspace", required=True)
     metrics.add_argument("--ref", default="HEAD")
 
+    scenarios = commands.add_parser(
+        "scenario-run",
+        help="execute read-only golden scenarios against the selected workspace",
+    )
+    scenarios.add_argument("--workspace", required=True)
+    scenarios.add_argument("--suite", required=True)
+    scenarios.add_argument("--ref", default="HEAD")
+    scenarios.add_argument("--output")
+    scenarios.add_argument(
+        "--require-pass",
+        action="store_true",
+        help="return exit code 3 when any executable scenario fails",
+    )
+
     report = commands.add_parser(
         "report", help="evaluate structural, scenario, visual, and publication gates"
     )
     report.add_argument("--workspace", required=True)
     report.add_argument("--manifest", required=True)
+    report.add_argument("--scenario-report")
     report.add_argument("--ref", default="HEAD")
     report.add_argument("--output")
     report.add_argument(
@@ -101,23 +153,42 @@ def _workspace(arguments: argparse.Namespace) -> KnowledgeRepository:
     return KnowledgeRepository(root)
 
 
+def _print_json(value: object) -> None:
+    print(
+        json.dumps(
+            value,
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     arguments = parse_args(argv)
     try:
         if arguments.command == "scaffold":
             output = _scaffold(Path(arguments.output))
-            print(
-                json.dumps(
-                    {
-                        "status": "OK",
-                        "format": "pcbknowledge-pilot-eval-v1",
-                        "output": str(output),
-                        "authority": False,
-                    },
-                    ensure_ascii=False,
-                    indent=2,
-                    sort_keys=True,
-                )
+            _print_json(
+                {
+                    "status": "OK",
+                    "format": "pcbknowledge-pilot-eval-v1",
+                    "output": str(output),
+                    "authority": False,
+                }
+            )
+            return 0
+
+        if arguments.command == "scenario-scaffold":
+            output = _scenario_scaffold(Path(arguments.output))
+            _print_json(
+                {
+                    "status": "OK",
+                    "format": "pcbknowledge-pilot-scenarios-v1",
+                    "output": str(output),
+                    "authority": False,
+                    "read_only_runner": True,
+                }
             )
             return 0
 
@@ -126,26 +197,45 @@ def main(argv: list[str] | None = None) -> int:
         published = repository.read_published_snapshot(ref=arguments.ref)
 
         if arguments.command == "metrics":
-            payload = {
-                "format": "pcbknowledge-pilot-metrics-v1",
-                "status": "OK",
-                "workspace": str(repository.root),
-                "published_ref": arguments.ref,
-                "published_commit": published.commit,
-                "working": measure_snapshot(working).to_dict(),
-                "published": measure_snapshot(published).to_dict(),
-            }
-            print(
-                json.dumps(
-                    payload,
-                    ensure_ascii=False,
-                    indent=2,
-                    sort_keys=True,
-                )
+            _print_json(
+                {
+                    "format": "pcbknowledge-pilot-metrics-v1",
+                    "status": "OK",
+                    "workspace": str(repository.root),
+                    "published_ref": arguments.ref,
+                    "published_commit": published.commit,
+                    "working": measure_snapshot(working).to_dict(),
+                    "published": measure_snapshot(published).to_dict(),
+                }
             )
             return 0
 
+        if arguments.command == "scenario-run":
+            suite = PilotScenarioSuite.from_path(Path(arguments.suite))
+            scenario_report = run_pilot_scenarios(
+                repository,
+                suite,
+                published_ref=arguments.ref,
+            )
+            payload = scenario_report.canonical_json()
+            if arguments.output:
+                _write_report(Path(arguments.output), payload)
+            print(payload, end="")
+            if arguments.require_pass and not scenario_report.passed:
+                return 3
+            return 0
+
         manifest = PilotEvaluationManifest.from_path(Path(arguments.manifest))
+        if arguments.scenario_report:
+            executable = PilotScenarioReport.from_path(
+                Path(arguments.scenario_report)
+            )
+            manifest = apply_scenario_report(
+                manifest,
+                executable,
+                repository,
+                published_ref=arguments.ref,
+            )
         report = build_pilot_report(
             repository,
             manifest,
