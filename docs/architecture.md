@@ -1,13 +1,13 @@
 # PcbKnowledge Git-native architecture
 
-> Status: P0.2 Agent-native ingestion complete; P0.2.5 workspace separation is next
+> Status: P0.2.5 Knowledge Workspace boundary complete; P0.3 Review Workbench next
 > Updated: 2026-08-18
-> Primary decisions: [ADR-018](adr/ADR-018-git-native-local-editor.md), [ADR-019](adr/ADR-019-git-publication-boundary.md)
+> Primary decisions: [ADR-018](adr/ADR-018-git-native-local-editor.md), [ADR-019](adr/ADR-019-git-publication-boundary.md), [ADR-020](adr/ADR-020-knowledge-workspace-boundary.md)
 > Open-source boundary: [`open-source-boundary.md`](open-source-boundary.md)
 
 ## 1. Product role
 
-PcbKnowledge is a repository for PCB engineering knowledge and source evidence. Agents prepare sources and structured candidates; engineers or product managers inspect the source material, reject or approve candidates, and use Git for attribution, collaboration, and final publication.
+PcbKnowledge is a repository for PCB engineering knowledge and source evidence. Agents prepare sources and structured candidates; engineers or product managers inspect source material, reject or approve candidates, and use Git for attribution, collaboration, and final publication.
 
 PCB software already knows the live board: components, nets, geometry, rules, connectivity, and deterministic DRC state. Many engineering decisions depend on information outside the board model, including:
 
@@ -19,31 +19,25 @@ PCB software already knows the live board: components, nets, geometry, rules, co
 
 These materials change by revision. An engineering conclusion therefore needs to answer which document, which revision, which page, and which source passage supports it. PcbKnowledge stores immutable evidence together with typed engineering facts instead of relying only on model memory or generic PDF chunk/vector retrieval.
 
-PcbKnowledge is not a shared online service and is not part of PcbCore. The system prioritizes:
+PcbKnowledge is not a shared online service and is not part of PcbCore. PcbKnowledge provides external engineering knowledge and evidence; PcbCore owns live board facts and deterministic validation. An Agent harness may combine both systems for a task, but board mutation remains inside PcbCore contracts.
 
-- traceability from engineering facts to exact source revisions;
-- explicit unknown, conflict, licensing, package, and revision states;
-- one authority model shared by humans and Agents;
-- reviewable Git diffs and immutable publication snapshots;
-- failure isolation from PcbCore and PCBAtlas board-opening/editing paths.
+## 2. Software checkout versus knowledge workspace
 
-PcbKnowledge provides external engineering knowledge and evidence. PcbCore owns live board facts and deterministic validation. An Agent harness may combine both systems when performing a task, but board mutation remains inside PcbCore contracts.
-
-## 2. Software repository versus knowledge workspace
-
-The open-source software repository and a production knowledge repository have different responsibilities.
+The open-source software repository and a production knowledge repository are physically distinct Git repositories.
 
 ```text
 PcbKnowledge/                    public software checkout
 ├── src/
 ├── configs/
-├── schemas/
+├── schemas/                     source schema contract
 ├── docs/
 ├── tests/
+├── pcbknowledge.workspace.json  empty development-workspace contract
 └── knowledge/evidence placeholders only
 
 PcbKnowledgeData/                private knowledge workspace
 ├── .git/
+├── pcbknowledge.workspace.json
 ├── schemas/                     pinned workspace contract
 ├── knowledge/
 │   ├── sources/
@@ -52,26 +46,59 @@ PcbKnowledgeData/                private knowledge workspace
 └── evidence/sha256/
 ```
 
-The public source checkout must stay data-empty. Production authority and evidence belong in a separately controlled Git workspace. The Agent CLI already supports an explicit repository through `--repo`; P0.2.5 extends this boundary to workspace initialization, the GUI, FreeCM actions, packaging, and schema-contract pinning.
+The public source checkout must stay free of production authority/evidence. It carries an empty workspace contract so software validation and default local smoke tests remain self-contained, but real data is written to an explicitly selected private workspace.
 
-A knowledge workspace remains self-contained. Formal publication must not depend on mutable files from the software checkout. The schemas, Source/Entity/Fact records, referenced evidence, and publication ref required to validate a snapshot must be available from the same workspace repository state.
+A production workspace is initialized with:
+
+```bash
+python3 configs/pcbknowledge_workspace.py init <workspace>
+```
+
+Initialization copies the three current schemas, writes canonical `pcbknowledge.workspace.json`, creates empty authority/evidence directories, and validates the result. It does not stage, commit, or push.
+
+### 2.1 Workspace manifest
+
+The workspace manifest pins:
+
+```text
+format            pcbknowledge-workspace-v1
+schema_contract   typed-v1
+schema_digest     SHA-256 contract digest
+created_with      PcbKnowledge
+```
+
+The schema digest covers the exact bytes of all three workspace schemas through their deterministic Git blob identities plus their repository paths. A mismatch between manifest and schema bytes fails closed. Existing workspaces are never silently upgraded by `init`; schema migration requires an explicit future upgrade workflow.
+
+### 2.2 Runtime selection
+
+Supported runtime selectors are explicit:
+
+```text
+Agent CLI                  --repo <workspace>
+Run/Open/Test/Package      --workspace <workspace>
+```
+
+No explicitly selected invalid workspace falls back to the public source checkout. Terminal receipts and the GUI show the concrete selected root.
+
+Source code, Python modules, CSS, and other application assets come from the PcbKnowledge software installation. Source/Entity/Fact authority, evidence, review state, and Git diffs come only from the selected workspace.
 
 ## 3. Current runtime structure
 
-Before P0.2.5, the local editor still defaults to its own checkout as the repository root:
-
 ```text
-FreeCM Run
-   |
-   v
+PcbKnowledge software checkout
+        |
+        | run/open --workspace <path>
+        v
 loopback Python editor (127.0.0.1:18080)
-   |
-   +--> selected/current Git repository
-   |      ├── schemas/
-   |      ├── knowledge/
-   |      └── evidence/
-   |
-   v
+        |
+        v
+selected knowledge Git workspace
+  ├── pcbknowledge.workspace.json
+  ├── schemas/
+  ├── knowledge/
+  └── evidence/
+        |
+        v
 Git diff / human review / commit
 ```
 
@@ -94,21 +121,21 @@ committed APPROVED in publication ref
     = Published Knowledge
 ```
 
-Formal readers never treat the mutable working tree as published knowledge. The published reader resolves one immutable Git ref and validates, from that same snapshot:
+Formal readers never treat the mutable working tree as published knowledge. The typed published reader resolves one immutable Git ref and validates from that snapshot:
 
-- canonical JSON;
+- canonical Source/Entity/Fact JSON;
 - filename and record identity;
-- schema contract;
+- workspace-local schema documents;
 - Source/Entity/Fact reference closure;
 - `supersedes` closure;
 - referenced PDF bytes;
 - PDF SHA-256, size, and content-addressed path.
 
-The typed published reader and `list --published` follow this rule and do not borrow uncommitted working-tree JSON, schema, license state, or evidence.
+Supported published Agent entry points first validate `pcbknowledge.workspace.json` and its schema digest from the same ref, then invoke the typed published reader. Working-tree schema or license changes cannot weaken a committed published read.
 
-### 4.2 Data commits and policy commits stay separate
+### 4.2 Data commits and contract commits stay separate
 
-Git change scope is classified as:
+Git change scope remains:
 
 ```text
 CLEAN
@@ -117,9 +144,7 @@ CODE_ONLY
 MIXED
 ```
 
-Inside a knowledge workspace, `knowledge/**` and `evidence/**` are data. Schema or workspace-contract upgrades are policy/contract changes and must be committed separately from data that relies on the new contract. When the Git index is non-empty, classification describes the actual staged commit candidate; otherwise it describes unstaged/untracked changes. Both sides of rename/copy operations participate in classification.
-
-`MIXED` is invalid for a single publication commit. This prevents one change from weakening or changing validation policy while simultaneously publishing data that only passes under the new policy.
+Inside a knowledge workspace, `knowledge/**` and `evidence/**` are data. Workspace manifest or schema changes are contract/policy changes and must not share a commit with data that depends on the new contract. In the public software repository, production data is prohibited entirely by `check_public_repo.py`.
 
 ## 5. Typed authority model
 
@@ -138,16 +163,7 @@ The retired `knowledge/records/` Source-only wire format is historical and has n
 
 ### 5.1 SourceRecordV1
 
-A Source represents one exact engineering-document revision, not all knowledge about a component. Core fields include:
-
-- stable ID and schema version;
-- `source_type`: `DATASHEET`, `APPLICATION_NOTE`, `REFERENCE_DESIGN`, `PCN`, `FAB_CAPABILITY`, or `INTERNAL_GUIDELINE`;
-- title, document number, and revision;
-- publisher and source locator;
-- explicit license policy;
-- content-addressed evidence;
-- append-only review history;
-- explicit `supersedes`.
+A Source represents one exact engineering-document revision. Core fields include stable ID/schema version, source type, title/document number/revision, publisher/locator, explicit license policy, content-addressed evidence, append-only review history, and explicit `supersedes`.
 
 Revision relationships are stored explicitly and are never inferred from file names or titles.
 
@@ -161,13 +177,7 @@ ComponentV1
 PackageV1
 ```
 
-Invariants:
-
-- raw manufacturer, MPN, and package strings are preserved;
-- normalized keys exist only for exact lookup;
-- package, silicon revision, orderable part, or family is never inferred from an MPN suffix;
-- identity creation is stable and idempotent;
-- Component references Manufacturer explicitly, while Package is modeled independently.
+Raw manufacturer, MPN, and package strings are preserved. Normalized keys exist only for exact lookup. Package, silicon revision, orderable part, or family is never inferred from an MPN suffix.
 
 ### 5.3 EvidenceAnchorV1
 
@@ -182,51 +192,11 @@ quote
 quote_sha256
 ```
 
-A complete bounding box satisfies:
-
-```text
-0 <= x0 < x1 <= 1
-0 <= y0 < y1 <= 1
-```
-
-An anchor binds to one immutable Source revision and never migrates automatically to another revision. Draft Facts may temporarily use incomplete/page-only anchors, but approval requires complete evidence anchors.
+An anchor binds to one immutable Source revision and never migrates automatically to another revision. Draft Facts may temporarily use page-only/incomplete anchors, but approval requires complete anchors.
 
 ### 5.4 FactRecordV1
 
-A Fact is a typed PCB engineering assertion rather than a free-text summary:
-
-```text
-stable identity
-fact_type
-subject entity IDs
-payload
-conditions/applicability
-evidence anchors
-review history
-supersedes
-```
-
-The first implemented Fact types are:
-
-**ComponentPinFactV1**
-
-- component ID;
-- package ID;
-- pin number/name;
-- primary function;
-- alternate functions;
-- conditions/applicability;
-- one or more evidence anchors.
-
-**ParameterLimitFactV1**
-
-- component ID;
-- parameter;
-- `ABSOLUTE_MAXIMUM`, `RECOMMENDED_OPERATING`, or `ELECTRICAL_CHARACTERISTIC`;
-- minimum / typical / maximum;
-- unit;
-- conditions;
-- one or more evidence anchors.
+A Fact is a typed PCB engineering assertion rather than a free-text summary. The first implemented types are `ComponentPinFactV1` and `ParameterLimitFactV1`, each carrying entity references, typed payload, conditions/applicability, evidence anchors, review history, and `supersedes`.
 
 Numeric facts require explicit units. An unstated value remains unknown; it is not copied from a similar device or filled from model memory.
 
@@ -241,17 +211,15 @@ DRAFT -> READY_FOR_REVIEW -> APPROVED
 ```
 
 - submit, reject, and approve append review history;
-- rejection comments are preserved through edit and resubmission;
+- rejection comments survive edit/resubmission;
 - committed `APPROVED` authority cannot be rewritten or deleted in place;
 - corrections use a new identity/version plus `supersedes`;
 - unresolved semantic conflicts remain explicit and are never resolved by model confidence;
 - working-tree approval remains distinct from publication.
 
-A reviewer is responsible for checking source identity, revision, licensing, structured fact content, and original evidence. High-risk engineering claims require a reviewer with appropriate domain judgment. The validator detects duplicate/conflicting semantic facts and prevents multiple active contradictory approved facts from being treated as one authoritative answer.
-
 ## 7. Source licensing and Agent processing
 
-`SourceRecordV1` uses the following explicit taxonomy:
+`SourceRecordV1` uses:
 
 ```text
 UNKNOWN
@@ -262,42 +230,27 @@ RESTRICTED
 LICENSED_BLOCKED_FOR_AI
 ```
 
-Semantics:
-
-- `PUBLIC_REFERENCE`: publicly accessible, but not necessarily redistributable;
-- `OPEN_LICENSE`: explicitly open-licensed subject to that license;
-- `INTERNAL`: internal processing is allowed in the controlled workspace;
-- `RESTRICTED`: distribution/processing restrictions fail closed;
-- `LICENSED_BLOCKED_FOR_AI`: Agent/model reading, parsing, indexing, embedding, or derived-content exposure is blocked;
-- `UNKNOWN`: rights are uncertain, so processing fails closed.
-
-IPC and equivalent restricted standards default to `LICENSED_BLOCKED_FOR_AI`.
+`PUBLIC_REFERENCE` means publicly accessible, not automatically redistributable. `UNKNOWN`, `RESTRICTED`, and `LICENSED_BLOCKED_FOR_AI` fail closed for Agent/model source processing. IPC and equivalent restricted standards default to `LICENSED_BLOCKED_FOR_AI`.
 
 Normal Agent Source projections do not reveal the evidence path. `source authorize-read` returns a path only after policy and bytes both pass validation.
 
 ## 8. Evidence lifecycle
 
-PDF originals are permanently addressed by their actual SHA-256 bytes:
+PDF originals are addressed by actual SHA-256 bytes:
 
 ```text
 evidence/sha256/<first-two>/<sha256>.pdf
 ```
 
-Write rules:
+The repository creates missing digest objects, reuses identical content, rejects hash/size/path mismatch and symlinks, validates orphan evidence, protects committed/published evidence, and serializes writes with a repository lock.
 
-- create if absent;
-- reuse an identical digest;
-- fail if hash, size, or path is inconsistent;
-- reject symlinks and invalid layouts;
-- treat unexplained orphan evidence as an integrity error;
-- after replacing draft evidence, prune only an uncommitted original that is unreferenced both in the working authority and published ref;
-- serialize multi-process writes with the repository lock.
+## 9. Derived data and packaging
 
-## 9. Derived data and retrieval
-
-Permanent assets are:
+Permanent workspace assets are:
 
 ```text
+pcbknowledge.workspace.json
+schemas/
 Source / Entity / Fact JSON
 PDF originals
 EvidenceAnchor
@@ -305,49 +258,23 @@ review / supersedes / conflict relationships
 Git history
 ```
 
-Rebuildable derived state includes:
+Rebuildable state includes `.pcbknowledge/`, SQLite indexes, FTS, page text, thumbnails/previews, embeddings, summaries, caches, and package ZIPs.
 
-```text
-.pcbknowledge/
-SQLite indexes
-FTS
-PDF page text
-thumbnail / preview
-embedding / vector index
-summary / cache
-build/package
-```
-
-P0 does not require vector RAG. P1 introduces a local exact index plus SQLite FTS5. Vector retrieval enters P3 only if golden evaluation shows stable improvement for guideline/case retrieval over exact + FTS.
+`package --workspace <path>` validates and reads only the selected workspace. Its archive includes the workspace manifest, pinned schemas, authority, and referenced evidence. The ZIP and SHA-256 sidecar are written under the software checkout's ignored `build/package/` directory.
 
 ## 10. Agent boundary
 
-P0.2 exposes the typed repository through explicit `source`, `entity`, and `fact` command groups plus four repository-local skills for Source ingestion, exact identity resolution, Fact extraction, and human handoff.
+P0.2 exposes typed `source`, `entity`, and `fact` command groups plus four repository-local skills. P0.2.5 makes workspace selection part of every skill contract.
 
-Entity resolution returns only `EXACT`, `UNKNOWN`, or `CONFLICT`. Fact projections expose optional unknowns, missing anchors, and semantic conflicts. `review-status` checks the selected Source/Entity/Fact closure and returns `WAIT_FOR_HUMAN_REVIEW` only when the candidate is complete, license-allowed, conflict-free, submitted, and `DATA_ONLY`.
+Agents may create/edit drafts, create typed candidates, attach verified anchors, validate, submit for human review, and report unknown/conflict/missing-evidence/diff state.
 
-Agents may:
-
-- create and edit drafts;
-- create typed Source/Entity/Fact candidates;
-- attach verified EvidenceAnchors;
-- validate;
-- submit for human review;
-- report unknowns, conflicts, missing evidence, and diffs.
-
-Agents may not:
-
-- approve or reject;
-- stage, commit, or push;
-- read blocked source content;
-- fill facts from approximate MPNs, similar devices, or model priors;
-- mutate PCB board state.
+Agents may not approve/reject, stage/commit/push, read blocked content, fill facts from approximate identities/model priors, silently switch workspaces, or mutate PCB board state.
 
 ## 11. GUI evolution
 
-The current GUI is the Source Corpus editor: it creates document records, attaches PDFs, submits/reviews Sources, and shows Git changes. It is not yet the final Fact Review Workbench.
+The current GUI remains the Source Corpus editor. P0.2.5 wraps the stable server with a workspace-aware runtime that validates the selected workspace and injects the exact workspace root into every rendered page. Existing Host/Origin, CSRF, optimistic-revision, and no-Git-write boundaries are unchanged.
 
-P0.2.5 first makes workspace selection explicit. P0.3 then evolves the UI toward:
+P0.3 now evolves the UI toward:
 
 ```text
 /review                primary review queue
@@ -363,23 +290,21 @@ PDF page + normalized bbox overlay
 + Git diff and change-scope state
 ```
 
-The runtime remains server-rendered Python plus a small amount of native JavaScript. No Node build chain is introduced for the P0 workbench.
+The runtime remains server-rendered Python plus a small amount of native JavaScript, with no Node build chain for the P0 workbench.
 
 ## 12. FreeCM lifecycle
 
-The current FreeCM protocol remains intentionally lightweight:
+- **Config** validates the software checkout and writes a configuration receipt.
+- **Build** compiles, runs focused tests, validates the empty source-checkout workspace, and writes a build receipt.
+- **Run/Open** require the software build, validate the selected workspace, and start the loopback editor.
+- **Test** runs software tests and may additionally validate an external `--workspace`.
+- **Package** requires the software build and exports the selected validated workspace.
 
-- **Config** checks Python/Git/runtime boundaries and writes a configuration receipt.
-- **Build** compiles, runs focused tests, validates authority, and writes a build receipt.
-- **Run/Open** verifies the build and starts the loopback editor.
-- **Test** runs the local standard-library test suite and repository integrity gates.
-- **Package** exports a deterministic validated knowledge snapshot.
-
-P0.2.5 extends Run/Open/Package with an explicit `--workspace` and keeps the public software checkout data-empty.
+FreeCM's default actions continue to target the source checkout for development convenience. Terminal users select production/private workspaces explicitly with `--workspace`.
 
 ## 13. Retrieval and product integration direction
 
-The intended P1 query order is:
+P1 query order remains:
 
 ```text
 exact entity
@@ -389,21 +314,8 @@ exact entity
 -> fact + evidence + conflict + unknown
 ```
 
-Broader Fact types such as package dimensions, power sequencing, decoupling, clock/reset rules, and layout guidelines are added only after the first real dataset validates the initial schema and review UX.
-
-P2 introduces immutable KnowledgeSnapshot consumption and read-only adapters for PCBAtlas/PcbCore-facing Agent workflows. PcbKnowledge still does not become a live PcbCore dependency and never gains authority to mutate a board directly.
+Broader Fact types are added only after the first real dataset validates the initial schema and review UX. P2 introduces immutable KnowledgeSnapshot consumption and read-only PCBAtlas/PcbCore-facing Agent adapters without making PcbKnowledge a live board dependency.
 
 ## 14. Explicitly deferred capabilities
 
-The following are not P0 requirements:
-
-- hosted multi-user service;
-- account/login infrastructure;
-- database authority;
-- object-storage authority;
-- MCP as a domain protocol;
-- vector retrieval without evaluation evidence;
-- automatic Git commit/push from the GUI or Agent;
-- automatic board mutation.
-
-Any future implementation that changes these boundaries requires an explicit architecture decision rather than silently reviving a superseded design.
+The following are not P0 requirements: hosted multi-user service, login infrastructure, database/object-store authority, MCP as a domain protocol, vector retrieval without evaluation evidence, automatic Git publication, and automatic PCB board mutation. Changing these boundaries requires an explicit ADR rather than silently reviving a superseded design.

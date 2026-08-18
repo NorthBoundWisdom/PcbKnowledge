@@ -4,7 +4,7 @@
 
 PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering knowledge repository and local review tool. It turns engineering statements from datasheets, application notes, reference designs, and similar sources into validated `Source`, `Entity`, `Fact`, and `EvidenceAnchor` records, with human review and Git publication as explicit boundaries.
 
-> **Open-source boundary:** this repository publishes software, schemas, documentation, and Agent workflows under Apache-2.0. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals are not part of the default open-source distribution. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
+> **Open-source boundary:** this repository publishes software, schemas, documentation, and Agent workflows under Apache-2.0. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals live in separately controlled knowledge workspaces. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
 
 ## Current status
 
@@ -12,12 +12,12 @@ PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering 
 P0.0 Git-native hardening             COMPLETE
 P0.1 Typed authority model            COMPLETE
 P0.2 Agent-native ingestion           COMPLETE
-P0.2.5 Knowledge Workspace boundary   NEXT
-P0.3 Local Review Workbench
+P0.2.5 Knowledge Workspace boundary   COMPLETE
+P0.3 Local Review Workbench           NEXT
 P0.4 First real dataset + evals
 ```
 
-The typed authority and Agent ingestion paths are implemented. The current GUI is still the Source Corpus editor. P0.2.5 separates the public software checkout from private knowledge workspaces before P0.3 evolves the GUI into the Fact Review Workbench. See [`TODO.md`](TODO.md) for the execution roadmap and [`docs/architecture.md`](docs/architecture.md) for the durable architecture.
+The software/knowledge boundary is now executable: the public checkout stays data-empty, while real authority is stored in an explicitly selected self-contained Git workspace with a canonical manifest and pinned schema snapshot. The current GUI is still the Source Corpus editor; P0.3 evolves it into the typed Fact Review Workbench. See [`TODO.md`](TODO.md) and [`docs/architecture.md`](docs/architecture.md).
 
 ## Core model
 
@@ -34,6 +34,88 @@ A Fact can bind to an exact source revision, PDF page, normalized bounding box, 
 
 Published Knowledge is read only from a fully validated immutable Git ref containing committed `APPROVED` authority. Working-tree approval is not publication.
 
+## Software checkout and knowledge workspace
+
+The open-source repository is the software installation. A production data repository is a **knowledge workspace**:
+
+```text
+PcbKnowledge/                     public software
+
+PcbKnowledgeData/                 private workspace
+├── .git/
+├── pcbknowledge.workspace.json
+├── schemas/
+├── knowledge/
+│   ├── sources/
+│   ├── entities/
+│   └── facts/
+└── evidence/sha256/
+```
+
+Create a clean workspace:
+
+```bash
+mkdir ../PcbKnowledgeData
+cd ../PcbKnowledgeData
+git init
+cd ../PcbKnowledge
+python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData
+```
+
+Or let the initializer create Git only for a missing/empty target:
+
+```bash
+python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData --init-git
+```
+
+Initialization writes the canonical workspace manifest, pins the current three schemas, and creates empty authority/evidence directories. It **does not** stage, commit, or push. Review and commit the workspace contract with your normal Git workflow before publishing data.
+
+Validate either working files or a committed ref:
+
+```bash
+python3 configs/pcbknowledge_workspace.py validate ../PcbKnowledgeData
+python3 configs/pcbknowledge_workspace.py validate-ref ../PcbKnowledgeData --ref HEAD
+```
+
+A schema/manifest mismatch fails closed. Schema upgrades are explicit contract changes; PcbKnowledge never silently overwrites an existing workspace with a newer schema snapshot.
+
+## Local editor and FreeCM workflow
+
+Requirements:
+
+- Git
+- Python 3.11+
+
+No Docker, database, account system, Node runtime, or hosted service is required.
+
+Prepare the software checkout once:
+
+```bash
+python3 configs/pcbknowledge_workflow.py config
+python3 configs/pcbknowledge_workflow.py build
+```
+
+Open a selected workspace:
+
+```bash
+python3 configs/pcbknowledge_workflow.py run --workspace ../PcbKnowledgeData
+# or first-use convenience:
+python3 configs/pcbknowledge_workflow.py open --workspace ../PcbKnowledgeData
+```
+
+The editor binds only to loopback. The page explicitly shows the selected workspace root. Source/Entity/Fact/evidence changes and Git diffs come only from that workspace; code and static assets come from the PcbKnowledge software checkout.
+
+Test or package a selected workspace:
+
+```bash
+python3 configs/pcbknowledge_workflow.py test --workspace ../PcbKnowledgeData
+python3 configs/pcbknowledge_workflow.py package --workspace ../PcbKnowledgeData
+```
+
+Package contents come from the selected workspace, including its manifest and pinned schemas. The generated ZIP remains derived output under the software checkout's `build/package/` directory and never becomes workspace authority.
+
+The same default Config / Build / Run / Test / Package actions remain available through the FreeCM VS Code / Cursor extension. Use the terminal form when selecting a non-default external workspace.
+
 ## Agent / human boundary
 
 Agents may:
@@ -49,44 +131,22 @@ Agents may not:
 - stage, commit, or push Git changes;
 - bypass the Source license gate to read blocked content;
 - infer engineering facts from similar MPNs, similar devices, or model priors;
+- silently switch workspaces;
 - mutate live PCB board state.
 
-## Quick start
-
-Requirements:
-
-- Git
-- Python 3.11+
-
-No Docker, database, account system, Node runtime, or hosted service is required.
-
-```bash
-python3 configs/pcbknowledge_workflow.py config
-python3 configs/pcbknowledge_workflow.py build
-python3 configs/pcbknowledge_workflow.py run
-```
-
-The same Config / Build / Run / Test / Package actions are available through the FreeCM VS Code / Cursor extension. The editor binds only to loopback and must not be exposed to a LAN, VPN, or the public internet.
-
-## Agent CLI
-
-```bash
-python3 configs/pcbknowledge_agent.py source list
-python3 configs/pcbknowledge_agent.py entity list
-python3 configs/pcbknowledge_agent.py fact list
-python3 configs/pcbknowledge_agent.py validate
-python3 configs/pcbknowledge_agent.py change-scope
-```
-
-The Agent CLI already accepts a separate Git repository as its knowledge root:
+Use an explicit workspace with the Agent CLI:
 
 ```bash
 python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData validate
+python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData source list
+python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData entity list
+python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData fact list
+python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData change-scope
 ```
 
-P0.2.5 makes that boundary a first-class workspace contract for the GUI, FreeCM workflow, packaging, and initialization as well.
+The four repository-local Agent skills follow the same rule: they validate `<workspace>` first and keep `--repo '<workspace>'` on every operation.
 
-## Public source and private knowledge
+## Public source guard
 
 The public upstream intentionally stays data-empty:
 
@@ -102,8 +162,6 @@ Real Source/Fact JSON and PDF evidence must not be committed to the public sourc
 ```bash
 python3 configs/check_public_repo.py
 ```
-
-Any additional tracked file below `knowledge/**` or `evidence/**` fails that check. Public fixtures must be synthetic or have a separately reviewed redistribution basis.
 
 `PUBLIC_REFERENCE` means that a source is publicly accessible; it is **not equivalent to** `OPEN_LICENSE`. Each `SourceRecord` controls its own license policy. Apache-2.0 covers this repository's software and documentation, not third-party engineering documents.
 
@@ -121,11 +179,11 @@ python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-GitHub Actions runs the same core gates on pushes and pull requests. Public repositories additionally enable the cross-platform matrix and CodeQL. Workflows use minimum repository permissions and do not expose project secrets to ordinary pull requests.
+Workspace-boundary changes additionally use synthetic external Git repositories, schema/manifest tamper tests, external GUI smoke, and external packaging tests.
 
 ## Contributing
 
-Read [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before opening a pull request. Do not place internal company material, unlicensed PDFs, real credentials, or production knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before opening a pull request. Do not place internal company material, unlicensed PDFs, real credentials, or production knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
 
 Report security issues privately according to [`SECURITY.md`](SECURITY.md).
 

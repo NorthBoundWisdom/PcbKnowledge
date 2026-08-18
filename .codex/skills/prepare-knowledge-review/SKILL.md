@@ -1,24 +1,23 @@
 ---
 name: prepare-knowledge-review
-description: Validate selected Git-native Source, Entity, and Fact drafts, resolve machine-reported blockers, submit complete Source and Fact records, and produce a DATA_ONLY review receipt and diff. Use after ingestion when an Agent must hand a bounded knowledge change to a human without approving, staging, committing, or pushing it.
+description: Validate selected Source, Entity, and Fact drafts in one explicit PcbKnowledge workspace, resolve machine-reported blockers, submit complete records, and produce a DATA_ONLY human-review handoff without approving or publishing it.
 ---
 
 # Prepare Knowledge Review
 
-End with a validated `DATA_ONLY` working-tree diff and `WAIT_FOR_HUMAN_REVIEW`.
+End with a validated `DATA_ONLY` working-tree diff and `WAIT_FOR_HUMAN_REVIEW` in the workspace selected by the task.
 
-## Check the selected task
-
-Validate the entire authority first:
+## Validate the workspace and selected task
 
 ```bash
-python3 configs/pcbknowledge_agent.py validate
+python3 configs/pcbknowledge_workspace.py validate '<workspace>'
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' validate
 ```
 
-Then inspect the selected closure. Repeat ID flags as needed:
+Then inspect the selected closure:
 
 ```bash
-python3 configs/pcbknowledge_agent.py review-status \
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' review-status \
   --source-id '<source-id>' \
   --entity-id '<entity-id>' \
   --fact-id '<fact-id>'
@@ -26,22 +25,23 @@ python3 configs/pcbknowledge_agent.py review-status \
 
 Treat exit code 2 as a normal blocked/not-ready report. Resolve every machine-reported category:
 
-- `unknown`: confirm required Source fields; preserve valid optional unknowns.
-- `missing_anchors`: use `$extract-component-facts`; never fabricate evidence.
-- `license_blocked`: stop without reading or exposing raw or derived content.
-- `conflicts`: stop and retain all candidates until explicitly resolved or superseded.
-- `not_ready`: submit only after the record content is complete.
-- `MIXED`: stop and report that code/policy and data cannot share a commit candidate. Do not manipulate the Git index.
+- `unknown`: confirm required Source fields; preserve valid optional unknowns;
+- `missing_anchors`: use `$extract-component-facts`; never fabricate evidence;
+- `license_blocked`: stop without reading or exposing raw or derived content;
+- `conflicts`: stop and retain all candidates until explicitly resolved or superseded;
+- `not_ready`: submit only after record content is complete;
+- `MIXED`: stop and report that contract/policy and data cannot share one commit candidate;
+- `INVALID_WORKSPACE`: stop and ask for an explicit valid workspace rather than falling back to `.`.
 
 ## Submit complete drafts
 
-Use the latest revision tokens from `source show` and `fact show`:
+Use the latest revision tokens:
 
 ```bash
-python3 configs/pcbknowledge_agent.py source submit '<source-id>' \
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' source submit '<source-id>' \
   --expected-revision '<source-revision-token>'
 
-python3 configs/pcbknowledge_agent.py fact submit '<fact-id>' \
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' fact submit '<fact-id>' \
   --expected-revision '<fact-revision-token>'
 ```
 
@@ -49,18 +49,18 @@ Submitting is not approving or publishing. If a record is rejected later, preser
 
 ## Produce the handoff
 
-Run the gates again:
+Run the gates again against the same workspace:
 
 ```bash
-python3 configs/pcbknowledge_agent.py validate
-python3 configs/pcbknowledge_agent.py review-status \
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' validate
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' review-status \
   --source-id '<source-id>' \
   --entity-id '<entity-id>' \
   --fact-id '<fact-id>'
-python3 configs/pcbknowledge_agent.py change-scope
-python3 configs/pcbknowledge_agent.py diff
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' change-scope
+python3 configs/pcbknowledge_agent.py --repo '<workspace>' diff
 ```
 
-Hand off only when `review_ready` is true, `change_scope` is `DATA_ONLY`, conflicts and missing anchors are empty, and `next_action` is `WAIT_FOR_HUMAN_REVIEW`. Report the IDs, commands, exit codes, and remaining valid optional unknowns.
+Hand off only when `review_ready` is true, `change_scope` is `DATA_ONLY`, conflicts and missing anchors are empty, and `next_action` is `WAIT_FOR_HUMAN_REVIEW`. Report the workspace path, selected IDs, commands, exit codes, and remaining valid optional unknowns.
 
-Stop there. Never approve, reject, stage, commit, push, or modify a PCB board.
+Stop there. Never approve, reject, stage, commit, push, switch workspaces silently, or modify a PCB board.

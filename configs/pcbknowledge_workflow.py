@@ -24,8 +24,15 @@ SOURCE_ROOT = REPO_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from pcbknowledge.git_native.server import DEFAULT_PORT, create_server  # noqa: E402
+from pcbknowledge.git_native.server import DEFAULT_PORT  # noqa: E402
 from pcbknowledge.git_native.store import KnowledgeRepository, RepositoryError  # noqa: E402
+from pcbknowledge.git_native.workspace import (  # noqa: E402
+    SCHEMA_PATHS,
+    WORKSPACE_MANIFEST_PATH,
+    WorkspaceError,
+    validate_workspace,
+)
+from pcbknowledge.git_native.workspace_server import create_server  # noqa: E402
 
 
 CONFIGURATION_ID = "git-native-local"
@@ -36,13 +43,14 @@ CONFIG_INPUTS = (
     Path("configs/freecm.commands.jsonc"),
     Path("configs/pcbknowledge_workflow.py"),
     Path("source_roots.lock.jsonc.in"),
+    WORKSPACE_MANIFEST_PATH,
 )
 BUILD_INPUT_FILES = (
     Path("configs/pcbknowledge_agent.py"),
+    Path("configs/pcbknowledge_workspace.py"),
     Path("configs/pcbknowledge_workflow.py"),
-    Path("schemas/source-record.schema.json"),
-    Path("schemas/entity-record.schema.json"),
-    Path("schemas/fact-record.schema.json"),
+    WORKSPACE_MANIFEST_PATH,
+    *SCHEMA_PATHS,
 )
 BUILD_INPUT_ROOTS = (
     Path(".codex/skills"),
@@ -51,7 +59,7 @@ BUILD_INPUT_ROOTS = (
 )
 IGNORED_SOURCE_NAMES = frozenset({"__pycache__", ".DS_Store"})
 PACKAGE_DIRECTORY = Path("build/package")
-PACKAGE_FORMAT = "pcbknowledge-git-native-typed-snapshot-v1"
+PACKAGE_FORMAT = "pcbknowledge-workspace-snapshot-v1"
 MINIMUM_PYTHON = (3, 11)
 
 
@@ -226,10 +234,18 @@ def require_build(root: Path = REPO_ROOT) -> dict[str, Any]:
     return receipt
 
 
-def _validate_knowledge(root: Path = REPO_ROOT) -> int:
-    repository = KnowledgeRepository(root)
+def _workspace_root(raw: str | Path | None) -> Path:
+    if raw is None:
+        return REPO_ROOT
+    return Path(raw).expanduser().resolve()
+
+
+def _validate_knowledge(root: Path) -> int:
+    validation = validate_workspace(root)
+    repository = KnowledgeRepository(validation.root)
     repository.ensure_layout()
     snapshot = repository.validate_all(require_canonical=True)
+    print(f"[pcbknowledge] workspace: {validation.root}", flush=True)
     print(
         "[pcbknowledge] validated "
         f"{len(snapshot.sources)} sources, "
@@ -245,6 +261,7 @@ def _run_checks(root: Path = REPO_ROOT) -> None:
         "src/pcbknowledge/git_native",
         "configs/pcbknowledge_workflow.py",
         "configs/pcbknowledge_agent.py",
+        "configs/pcbknowledge_workspace.py",
         "tests/git_native",
     ]
     print("[pcbknowledge] compile local editor", flush=True)
@@ -252,7 +269,7 @@ def _run_checks(root: Path = REPO_ROOT) -> None:
         str(root / "src/pcbknowledge/git_native"), quiet=1, force=True
     ):
         raise WorkflowError("Python compilation failed")
-    for relative in compile_targets[1:3]:
+    for relative in compile_targets[1:4]:
         if not compileall.compile_file(str(root / relative), quiet=1, force=True):
             raise WorkflowError(f"Python compilation failed: {relative}")
     _run(
@@ -274,8 +291,7 @@ def _run_checks(root: Path = REPO_ROOT) -> None:
 
 def cmd_config() -> int:
     _require_prerequisites()
-    repository = KnowledgeRepository(REPO_ROOT)
-    repository.ensure_layout()
+    validate_workspace(REPO_ROOT)
     receipt = write_configuration_receipt()
     print(f"[pcbknowledge] ready: {receipt.relative_to(REPO_ROOT)}", flush=True)
     print("[pcbknowledge] no containers, services, accounts or downloads are required", flush=True)
@@ -291,11 +307,14 @@ def cmd_build() -> int:
     return 0
 
 
-def cmd_test() -> int:
+def cmd_test(*, workspace: Path = REPO_ROOT) -> int:
     _require_prerequisites()
     require_configuration()
     _run_checks()
     _run(["git", "diff", "--check"], root=REPO_ROOT)
+    if workspace.resolve() != REPO_ROOT.resolve():
+        _validate_knowledge(workspace)
+        _run(["git", "diff", "--check"], root=workspace)
     return 0
 
 
@@ -308,21 +327,23 @@ def _open_editor(url: str) -> bool:
         return False
 
 
-def cmd_run(*, port: int, no_browser: bool) -> int:
+def cmd_run(*, port: int, no_browser: bool, workspace: Path = REPO_ROOT) -> int:
     _require_prerequisites()
     require_build()
-    _validate_knowledge()
+    validation = validate_workspace(workspace)
+    _validate_knowledge(validation.root)
     try:
-        server = create_server(REPO_ROOT, port)
+        server = create_server(validation.root, port)
     except OSError as error:
         raise WorkflowError(
             f"cannot start the editor on 127.0.0.1:{port}; close the program using that port"
         ) from error
     url = f"http://127.0.0.1:{server.server_port}"
     print("[pcbknowledge] local editor ready", flush=True)
+    print(f"[pcbknowledge] workspace: {validation.root}", flush=True)
     print(f"[pcbknowledge] open: {url}", flush=True)
     print("[pcbknowledge] no login or password", flush=True)
-    print("[pcbknowledge] Ctrl+C closes the editor; saved files stay in the Git worktree", flush=True)
+    print("[pcbknowledge] Ctrl+C closes the editor; saved files stay in the selected Git worktree", flush=True)
     if not no_browser and not _open_editor(url):
         print("[pcbknowledge] the browser did not open automatically; use the URL above", flush=True)
     try:
@@ -335,8 +356,8 @@ def cmd_run(*, port: int, no_browser: bool) -> int:
     return 0
 
 
-def cmd_open(*, port: int, no_browser: bool) -> int:
-    """Prepare an unconfigured checkout once, then open the local editor."""
+def cmd_open(*, port: int, no_browser: bool, workspace: Path = REPO_ROOT) -> int:
+    """Prepare the software checkout once, then open the selected workspace."""
 
     _require_prerequisites()
     try:
@@ -345,17 +366,14 @@ def cmd_open(*, port: int, no_browser: bool) -> int:
         print("[pcbknowledge] first use or editor source changed; running local checks", flush=True)
         cmd_config()
         cmd_build()
-    return cmd_run(port=port, no_browser=no_browser)
+    return cmd_run(port=port, no_browser=no_browser, workspace=workspace)
 
 
 def package_files(root: Path = REPO_ROOT) -> tuple[Path, ...]:
-    repository = KnowledgeRepository(root)
+    validation = validate_workspace(root)
+    repository = KnowledgeRepository(validation.root)
     snapshot = repository.validate_all(require_canonical=True)
-    paths = {
-        Path("schemas/source-record.schema.json"),
-        Path("schemas/entity-record.schema.json"),
-        Path("schemas/fact-record.schema.json"),
-    }
+    paths = {WORKSPACE_MANIFEST_PATH, *SCHEMA_PATHS}
     for source in snapshot.sources:
         paths.add(repository.source_path(source.id).relative_to(repository.root))
         if source.evidence.path is not None:
@@ -382,15 +400,21 @@ def _snapshot_manifest(files: Sequence[Path], root: Path) -> dict[str, object]:
     }
 
 
-def create_package(root: Path = REPO_ROOT) -> Path:
-    require_build(root)
-    files = package_files(root)
-    manifest = _snapshot_manifest(files, root)
+def create_package(
+    root: Path = REPO_ROOT,
+    *,
+    software_root: Path | None = None,
+) -> Path:
+    software = root if software_root is None else software_root
+    require_build(software)
+    workspace = validate_workspace(root).root
+    files = package_files(workspace)
+    manifest = _snapshot_manifest(files, workspace)
     manifest_payload = (
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     ).encode("utf-8")
     identity = hashlib.sha256(manifest_payload).hexdigest()[:16]
-    output_directory = root / PACKAGE_DIRECTORY
+    output_directory = software / PACKAGE_DIRECTORY
     output_directory.mkdir(parents=True, exist_ok=True)
     output = output_directory / f"PcbKnowledge_{identity}.zip"
     descriptor, temporary_name = tempfile.mkstemp(
@@ -406,7 +430,7 @@ def create_package(root: Path = REPO_ROOT) -> Path:
                 info = zipfile.ZipInfo(relative.as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.external_attr = 0o100644 << 16
-                archive.writestr(info, (root / relative).read_bytes(), compresslevel=9)
+                archive.writestr(info, (workspace / relative).read_bytes(), compresslevel=9)
             manifest_info = zipfile.ZipInfo(
                 "MANIFEST.json", date_time=(1980, 1, 1, 0, 0, 0)
             )
@@ -423,9 +447,11 @@ def create_package(root: Path = REPO_ROOT) -> Path:
     return output
 
 
-def cmd_package() -> int:
+def cmd_package(*, workspace: Path = REPO_ROOT) -> int:
     _require_prerequisites()
-    output = create_package()
+    validation = validate_workspace(workspace)
+    output = create_package(validation.root, software_root=REPO_ROOT)
+    print(f"[pcbknowledge] workspace: {validation.root}", flush=True)
     print(f"[pcbknowledge] data snapshot: {output.relative_to(REPO_ROOT)}", flush=True)
     print(f"[pcbknowledge] sha256: {_sha256(output)}", flush=True)
     return 0
@@ -436,6 +462,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "action", choices=("config", "build", "run", "open", "test", "package")
     )
+    parser.add_argument("--workspace")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
     parser.add_argument("--no-browser", action="store_true")
     arguments = parser.parse_args(argv)
@@ -445,24 +472,35 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         arguments.no_browser or arguments.port != DEFAULT_PORT
     ):
         parser.error("--port and --no-browser are only valid for run/open")
+    if arguments.action in {"config", "build"} and arguments.workspace is not None:
+        parser.error("--workspace is valid only for run/open/test/package")
     return arguments
 
 
 def main(argv: list[str] | None = None) -> int:
     arguments = parse_args(argv)
+    workspace = _workspace_root(arguments.workspace)
     try:
         if arguments.action == "config":
             return cmd_config()
         if arguments.action == "build":
             return cmd_build()
         if arguments.action == "test":
-            return cmd_test()
+            return cmd_test(workspace=workspace)
         if arguments.action == "package":
-            return cmd_package()
+            return cmd_package(workspace=workspace)
         if arguments.action == "open":
-            return cmd_open(port=arguments.port, no_browser=arguments.no_browser)
-        return cmd_run(port=arguments.port, no_browser=arguments.no_browser)
-    except (WorkflowError, RepositoryError) as error:
+            return cmd_open(
+                port=arguments.port,
+                no_browser=arguments.no_browser,
+                workspace=workspace,
+            )
+        return cmd_run(
+            port=arguments.port,
+            no_browser=arguments.no_browser,
+            workspace=workspace,
+        )
+    except (WorkflowError, WorkspaceError, RepositoryError) as error:
         print(f"pcbknowledge: {error}", file=sys.stderr)
         return 2
     except subprocess.CalledProcessError as error:

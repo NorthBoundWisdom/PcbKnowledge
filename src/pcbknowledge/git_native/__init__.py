@@ -1,7 +1,8 @@
 """Git-native PcbKnowledge core.
 
-The canonical state lives in repository files. This package deliberately has
-no database, network identity, object-store, or container dependency.
+The canonical state lives in self-contained knowledge workspace files. This
+package deliberately has no database, network identity, object-store, or
+container dependency.
 """
 
 from pcbknowledge.git_native.model import (
@@ -29,6 +30,18 @@ from pcbknowledge.git_native.store import (
     FactConflict,
     KnowledgeRepository,
 )
+from pcbknowledge.git_native.workspace import (
+    SCHEMA_CONTRACT,
+    WORKSPACE_FORMAT,
+    WORKSPACE_MANIFEST_PATH,
+    WorkspaceError,
+    WorkspaceInitialization,
+    WorkspaceManifest,
+    WorkspaceValidation,
+    initialize_workspace,
+    validate_workspace,
+    validate_workspace_ref,
+)
 
 __all__ = [
     "AuthoritySnapshot",
@@ -49,7 +62,17 @@ __all__ = [
     "ReviewAction",
     "ReviewDecision",
     "ReviewEvent",
+    "SCHEMA_CONTRACT",
     "SourceLocation",
     "SourceRecord",
     "SourceType",
+    "WORKSPACE_FORMAT",
+    "WORKSPACE_MANIFEST_PATH",
+    "WorkspaceError",
+    "WorkspaceInitialization",
+    "WorkspaceManifest",
+    "WorkspaceValidation",
+    "initialize_workspace",
+    "validate_workspace",
+    "validate_workspace_ref",
 ]

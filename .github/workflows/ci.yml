@@ -33,6 +33,9 @@ jobs:
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
 
+      - name: Validate source-checkout workspace contract
+        run: python configs/pcbknowledge_workspace.py validate .
+
       - name: Config
         run: python configs/pcbknowledge_workflow.py config
 
@@ -77,6 +80,9 @@ jobs:
 
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
+
+      - name: Validate source-checkout workspace contract
+        run: python configs/pcbknowledge_workspace.py validate .
 
       - name: Config
         run: python configs/pcbknowledge_workflow.py config
