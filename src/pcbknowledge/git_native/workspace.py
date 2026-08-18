@@ -14,11 +14,14 @@ from typing import Mapping
 
 
 WORKSPACE_MANIFEST_PATH = Path("pcbknowledge.workspace.json")
+WORKSPACE_GITIGNORE_PATH = Path(".gitignore")
+WORKSPACE_GITIGNORE_RULE = "/.pcbknowledge/"
 WORKSPACE_FORMAT = "pcbknowledge-workspace-v1"
 SCHEMA_CONTRACT = "typed-v1"
 CREATED_WITH = "PcbKnowledge"
 MAX_MANIFEST_BYTES = 64 * 1024
 MAX_SCHEMA_BYTES = 1_000_000
+MAX_GITIGNORE_BYTES = 64 * 1024
 SCHEMA_PATHS = (
     Path("schemas/source-record.schema.json"),
     Path("schemas/entity-record.schema.json"),
@@ -44,7 +47,7 @@ class WorkspaceManifest:
     schema_digest: str
     created_with: str
 
-    def validate(self) -> WorkspaceManifest:
+    def validate(self) -> "WorkspaceManifest":
         if self.format != WORKSPACE_FORMAT:
             raise WorkspaceError(f"unsupported workspace format: {self.format!r}")
         if self.schema_contract != SCHEMA_CONTRACT:
@@ -76,7 +79,7 @@ class WorkspaceManifest:
         ) + "\n"
 
     @classmethod
-    def from_json(cls, payload: str) -> WorkspaceManifest:
+    def from_json(cls, payload: str) -> "WorkspaceManifest":
         try:
             value = json.loads(payload)
         except json.JSONDecodeError as error:
@@ -191,6 +194,29 @@ def _load_manifest_bytes(payload: bytes, *, label: str) -> WorkspaceManifest:
     if payload != manifest.canonical_json().encode("utf-8"):
         raise WorkspaceError(f"{label} is not canonical JSON")
     return manifest
+
+
+def _validate_gitignore_payload(payload: bytes, *, label: str) -> None:
+    try:
+        text = payload.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise WorkspaceError(f"{label} is not UTF-8") from error
+    if WORKSPACE_GITIGNORE_RULE not in {line.strip() for line in text.splitlines()}:
+        raise WorkspaceError(
+            f"{label} must ignore {WORKSPACE_GITIGNORE_RULE} derived runtime state"
+        )
+
+
+def validate_workspace_gitignore(root: Path) -> None:
+    """Require derived runtime state to be ignored for a new active workspace."""
+
+    resolved = _git_root(root)
+    payload = _read_regular_file(
+        resolved / WORKSPACE_GITIGNORE_PATH,
+        label="workspace .gitignore",
+        maximum_bytes=MAX_GITIGNORE_BYTES,
+    )
+    _validate_gitignore_payload(payload, label="workspace .gitignore")
 
 
 def validate_workspace(root: Path) -> WorkspaceValidation:
@@ -365,6 +391,21 @@ def initialize_workspace(
 
     created: list[Path] = []
     try:
+        gitignore_path = resolved / WORKSPACE_GITIGNORE_PATH
+        if gitignore_path.exists():
+            payload = _read_regular_file(
+                gitignore_path,
+                label="workspace .gitignore",
+                maximum_bytes=MAX_GITIGNORE_BYTES,
+            )
+            _validate_gitignore_payload(payload, label="workspace .gitignore")
+        else:
+            _atomic_write(
+                gitignore_path,
+                (WORKSPACE_GITIGNORE_RULE + "\n").encode("utf-8"),
+            )
+            created.append(gitignore_path)
+
         for relative in SCHEMA_PATHS:
             destination = resolved / relative
             if destination.exists():

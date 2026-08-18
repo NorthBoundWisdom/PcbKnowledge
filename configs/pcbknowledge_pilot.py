@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Measure and close the P0.4a pilot against an explicit private workspace."""
+"""Bootstrap, measure, and close a P0.4a pilot against private workspace state."""
 
 from __future__ import annotations
 
@@ -29,6 +29,13 @@ from pcbknowledge.git_native.pilot_scenarios import (  # noqa: E402
     example_scenario_suite_payload,
     run_pilot_scenarios,
     write_example_scenario_suite,
+)
+from pcbknowledge.git_native.pilot_session import (  # noqa: E402
+    bootstrap_pilot_session,
+    load_pilot_session,
+)
+from pcbknowledge.git_native.pilot_session_status import (  # noqa: E402
+    pilot_session_status,
 )
 from pcbknowledge.git_native.store import KnowledgeRepository  # noqa: E402
 from pcbknowledge.git_native.workspace import (  # noqa: E402
@@ -61,9 +68,7 @@ def _scaffold(path: Path) -> Path:
             f"refusing to overwrite non-template file: {resolved}"
         ) from error
     if existing != example_manifest_payload():
-        raise PilotEvaluationError(
-            f"refusing to overwrite existing file: {resolved}"
-        )
+        raise PilotEvaluationError(f"refusing to overwrite existing file: {resolved}")
     return resolved
 
 
@@ -93,11 +98,31 @@ def _scenario_scaffold(path: Path) -> Path:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Evaluate a private PcbKnowledge pilot without storing negative cases "
-            "as canonical engineering authority"
+            "Operate a private PcbKnowledge P0.4a pilot without storing negative "
+            "evaluation cases as canonical engineering authority"
         )
     )
     commands = parser.add_subparsers(dest="command", required=True)
+
+    bootstrap = commands.add_parser(
+        "bootstrap",
+        help="initialize an isolated private pilot workspace and evaluation session",
+    )
+    bootstrap.add_argument("--workspace", required=True)
+    bootstrap.add_argument("--state-dir", required=True)
+    bootstrap.add_argument("--dataset-name", required=True)
+    bootstrap.add_argument("--ref", default="HEAD")
+    bootstrap.add_argument(
+        "--init-git",
+        action="store_true",
+        help="initialize Git only when the workspace target is missing or empty",
+    )
+
+    status = commands.add_parser(
+        "status",
+        help="project the current pilot phase and machine-readable next actions",
+    )
+    status.add_argument("--session", required=True)
 
     scaffold = commands.add_parser(
         "scaffold", help="write an editable pilot-evaluation manifest template"
@@ -167,6 +192,29 @@ def _print_json(value: object) -> None:
 def main(argv: list[str] | None = None) -> int:
     arguments = parse_args(argv)
     try:
+        if arguments.command == "bootstrap":
+            result = bootstrap_pilot_session(
+                workspace=Path(arguments.workspace),
+                state_root=Path(arguments.state_dir),
+                schema_source_root=REPO_ROOT,
+                software_root=REPO_ROOT,
+                dataset_name=arguments.dataset_name,
+                init_git=arguments.init_git,
+                published_ref=arguments.ref,
+            )
+            _print_json(result.to_dict())
+            return 0
+
+        if arguments.command == "status":
+            session = load_pilot_session(Path(arguments.session))
+            _print_json(
+                pilot_session_status(
+                    session,
+                    software_root=REPO_ROOT,
+                ).to_dict()
+            )
+            return 0
+
         if arguments.command == "scaffold":
             output = _scaffold(Path(arguments.output))
             _print_json(
@@ -227,9 +275,7 @@ def main(argv: list[str] | None = None) -> int:
 
         manifest = PilotEvaluationManifest.from_path(Path(arguments.manifest))
         if arguments.scenario_report:
-            executable = PilotScenarioReport.from_path(
-                Path(arguments.scenario_report)
-            )
+            executable = PilotScenarioReport.from_path(Path(arguments.scenario_report))
             manifest = apply_scenario_report(
                 manifest,
                 executable,
