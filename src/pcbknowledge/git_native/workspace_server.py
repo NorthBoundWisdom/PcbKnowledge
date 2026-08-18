@@ -19,6 +19,7 @@ from pcbknowledge.git_native.server import (
     HTTPRequestError,
 )
 from pcbknowledge.git_native.store import KnowledgeRepository, RepositoryError
+from pcbknowledge.git_native.workbench import WorkbenchApplication
 from pcbknowledge.git_native.workspace import validate_workspace
 
 
@@ -130,6 +131,7 @@ class WorkspaceEditorHTTPServer(EditorHTTPServer):
     def __init__(self, address: tuple[str, int], repository: KnowledgeRepository) -> None:
         ThreadingHTTPServer.__init__(self, address, WorkspaceEditorRequestHandler)
         self.repository = repository
+        self.application = WorkbenchApplication(repository)
         self.csrf_token = secrets.token_urlsafe(32)
 
 
