@@ -1,82 +1,141 @@
-# PcbKnowledge Git-native 架构
+# PcbKnowledge Git-native architecture
 
-> 状态：P0.2 Agent-native ingestion 已实现 + P0 后续演进基线
-> 更新日期：2026-08-14
-> 当前实现阶段：P0.2 complete，P0.3 next
-> 主要决策：[ADR-018](adr/ADR-018-git-native-local-editor.md)、[ADR-019](adr/ADR-019-git-publication-boundary.md)
+> Status: P0.2.5 Knowledge Workspace boundary complete; P0.3 Review Workbench next
+> Updated: 2026-08-18
+> Primary decisions: [ADR-018](adr/ADR-018-git-native-local-editor.md), [ADR-019](adr/ADR-019-git-publication-boundary.md), [ADR-020](adr/ADR-020-knowledge-workspace-boundary.md)
+> Open-source boundary: [`open-source-boundary.md`](open-source-boundary.md)
 
-## 1. 产品定位
+## 1. Product role
 
-PcbKnowledge 是 PCB 工程知识与证据仓库。当前阶段服务少量可信内部使用者：Agent 负责资料准备和结构化候选，PCB 工程师或产品经理在本机 GUI 中检查、退回和批准，Git 负责差异审阅、协作、归属和最终发布。
+PcbKnowledge is a repository for PCB engineering knowledge and source evidence. Agents prepare sources and structured candidates; engineers or product managers inspect source material, reject or approve candidates, and use Git for attribution, collaboration, and final publication.
 
-PCB 软件本身知道当前板卡里的元件、网络、几何、规则和 DRC 结果，但大量设计决策依赖板卡之外的知识，例如：
+PCB software already knows the live board: components, nets, geometry, rules, connectivity, and deterministic DRC state. Many engineering decisions depend on information outside the board model, including:
 
-- datasheet 的 pin function、absolute maximum 与 recommended operating condition；
-- 电源时序、去耦、晶振、复位和启动配置；
-- 厂商 layout/application guide 与 reference design；
-- 板厂工艺能力、内部设计规范、历史 review 与 waiver；
-- PCN、EOL、器件生命周期和替代关系。
+- datasheet pin functions, absolute maximums, and recommended operating conditions;
+- power sequencing, decoupling, clocks, reset behavior, and boot configuration;
+- manufacturer layout/application guides and reference designs;
+- fabrication capabilities, internal engineering rules, historical reviews, and waivers;
+- PCNs, EOL information, lifecycle state, and replacement relationships.
 
-这些资料会更新并存在不同 revision，工程结论必须能回答“来自哪份资料、哪个版本、哪一页和哪一块原文”。因此 PcbKnowledge 同时保存不可变证据与结构化工程事实，而不是只依赖模型记忆或“PDF 切块 + 向量搜索”。
+These materials change by revision. An engineering conclusion therefore needs to answer which document, which revision, which page, and which source passage supports it. PcbKnowledge stores immutable evidence together with typed engineering facts instead of relying only on model memory or generic PDF chunk/vector retrieval.
 
-它不是共享在线服务，也不是 PcbCore 的一部分。当前产品优先保证：
+PcbKnowledge is not a shared online service and is not part of PcbCore. PcbKnowledge provides external engineering knowledge and evidence; PcbCore owns live board facts and deterministic validation. An Agent harness may combine both systems for a task, but board mutation remains inside PcbCore contracts.
 
-- 工程事实可以追溯到确定的来源和版本；
-- 未知、冲突、受限资料不会被模型静默补全；
-- 人和 Agent 操作同一套仓库文件；
-- 数据变化可以直接用 Git diff 审阅；
-- PcbKnowledge 不可用时，PcbCore/PCBAtlas 的板卡打开、编辑和确定性验证不受影响。
+## 2. Software checkout versus knowledge workspace
 
-PcbKnowledge 提供“知识与证据”，PcbCore 提供“当前板卡事实与确定性验证”，Agent Harness 负责把二者组合成任务闭环。
-
-## 2. 当前运行结构
+The open-source software repository and a production knowledge repository are physically distinct Git repositories.
 
 ```text
-FreeCM Run
-   |
-   v
+PcbKnowledge/                    public software checkout
+├── src/
+├── configs/
+├── schemas/                     source schema contract
+├── docs/
+├── tests/
+├── pcbknowledge.workspace.json  empty development-workspace contract
+└── knowledge/evidence placeholders only
+
+PcbKnowledgeData/                private knowledge workspace
+├── .git/
+├── pcbknowledge.workspace.json
+├── schemas/                     pinned workspace contract
+├── knowledge/
+│   ├── sources/
+│   ├── entities/
+│   └── facts/
+└── evidence/sha256/
+```
+
+The public source checkout must stay free of production authority/evidence. It carries an empty workspace contract so software validation and default local smoke tests remain self-contained, but real data is written to an explicitly selected private workspace.
+
+A production workspace is initialized with:
+
+```bash
+python3 configs/pcbknowledge_workspace.py init <workspace>
+```
+
+Initialization copies the three current schemas, writes canonical `pcbknowledge.workspace.json`, creates empty authority/evidence directories, and validates the result. It does not stage, commit, or push.
+
+### 2.1 Workspace manifest
+
+The workspace manifest pins:
+
+```text
+format            pcbknowledge-workspace-v1
+schema_contract   typed-v1
+schema_digest     SHA-256 contract digest
+created_with      PcbKnowledge
+```
+
+The schema digest covers the exact bytes of all three workspace schemas through their deterministic Git blob identities plus their repository paths. A mismatch between manifest and schema bytes fails closed. Existing workspaces are never silently upgraded by `init`; schema migration requires an explicit future upgrade workflow.
+
+### 2.2 Runtime selection
+
+Supported runtime selectors are explicit:
+
+```text
+Agent CLI                  --repo <workspace>
+Run/Open/Test/Package      --workspace <workspace>
+```
+
+No explicitly selected invalid workspace falls back to the public source checkout. Terminal receipts and the GUI show the concrete selected root.
+
+Source code, Python modules, CSS, and other application assets come from the PcbKnowledge software installation. Source/Entity/Fact authority, evidence, review state, and Git diffs come only from the selected workspace.
+
+## 3. Current runtime structure
+
+```text
+PcbKnowledge software checkout
+        |
+        | run/open --workspace <path>
+        v
 loopback Python editor (127.0.0.1:18080)
-   |
-   +--> Git-native JSON authority
-   +--> evidence/sha256/*/*.pdf
-   |
-   v
+        |
+        v
+selected knowledge Git workspace
+  ├── pcbknowledge.workspace.json
+  ├── schemas/
+  ├── knowledge/
+  └── evidence/
+        |
+        v
 Git diff / human review / commit
 ```
 
-当前运行时只有一个 Python 进程，页面由服务端渲染，CSS 无编译步骤。没有 Node、Docker、反向代理、数据库、消息队列、对象存储、身份提供方或后台 worker。
+The runtime is one Python process with server-rendered HTML and repository-owned CSS. It has no Node build chain, Docker runtime, reverse proxy, database, queue, object store, identity provider, or background worker.
 
-本机文件权限和 Git 仓库权限构成当前可信小团队的访问边界；如果未来需要共享在线编辑、企业 SSO、细粒度 ACL 或法规级审计，必须另立 ADR，而不是把当前 loopback editor 暴露到网络。
+Local operating-system permissions and Git repository permissions define the current trusted-user boundary. A future shared online editor, enterprise SSO, fine-grained ACL, or compliance-grade audit system requires a new threat model and a new ADR; exposing the loopback editor to a network is not an incremental deployment option.
 
-## 3. Git authority 与 publication boundary
+## 4. Git authority and publication boundary
 
-### 3.1 工作树、批准与发布是三件事
+### 4.1 Working tree, approval, and publication are distinct
 
 ```text
 working tree DRAFT / READY_FOR_REVIEW
-    = 准备中，未发布
+    = preparation in progress
 
 working tree APPROVED
-    = 人已经批准，但尚未发布
+    = human-approved, not yet published
 
 committed APPROVED in publication ref
     = Published Knowledge
 ```
 
-正式读取不能把本机工作树当知识库。published reader 必须从同一个 immutable Git ref 读取并校验：
+Formal readers never treat the mutable working tree as published knowledge. The typed published reader resolves one immutable Git ref and validates from that snapshot:
 
-- canonical JSON；
-- 文件名与 record identity；
-- supersedes/reference closure；
-- 关联 PDF bytes；
-- PDF SHA-256、size 和 content-addressed path。
+- canonical Source/Entity/Fact JSON;
+- filename and record identity;
+- workspace-local schema documents;
+- Source/Entity/Fact reference closure;
+- `supersedes` closure;
+- referenced PDF bytes;
+- PDF SHA-256, size, and content-addressed path.
 
-当前 typed published reader 与 CLI 的 `list --published` 已实现这一原则，并且不会借用工作树中
-尚未提交的 JSON、Schema 或 PDF。
+Supported published Agent entry points first validate `pcbknowledge.workspace.json` and its schema digest from the same ref, then invoke the typed published reader. Working-tree schema or license changes cannot weaken a committed published read.
 
-### 3.2 数据提交与代码提交分离
+### 4.2 Data commits and contract commits stay separate
 
-Git change scope：
+Git change scope remains:
 
 ```text
 CLEAN
@@ -85,70 +144,32 @@ CODE_ONLY
 MIXED
 ```
 
-`knowledge/**` 与 `evidence/**` 是数据；其余路径是代码、Schema、文档或策略。若 Git index 非空，分类器判断下一次 commit 的实际 index；否则判断未暂存/未跟踪工作区。rename/copy 的来源和目标同时计入。
+Inside a knowledge workspace, `knowledge/**` and `evidence/**` are data. Workspace manifest or schema changes are contract/policy changes and must not share a commit with data that depends on the new contract. In the public software repository, production data is prohibited entirely by `check_public_repo.py`.
 
-`MIXED` 不能成为一个 commit。原因是不能让同一个 Agent 在一个提交中既修改 validator/schema/policy，又提交依赖新规则才能通过的数据。
+## 5. Typed authority model
 
-## 4. 历史 Source Corpus 过渡层（P0.0，已退役）
-
-当前 GUI 截图中的“建立一条可审阅的记录”属于 Source Corpus 录入，不是最终 Fact Editor。
-
-历史 Schema v2 的一条记录代表：
-
-```text
-一个确定来源
-+ 一个确定文档
-+ 一个确定 revision
-+ 一份确定 PDF 原件
-+ 审阅历史
-```
-
-当时的 authority：
-
-```text
-knowledge/records/<stable-id>.json
-evidence/sha256/<prefix>/<sha256>.pdf
-schemas/knowledge-record.schema.json
-```
-
-历史记录包含 title、document number、revision、publisher/locator、license、PDF、preparation note、append-only review history 与 supersedes。
-
-这套 v2 是 Git-native MVP 的过渡 Source 模型。P0.1 已在仓库没有真实 record 的窗口一次性迁移到
-正式 typed knowledge layout；validator 不读取该旧 root，也没有双写兼容层。
-
-## 5. P0.1 正式 authority 模型（已实现）
-
-P0.1 把“资料”和“资料中的工程事实”拆开：
+Canonical knowledge uses:
 
 ```text
 knowledge/
-├── sources/      # 文档 revision
-├── entities/     # PCB 工程实体
-└── facts/        # 可审核工程事实
+├── sources/      SourceRecordV1
+├── entities/     EntityRecordV1
+└── facts/        FactRecordV1
 
-evidence/sha256/ # immutable PDF originals
+evidence/sha256/ immutable PDF originals
 ```
+
+The retired `knowledge/records/` Source-only wire format is historical and has no active read or dual-write path.
 
 ### 5.1 SourceRecordV1
 
-`SourceRecordV1` 表达一个确定文档 revision，而不是一个器件的全部知识。
+A Source represents one exact engineering-document revision. Core fields include stable ID/schema version, source type, title/document number/revision, publisher/locator, explicit license policy, content-addressed evidence, append-only review history, and explicit `supersedes`.
 
-字段至少包括：
-
-- stable ID；
-- `source_type`：DATASHEET / APPLICATION_NOTE / REFERENCE_DESIGN / PCN / FAB_CAPABILITY / INTERNAL_GUIDELINE；
-- title、document number、revision；
-- publisher、source locator；
-- license policy；
-- content-addressed evidence；
-- review history；
-- supersedes。
-
-资料版本关系显式保存，不从文件名或标题推断。
+Revision relationships are stored explicitly and are never inferred from file names or titles.
 
 ### 5.2 EntityRecordV1
 
-P0.1 只建立支撑 datasheet facts 的最小实体集合：
+The P0 entity set is intentionally small:
 
 ```text
 ManufacturerV1
@@ -156,78 +177,32 @@ ComponentV1
 PackageV1
 ```
 
-核心约束：
-
-- 原始 manufacturer/MPN/package 字符串永久保留；
-- normalized key 只用于精确 lookup；
-- 不根据 MPN suffix 猜 package、silicon revision 或 orderable part；
-- entity identity 稳定并支持幂等创建；
-- Component 明确引用 Manufacturer，Package 独立建模。
+Raw manufacturer, MPN, and package strings are preserved. Normalized keys exist only for exact lookup. Package, silicon revision, orderable part, or family is never inferred from an MPN suffix.
 
 ### 5.3 EvidenceAnchorV1
 
-继续执行 ADR-013：
+ADR-013 defines evidence coordinates:
 
 ```text
 source_id
 page                 # 1-based
 coordinate_space     # PDF_NORMALIZED_V1
-bbox                  # x0,y0,x1,y1 in [0,1]
+bbox                 # x0,y0,x1,y1 in [0,1]
 quote
 quote_sha256
 ```
 
-完整 anchor 必须满足：
-
-```text
-0 <= x0 < x1 <= 1
-0 <= y0 < y1 <= 1
-```
-
-Anchor 绑定 immutable source revision，不会自动迁移到新 revision。Draft Fact 可以暂缺 bbox，但批准前必须具备完整 anchor。
+An anchor binds to one immutable Source revision and never migrates automatically to another revision. Draft Facts may temporarily use page-only/incomplete anchors, but approval requires complete anchors.
 
 ### 5.4 FactRecordV1
 
-`FactRecordV1` 表达结构化 PCB 工程事实，而不是自由文本摘要：
+A Fact is a typed PCB engineering assertion rather than a free-text summary. The first implemented types are `ComponentPinFactV1` and `ParameterLimitFactV1`, each carrying entity references, typed payload, conditions/applicability, evidence anchors, review history, and `supersedes`.
 
-```text
-stable identity
-fact_type
-subject entity IDs
-payload
-conditions/applicability
-evidence anchors
-review history
-supersedes
-```
+Numeric facts require explicit units. An unstated value remains unknown; it is not copied from a similar device or filled from model memory.
 
-P0.1 第一批仅实现两类事实：
+## 6. Review, immutability, and conflict handling
 
-**ComponentPinFactV1**
-
-- component ID；
-- package ID；
-- pin number/name；
-- primary function；
-- alternate functions；
-- conditions/applicability；
-- one or more evidence anchors。
-
-**ParameterLimitFactV1**
-
-- component ID；
-- parameter；
-- `ABSOLUTE_MAXIMUM / RECOMMENDED_OPERATING / ELECTRICAL_CHARACTERISTIC`；
-- minimum / typical / maximum；
-- unit；
-- conditions；
-- one or more evidence anchors。
-
-数值事实必须有单位；没有值就是 unknown，不使用相似器件或模型记忆补齐。
-
-## 6. Review、不可变性与冲突
-
-Source 与 Fact 都使用显式状态机：
+Source and Fact records use an explicit state machine:
 
 ```text
 DRAFT -> READY_FOR_REVIEW -> APPROVED
@@ -235,20 +210,16 @@ DRAFT -> READY_FOR_REVIEW -> APPROVED
   +-- REJECTED <-+
 ```
 
-- submit/reject/approve 追加 review history；
-- rejection comment 必须保留；
-- committed `APPROVED` authority object 不允许原地改写或删除；
-- 修正通过新 ID/new version + `supersedes`；
-- unresolved conflict 必须显式存在，不能依据模型置信度静默选 winner；
-- working-tree approval 不等于 publication。
+- submit, reject, and approve append review history;
+- rejection comments survive edit/resubmission;
+- committed `APPROVED` authority cannot be rewritten or deleted in place;
+- corrections use a new identity/version plus `supersedes`;
+- unresolved semantic conflicts remain explicit and are never resolved by model confidence;
+- working-tree approval remains distinct from publication.
 
-PCB 工程师或产品经理负责核对文档版本、来源、许可、结构化事实与原文是否一致，退回不完整或错误候选，并只批准自己有能力负责的内容。高风险工程事实仍需具备相应领域判断能力的人审阅。
+## 7. Source licensing and Agent processing
 
-P0.1 不实现复杂 Conflict Center，但 validator 必须能发现语义重复/冲突，并阻止“多个相互冲突的事实同时被当作唯一 authoritative answer”。
-
-## 7. 许可与 Agent 处理
-
-P0.1 SourceRecordV1 已把历史 v2 的临时许可表示替换为明确 taxonomy：
+`SourceRecordV1` uses:
 
 ```text
 UNKNOWN
@@ -259,166 +230,92 @@ RESTRICTED
 LICENSED_BLOCKED_FOR_AI
 ```
 
-语义：
+`PUBLIC_REFERENCE` means publicly accessible, not automatically redistributable. `UNKNOWN`, `RESTRICTED`, and `LICENSED_BLOCKED_FOR_AI` fail closed for Agent/model source processing. IPC and equivalent restricted standards default to `LICENSED_BLOCKED_FOR_AI`.
 
-- `PUBLIC_REFERENCE`：公开可访问，例如厂商 datasheet；不等于开放版权许可；
-- `OPEN_LICENSE`：有明确开放许可；
-- `INTERNAL`：组织内部允许处理；
-- `RESTRICTED`：限制分发/处理，按明确 policy 执行；
-- `LICENSED_BLOCKED_FOR_AI`：禁止 Agent/model 原文、解析、索引、embedding 等处理；
-- `UNKNOWN`：fail closed。
+Normal Agent Source projections do not reveal the evidence path. `source authorize-read` returns a path only after policy and bytes both pass validation.
 
-IPC 与等价受限标准默认进入 `LICENSED_BLOCKED_FOR_AI`。
+## 8. Evidence lifecycle
 
-## 8. Evidence 生命周期
-
-PDF 永久按实际 bytes SHA-256 内容寻址：
+PDF originals are addressed by actual SHA-256 bytes:
 
 ```text
 evidence/sha256/<first-two>/<sha256>.pdf
 ```
 
-写入规则：
+The repository creates missing digest objects, reuses identical content, rejects hash/size/path mismatch and symlinks, validates orphan evidence, protects committed/published evidence, and serializes writes with a repository lock.
 
-- create-if-absent；
-- 同 digest 复用；
-- hash/size/path 任一不一致即失败；
-- symlink、异常布局和真正 orphan evidence 使校验失败；
-- 草稿替换 PDF 后，仅允许清理“当前无引用且 published ref 也无引用”的未提交原件；
-- 多进程写入通过同一仓库文件锁协调。
+## 9. Derived data and packaging
 
-## 9. 派生数据与检索
-
-永久资产：
+Permanent workspace assets are:
 
 ```text
-source/entity/fact JSON
+pcbknowledge.workspace.json
+schemas/
+Source / Entity / Fact JSON
 PDF originals
 EvidenceAnchor
-review/supersedes/conflict relations
+review / supersedes / conflict relationships
 Git history
 ```
 
-可重建派生物：
+Rebuildable state includes `.pcbknowledge/`, SQLite indexes, FTS, page text, thumbnails/previews, embeddings, summaries, caches, and package ZIPs.
+
+`package --workspace <path>` validates and reads only the selected workspace. Its archive includes the workspace manifest, pinned schemas, authority, and referenced evidence. The ZIP and SHA-256 sidecar are written under the software checkout's ignored `build/package/` directory.
+
+## 10. Agent boundary
+
+P0.2 exposes typed `source`, `entity`, and `fact` command groups plus four repository-local skills. P0.2.5 makes workspace selection part of every skill contract.
+
+Agents may create/edit drafts, create typed candidates, attach verified anchors, validate, submit for human review, and report unknown/conflict/missing-evidence/diff state.
+
+Agents may not approve/reject, stage/commit/push, read blocked content, fill facts from approximate identities/model priors, silently switch workspaces, or mutate PCB board state.
+
+## 11. GUI evolution
+
+The current GUI remains the Source Corpus editor. P0.2.5 wraps the stable server with a workspace-aware runtime that validates the selected workspace and injects the exact workspace root into every rendered page. Existing Host/Origin, CSRF, optimistic-revision, and no-Git-write boundaries are unchanged.
+
+P0.3 now evolves the UI toward:
 
 ```text
-.pcbknowledge/
-SQLite indexes
-FTS
-page text
-thumbnail/preview
-embedding/vector index
-summary/cache
-build/package
-```
-
-P0/P0.1 不需要 vector RAG。P1 才建立本机 SQLite exact index + FTS5；vector 只有在 golden eval 证明对 guideline/case retrieval 有稳定增益时才进入 P3。
-
-## 10. Agent 边界
-
-P0.2 已把底层 typed repository API 暴露为显式 `source` / `entity` / `fact` 命令组，并用四个
-repository-local skill 编排 Source 录入、Entity 精确解析、Fact 提取与人工交接。普通 Source 投影
-不返回 evidence path；只有 `source authorize-read` 在许可检查和 bytes 验证均通过后才返回只读路径。
-
-Entity resolution 只输出 `EXACT / UNKNOWN / CONFLICT`。Fact 投影显式输出 optional unknown、
-missing anchor 和 semantic conflict，不使用 fuzzy match 或模型置信度选 winner。`review-status` 对选中
-记录及其 Source/Entity closure 做最终检查，只有完整、无冲突、许可允许、已送审并且 change scope 为
-`DATA_ONLY` 时才给出 `WAIT_FOR_HUMAN_REVIEW`。
-
-Agent 可以：
-
-- 创建和修改 Draft；
-- 创建 Source/Entity/Fact 候选；
-- 绑定已证实的 EvidenceAnchor；
-- validate；
-- submit for human review；
-- 输出 unknown/conflict/missing evidence/diff。
-
-Agent 不可以：
-
-- approve/reject；
-- stage/commit/push；
-- 读取 `UNKNOWN` 或 `LICENSED_BLOCKED_FOR_AI` 的受限原文；
-- 根据近似 MPN、相似器件或模型先验补事实；
-- 修改 PCB board state。
-
-## 11. GUI
-
-当前 GUI 是 Source Corpus editor：用于建立文档记录、关联 PDF、送审、批准和看 Git diff。
-
-P0.1/P0.2 已完成 authority、Agent 命令与交接闭环；P0.3 再完成 Review Workbench：
-
-```text
+/review                primary review queue
 /sources
 /entities
 /facts
-/review
 
 PDF page + normalized bbox overlay
 + typed fact inspector
 + review history
-+ conflicts/missing/license gate
-+ Git diff
++ source/entity/fact/supersedes navigation
++ missing/conflict/license gates
++ Git diff and change-scope state
 ```
 
-继续使用 Python server + 少量原生 JS，不恢复 React/Node build chain。
+The runtime remains server-rendered Python plus a small amount of native JavaScript, with no Node build chain for the P0 workbench.
 
-## 12. FreeCM 生命周期
+## 12. FreeCM lifecycle
 
-- Config：检查 Python/Git/仓库边界并写 receipt；
-- Build：编译、运行标准库测试、验证全部 authority data；
-- Run：验证 build receipt 后启动 loopback editor；
-- Test：完整本地门禁 + `git diff --check`；
-- Package：从 validated authority 生成确定性 ZIP + manifest + SHA-256 sidecar。
+- **Config** validates the software checkout and writes a configuration receipt.
+- **Build** compiles, runs focused tests, validates the empty source-checkout workspace, and writes a build receipt.
+- **Run/Open** require the software build, validate the selected workspace, and start the loopback editor.
+- **Test** runs software tests and may additionally validate an external `--workspace`.
+- **Package** requires the software build and exports the selected validated workspace.
 
-所有 Schema、authority roots、Agent CLI、repository-local skills 与聚焦测试都进入 Build signature；
-canonical data 继续进入 validate 和 Package，不能产生测试未覆盖的隐藏写路径。
+FreeCM's default actions continue to target the source checkout for development convenience. Terminal users select production/private workspaces explicitly with `--workspace`.
 
-## 13. 与 PcbCore / PCBAtlas 的边界
+## 13. Retrieval and product integration direction
 
-PcbKnowledge 不读取、不修改 live board。它未来向 PCB Agent 提供的是 evidence-backed knowledge，例如 pin、电气限制、布局建议、waiver、板厂能力等。
-
-PcbCore 继续负责：
-
-- board identity；
-- geometry/connectivity；
-- DRC/ERC/DFM 等确定性判断；
-- transaction、patch、undo/replay。
-
-因此 RAG/knowledge retrieval 负责“应该参考什么”，PcbCore/验证器负责“修改后是否正确”。
-
-## 14. 主要使用场景
-
-- **器件选型 / BOM**：查询工作电压、absolute maximum、package、生命周期与替代关系，并同时返回来源、适用条件和冲突。
-- **原理图检查**：核对 pin function、alternate function、电源/复位/晶振连接和推荐工作条件。
-- **PCB 布局**：查询厂商布局指南、reference design 与去耦要求；实际坐标、间距和 DRC 仍由 PcbCore 验证。
-- **自动布线 / ECO**：提供约束依据和历史案例；router、DRC 与 evaluator 决定修改是否可接受。
-- **Design Review**：把历史 review、approved waiver 和内部 guideline 变成可追溯的查询证据。
-- **PCBAtlas 离线知识**：从 Git authority 构建项目级只读 snapshot，只下发当前板卡相关 Fact、Source 与 evidence，而不是完整公司语料。
-
-## 15. 演进顺序
-
-当前执行计划见 [TODO.md](../TODO.md)：
+P1 query order remains:
 
 ```text
-P0.0 Git-native hardening        COMPLETE
-P0.1 typed authority model       COMPLETE
-P0.2 Agent-native ingestion      COMPLETE
-P0.3 Local Review Workbench      NEXT
-P0.4 First real dataset + evals
-P1    SQLite exact + FTS
-P2    broader PCB knowledge + integration
-P3    vector retrieval only if eval justifies it
+exact entity
+-> exact package / revision / fact type
+-> published filters
+-> FTS
+-> fact + evidence + conflict + unknown
 ```
 
-第一批真实数据的重点不是尽快导入大量 PDF，而是让 20–30 个常用器件形成稳定闭环：
+Broader Fact types are added only after the first real dataset validates the initial schema and review UX. P2 introduces immutable KnowledgeSnapshot consumption and read-only PCBAtlas/PcbCore-facing Agent adapters without making PcbKnowledge a live board dependency.
 
-```text
-原文
-→ entity
-→ typed fact
-→ exact evidence
-→ human review
-→ Git publication
-→ published query
-```
+## 14. Explicitly deferred capabilities
+
+The following are not P0 requirements: hosted multi-user service, login infrastructure, database/object-store authority, MCP as a domain protocol, vector retrieval without evaluation evidence, automatic Git publication, and automatic PCB board mutation. Changing these boundaries requires an explicit ADR rather than silently reviving a superseded design.

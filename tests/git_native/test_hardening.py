@@ -141,9 +141,21 @@ class GitNativeHardeningTests(RepositoryTestCase):
         record = SourceRecord.new(
             "pk_aaaaaaaaaaaaaaaaaaaaaaaa", prepared_by=PreparedBy.HUMAN
         )
-        path = self.root / f"knowledge/sources/{record.id}.json"
-        path.symlink_to(record.canonical_json())
-        subprocess.run(["git", "add", "knowledge"], cwd=self.root, check=True)
+        relative = f"knowledge/sources/{record.id}.json"
+        # Build the symlink directly in the Git index. This tests the published
+        # tree mode itself and does not depend on OS symlink privileges.
+        blob = subprocess.run(
+            ["git", "hash-object", "-w", "--stdin"],
+            cwd=self.root,
+            input=record.canonical_json().encode("utf-8"),
+            stdout=subprocess.PIPE,
+            check=True,
+        ).stdout.decode("ascii").strip()
+        subprocess.run(
+            ["git", "update-index", "--add", "--cacheinfo", f"120000,{blob},{relative}"],
+            cwd=self.root,
+            check=True,
+        )
         subprocess.run(
             [
                 "git",

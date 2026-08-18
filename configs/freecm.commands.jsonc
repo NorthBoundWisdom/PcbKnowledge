@@ -5,7 +5,7 @@
       {
         "id": "git-native-local",
         "label": "Local Git Workspace",
-        "description": "Check Python and Git, then prepare the local repository editor",
+        "description": "Check Python, Git and the source-checkout workspace contract",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "config"],
         "platforms": ["darwin", "linux"],
@@ -20,7 +20,8 @@
           "inputs": [
             "configs/freecm.commands.jsonc",
             "configs/pcbknowledge_workflow.py",
-            "source_roots.lock.jsonc.in"
+            "source_roots.lock.jsonc.in",
+            "pcbknowledge.workspace.json"
           ],
           "outputs": [".freecm/pcbknowledge-config.json"]
         }
@@ -30,7 +31,7 @@
       {
         "id": "local-checks",
         "label": "Check Local Editor",
-        "description": "Compile, test and validate the Git-native editor without containers or downloads",
+        "description": "Compile, test and validate the Git-native software checkout without containers or downloads",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "build"],
         "configurations": ["git-native-local"]
@@ -40,7 +41,7 @@
       {
         "id": "local-editor",
         "label": "Open Knowledge Editor",
-        "description": "Open the no-login local GUI; Ctrl+C closes only this editor",
+        "description": "Open the no-login local GUI; terminal users can pass --workspace for external knowledge data",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "run"],
         "configurations": ["git-native-local"]
@@ -50,7 +51,7 @@
       {
         "id": "local-tests",
         "label": "Run Local Tests",
-        "description": "Run standard-library tests and validate all repository knowledge data",
+        "description": "Run standard-library tests and validate the source-checkout workspace",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "test"],
         "configurations": ["git-native-local"]
@@ -60,7 +61,7 @@
       {
         "id": "data-snapshot",
         "label": "Export Data Snapshot",
-        "description": "Create a reproducible ZIP of validated records, evidence and schema",
+        "description": "Create a reproducible ZIP of the selected validated workspace; terminal users can pass --workspace",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "package"],
         "configurations": ["git-native-local"]

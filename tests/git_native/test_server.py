@@ -103,14 +103,14 @@ class LocalEditorServerTests(RepositoryTestCase):
             {
                 "csrf_token": self.server.csrf_token,
                 "expected_revision": "",
-                "title": "TPS5430 数据手册",
+                "title": "TPS5430 Datasheet",
                 "document_number": "SLVS632",
                 "revision": "G",
                 "source_publisher": "Texas Instruments",
                 "source_locator": "https://example.test/tps5430.pdf",
                 "license_class": "PUBLIC_REFERENCE",
-                "license_note": "公开资料",
-                "preparation_note": "人工核对版本",
+                "license_note": "Public reference fixture",
+                "preparation_note": "Revision checked by a human",
                 "supersedes": "",
             },
             filename="datasheet.pdf",
@@ -130,9 +130,9 @@ class LocalEditorServerTests(RepositoryTestCase):
 
         text = body.decode("utf-8")
         self.assertEqual(status, HTTPStatus.OK)
-        self.assertIn("资料工作台", text)
-        self.assertIn("没有账号和数据库", text)
-        self.assertNotIn("登录", text)
+        self.assertIn("Source workspace", text)
+        self.assertIn("No account system or database", text)
+        self.assertNotIn("Sign in", text)
         self.assertEqual(headers["x-frame-options"], "DENY")
         self.assertIn("default-src 'none'", headers["content-security-policy"])
 
@@ -149,7 +149,7 @@ class LocalEditorServerTests(RepositoryTestCase):
             license_class=record.license_class,
             license_note=None,
             evidence=record.evidence,
-            preparation_note="等待工程师补充",
+            preparation_note="Waiting for engineer input",
             supersedes=None,
         )
         self.repository.save(record, updated, record.revision_token)
@@ -158,7 +158,7 @@ class LocalEditorServerTests(RepositoryTestCase):
         text = body.decode("utf-8")
         self.assertEqual(status, HTTPStatus.OK)
         self.assertIn("Agent prepared TPS5430 draft", text)
-        self.assertIn("AI 准备", text)
+        self.assertIn("Agent prepared", text)
 
     def test_create_submit_approve_diff_and_evidence_vertical_flow(self) -> None:
         index_before = self.root.joinpath(".git", "index").read_bytes()
@@ -174,7 +174,10 @@ class LocalEditorServerTests(RepositoryTestCase):
                 "expected_revision": draft.revision_token,
             },
         )
-        self.assertEqual((status, headers["location"]), (HTTPStatus.SEE_OTHER, f"/records/{record_id}"))
+        self.assertEqual(
+            (status, headers["location"]),
+            (HTTPStatus.SEE_OTHER, f"/records/{record_id}"),
+        )
 
         ready = self.repository.load(record_id)
         self.assertEqual(ready.status, RecordStatus.READY_FOR_REVIEW)
@@ -183,14 +186,16 @@ class LocalEditorServerTests(RepositoryTestCase):
             {
                 "csrf_token": self.server.csrf_token,
                 "expected_revision": ready.revision_token,
-                "review_comment": "来源与原件一致",
+                "review_comment": "Source identity matches the PDF original",
             },
         )
         self.assertEqual(status, HTTPStatus.SEE_OTHER)
         approved = self.repository.load(record_id)
         self.assertEqual(approved.status, RecordStatus.APPROVED)
 
-        status, headers, evidence = self.request("GET", f"/records/{record_id}/evidence")
+        status, headers, evidence = self.request(
+            "GET", f"/records/{record_id}/evidence"
+        )
         self.assertEqual(status, HTTPStatus.OK)
         self.assertEqual(headers["content-type"], "application/pdf")
         self.assertEqual(evidence, minimal_pdf("TPS5430"))
@@ -222,7 +227,7 @@ class LocalEditorServerTests(RepositoryTestCase):
             {
                 "csrf_token": self.server.csrf_token,
                 "expected_revision": ready.revision_token,
-                "review_comment": "请补充资料编号",
+                "review_comment": "Add the complete document number",
             },
         )
         self.assertEqual(status, HTTPStatus.SEE_OTHER)
@@ -267,7 +272,10 @@ class LocalEditorServerTests(RepositoryTestCase):
 
         status, _, _ = self.post_urlencoded(
             f"/records/{record_id}/submit",
-            {"csrf_token": "wrong", "expected_revision": self.repository.load(record_id).revision_token},
+            {
+                "csrf_token": "wrong",
+                "expected_revision": self.repository.load(record_id).revision_token,
+            },
         )
         self.assertEqual(status, HTTPStatus.FORBIDDEN)
         self.assertEqual(self.repository.load(record_id).status, RecordStatus.DRAFT)

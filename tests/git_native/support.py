@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import subprocess
 import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
 from pcbknowledge.git_native.store import KnowledgeRepository
+from pcbknowledge.git_native.workspace import WORKSPACE_MANIFEST_PATH
 
 
 class RepositoryTestCase(unittest.TestCase):
@@ -20,8 +21,16 @@ class RepositoryTestCase(unittest.TestCase):
         subprocess.run(["git", "init", "-q", str(self.root)], check=True)
         repository_root = Path(__file__).resolve().parents[2]
         shutil.copytree(repository_root / "schemas", self.root / "schemas")
+        shutil.copy2(
+            repository_root / WORKSPACE_MANIFEST_PATH,
+            self.root / WORKSPACE_MANIFEST_PATH,
+        )
         shutil.copy2(repository_root / ".gitignore", self.root / ".gitignore")
-        subprocess.run(["git", "add", "schemas", ".gitignore"], cwd=self.root, check=True)
+        subprocess.run(
+            ["git", "add", "schemas", WORKSPACE_MANIFEST_PATH.as_posix(), ".gitignore"],
+            cwd=self.root,
+            check=True,
+        )
         subprocess.run(
             [
                 "git",
@@ -32,7 +41,7 @@ class RepositoryTestCase(unittest.TestCase):
                 "commit",
                 "-q",
                 "-m",
-                "typed schema fixture",
+                "typed workspace contract fixture",
             ],
             cwd=self.root,
             check=True,

@@ -27,8 +27,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Check repository language
+        run: python configs/check_english_repo.py
+
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
+
+      - name: Validate source-checkout workspace contract
+        run: python configs/pcbknowledge_workspace.py validate .
 
       - name: Config
         run: python configs/pcbknowledge_workflow.py config
@@ -69,8 +75,14 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
 
+      - name: Check repository language
+        run: python configs/check_english_repo.py
+
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
+
+      - name: Validate source-checkout workspace contract
+        run: python configs/pcbknowledge_workspace.py validate .
 
       - name: Config
         run: python configs/pcbknowledge_workflow.py config
