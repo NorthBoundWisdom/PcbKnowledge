@@ -1,13 +1,12 @@
 # Open-source distribution boundary
 
-> 状态：ACTIVE
-> 建立日期：2026-08-18
-> 适用对象：PcbKnowledge public source repository、贡献者、CI、Agent 与未来 private knowledge workspace
+> Status: ACTIVE
+> Established: 2026-08-18
+> Applies to: the PcbKnowledge public source repository, contributors, CI, Agents, and private knowledge workspaces
 
-## 1. 目标
+## 1. Purpose
 
-PcbKnowledge 的软件基础设施适合公开协作，但 PCB 工程知识和证据天然具有不同的版权、商业敏感性和
-许可边界。本文件把两者分开：
+PcbKnowledge software infrastructure is suitable for public collaboration, while PCB engineering knowledge and source evidence have different copyright, redistribution, and commercial-sensitivity boundaries. This document separates them:
 
 ```text
 Public PcbKnowledge source
@@ -17,12 +16,11 @@ Private knowledge workspace
   = Source / Entity / Fact authority + licensed/internal evidence + review history
 ```
 
-开源不是“把当前目录所有内容都公开”。Apache-2.0 只授权本项目有权授权的软件和仓库文档，不会替
-TI/ADI/ST 等厂商 datasheet、IPC 等标准、公司内部 guideline 或用户数据重新授权。
+Open source does not mean publishing every file that happens to be in a development checkout. Apache-2.0 licenses only the software and repository material that the project has the right to license. It does not relicense manufacturer datasheets, IPC or similar standards, internal company guidelines, customer information, or user data.
 
 ## 2. Public upstream contract
 
-公开上游 `knowledge/**` / `evidence/**` 只保留目录占位符：
+The public upstream tracks only directory placeholders below `knowledge/**` and `evidence/**`:
 
 ```text
 knowledge/sources/.gitkeep
@@ -31,88 +29,91 @@ knowledge/facts/.gitkeep
 evidence/sha256/.gitkeep
 ```
 
-`configs/check_public_repo.py` 从 Git index/HEAD 的 tracked paths 验证这一合同。任何真实 JSON、PDF 或
-其他文件进入这些 roots 都直接失败。CI 必须在常规测试之前运行它。
+`configs/check_public_repo.py` validates this contract against tracked Git paths. Any real JSON, PDF, or other file added below these roots fails the check. CI runs this gate before the core repository tests.
 
-Synthetic fixtures 放在 `tests/**`，不能为了方便把真实受限文档改名后塞进 test data。
+Synthetic fixtures belong under `tests/**`. Do not rename or redact a restricted real document and treat it as a synthetic fixture.
 
-如果未来希望发布一个公共 PCB knowledge dataset，应建立独立数据仓库和独立许可审查，不要解除
-public source guard。
+If the project later publishes a public PCB knowledge dataset, create a separate data repository with its own licensing and redistribution review. Do not disable the public-source guard in this software repository.
 
 ## 3. Private knowledge workspace
 
-生产数据建议放在单独 private Git repository，例如：
+Production data belongs in a separate private Git repository, for example:
 
 ```text
 PcbKnowledge/              # public software
 PcbKnowledgeData/          # private authority/evidence
 ```
 
-Agent CLI 已支持显式 workspace root：
+The Agent CLI already accepts an explicit repository root:
 
 ```bash
 python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData validate
 python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData source list
 ```
 
-Agent 不得自行在 public/private workspace 之间搬运数据。调用者必须明确目标 repo，并继续执行原有
-license gate、review、publication、immutability 和 `DATA_ONLY/MIXED` 规则。
+P0.2.5 makes the workspace contract explicit for initialization, GUI, FreeCM lifecycle, and packaging. The target workspace remains a self-contained Git publication unit: its schemas, authority JSON, evidence, and publication history must be verifiable from the same repository snapshot.
 
-当前 GUI / FreeCM editor 仍把自身 checkout 作为运行 workspace。P0.3 在开始 P0.4 大规模真实数据前
-应完成“software checkout 与 selected knowledge workspace”显式分离；在此之前，真实数据只能放在
-经过明确控制的 private checkout/fork，而不能进入公开上游。
+An Agent must never move data between public and private repositories on its own. The caller selects the target workspace explicitly. License gates, review state, immutability, publication, and `DATA_ONLY/MIXED` rules remain unchanged in the private workspace.
 
-## 4. License taxonomy 与再分发
+## 4. License taxonomy and redistribution
 
-SourceRecord 的 taxonomy 不因仓库开源而改变：
+The `SourceRecord` taxonomy is unchanged by the open-source status of the software:
 
-- `PUBLIC_REFERENCE`：可公开访问的参考资料；**不表示允许重新托管或再分发原件**；
-- `OPEN_LICENSE`：存在明确开放许可，仍需遵守该许可；
-- `INTERNAL`：组织内部允许处理，不进入 public upstream；
-- `RESTRICTED`：受限资料，按 policy fail closed；
-- `LICENSED_BLOCKED_FOR_AI`：禁止 Agent/model 原文、解析、索引、embedding 等处理；
-- `UNKNOWN`：权利不明确时 fail closed。
+- `PUBLIC_REFERENCE`: the source is publicly accessible; **this does not grant permission to re-host or redistribute the original**;
+- `OPEN_LICENSE`: an explicit open license exists and its terms still apply;
+- `INTERNAL`: internal processing is permitted, but the material does not enter the public upstream;
+- `RESTRICTED`: distribution or processing is restricted and policy fails closed;
+- `LICENSED_BLOCKED_FOR_AI`: Agent/model reading, parsing, indexing, embedding, and derived-content exposure are blocked;
+- `UNKNOWN`: rights are uncertain, so processing fails closed.
 
-公开测试或示例要么是 synthetic，要么必须有明确的 redistribution basis。
+Public examples and test material must be synthetic or have an explicit, documented redistribution basis.
 
-## 5. Pull request 与 CI
+## 5. Pull requests and CI
 
-公开 PR 被视为不可信输入：
+Public pull requests are untrusted input:
 
-- CI 默认只有 `contents: read`；
-- 普通 PR 不应获得 repository secrets；
-- 不接受凭据、内部 endpoint、客户标识、生产日志或未授权 evidence；
-- `check_public_repo.py` 先于核心测试执行；
-- code/schema/policy 变更和 knowledge data 不混 commit；
-- CodeQL 在 repository public 后启用；
-- Dependabot 维护 GitHub Actions pin/version 更新。
+- workflows default to `contents: read`;
+- ordinary pull requests must not receive repository secrets;
+- credentials, internal endpoints, customer identifiers, production logs, and unauthorized evidence are rejected;
+- `check_english_repo.py` and `check_public_repo.py` run before the core tests;
+- code/schema/policy changes and knowledge-data changes do not share a commit;
+- CodeQL is enabled when the repository is public;
+- Dependabot maintains GitHub Actions versions.
 
-## 6. Visibility 切换前的最后门禁
+## 6. Repository language
 
-当前仓库曾经存在已退役的在线服务架构，因此 private → public 之前不能只审当前 tree。必须完成：
+The public repository uses English as its contributor and UI language. Documentation, user-facing UI strings, repository policy text, comments intended for contributors, and public fixtures must not introduce CJK, Kana, or Hangul text. `configs/check_english_repo.py` enforces this on tracked UTF-8 source files.
 
-1. **Git history secret scan**：检查所有 reachable commits，不只是 `HEAD`；
-2. **历史版权/来源检查**：确认旧代码、模板、图片、fixture 等有权公开；
-3. **Actions history 检查**：确认既有 logs/artifacts 不包含敏感内容；
-4. **分支与 tag 检查**：确认非 `main` ref 没有不应公开内容；
-5. **第三方许可检查**：确认 vendored 文件的许可证与 attribution 完整；
-6. 若发现历史 secret，先 revoke/rotate，再决定是否 rewrite history。
+This is a repository-maintenance rule, not a restriction on knowledge content in a private workspace. A private workspace may contain source-backed multilingual engineering material when licensing and processing policy allow it.
 
-本仓库的 public-source guard 是持续集成门禁，不是历史扫描器，不能替代上述一次性审计。
+## 7. Visibility-change and rewritten-history gate
 
-## 7. Publication boundary 不变
+Before changing repository visibility, audit more than the current working tree:
 
-对 private knowledge workspace 来说，原有三层边界仍然成立：
+1. scan reachable Git history for secrets;
+2. verify copyright and provenance for historical source, templates, images, and fixtures;
+3. inspect relevant Actions logs and artifacts;
+4. inspect non-`main` branches, tags, and pull-request refs;
+5. verify third-party licenses and attribution for vendored material;
+6. revoke or rotate any discovered secret before deciding whether history must be rewritten.
+
+The repository history was intentionally rewritten before public release. Force-pushing removes old commits from the normal branch history but may not immediately remove server-side unreachable Git objects addressable by a known SHA. If such an object contains an actual credential or similarly sensitive material, use the hosting provider's sensitive-data-removal process rather than treating the rewrite as erasure.
+
+The public-source guard is a continuous integration control, not a historical scanner.
+
+## 8. Publication boundary remains unchanged
+
+Inside a private knowledge workspace, the original three-layer publication boundary still applies:
 
 ```text
 working tree DRAFT / READY_FOR_REVIEW
-    = 准备中
+    = preparation in progress
 
 working tree APPROVED
-    = 人已批准，尚未发布
+    = human-approved, not yet published
 
 committed APPROVED in publication ref
     = Published Knowledge
 ```
 
-“Published Knowledge”指在该 knowledge workspace 的受控受众范围内发布，并不自动意味着互联网公开。
+"Published Knowledge" means published to the controlled audience of that knowledge workspace. It does not imply publication to the public internet.

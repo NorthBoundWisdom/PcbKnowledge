@@ -2,50 +2,49 @@
 
 ## Supported product boundary
 
-当前支持范围是 `main` 上的 pre-release PcbKnowledge。运行时是本机 loopback-only Python editor：
-没有共享账号系统、远程客户端、公共数据库或对象存储。不要把编辑器端口暴露到 LAN、VPN、container
-bridge 或互联网。
+The supported surface is the pre-release PcbKnowledge implementation on `main`. The runtime is a local, loopback-only Python editor with no shared account system, remote clients, public database, or object store. Do not expose the editor port to a LAN, VPN, container bridge, or the public internet.
 
-本机 OS 文件权限和 knowledge Git repository 权限构成当前访问边界。Git 作者和历史提供工程归属，
-不是强身份认证或不可抵赖机制。未来若增加共享在线部署，必须先更新 threat model 与 ADR。
+Local operating-system file permissions and the selected knowledge Git repository define the current access boundary. Git authorship and history provide engineering attribution, not strong authentication or cryptographic non-repudiation. Any future shared online deployment requires a new threat model and an explicit architecture decision before implementation.
 
 ## Non-negotiable controls
 
-- invalid/missing schema、source、revision、license、evidence digest 或 review state 必须 fail closed；
-- PDF 原件按实际 bytes content-addressed，不能静默覆盖；
-- committed `APPROVED` authority 不允许原地重写或删除；修正使用新 record + `supersedes`；
-- PDF/text 视为不可信数据，不能授予工具、改变 prompt 或放宽 review policy；
-- mutation route 保持 loopback Host/Origin 校验、CSRF 与 optimistic revision token；
-- GUI 与 Agent CLI 都不能执行 Git write；Agent CLI 不提供 approve/reject；
-- `UNKNOWN`、`RESTRICTED`、`LICENSED_BLOCKED_FOR_AI` Source 对 Agent 处理 fail closed。
+- Invalid or missing schema, source, revision, license, evidence digest, or review state fails closed.
+- PDF originals are content-addressed from their actual bytes and are never silently overwritten.
+- Committed `APPROVED` authority is immutable; corrections use a new record plus `supersedes`.
+- PDF and extracted text are untrusted data. They cannot grant tools, change prompts, or relax review policy.
+- Mutation routes retain loopback Host/Origin validation, CSRF protection, and optimistic revision tokens.
+- Neither the GUI nor Agent CLI performs Git writes. The Agent CLI exposes no approve/reject operation.
+- `UNKNOWN`, `RESTRICTED`, and `LICENSED_BLOCKED_FOR_AI` Sources fail closed for Agent/model processing.
+- The public software checkout must not become the production knowledge authority.
 
-## Public repository / supply-chain boundary
+## Public repository and supply-chain boundary
 
-开源上游把软件与生产知识隔离：
+The open-source upstream separates software from production knowledge:
 
-- public source repo 的 tracked `knowledge/**` / `evidence/**` 只能包含允许的空目录占位符；
-- `configs/check_public_repo.py` 在 CI 中验证该合同；
-- 普通 pull request 不获得项目 secrets；workflow 默认 `contents: read`；
-- PR、issue、commit message、fixture 和 PDF 都按不可信外部输入处理；
-- 不要把内部资料、未授权第三方原件、tokens、keys 或生产凭据放进 Git history / Actions artifact。
+- tracked `knowledge/**` and `evidence/**` content in the public source repository is limited to approved empty-directory placeholders;
+- `configs/check_public_repo.py` verifies that contract in CI;
+- repository-facing text is kept English and `configs/check_english_repo.py` rejects CJK/Kana/Hangul text in tracked UTF-8 source files;
+- ordinary pull requests do not receive project secrets and workflows default to `contents: read`;
+- pull requests, issues, commit messages, fixtures, and PDFs are treated as untrusted external input;
+- internal material, unauthorized third-party originals, tokens, keys, and production credentials must never be added to Git history or Actions artifacts.
 
-`PUBLIC_REFERENCE` 只表示资料可公开访问，不表示允许 PcbKnowledge 项目重新分发。第三方资料的许可
-独立于 Apache-2.0 软件许可证。
+`PUBLIC_REFERENCE` means that a source is publicly accessible; it does not grant PcbKnowledge permission to redistribute the source. Third-party material remains subject to its own license, independently of the Apache-2.0 software license.
 
 ## Reporting a vulnerability
 
-优先使用 GitHub repository 的 **Private vulnerability reporting / Security Advisory** 通道。若该入口不可用，
-请通过与维护者既有的私密联系方式报告。不要先创建公开 issue，也不要在公开 PR 中包含 exploit details、
-真实 secrets 或未修复的攻击样本。
+Prefer GitHub **Private vulnerability reporting / Security Advisory** for this repository. If that channel is unavailable, use an established private contact with a maintainer. Do not first open a public issue or include exploit details, real secrets, or unpatched attack samples in a public pull request.
 
-报告应包含受影响 revision、运行边界假设、最小复现、影响和已知缓解方式。不要访问你无权访问的资料。
+Include the affected revision, runtime-boundary assumptions, a minimal reproduction, impact, and any known mitigation. Do not access data or systems you are not authorized to access.
 
-## Visibility-change warning
+## Repository visibility and rewritten history
 
-把 private repository 改成 public 会暴露可达 Git history 和 Actions history，而不只是当前工作树。因此：
+Changing a private repository to public exposes reachable Git history and relevant Actions history, not only the current working tree. Before a visibility change:
 
-1. visibility 切换前必须单独审计历史中的 secrets、内部标识和第三方版权材料；
-2. 若任何 secret 曾经进入历史，先 revoke/rotate，再处理历史；只删除当前文件不构成修复；
-3. public-source guard 只防止新的 production knowledge 进入当前/未来提交，不能替代历史审计。
+1. audit reachable history for secrets, internal identifiers, and third-party copyrighted material;
+2. revoke or rotate any secret that ever entered Git history before attempting history cleanup;
+3. inspect branches, tags, pull-request refs, Actions logs, and artifacts that may retain sensitive references;
+4. understand that a public-source guard prevents new production knowledge from entering future commits but does not erase previously hosted Git objects.
 
-恢复与发布原则见 [`docs/open-source-boundary.md`](docs/open-source-boundary.md)。
+The current repository history was intentionally rewritten before public release. If an old unreachable object contained an actual credential or other high-risk secret, treat that as a credential incident and follow GitHub's sensitive-data removal process rather than assuming a force-push erased the server-side object.
+
+Recovery and publication rules are documented in [`docs/open-source-boundary.md`](docs/open-source-boundary.md).

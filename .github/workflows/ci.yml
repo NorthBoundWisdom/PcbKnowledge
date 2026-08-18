@@ -27,6 +27,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Check repository language
+        run: python configs/check_english_repo.py
+
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
 
@@ -68,6 +71,9 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.py }}
+
+      - name: Check repository language
+        run: python configs/check_english_repo.py
 
       - name: Check public-source boundary
         run: python configs/check_public_repo.py

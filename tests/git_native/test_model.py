@@ -50,7 +50,7 @@ def described_evidence() -> Evidence:
 
 def complete_source() -> SourceRecord:
     return SourceRecord.new(SOURCE_ID, prepared_by=PreparedBy.HUMAN).edit(
-        title="电源数据手册",
+        title="Power Supply Datasheet — Revision A",
         document_number="DS-1",
         revision="A",
         source_locator="https://example.test/ds.pdf",
@@ -79,7 +79,7 @@ class TypedAuthorityModelTests(unittest.TestCase):
 
         self.assertEqual(SourceRecord.from_json(payload), source)
         self.assertTrue(payload.endswith("\n"))
-        self.assertIn("电源数据手册", payload)
+        self.assertIn("Power Supply Datasheet — Revision A", payload)
         self.assertEqual(json.loads(payload)["schema_version"], 1)
         self.assertEqual(json.loads(payload)["source_type"], "DATASHEET")
         self.assertEqual(json.loads(payload)["review_history"], [])
@@ -106,7 +106,7 @@ class TypedAuthorityModelTests(unittest.TestCase):
         with self.assertRaisesRegex(RecordTransitionError, "fields are missing"):
             source.submit().approve("looks good")
 
-        rejected = source.submit().reject("请补版本")
+        rejected = source.submit().reject("Please add the revision")
         edited = rejected.edit(
             title="Title",
             document_number=None,
@@ -125,7 +125,7 @@ class TypedAuthorityModelTests(unittest.TestCase):
             [event.action for event in edited.review_history],
             [ReviewAction.SUBMITTED, ReviewAction.REJECTED],
         )
-        self.assertEqual(edited.review_history[-1].comment, "请补版本")
+        self.assertEqual(edited.review_history[-1].comment, "Please add the revision")
         self.assertEqual(edited.submit().review_history[-1].action, ReviewAction.SUBMITTED)
 
         tampered = edited.to_dict()
@@ -177,7 +177,7 @@ class TypedAuthorityModelTests(unittest.TestCase):
         self.assertEqual(component.raw_mpn, "TPS5430DDA")
         self.assertEqual(component.normalized_mpn, "TPS5430DDA")
         self.assertEqual(package.normalized_key, "SOPOWERPAD8")
-        self.assertEqual(normalize_lookup("村田 製作所"), "村田製作所")
+        self.assertEqual(normalize_lookup("Murata Manufacturing"), "MURATAMANUFACTURING")
         self.assertEqual(EntityRecord.from_json(component.canonical_json()), component)
 
         value = component.to_dict()

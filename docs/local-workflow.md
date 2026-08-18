@@ -1,47 +1,59 @@
-# 本机使用流程
+# Local workflow
 
-## 首次准备
+## First-time preparation
 
 ```bash
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 ```
 
-仓库不需要初始化 submodule。Config 不创建账号或密钥。Build 不联网、不下载、不运行 Docker，
-通常几秒完成。
+The repository has no submodule initialization requirement. Config creates no account or secret. Build performs no network download and does not run Docker; it normally completes quickly on a local development machine.
 
-## 打开与关闭
+## Open and close the editor
 
 ```bash
 python3 configs/pcbknowledge_workflow.py run
 ```
 
-默认浏览器会打开 <http://127.0.0.1:18080>。如果系统阻止自动打开，复制终端打印的 URL。
-按 `Ctrl+C` 关闭；终端没有健康轮询日志。
+The default browser opens <http://127.0.0.1:18080>. If the operating system blocks automatic browser launch, copy the URL printed by the terminal. Press `Ctrl+C` to stop the editor. The terminal does not emit periodic health-poll noise.
 
-## 提交一批资料
-
-1. 新建或打开草稿；未知项留空。
-2. 选择 PDF，保存。
-3. 信息完整后提交审阅。
-4. 工程师核对并批准，或写明原因退回。
-5. 打开“查看变化”，确认 JSON 和二进制 receipt。
-6. 使用团队熟悉的 Git GUI 完成 add/commit/push。
-
-应用本身不会执行第 6 步。
-
-## 协作建议
-
-- 每个小批次单独 commit，说明来源或任务编号。
-- 录入前先 pull，避免两个人同时修改同一记录。
-- 不要手工重命名 evidence；路径由 digest 决定。
-- 要更正已提交的批准记录，建立新记录并填写旧 ID 到 `supersedes`。
-
-## 本地门禁
+P0.2.5 will make the selected knowledge workspace explicit:
 
 ```bash
+python3 configs/pcbknowledge_workflow.py run --workspace ../PcbKnowledgeData
+```
+
+Until that implementation is complete, use the Agent CLI's existing `--repo` option for external private knowledge work and do not place production records in the public source checkout.
+
+## Review a small source batch
+
+The current GUI is the Source Corpus editor. Its workflow is:
+
+1. Create or open a draft; leave unknown values empty.
+2. Select a PDF and save the draft.
+3. Submit the record for review when required information is complete.
+4. An engineer verifies the source and approves it, or rejects it with a specific reason.
+5. Open the repository-change view and inspect the JSON diff plus binary evidence receipt.
+6. Use the team's normal Git GUI or command-line workflow to stage, commit, and push the accepted data.
+
+The application never performs step 6 itself.
+
+## Collaboration guidance
+
+- Keep each knowledge batch in a focused commit and include the source or task identifier in the commit message.
+- Pull before ingestion to reduce concurrent edits to the same authority object.
+- Never rename content-addressed evidence manually; its path is derived from the digest.
+- Correct a committed approved record by creating a new record and linking the prior ID through `supersedes`.
+- Keep code/schema/policy commits separate from knowledge/evidence commits.
+- Keep production knowledge in a private workspace repository rather than the public software checkout.
+
+## Local gates
+
+```bash
+python3 configs/check_english_repo.py
+python3 configs/check_public_repo.py
 python3 configs/pcbknowledge_workflow.py test
 python3 configs/pcbknowledge_agent.py validate
 ```
 
-两者都应 exit 0，且测试不能有 skip。
+All applicable commands must exit 0 with no skipped tests. Unexecuted, interrupted, or truncated checks are not passes.

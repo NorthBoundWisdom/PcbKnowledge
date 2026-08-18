@@ -38,18 +38,18 @@ from pcbknowledge.git_native.store import (
 DEFAULT_PORT = 18080
 MAX_FORM_BYTES = MAX_PDF_BYTES + 2 * 1024 * 1024
 STATUS_LABELS = {
-    RecordStatus.DRAFT: "待准备",
-    RecordStatus.READY_FOR_REVIEW: "待审阅",
-    RecordStatus.APPROVED: "已批准",
-    RecordStatus.REJECTED: "已退回",
+    RecordStatus.DRAFT: "Draft",
+    RecordStatus.READY_FOR_REVIEW: "Ready for review",
+    RecordStatus.APPROVED: "Approved",
+    RecordStatus.REJECTED: "Rejected",
 }
 MISSING_LABELS = {
-    "title": "标题",
-    "revision": "版本",
-    "source": "来源",
-    "license": "许可",
-    "evidence": "PDF 原件",
-    "license_note": "许可说明",
+    "title": "title",
+    "revision": "revision",
+    "source": "source",
+    "license": "license",
+    "evidence": "PDF original",
+    "license_note": "license note",
 }
 
 
@@ -115,12 +115,12 @@ def _textarea(label: str, name: str, value: str | None, *, placeholder: str = ""
 
 def _license_select(selected: LicenseClass) -> str:
     labels = {
-        LicenseClass.UNKNOWN: "未知（不能批准）",
-        LicenseClass.PUBLIC_REFERENCE: "公开参考资料",
-        LicenseClass.OPEN_LICENSE: "开放许可资料",
-        LicenseClass.INTERNAL: "内部可用",
-        LicenseClass.RESTRICTED: "受限资料",
-        LicenseClass.LICENSED_BLOCKED_FOR_AI: "许可资料（禁止 AI 处理）",
+        LicenseClass.UNKNOWN: "Unknown (cannot approve)",
+        LicenseClass.PUBLIC_REFERENCE: "Public reference",
+        LicenseClass.OPEN_LICENSE: "Open-license material",
+        LicenseClass.INTERNAL: "Internal use allowed",
+        LicenseClass.RESTRICTED: "Restricted",
+        LicenseClass.LICENSED_BLOCKED_FOR_AI: "Licensed material (AI processing blocked)",
     }
     options = "".join(
         f'<option value="{item.value}"{" selected" if item is selected else ""}>'
@@ -128,7 +128,7 @@ def _license_select(selected: LicenseClass) -> str:
         for item in LicenseClass
     )
     return (
-        '<label class="field"><span>许可类别</span>'
+        '<label class="field"><span>License class</span>'
         f'<select name="license_class">{options}</select></label>'
     )
 
@@ -145,7 +145,7 @@ def _record_form(
     if record.evidence.present:
         evidence = (
             '<div class="evidence-current">'
-            '<strong>当前原件</strong>'
+            '<strong>Current original</strong>'
             f'<a href="/records/{_escape(record.id)}/evidence" target="_blank" rel="noreferrer">'
             f"{_escape(record.evidence.sha256)}</a>"
             f"<span>{record.evidence.byte_size} bytes</span>"
@@ -157,19 +157,19 @@ def _record_form(
         f"{_hidden('csrf_token', csrf_token)}"
         f"{_hidden('expected_revision', expected_revision or '')}"
         '<section class="panel"><div class="section-heading"><div>'
-        '<p class="eyebrow">资料身份</p><h2>只填写已经确认的内容</h2>'
-        "</div><p>未知项可以留空，批准前会再次校验。</p></div>"
+        '<p class="eyebrow">Source identity</p><h2>Enter only confirmed information</h2>'
+        "</div><p>Unknown values may remain empty and are checked again before approval.</p></div>"
         '<div class="form-grid">'
-        f'{_text_field("标题", "title", record.title, placeholder="例如：TPS5430 数据手册")}'
-        f'{_text_field("资料编号（可选）", "document_number", record.document_number)}'
-        f'{_text_field("版本 / 修订", "revision", record.revision, placeholder="例如：Rev. G")}'
-        f'{_text_field("来源发布者", "source_publisher", record.source.publisher)}'
-        f'{_text_field("来源 URL 或线索", "source_locator", record.source.locator)}'
+        f'{_text_field("Title", "title", record.title, placeholder="Example: TPS5430 datasheet")}'
+        f'{_text_field("Document number (optional)", "document_number", record.document_number)}'
+        f'{_text_field("Version / revision", "revision", record.revision, placeholder="Example: Rev. G")}'
+        f'{_text_field("Source publisher", "source_publisher", record.source.publisher)}'
+        f'{_text_field("Source URL or locator", "source_locator", record.source.locator)}'
         f"{_license_select(record.license_class)}"
-        f'{_textarea("许可说明", "license_note", record.license_note)}'
-        f'{_textarea("准备说明", "preparation_note", record.preparation_note, placeholder="给 Agent 或审阅者的说明")}'
-        f'{_text_field("取代的记录 ID（可选）", "supersedes", record.supersedes)}'
-        '<label class="field field-wide"><span>PDF 原件（最大 64 MiB）</span>'
+        f'{_textarea("License note", "license_note", record.license_note)}'
+        f'{_textarea("Preparation note", "preparation_note", record.preparation_note, placeholder="Notes for an Agent or reviewer")}'
+        f'{_text_field("Superseded record ID (optional)", "supersedes", record.supersedes)}'
+        '<label class="field field-wide"><span>PDF original (maximum 64 MiB)</span>'
         '<input name="pdf" type="file" accept="application/pdf,.pdf">'
         '</label>'
         f"{evidence}"
@@ -186,9 +186,9 @@ def _status_badge(record: SourceRecord) -> str:
 
 def _missing_badges(record: SourceRecord) -> str:
     if not record.missing_fields:
-        return '<span class="badge complete">必需信息完整</span>'
+        return '<span class="badge complete">Required information complete</span>'
     return "".join(
-        f'<span class="badge missing">缺少：{_escape(MISSING_LABELS[item])}</span>'
+        f'<span class="badge missing">Missing: {_escape(MISSING_LABELS[item])}</span>'
         for item in record.missing_fields
     )
 
@@ -199,7 +199,7 @@ def _page(title: str, body: str, *, changes: int, active: str = "") -> str:
         return f'<a href="{path}"{current}>{label}</a>'
 
     return f"""<!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -210,12 +210,12 @@ def _page(title: str, body: str, *, changes: int, active: str = "") -> str:
   <header class="topbar">
     <a class="brand" href="/"><span>PK</span><strong>PcbKnowledge</strong></a>
     <nav>
-      {nav('/', '资料工作台', 'records')}
-      {nav('/diff', f'查看变化 ({changes})', 'diff')}
+      {nav('/', 'Source workspace', 'records')}
+      {nav('/diff', f'Repository changes ({changes})', 'diff')}
     </nav>
   </header>
   <main>{body}</main>
-  <footer>本机 Git 工作树是唯一权威数据源 · 保存不会自动提交</footer>
+  <footer>The local Git working tree is the authority · Saving never commits automatically</footer>
 </body>
 </html>
 """
@@ -247,7 +247,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         except HTTPRequestError as error:
             self._send_error_page(error.status, str(error))
         except RecordNotFoundError:
-            self._send_error_page(HTTPStatus.NOT_FOUND, "没有找到这条记录。")
+            self._send_error_page(HTTPStatus.NOT_FOUND, "Record not found.")
         except (RecordValidationError, EvidenceError, RepositoryError) as error:
             self._send_error_page(HTTPStatus.BAD_REQUEST, str(error))
 
@@ -260,7 +260,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         except HTTPRequestError as error:
             self._send_error_page(error.status, str(error))
         except RecordNotFoundError:
-            self._send_error_page(HTTPStatus.NOT_FOUND, "没有找到这条记录。")
+            self._send_error_page(HTTPStatus.NOT_FOUND, "Record not found.")
         except RecordConflictError as error:
             self._send_error_page(HTTPStatus.CONFLICT, str(error))
         except RecordTransitionError as error:
@@ -295,7 +295,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
                 try:
                     selected = RecordStatus(query["status"][0])
                 except ValueError as error:
-                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "未知的状态筛选。") from error
+                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Unknown status filter.") from error
             self._dashboard(selected)
             return
         if path == "/records/new":
@@ -304,19 +304,19 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             )
             changes = self.repository.git_changes().count
             body = (
-                '<div class="page-heading"><div><p class="eyebrow">新建资料</p>'
-                '<h1>建立一条可审阅的记录</h1>'
-                '<p>先保存草稿，再让 Agent 或同事补充。保存不会提交 Git。</p></div>'
-                '<a class="button secondary" href="/">返回工作台</a></div>'
+                '<div class="page-heading"><div><p class="eyebrow">New source</p>'
+                '<h1>Create a reviewable source record</h1>'
+                '<p>Save a draft first, then let an Agent or collaborator complete it. Saving does not commit Git.</p></div>'
+                '<a class="button secondary" href="/">Back to workspace</a></div>'
                 + _record_form(
                     action="/records/new",
                     csrf_token=self.editor_server.csrf_token,
                     record=record,
-                    submit_label="保存新草稿",
+                    submit_label="Save new draft",
                     expected_revision=None,
                 )
             )
-            self._send_html(_page("新建资料", body, changes=changes, active="records"))
+            self._send_html(_page("New source", body, changes=changes, active="records"))
             return
         if path == "/diff":
             self._diff_page()
@@ -328,7 +328,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         if len(parts) == 3 and parts[0] == "records" and parts[2] == "evidence":
             self._serve_evidence(parts[1])
             return
-        raise HTTPRequestError(HTTPStatus.NOT_FOUND, "页面不存在。")
+        raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Page not found.")
 
     def _dispatch_post(self, form: FormData) -> None:
         path = urlsplit(self.path).path
@@ -342,12 +342,12 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             return
         parts = path.strip("/").split("/")
         if len(parts) != 3 or parts[0] != "records":
-            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "操作不存在。")
+            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
         record_id, action = parts[1], parts[2]
         current = self.repository.load(record_id)
         expected = form.fields.get("expected_revision", "")
         if current.revision_token != expected:
-            raise RecordConflictError("记录已经被其他操作修改，请刷新后重试。")
+            raise RecordConflictError("The record changed after this page loaded. Refresh and retry.")
         if action == "save":
             updated = self._apply_form(current, form)
         elif action == "submit":
@@ -357,7 +357,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         elif action == "reject":
             updated = current.reject(form.fields.get("review_comment"))
         else:
-            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "操作不存在。")
+            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
         self.repository.save(current, updated, expected)
         self._redirect(f"/records/{record_id}")
 
@@ -366,7 +366,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         try:
             license_class = LicenseClass(raw_license)
         except ValueError as error:
-            raise RecordValidationError("未知的许可类别") from error
+            raise RecordValidationError("Unknown license class") from error
         values = {
             "title": form.fields.get("title"),
             "document_number": form.fields.get("document_number"),
@@ -393,7 +393,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         records = all_records if selected is None else [r for r in all_records if r.status is selected]
         summary = summarize_records(all_records)
         changes = self.repository.git_changes()
-        filters = [('<a href="/" class="filter">全部</a>' if selected is not None else '<a href="/" class="filter selected">全部</a>')]
+        filters = [('<a href="/" class="filter">All</a>' if selected is not None else '<a href="/" class="filter selected">All</a>')]
         for status in RecordStatus:
             css = "filter selected" if selected is status else "filter"
             filters.append(
@@ -403,94 +403,94 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         cards = "".join(
             f'<a class="record-card" href="/records/{_escape(record.id)}">'
             '<div class="record-card-top">'
-            f'<div><p class="record-origin">{"AI 准备" if record.prepared_by is PreparedBy.AGENT else "人工录入"}</p>'
-            f'<h3>{_escape(record.title or "未命名草稿")}</h3></div>{_status_badge(record)}</div>'
-            f'<p class="record-meta">{_escape(record.document_number or "未填资料编号")} · '
-            f'{_escape(record.revision or "版本未知")}</p>'
+            f'<div><p class="record-origin">{"Agent prepared" if record.prepared_by is PreparedBy.AGENT else "Human entered"}</p>'
+            f'<h3>{_escape(record.title or "Untitled draft")}</h3></div>{_status_badge(record)}</div>'
+            f'<p class="record-meta">{_escape(record.document_number or "Document number not set")} · '
+            f'{_escape(record.revision or "Revision unknown")}</p>'
             f'<div class="badges">{_missing_badges(record)}</div></a>'
             for record in records
         )
         if not cards:
             cards = (
-                '<section class="empty"><h2>这里还没有记录</h2>'
-                '<p>可以由你新建，也可以让 Agent CLI 先准备草稿。</p>'
-                '<a class="button primary" href="/records/new">建立第一条资料</a></section>'
+                '<section class="empty"><h2>No records yet</h2>'
+                '<p>Create one manually or let the Agent CLI prepare a draft first.</p>'
+                '<a class="button primary" href="/records/new">Create the first source</a></section>'
             )
         body = (
-            '<section class="hero"><div><p class="eyebrow">Git-native · 本机工作树</p>'
-            '<h1>Agent 准备，人来确认，Git 负责追踪</h1>'
-            '<p>没有账号和数据库。每次保存都是清楚可读的仓库变化，确认后再由你提交。</p>'
-            '</div><div class="hero-actions"><a class="button primary" href="/records/new">新建资料</a>'
-            f'<a class="button secondary" href="/diff">查看 {changes.count} 项变化</a></div></section>'
+            '<section class="hero"><div><p class="eyebrow">Git-native · local working tree</p>'
+            '<h1>Agents prepare, humans verify, Git tracks publication</h1>'
+            '<p>No account system or database. Every save becomes a readable repository change that you publish only after review.</p>'
+            '</div><div class="hero-actions"><a class="button primary" href="/records/new">New source</a>'
+            f'<a class="button secondary" href="/diff">View {changes.count} changes</a></div></section>'
             '<section class="stats">'
-            f'<div><strong>{summary[RecordStatus.DRAFT.value]}</strong><span>待准备</span></div>'
-            f'<div><strong>{summary[RecordStatus.READY_FOR_REVIEW.value]}</strong><span>待审阅</span></div>'
-            f'<div><strong>{summary[RecordStatus.APPROVED.value]}</strong><span>已批准</span></div>'
-            f'<div><strong>{changes.count}</strong><span>Git 变化</span></div></section>'
+            f'<div><strong>{summary[RecordStatus.DRAFT.value]}</strong><span>Draft</span></div>'
+            f'<div><strong>{summary[RecordStatus.READY_FOR_REVIEW.value]}</strong><span>Ready for review</span></div>'
+            f'<div><strong>{summary[RecordStatus.APPROVED.value]}</strong><span>Approved</span></div>'
+            f'<div><strong>{changes.count}</strong><span>Git changes</span></div></section>'
             f'<div class="filters">{"".join(filters)}</div><section class="record-grid">{cards}</section>'
         )
-        self._send_html(_page("资料工作台", body, changes=changes.count, active="records"))
+        self._send_html(_page("Source workspace", body, changes=changes.count, active="records"))
 
     def _record_page(self, record_id: str) -> None:
         record = self.repository.load(record_id)
         changes = self.repository.git_changes().count
         heading = (
             '<div class="page-heading"><div>'
-            f'<p class="eyebrow">{"AI 准备" if record.prepared_by is PreparedBy.AGENT else "人工录入"}</p>'
-            f'<h1>{_escape(record.title or "未命名草稿")}</h1>'
-            '<p>记录文件可直接通过 Git diff 审阅；批准后不能原地改写。</p></div>'
+            f'<p class="eyebrow">{"Agent prepared" if record.prepared_by is PreparedBy.AGENT else "Human entered"}</p>'
+            f'<h1>{_escape(record.title or "Untitled draft")}</h1>'
+            '<p>The record is directly reviewable with Git diff. Approved authority cannot be rewritten in place.</p></div>'
             f'<div class="heading-actions">{_status_badge(record)}'
-            '<a class="button secondary" href="/">返回工作台</a></div></div>'
+            '<a class="button secondary" href="/">Back to workspace</a></div></div>'
             f'<div class="badges record-missing">{_missing_badges(record)}</div>'
         )
         if record.status in {RecordStatus.DRAFT, RecordStatus.REJECTED}:
             if record.status is RecordStatus.REJECTED:
                 heading += (
-                    '<div class="notice warning"><strong>上次审阅已退回</strong>'
+                    '<div class="notice warning"><strong>Previous review rejected this record</strong>'
                     f'<p>{_escape(record.review.comment)}</p></div>'
                 )
             content = _record_form(
                 action=f"/records/{record.id}/save",
                 csrf_token=self.editor_server.csrf_token,
                 record=record,
-                submit_label="保存草稿",
+                submit_label="Save draft",
                 expected_revision=record.revision_token,
             )
             content += (
                 f'<form class="inline-action" action="/records/{record.id}/submit" method="post">'
                 f"{_hidden('csrf_token', self.editor_server.csrf_token)}"
                 f"{_hidden('expected_revision', record.revision_token)}"
-                '<div><strong>准备完成了吗？</strong><p>送审后内容冻结，审阅者可批准或退回。</p></div>'
-                '<button class="button primary" type="submit">提交人工审阅</button></form>'
+                '<div><strong>Ready for review?</strong><p>Submission freezes the content until a reviewer approves or rejects it.</p></div>'
+                '<button class="button primary" type="submit">Submit for human review</button></form>'
             )
         elif record.status is RecordStatus.READY_FOR_REVIEW:
             content = self._readonly_record(record)
             content += (
-                '<section class="panel review-panel"><p class="eyebrow">人工决定</p>'
-                '<h2>核对来源、许可、版本和 PDF 原件</h2>'
-                '<p>批准会使该记录不可原地修改。退回必须说明下一步。</p>'
+                '<section class="panel review-panel"><p class="eyebrow">Human decision</p>'
+                '<h2>Verify source, license, revision, and PDF original</h2>'
+                '<p>Approval makes this authority immutable in place. Rejection must explain the next action.</p>'
                 f'<form action="/records/{record.id}/approve" method="post">'
                 f"{_hidden('csrf_token', self.editor_server.csrf_token)}"
                 f"{_hidden('expected_revision', record.revision_token)}"
-                '<label class="field field-wide"><span>批准说明（可选）</span>'
+                '<label class="field field-wide"><span>Approval note (optional)</span>'
                 '<textarea name="review_comment"></textarea></label>'
-                '<button class="button primary" type="submit">批准这条资料</button></form>'
+                '<button class="button primary" type="submit">Approve source</button></form>'
                 f'<form action="/records/{record.id}/reject" method="post">'
                 f"{_hidden('csrf_token', self.editor_server.csrf_token)}"
                 f"{_hidden('expected_revision', record.revision_token)}"
-                '<label class="field field-wide"><span>退回原因（必填）</span>'
+                '<label class="field field-wide"><span>Rejection reason (required)</span>'
                 '<textarea name="review_comment" required></textarea></label>'
-                '<button class="button danger" type="submit">退回补充</button></form></section>'
+                '<button class="button danger" type="submit">Reject for revision</button></form></section>'
             )
         else:
             content = (
-                '<div class="notice success"><strong>这条资料已经批准并锁定</strong>'
-                '<p>如需修正，请新建记录并填写“取代的记录 ID”。</p></div>'
+                '<div class="notice success"><strong>This source is approved and locked</strong>'
+                '<p>To correct it, create a new record and set the superseded record ID.</p></div>'
                 + self._readonly_record(record)
             )
         self._send_html(
             _page(
-                record.title or "未命名草稿",
+                record.title or "Untitled draft",
                 heading + content,
                 changes=changes,
                 active="records",
@@ -498,51 +498,51 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         )
 
     def _readonly_record(self, record: SourceRecord) -> str:
-        evidence = "未提供"
+        evidence = "Not provided"
         if record.evidence.present:
             evidence = (
                 f'<a href="/records/{record.id}/evidence" target="_blank" rel="noreferrer">'
-                f"打开 PDF · {_escape(record.evidence.sha256)}</a>"
+                f"Open PDF · {_escape(record.evidence.sha256)}</a>"
             )
         rows = (
-            ("资料编号", record.document_number or "未知"),
-            ("版本", record.revision or "未知"),
-            ("发布者", record.source.publisher or "未知"),
-            ("来源", record.source.locator or "未知"),
-            ("许可", record.license_class.value),
-            ("原件", evidence),
+            ("Document number", record.document_number or "Unknown"),
+            ("Revision", record.revision or "Unknown"),
+            ("Publisher", record.source.publisher or "Unknown"),
+            ("Source", record.source.locator or "Unknown"),
+            ("License", record.license_class.value),
+            ("Original", evidence),
         )
         items = "".join(
-            f'<div><dt>{_escape(label)}</dt><dd>{value if label == "原件" else _escape(value)}</dd></div>'
+            f'<div><dt>{_escape(label)}</dt><dd>{value if label == "Original" else _escape(value)}</dd></div>'
             for label, value in rows
         )
-        note = _escape(record.preparation_note or "无")
+        note = _escape(record.preparation_note or "None")
         return (
             f'<section class="panel"><dl class="record-details">{items}</dl>'
-            f'<div class="note"><strong>准备说明</strong><p>{note}</p></div></section>'
+            f'<div class="note"><strong>Preparation note</strong><p>{note}</p></div></section>'
         )
 
     def _diff_page(self) -> None:
         changes = self.repository.git_changes()
-        status = "\n".join(changes.status_lines) or "工作树中没有 knowledge/evidence 变化。"
+        status = "\n".join(changes.status_lines) or "No knowledge/evidence changes in the working tree."
         diff = changes.tracked_diff + changes.untracked_preview
         if not diff:
-            diff = "暂无可显示的内容差异。"
+            diff = "No content diff to display."
         body = (
-            '<div class="page-heading"><div><p class="eyebrow">提交前检查</p>'
-            '<h1>仓库变化</h1><p>这里只预览，不会执行 add、commit 或 push。</p></div>'
-            '<a class="button secondary" href="/">返回工作台</a></div>'
-            '<section class="panel diff-panel"><h2>Git 状态</h2>'
-            f'<pre>{_escape(status)}</pre><h2>内容差异与新文件预览</h2>'
+            '<div class="page-heading"><div><p class="eyebrow">Pre-publication check</p>'
+            '<h1>Repository changes</h1><p>This view is read-only and never runs add, commit, or push.</p></div>'
+            '<a class="button secondary" href="/">Back to workspace</a></div>'
+            '<section class="panel diff-panel"><h2>Git status</h2>'
+            f'<pre>{_escape(status)}</pre><h2>Content diff and new-file preview</h2>'
             f'<pre>{_escape(diff)}</pre></section>'
         )
-        self._send_html(_page("仓库变化", body, changes=changes.count, active="diff"))
+        self._send_html(_page("Repository changes", body, changes=changes.count, active="diff"))
 
     def _serve_evidence(self, record_id: str) -> None:
         record = self.repository.load(record_id)
         self.repository.verify_evidence(record.evidence)
         if not record.evidence.present or record.evidence.path is None:
-            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "这条记录没有 PDF 原件。")
+            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "This record has no PDF original.")
         payload = (self.repository.root / record.evidence.path).read_bytes()
         self.send_response(HTTPStatus.OK)
         self._security_headers(cache="no-store")
@@ -555,21 +555,21 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
     def _read_form(self) -> FormData:
         content_length = self.headers.get("Content-Length")
         if content_length is None:
-            raise HTTPRequestError(HTTPStatus.LENGTH_REQUIRED, "请求缺少 Content-Length。")
+            raise HTTPRequestError(HTTPStatus.LENGTH_REQUIRED, "Request is missing Content-Length.")
         try:
             length = int(content_length)
         except ValueError as error:
-            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Content-Length 无效。") from error
+            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Invalid Content-Length.") from error
         if length < 0 or length > MAX_FORM_BYTES:
-            raise HTTPRequestError(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, "上传内容超过 64 MiB。")
+            raise HTTPRequestError(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, "Upload exceeds 64 MiB.")
         body = self.rfile.read(length)
         if len(body) != length:
-            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "请求内容不完整。")
+            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Request body is incomplete.")
         content_type = self.headers.get("Content-Type", "")
         if content_type.startswith("application/x-www-form-urlencoded"):
             decoded = parse_qs(body.decode("utf-8"), keep_blank_values=True, strict_parsing=True)
             if any(len(values) != 1 for values in decoded.values()):
-                raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "表单字段重复。")
+                raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Duplicate form field.")
             return FormData(fields={key: values[0] for key, values in decoded.items()}, files={})
         if content_type.startswith("multipart/form-data"):
             envelope = (
@@ -578,34 +578,34 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             )
             message = BytesParser(policy=policy.default).parsebytes(envelope)
             if not message.is_multipart():
-                raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "multipart 表单无效。")
+                raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Invalid multipart form.")
             fields: dict[str, str] = {}
             files: dict[str, UploadedFile] = {}
             for part in message.iter_parts():
                 name = part.get_param("name", header="content-disposition")
                 if not isinstance(name, str) or not name:
-                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "multipart 字段缺少名称。")
+                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Multipart field is missing a name.")
                 filename = part.get_filename()
                 payload = part.get_payload(decode=True) or b""
                 if filename is not None:
                     if name in files:
-                        raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "上传字段重复。")
+                        raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Duplicate upload field.")
                     if payload:
                         files[name] = UploadedFile(filename=filename, payload=payload)
                     continue
                 if name in fields:
-                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "表单字段重复。")
+                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Duplicate form field.")
                 try:
                     fields[name] = payload.decode(part.get_content_charset() or "utf-8")
                 except UnicodeDecodeError as error:
-                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "表单字段不是 UTF-8。") from error
+                    raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Form field is not UTF-8.") from error
             return FormData(fields=fields, files=files)
-        raise HTTPRequestError(HTTPStatus.UNSUPPORTED_MEDIA_TYPE, "不支持的表单格式。")
+        raise HTTPRequestError(HTTPStatus.UNSUPPORTED_MEDIA_TYPE, "Unsupported form format.")
 
     def _require_csrf(self, form: FormData) -> None:
         supplied = form.fields.get("csrf_token", "")
         if not secrets.compare_digest(supplied, self.editor_server.csrf_token):
-            raise HTTPRequestError(HTTPStatus.FORBIDDEN, "页面令牌已过期，请刷新后重试。")
+            raise HTTPRequestError(HTTPStatus.FORBIDDEN, "Page token expired. Refresh and retry.")
         origin = self.headers.get("Origin")
         if origin is None:
             return
@@ -616,7 +616,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             or parsed.port != self.editor_server.server_port
             or parsed.path not in {"", "/"}
         ):
-            raise HTTPRequestError(HTTPStatus.FORBIDDEN, "拒绝非本机来源的修改请求。")
+            raise HTTPRequestError(HTTPStatus.FORBIDDEN, "Mutation request rejected from non-loopback origin.")
 
     def _require_loopback_host(self) -> None:
         host = self.headers.get("Host", "")
@@ -624,11 +624,11 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             parsed = urlsplit(f"//{host}")
             port = parsed.port
         except ValueError as error:
-            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Host 无效。") from error
+            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Invalid Host header.") from error
         if parsed.hostname not in {"127.0.0.1", "localhost"}:
-            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "只接受本机访问。")
+            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Only loopback access is accepted.")
         if port is not None and port != self.editor_server.server_port:
-            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Host 端口不匹配。")
+            raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Host port does not match the editor port.")
 
     def _redirect(self, location: str) -> None:
         self.send_response(HTTPStatus.SEE_OTHER)
@@ -672,11 +672,11 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         except RepositoryError:
             changes = 0
         body = (
-            '<section class="error-page"><p class="eyebrow">操作未完成</p>'
+            '<section class="error-page"><p class="eyebrow">Operation not completed</p>'
             f'<h1>{status.value} · {_escape(status.phrase)}</h1>'
-            f'<p>{_escape(message)}</p><a class="button primary" href="/">返回工作台</a></section>'
+            f'<p>{_escape(message)}</p><a class="button primary" href="/">Back to workspace</a></section>'
         )
-        self._send_html(_page("操作未完成", body, changes=changes), status)
+        self._send_html(_page("Operation not completed", body, changes=changes), status)
 
 
 def create_server(repository_root: Path, port: int = DEFAULT_PORT) -> EditorHTTPServer:

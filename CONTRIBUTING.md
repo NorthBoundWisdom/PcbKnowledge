@@ -1,39 +1,39 @@
 # Contributing to PcbKnowledge
 
-感谢你改进 PcbKnowledge。这个项目的首要约束不是“尽量多收资料”，而是保持工程知识的来源、许可、
-证据和人工发布边界可验证。
+Thank you for improving PcbKnowledge. The primary constraint of this project is not to collect as much material as possible; it is to keep engineering knowledge, licensing, evidence, and human publication boundaries verifiable.
 
-## 1. 不要向 public source repo 提交生产知识
+## 1. Do not submit production knowledge to the public source repository
 
-以下内容默认不接受进入公开上游：
+The following content is not accepted in the public upstream by default:
 
-- 真实 `knowledge/sources/**`、`knowledge/entities/**`、`knowledge/facts/**` 数据；
-- datasheet、标准、内部文档或其他真实 `evidence/**` PDF；
-- 公司内部 guideline、review、waiver、historical case；
-- credentials、tokens、private keys、生产 URL 或可识别的内部基础设施信息；
-- 你没有权利公开或再分发的测试 fixture。
+- real `knowledge/sources/**`, `knowledge/entities/**`, or `knowledge/facts/**` authority data;
+- datasheets, standards, internal documents, or other real `evidence/**` PDFs;
+- internal company guidelines, reviews, waivers, or historical cases;
+- credentials, tokens, private keys, production URLs, or identifiable internal infrastructure details;
+- test fixtures you do not have the right to publish or redistribute.
 
-公开上游的 `knowledge/**` 与 `evidence/**` 只允许仓库定义的 `.gitkeep` 占位符。
-`python3 configs/check_public_repo.py` 会执行这个合同。
+The public upstream permits only the repository-defined `.gitkeep` placeholders under `knowledge/**` and `evidence/**`. `python3 configs/check_public_repo.py` enforces this contract.
 
-需要测试数据时优先使用 synthetic fixture。若确实需要公开第三方数据，必须在 PR 中说明来源、许可和
-再分发依据，并单独接受维护者审核。
+Prefer synthetic fixtures for tests. If third-party material genuinely needs to be public, document its source, license, and redistribution basis in the pull request and obtain explicit maintainer review.
 
-## 2. 开发边界
+## 2. Development boundaries
 
-- 不要让 PcbKnowledge 成为 PcbCore 的运行时依赖，也不要修改 PCB board state。
-- 当前 runtime 保持 loopback-only、Python standard library-first。
-- Agent 可以 prepare / edit / submit，但不能 approve / reject / stage / commit / push。
-- Unknown、conflict、wrong revision、wrong package、license block 必须 fail closed。
-- `knowledge/**` / `evidence/**` 数据提交不能和 code/schema/policy/documentation 混成一个 commit。
+- Do not make PcbKnowledge a runtime dependency of PcbCore and do not mutate live PCB board state.
+- Keep the current runtime loopback-only and Python-standard-library-first.
+- Agents may prepare, edit, validate, and submit drafts, but may not approve, reject, stage, commit, or push.
+- Unknown values, conflicts, wrong revisions, wrong packages, and license blocks must fail closed.
+- Knowledge/evidence data commits must not be mixed with code, schema, policy, or documentation changes.
+- The public software checkout and production knowledge workspace are separate repositories. Do not silently move data between them.
+- Repository documentation, UI text, comments intended for contributors, and public test fixtures must remain English. `python3 configs/check_english_repo.py` enforces this for tracked UTF-8 text.
 
-更完整的仓库约束见 [`AGENTS.md`](AGENTS.md) 和 [`docs/architecture.md`](docs/architecture.md)。
+See [`AGENTS.md`](AGENTS.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) for the full repository contract.
 
-## 3. 本地验证
+## 3. Local verification
 
-至少运行：
+At minimum run:
 
 ```bash
+python3 configs/check_english_repo.py
 python3 configs/check_public_repo.py
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
@@ -41,30 +41,28 @@ python3 configs/pcbknowledge_workflow.py test
 python3 configs/pcbknowledge_agent.py validate
 ```
 
-涉及 Package 合同时再运行：
+For changes that affect package contracts, also run:
 
 ```bash
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-涉及 GUI 时做真实 loopback smoke。跳过、截断或中断的检查不能记为通过。
+For GUI changes, perform a real loopback smoke test. A skipped, truncated, interrupted, or unexecuted check is not a pass.
 
-## 4. Pull request
+## 4. Pull requests
 
-PR 应保持单一目的，并说明：
+Keep each pull request focused. Describe:
 
-- 改了什么合同或行为；
-- 为什么需要改；
-- 哪些测试覆盖了它；
-- 是否影响 Source / Entity / Fact / EvidenceAnchor schema；
-- 是否影响 license gate、publication boundary 或 Agent 权限。
+- which contract or behavior changed;
+- why the change is necessary;
+- which tests cover it;
+- whether Source / Entity / Fact / EvidenceAnchor schemas are affected;
+- whether the license gate, publication boundary, workspace boundary, or Agent privileges are affected.
 
-不要通过降低 validator、放宽 fail-closed policy、跳过测试或把数据与 policy 放进同一提交来让 fixture
-“通过”。
+Do not make a fixture pass by weakening a validator, relaxing fail-closed policy, skipping tests, or mixing data with the policy that validates it.
 
 ## 5. Contribution license
 
-除非你明确书面声明某次提交不是 Contribution，向本项目提交并被合并的贡献将按照仓库的
-Apache License 2.0 条款提供。提交者必须确认自己有权提供相关代码、文档和测试材料。
+Unless you explicitly designate a submission as "Not a Contribution" in writing, contributions intentionally submitted and accepted into this project are provided under the Apache License 2.0 terms applicable to the repository. Contributors must have the right to provide the submitted code, documentation, and test material.
 
-安全漏洞请按照 [`SECURITY.md`](SECURITY.md) 私下报告。
+Report security vulnerabilities privately according to [`SECURITY.md`](SECURITY.md).
