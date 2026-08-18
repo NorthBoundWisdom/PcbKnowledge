@@ -1,380 +1,556 @@
-# TODO — Git-native PCB Knowledge
+# TODO — PcbKnowledge Roadmap
 
-> 状态：`P0.2_COMPLETE_P0.3_NEXT`
-> 建立日期：2026-08-10
-> 更新日期：2026-08-14
-> P0.1 起始基线：`c5fe01bfb4cf3a23f8315427443f8358b79736ef`
-> 前置里程碑：Git-native MVP（第 2 节）已完成
-> 目标：在不恢复 Docker、登录、数据库和在线服务的前提下，把当前 Source Corpus 登记器推进为 Git-native PCB structured knowledge repository。
+> 状态：`P0.2_COMPLETE_P0.2.5_NEXT`
+> 更新日期：2026-08-18
+> 当前公开源码基线：`efe86a360183f9fd05a0c88ace3bb3f670fde389`
+> 目标：把 PcbKnowledge 从已经完成 typed authority + Agent ingestion 的 Git-native 内核，推进为可实际录入、人工审阅、检索并供 PCB Agent 消费的工程知识系统。
 
-## 1. 文档职责与不变边界
+## 0. 文档职责
 
-本文件是仓库根目录唯一的 Git-native knowledge 执行路线图：维护当前阶段、未完成工作、完成门槛和必要的里程碑收据。长期产品与技术合同由 [`docs/architecture.md`](docs/architecture.md) 负责，不在这里复制为第二份架构 authority。
+本文件是仓库根目录唯一的执行路线图，负责记录：
 
-- Git 仓库文件仍是唯一 authority。
-- PDF 继续使用实际 bytes SHA-256 content addressing。
-- GUI 继续是 loopback-only Python editor，不恢复 React/Node 服务栈。
-- Agent 与 GUI 共用同一 authority model 和 validator。
-- Agent 可以准备/修改/送审，不能批准、提交或推送。
-- working-tree approval 与 Git publication 分离；formal read 只使用 fully validated committed approved snapshot。
-- `knowledge/**`/`evidence/**` 数据 commit 与 code/schema/policy commit 分离。
-- PcbKnowledge 不读取或修改 PCB board state，不成为 PcbCore 运行时依赖。
-- Unknown、conflict、wrong revision、wrong package 必须显式处理，不能靠模型补值。
-- Vector RAG、数据库服务、MCP 均不是 P0 前置条件。
+- 当前阶段与下一阶段；
+- 未完成任务；
+- 阶段完成门槛；
+- 必须保持的工程边界。
 
-## 2. Git-native MVP — COMPLETE（历史里程碑）
+长期稳定架构见 [`docs/architecture.md`](docs/architecture.md)，开源源码与私有知识数据的边界见
+[`docs/open-source-boundary.md`](docs/open-source-boundary.md)。历史实现细节以 Git history / ADR 为准，不在 TODO 中维护第二份架构说明。
 
-MVP 完成了本机 Git-native Source Corpus editor，并关闭了旧共享服务平台。它不再是当前开发阶段，也不再使用独立 TODO；以下收据保留在本路线图中，后续状态以 P0.0–P0.4 和架构文档为准。
+### 永久边界
 
-### 2.1 当时完成的产品边界
+- Public PcbKnowledge 仓库只保存代码、Schema、文档、Agent skills 和 synthetic tests。
+- 真实 Source / Entity / Fact / Evidence、内部规范、review、waiver 和第三方 PDF 默认进入独立 private knowledge workspace。
+- Git repository 仍是 knowledge workspace 的唯一 authority。
+- PDF 继续按实际 bytes SHA-256 content addressing。
+- Agent 与 GUI 共用同一 authority model / validator。
+- Agent 可以创建、修改、validate、submit draft，但不能 approve / reject / stage / commit / push。
+- working-tree approval 与 Git publication 分离；正式读取只使用 fully validated committed snapshot。
+- unknown / conflict / wrong revision / wrong package 必须显式存在，不能靠模型补值。
+- PcbKnowledge 不读取或修改 live PCB board state，也不成为 PcbCore 的运行时依赖。
+- SQLite / FTS / page text / vector index 均为可删除派生物，不成为 authority。
+- Vector RAG 不是 P0/P1 前置条件；只有 eval 证明增益后才进入 P3。
 
-- [x] 产品只提供 loopback 本机 GUI，不提供局域网或公网服务，也不需要账号、密码、Keycloak、租户或数据库管理员。
-- [x] 操作系统文件权限与 Git 仓库权限构成访问边界；Agent 与人类修改同一套规范化文件。
-- [x] Agent 不批准、不自动 commit/push；人通过 diff 审阅后决定发布。
-- [x] 缺失来源、版本、许可或原件的记录可以保持 Draft，但不能批准。
-- [x] PDF 与提取文本按不可信数据处理，不能改变工具、权限、validator 或审阅规则。
+---
 
-### 2.2 历史 authority 与当前迁移结果
+## 1. 已完成基础能力
 
-MVP 当时使用以下过渡布局：
+### P0.0 — Git-native Core Hardening — COMPLETE
 
-```text
-knowledge/records/<stable-id>.json
-evidence/sha256/<prefix>/<digest>.pdf
-schemas/knowledge-record.schema.json
-```
+已完成：
 
-- [x] JSON 使用 UTF-8、canonical 字段顺序和末尾换行；PDF 按实际 bytes SHA-256 内容寻址并去重。
-- [x] `.pcbknowledge/`、索引、预览与 package 是可删除派生物，SQLite/FTS 不作为 authority。
-- [x] 过渡记录支持 stable ID、状态机、source/license/evidence、explicit unknown、review decision、supersedes 与 canonical serialization。
+- Git-native JSON/PDF authority；
+- content-addressed evidence；
+- canonical serialization；
+- append-only review history；
+- optimistic revision token；
+- committed APPROVED immutability；
+- supersedes closure；
+- evidence orphan / shared evidence / published evidence protection；
+- repository write lock；
+- `CLEAN / DATA_ONLY / CODE_ONLY / MIXED` change scope；
+- working-tree approval 与 committed publication 分离；
+- fully validated published reader；
+- deterministic Package snapshot。
 
-`knowledge/records/` 和 Schema v2 只是历史里程碑形态。P0.0 后续增加 append-only review history、严格 published snapshot、evidence/reference concurrency hardening 和 code/data commit isolation；P0.1 已在零真实数据窗口迁移到 `knowledge/sources|entities|facts`，没有双写兼容路径。
+### P0.1 — Typed Authority Model — COMPLETE
 
-### 2.3 GUI、Agent 与本机工作流
-
-- [x] GUI 完成 Draft 创建/编辑、PDF 导入、submit/approve/reject、记录详情和 Git diff/untracked preview；GUI 不执行 `git add`、`git commit` 或 `git push`。
-- [x] 当前这套页面的产品含义固定为 **Source Corpus editor**，不是最终 Fact Review Workbench。
-- [x] 初版 CLI 完成 list/show/create/update/submit/validate/diff、稳定 idempotency key、missing fields 和 next action；后续 typed Agent 能力由 P0.2 接管。
-- [x] FreeCM Config/Build/Run/Test/Package 使用本机 Python/Git，不依赖 Docker、数据库、S3 或 source dependency。
-- [x] 旧 Compose、Keycloak、PostgreSQL、SeaweedFS、Caddy、在线 API、Worker、OIDC/RLS/outbox/job/storage、React/pnpm 和部署链已退役；历史 ADR 保留并由 ADR-018 标注 superseded decisions。
-
-### 2.4 MVP completion receipt（2026-08-10）
-
-- 首轮完整门禁唯一失败：`git diff --check` 发现架构文档 2 处行尾空格；修复后通过。
-- `config`：exit 0。
-- `build`：exit 0，33/33 tests passed，0 skipped，0 records validated。
-- `test`：exit 0，33/33 tests passed，0 skipped；`git diff --check` 通过。
-- `package`：exit 0；生成 `build/package/PcbKnowledge_aced0464d948a291.zip`，SHA-256 为 `77e66577b6f2a40cd8508fe55c674875b0bbe2d4b58cf51e7139dcf545bd04de`。
-- 当时 repository-pinned FreeCM validator：exit 0，Config/Build/Run/Test/Package 五个动作均解析为 Git-native 命令；该 Node/submodule 校验链后来已从协议型仓库移除。
-- 真实 Run 首秒 ready，`http://127.0.0.1:18080` 返回 HTTP 200、无登录、相关 Docker 容器数为 0，`Ctrl+C` 返回 130。
-- 根启动器首次约 4 秒完成当时 33 个检查并打开首页，第二次首秒 ready。
-- 旧服务未跟踪材料可恢复地移动到 `~/.Trash/PcbKnowledge-retired-service-20260810/`。
-
-## 3. P0.0 — Git-native Core Hardening
-
-状态：**COMPLETE**。P0.1 完成时已刷新真实 checkout 门禁 receipt。
-
-- [x] 修复替换/清空草稿 PDF 后遗留 orphan evidence 的一致性缺陷。
-- [x] 共享 evidence 不被清理；published evidence 受保护。
-- [x] 仓储写入增加跨进程 lock，引用写入与 evidence cleanup 不发生静默竞态。
-- [x] Schema v2 增加 append-only `review_history`。
-- [x] review history 强制 `SUBMITTED -> APPROVED/REJECTED` 序列；approve 后不能继续伪造历史。
-- [x] reject → edit → resubmit 不再丢失退回原因。
-- [x] v2 `RESTRICTED` 作为 ADR-015 AI-processing-blocked 临时执行表示。
-- [x] CLI 输出 `agent_processing_allowed`。
-- [x] published reader 从同一 Git ref 校验 canonical JSON、record ID、supersedes closure、PDF bytes/hash/size。
-- [x] CLI 增加 `list --published`。
-- [x] change-scope 优先判断 Git index；index 为空才判断 unstaged/untracked workspace。
-- [x] rename/copy 来源和目标同时参与 `CLEAN / DATA_ONLY / CODE_ONLY / MIXED` 分类。
-- [x] `MIXED` 被定义为非法单 commit。
-- [x] ADR-019 固化 publication 与 change-scope 边界。
-- [x] 在真实 checkout 重新执行 Config / Build / Test / Package / FreeCM validator / GUI smoke，并把新 case 数记录到本文件。
-
-## 4. P0.1 — Typed Authority Model
-
-状态：**COMPLETE**。自动化验收入口为
-`tests.git_native.test_p01_vertical.P01SyntheticVerticalTests`。
-
-P0.1 的目标不是做新 UI，而是把 authority 从“资料登记记录”升级为正式的 Source / Entity / Fact / EvidenceAnchor，并让 validator、published view、package 和测试全部使用同一模型。
-
-### 4.1 Authority layout
-
-目标布局：
+正式 authority 已固定为：
 
 ```text
-knowledge/
-├── sources/
-│   └── <source-id>.json
-├── entities/
-│   └── <entity-id>.json
-└── facts/
-    └── <fact-id>.json
-
-evidence/sha256/<prefix>/<sha256>.pdf
-
-schemas/
-├── source-record.schema.json
-├── entity-record.schema.json
-└── fact-record.schema.json
+SourceRecordV1
+EntityRecordV1
+  - ManufacturerV1
+  - ComponentV1
+  - PackageV1
+FactRecordV1
+  - ComponentPinFactV1
+  - ParameterLimitFactV1
+EvidenceAnchorV1
 ```
 
-- [x] `knowledge/records/` 在仓库零真实 record 的窗口一次性退役；不建立双写兼容路径。
-- [x] legacy v2 代码只允许作为迁移提交前的内部实现历史；P0.1 completion 后 authority 只认新 roots。
-- [x] `KnowledgeRepository.validate_all()` 或新的统一 repository facade 同时验证 Source/Entity/Fact 的 referential closure。
-- [x] FreeCM Build/Test/Package 都覆盖新 roots 和三份 Schema。
-- [x] package manifest 包含被引用 PDF，且不依赖工作树之外的隐藏状态。
+已完成：
 
-### 4.2 SourceRecordV1
+- `knowledge/sources/` / `knowledge/entities/` / `knowledge/facts/`；
+- 三份 canonical JSON Schema；
+- Source license taxonomy；
+- exact manufacturer / MPN / package identity；
+- PDF normalized bbox + page + quote evidence anchor；
+- Fact conditions / applicability / supersedes；
+- referential closure validation；
+- semantic conflict detection；
+- synthetic vertical publication tests。
 
-- [x] 独立 model、canonical JSON、stable ID、schema version。
-- [x] `source_type`：DATASHEET / APPLICATION_NOTE / REFERENCE_DESIGN / PCN / FAB_CAPABILITY / INTERNAL_GUIDELINE。
-- [x] title/document number/revision/publisher/locator。
-- [x] 正式 license taxonomy：
-  - `UNKNOWN`
-  - `PUBLIC_REFERENCE`
-  - `OPEN_LICENSE`
-  - `INTERNAL`
-  - `RESTRICTED`
-  - `LICENSED_BLOCKED_FOR_AI`
-- [x] 明确 `agent_processing_allowed` policy；UNKNOWN 与 LICENSED_BLOCKED_FOR_AI fail closed。
-- [x] content-addressed PDF evidence。
-- [x] append-only review history + current decision。
-- [x] explicit supersedes，不从文件名猜 revision relation。
-- [x] committed APPROVED Source 不允许原地改写/删除。
+### P0.2 — Agent-native Ingestion — COMPLETE
 
-### 4.3 EntityRecordV1
-
-P0.1 只实现能支撑第一批 datasheet facts 的最小集合。
-
-- [x] `ManufacturerV1`：raw name + normalized key。
-- [x] `ComponentV1`：manufacturer ID + raw MPN + normalized MPN key + optional family text。
-- [x] `PackageV1`：raw package name + normalized lookup key。
-- [x] 原始 manufacturer/MPN/package 永远保留；normalized key 仅用于 exact lookup。
-- [x] 不从 MPN suffix 猜 package、silicon revision、orderable part。
-- [x] entity ID 稳定，可从 Agent idempotency key 确定性创建。
-- [x] entity JSON canonical、额外字段 fail closed。
-- [x] 删除/改写被 Fact 引用的 entity 必须失败。
-
-### 4.4 EvidenceAnchorV1
-
-继续执行 ADR-013。
-
-- [x] `source_id` 指向 SourceRecordV1。
-- [x] 1-based `page`。
-- [x] `coordinate_space = PDF_NORMALIZED_V1`。
-- [x] bbox 满足 `0 <= x0 < x1 <= 1`、`0 <= y0 < y1 <= 1`。
-- [x] `quote` 与 `quote_sha256` 一致；quote 允许 Draft 暂缺，但不能伪造 hash。
-- [x] anchor 永远绑定确定 Source revision；不自动迁移。
-- [x] Draft Fact 可使用 page-only/incomplete anchor；Fact approval 前每个 anchor 必须完整。
-
-### 4.5 FactRecordV1
-
-公共字段：
-
-- [x] stable ID / schema version / status / prepared_by。
-- [x] `fact_type` + typed payload。
-- [x] subject entity IDs。
-- [x] conditions/applicability 作为结构化字符串列表；P0.1 不引入规则 DSL。
-- [x] one or more `EvidenceAnchorV1`。
-- [x] append-only review history + current decision。
-- [x] supersedes。
-- [x] committed APPROVED Fact 不允许原地改写/删除。
-- [x] APPROVED Fact 必须引用 APPROVED Source 和存在的 Entity。
-- [x] APPROVED Fact 至少一个完整 EvidenceAnchor。
-- [x] unresolved semantic conflict 必须被 validator/query layer 暴露，不能静默选 winner。
-
-第一批 fact type：
-
-#### ComponentPinFactV1
-
-- [x] component ID。
-- [x] package ID。
-- [x] pin number/name。
-- [x] primary function。
-- [x] alternate functions。
-- [x] conditions/applicability。
-- [x] evidence anchors。
-
-#### ParameterLimitFactV1
-
-- [x] component ID。
-- [x] parameter。
-- [x] `ABSOLUTE_MAXIMUM / RECOMMENDED_OPERATING / ELECTRICAL_CHARACTERISTIC`。
-- [x] minimum / typical / maximum；至少一个值存在。
-- [x] unit 必填；数值使用 JSON number，不把 `30 V` 存成自由文本。
-- [x] conditions。
-- [x] evidence anchors。
-
-### 4.6 P0.1 repository operations
-
-P0.1 要提供可测试的 repository API，不要求完成 P0.2 Agent UX。
-
-- [x] create/load/list/save Source。
-- [x] create/load/list Entity。
-- [x] create/load/list/save/submit/approve/reject Fact。
-- [x] unified `validate_all()`：layout、canonical、identity、supersedes、evidence、entity/source refs、approval invariants。
-- [x] published snapshot reader 能从一个 Git ref 返回 Source/Entity/Fact，并验证完整 closure。
-- [x] content-addressed evidence cleanup 以所有 Source refs 为准，不因 Fact 改写误删 PDF。
-- [x] data change scope 继续覆盖整个 `knowledge/**` 与 `evidence/**`。
-
-### 4.7 P0.1 tests / completion gate
-
-必须使用 synthetic/minimal fixtures；本提交不把真实厂商 PDF 当测试依赖。
-
-- [x] Source canonical round-trip、license gate、review history。
-- [x] Entity raw/normalized 分离、错误 ref/重复 ID fail closed。
-- [x] EvidenceAnchor bbox/page/quote hash negative tests。
-- [x] Pin Fact 和 ParameterLimit Fact payload schema tests。
-- [x] Fact approval 缺 source/entity/anchor 时 fail closed。
-- [x] wrong component / wrong package / wrong source ref fail closed。
-- [x] supersedes missing/cycle/self reference fail closed。
-- [x] committed approved Source/Fact immutable。
-- [x] published reader 不读取 working-tree Draft/Approval/PDF。
-- [x] package 从新 authority roots 可重复生成。
-
-P0.1 代码完成门槛：
+已完成四个 repository-local skills：
 
 ```text
-synthetic datasheet Source
-→ Manufacturer + Component + Package
-→ >=5 ComponentPinFactV1
-→ >=3 ParameterLimitFactV1
-→ 每条 Fact 有 Source/page/bbox evidence
-→ reject/resubmit history 被测试覆盖
-→ Source/Fact approve
-→ commit fixture in temp Git repo
-→ published reader 只返回 commit 后 authority
-→ validate/package 全部通过
+ingest-engineering-source
+resolve-component-identity
+extract-component-facts
+prepare-knowledge-review
 ```
 
-说明：这是自动化 synthetic vertical test，不要求在产品仓库提交真实器件数据。
+Agent CLI 已支持：
 
-### 4.8 P0.1 completion receipt（2026-08-10）
+- typed `source / entity / fact` commands；
+- stable idempotency keys；
+- exact identity resolution；
+- `source authorize-read` license gate；
+- explicit unknown / missing anchor / conflict output；
+- selected closure `review-status`；
+- `DATA_ONLY + WAIT_FOR_HUMAN_REVIEW` handoff；
+- `--repo <path>` 指向显式 Git repository。
 
-- `python3 configs/pcbknowledge_workflow.py config`：exit 0。
-- `python3 configs/pcbknowledge_workflow.py build`：exit 0；53 tests passed，0 failures，
-  0 errors，0 skips；working authority 为 0 Source / 0 Entity / 0 Fact。
-- `python3 configs/pcbknowledge_workflow.py test`：exit 0；53 tests passed，0 failures，
-  0 errors，0 skips；`git diff --check` passed。
-- `python3 configs/pcbknowledge_workflow.py package`：exit 0；生成
-  `PcbKnowledge_a2f89fd66a6f5cea.zip`，SHA-256
-  `c6406225fe0835ea5c995907b984d35edce06d4f04c90cd8ca0ba12ead214420`。
-- 当时的 repository-pinned FreeCM validator：exit 0；FreeCM `0.1.141` validator/TypeScript
-  compile passed。该 Node/submodule 校验链后来已从协议型仓库移除。
-- real loopback GUI smoke：`run --port 18082 --no-browser` ready；`/healthz` 返回 `ok`；
-  首页 HTTP 200，包含 CSP / `X-Frame-Options: DENY`，无登录步骤；`SIGINT` 后 exit 130。
+Public source repository 已增加：
 
-## 5. P0.2 — Agent-native ingestion
+- Apache-2.0；
+- public-source guard；
+- GitHub Actions；
+- CodeQL / Dependabot 配置；
+- CONTRIBUTING / SECURITY / PR contract；
+- `knowledge/**` / `evidence/**` 只允许 `.gitkeep` 的持续集成门禁。
 
-状态：**COMPLETE**。自动化验收入口为
-`tests.git_native.test_p02_agent_ingestion.P02AgentCliTests` 与
-`P02SkillContractTests`。
+---
 
-- [x] `.codex/skills/ingest-engineering-source/SKILL.md`。
-- [x] `.codex/skills/resolve-component-identity/SKILL.md`。
-- [x] `.codex/skills/extract-component-facts/SKILL.md`。
-- [x] `.codex/skills/prepare-knowledge-review/SKILL.md`。
-- [x] CLI 增加 source/entity/fact typed commands。
-- [x] Agent 输入稳定业务 key 时 create 幂等；Source/Fact 送审后 replay 不重写 review state。
-- [x] 输出 conflict / unknown / missing anchor，不自由补值。
-- [x] license gate 在 Agent 读取 source bytes 之前执行；普通 Source 投影不暴露 evidence path，
-  `source authorize-read` 只有在 policy 与 bytes 均通过后才返回路径。
-- [x] Published Fact 许可门禁与 published reader 使用同一 Git snapshot，不借用工作树许可状态。
-- [x] `review-status` 验证选中 Source/Entity/Fact closure、完整锚点、许可、冲突、送审状态和
-  change scope；一条任务形成 review-ready DATA_ONLY diff 后只输出 `WAIT_FOR_HUMAN_REVIEW`。
-- [x] Agent CLI 不提供 approve/reject/delete/stage/commit/push 命令。
-- [x] 四个 skill 进入 Build signature，并由聚焦契约测试检查无越权命令。
+## 2. P0.2.5 — Knowledge Workspace Boundary — NEXT
 
-### 5.1 P0.2 completion receipt（2026-08-13）
+### 目标
 
-- 四次 `quick_validate.py .codex/skills/<skill>`：全部 exit 0，四个 skill 均为 valid。
-- `python3 configs/pcbknowledge_workflow.py config`：exit 0。
-- `python3 configs/pcbknowledge_workflow.py build`：exit 0；60 tests passed，0 failures，
-  0 errors，0 skips；working authority 为 0 Source / 0 Entity / 0 Fact。
-- `python3 configs/pcbknowledge_workflow.py test`：exit 0；60 tests passed，0 failures，
-  0 errors，0 skips；`git diff --check` passed。
-- `python3 configs/pcbknowledge_agent.py validate`：exit 0；working/published authority 均为
-  0 Source / 0 Entity / 0 Fact，0 conflicts。
-- `python3 configs/pcbknowledge_agent.py change-scope`：exit 0；真实 checkout 为 `CODE_ONLY`，
-  `valid_for_single_commit: true`；synthetic Agent vertical test 另行验证最终 handoff 为
-  `DATA_ONLY + WAIT_FOR_HUMAN_REVIEW`。
-- `python3 configs/pcbknowledge_workflow.py package`：exit 0；生成
-  `PcbKnowledge_a2f89fd66a6f5cea.zip`，SHA-256
-  `c6406225fe0835ea5c995907b984d35edce06d4f04c90cd8ca0ba12ead214420`。
-- real loopback GUI smoke：`run --port 18083 --no-browser` ready；`/healthz` 与 `/` 均 HTTP 200；
-  CSP 为 `default-src 'none'` 且 `X-Frame-Options: DENY`；`SIGINT` 后 exit 130。
-- 迭代阶段首次直接运行三模块 unittest 时漏设 `PYTHONPATH=src`：exit 1，loader 报 2 个
-  `ModuleNotFoundError`；按仓库运行环境补齐后 exit 0，18 tests passed。该环境调用错误未作为门禁
-  pass，最终 Build/Test receipt 均使用 workflow 固化的正确环境。
+把“PcbKnowledge 软件 checkout”和“Knowledge authority Git repository”从运行时上彻底分离。
 
-## 6. P0.3 — Local Review Workbench
+当前 Agent CLI 已能使用 `--repo <path>`，但 GUI / FreeCM workflow 仍默认把 public source checkout 当作 knowledge workspace。进入真实数据阶段前必须关闭这个架构缺口。
 
-继续 Python server + 少量原生 JS，不引入 Node build chain。
+目标结构：
 
+```text
+PcbKnowledge/                 # public software repository
+├── src/
+├── configs/
+├── schemas/
+├── tests/
+└── ...
+
+PcbKnowledgeData/             # private knowledge workspace
+├── .git/
+├── pcbknowledge.workspace.json
+├── schemas/
+├── knowledge/
+│   ├── sources/
+│   ├── entities/
+│   └── facts/
+└── evidence/
+    └── sha256/
+```
+
+### P0.2.5.1 Workspace manifest
+
+- [ ] 定义 `pcbknowledge.workspace.json` V1。
+- [ ] 至少包含 workspace format / schema contract / schema digest。
+- [ ] manifest canonical、额外字段 fail closed。
+- [ ] workspace 必须是独立 Git repository。
+- [ ] 不允许 runtime 隐式退回 public source checkout。
+
+### P0.2.5.2 Workspace initialization
+
+新增明确入口，例如：
+
+```bash
+python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData
+```
+
+- [ ] 创建/验证 Git workspace。
+- [ ] 写入 workspace manifest。
+- [ ] 从 public engine 复制固定 Schema contract 到 workspace。
+- [ ] 创建 typed authority roots 和 evidence root。
+- [ ] 初始化后立即运行完整 validator。
+- [ ] 默认不生成任何真实/示例知识数据。
+
+### P0.2.5.3 Runtime workspace selection
+
+- [ ] Agent CLI `--repo` 与新 workspace contract 对齐。
+- [ ] FreeCM `Run/Open/Package` 增加 `--workspace <path>`。
+- [ ] GUI server 明确接收 workspace root，不再固定 `REPO_ROOT`。
+- [ ] Package 从 selected workspace 导出，不从 public checkout 导出生产数据。
+- [ ] published reader 继续只读取 workspace 自身 immutable Git snapshot。
+- [ ] Schema / Source / Entity / Fact / Evidence 仍必须在同一个 workspace publication commit 中形成 closure。
+
+### P0.2.5.4 Schema contract upgrade boundary
+
+- [ ] public engine Schema 更新不能静默改变 private workspace authority。
+- [ ] workspace 继续使用已 pin 的 Schema copy。
+- [ ] 为未来显式 `workspace upgrade` 留出 contract，不在本阶段实现复杂迁移框架。
+- [ ] schema upgrade commit 与 knowledge data commit 分离。
+
+### P0.2.5.5 Tests / completion gate
+
+- [ ] temp public source checkout + temp private workspace vertical test。
+- [ ] `workspace init -> validate -> Agent create Source/Entity/Fact -> review-status` 可运行。
+- [ ] external workspace 可形成 `DATA_ONLY` diff。
+- [ ] public source checkout 的 `knowledge/**` / `evidence/**` 始终只有允许的 `.gitkeep`。
+- [ ] 错误 workspace / 非 Git repo / manifest drift / schema digest mismatch fail closed。
+- [ ] GUI smoke 可以显式打开 external workspace。
+- [ ] Package 从 external workspace 可重复生成。
+- [ ] GitHub CI 与 public-source guard 全部通过。
+
+**P0.2.5 完成后，才开始 P0.3 Review Workbench。**
+
+---
+
+## 3. P0.3 — Local Review Workbench
+
+P0.3 不再把 `/sources`、`/entities`、`/facts` 当作普通 CRUD 优先实现。核心目标是先完成一个工程师可以真正审核 Agent Fact 的 `/review` vertical slice。
+
+继续保持：
+
+```text
+loopback-only Python server
++ server-rendered HTML
++ 少量 native JS
++ no Node build chain
+```
+
+### P0.3a — Typed Workbench Foundation
+
+#### Server/UI structure
+
+- [ ] 从当前单体 `server.py` 拆出轻量 routing / view / view-model 边界。
+- [ ] HTTP security、CSRF、Host/Origin、revision token 仍在统一 server boundary。
+- [ ] GUI 只通过 `KnowledgeRepository` facade 操作 selected workspace。
+
+建议结构：
+
+```text
+server.py
+views/
+  sources.py
+  entities.py
+  facts.py
+  review.py
+view_models.py
+```
+
+#### Typed navigation
+
+- [ ] `/review`
+- [ ] `/facts`
 - [ ] `/sources`
 - [ ] `/entities`
-- [ ] `/facts`
-- [ ] `/review`
-- [ ] vendored、版本固定的 PDF.js viewer。
-- [ ] PDF page + normalized bbox overlay。
-- [ ] typed fact inspector。
-- [ ] review history。
-- [ ] source/entity/fact/supersedes 导航。
-- [ ] missing/conflict/license gate。
-- [ ] Git diff 显示 DATA_ONLY/MIXED 状态。
+- [ ] Fact → Component / Package / Source 导航。
+- [ ] Source / Fact supersedes 导航。
+- [ ] status / prepared_by / revision token / review history 可见。
 
-## 7. P0.4 — First Real Dataset + Evals
+#### Typed fact inspector
 
-只有 P0.1–P0.3 关闭后才开始批量录入真实数据。
+- [ ] `ComponentPinFactV1` inspector。
+- [ ] `ParameterLimitFactV1` inspector。
+- [ ] conditions / applicability。
+- [ ] unknown fields。
+- [ ] missing anchors。
+- [ ] semantic conflicts。
+- [ ] license gate state。
 
-首批目标：
+### P0.3b — Evidence Review
+
+核心审阅布局：
+
+```text
+PDF evidence                           Typed Fact
+┌───────────────────────┐             ┌───────────────────────┐
+│ page                  │             │ component / package   │
+│ highlighted bbox      │     <->     │ payload               │
+│ source revision       │             │ conditions            │
+│ quote context         │             │ conflict / unknown    │
+└───────────────────────┘             └───────────────────────┘
+```
+
+- [ ] vendored、版本固定的 PDF.js（如必须引入第三方资产，记录来源/许可证/version）。
+- [ ] PDF page navigation。
+- [ ] normalized bbox overlay。
+- [ ] 多 anchor 切换。
+- [ ] quote + quote hash 显示。
+- [ ] Source revision / publisher / document number 同屏可见。
+- [ ] source 不允许 Agent 读取时，GUI 仍按 human review policy 工作，但界面明确显示 license classification。
+
+### P0.3c — Review Closure
+
+- [ ] Source approve / reject。
+- [ ] Fact approve / reject。
+- [ ] rejection comment 必填规则与现有 state machine 对齐。
+- [ ] review history timeline。
+- [ ] conflict / missing evidence / wrong state 阻止 approve。
+- [ ] `DATA_ONLY / MIXED` Git scope 明确显示。
+- [ ] Git diff 页面显示 selected workspace diff。
+- [ ] GUI 永远不执行 stage / commit / push。
+- [ ] `WAIT_FOR_HUMAN_REVIEW -> human decision -> Git publication` vertical test。
+
+### P0.3 completion gate
+
+至少跑通一个完整 synthetic scenario：
+
+```text
+Agent ingest Source
+→ resolve Manufacturer/Component/Package
+→ create Fact + EvidenceAnchor
+→ submit
+→ engineer opens /review
+→ PDF bbox 与 typed payload 同屏核对
+→ approve
+→ DATA_ONLY diff
+→ human Git commit in temp workspace
+→ published reader returns Fact
+```
+
+---
+
+## 4. P0.4 — First Real Dataset + Evals
+
+真实数据必须在独立 private knowledge workspace 中进行，不进入 public PcbKnowledge source repository。
+
+### P0.4a — Pilot Dataset
+
+先用极小真实数据集验证 Schema 和 Review UX，不直接批量导入。
+
+目标：
+
+- [ ] 3–5 个常用 IC。
+- [ ] 20–40 个高质量 Fact。
+- [ ] 至少一个 multi-package case。
+- [ ] 至少一个 datasheet revision update case。
+- [ ] 5–10 个 deliberately wrong / ambiguous negative cases。
+- [ ] 实际由人通过 Review Workbench 审阅，而不是只依赖 Agent/validator。
+
+重点观察是否需要修正：
+
+- table cell / footnote evidence；
+- 一条事实跨多行或多页；
+- package applicability；
+- 多 Source 支撑一个 Fact；
+- revision anchor drift；
+- electrical characteristic 的 condition 表达；
+- semantic key 是否过宽/过窄；
+- review UI 是否能在合理时间完成核对。
+
+P0.4a 允许根据真实数据反馈修改 typed model；但 Schema change 必须有 migration/compatibility decision，不能静默修改已有 private workspace。
+
+### P0.4b — First Useful Dataset
+
+P0.4a 稳定后再扩大：
 
 - [ ] 20–30 个常用 IC。
 - [ ] >=100 pin facts。
 - [ ] >=100 parameter-limit facts。
 - [ ] 至少两个 datasheet revision 更新案例。
-- [ ] 至少 20 个 deliberately wrong/ambiguous negative cases。
+- [ ] 至少 20 个 deliberately wrong / ambiguous negative cases。
+- [ ] 每个 published Fact 都可追溯到 exact source revision + evidence anchor。
 
-恢复 `evals/`，至少覆盖 wrong MPN、wrong package、wrong revision、absolute max vs recommended、unknown、supersede、conflict、license blocked、anchor drift、review history、uncommitted approval、mixed commit。
+恢复正式 `evals/`，至少覆盖：
 
-## 8. P1 — Local Retrieval
+- wrong MPN；
+- wrong package；
+- wrong revision；
+- absolute max vs recommended；
+- unknown；
+- supersede；
+- semantic conflict；
+- license blocked；
+- anchor drift；
+- review history；
+- uncommitted approval；
+- mixed commit；
+- workspace/schema contract mismatch。
+
+---
+
+## 5. P1 — Local Retrieval
+
+目标：在不牺牲 provenance / conflict / unknown 的前提下，让 Published Knowledge 可以快速本地查询。
+
+### P1.1 Exact index
 
 - [ ] `.pcbknowledge/index.sqlite`，可删除重建。
-- [ ] exact manufacturer/MPN/package/fact-type index。
-- [ ] SQLite FTS5。
-- [ ] PDF page text 派生缓存。
-- [ ] published snapshot 是默认 index source。
-- [ ] working-tree preview 显式 opt-in。
-- [ ] 增加 PackageDimension / PowerSequence / Decoupling / ClockReset / LayoutGuideline facts。
+- [ ] manufacturer exact index。
+- [ ] MPN exact index。
+- [ ] package exact index。
+- [ ] fact type / subject / source revision filters。
+- [ ] published snapshot 默认 index source。
+- [ ] working-tree preview 必须显式 opt-in。
 
-查询顺序：
+### P1.2 FTS5
+
+- [ ] SQLite FTS5。
+- [ ] Source metadata FTS。
+- [ ] Fact conditions / applicability FTS。
+- [ ] PDF page text 派生缓存。
+- [ ] page text 与 immutable Source revision 绑定。
+
+查询顺序固定为：
 
 ```text
 exact entity
 → exact package/revision/fact type
 → published filters
 → FTS
-→ fact/evidence/conflict/unknown
+→ Fact + evidence + conflict + unknown
 ```
 
-## 9. P2 / P3
+### P1 completion gate
 
-P2：FabCapability、InternalRule、DesignReview、Waiver、Lifecycle、Replacement、HistoricalCase、KnowledgeSnapshot、PCBAtlas/PcbCore adapter、iOS read-only snapshot。
+- [ ] golden queries 对 20–30 IC dataset 有明确 expected answer set。
+- [ ] wrong package / wrong revision 不被 FTS fallback 偷偷放宽。
+- [ ] query result 总是返回 provenance / evidence / conflict / unknown。
+- [ ] index 删除后可从 Published Knowledge 完整重建。
 
-P3：只有 golden eval 证明 Exact+FTS+Vector 对开放式 guideline/case retrieval 有稳定增益后，再写新 ADR 选择本地 vector 技术。ADR-010 的历史 pgvector 方案不会自动复活。
+---
 
-## 10. 验证要求
+## 6. P1.5 — PCB Knowledge Expansion
 
-每一轮至少执行：
+只有 P0.4 / P1 的真实 eval 证明基础模型稳定后，再增加更多 Fact 类型。
+
+建议顺序：
+
+### P1.5a — Component engineering
+
+- [ ] PackageDimension。
+- [ ] PowerSequence。
+- [ ] DecouplingRequirement。
+- [ ] ClockResetRequirement。
+
+### P1.5b — Layout knowledge
+
+- [ ] LayoutGuideline。
+- [ ] ReferenceDesignRelation。
+- [ ] applicability / topology / layer context 的最小结构化表达。
+
+不要提前引入通用规则 DSL；优先根据真实 datasheet/application note case 演进 typed payload。
+
+---
+
+## 7. P2 — Product Integration
+
+目标：让 PcbKnowledge 真正服务 PCB Agent，而不是让 PCB 软件直接依赖整个知识仓库。
+
+### P2.1 Snapshot / adapter
+
+- [ ] immutable `KnowledgeSnapshot` export。
+- [ ] project/component scoped snapshot。
+- [ ] read-only PcbCore adapter。
+- [ ] PCBAtlas/iOS read-only snapshot。
+- [ ] 不把完整公司语料下发到终端设备。
+
+### P2.2 Broader knowledge
+
+按需求逐步增加：
+
+- [ ] FabCapability。
+- [ ] InternalRule。
+- [ ] DesignReview。
+- [ ] Waiver。
+- [ ] Lifecycle / PCN / EOL。
+- [ ] Replacement。
+- [ ] HistoricalCase。
+
+### P2.3 Agent task boundary
+
+最终职责保持：
+
+```text
+PcbKnowledge
+  → evidence-backed engineering knowledge
+
+PcbCore
+  → live board truth + deterministic validation
+
+Agent Harness
+  → combine knowledge + board state + tools into a bounded task
+```
+
+---
+
+## 8. P3 — Advanced Retrieval
+
+只有 golden eval 证明 `Exact + Filters + FTS` 对开放式 guideline / historical case retrieval 明显不足时，才进入 P3。
+
+候选：
+
+- local embedding；
+- vector index；
+- hybrid retrieval；
+- reranking；
+- query decomposition。
+
+进入条件：
+
+- [ ] 有固定 golden eval dataset；
+- [ ] 有 Exact+FTS baseline；
+- [ ] vector/hybrid 在 correctness/recall 上有稳定可测增益；
+- [ ] provenance、license、revision、package gate 不被 semantic retrieval 绕过；
+- [ ] 新技术仍然只是派生 index，不成为 authority。
+
+---
+
+## 9. 每轮验证要求
+
+Public source repository 代码变更至少执行：
 
 ```bash
+python3 configs/check_public_repo.py
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_workflow.py test
 python3 configs/pcbknowledge_agent.py validate
-python3 configs/pcbknowledge_agent.py change-scope
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-涉及 GUI 时再做 loopback smoke。FreeCM manifest 由 workflow tests 覆盖，并由已安装扩展加载时
-执行协议校验；仓库不携带独立 validator。未运行、被截断或 skipped 的检查不能记为通过。
+P0.2.5 完成后，涉及真实/外部 knowledge workspace 的变更还必须在独立 temp Git workspace 上执行对应：
+
+```bash
+workspace init
+validate
+Agent vertical workflow
+review-status
+change-scope
+package
+published snapshot read
+```
+
+涉及 GUI 时增加真实 loopback smoke。
+
+规则：
+
+- skipped / interrupted / truncated 不算通过；
+- 失败的首次检查必须记录并修复后重跑；
+- public source guard 是每轮第一道门；
+- 不因为测试方便把真实 knowledge/evidence 写入公开仓库；
+- code/schema/policy commit 与 private knowledge publication commit 永远分离。
+
+---
+
+## 10. 当前开工顺序
+
+当前唯一主线：
+
+```text
+P0.2.5 Workspace Boundary
+        ↓
+P0.3a Typed Workbench Foundation
+        ↓
+P0.3b Evidence Review
+        ↓
+P0.3c Review Closure
+        ↓
+P0.4a Real-data Pilot
+        ↓
+P0.4b First Useful Dataset
+        ↓
+P1 Exact + FTS Retrieval
+        ↓
+P1.5 Knowledge Expansion
+        ↓
+P2 Product Integration
+        ↓
+P3 Advanced Retrieval (only if eval justifies)
+```
+
+下一轮直接实现 **P0.2.5 Knowledge Workspace Boundary**。
