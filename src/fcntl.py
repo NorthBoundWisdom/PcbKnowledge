@@ -3,7 +3,9 @@
 The repository core historically imported POSIX ``fcntl`` directly. Keeping this
 module at the source root preserves that import while providing the exact
 ``flock(fd, LOCK_EX|LOCK_UN)`` subset on Windows without a third-party runtime
-dependency. No other fcntl API is intentionally emulated.
+dependency. POSIX uses the native libc ``flock(2)`` primitive so locks keep
+open-file-description semantics even between repository instances in one process.
+No other fcntl API is intentionally emulated.
 """
 
 from __future__ import annotations
@@ -15,8 +17,8 @@ LOCK_EX = 2
 LOCK_UN = 8
 
 
-def _ensure_lock_byte(fd: int) -> None:
-    """Ensure byte-range locking has one stable byte without changing position."""
+def _windows_flock(fd: int, operation: int) -> None:
+    import msvcrt
 
     position = os.lseek(fd, 0, os.SEEK_CUR)
     try:
@@ -24,8 +26,23 @@ def _ensure_lock_byte(fd: int) -> None:
             os.lseek(fd, 0, os.SEEK_SET)
             os.write(fd, b"\0")
             os.fsync(fd)
+        os.lseek(fd, 0, os.SEEK_SET)
+        mode = msvcrt.LK_LOCK if operation == LOCK_EX else msvcrt.LK_UNLCK
+        msvcrt.locking(fd, mode, 1)
     finally:
         os.lseek(fd, position, os.SEEK_SET)
+
+
+def _posix_flock(fd: int, operation: int) -> None:
+    import ctypes
+
+    libc = ctypes.CDLL(None, use_errno=True)
+    native_flock = libc.flock
+    native_flock.argtypes = (ctypes.c_int, ctypes.c_int)
+    native_flock.restype = ctypes.c_int
+    if native_flock(fd, operation) != 0:
+        error_number = ctypes.get_errno()
+        raise OSError(error_number, os.strerror(error_number))
 
 
 def flock(fd: int, operation: int) -> None:
@@ -33,18 +50,7 @@ def flock(fd: int, operation: int) -> None:
 
     if operation not in {LOCK_EX, LOCK_UN}:
         raise ValueError(f"unsupported flock operation: {operation}")
-
-    _ensure_lock_byte(fd)
-    os.lseek(fd, 0, os.SEEK_SET)
-
     if os.name == "nt":
-        import msvcrt
-
-        mode = msvcrt.LK_LOCK if operation == LOCK_EX else msvcrt.LK_UNLCK
-        msvcrt.locking(fd, mode, 1)
-        return
-
-    if not hasattr(os, "lockf"):
-        raise OSError("platform does not provide a supported file-lock primitive")
-    command = os.F_LOCK if operation == LOCK_EX else os.F_ULOCK
-    os.lockf(fd, command, 1)
+        _windows_flock(fd, operation)
+    else:
+        _posix_flock(fd, operation)
