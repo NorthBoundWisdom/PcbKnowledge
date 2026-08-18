@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge Roadmap
 
-> Status: `P0.2.5_IMPLEMENTED_P0.3_NEXT`
+> Status: `P0.2.5_COMPLETE_P0.3_NEXT`
 > Updated: 2026-08-18
 > Goal: evolve the completed Git-native typed-authority, Agent-ingestion, and workspace-boundary core into a practical evidence-review and retrieval system for PCB engineering Agents.
 
@@ -82,7 +82,7 @@ Implemented:
 
 ---
 
-## 2. P0.2.5 — Knowledge Workspace Boundary — IMPLEMENTED
+## 2. P0.2.5 — Knowledge Workspace Boundary — COMPLETE
 
 ADR: [`ADR-020`](docs/adr/ADR-020-knowledge-workspace-boundary.md)
 
@@ -199,21 +199,27 @@ Added synthetic coverage for:
 - [x] workflow argument contract;
 - [x] Agent skill explicit-workspace contract.
 
-### 2.8 Verification receipt
+### 2.8 Completion receipt — 2026-08-18
 
-Implementation is present in the repository. The authoritative pass/fail receipt is the repository CI and the standard local gate sequence:
+Validated candidate head: `89b1356f9b4951f88174785f9701b96e2fc1da5e`.
 
-```bash
-python3 configs/check_english_repo.py
-python3 configs/check_public_repo.py
-python3 configs/pcbknowledge_workflow.py config
-python3 configs/pcbknowledge_workflow.py build
-python3 configs/pcbknowledge_workflow.py test
-python3 configs/pcbknowledge_agent.py validate
-python3 configs/pcbknowledge_workflow.py package
-```
+GitHub Actions CI run `32129686030` completed successfully:
 
-Any failing gate discovered after integration must be repaired before P0.3 feature work continues.
+- Ubuntu / Python 3.11 core: English guard, public-source guard, workspace contract validation, Config, Build, Test, Agent validate, and Package all passed;
+- Ubuntu / Python 3.14: full public cross-platform test job passed;
+- macOS / Python 3.11: full public cross-platform test job passed;
+- Windows / Python 3.11: full public cross-platform test job passed;
+- the integrated test suite ran 78 tests with 0 failures/errors/skips on the validated head;
+- CodeQL run `32129686024` completed successfully;
+- source-checkout authority remained 0 Source / 0 Entity / 0 Fact;
+- deterministic package output was `PcbKnowledge_f58e138fd4337765.zip` with SHA-256 `d5ee3feb43616470703cbc98dd98b67f8f66fee9b278f0403cc6df3dd61987c6`.
+
+Cross-platform validation also exposed and closed two pre-existing portability issues before the milestone was published:
+
+- the repository write lock no longer depends on an unavailable Windows `fcntl` module; POSIX preserves native `flock(2)` semantics while Windows uses the standard-library `msvcrt.locking` primitive;
+- the published-symlink hardening test now constructs a Git mode-`120000` entry directly instead of requiring host OS symlink privileges.
+
+The validated commit chain was fast-forwarded directly to `main`; the temporary validation PR was closed after its head became the mainline, with no separate merge commit required.
 
 ---
 
