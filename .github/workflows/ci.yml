@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Core / Ubuntu / Python 3.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Check public-source boundary
+        run: python configs/check_public_repo.py
+
+      - name: Config
+        run: python configs/pcbknowledge_workflow.py config
+
+      - name: Build
+        run: python configs/pcbknowledge_workflow.py build
+
+      - name: Test
+        run: python configs/pcbknowledge_workflow.py test
+
+      - name: Validate authority
+        run: python configs/pcbknowledge_agent.py validate
+
+      - name: Package reproducibility surface
+        run: python configs/pcbknowledge_workflow.py package
+
+  public-cross-platform:
+    name: Public / ${{ matrix.os }} / Python ${{ matrix.py }}
+    if: github.event.repository.private == false
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            py: "3.14"
+          - os: macos-latest
+            py: "3.11"
+          - os: windows-latest
+            py: "3.11"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.py }}
+
+      - name: Check public-source boundary
+        run: python configs/check_public_repo.py
+
+      - name: Config
+        run: python configs/pcbknowledge_workflow.py config
+
+      - name: Test
+        run: python configs/pcbknowledge_workflow.py test
