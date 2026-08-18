@@ -33,6 +33,9 @@ jobs:
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
 
+      - name: Check pinned PDF.js vendor
+        run: python configs/check_pdfjs_vendor.py
+
       - name: Validate source-checkout workspace contract
         run: python configs/pcbknowledge_workspace.py validate .
 
@@ -80,6 +83,9 @@ jobs:
 
       - name: Check public-source boundary
         run: python configs/check_public_repo.py
+
+      - name: Check pinned PDF.js vendor
+        run: python configs/check_pdfjs_vendor.py
 
       - name: Validate source-checkout workspace contract
         run: python configs/pcbknowledge_workspace.py validate .
