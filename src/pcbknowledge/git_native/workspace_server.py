@@ -12,6 +12,7 @@ from urllib.parse import urlsplit
 from pcbknowledge.git_native.evidence_review import EvidenceReviewApplication
 from pcbknowledge.git_native.evidence_review_views import render_fact_evidence_review
 from pcbknowledge.git_native.pdfjs_vendor import PdfJsVendorError, validate_pdfjs_vendor
+from pcbknowledge.git_native.review_closure_views import VISUAL_EVIDENCE_SLOT
 from pcbknowledge.git_native.server import (
     DEFAULT_PORT,
     EditorHTTPServer,
@@ -81,8 +82,11 @@ class WorkspaceEditorRequestHandler(EditorRequestHandler):
         if fact_id is not None:
             review = EvidenceReviewApplication(self.repository).fact_review(fact_id)
             section = render_fact_evidence_review(review)
-            if "</main>" in payload:
-                payload = payload.replace("</main>", section + "</main>", 1)
+            if VISUAL_EVIDENCE_SLOT not in payload:
+                raise RepositoryError(
+                    "Fact detail is missing the visual-evidence review slot"
+                )
+            payload = payload.replace(VISUAL_EVIDENCE_SLOT, section, 1)
             if "</head>" in payload:
                 payload = payload.replace(
                     "</head>",

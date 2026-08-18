@@ -80,7 +80,7 @@ class EditorHTTPServer(ThreadingHTTPServer):
 
 
 class EditorRequestHandler(BaseHTTPRequestHandler):
-    server_version = "PcbKnowledgeLocal/2"
+    server_version = "PcbKnowledgeLocal/3"
 
     @property
     def editor_server(self) -> EditorHTTPServer:
@@ -204,12 +204,18 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         parts = path.strip("/").split("/")
         if len(parts) == 2 and parts[0] == "sources":
             source = self.application.source_detail(parts[1])
+            decision = (
+                self.application.source_review_decision(parts[1])
+                if source.status == RecordStatus.READY_FOR_REVIEW.value
+                else None
+            )
             self._send_html(
                 render_source_detail(
                     source,
                     workspace=self.repository.root,
                     change_count=self.repository.git_changes().count,
                     csrf_token=self.editor_server.csrf_token,
+                    decision=decision,
                 )
             )
             return
@@ -228,11 +234,18 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             return
         if len(parts) == 2 and parts[0] == "facts":
             fact = self.application.fact_detail(parts[1])
+            decision = (
+                self.application.fact_review_decision(parts[1])
+                if fact.status == RecordStatus.READY_FOR_REVIEW.value
+                else None
+            )
             self._send_html(
                 render_fact_detail(
                     fact,
                     workspace=self.repository.root,
                     change_count=self.repository.git_changes().count,
+                    csrf_token=self.editor_server.csrf_token,
+                    decision=decision,
                 )
             )
             return
@@ -251,38 +264,61 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             return
 
         parts = path.strip("/").split("/")
-        if len(parts) != 3 or parts[0] != "sources":
+        if len(parts) != 3:
             raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
-        source_id, action = parts[1], parts[2]
+        record_id, action = parts[1], parts[2]
         expected = form.fields.get("expected_revision", "")
-        if action == "save":
-            draft = self._source_draft(form)
-            uploaded = form.files.get("pdf")
-            self.application.update_source(
-                source_id,
-                expected_revision=expected,
-                draft=draft,
-                pdf_payload=None if uploaded is None else uploaded.payload,
-            )
-        elif action == "submit":
-            self.application.submit_source(
-                source_id, expected_revision=expected
-            )
-        elif action == "approve":
-            self.application.approve_source(
-                source_id,
-                expected_revision=expected,
-                comment=form.fields.get("review_comment"),
-            )
-        elif action == "reject":
-            self.application.reject_source(
-                source_id,
-                expected_revision=expected,
-                comment=form.fields.get("review_comment", ""),
-            )
-        else:
-            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
-        self._redirect(f"/sources/{source_id}")
+
+        if parts[0] == "sources":
+            if action == "save":
+                draft = self._source_draft(form)
+                uploaded = form.files.get("pdf")
+                self.application.update_source(
+                    record_id,
+                    expected_revision=expected,
+                    draft=draft,
+                    pdf_payload=None if uploaded is None else uploaded.payload,
+                )
+            elif action == "submit":
+                self.application.submit_source(
+                    record_id, expected_revision=expected
+                )
+            elif action == "approve":
+                self.application.approve_source(
+                    record_id,
+                    expected_revision=expected,
+                    comment=form.fields.get("review_comment"),
+                )
+            elif action == "reject":
+                self.application.reject_source(
+                    record_id,
+                    expected_revision=expected,
+                    comment=form.fields.get("review_comment", ""),
+                )
+            else:
+                raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
+            self._redirect(f"/sources/{record_id}")
+            return
+
+        if parts[0] == "facts":
+            if action == "approve":
+                self.application.approve_fact(
+                    record_id,
+                    expected_revision=expected,
+                    comment=form.fields.get("review_comment"),
+                )
+            elif action == "reject":
+                self.application.reject_fact(
+                    record_id,
+                    expected_revision=expected,
+                    comment=form.fields.get("review_comment", ""),
+                )
+            else:
+                raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
+            self._redirect(f"/facts/{record_id}")
+            return
+
+        raise HTTPRequestError(HTTPStatus.NOT_FOUND, "Operation not found.")
 
     @staticmethod
     def _status_filter(query_string: str) -> RecordStatus | None:
