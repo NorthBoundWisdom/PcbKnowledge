@@ -4,7 +4,7 @@
 
 PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering knowledge repository and local review tool. It turns engineering statements from datasheets, application notes, reference designs, and similar sources into validated `Source`, `Entity`, `Fact`, and `EvidenceAnchor` records, with human review and Git publication as explicit boundaries.
 
-> **Open-source boundary:** this repository publishes software, schemas, documentation, Agent workflows, synthetic tests, and explicitly reviewed runtime dependencies. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals live in separately controlled knowledge workspaces. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
+> **Open-source boundary:** this repository publishes software, schemas, documentation, Agent workflows, synthetic tests, evaluation harnesses, and explicitly reviewed runtime dependencies. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals live in separately controlled knowledge workspaces. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
 
 ## Current status
 
@@ -16,7 +16,8 @@ P0.2.5 Knowledge Workspace boundary   COMPLETE
 P0.3a Typed Workbench Foundation      COMPLETE
 P0.3b Visual Evidence Review          COMPLETE
 P0.3c Review Closure                  COMPLETE
-P0.4a Pilot dataset                   NEXT
+P0.4a Pilot evaluation harness        READY
+P0.4a Real private pilot              NEXT
 ```
 
 The P0 software path is implemented end-to-end: Agents can prepare typed Source/Entity/Fact authority in an explicitly selected knowledge workspace; humans can inspect exact Source evidence, review typed closure, approve or reject Source/Fact records, and then publish with ordinary Git. The GUI never stages, commits, or pushes.
@@ -138,6 +139,37 @@ Before a decision the UI shows the exact selected closure paths, selected Git st
 
 Approved Facts are immutable in place and expose no mutation form. Corrections use a new Fact plus explicit `supersedes`.
 
+## P0.4a private pilot harness
+
+Real pilot data remains private, but the public repository now provides a deterministic evaluator for the first 3–5 IC / 20–40 Fact dataset. Deliberately wrong MPN/package/revision inputs are recorded as evaluation scenarios rather than false canonical Facts or Entities.
+
+Create a private evaluation manifest:
+
+```bash
+python3 configs/pcbknowledge_pilot.py scaffold \
+  --output ../PcbKnowledgeData-pilot-evaluation.json
+```
+
+Inspect working versus committed Published Knowledge coverage:
+
+```bash
+python3 configs/pcbknowledge_pilot.py metrics \
+  --workspace ../PcbKnowledgeData
+```
+
+Run the structural, negative-case, visual-acceptance, human-review, and publication gates:
+
+```bash
+python3 configs/pcbknowledge_pilot.py report \
+  --workspace ../PcbKnowledgeData \
+  --manifest ../PcbKnowledgeData-pilot-evaluation.json \
+  --require-pass
+```
+
+The evaluator intentionally distinguishes reviewed working-tree authority from committed Published Knowledge. It also requires explicit unknown preservation, table-pin and footnote-limit cases, multi-package coverage, a Source revision/supersedes chain, negative scenario receipts, and at least one real browser visual-evidence receipt before the private pilot can close.
+
+See [`docs/pilot-evaluation.md`](docs/pilot-evaluation.md) and [`evals/pilot-evaluation.example.json`](evals/pilot-evaluation.example.json).
+
 ## Agent / human boundary
 
 Agents may:
@@ -203,13 +235,13 @@ python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-P0.3c's validated checkpoint runs 96 tests with 0 failures, errors, or skips across Ubuntu/Python 3.11, Ubuntu/Python 3.14, macOS/Python 3.11, and Windows/Python 3.11.
+The completed P0.3 checkpoint ran 96 tests with 0 failures, errors, or skips across Ubuntu/Python 3.11, Ubuntu/Python 3.14, macOS/Python 3.11, and Windows/Python 3.11. P0.4a adds a synthetic 3-Component / 20-Fact vertical evaluator to that suite.
 
-Automated HTTP tests verify loopback Host/Origin, CSRF, optimistic revisions, selected workspace identity, Source/Fact decision gating, immutable approved UX, PDF license blocking, and GUI no-stage behavior. Pixel-level PDF/bbox placement on a real vendor document is deliberately the first P0.4a private-workspace acceptance rather than a synthetic browser claim.
+Automated HTTP tests verify loopback Host/Origin, CSRF, optimistic revisions, selected workspace identity, Source/Fact decision gating, immutable approved UX, PDF license blocking, and GUI no-stage behavior. Pixel-level PDF/bbox placement on a real vendor document remains a required private-workspace P0.4a acceptance rather than a synthetic browser claim.
 
-## Next: P0.4a pilot dataset
+## Next: execute the P0.4a private pilot
 
-The next stage is not another infrastructure expansion. It is a small real-data pilot: 3–5 common ICs, 20–40 Facts, at least one multi-package case, one revision/supersedes case, several deliberately wrong/ambiguous negatives, and real visual evidence acceptance. The pilot should expose schema/viewer shortcomings before P1 retrieval or broader Fact families are built.
+The next stage is not another infrastructure expansion. Use the completed harness on 3–5 common ICs, 20–40 Facts, at least one multi-package case, one revision/supersedes case, 5–10 deliberately wrong/ambiguous scenarios, and real visual evidence acceptance. Record modeling failures before P1 retrieval or broader Fact families are built.
 
 See [`TODO.md`](TODO.md) for the executable roadmap.
 

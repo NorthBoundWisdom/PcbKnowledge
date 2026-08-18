@@ -10,6 +10,8 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 - Never write sibling repositories unless the user explicitly selected that repository/workspace as the task target.
 - PcbKnowledge must not depend on PcbCore runtime availability or mutate live PCB state.
 - Commit and push only when the user explicitly authorizes repository writes. When authorized, use the existing primary branch and keep commits focused.
+- During active construction, batch coherent implementation into substantial stage commits. Prefer at least 500 lines of meaningful diff before committing when the work naturally supports that size; never pad or mix unrelated changes merely to reach a line count.
+- CI-follow-up fixes, focused test repairs, and milestone documentation belong in the stage that introduced them. Rewrite/squash them back into that stage before final delivery instead of leaving chains of tiny fix/test/docs commits. A genuinely urgent security or correctness fix may remain smaller when waiting would be unsafe.
 - Commit messages use `[type]: description`, where type is one of `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`, `perf`, `ci`, or `build`.
 
 ## 2. Engineering preferences

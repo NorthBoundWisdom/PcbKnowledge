@@ -1,0 +1,84 @@
+{
+  "format": "pcbknowledge-pilot-eval-v1",
+  "dataset_name": "replace-with-private-pilot-name",
+  "cases": [
+    {
+      "id": "case_wrong_mpn",
+      "category": "WRONG_MPN",
+      "status": "NOT_RUN",
+      "expected_code": "UNKNOWN",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Use a deliberately wrong MPN input. Do not create a false Component record."
+    },
+    {
+      "id": "case_wrong_package",
+      "category": "WRONG_PACKAGE",
+      "status": "NOT_RUN",
+      "expected_code": "UNKNOWN",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Use a package that must not be inferred from a similar orderable part."
+    },
+    {
+      "id": "case_wrong_revision",
+      "category": "WRONG_REVISION",
+      "status": "NOT_RUN",
+      "expected_code": "UNKNOWN",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Request a revision not present in the selected Source chain."
+    },
+    {
+      "id": "case_unknown_preserved",
+      "category": "UNKNOWN",
+      "status": "NOT_RUN",
+      "expected_code": "UNKNOWN",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Choose a genuinely unstated engineering value and verify it remains unknown."
+    },
+    {
+      "id": "case_license_block",
+      "category": "LICENSE_BLOCK",
+      "status": "NOT_RUN",
+      "expected_code": "BLOCKED",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Exercise a Source whose license policy blocks model/source processing."
+    },
+    {
+      "id": "case_table_pin",
+      "category": "TABLE_PIN",
+      "status": "NOT_RUN",
+      "expected_code": "EXACT",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Bind this receipt to a real table-based ComponentPin Fact after ingestion."
+    },
+    {
+      "id": "case_footnote_limit",
+      "category": "FOOTNOTE_LIMIT",
+      "status": "NOT_RUN",
+      "expected_code": "EXACT",
+      "observed_code": null,
+      "related_ids": [],
+      "notes": "Bind this receipt to a ParameterLimit Fact whose conditions depend on a footnote."
+    }
+  ],
+  "visual_acceptance": [
+    {
+      "id": "visual_real_anchor",
+      "source_id": "pk_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "fact_id": "fact_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "page": 1,
+      "characteristics": [
+        "TABLE",
+        "RESIZE_ZOOM"
+      ],
+      "status": "NOT_RUN",
+      "notes": "Replace Source/Fact/page with a real private-workspace anchor. Add ROTATED_OR_CROPPED or COMPLEX_FONT when the selected vendor PDF exposes it."
+    }
+  ],
+  "notes": "This file is evaluation metadata, not canonical engineering authority. Keep real pilot content in the private workspace or another private evaluation location."
+}
