@@ -11,3 +11,5 @@
 *.jpg binary
 *.jpeg binary
 *.webp binary
+
+.grok/skills -text -eol
