@@ -112,6 +112,12 @@ def _valid_payload(payload: bytes, *, pin: tuple[int, str] | None, placeholder: 
     return _text_metadata(payload, placeholder=placeholder)
 
 
+def _native_link_target_bytes(target: str) -> bytes:
+    """Normalize only the host-native separator, not arbitrary target paths."""
+
+    return os.fsencode(target.replace(os.sep, "/"))
+
+
 def check_public_distribution(repo_root: Path) -> tuple[str, ...]:
     """Reject original/binary/oversized files anywhere in the index or worktree.
 
@@ -133,7 +139,7 @@ def check_public_distribution(repo_root: Path) -> tuple[str, ...]:
             local = repo_root / path
             # Git on Windows may materialize a symlink as its small target text.
             if local.is_symlink():
-                local_matches = os.fsencode(os.readlink(local)) == expected
+                local_matches = _native_link_target_bytes(os.readlink(local)) == expected
             else:
                 local_matches = (local.is_file() and local.stat().st_size == len(expected)
                                  and local.read_bytes() == expected)

@@ -3,10 +3,12 @@ from __future__ import annotations
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from pcbknowledge.git_native.public_repo import (
     ALLOWED_AUTHORITY_PLACEHOLDERS,
+    _native_link_target_bytes,
     MAX_METADATA_BYTES,
     PINNED_RUNTIME_FILES,
     check_public_distribution,
@@ -146,6 +148,30 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         self.assertEqual(check_public_distribution(self.root), ())
         target.write_bytes(b"../../outside")
         self.assertEqual(check_public_distribution(self.root), (".grok/skills",))
+
+    def test_native_windows_link_separators_preserve_exact_target_boundary(self) -> None:
+        with patch("pcbknowledge.git_native.public_repo.os.sep", "\\"):
+            self.assertEqual(_native_link_target_bytes(r"..\.codex\skills"), b"../.codex/skills")
+            self.assertNotEqual(_native_link_target_bytes(r"..\outside\skills"), b"../.codex/skills")
+        with patch("pcbknowledge.git_native.public_repo.os.sep", "/"):
+            # Backslashes remain literal on POSIX, not path separators.
+            self.assertNotEqual(_native_link_target_bytes(r"..\.codex\skills"), b"../.codex/skills")
+
+    def test_pinned_actual_symlink_checks_normalized_native_target(self) -> None:
+        target = self.stage(".grok/skills", b"../.codex/skills")
+        object_id = self.git("rev-parse", ":.grok/skills").decode().strip()
+        self.git("update-index", "--cacheinfo", f"120000,{object_id},.grok/skills")
+        target.unlink()
+        try:
+            target.symlink_to("../.codex/skills", target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("symlinks are unavailable on this platform")
+        self.assertEqual(check_public_distribution(self.root), ())
+        with patch("pcbknowledge.git_native.public_repo.os.sep", "\\"):
+            with patch("pcbknowledge.git_native.public_repo.os.readlink", return_value=r"..\.codex\skills"):
+                self.assertEqual(check_public_distribution(self.root), ())
+            with patch("pcbknowledge.git_native.public_repo.os.readlink", return_value=r"..\outside\skills"):
+                self.assertEqual(check_public_distribution(self.root), (".grok/skills",))
 
     def test_symlink_index_mode_is_rejected_without_following_target(self) -> None:
         self.stage("knowledge/intake/safe.md", b"summary\n")
