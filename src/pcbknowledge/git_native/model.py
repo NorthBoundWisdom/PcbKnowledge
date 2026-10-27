@@ -189,7 +189,7 @@ def _validate_text_tuple(
 
 
 def normalize_lookup(value: str) -> str:
-    """Create a deterministic exact-lookup key while preserving the raw value."""
+    """Create a lossy candidate key, never proof of component identity."""
 
     raw = _required_text(value, "lookup value", limit=500)
     compatibility = unicodedata.normalize("NFKC", raw).upper()
@@ -197,6 +197,17 @@ def normalize_lookup(value: str) -> str:
     if not normalized:
         raise RecordValidationError("lookup value normalizes to empty")
     return normalized
+
+
+def exact_mpn_key(value: str) -> str:
+    """Trim outer whitespace only; preserve case, Unicode and MPN punctuation.
+
+    This mirrors raw MPN storage without compatibility normalization, case
+    folding, suffix removal or internal whitespace folding. The normalized_mpn
+    field remains a lossy candidate key and is not authoritative identity.
+    """
+
+    return _required_text(value, "MPN", limit=500)
 
 
 def _canonical_json(value: Mapping[str, object]) -> str:
@@ -1018,8 +1029,8 @@ class EntityRecord:
     def identity_key(self) -> tuple[str, ...]:
         if self.kind is EntityKind.COMPONENT:
             assert self.manufacturer_id is not None
-            assert self.normalized_mpn is not None
-            return (self.kind.value, self.manufacturer_id, self.normalized_mpn)
+            assert self.raw_mpn is not None
+            return (self.kind.value, self.manufacturer_id, exact_mpn_key(self.raw_mpn))
         assert self.normalized_key is not None
         return (self.kind.value, self.normalized_key)
 

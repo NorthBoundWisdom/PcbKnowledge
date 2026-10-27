@@ -4,6 +4,7 @@ import contextlib
 import io
 import json
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 
 from configs.pcbknowledge_pilot import main as pilot_main
@@ -28,6 +29,7 @@ from pcbknowledge.git_native.pilot_eval import (
     write_example_manifest,
 )
 from pcbknowledge.git_native.store import KnowledgeRepository
+from pcbknowledge.git_native.snapshot import snapshot_fingerprint
 from tests.git_native.support import RepositoryTestCase, minimal_pdf
 
 
@@ -358,6 +360,38 @@ class PilotEvaluationHarnessTests(RepositoryTestCase):
         self.assertEqual(report.case_fail_count, 0)
         self.assertEqual(report.case_not_run_count, 0)
         self.assertTrue(all(gate.passed for gate in report.gates))
+
+    def test_shared_fingerprint_covers_all_record_fields_and_ignores_local_cache(self) -> None:
+        manifest, _source, _facts = self._build_passing_pilot()
+        snapshot = self.repository.validate_all(require_canonical=True)
+        fingerprint = snapshot_fingerprint(snapshot)
+        # Both consumers use one definition, preserving existing receipt semantics.
+        from pcbknowledge.git_native import pilot_scenarios
+        self.assertIs(pilot_scenarios.snapshot_fingerprint, snapshot_fingerprint)
+        for field, changed in (
+            ("sources", replace(snapshot.sources[0], preparation_note="Changed synthetic note")),
+            ("entities", replace(snapshot.entities[0], note="Changed synthetic note")),
+            ("facts", replace(snapshot.facts[0], conditions=("Changed synthetic condition",))),
+        ):
+            with self.subTest(record_type=field):
+                records = getattr(snapshot, field)
+                changed_snapshot = replace(snapshot, **{field: (changed, *records[1:])})
+                self.assertNotEqual(fingerprint, snapshot_fingerprint(changed_snapshot))
+        reordered = replace(
+            snapshot, sources=tuple(reversed(snapshot.sources)),
+            entities=tuple(reversed(snapshot.entities)), facts=tuple(reversed(snapshot.facts)),
+        )
+        self.assertEqual(fingerprint, snapshot_fingerprint(reordered))
+        # Remove only test-created ignored evidence. This changes local verification,
+        # not records or the reviewed published/working equality decision.
+        for path in self.repository.evidence_dir.rglob("*.pdf"):
+            path.unlink()
+        without_cache = self.repository.validate_all(require_canonical=True)
+        self.assertNotEqual(snapshot.local_evidence_verification, without_cache.local_evidence_verification)
+        self.assertEqual(fingerprint, snapshot_fingerprint(without_cache))
+        report = build_pilot_report(self.repository, manifest)
+        gate = next(g for g in report.gates if g.name == "published-matches-working")
+        self.assertTrue(gate.passed)
 
     def test_uncommitted_reviewed_authority_keeps_publication_gate_open(self) -> None:
         manifest, _source, _facts = self._build_passing_pilot()

@@ -113,9 +113,16 @@ all Source/Fact records APPROVED in working tree
 Published Knowledge
 ```
 
-The `published-matches-working` gate passes only when reviewed working Source,
-Entity, and Fact counts are present in the committed published snapshot. This keeps
-the existing Git publication boundary visible during the pilot.
+The `published-matches-working` gate requires identical canonical Source, Entity
+and Fact content in the working and selected published snapshots, plus the
+existing published approval checks. Equal counts alone are insufficient. Both
+fingerprints are exposed in the gate diagnostic. The shared scenario-receipt
+fingerprint hashes every current canonical record field by type and sorted ID;
+record enumeration and JSON formatting do not affect the logical fingerprint.
+Repository validation still independently requires canonical JSON bytes. Local evidence-cache
+availability, derived diagnostics and Git ref names are not authority content.
+This does not replace working review gates, immutable-record protections or
+stale scenario-receipt checks.
 
 Use another committed ref when required:
 
@@ -141,7 +148,7 @@ The first pilot intentionally stays small. Required automatic gates include:
 - at least one explicit Source revision `supersedes` relationship;
 - fully reviewed working Source/Fact authority;
 - no unresolved working semantic Fact conflict;
-- published Source/Entity/Fact counts matching reviewed working authority.
+- published Source/Entity/Fact content matching reviewed working authority.
 
 The report also records, without making every metric a hard gate:
 

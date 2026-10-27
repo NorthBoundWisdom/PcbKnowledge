@@ -632,6 +632,7 @@ def _entity_resolve_component(
         "manufacturer_id": arguments.manufacturer_id,
         "raw_mpn": arguments.mpn,
         "normalized_mpn": normalize_lookup(arguments.mpn),
+        "matching_policy": "MANUFACTURER_ID_AND_OUTER_TRIMMED_MPN",
     }
     if reason is not None:
         query["reason"] = reason
@@ -1031,7 +1032,21 @@ def _intake_list(repository: KnowledgeRepository, arguments: argparse.Namespace)
 
 def _intake_search(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     from pcbknowledge.git_native.intake import search_intake
-    _print(search_intake(repository.root, arguments.query))
+    _print(search_intake(repository.root, arguments.query,
+                         **_intake_source_filters(arguments),
+                         kind=arguments.kind, parameter=arguments.parameter))
+    return 0
+
+
+def _intake_source_filters(arguments: argparse.Namespace) -> dict:
+    return {name: getattr(arguments, name)
+            for name in ("source_id", "manufacturer", "device", "package")}
+
+
+def _intake_issues(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake import search_intake_issues
+    _print(search_intake_issues(repository.root, arguments.query,
+                                **_intake_source_filters(arguments)))
     return 0
 
 
@@ -1617,9 +1632,20 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     intake_actions = intake_parser.add_subparsers(dest="intake_action", required=True)
     intake_list = intake_actions.add_parser("list")
     intake_list.set_defaults(handler=_intake_list)
-    intake_search = intake_actions.add_parser("search")
-    intake_search.add_argument("query")
+    intake_search = intake_actions.add_parser(
+        "search", allow_abbrev=False,
+        help="retrieve fact candidates, not electrical answers; see intake issues")
+    intake_issues = intake_actions.add_parser(
+        "issues", allow_abbrev=False,
+        help="retrieve source warnings; no hits does not prove absence of ambiguity")
+    for intake_command in (intake_search, intake_issues):
+        intake_command.add_argument("query", nargs="?", default="", help="optional case-folded AND lexical terms")
+        for field in ("source-id", "manufacturer", "device", "package"):
+            intake_command.add_argument(f"--{field}", help="exact structured string; missing fields do not match")
+    for field in ("kind", "parameter"):
+        intake_search.add_argument(f"--{field}", help="exact structured fact string")
     intake_search.set_defaults(handler=_intake_search)
+    intake_issues.set_defaults(handler=_intake_issues)
 
     validate_parser = subparsers.add_parser("validate")
     validate_parser.set_defaults(handler=_validate)

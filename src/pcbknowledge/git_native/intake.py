@@ -136,24 +136,112 @@ def load_intake(root: Path) -> list[dict]:
     return batches
 
 
-def search_intake(root: Path, query: str = "") -> list[dict]:
-    """Return fact matches linked to their batch-local sources, without promotion.
+def _filters(**values: str | None) -> dict[str, str]:
+    """Validate explicit filters without normalizing authoritative strings."""
 
-    Whitespace-separated case-insensitive terms must all match the combined fact
-    and source JSON. Empty queries list all candidates in stable batch/id order.
+    for name, value in values.items():
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise IntakeError(f"{name} filter must be a nonempty string")
+    return {name: value for name, value in values.items() if value is not None}
+
+
+def _matches(record: dict, filters: dict[str, str]) -> bool:
+    # Missing, null, array and other non-string fields are unknown, not matches.
+    return all(isinstance(record.get(key), str) and record[key] == value
+               for key, value in filters.items())
+
+
+def _source_issues(data: dict) -> dict[str, list[dict]]:
+    """Index full warnings in this batch only; never infer source association."""
+
+    result: dict[str, list[dict]] = {source["id"]: [] for source in data["sources"]}
+    issues = data.get("source_issues", [])
+    if not isinstance(issues, list):
+        raise IntakeError("intake source_issues must be an array")
+    identifiers: set[str] = set()
+    for issue in issues:
+        if not isinstance(issue, dict):
+            raise IntakeError("intake source_issues entries must be objects")
+        identifier = issue.get("id")
+        source_id = issue.get("source_id")
+        if (not isinstance(identifier, str) or not identifier.strip()
+                or identifier in identifiers):
+            raise IntakeError("intake source_issues require unique nonempty string ids")
+        if not isinstance(source_id, str) or source_id not in result:
+            raise IntakeError(f"intake source issue {identifier} has an unknown source_id")
+        identifiers.add(identifier)
+        result[source_id].append(issue)
+    for issues_for_source in result.values():
+        issues_for_source.sort(key=lambda issue: issue["id"])
+    return result
+
+
+def _candidate(batch: dict, source: dict) -> dict:
+    return {"path": batch["path"], "canonical": False,
+            "acceptance_status": batch["data"]["acceptance_status"],
+            "evidence_verification": "NOT_LOCALLY_VERIFIED", "source": source}
+
+
+def search_intake(
+    root: Path, query: str = "", *, source_id: str | None = None,
+    manufacturer: str | None = None, device: str | None = None,
+    package: str | None = None, kind: str | None = None, parameter: str | None = None,
+) -> list[dict]:
+    """Return noncanonical fact candidates, not synthesized electrical answers.
+
+    Filters compare exact structured strings (case, Unicode and whitespace are
+    significant), before case-folded AND lexical matching over fact/source JSON.
+    Missing structured fields fail closed. No prose is used for identity. Empty
+    queries support filter-only lookup or, with no filters, list all candidates.
+    Full same-source warnings are attached independently of lexical terms; use
+    search_intake_issues to find warnings even without a matching fact.
     """
 
+    source_filters = _filters(id=source_id, manufacturer=manufacturer, device=device,
+                              package=package)
+    fact_filters = _filters(kind=kind, parameter=parameter)
     terms = query.casefold().split()
     matches: list[dict] = []
     for batch in load_intake(root):
         data = batch["data"]
         sources = {source["id"]: source for source in data["sources"]}
+        issues = _source_issues(data)
         for fact in sorted(data["facts"], key=lambda record: record["id"]):
             source = sources[fact["source_id"]]
+            if not _matches(source, source_filters) or not _matches(fact, fact_filters):
+                continue
             searchable = json.dumps([fact, source], ensure_ascii=False, sort_keys=True).casefold()
             if all(term in searchable for term in terms):
-                matches.append({"path": batch["path"], "canonical": False,
-                                "acceptance_status": data["acceptance_status"],
-                                "evidence_verification": "NOT_LOCALLY_VERIFIED",
-                                "fact": fact, "source": source})
+                matches.append({**_candidate(batch, source), "result_type": "FACT_CANDIDATE",
+                                "fact": fact, "source_issues": issues[source["id"]]})
+    return matches
+
+
+def search_intake_issues(
+    root: Path, query: str = "", *, source_id: str | None = None,
+    manufacturer: str | None = None, device: str | None = None,
+    package: str | None = None,
+) -> list[dict]:
+    """Retrieve source warnings separately from Facts, including without facts.
+
+    Source filters have the same exact policy as search_intake. Optional lexical
+    terms match warning/source JSON, not facts. An empty result does not establish
+    the absence of ambiguities: unrecorded or differently worded issues may exist.
+    """
+
+    source_filters = _filters(id=source_id, manufacturer=manufacturer, device=device,
+                              package=package)
+    terms = query.casefold().split()
+    matches: list[dict] = []
+    for batch in load_intake(root):
+        data = batch["data"]
+        issues = _source_issues(data)
+        for source in sorted(data["sources"], key=lambda record: record["id"]):
+            if not _matches(source, source_filters):
+                continue
+            for issue in issues[source["id"]]:
+                searchable = json.dumps([issue, source], ensure_ascii=False, sort_keys=True).casefold()
+                if all(term in searchable for term in terms):
+                    matches.append({**_candidate(batch, source), "result_type": "SOURCE_ISSUE",
+                                    "source_issue": issue})
     return matches

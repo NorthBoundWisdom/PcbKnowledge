@@ -5,7 +5,7 @@ description: Resolve and create exact Manufacturer, Component, and Package ident
 
 # Resolve Component Identity
 
-Preserve raw identity strings, use normalized keys only for exact lookup, and operate only on the workspace selected by the task.
+Preserve raw identity strings and operate only on the workspace selected by the task. Component identity uses manufacturer ID plus raw MPN after trimming surrounding whitespace only. Case, Unicode code points, internal whitespace, punctuation and suffixes remain significant. A lossy `normalized_mpn` is candidate metadata, never proof of identity. Manufacturer and package lookup retain their normalized-key policy.
 
 ## Validate the target workspace
 
@@ -60,7 +60,7 @@ python3 configs/pcbknowledge_agent.py --repo '<workspace>' entity create-package
   --name '<exact-raw-package-name>'
 ```
 
-Add `--family` only when the source states it. Re-run the exact resolver after creation and use only an `EXACT` result. Treat `CONFLICT` from create as evidence that another identity already owns the normalized key.
+Add `--family` only when the source states it. Re-run the exact resolver after creation and use only an `EXACT` result. Treat `CONFLICT` from create as a reason to inspect the exact identity and idempotency key, not proof that normalized candidates are identical. Distinct verified MPNs may share a normalized candidate key; never rewrite existing IDs or references to merge them.
 
 ## Boundaries
 

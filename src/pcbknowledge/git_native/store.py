@@ -43,6 +43,7 @@ from pcbknowledge.git_native.model import (
     deterministic_entity_id,
     deterministic_fact_id,
     deterministic_source_id,
+    exact_mpn_key,
     normalize_lookup,
 )
 
@@ -482,12 +483,13 @@ class KnowledgeRepository:
     ) -> list[EntityRecord]:
         """Return exact manufacturer/MPN matches without suffix inference."""
 
-        key = normalize_lookup(raw_mpn)
+        key = exact_mpn_key(raw_mpn)
         return self._sorted_entities(
             entity
             for entity in self.list_entities(kind=EntityKind.COMPONENT)
             if entity.manufacturer_id == manufacturer_id
-            and entity.normalized_mpn == key
+            and entity.raw_mpn is not None
+            and exact_mpn_key(entity.raw_mpn) == key
         )
 
     def find_packages_exact(self, raw_name: str) -> list[EntityRecord]:

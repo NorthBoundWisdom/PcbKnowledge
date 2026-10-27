@@ -33,6 +33,13 @@ Local receipt (2026-10-27): 141 tests pass; config/build/test, workspace/authori
 
 Cross-platform correction receipt: commit `8515bf5` passed all four jobs in [CI run 40552649329](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/runs/40552649329), including 143 Windows tests. This fixed native symlink separators without relaxing the pinned-target boundary. The following data-only expansion retains the same executable contract and is verified separately; see the [collection index](knowledge/intake/README.md) and [23-query evaluation receipt](docs/intake-evaluation-100.md).
 
+Issue implementation receipt (2026-10-27; maintainer verification remains open):
+
+- [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10): exact component identity uses manufacturer ID and outer-trimmed raw MPN, preserving case, Unicode, punctuation, suffixes and internal whitespace. Existing serialized records, IDs, Fact references and approved bytes are unchanged.
+- [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11): the publication equality gate and scenario receipts share one canonical-content fingerprint; local evidence availability is excluded and existing approval/stale-receipt protections remain.
+- [#12](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/12): exact structured intake filters precede lexical candidate retrieval; missing structured fields fail closed. Full batch-local source warnings remain distinct and retrievable through `intake issues`.
+- Combined local verification: 169 tests passed with no skips; English/public-source/PDF.js guards, workspace validation, Config, Build, Test, Agent validate and Package passed. Independent focused review passed 25 tests without blocking findings. No live intake data, schema or cache policy changed. Remote CI is verified separately after publication.
+
 See [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md). Historic receipts below describe their original stage, not a claim that the new pilot is complete.
 
 ## 1. Completed foundation

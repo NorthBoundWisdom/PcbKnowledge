@@ -67,7 +67,9 @@ knowledge/facts/        FactRecordV1
 
 The initial entity set is Manufacturer, Component, and Package. The initial Fact set is ComponentPin and ParameterLimit.
 
-Raw manufacturer/MPN/package text is preserved. Normalized fields exist for exact lookup only; package, silicon revision, orderable part, or family is not guessed from an MPN suffix.
+Raw manufacturer/MPN/package text is preserved. Component identity and exact lookup use the manufacturer entity ID and the raw MPN with surrounding whitespace removed. Case, Unicode code points (including compatibility forms and combining sequences), internal whitespace, punctuation and suffixes remain significant. `normalized_mpn` is a lossy candidate key, never proof of identity; no normalized-only candidate can yield `EXACT`. Manufacturer and package lookup retain their existing normalized-key policy. Package, silicon revision, orderable part, or family is not guessed from an MPN suffix.
+
+This identity correction changes no serialized fields or schema. Existing entity IDs, raw values, normalized candidate metadata, revision tokens, Fact references and approved records are not rewritten. Independently verified distinct MPNs that share a lossy key may coexist with distinct IDs. Replaying an existing creation key still requires identical record content; a second creation key for the same exact identity is rejected. Existing identities previously merged by normalization cannot be reconstructed automatically: any correction requires independently verified records and the existing review/publication workflow.
 
 Unknown is a valid result. Missing facts are never filled from a similar device, a similar package, free text, or model prior.
 

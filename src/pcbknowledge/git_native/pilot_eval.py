@@ -24,6 +24,7 @@ from pcbknowledge.git_native.model import (
     RecordStatus,
 )
 from pcbknowledge.git_native.store import AuthoritySnapshot, KnowledgeRepository
+from pcbknowledge.git_native.snapshot import snapshot_fingerprint
 
 
 PILOT_EVAL_FORMAT = "pcbknowledge-pilot-eval-v1"
@@ -708,8 +709,11 @@ def build_pilot_report(
         and working.incomplete_fact_count == 0
         and working.conflict_count == 0
     )
+    working_fingerprint = snapshot_fingerprint(working_snapshot)
+    published_fingerprint = snapshot_fingerprint(published_snapshot)
     published_matches_working = (
-        working.source_count == published.source_count
+        working_fingerprint == published_fingerprint
+        and working.source_count == published.source_count
         and working.entity_count == published.entity_count
         and working.fact_count == published.fact_count
         and published.source_count == published.approved_source_count
@@ -850,17 +854,19 @@ def build_pilot_report(
             published_matches_working,
             {
                 "working": {
+                    "fingerprint": working_fingerprint,
                     "sources": working.source_count,
                     "entities": working.entity_count,
                     "facts": working.fact_count,
                 },
                 "published": {
+                    "fingerprint": published_fingerprint,
                     "sources": published.source_count,
                     "entities": published.entity_count,
                     "facts": published.fact_count,
                 },
             },
-            "published counts equal reviewed working authority",
+            "published canonical record content equals reviewed working authority",
             "Approval alone is not publication; the committed ref must contain the reviewed closure.",
         ),
     )

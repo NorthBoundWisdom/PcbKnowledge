@@ -54,7 +54,7 @@ python3 configs/pcbknowledge_agent.py --repo '<workspace>' entity resolve-compon
 python3 configs/pcbknowledge_agent.py --repo '<workspace>' entity resolve-package --name '<raw-package>'
 ```
 
-A resolver returns only `EXACT`, `UNKNOWN`, or `CONFLICT`. Never infer package, silicon revision, orderable part, or family from a similar MPN, suffix, or model memory.
+A resolver returns only `EXACT`, `UNKNOWN`, or `CONFLICT`. Component resolution uses the manufacturer ID and raw MPN after trimming outer whitespace only; case, Unicode code points, internal whitespace, punctuation and suffixes must match. The returned `normalized_mpn` is candidate metadata, not identity evidence (see [architecture](architecture.md)). Never infer package, silicon revision, orderable part, or family from a similar MPN, suffix, or model memory.
 
 ## 4. Create typed Facts
 

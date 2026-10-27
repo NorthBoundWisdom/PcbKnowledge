@@ -35,6 +35,55 @@ human-review operations; this release does not impersonate a human through that 
 Intake search must retain the noncanonical marker and limitations and must not be
 mixed silently into published canonical Fact results.
 
+## Intake candidate retrieval
+
+`intake search [query]` is read-only candidate retrieval, not an electrical answer,
+identity verification, or proof that a requested specification exists. Without
+filters it retains the legacy case-folded, whitespace-separated AND search over
+serialized fact and source JSON. Negative mentions and incidental prose can match.
+The query is optional: an empty query lists candidates in stable batch-path/fact-ID
+order, or performs a filter-only lookup when filters are supplied.
+
+Use `--source-id`, `--manufacturer`, `--device`, and `--package` to constrain actual
+structured source fields, and `--kind` and `--parameter` for structured fact fields.
+All filters are conjunctive and applied before lexical search. Matching is exact
+string equality: case, whitespace, Unicode code points, punctuation, and orderable
+suffixes are significant. No trimming, case folding, Unicode normalization, MPN
+canonicalization, substring matching, or inference from URLs/scope/selection prose
+is applied to filters. Empty/whitespace-only filter arguments are errors. A missing,
+null, or non-string structured field does not match. In particular, package prose
+in `scope` does not satisfy `--package`; an unknown package/device returns no
+candidates, not a fallback lexical result. Unknown filter options are errors.
+
+Examples (identifiers are illustrative, not engineering recommendations):
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo <workspace> intake search absolute --source-id ti-lm1117-q
+python3 configs/pcbknowledge_agent.py --repo <workspace> intake search --device LM1117 --kind recommended_operating --parameter VIN_to_GND
+python3 configs/pcbknowledge_agent.py --repo <workspace> intake search --parameter PG
+python3 configs/pcbknowledge_agent.py --repo <workspace> intake issues --source-id microchip-mcp23017
+```
+
+The Python `search_intake(root, query="", *, source_id=None, manufacturer=None,
+device=None, package=None, kind=None, parameter=None)` API has the same policy;
+unknown keyword arguments are rejected. Results label `FACT_CANDIDATE` and preserve
+full original source/fact values, conditions, evidence levels and statuses. They
+retain `canonical: false`, batch acceptance status and `NOT_LOCALLY_VERIFIED`.
+Filtering never collapses conditional values or upgrades review/byte verification.
+
+Each fact candidate includes full batch-local `source_issues` for its exact
+`source_id`, independent of the fact's lexical match. Warnings remain separate
+objects, not Facts or inferred specifications. `intake issues [query]` (Python
+`search_intake_issues`) also retrieves warnings without any matching fact. It accepts
+the same source filters, but no fact filters; optional lexical terms search the
+warning plus its source. Results label `SOURCE_ISSUE` and retain the full warning,
+source, batch path, unresolved status, provenance, and nonverification marker.
+Warning association never crosses batch boundaries, even if source IDs repeat.
+Malformed or ambiguous warning links fail clearly rather than silently dropping
+warnings. An empty warning query result is not proof that no source ambiguity
+exists: wording, filters, or missing annotations can hide relevant unknowns. Use
+filter-only warning lookup or `intake list` to inspect the available source context.
+
 ## Metadata in Git, original bytes outside Git
 
 The workspace schema contract is `typed-v2-local-cache`. Source originals live only

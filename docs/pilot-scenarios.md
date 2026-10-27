@@ -149,8 +149,10 @@ UNKNOWN
 CONFLICT
 ```
 
-Lookup uses the same deterministic normalized exact-key semantics as canonical
-Component identity. It performs no suffix guessing or fuzzy search.
+Lookup uses the same manufacturer ID and outer-trimmed, case-sensitive raw MPN
+as canonical Component identity (see [architecture](architecture.md)). Unicode
+code points, internal whitespace, punctuation and suffixes remain significant.
+A lossy normalized candidate is not an exact match.
 
 Typical pilot categories:
 

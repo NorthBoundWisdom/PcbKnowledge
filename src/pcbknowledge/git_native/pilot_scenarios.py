@@ -24,6 +24,7 @@ from pcbknowledge.git_native.model import (
     ParameterLimitPayload,
     ReviewAction,
     SourceRecord,
+    exact_mpn_key,
     normalize_lookup,
 )
 from pcbknowledge.git_native.pilot_eval import (
@@ -34,6 +35,7 @@ from pcbknowledge.git_native.pilot_eval import (
     PilotEvaluationManifest,
 )
 from pcbknowledge.git_native.store import AuthoritySnapshot, KnowledgeRepository
+from pcbknowledge.git_native.snapshot import snapshot_fingerprint
 
 
 PILOT_SCENARIO_FORMAT = "pcbknowledge-pilot-scenarios-v1"
@@ -706,22 +708,6 @@ class PilotScenarioReport:
             ) from error
 
 
-def snapshot_fingerprint(snapshot: AuthoritySnapshot) -> str:
-    digest = hashlib.sha256()
-    for prefix, records in (
-        ("SOURCE", snapshot.sources),
-        ("ENTITY", snapshot.entities),
-        ("FACT", snapshot.facts),
-    ):
-        for record in sorted(records, key=lambda item: item.id):
-            digest.update(prefix.encode("ascii"))
-            digest.update(b"\0")
-            digest.update(record.id.encode("ascii"))
-            digest.update(b"\0")
-            digest.update(record.canonical_json().encode("utf-8"))
-    return digest.hexdigest()
-
-
 def git_state_fingerprint(repository: KnowledgeRepository) -> str:
     changes = repository.git_changes()
     digest = hashlib.sha256()
@@ -771,13 +757,14 @@ def _run_one(
 
     if scenario.kind is PilotScenarioKind.COMPONENT_LOOKUP:
         manufacturer_id = str(parameters["manufacturer_id"])
-        key = normalize_lookup(str(parameters["raw_mpn"]))
+        key = exact_mpn_key(str(parameters["raw_mpn"]))
         matches = tuple(
             entity
             for entity in snapshot.entities
             if entity.kind is EntityKind.COMPONENT
             and entity.manufacturer_id == manufacturer_id
-            and entity.normalized_mpn == key
+            and entity.raw_mpn is not None
+            and exact_mpn_key(entity.raw_mpn) == key
         )
         observed = _lookup_code(matches)
         related = tuple(item.id for item in matches)
