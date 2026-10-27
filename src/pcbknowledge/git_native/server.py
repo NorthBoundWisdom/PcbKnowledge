@@ -383,6 +383,9 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
 
     def _serve_evidence(self, source_id: str) -> None:
         source = self.repository.load_source(source_id)
+        verification = self.repository.evidence_verification(source.evidence)
+        if verification == "NOT_LOCALLY_VERIFIED":
+            raise HTTPRequestError(HTTPStatus.NOT_FOUND, "NOT_LOCALLY_VERIFIED: original is not cached locally.")
         self.repository.verify_evidence(source.evidence)
         if not source.evidence.present or source.evidence.path is None:
             raise HTTPRequestError(

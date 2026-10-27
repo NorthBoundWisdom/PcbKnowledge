@@ -76,6 +76,7 @@ class SourceView:
     preparation_note: str | None
     evidence_sha256: str | None
     evidence_byte_size: int | None
+    local_evidence_verification: str
     missing_fields: tuple[str, ...]
     review_history: tuple[ReviewEventView, ...]
     revision_token: str
@@ -344,6 +345,7 @@ class WorkbenchApplication:
             preparation_note=source.preparation_note,
             evidence_sha256=source.evidence.sha256,
             evidence_byte_size=source.evidence.byte_size,
+            local_evidence_verification=self.repository.evidence_verification(source.evidence),
             missing_fields=source.missing_fields,
             review_history=self._review_history(source),
             revision_token=source.revision_token,

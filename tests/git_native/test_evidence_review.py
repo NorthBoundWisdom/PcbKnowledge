@@ -119,6 +119,35 @@ class EvidenceReviewTests(RepositoryTestCase):
         self.repository.save_source(source, updated, source.revision_token)
         return updated
 
+    def test_source_approval_without_cached_original_is_rejected(self) -> None:
+        from pcbknowledge.git_native.store import EvidenceError
+        source = self.allowed_source
+        ready = self.repository.submit_source(source.id, expected_revision=source.revision_token)
+        (self.root / source.evidence.path).unlink()
+        with self.assertRaisesRegex(EvidenceError, "NOT_LOCALLY_VERIFIED"):
+            self.repository.approve_source(source.id, expected_revision=ready.revision_token, comment="must not pass")
+        self.assertEqual(self.repository.load_source(source.id), ready)
+
+    def test_missing_cache_has_no_viewer_url_and_returns_explicit_not_verified(self) -> None:
+        (self.root / self.allowed_source.evidence.path).unlink()
+        view = EvidenceReviewApplication(self.repository).fact_review(self.fact.id)
+        self.assertIsNone(view.anchors[0].evidence_url)
+        self.assertIn("NOT_LOCALLY_VERIFIED", view.anchors[0].blocked_reason)
+        server = create_server(self.root, 0)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            status, _headers, payload = self._get(server.server_port, f"/sources/{self.allowed_source.id}/evidence")
+            self.assertEqual(status, 404)
+            self.assertIn(b"NOT_LOCALLY_VERIFIED", payload)
+            status, _headers, payload = self._get(server.server_port, f"/sources/{self.allowed_source.id}")
+            self.assertEqual(status, 200)
+            self.assertIn(b"NOT_LOCALLY_VERIFIED", payload)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
+
     def test_projection_preserves_source_revision_bbox_quote_and_policy_gate(self) -> None:
         view = EvidenceReviewApplication(self.repository).fact_review(self.fact.id)
 

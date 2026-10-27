@@ -39,6 +39,20 @@ class WorkspaceContractTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.temporary.cleanup()
 
+    def test_old_contract_fails_explicitly_without_silent_migration(self) -> None:
+        root = self.git_workspace()
+        self.initialize(root)
+        path = root / WORKSPACE_MANIFEST_PATH
+        manifest = json.loads(path.read_text())
+        manifest["schema_contract"] = "typed-v1"
+        original = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+        path.write_text(original)
+        with self.assertRaisesRegex(WorkspaceError, "unsupported workspace schema contract"):
+            validate_workspace(root)
+        with self.assertRaises(WorkspaceError):
+            self.initialize(root)
+        self.assertEqual(path.read_text(), original)
+
     def git_workspace(self, name: str = "knowledge") -> Path:
         root = self.parent / name
         root.mkdir()
@@ -268,7 +282,7 @@ class WorkspacePackagingTests(WorkflowTestCase):
             names = set(archive.namelist())
             self.assertIn(WORKSPACE_MANIFEST_PATH.as_posix(), names)
             self.assertIn(f"knowledge/sources/{source.id}.json", names)
-            self.assertIn(evidence.path, names)
+            self.assertNotIn(evidence.path, names)
             self.assertEqual(
                 json.loads(archive.read("MANIFEST.json"))["format"],
                 workflow.PACKAGE_FORMAT,

@@ -226,7 +226,7 @@ class P02AgentCliTests(RepositoryTestCase):
             comment="human reviewed licensed fact",
         )
         subprocess.run(
-            ["git", "add", "knowledge", "evidence"], cwd=self.root, check=True
+            ["git", "add", "knowledge"], cwd=self.root, check=True
         )
         subprocess.run(
             [

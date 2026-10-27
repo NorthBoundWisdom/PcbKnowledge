@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/workflows/ci.yml)
 
-PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering knowledge repository and local review tool. It turns engineering statements from datasheets, application notes, reference designs, and similar sources into validated `Source`, `Entity`, `Fact`, and `EvidenceAnchor` records, with human review and Git publication as explicit boundaries.
+PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering knowledge repository and local review tool. It turns engineering statements from datasheets, application notes, reference designs, and similar sources into validated `Source`, `Entity`, `Fact`, and `EvidenceAnchor` records, with explicit review provenance, evidence levels, and Git publication boundaries.
 
-> **Open-source boundary:** this repository publishes software, schemas, documentation, Agent workflows, synthetic tests, evaluation harnesses, and explicitly reviewed runtime dependencies. Production knowledge, internal rules, waivers, historical reviews, and third-party PDF originals live in separately controlled knowledge workspaces. A publicly accessible datasheet is not automatically redistributable. See [`docs/open-source-boundary.md`](docs/open-source-boundary.md).
+> **Lightweight knowledge:** this repository also accepts small original summaries and annotations reviewed by an Agent under owner delegation. Intake is explicitly noncanonical; no human review or complete byte/bbox verification is invented. Original PDFs stay in an ignored local cache and are never committed or packaged. See [`docs/lightweight-knowledge.md`](docs/lightweight-knowledge.md).
 
 ## Current status
 
@@ -22,6 +22,22 @@ P0.4a Real private pilot              NEXT
 
 The P0 software path is implemented end-to-end: Agents can prepare typed Source/Entity/Fact authority in an explicitly selected knowledge workspace; humans can inspect exact Source evidence, review typed closure, approve or reject Source/Fact records, and then publish with ordinary Git. The GUI never stages, commits, or pushes.
 
+## Curated intake
+
+The first batch contains 3 TI sources and 20 independently Agent-reviewed annotations.
+Source hashes and seven rendered-page review receipts are retained; exact orderable
+identity and region bounding boxes remain unresolved. This is not a complete device
+model or a formal pilot pass. Review details live in `knowledge/intake/`.
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . intake list
+python3 configs/pcbknowledge_agent.py --repo . intake search LM358
+```
+
+Results remain `canonical: false`. `NOT_LOCALLY_VERIFIED` on a read means that reader
+has not checked local original bytes; it does not erase the recorded independent
+review receipt. See [the contract](docs/lightweight-knowledge.md) for evidence levels.
+
 ## Core authority
 
 ```text
@@ -30,16 +46,16 @@ knowledge/
 ├── entities/      ManufacturerV1 / ComponentV1 / PackageV1
 └── facts/         ComponentPinFactV1 / ParameterLimitFactV1
 
-evidence/sha256/  immutable PDF originals
+.pcbknowledge/evidence/sha256/  ignored local original cache (not Git authority)
 ```
 
 A Fact can bind to an exact Source revision, PDF page, normalized bounding box, and quote hash. Unknown values, conflicts, wrong packages, wrong revisions, missing evidence, and license blocks remain explicit instead of being filled from model priors.
 
 Published Knowledge is read only from a fully validated immutable Git ref containing committed `APPROVED` authority. Working-tree approval is not publication.
 
-## Public software versus private knowledge workspace
+## Explicit workspaces and lightweight curation
 
-The open-source repository is the software installation. Production knowledge belongs in a separate self-contained Git workspace:
+The software checkout can contain curated metadata. Use a separate controlled workspace for private knowledge; both pin their schema contract. `knowledge/intake/` is a reviewable noncanonical queue, not a replacement for typed Facts:
 
 ```text
 PcbKnowledge/                     public software
@@ -52,7 +68,7 @@ PcbKnowledgeData/                 private workspace
 │   ├── sources/
 │   ├── entities/
 │   └── facts/
-└── evidence/sha256/
+└── .pcbknowledge/evidence/sha256/  # ignored local cache
 ```
 
 Create a clean workspace:
@@ -141,7 +157,7 @@ Approved Facts are immutable in place and expose no mutation form. Corrections u
 
 ## P0.4a private pilot harness
 
-Real pilot data remains private, but the public repository now provides a deterministic evaluator for the first 3–5 IC / 20–40 Fact dataset. Deliberately wrong MPN/package/revision inputs are recorded as evaluation scenarios rather than false canonical Facts or Entities.
+Curated public intake is separate from the formal evidence-complete pilot. The repository provides a deterministic evaluator for the first 3–5 IC / 20–40 Fact dataset. Deliberately wrong MPN/package/revision inputs are recorded as evaluation scenarios rather than false canonical Facts or Entities.
 
 Create a private evaluation manifest:
 
@@ -180,10 +196,9 @@ Agents may:
 - submit Source/Fact records for human review;
 - prepare a `DATA_ONLY` handoff.
 
-Agents may not:
+Agents may review intake under explicit owner delegation and use the authorized main-branch Git workflow. Record the actual Agent actor. The canonical CLI still has no human-decision or Git-write operation. Agents may not:
 
-- approve or reject records;
-- stage, commit, or push Git changes;
+- impersonate human canonical approval;
 - bypass Source license policy;
 - infer facts from similar MPNs/devices or model priors;
 - silently switch workspaces;
@@ -203,14 +218,7 @@ Repository-local Agent skills enforce the same explicit-workspace boundary.
 
 ## Public source guard
 
-The public upstream intentionally keeps only placeholders under production authority roots:
-
-```text
-knowledge/sources/.gitkeep
-knowledge/entities/.gitkeep
-knowledge/facts/.gitkeep
-evidence/sha256/.gitkeep
-```
+The public upstream permits small original summaries, annotations, and metadata. The guard checks tracked files and the Git index, rejects source originals and oversized/binary knowledge payloads, and retains only explicitly reviewed software-vendor exceptions.
 
 The machine gate is:
 
@@ -247,7 +255,7 @@ See [`TODO.md`](TODO.md) for the executable roadmap.
 
 ## Contributing
 
-Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before contributing. Do not place internal material, unlicensed PDFs, real credentials, or production knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before contributing. Do not place internal material, unlicensed PDFs, real credentials, or private knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
 
 Report security issues privately according to [`SECURITY.md`](SECURITY.md).
 

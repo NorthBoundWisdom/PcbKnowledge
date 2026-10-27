@@ -1,5 +1,7 @@
 # Executable Pilot Scenarios
 
+> The formal canonical/visual pilot below is distinct from lightweight public intake. See [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md): original PDFs are local-only, and delegated curation acceptance does not establish a pilot pass.
+
 P0.4a uses real private engineering material, but most negative and regression
 checks do not need to remain manual. The executable scenario runner turns common
 pilot questions into deterministic, read-only queries against one explicitly

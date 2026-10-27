@@ -410,6 +410,7 @@ def render_source_detail(
         f'<div class="heading-actions">{status_badge(source.status)}'
         '<a class="button secondary" href="/sources">Back to sources</a></div></div>'
         f'<div class="badges record-missing">{missing}</div>'
+        f'<p>Local original: <strong>{escape(source.local_evidence_verification)}</strong>. Git publication validates metadata, not local bytes.</p>'
     )
     if source.status in {"DRAFT", "REJECTED"}:
         if source.status == "REJECTED" and source.review_history:

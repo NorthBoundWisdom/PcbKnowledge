@@ -95,6 +95,12 @@ class EvidenceReviewApplication:
                 )
             elif not source.evidence.present:
                 blocked_reason = "The referenced Source has no PDF evidence."
+            elif self.repository.evidence_verification(source.evidence) != "VERIFIED":
+                blocked_reason = (
+                    "Local original is "
+                    + self.repository.evidence_verification(source.evidence)
+                    + "; metadata publication does not supply original bytes."
+                )
             else:
                 evidence_url = f"/sources/{source.id}/evidence"
 

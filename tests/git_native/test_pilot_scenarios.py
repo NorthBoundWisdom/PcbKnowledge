@@ -166,7 +166,7 @@ class PilotScenarioRunnerTests(RepositoryTestCase):
             page=5,
             quote="Input voltage 4.5 to 36 V",
         )
-        subprocess.run(["git", "add", "knowledge", "evidence"], cwd=self.root, check=True)
+        subprocess.run(["git", "add", "knowledge"], cwd=self.root, check=True)
         subprocess.run(
             [
                 "git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",

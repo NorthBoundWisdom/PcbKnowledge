@@ -6,6 +6,7 @@
 
 | Topic | Authoritative document |
 | --- | --- |
+| Curation, delegated review, evidence levels, and local cache | [`lightweight-knowledge.md`](lightweight-knowledge.md) |
 | Product role, Git-native authority, runtime boundary, and evolution | [`architecture.md`](architecture.md) |
 | Separation between open-source software and private knowledge/evidence | [`open-source-boundary.md`](open-source-boundary.md) |
 | Local workflow for product managers and engineers | [`local-workflow.md`](local-workflow.md) |
@@ -20,7 +21,7 @@
 
 1. Keep one durable authority per topic. Adjacent documents link to it instead of copying status, boundaries, or schema contracts.
 2. Architecture documents describe stable current behavior and explicit evolution boundaries. Unfinished execution work belongs in the root TODO.
-3. The public upstream is never the production knowledge/evidence authority. Real data lives in a separately controlled private Git workspace.
+3. Public curated metadata follows [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md); private data stays controlled and original documents stay outside Git.
 4. Evaluation metadata for deliberately wrong/ambiguous scenarios is not canonical engineering authority; keep sensitive real pilot observations private.
 5. Pilot session/evaluation state stays outside the selected knowledge workspace so it cannot contaminate `DATA_ONLY` publication scope or P0.3c review decisions.
 6. When moving, renaming, or merging documents, update repository links in README files, ADRs, scripts, tests, and skills in the same change.

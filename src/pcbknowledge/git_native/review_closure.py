@@ -64,6 +64,9 @@ class ReviewClosureApplication:
         approval_blockers = tuple(
             f"Missing {field}" for field in source.missing_fields
         )
+        verification = self.repository.evidence_verification(source.evidence)
+        if verification != "VERIFIED":
+            approval_blockers += (f"Evidence is {verification}",)
         return ReviewDecisionView(
             kind="SOURCE",
             record_id=source.id,
@@ -152,8 +155,8 @@ class ReviewClosureApplication:
             blockers.append(scope_blocker)
         return tuple(blockers)
 
-    @staticmethod
     def _fact_approval_blockers(
+        self,
         fact: FactRecord,
         *,
         source_map: dict[str, SourceRecord],
@@ -171,8 +174,9 @@ class ReviewClosureApplication:
                 blockers.append(
                     f"Source {source_id} is {source.status.value}, not APPROVED"
                 )
-            if not source.evidence.present:
-                blockers.append(f"Source {source_id} has no PDF evidence")
+            verification = self.repository.evidence_verification(source.evidence)
+            if verification != "VERIFIED":
+                blockers.append(f"Source {source_id} evidence is {verification}")
             if not source.agent_processing_allowed:
                 blockers.append(
                     f"Source {source_id} license {source.license_class.value} "
@@ -184,8 +188,6 @@ class ReviewClosureApplication:
         self, source: SourceRecord, sources: Iterable[SourceRecord]
     ) -> tuple[str, ...]:
         paths = [self.repository.source_path(source.id).relative_to(self.repository.root).as_posix()]
-        if source.evidence.path is not None:
-            paths.append(source.evidence.path)
         if source.supersedes is not None:
             predecessor = next(
                 (item for item in sources if item.id == source.supersedes), None
@@ -242,8 +244,6 @@ class ReviewClosureApplication:
                 .relative_to(self.repository.root)
                 .as_posix()
             )
-            if source.evidence.path is not None:
-                paths.append(source.evidence.path)
         return tuple(dict.fromkeys(paths))
 
     def _selected_changes(self, paths: tuple[str, ...]) -> SelectedChangeView:

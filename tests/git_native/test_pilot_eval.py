@@ -34,7 +34,7 @@ from tests.git_native.support import RepositoryTestCase, minimal_pdf
 class PilotEvaluationHarnessTests(RepositoryTestCase):
     @staticmethod
     def _commit_all(root: Path, message: str) -> None:
-        subprocess.run(["git", "add", "knowledge", "evidence"], cwd=root, check=True)
+        subprocess.run(["git", "add", "knowledge"], cwd=root, check=True)
         subprocess.run(
             [
                 "git",

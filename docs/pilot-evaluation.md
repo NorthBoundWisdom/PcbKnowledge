@@ -1,9 +1,10 @@
 # P0.4a Pilot Evaluation
 
-P0.4a is the first stage that intentionally uses real engineering documents. The
-public PcbKnowledge repository therefore provides the evaluation **harness and
-contract**, while real Sources, Facts, PDFs, observations, and review receipts stay
-in a separately controlled private workspace or private evaluation location.
+> The formal canonical/visual pilot below is distinct from lightweight public intake. See [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md): original PDFs are local-only, and delegated curation acceptance does not establish a pilot pass.
+
+The formal pilot validates complete typed evidence and review closure beyond the
+lightweight public curation queue. Sensitive observations stay in a separately
+controlled workspace or evaluation location; original PDFs remain local-only.
 
 The purpose of the pilot is not to prove that a synthetic fixture can pass the
 model. It is to expose schema, evidence-anchor, revision, package, review, and
@@ -19,7 +20,6 @@ schemas/
 knowledge/sources/
 knowledge/entities/
 knowledge/facts/
-evidence/sha256/
 Git history
 ```
 
@@ -311,11 +311,11 @@ Do not add a broad free-text Fact escape hatch simply to make the pilot green.
 
 ## Public repository safety
 
-The public repository contains only the evaluator implementation, tests, and a
-synthetic example manifest. It must not receive:
+Public intake and original annotations are allowed separately from this formal
+evaluation harness. The public repository must not receive:
 
 - real vendor PDF originals;
-- real production Source/Entity/Fact authority;
+- private or falsely approved Source/Entity/Fact authority;
 - internal engineering rules or customer material;
 - private pilot observations that disclose non-public design work;
 - credentials or authenticated download URLs.

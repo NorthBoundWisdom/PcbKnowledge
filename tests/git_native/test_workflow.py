@@ -93,6 +93,22 @@ class LocalWorkflowTests(WorkflowTestCase):
         extra.write_text("NEW = True\n", encoding="utf-8")
         self.assertNotEqual(workflow.build_signature(self.root), before)
 
+    def test_package_includes_validated_curated_intake_but_no_originals(self) -> None:
+        from tests.git_native.test_intake import sample
+        from pcbknowledge.git_native.intake import IntakeError
+        repository = KnowledgeRepository(self.root)
+        repository.ensure_layout()
+        directory = self.root / "knowledge/intake"
+        directory.mkdir()
+        path = directory / "synthetic.json"
+        path.write_text(json.dumps(sample()), encoding="utf-8")
+        self.assertIn(path.relative_to(self.root), workflow.package_files(self.root))
+        invalid = sample()
+        invalid["canonical"] = True
+        path.write_text(json.dumps(invalid), encoding="utf-8")
+        with self.assertRaises(IntakeError):
+            workflow.package_files(self.root)
+
     def test_package_is_reproducible_and_contains_only_validated_data(self) -> None:
         repository = KnowledgeRepository(self.root)
         repository.ensure_layout()
@@ -123,7 +139,7 @@ class LocalWorkflowTests(WorkflowTestCase):
             names = archive.namelist()
             self.assertIn("MANIFEST.json", names)
             self.assertIn(f"knowledge/sources/{record.id}.json", names)
-            self.assertIn(evidence.path, names)
+            self.assertNotIn(evidence.path, names)
             self.assertIn("schemas/source-record.schema.json", names)
             self.assertIn("schemas/entity-record.schema.json", names)
             self.assertIn("schemas/fact-record.schema.json", names)

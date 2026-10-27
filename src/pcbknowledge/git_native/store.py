@@ -55,7 +55,7 @@ _SOURCE_FILENAME = re.compile(r"pk_[0-9a-f]{24,32}\.json\Z")
 _ENTITY_FILENAME = re.compile(r"ent_[0-9a-f]{24,32}\.json\Z")
 _FACT_FILENAME = re.compile(r"fact_[0-9a-f]{24,32}\.json\Z")
 _EVIDENCE_PATH = re.compile(
-    r"evidence/sha256/(?P<prefix>[0-9a-f]{2})/"
+    r"\.pcbknowledge/evidence/sha256/(?P<prefix>[0-9a-f]{2})/"
     r"(?P<digest>[0-9a-f]{64})\.pdf\Z"
 )
 _DATA_ROOTS = ("knowledge/", "evidence/")
@@ -115,6 +115,7 @@ class AuthoritySnapshot:
     conflicts: tuple[FactConflict, ...] = ()
     ref: str | None = None
     commit: str | None = None
+    local_evidence_verification: tuple[tuple[str, str], ...] = ()
 
     @property
     def published_sources(self) -> tuple[SourceRecord, ...]:
@@ -152,7 +153,7 @@ class KnowledgeRepository:
         self.entities_dir = resolved / "knowledge" / "entities"
         self.facts_dir = resolved / "knowledge" / "facts"
         self.legacy_records_dir = resolved / "knowledge" / "records"
-        self.evidence_dir = resolved / "evidence" / "sha256"
+        self.evidence_dir = resolved / ".pcbknowledge" / "evidence" / "sha256"
         self.schemas_dir = resolved / "schemas"
         self.state_dir = resolved / ".pcbknowledge"
 
@@ -165,11 +166,15 @@ class KnowledgeRepository:
         self._write_lock_stream: BinaryIO | None = None
 
     def ensure_layout(self) -> None:
+        for directory in (self.state_dir, self.state_dir / "evidence"):
+            if directory.is_symlink():
+                raise RepositoryError("local cache parent is unsafe")
         for directory in (
             self.sources_dir,
             self.entities_dir,
             self.facts_dir,
             self.evidence_dir,
+            self.root / "evidence" / "sha256",
         ):
             directory.mkdir(parents=True, exist_ok=True)
             if directory.is_symlink() or not directory.is_dir():
@@ -340,7 +345,6 @@ class KnowledgeRepository:
             self._atomic_replace(
                 self.source_path(updated.id), updated.canonical_json()
             )
-            self._prune_replaced_evidence(previous.evidence, updated.evidence)
 
     def save(
         self,
@@ -644,7 +648,7 @@ class KnowledgeRepository:
         if len(payload) > MAX_PDF_BYTES:
             raise EvidenceError(f"PDF must be at most {MAX_PDF_BYTES} bytes")
         digest = hashlib.sha256(payload).hexdigest()
-        relative = Path("evidence") / "sha256" / digest[:2] / f"{digest}.pdf"
+        relative = Path(".pcbknowledge") / "evidence" / "sha256" / digest[:2] / f"{digest}.pdf"
         return Evidence(
             path=relative.as_posix(),
             sha256=digest,
@@ -702,6 +706,21 @@ class KnowledgeRepository:
             raise EvidenceError(f"PDF exceeds {MAX_PDF_BYTES} bytes")
         return self.inspect_pdf_bytes(resolved.read_bytes())
 
+    def evidence_verification(self, evidence: Evidence) -> str:
+        """Derived local state; metadata publication is not byte verification."""
+        evidence.validate()
+        if not evidence.present:
+            return "NOT_LOCALLY_VERIFIED"
+        assert evidence.path is not None
+        path = self.root / evidence.path
+        if not path.exists() and not path.is_symlink():
+            return "NOT_LOCALLY_VERIFIED"
+        try:
+            self.verify_evidence(evidence)
+        except (EvidenceError, OSError):
+            return "TAMPERED"
+        return "VERIFIED"
+
     def verify_evidence(self, evidence: Evidence) -> None:
         evidence.validate()
         if not evidence.present:
@@ -710,14 +729,21 @@ class KnowledgeRepository:
         assert evidence.sha256 is not None
         assert evidence.byte_size is not None
         path = self.root / evidence.path
+        for parent in path.parents:
+            if parent == self.root:
+                break
+            if parent.is_symlink():
+                raise EvidenceError("evidence cache parent is a symlink")
         try:
             stat = path.lstat()
         except FileNotFoundError as error:
-            raise EvidenceError(f"evidence file is missing: {evidence.path}") from error
+            raise EvidenceError(f"NOT_LOCALLY_VERIFIED: evidence file is missing: {evidence.path}") from error
         if path.is_symlink() or not path.is_file():
             raise EvidenceError(
                 f"evidence path is not a regular file: {evidence.path}"
             )
+        if stat.st_size > MAX_PDF_BYTES:
+            raise EvidenceError(f"PDF exceeds {MAX_PDF_BYTES} bytes")
         if stat.st_size != evidence.byte_size:
             raise EvidenceError(
                 f"evidence size does not match source: {evidence.path}"
@@ -761,13 +787,11 @@ class KnowledgeRepository:
 
         conflicts = self._validate_records(sources, entities, facts)
 
-        referenced_evidence: set[str] = set()
         for source in sources:
             if source.evidence.present:
-                self.verify_evidence(source.evidence)
-                assert source.evidence.path is not None
-                referenced_evidence.add(source.evidence.path)
-        self._validate_evidence_layout(referenced_evidence)
+                if self.evidence_verification(source.evidence) == "TAMPERED":
+                    self.verify_evidence(source.evidence)
+        self._validate_evidence_layout()
         self._validate_committed_authority(sources, entities, facts)
 
         return AuthoritySnapshot(
@@ -775,6 +799,10 @@ class KnowledgeRepository:
             entities=entities,
             facts=facts,
             conflicts=conflicts,
+            local_evidence_verification=tuple(
+                (source.id, self.evidence_verification(source.evidence))
+                for source in sources
+            ),
         )
 
     def _validate_records(
@@ -971,6 +999,10 @@ class KnowledgeRepository:
             conflicts=self._fact_conflicts(approved_facts),
             ref=ref,
             commit=complete.commit,
+            local_evidence_verification=tuple(
+                (source.id, self.evidence_verification(source.evidence))
+                for source in approved_sources
+            ),
         )
 
     def list_published(self, *, ref: str = "HEAD") -> list[SourceRecord]:
@@ -1001,6 +1033,7 @@ class KnowledgeRepository:
                 "knowledge/facts",
                 "knowledge/records",
                 "evidence/sha256",
+                ".pcbknowledge",
                 *(path.as_posix() for path in SCHEMA_PATHS),
             )
         )
@@ -1008,7 +1041,6 @@ class KnowledgeRepository:
         source_paths: list[str] = []
         entity_paths: list[str] = []
         fact_paths: list[str] = []
-        evidence_paths: list[str] = []
         schema_paths: list[str] = []
         typed_content_present = False
 
@@ -1052,15 +1084,10 @@ class KnowledgeRepository:
                 fact_paths.append(relative)
                 typed_content_present = True
                 continue
-            if relative.startswith("evidence/sha256/"):
-                match = _EVIDENCE_PATH.fullmatch(relative)
-                if match is None or match["prefix"] != match["digest"][:2]:
-                    raise EvidenceError(
-                        f"unexpected published evidence path: {relative}"
-                    )
-                evidence_paths.append(relative)
-                typed_content_present = True
-                continue
+            if relative.startswith(("evidence/", ".pcbknowledge/")):
+                raise EvidenceError(
+                    f"original evidence/cache must not be committed: {relative}"
+                )
             if Path(relative) in SCHEMA_PATHS:
                 schema_paths.append(relative)
                 typed_content_present = True
@@ -1101,50 +1128,8 @@ class KnowledgeRepository:
         )
 
         conflicts = self._validate_records(sources, entities, facts)
-        evidence_metadata: dict[str, tuple[int, str]] = {}
-        for relative in sorted(evidence_paths):
-            payload = self._read_ref_blob(
-                commit, relative, maximum_bytes=MAX_PDF_BYTES
-            )
-            if not payload.startswith(b"%PDF-"):
-                raise EvidenceError(f"published evidence is not a PDF: {relative}")
-            digest = hashlib.sha256(payload).hexdigest()
-            match = _EVIDENCE_PATH.fullmatch(relative)
-            assert match is not None
-            if digest != match["digest"]:
-                raise EvidenceError(
-                    f"published evidence hash does not match path: {relative}"
-                )
-            evidence_metadata[relative] = (len(payload), digest)
-
-        referenced: set[str] = set()
-        for source in sources:
-            if not source.evidence.present:
-                continue
-            assert source.evidence.path is not None
-            assert source.evidence.byte_size is not None
-            assert source.evidence.sha256 is not None
-            metadata = evidence_metadata.get(source.evidence.path)
-            if metadata is None:
-                raise EvidenceError(
-                    f"published evidence is missing from {ref}: "
-                    f"{source.evidence.path}"
-                )
-            byte_size, digest = metadata
-            if (
-                byte_size != source.evidence.byte_size
-                or digest != source.evidence.sha256
-            ):
-                raise EvidenceError(
-                    f"published evidence does not match source: "
-                    f"{source.evidence.path}"
-                )
-            referenced.add(source.evidence.path)
-        orphaned = sorted(set(evidence_metadata) - referenced)
-        if orphaned:
-            raise EvidenceError(
-                f"unreferenced published evidence file: {orphaned[0]}"
-            )
+        # Git validates only metadata closure. Local cache availability is a
+        # separate projection and never changes the identity of a pinned ref.
 
         return AuthoritySnapshot(
             sources=self._sorted_sources(sources),
@@ -1451,8 +1436,8 @@ class KnowledgeRepository:
                     f"unexpected {label} layout entry: {path}"
                 )
 
-    def _validate_evidence_layout(self, referenced: set[str]) -> None:
-        discovered: set[str] = set()
+    def _validate_evidence_layout(self) -> None:
+        # Valid cache entries may belong to other revisions or curated intake.
         for path in sorted(self.evidence_dir.rglob("*")):
             relative = path.relative_to(self.root).as_posix()
             if path.is_symlink():
@@ -1484,15 +1469,14 @@ class KnowledgeRepository:
                 media_type="application/pdf",
             )
             self.verify_evidence(evidence)
-            discovered.add(relative)
-        orphaned = sorted(discovered - referenced)
-        if orphaned:
-            raise EvidenceError("unreferenced evidence file: " + orphaned[0])
 
     def _validate_source_for_write(self, source: SourceRecord) -> None:
         if source.status is RecordStatus.APPROVED:
             self._validate_schema_files()
-        if source.evidence.present:
+        if source.evidence.present and (
+            source.status is RecordStatus.APPROVED
+            or self.evidence_verification(source.evidence) == "TAMPERED"
+        ):
             self.verify_evidence(source.evidence)
         if source.supersedes is not None:
             target = self.load_source(source.supersedes)
@@ -1537,6 +1521,9 @@ class KnowledgeRepository:
             entity_map=entities,
             fact_map=fact_map,
         )
+        if fact.status is RecordStatus.APPROVED:
+            for source_id in fact.source_ids:
+                self.verify_evidence(sources[source_id].evidence)
         prospective = (*existing_facts, fact)
         conflicts = self._fact_conflicts(prospective, approved_only=True)
         if conflicts:
@@ -1583,38 +1570,6 @@ class KnowledgeRepository:
         if path.read_text(encoding="utf-8") != canonical:
             raise RecordValidationError(f"{label} is not canonical JSON: {path}")
 
-    # Evidence cleanup --------------------------------------------------
-
-    def _prune_replaced_evidence(
-        self, previous: Evidence, updated: Evidence
-    ) -> None:
-        if not previous.present or previous.path == updated.path:
-            return
-        assert previous.path is not None
-
-        # All current Source refs own evidence. Facts only anchor a Source and
-        # therefore never participate in PDF cleanup.
-        for source in self.list_sources():
-            if source.evidence.path == previous.path:
-                return
-
-        # Preserve bytes still used by a committed Source, even if another
-        # inconsistency means the published snapshot will subsequently fail.
-        for source in self.list_published():
-            if source.evidence.path == previous.path:
-                return
-
-        candidate = self.root / previous.path
-        if candidate.exists():
-            if candidate.is_symlink() or not candidate.is_file():
-                raise EvidenceError(
-                    f"replaced evidence path is unsafe: {previous.path}"
-                )
-            candidate.unlink()
-            try:
-                candidate.parent.rmdir()
-            except OSError:
-                pass
 
     # Git change inspection --------------------------------------------
 

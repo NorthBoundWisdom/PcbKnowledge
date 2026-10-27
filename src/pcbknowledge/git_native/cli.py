@@ -66,7 +66,7 @@ def _repository(root: str) -> KnowledgeRepository:
     return repository
 
 
-def _source_projection(record: SourceRecord) -> dict[str, Any]:
+def _source_projection(record: SourceRecord, repository: KnowledgeRepository) -> dict[str, Any]:
     value = record.to_dict()
     evidence = value["evidence"]
     if not isinstance(evidence, dict):
@@ -95,6 +95,7 @@ def _source_projection(record: SourceRecord) -> dict[str, Any]:
         "next_actions": list(record.next_actions),
         "agent_processing_allowed": record.agent_processing_allowed,
         "evidence_access": evidence_access,
+        "local_evidence_verification": repository.evidence_verification(record.evidence),
     }
 
 
@@ -341,7 +342,7 @@ def _source_create(repository: KnowledgeRepository, arguments: argparse.Namespac
             raise RecordConflictError(
                 "idempotency key already exists with different content; use source update"
             )
-        _print({**_source_projection(existing), "replayed": True})
+        _print({**_source_projection(existing, repository), "replayed": True})
         return 0
 
     validated = blank.edit(
@@ -376,7 +377,7 @@ def _source_create(repository: KnowledgeRepository, arguments: argparse.Namespac
         source_type=validated.source_type,
     )
     repository.insert_source(updated)
-    _print({**_source_projection(updated), "replayed": False})
+    _print({**_source_projection(updated, repository), "replayed": False})
     return 0
 
 
@@ -431,7 +432,7 @@ def _source_update(repository: KnowledgeRepository, arguments: argparse.Namespac
         imported = repository.import_pdf_path(Path(arguments.pdf))
         updated = record.edit(evidence=imported, **values)
     repository.save_source(record, updated, arguments.expected_revision)
-    _print(_source_projection(updated))
+    _print(_source_projection(updated, repository))
     return 0
 
 
@@ -445,7 +446,7 @@ def _source_submit(repository: KnowledgeRepository, arguments: argparse.Namespac
     updated = repository.submit_source(
         arguments.record_id, expected_revision=arguments.expected_revision
     )
-    _print(_source_projection(updated))
+    _print(_source_projection(updated, repository))
     return 0
 
 
@@ -455,12 +456,12 @@ def _source_list(repository: KnowledgeRepository, arguments: argparse.Namespace)
         if arguments.published
         else repository.list_sources(status=arguments.status)
     )
-    _print([_source_projection(record) for record in records])
+    _print([_source_projection(record, repository) for record in records])
     return 0
 
 
 def _source_show(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
-    _print(_source_projection(repository.load_source(arguments.record_id)))
+    _print(_source_projection(repository.load_source(arguments.record_id), repository))
     return 0
 
 
@@ -1020,12 +1021,28 @@ def _fact_submit(repository: KnowledgeRepository, arguments: argparse.Namespace)
     return 0
 
 
+# Curated intake is deliberately separate from canonical Fact authority.
+
+def _intake_list(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake import load_intake
+    _print(load_intake(repository.root))
+    return 0
+
+
+def _intake_search(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake import search_intake
+    _print(search_intake(repository.root, arguments.query))
+    return 0
+
+
 # Repository/report commands -----------------------------------------
 
 
 def _validate(repository: KnowledgeRepository, _arguments: argparse.Namespace) -> int:
     snapshot = repository.validate_all(require_canonical=True)
     published = repository.read_published_snapshot()
+    from pcbknowledge.git_native.intake import load_intake
+    batches = load_intake(repository.root)
     _print(
         {
             "status": "VALID",
@@ -1035,6 +1052,9 @@ def _validate(repository: KnowledgeRepository, _arguments: argparse.Namespace) -
             "conflicts": len(snapshot.conflicts),
             "published_sources": len(published.sources),
             "published_facts": len(published.facts),
+            "curated_intake_batches": len(batches),
+            "validation_scope": "METADATA_CLOSURE",
+            "local_evidence_verification": dict(snapshot.local_evidence_verification),
         }
     )
     return 0
@@ -1592,6 +1612,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     _add_entity_commands(subparsers)
     _add_fact_commands(subparsers)
     _add_legacy_source_commands(subparsers)
+
+    intake_parser = subparsers.add_parser("intake", help="read curated non-canonical knowledge")
+    intake_actions = intake_parser.add_subparsers(dest="intake_action", required=True)
+    intake_list = intake_actions.add_parser("list")
+    intake_list.set_defaults(handler=_intake_list)
+    intake_search = intake_actions.add_parser("search")
+    intake_search.add_argument("query")
+    intake_search.set_defaults(handler=_intake_search)
 
     validate_parser = subparsers.add_parser("validate")
     validate_parser.set_defaults(handler=_validate)

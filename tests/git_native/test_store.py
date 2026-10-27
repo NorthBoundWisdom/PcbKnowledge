@@ -164,8 +164,42 @@ class TypedKnowledgeRepositoryTests(RepositoryTestCase):
 
         assert evidence.path is not None
         (self.root / evidence.path).write_bytes(minimal_pdf("tampered"))
+        self.assertEqual(self.repository.evidence_verification(evidence), "TAMPERED")
         with self.assertRaisesRegex(EvidenceError, "size|hash"):
             self.repository.verify_evidence(evidence)
+
+    def test_retained_cache_from_another_revision_does_not_block_metadata(self) -> None:
+        old = self.repository.import_pdf_bytes(minimal_pdf("other revision retained locally"))
+        current = self.create_approved_source("current revision")
+        self.repository.validate_all()
+        from configs.pcbknowledge_workflow import package_files
+        paths = {path.as_posix() for path in package_files(self.root)}
+        self.assertNotIn(old.path, paths)
+        self.assertNotIn(current.evidence.path, paths)
+        self.assertTrue((self.root / old.path).exists())
+        self.assertEqual(self.repository.evidence_verification(old), "VERIFIED")
+
+    def test_cache_is_ignored_and_missing_bytes_do_not_invalidate_metadata(self) -> None:
+        source = self.create_approved_source("cache-local")
+        evidence = source.evidence
+        self.assertTrue(evidence.path.startswith(".pcbknowledge/evidence/sha256/"))
+        subprocess.run(["git", "check-ignore", "--quiet", evidence.path], cwd=self.root, check=True)
+        snapshot = self.repository.validate_all()
+        self.assertEqual(dict(snapshot.local_evidence_verification)[source.id], "VERIFIED")
+        (self.root / evidence.path).unlink()
+        snapshot = self.repository.validate_all()
+        self.assertEqual(dict(snapshot.local_evidence_verification)[source.id], "NOT_LOCALLY_VERIFIED")
+        with self.assertRaisesRegex(EvidenceError, "NOT_LOCALLY_VERIFIED"):
+            self.repository.verify_evidence(evidence)
+
+    def test_published_snapshot_rejects_forced_cache_blob(self) -> None:
+        source = self.create_approved_source("forced-cache")
+        subprocess.run(["git", "add", "knowledge"], cwd=self.root, check=True)
+        subprocess.run(["git", "add", "-f", source.evidence.path], cwd=self.root, check=True)
+        subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                        "commit", "-qm", "invalid forced original"], cwd=self.root, check=True)
+        with self.assertRaisesRegex(EvidenceError, "must not be committed"):
+            self.repository.read_published_snapshot()
 
     def test_entities_are_idempotent_unique_and_referentially_closed(self) -> None:
         manufacturer, component, package = self.create_entities()
@@ -332,7 +366,7 @@ class TypedKnowledgeRepositoryTests(RepositoryTestCase):
                 second.id, expected_revision=second.revision_token, comment=None
             )
 
-    def test_validate_all_rejects_layout_orphan_and_missing_supersedes(self) -> None:
+    def test_validate_all_rejects_bad_layout_but_allows_valid_retained_cache(self) -> None:
         unexpected = self.repository.facts_dir / "notes.json"
         unexpected.write_text("{}\n", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "unexpected fact layout"):
@@ -340,8 +374,7 @@ class TypedKnowledgeRepositoryTests(RepositoryTestCase):
         unexpected.unlink()
 
         evidence = self.repository.import_pdf_bytes(minimal_pdf("orphan"))
-        with self.assertRaisesRegex(EvidenceError, "unreferenced evidence"):
-            self.repository.validate_all()
+        self.repository.validate_all()
         assert evidence.path is not None
         (self.root / evidence.path).unlink()
 
@@ -396,7 +429,7 @@ class TypedKnowledgeRepositoryTests(RepositoryTestCase):
             fact.id, expected_revision=fact.revision_token, comment="reviewed"
         )
         subprocess.run(
-            ["git", "add", "knowledge", "evidence"], cwd=self.root, check=True
+            ["git", "add", "knowledge"], cwd=self.root, check=True
         )
         subprocess.run(
             [
@@ -461,7 +494,7 @@ class TypedKnowledgeRepositoryTests(RepositoryTestCase):
             fact.id, expected_revision=fact.revision_token, comment="reviewed"
         )
         subprocess.run(
-            ["git", "add", "knowledge", "evidence"], cwd=self.root, check=True
+            ["git", "add", "knowledge"], cwd=self.root, check=True
         )
         subprocess.run(
             [

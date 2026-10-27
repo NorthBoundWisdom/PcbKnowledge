@@ -41,7 +41,7 @@ FACT_ID = "fact_0123456789abcdef01234567"
 def described_evidence() -> Evidence:
     digest = "a" * 64
     return Evidence(
-        path=f"evidence/sha256/aa/{digest}.pdf",
+        path=f".pcbknowledge/evidence/sha256/aa/{digest}.pdf",
         sha256=digest,
         byte_size=42,
         media_type="application/pdf",

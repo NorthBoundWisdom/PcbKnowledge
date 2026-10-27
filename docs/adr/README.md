@@ -23,12 +23,13 @@ ADRs record durable choices from the architecture baseline. `Accepted` decisions
 | [017](ADR-017-two-role-review.md) | Superseded | Historical shared-service role model; human review intent remains |
 | [018](ADR-018-git-native-local-editor.md) | Accepted | Git-native local editor supersedes the service-platform MVP decisions |
 | [019](ADR-019-git-publication-boundary.md) | Accepted | Git commit is publication; data and policy/contract changes use separate commits |
-| [020](ADR-020-knowledge-workspace-boundary.md) | Accepted | Public software and self-contained knowledge workspaces are separate Git repositories |
+| [020](ADR-020-knowledge-workspace-boundary.md) | Partly superseded by 021 | Explicit workspaces and pinned schemas remain; public data-empty rule retired |
+| [021](ADR-021-lightweight-curation-local-evidence.md) | Accepted | Small delegated-review curation in Git; original evidence in ignored local cache |
 
 ADR-018 supersedes ADR-002, ADR-003, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009, and ADR-017 for the executable local product. Those files remain historical records rather than descriptions of the current runtime.
 
 ADR-019 clarifies the Git-native authority introduced by ADR-018: a working-tree approval is not yet published knowledge, and one publication commit must not combine knowledge/evidence data with the schema/policy contract it depends on.
 
-ADR-020 extends ADR-018/019 after the software repository became open source. Production authority now lives in an explicitly selected, self-contained knowledge Git workspace with a canonical manifest and pinned schema snapshot. The public source checkout remains data-empty.
+ADR-020 extends ADR-018/019 after the software repository became open source. Production authority now lives in an explicitly selected, self-contained knowledge Git workspace with a canonical manifest and pinned schema snapshot. Its historical public data-empty restriction and Git-original requirement are superseded by ADR-021. Explicit selection and pinned schemas remain current.
 
 Changes to an accepted decision require a new superseding ADR. Edit an ADR only to fix non-semantic errors or clarify facts that were true at decision time.

@@ -195,7 +195,7 @@
       "properties": {
         "path": {
           "type": "string",
-          "pattern": "^evidence/sha256/[0-9a-f]{2}/[0-9a-f]{64}\\.pdf$"
+          "pattern": "^\\.pcbknowledge/evidence/sha256/[0-9a-f]{2}/[0-9a-f]{64}\\.pdf$"
         },
         "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
         "byte_size": { "type": "integer", "minimum": 1 },

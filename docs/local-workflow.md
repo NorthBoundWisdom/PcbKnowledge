@@ -7,11 +7,11 @@ python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 ```
 
-Config and Build are software-checkout operations. They validate the repository's empty development-workspace contract, compile the local editor, run the standard-library test suite, and write local receipts. No account, Docker service, network download, or database is created.
+Config and Build are software-checkout operations. They validate the repository's pinned workspace contract, compile the local editor, run the standard-library test suite, and write local receipts. No account, Docker service, network download, or database is created.
 
 ## Create a knowledge workspace
 
-Production knowledge lives in a separate Git repository:
+Private knowledge belongs in a separate Git repository; public curated intake may live with the software. See [the current contract](lightweight-knowledge.md).
 
 ```bash
 mkdir ../PcbKnowledgeData
@@ -64,16 +64,16 @@ The repository-local skills validate `<workspace>` before ingestion and keep `--
 
 ## Review a Source batch
 
-The current GUI is still the Source Corpus editor. Its workflow is:
+The typed Source/Entity/Fact workbench supports the canonical review flow. For a Source:
 
 1. Create or open a draft; leave unknown values empty.
 2. Select a PDF and save the draft.
 3. Submit the record for review when required information is complete.
 4. An engineer verifies the source and approves it, or rejects it with a specific reason.
-5. Open the repository-change view and inspect the workspace JSON diff plus binary evidence receipt.
+5. Open the repository-change view and inspect the workspace JSON diff plus local evidence verification receipt (originals are not staged).
 6. Use the team's normal Git GUI or command-line workflow to stage, commit, and push accepted data.
 
-P0.3 replaces this Source-only review flow with typed Source/Entity/Fact evidence review.
+Fact review additionally checks exact entity/package scope, typed closure, and evidence anchors. Delegated intake follows the separate lightweight contract.
 
 ## Test and package an external workspace
 
@@ -82,7 +82,7 @@ python3 configs/pcbknowledge_workflow.py test --workspace ../PcbKnowledgeData
 python3 configs/pcbknowledge_workflow.py package --workspace ../PcbKnowledgeData
 ```
 
-`test` runs the full software test suite and additionally validates the selected external workspace. `package` reads the selected workspace manifest, pinned schemas, canonical authority, and referenced evidence. The ZIP and SHA-256 sidecar are written under the software checkout's ignored `build/package/` directory, not into the knowledge authority repository.
+`test` runs the full software test suite and additionally validates the selected external workspace. `package` reads the selected workspace manifest, pinned schemas, canonical authority, curated intake, and evidence metadata only. Original cache bytes are never packaged. The ZIP and SHA-256 sidecar are written under the software checkout's ignored `build/package/` directory, not into the knowledge authority repository.
 
 ## Collaboration guidance
 
@@ -91,7 +91,7 @@ python3 configs/pcbknowledge_workflow.py package --workspace ../PcbKnowledgeData
 - Pull before ingestion to reduce concurrent edits to the same authority object.
 - Never rename content-addressed evidence manually; its path is derived from the digest.
 - Correct a committed approved record by creating a new record and linking the prior ID through `supersedes`.
-- Never move production data into the public PcbKnowledge source checkout.
+- Never move private data or source originals into the public checkout. Only small original curated metadata belongs in public Git.
 
 ## Local gates
 

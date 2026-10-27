@@ -1,7 +1,8 @@
 # PcbKnowledge Git-native architecture
 
 > Status: P0.3 Local Review Workbench implementation complete; P0.4a real-data pilot next
-> Updated: 2026-08-18
+> Updated: 2026-10-27
+> Current storage/curation decision: [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md)
 > Primary decisions: [ADR-018](adr/ADR-018-git-native-local-editor.md), [ADR-019](adr/ADR-019-git-publication-boundary.md), [ADR-020](adr/ADR-020-knowledge-workspace-boundary.md)
 > Evidence coordinates: [ADR-013](adr/ADR-013-evidence-anchor-coordinates.md)
 > Open-source boundary: [`open-source-boundary.md`](open-source-boundary.md)
@@ -16,7 +17,7 @@ An Agent harness may combine both systems for a task, but PcbKnowledge is not a 
 
 ## 2. Public software versus private knowledge workspace
 
-The open-source software repository and a production knowledge repository are physically distinct Git repositories.
+Public curated metadata may live with software. Private knowledge uses a separately controlled Git repository. The intake queue is not canonical authority; see [evidence levels and delegation](lightweight-knowledge.md).
 
 ```text
 PcbKnowledge/                    public software checkout
@@ -26,8 +27,8 @@ PcbKnowledge/                    public software checkout
 ├── docs/
 ├── tests/
 ├── static vendor assets
-├── pcbknowledge.workspace.json  empty development contract
-└── knowledge/evidence placeholders only
+├── pcbknowledge.workspace.json  pinned workspace contract
+└── knowledge/                  small curated metadata, including noncanonical intake
 
 PcbKnowledgeData/                controlled knowledge workspace
 ├── .git/
@@ -37,10 +38,10 @@ PcbKnowledgeData/                controlled knowledge workspace
 │   ├── sources/
 │   ├── entities/
 │   └── facts/
-└── evidence/sha256/
+└── .pcbknowledge/evidence/sha256/
 ```
 
-A production workspace is self-contained. Its manifest, exact schema bytes, Source/Entity/Fact records, PDF evidence, review history, supersedes graph, and Git history define authority/publication. The public software checkout does not act as a hidden schema or data side channel for a published workspace.
+A production workspace is self-contained. Its manifest, exact schema bytes, Source/Entity/Fact metadata, review history, supersedes graph, and Git history define authority/publication. The public software checkout does not act as a hidden schema or data side channel for a published workspace.
 
 Initialization copies the current schema snapshot, writes canonical `pcbknowledge.workspace.json`, and creates empty authority/evidence directories. It does not stage, commit, push, or silently upgrade an existing workspace.
 
@@ -61,7 +62,7 @@ Canonical workspace authority is:
 knowledge/sources/      SourceRecordV1
 knowledge/entities/     EntityRecordV1
 knowledge/facts/        FactRecordV1
-evidence/sha256/        immutable PDF originals
+.pcbknowledge/evidence/sha256/        ignored local PDF originals (not committed)
 ```
 
 The initial entity set is Manufacturer, Component, and Package. The initial Fact set is ComponentPin and ParameterLimit.
@@ -75,10 +76,10 @@ Unknown is a valid result. Missing facts are never filled from a similar device,
 A Source represents one exact engineering-document revision. Its PDF is addressed by actual SHA-256 bytes:
 
 ```text
-evidence/sha256/<first-two>/<sha256>.pdf
+.pcbknowledge/evidence/sha256/<first-two>/<sha256>.pdf
 ```
 
-The repository validates PDF path, SHA-256, size, media type, orphan state, symlinks, shared references, and committed/published evidence before authority is considered valid.
+Source-byte use validates the ignored cache path, SHA-256, size, media type, and symlink safety. Git metadata publication validates references and pinned schemas separately. Cache status is `VERIFIED`, `NOT_LOCALLY_VERIFIED`, or `TAMPERED`; absent originals are not silently verified.
 
 A Fact carries one or more `EvidenceAnchorV1` values:
 
@@ -243,7 +244,7 @@ CODE_ONLY
 MIXED
 ```
 
-Staged paths take precedence when a staged candidate exists; otherwise unstaged/untracked workspace paths are considered. Knowledge/evidence cannot share a commit with software/schema/policy changes.
+Staged paths take precedence when a staged candidate exists; otherwise unstaged/untracked workspace paths are considered. Canonical knowledge data cannot share a commit with software/schema/policy changes.
 
 Inside a knowledge workspace, Source/Entity/Fact/evidence changes are data. Manifest/schema migrations are contract changes and must be separate from data that depends on them.
 
@@ -264,7 +265,7 @@ A shared network editor, accounts, SSO, ACLs, compliance audit, or remote servic
 
 ## 12. Derived state and packaging
 
-Permanent authority is limited to workspace manifest/schemas, Source/Entity/Fact JSON, PDF originals, EvidenceAnchors, review/supersedes/conflict relationships, and Git history.
+Permanent authority is limited to workspace manifest/schemas, Source/Entity/Fact JSON, original-byte identities, EvidenceAnchors, review/supersedes/conflict relationships, and Git history.
 
 Derived/rebuildable state may include `.pcbknowledge/`, SQLite/FTS indexes, page text, thumbnails, rendered canvases, embeddings, summaries, caches, and package ZIPs.
 
@@ -273,7 +274,7 @@ Derived/rebuildable state may include `.pcbknowledge/`, SQLite/FTS indexes, page
 ## 13. FreeCM lifecycle
 
 - **Config** validates the software checkout and writes a configuration receipt.
-- **Build** compiles and runs repository tests, validates the empty source-checkout workspace, and writes a build receipt.
+- **Build** compiles and runs repository tests, validates the source-checkout workspace, and writes a build receipt.
 - **Run/Open** require the software build, validate the selected workspace and pinned viewer assets, and start the loopback editor.
 - **Test** runs software tests and may additionally validate an external workspace.
 - **Package** exports one validated selected workspace.

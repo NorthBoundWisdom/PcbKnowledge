@@ -11,6 +11,7 @@ from pcbknowledge.git_native.model import (
     Evidence,
     LicenseClass,
     PreparedBy,
+    RecordStatus,
     SourceRecord,
     deterministic_record_id,
 )
@@ -38,7 +39,7 @@ class GitNativeHardeningTests(RepositoryTestCase):
             supersedes=None,
         )
 
-    def test_replacing_draft_evidence_prunes_unreferenced_bytes(self) -> None:
+    def test_replacing_draft_evidence_retains_content_addressed_cache(self) -> None:
         record = self.repository.create(prepared_by=PreparedBy.HUMAN)
         old = self.repository.import_pdf_bytes(minimal_pdf("old"))
         first = self._complete(record, old)
@@ -52,7 +53,7 @@ class GitNativeHardeningTests(RepositoryTestCase):
         )
         self.repository.save(first, second, first.revision_token)
         assert old.path is not None
-        self.assertFalse((self.root / old.path).exists())
+        self.assertTrue((self.root / old.path).exists())
         self.repository.validate_all()
 
     def test_shared_evidence_is_not_pruned(self) -> None:
@@ -81,12 +82,12 @@ class GitNativeHardeningTests(RepositoryTestCase):
         self.repository.save(record, approved, record.revision_token)
         self.assertEqual(self.repository.list_published(), [])
         subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
-                        "add", "knowledge", "evidence"], cwd=self.root, check=True)
+                        "add", "knowledge"], cwd=self.root, check=True)
         subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
                         "commit", "-q", "-m", "publish fixture"], cwd=self.root, check=True)
         self.assertEqual(self.repository.list_published(), [approved])
 
-    def test_published_view_requires_evidence_in_the_same_git_snapshot(self) -> None:
+    def test_published_metadata_does_not_require_original_bytes_in_git(self) -> None:
         record = self.repository.create(prepared_by=PreparedBy.HUMAN)
         evidence = self.repository.import_pdf_bytes(minimal_pdf("not committed"))
         approved = self._complete(record, evidence).submit().approve("reviewed")
@@ -108,8 +109,18 @@ class GitNativeHardeningTests(RepositoryTestCase):
             check=True,
         )
 
-        with self.assertRaisesRegex(EvidenceError, "missing from HEAD"):
-            self.repository.list_published()
+        self.assertEqual(self.repository.list_published(), [approved])
+        self.assertEqual(self.repository.evidence_verification(evidence), "VERIFIED")
+        (self.root / evidence.path).unlink()
+        self.assertEqual(self.repository.list_published(), [approved])
+        self.assertEqual(self.repository.evidence_verification(evidence), "NOT_LOCALLY_VERIFIED")
+        self.repository.validate_all()
+        (self.root / evidence.path).write_bytes(minimal_pdf("tampered cache"))
+        snapshot = self.repository.read_published_snapshot()
+        self.assertEqual(snapshot.sources, (approved,))
+        self.assertEqual(dict(snapshot.local_evidence_verification)[approved.id], "TAMPERED")
+        with self.assertRaises(EvidenceError):
+            self.repository.validate_all()
 
     def test_published_view_rejects_record_filename_identity_mismatch(self) -> None:
         record = SourceRecord.new(
@@ -259,19 +270,19 @@ class GitNativeHardeningTests(RepositoryTestCase):
 
         self.assertEqual(self.repository.git_change_scope(), ChangeScope.DATA_ONLY)
 
-    def test_evidence_pruning_is_serialized_against_new_references(self) -> None:
+    def test_evidence_replacement_is_serialized_against_new_references(self) -> None:
         prune_entered = threading.Event()
         allow_prune = threading.Event()
 
         class PausingRepository(KnowledgeRepository):
             pause = False
 
-            def _prune_replaced_evidence(self, previous, updated):
+            def _validate_source_for_write(self, source):
                 if self.pause:
                     prune_entered.set()
                     if not allow_prune.wait(3):
-                        raise AssertionError("test did not release evidence pruning")
-                return super()._prune_replaced_evidence(previous, updated)
+                        raise AssertionError("test did not release evidence replacement")
+                return super()._validate_source_for_write(source)
 
         writer = PausingRepository(self.root)
         first = writer.create(prepared_by=PreparedBy.HUMAN)
@@ -338,9 +349,12 @@ class GitNativeHardeningTests(RepositoryTestCase):
         self.assertFalse(save_thread.is_alive())
         self.assertFalse(insert_thread.is_alive())
         self.assertEqual(save_errors, [])
-        self.assertEqual(len(insert_errors), 1)
-        self.assertIsInstance(insert_errors[0], EvidenceError)
-        self.assertFalse(writer.record_path(concurrent.id).exists())
+        # Cache retention is independent of current source references. Both
+        # serialized writes retain verified original bytes without approval.
+        self.assertEqual(insert_errors, [])
+        self.assertTrue(writer.record_path(concurrent.id).exists())
+        self.assertEqual(writer.evidence_verification(old), "VERIFIED")
+        self.assertEqual(writer.load_source(concurrent.id).status, RecordStatus.DRAFT)
         writer.validate_all()
 
     def test_agent_cli_published_and_change_scope_contract(self) -> None:

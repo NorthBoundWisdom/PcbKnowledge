@@ -1,6 +1,10 @@
-# Agent typed ingestion and human handoff
+# Agent curation and typed ingestion
 
 Agents operate the same Git-native JSON/PDF authority used by the GUI through `configs/pcbknowledge_agent.py`. The Agent CLI connects to no service and exposes no approve, reject, stage, commit, or push command.
+
+## Delegated lightweight curation
+
+The owner authorizes Agent-reviewed intake without a per-fact human wait. Use `knowledge/intake/` with truthful Agent provenance and explicit evidence limitations; this is not canonical approval. See [the lightweight contract](lightweight-knowledge.md). The typed workflow below remains the stricter canonical lane. Source originals belong only in the ignored local cache.
 
 ## 1. Select and validate one workspace
 
@@ -102,7 +106,7 @@ python3 configs/pcbknowledge_agent.py --repo '<workspace>' change-scope
 python3 configs/pcbknowledge_agent.py --repo '<workspace>' diff
 ```
 
-The Agent handoff is complete only when `review_ready: true`, `change_scope: DATA_ONLY`, and `next_action: WAIT_FOR_HUMAN_REVIEW`. Stop there and wait for human review.
+The Agent handoff is complete only when `review_ready: true`, `change_scope: DATA_ONLY`, and `next_action: WAIT_FOR_HUMAN_REVIEW`. For this canonical API, stop there and wait for human review. This does not block separately delegated noncanonical intake acceptance.
 
 ## 6. Published reads
 

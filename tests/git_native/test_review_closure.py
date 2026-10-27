@@ -174,9 +174,22 @@ class ReviewClosureTests(RepositoryTestCase):
         self.assertIn(f"knowledge/entities/{component.id}.json", decision.selected.paths)
         self.assertIn(f"knowledge/entities/{package.id}.json", decision.selected.paths)
         self.assertIn(f"knowledge/sources/{source.id}.json", decision.selected.paths)
-        self.assertIn(source.evidence.path, decision.selected.paths)
+        self.assertNotIn(source.evidence.path, decision.selected.paths)
         self.assertIn(fact.id, decision.selected.diff_text)
         self.assertNotIn(unrelated.id, decision.selected.diff_text)
+
+    def test_fact_approval_requires_verified_local_original(self) -> None:
+        source = self._approved_source()
+        _manufacturer, component, package = self._entities()
+        fact = self._ready_fact(key="missing-cache-fact", source=source, component=component, package=package)
+        (self.root / source.evidence.path).unlink()
+        decision = self.application.fact_review_decision(fact.id)
+        self.assertFalse(decision.can_approve)
+        self.assertIn("NOT_LOCALLY_VERIFIED", " ".join(decision.approval_blockers))
+        from pcbknowledge.git_native.store import EvidenceError
+        with self.assertRaisesRegex(EvidenceError, "NOT_LOCALLY_VERIFIED"):
+            self.repository.approve_fact(fact.id, expected_revision=fact.revision_token, comment="must not pass")
+        self.assertEqual(self.repository.load_fact(fact.id).status, RecordStatus.READY_FOR_REVIEW)
 
     def test_clean_committed_review_candidate_can_approve_and_becomes_data_only(self) -> None:
         source = self._approved_source()

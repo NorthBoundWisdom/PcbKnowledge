@@ -1,16 +1,16 @@
 # TODO — PcbKnowledge Roadmap
 
-> Status: `P0.4A_HARNESS_READY_PRIVATE_PILOT_NEXT`
-> Updated: 2026-08-18
-> Goal: run the completed ingestion/review system against a small real private PCB knowledge workspace before expanding schema breadth or retrieval complexity.
+> Status: `LIGHTWEIGHT_CURATION_ACTIVE_FORMAL_PILOT_OPEN`
+> Updated: 2026-10-27
+> Goal: accumulate reviewable small summaries under owner delegation while preserving evidence limitations; keep the formal PDF/typed-authority pilot separate.
 
 ## 0. Permanent boundaries
 
-- The public repository contains software, schemas, documentation, Agent skills, synthetic tests, evaluation harnesses, and explicitly reviewed runtime dependencies, but no production knowledge/evidence.
-- Real Source / Entity / Fact authority, internal rules, reviews, waivers, and third-party PDF evidence live in a separately controlled knowledge Git workspace.
-- A knowledge workspace is self-contained: its manifest, pinned schemas, authority, evidence, and Git history define publication.
+- The public repository also accepts small original curated summaries and metadata; never source originals or private material.
+- Private records stay in controlled workspaces. Original PDFs live only in ignored local caches; packages contain metadata, not originals.
+- A workspace pins metadata authority and schemas. Git publication does not imply locally verified original bytes.
 - The GUI and Agent share one typed authority model, validator, and repository write path.
-- Agents may prepare, edit, validate, and submit drafts; they may not approve, reject, stage, commit, or push knowledge data.
+- Agents may review intake under owner delegation and publish authorized main-branch changes. Canonical human review is not impersonated.
 - Working-tree `APPROVED` is distinct from publication. Formal reads use a fully validated committed Git snapshot.
 - Unknown values, conflicts, wrong revisions, wrong packages, missing anchors, and license blocks stay explicit.
 - Deliberately wrong/ambiguous evaluation inputs are evaluation metadata, not false canonical authority.
@@ -19,6 +19,18 @@
 - Vector retrieval is not a P0/P1 prerequisite and enters the roadmap only after evaluation demonstrates value.
 
 ---
+
+## Active lightweight curation slice
+
+- [x] Integrate 3 TI sources / 20 Agent-reviewed annotations, actual source hashes, and 7 rendered-page review receipts; precise bbox and full orderable identity remain unresolved.
+- [x] Verify `typed-v2-local-cache`, metadata-only packages, and repository-wide index/working-tree guards.
+- [x] Add read-only `intake list` / `intake search` retrieval without mixing curation into canonical published Facts.
+- [x] Delegate independent exact-identity and pinned-snapshot work through [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10) and [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11); these issues remain open until reviewed.
+- [ ] Complete byte identity, visual anchors, revision drift, and negative-case coverage in the formal pilot.
+
+Local receipt (2026-10-27): 141 tests pass; config/build/test, workspace/authority validation, repository-wide staged/worktree text-size gate, English guard, pinned PDF.js hashes, and metadata-only package pass. Read-only independent code audit cleared after cache-retention and alternate-folder original guards were repaired. Intake retrieval returns 1 batch / 20 annotations (LM358 search: 7); canonical counts remain zero. Remote CI is checked separately after the authorized main push, not inferred from these local results.
+
+See [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md). Historic receipts below describe their original stage, not a claim that the new pilot is complete.
 
 ## 1. Completed foundation
 
@@ -153,7 +165,7 @@ P0.3 does not claim human pixel-level acceptance against a real vendor PDF. That
 
 ### P0.4a — Private Pilot — HARNESS READY / REAL PILOT NEXT
 
-The public software repository now contains the pilot evaluation contract and synthetic vertical coverage. Real Sources, Facts, PDFs, observations, and potentially sensitive evaluation notes remain private.
+The public software repository now contains the pilot evaluation contract and synthetic vertical coverage. Private evaluation notes stay private. Public curated annotations are allowed under ADR-021; original PDFs stay outside Git. Intake counts do not complete this formal pilot.
 
 Public harness:
 
@@ -302,4 +314,4 @@ Before implementation:
 
 ## 8. Verification contract
 
-Use the narrowest relevant tests during editing, then the applicable repository checkpoint. GUI work requires focused HTTP/view-model coverage and a real loopback smoke. Workspace work requires a temporary external Git repository and tamper tests. Pilot/evaluation work additionally requires deterministic synthetic structural/negative/visual/publication closure. Production/pilot data is never added to this public software repository. Interrupted, truncated, skipped, or unexecuted checks are not passes.
+Use the narrowest relevant tests during editing, then the applicable repository checkpoint. GUI work requires focused HTTP/view-model coverage and a real loopback smoke. Workspace work requires a temporary external Git repository and tamper tests. Pilot/evaluation work additionally requires deterministic synthetic structural/negative/visual/publication closure. Public intake must obey the lightweight contract; private pilot data and original PDFs are never added. Interrupted, truncated, skipped, or unexecuted checks are not passes.

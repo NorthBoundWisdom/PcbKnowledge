@@ -230,7 +230,7 @@ class TypedWorkbenchServerTests(RepositoryTestCase):
         self.assertEqual(status, HTTPStatus.OK)
         diff_text = diff.decode("utf-8")
         self.assertIn(source_id, diff_text)
-        self.assertIn("new binary evidence", diff_text)
+        self.assertNotIn("new binary evidence", diff_text)
         self.assertEqual(
             self.root.joinpath(".git", "index").read_bytes(),
             index_before,

@@ -1,5 +1,7 @@
 # P0.4a Pilot Session
 
+> The formal canonical/visual pilot below is distinct from lightweight public intake. See [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md): original PDFs are local-only, and delegated curation acceptance does not establish a pilot pass.
+
 The P0.4a pilot intentionally spans three different roots:
 
 ```text
@@ -241,7 +243,7 @@ new session; do not treat it as a project-wide architecture document.
 
 ## Evaluation state and privacy
 
-The public repository contains only example manifests and synthetic tests. Real pilot
+The public evaluation harness contains example manifests and synthetic tests; public intake is a separate lane. Sensitive real pilot
 state may contain:
 
 - selected internal Source/Fact IDs;

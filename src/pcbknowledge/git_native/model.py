@@ -278,7 +278,7 @@ class Evidence:
             raise RecordValidationError("evidence.path must be normalized")
         if SHA256_PATTERN.fullmatch(self.sha256) is None:
             raise RecordValidationError("evidence.sha256 must be lowercase SHA-256")
-        expected = f"evidence/sha256/{self.sha256[:2]}/{self.sha256}.pdf"
+        expected = f".pcbknowledge/evidence/sha256/{self.sha256[:2]}/{self.sha256}.pdf"
         if self.path != expected:
             raise RecordValidationError(
                 "evidence.path must be derived from evidence.sha256"

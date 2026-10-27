@@ -224,7 +224,7 @@ class P01SyntheticVerticalTests(WorkflowTestCase):
         )
 
         subprocess.run(
-            ["git", "add", "knowledge", "evidence"], cwd=self.root, check=True
+            ["git", "add", "knowledge"], cwd=self.root, check=True
         )
         subprocess.run(
             [
@@ -263,7 +263,7 @@ class P01SyntheticVerticalTests(WorkflowTestCase):
             self.assertIn(f"knowledge/sources/{approved_source.id}.json", names)
             self.assertIn(f"knowledge/entities/{component.id}.json", names)
             self.assertIn(f"knowledge/facts/{facts[0].id}.json", names)
-            self.assertIn(evidence.path, names)
+            self.assertNotIn(evidence.path, names)
             manifest = json.loads(archive.read("MANIFEST.json"))
             self.assertEqual(manifest["format"], workflow.PACKAGE_FORMAT)
 
