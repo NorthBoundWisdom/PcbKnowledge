@@ -22,13 +22,16 @@
 
 ## Active lightweight curation slice
 
-- [x] Integrate 3 TI sources / 20 Agent-reviewed annotations, actual source hashes, and 7 rendered-page review receipts; precise bbox and full orderable identity remain unresolved.
+- [x] Integrate the initial 3 TI sources / 20 Agent-reviewed annotations, actual source hashes, and 7 rendered-page review receipts.
+- [x] Expand the curated collection to 5 batches / 15 device scopes / 100 unique reviewed annotations. Ninety-four have byte-identity and visual-page receipts; 6 Nexperia observations remain explicitly text-only. Preserve the MCP23017 source-wording discrepancy without synthesizing a supply envelope. Precise bbox and full component coverage remain unresolved.
 - [x] Verify `typed-v2-local-cache`, metadata-only packages, and repository-wide index/working-tree guards.
 - [x] Add read-only `intake list` / `intake search` retrieval without mixing curation into canonical published Facts.
 - [x] Delegate independent exact-identity and pinned-snapshot work through [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10) and [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11); these issues remain open until reviewed.
 - [ ] Complete byte identity, visual anchors, revision drift, and negative-case coverage in the formal pilot.
 
 Local receipt (2026-10-27): 141 tests pass; config/build/test, workspace/authority validation, repository-wide staged/worktree text-size gate, English guard, pinned PDF.js hashes, and metadata-only package pass. Read-only independent code audit cleared after cache-retention and alternate-folder original guards were repaired. Intake retrieval returns 1 batch / 20 annotations (LM358 search: 7); canonical counts remain zero. Remote CI is checked separately after the authorized main push, not inferred from these local results.
+
+Cross-platform correction receipt: commit `8515bf5` passed all four jobs in [CI run 40552649329](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/runs/40552649329), including 143 Windows tests. This fixed native symlink separators without relaxing the pinned-target boundary. The following data-only expansion retains the same executable contract and is verified separately; see the [collection index](knowledge/intake/README.md) and [23-query evaluation receipt](docs/intake-evaluation-100.md).
 
 See [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md). Historic receipts below describe their original stage, not a claim that the new pilot is complete.
 
