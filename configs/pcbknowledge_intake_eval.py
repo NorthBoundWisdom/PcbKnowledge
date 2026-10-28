@@ -23,6 +23,7 @@ from pcbknowledge.git_native.intake import IntakeError, load_intake  # noqa: E40
 
 
 FORMAT = "pcbknowledge-intake-retrieval-eval-v1"
+DISPOSITION_EVAL_FORMAT = "pcbknowledge-intake-disposition-eval-v1"
 SOURCE_FILTERS = {"source_id", "manufacturer", "device", "package"}
 FACT_FILTERS = {"kind", "parameter"}
 
@@ -118,20 +119,45 @@ def expected_candidates(batches: list[dict], command: str) -> dict[str, dict]:
                                      key=lambda issue: issue["id"]))
             else:
                 candidate.update(result_type="SOURCE_ISSUE", source_issue=record)
+            receipts = [receipt for receipt in batch.get("source_issue_dispositions", [])
+                        if receipt["data"]["target"]["source_id"] == source_id
+                        and (command == "search" or receipt["data"]["target"]["issue_id"] == record["id"])]
+            if receipts:
+                candidate["source_issue_dispositions"] = receipts
             candidates[f"{batch['path']}#{record['id']}"] = candidate
     return candidates
 
 
-def evaluate(root: Path, manifest: dict, *, runner: Callable = run_cli) -> dict:
+def disposition_files(batches: list[dict]) -> dict[str, str]:
+    return {receipt["path"]: receipt["sha256"] for batch in batches
+            for receipt in batch.get("source_issue_dispositions", [])}
+
+
+def evaluate(root: Path, manifest: dict, *, runner: Callable = run_cli,
+             disposition_manifest: dict | None = None) -> dict:
     validate_manifest(manifest)
     batches = load_intake(root)
-    files = {batch["path"]: hashlib.sha256((root / batch["path"]).read_bytes()).hexdigest()
-             for batch in batches}
+    files = {batch["path"]: batch["sha256"] for batch in batches}
     if files != manifest["files"]:
         raise EvaluationError("dataset bytes or batch set changed; review cases before updating pins")
+    supplements = disposition_files(batches)
+    extra_cases = []
+    if disposition_manifest is None:
+        if supplements:
+            raise EvaluationError("dispositions require a separately pinned --dispositions manifest")
+    else:
+        if not isinstance(disposition_manifest, dict) or disposition_manifest.get("format") != DISPOSITION_EVAL_FORMAT:
+            raise EvaluationError(f"disposition manifest format must be {DISPOSITION_EVAL_FORMAT}")
+        validate_manifest({**disposition_manifest, "format": FORMAT})
+        if supplements != disposition_manifest["files"]:
+            raise EvaluationError("disposition bytes or set changed; review cases before updating pins")
+        extra_cases = disposition_manifest["cases"]
+    cases = manifest["cases"] + extra_cases
+    if len({case["id"] for case in cases}) != len(cases):
+        raise EvaluationError("base and disposition case ids must be unique together")
     oracles = {command: expected_candidates(batches, command) for command in ("search", "issues")}
     results = []
-    for case in manifest["cases"]:
+    for case in cases:
         oracle = oracles[case["command"]]
         if any(ref not in oracle for ref in case["expected"]):
             raise EvaluationError(f"{case['id']}: expected reference is absent from pinned input")
@@ -150,13 +176,17 @@ def evaluate(root: Path, manifest: dict, *, runner: Callable = run_cli) -> dict:
             result["error"] = str(error)
         results.append(result)
     # Detect edits made during the replay instead of attesting to a mixed dataset.
-    after = {batch["path"]: hashlib.sha256((root / batch["path"]).read_bytes()).hexdigest()
-             for batch in load_intake(root)}
+    after_batches = load_intake(root)
+    after = {batch["path"]: batch["sha256"] for batch in after_batches}
     if after != files:
         raise EvaluationError("dataset changed during evaluation")
+    if disposition_files(after_batches) != supplements:
+        raise EvaluationError("dispositions changed during evaluation")
     return {"format": FORMAT, "status": "PASS" if all(r["passed"] for r in results) else "FAIL",
             "dataset_sha256": fingerprint(files), "batch_count": len(batches),
             "fact_count": sum(len(batch["data"]["facts"]) for batch in batches),
+            "disposition_count": len(supplements), "dispositions_sha256": fingerprint(supplements),
+            "base_case_count": len(manifest["cases"]), "disposition_case_count": len(extra_cases),
             "case_count": len(results), "cases": results,
             "limitations": "Candidate retrieval only; no new source-byte, visual, human or canonical verification."}
 
@@ -165,10 +195,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
     parser.add_argument("--repo", type=Path, required=True, help="explicit intake workspace")
     parser.add_argument("--cases", type=Path, required=True, help="reviewed pinned case manifest")
+    parser.add_argument("--dispositions", type=Path, help="separate reviewed pins/cases for handling supplements")
     args = parser.parse_args(argv)
     try:
         payload = args.cases.read_bytes()
-        report = evaluate(args.repo.resolve(), json.loads(payload))
+        supplement_payload = args.dispositions.read_bytes() if args.dispositions else None
+        report = evaluate(args.repo.resolve(), json.loads(payload),
+                          disposition_manifest=json.loads(supplement_payload) if supplement_payload else None)
+        if supplement_payload is not None:
+            report["disposition_manifest_sha256"] = hashlib.sha256(supplement_payload).hexdigest()
         report["manifest_sha256"] = hashlib.sha256(payload).hexdigest()
         print(json.dumps(report, indent=2, sort_keys=True))
         return 0 if report["status"] == "PASS" else 1

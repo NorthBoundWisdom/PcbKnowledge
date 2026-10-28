@@ -39,6 +39,10 @@ The fifth batch preserves `MCP23017-SUPPLY-TEMPERATURE-AMBIGUITY` as
 `UNRESOLVED_SOURCE_WORDING`. Its cover and electrical table give different supply
 versus temperature wording. No supply-envelope fact was inferred; acceptance of
 unrelated pin annotations does not resolve the issue. See its [review](power-monitor-gpio-review.md).
+A later [separate disposition](../../docs/mcp23017-source-disposition-2026-10-28.md)
+rechecks official Revision E (July 2026), contains use to an explicit conservative
+preliminary supply/ambient subset, and preserves the original wording conflict.
+Normal reads expose both records; none of these 100 annotation bytes were changed.
 
 No precise bbox was annotated in any batch. These are scoped observations, not
 full pinouts, procurement guarantees, thermal designs, cross-vendor replacements,

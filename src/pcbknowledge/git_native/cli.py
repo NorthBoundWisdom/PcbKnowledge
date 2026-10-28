@@ -1637,7 +1637,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="retrieve fact candidates, not electrical answers; see intake issues")
     intake_issues = intake_actions.add_parser(
         "issues", allow_abbrev=False,
-        help="retrieve source warnings; no hits does not prove absence of ambiguity")
+        help="retrieve source warnings and pinned handling receipts; no hits does not prove absence of ambiguity")
     for intake_command in (intake_search, intake_issues):
         intake_command.add_argument("query", nargs="?", default="", help="optional case-folded AND lexical terms")
         for field in ("source-id", "manufacturer", "device", "package"):

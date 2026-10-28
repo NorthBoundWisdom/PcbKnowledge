@@ -61,7 +61,7 @@ def _allowed_metadata_path(path: str) -> bool:
         return False
     if parts[1] in {"sources", "entities", "facts"}:
         return len(parts) == 3 and path.endswith(".json")
-    return parts[1] == "intake" and PurePosixPath(path).suffix in {".json", ".md"}
+    return parts[1] in {"intake", "intake-dispositions"} and PurePosixPath(path).suffix in {".json", ".md"}
 
 
 def public_distribution_violations(tracked_paths: Iterable[str]) -> tuple[str, ...]:

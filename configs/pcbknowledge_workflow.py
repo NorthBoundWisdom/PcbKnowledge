@@ -381,7 +381,9 @@ def package_files(root: Path = REPO_ROOT) -> tuple[Path, ...]:
     snapshot = repository.validate_all(require_canonical=True)
     from pcbknowledge.git_native.intake import load_intake
     paths = {WORKSPACE_MANIFEST_PATH, *SCHEMA_PATHS}
-    paths.update(Path(batch["path"]) for batch in load_intake(repository.root))
+    for batch in load_intake(repository.root):
+        paths.add(Path(batch["path"]))
+        paths.update(Path(receipt["path"]) for receipt in batch.get("source_issue_dispositions", []))
     for source in snapshot.sources:
         paths.add(repository.source_path(source.id).relative_to(repository.root))
     for entity in snapshot.entities:

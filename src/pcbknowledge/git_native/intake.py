@@ -7,6 +7,7 @@ verification. This module neither opens original documents nor mutates records.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -109,7 +110,7 @@ def load_intake(root: Path) -> list[dict]:
     if (root / "knowledge").is_symlink() or directory.is_symlink():
         raise IntakeError("intake directories must not be symlinks")
     if not directory.exists():
-        return []
+        return _attach_dispositions(root, [])
     if not directory.is_dir():
         raise IntakeError("knowledge/intake must be a directory")
     batches: list[dict] = []
@@ -131,8 +132,20 @@ def load_intake(root: Path) -> list[dict]:
             data = _validate_batch(data)
         except (UnicodeError, json.JSONDecodeError, IntakeError) as error:
             raise IntakeError(f"invalid intake {relative}: {error}") from error
-        batches.append({"path": relative, "canonical": False,
+        batches.append({"path": relative, "sha256": hashlib.sha256(payload).hexdigest(), "canonical": False,
                         "evidence_verification": "NOT_LOCALLY_VERIFIED", "data": data})
+    return _attach_dispositions(root, batches)
+
+
+def _attach_dispositions(root: Path, batches: list[dict]) -> list[dict]:
+    from .intake_dispositions import load_dispositions
+
+    by_path = {batch["path"]: batch for batch in batches}
+    for batch in batches:
+        _source_issues(batch["data"])
+    for receipt in load_dispositions(root, batches):
+        target = receipt["data"]["target"]["batch_path"]
+        by_path[target].setdefault("source_issue_dispositions", []).append(receipt)
     return batches
 
 
@@ -176,10 +189,16 @@ def _source_issues(data: dict) -> dict[str, list[dict]]:
     return result
 
 
-def _candidate(batch: dict, source: dict) -> dict:
-    return {"path": batch["path"], "canonical": False,
-            "acceptance_status": batch["data"]["acceptance_status"],
-            "evidence_verification": "NOT_LOCALLY_VERIFIED", "source": source}
+def _candidate(batch: dict, source: dict, issue_id: str | None = None) -> dict:
+    result = {"path": batch["path"], "canonical": False,
+              "acceptance_status": batch["data"]["acceptance_status"],
+              "evidence_verification": "NOT_LOCALLY_VERIFIED", "source": source}
+    receipts = [receipt for receipt in batch.get("source_issue_dispositions", [])
+                if receipt["data"]["target"]["source_id"] == source["id"]
+                and (issue_id is None or receipt["data"]["target"]["issue_id"] == issue_id)]
+    if receipts:
+        result["source_issue_dispositions"] = receipts
+    return result
 
 
 def search_intake(
@@ -240,8 +259,9 @@ def search_intake_issues(
             if not _matches(source, source_filters):
                 continue
             for issue in issues[source["id"]]:
-                searchable = json.dumps([issue, source], ensure_ascii=False, sort_keys=True).casefold()
+                candidate = _candidate(batch, source, issue["id"])
+                searchable = json.dumps([issue, source, candidate.get("source_issue_dispositions", [])],
+                                        ensure_ascii=False, sort_keys=True).casefold()
                 if all(term in searchable for term in terms):
-                    matches.append({**_candidate(batch, source), "result_type": "SOURCE_ISSUE",
-                                    "source_issue": issue})
+                    matches.append({**candidate, "result_type": "SOURCE_ISSUE", "source_issue": issue})
     return matches

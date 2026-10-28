@@ -28,6 +28,7 @@
 - [x] Add read-only `intake list` / `intake search` retrieval without mixing curation into canonical published Facts.
 - [x] Independently verify exact identity, pinned-snapshot parity and structured intake filters; [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10), [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11) and [#12](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/12) accepted and closed on 2026-10-28.
 - [x] Record [human owner batch-level content acceptance](docs/owner-acceptance-2026-10-28.md) dated 2026-10-28 for the immutable 100-annotation snapshot at `9530c0d`; preserve all original Agent provenance, unresolved issues and noncanonical status.
+- [x] Handle the sole recorded original-source conflict with a [separate conservative MCP23017 disposition](docs/mcp23017-source-disposition-2026-10-28.md): recheck official Revision E, preserve unresolved manufacturer wording, expose the bounded preliminary supply/ambient screen and unknown outside it; keep the accepted 100 bytes immutable.
 - [ ] Complete byte identity, visual anchors, revision drift, and negative-case coverage in the formal pilot.
 
 Local receipt (2026-10-27): 141 tests pass; config/build/test, workspace/authority validation, repository-wide staged/worktree text-size gate, English guard, pinned PDF.js hashes, and metadata-only package pass. Read-only independent code audit cleared after cache-retention and alternate-folder original guards were repaired. Intake retrieval returns 1 batch / 20 annotations (LM358 search: 7); canonical counts remain zero. Remote CI is checked separately after the authorized main push, not inferred from these local results.
@@ -60,7 +61,15 @@ guards, local Markdown link-target checks, and metadata-only Package. No new sou
 evidence or canonical authority was added. Exact-commit remote CI is checked after
 publication, independently of this local receipt.
 
-### Next application-question milestones
+#MCP23017 handling receipt (2026-10-28): independent source/code review passed;
+44 focused tests and 191 full tests passed with no skips, and all 24 explicitly
+pinned CLI cases passed. Config/Build/Test, workspace/Agent validation,
+English/public/PDF.js guards and metadata-only Package exited 0. The original
+100-record fingerprint is unchanged; the separately pinned receipt is attached to
+normal queries and packaged without originals. See the [dated disposition](docs/mcp23017-source-disposition-2026-10-28.md).
+Remote CI is checked separately for the published commit.
+
+## Next application-question milestones
 
 The accepted 100 annotations are a baseline, not a target to inflate. Prioritize
 knowledge that helps answer a concrete engineering question and identifies what

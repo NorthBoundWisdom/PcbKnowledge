@@ -7,8 +7,15 @@ The original 100 annotations are unchanged. A reviewed, pinned
 commands, rather than leaving the retrieval observations as a prose-only receipt:
 
 ```bash
-python3 configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-100.json
+python3 configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-100.json \
+  --dispositions evals/intake-dispositions-2026-10-28.json
 ```
+
+The later [MCP23017 handling supplement](mcp23017-source-disposition-2026-10-28.md)
+adds separately pinned receipt metadata and six cases; the original 18-case
+manifest and five batch pins are unchanged. The current command runs 24 cases.
+Without supplements, the original command needs no `--dispositions`; when any
+supplement exists, omitting its explicit pins fails closed.
 
 The evaluator checks the exact ordered `batch-path#record-id` selections and the
 complete original source/fact/warning projections, including all conditions,

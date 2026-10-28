@@ -91,13 +91,29 @@ Each fact candidate includes full batch-local `source_issues` for its exact
 objects, not Facts or inferred specifications. `intake issues [query]` (Python
 `search_intake_issues`) also retrieves warnings without any matching fact. It accepts
 the same source filters, but no fact filters; optional lexical terms search the
-warning plus its source. Results label `SOURCE_ISSUE` and retain the full warning,
+warning plus its source and any pinned handling receipt. Results label `SOURCE_ISSUE` and retain the full warning,
 source, batch path, unresolved status, provenance, and nonverification marker.
 Warning association never crosses batch boundaries, even if source IDs repeat.
 Malformed or ambiguous warning links fail clearly rather than silently dropping
 warnings. An empty warning query result is not proof that no source ambiguity
 exists: wording, filters, or missing annotations can hide relevant unknowns. Use
 filter-only warning lookup or `intake list` to inspect the available source context.
+
+## Append-only source-issue handling receipts
+
+`knowledge/intake-dispositions/` holds small noncanonical containment receipts,
+not replacement Facts or edits to accepted intake bytes. The reader validates
+exact historical batch/issue/source/hash/device/package/revision linkage before
+exposing any receipt. Normal fact and issue results attach matching
+`source_issue_dispositions` without changing the original warning. Fact lexical
+matching excludes the policy text; issue lexical matching includes it.
+
+Malformed, stale, orphan or duplicate-target receipts fail `intake list`, retrieval,
+validation and Package. Original bytes are not opened by these readers; every
+receipt projection stays `NOT_LOCALLY_VERIFIED`. Version 1 permits one receipt
+per exact issue target; future supersession requires an explicit reviewed lifecycle
+extension, not an unsupported second receipt. See the [MCP23017 disposition](mcp23017-source-disposition-2026-10-28.md)
+for the conservative preliminary screen and unresolved manufacturer wording.
 
 ## Metadata in Git, original bytes outside Git
 
