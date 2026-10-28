@@ -1,0 +1,407 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "bourns-mf-msmf050-ptc-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+    "collected_at": "2026-10-28T21:56:44.955696+00:00"
+  },
+  "sources": [
+    {
+      "id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "full_orderable_mpn": "MF-MSMF050-2",
+      "document_url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+      "revision": "BE, 09/26",
+      "revision_date": null,
+      "revision_month": "2026-09",
+      "revision_locator": "PDF page 14 footer; electrical series revision BE, 09/26",
+      "legal_appendix_revision": "K2540 08/26R, PDF page 16",
+      "identity_evidence": "Base model row on PDF page 1 plus -2 suffix definition and 2000-piece reel group on page 11; assembled orderable, not inventory verification.",
+      "pdf_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+      "pdf_byte_size": 1327051,
+      "pdf_pages": 16,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "No open or source redistribution license asserted. Only small original facts and caveats; no source tables, images, extracts or PDF published.",
+      "source_processing_scope": "Public official datasheet and legal page 16 reviewed for small original annotation under ADR-021. Official legal landing and linked disclaimer also checked; no explicit prohibition on this scope identified. No permission to republish source originals is claimed.",
+      "rights_review_url": "https://www.bourns.com/legal/disclaimers-terms-and-policies",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        3,
+        9,
+        11,
+        14,
+        15
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "mf-msmf050-ptc-01",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "identity",
+      "parameter": "exact_orderable_packaging_and_new_design_warning",
+      "value": {
+        "full_orderable_mpn": "MF-MSMF050-2",
+        "packaging_code": "-2",
+        "packaging": "tape and reel per EIA-481",
+        "pieces_per_reel": 2000,
+        "source_not_recommended_for_new_designs": true
+      },
+      "unit": null,
+      "conditions": "The base MF-MSMF050 row and ordering suffix establish this scope; not a 050/16X, 050/24X or other suffix substitute. The page-1 warning triangle marks this base model as not recommended for new designs. This is a legacy-part constraint record, not a new-design recommendation or stock claim.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 10,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          11,
+          1
+        ],
+        "section": "Packaging Quantity; How to Order; electrical row warning symbol",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "mf-msmf050-ptc-02",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "electrical_characteristic",
+      "parameter": "hold_current_trip_current_reference_ambient",
+      "value": {
+        "Ihold_A": 0.5,
+        "Itrip_A": 1.0,
+        "reference_ambient_C": 23,
+        "hold_test_minutes": 30,
+        "hold_test_medium": "still air",
+        "hold_test_acceptance": "no trip",
+        "guaranteed_trip_time_at_Itrip_s": null
+      },
+      "unit": null,
+      "conditions": "Hold and trip labels are distinct. The hold-current test states 30 minutes in still air; 1 A is not a timed-trip guarantee and 0.5 A is not an all-temperature circuit allowance. Do not treat a PTC as a one-shot fuse or a precision current limiter.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          3
+        ],
+        "section": "Electrical Characteristics; Test Procedures and Requirements",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "mf-msmf050-ptc-03",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "electrical_characteristic",
+      "parameter": "maximum_time_to_trip_test_point",
+      "value": {
+        "maximum_time_to_trip_s": 0.15,
+        "test_current_A": 8.0,
+        "test_voltage_Vmax_V": 15,
+        "test_ambient_C": 23,
+        "test_medium": "still air"
+      },
+      "unit": null,
+      "conditions": "This maximum applies to the stated 8 A test at Vmax and 23 C in still air, not at the 1 A Itrip value. No arbitrary waveform, inrush survival or lower-overcurrent trip time is established.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          3
+        ],
+        "section": "Electrical Characteristics; Time to Trip test",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "mf-msmf050-ptc-04",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "electrical_characteristic",
+      "parameter": "separate_maximum_voltage_and_current_ratings",
+      "value": {
+        "Vmax_V": 15,
+        "Imax_A": 100,
+        "AC_or_DC_designation_in_cited_table": null,
+        "guaranteed_open_circuit_isolation": null
+      },
+      "unit": null,
+      "conditions": "Retain the source Vmax and Imax labels as maximum ratings, distinct from hold/trip/test currents. The cited datasheet table does not label AC versus DC; no AC rating or interrupt/isolation certification is inferred. Prospective fault current, inductive voltage overshoot and actual test envelope require application validation; 100 A is not an allowed continuous load.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          15
+        ],
+        "section": "Electrical Characteristics; Application Notice maximum-rating warning",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "mf-msmf050-ptc-05",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "electrical_characteristic",
+      "parameter": "selected_ambient_hold_current_derating_points",
+      "value": {
+        "Ihold_A_at_23C": 0.5,
+        "Ihold_A_at_70C": 0.33,
+        "Ihold_A_at_85C": 0.29,
+        "interpolated_current_A": null
+      },
+      "unit": null,
+      "conditions": "These selected tabulated ambient points are for the unsuffixed MF-MSMF050 row, not 050/60X or other variants. They do not establish the board hot-spot temperature, mounting effects, or a guaranteed arbitrary-temperature interpolation.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 8,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          9
+        ],
+        "section": "Thermal Derating Table - Ihold",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "mf-msmf050-ptc-06",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "electrical_characteristic",
+      "parameter": "typical_tripped_dissipation_not_zero_current_proof",
+      "value": {
+        "typical_tripped_power_W": 0.8,
+        "reference_ambient_C": 23,
+        "residual_current_A": null,
+        "recovery_time_s": null,
+        "recovered_resistance_ohm": null
+      },
+      "unit": null,
+      "conditions": "The stated 0.8 W is typical tripped dissipation, not maximum permissible dissipation or zero-current disconnection. This source does not establish a numeric residual-current, reset-time or recovered-resistance guarantee for the application.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Electrical Characteristics tripped power dissipation",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "mf-msmf050-ptc-07",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "manufacturer": "Bourns",
+      "device": "MF-MSMF050-2",
+      "variant": "MF-MSMF050 standard-voltage model; no slash voltage option or X; -2 tape/reel",
+      "package": "1812 surface-mount polymer PTC",
+      "kind": "application_constraint",
+      "parameter": "temporary_fault_and_mechanical_expansion_constraints",
+      "value": {
+        "temporary_fault_scope_only": true,
+        "repetitive_or_prolonged_fault_protection_qualified": false,
+        "required_expansion_clearance_mm": null,
+        "potting_material_qualified": null
+      },
+      "unit": null,
+      "conditions": "The application notice limits intended protection to temporary events within ratings; repetitive or prolonged overcurrent/overvoltage needs another assessment. Leave space for thermal expansion and validate potting/housing stress; no quantitative clearance or material approval is supplied.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+        "revision": "BE, 09/26",
+        "pdf_page_index": 14,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          15
+        ],
+        "section": "Application Notice",
+        "source_sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "method": "Collector and distinct Agent reviewer independently rendered and inspected cited pages from the same byte-identified PDF. Reviewer recomputed source hash, size and page count and checked complete payload. No measured bounding boxes or live-download reattestation claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "mf-msmf050-fault-envelope",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Prospective fault current, supply transients/inductance, actual ambient and board temperature, inrush waveform and required disconnection behavior remain unknown; this PTC record is not mains, battery or end-equipment safety certification.",
+      "provenance": {
+        "actor": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "recorded_at": "2026-10-28T21:56:44.955696+00:00"
+      }
+    },
+    {
+      "id": "mf-msmf050-reset-and-residual",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "issue_status": "SOURCE_SCOPE_LIMITATION",
+      "description": "Residual current, reset conditions/time and post-trip recovered resistance are not established here. Do not equate resettable PTC behavior with a fuse producing guaranteed galvanic isolation.",
+      "provenance": {
+        "actor": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "recorded_at": "2026-10-28T21:56:44.955696+00:00"
+      }
+    },
+    {
+      "id": "mf-msmf050-legacy-design",
+      "source_id": "bourns-mf-msmf050-be-202609",
+      "issue_status": "SOURCE_SCOPE_LIMITATION",
+      "description": "MF-MSMF050 carries the source new-design warning. No alternative model is selected or electrically qualified; use this record for exact legacy-part assessment only.",
+      "provenance": {
+        "actor": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+        "recorded_at": "2026-10-28T21:56:44.955696+00:00"
+      }
+    }
+  ],
+  "limitations": [
+    "Only MF-MSMF050-2; no alternate suffix equivalence or new-design recommendation.",
+    "Electrical revision month is not an exact day or legal appendix revision; latest revision not guaranteed.",
+    "Original PDF, text and renders remain local only; no human/canonical/circuit approval."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/resume_compact_evaluation/curate_fuse_constraints",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T21:56:44.955696+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T21:57:33Z",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "28a842420852c6910212ddda3eaa0431c2c0f96315bb729b28662331bbb8f41f",
+      "notes": "Independent actual-source and full-payload review accepted all seven facts and three warnings without blocking correction."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/resume_compact_evaluation/curate_fuse_constraints/review_bourns_ptc",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T21:57:33Z",
+    "draft_sha256": "28a842420852c6910212ddda3eaa0431c2c0f96315bb729b28662331bbb8f41f",
+    "scope": "Independent same-byte source and full-payload review; no human/canonical/circuit approval.",
+    "source_byte_check": {
+      "sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+      "byte_size": 1327051,
+      "pdf_pages": 16,
+      "visual_pages": [
+        1,
+        3,
+        9,
+        11,
+        14,
+        15
+      ],
+      "legal_text_pages": [
+        16
+      ]
+    },
+    "source_warning_review": "NRND legacy scope, Vmax AC/DC designation unknown, residual/recovery values unknown, application fault and thermal envelope not qualified."
+  }
+}

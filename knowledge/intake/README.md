@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **30 reviewed batches, 42 batch-local source/device scopes, and 284 factual
+This queue contains **31 reviewed batches, 43 batch-local source/device scopes, and 291 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -39,6 +39,7 @@ provenance and batch bytes are preserved.
 | [Low-voltage MOSFET drive](si2342ds-low-voltage-drive-constraints.json) | Vishay Si2342DS-T1-GE3/SOT-23 (TO-236) | 6 | Actual hash and independent page 1/2 visual review; source-container warning retained; [receipt](si2342ds-low-voltage-drive-constraints-review.md) |
 | [Optocoupler logic constraints](vo617a-3-optocoupler-logic-constraints.json) | Vishay VO617A-3, standard DIP-4, CTR bin 3 | 8 | Actual hash and independent pages 1-4 visual review; saturated-current source conflict retained; [receipt](vo617a-3-optocoupler-logic-constraints-review.md) |
 | [Current-sense resistor constraints](wslp2512-current-sense-constraints.json) | Vishay WSLP2512R0100FEA, 10 milliohm, 2512 | 6 | Actual PDF/identity HTML and independent rendered-page review; [receipt](wslp2512-current-sense-constraints-review.md) |
+| [Legacy polymer PTC constraints](bourns-mf-msmf050-ptc-constraints.json) | Bourns MF-MSMF050-2, standard 1812 | 7 | Actual PDF and independent graphical legacy-warning review; [receipt](bourns-mf-msmf050-ptc-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -197,9 +198,17 @@ safety approval is synthesized from these records.
 
 ## Current-sense resistor integration
 
-The [current aggregate replay](../../docs/intake-evaluation-current-sense.md) adds
+The [current-sense replay](../../docs/intake-evaluation-current-sense.md) adds
 six exact WSLP2512R0100FEA annotations and three warnings. Component TCR is not
 the alloy-only element value; P70 and ambient derating do not approve an unknown
 board current. Resistance-specific terminal geometry, additive load-life drift
 and illustrative pulse scope are retained. Initial tolerance and typical sensing
 traces do not qualify total current-measurement accuracy.
+
+## Legacy polymer PTC integration
+
+The [current aggregate replay](../../docs/intake-evaluation-ptc.md) adds seven
+exact MF-MSMF050-2 facts and three warnings. This source-marked legacy part is
+not recommended for new designs. Hold, trip and timed-test currents remain
+distinct; temperature derating, typical tripped power, unknown residual current
+and reset behavior do not establish fuse-like isolation or system safety.

@@ -4,9 +4,20 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed legacy polymer PTC integration
+
+The collection now contains 31 batches / 43 source scopes / 291 annotations.
+Seven exact MF-MSMF050-2 facts retain its source no-new-design warning, conditioned
+hold/trip/time-to-trip limits, temperature derating and unknown residual/reset
+behavior. The source is not a fuse or safety-system qualification. A compact
+hash-pinned successor adds 30 recipes without copying inherited history.
+See the [evaluation receipt](docs/intake-evaluation-ptc.md). Final local gates
+passed: Build/Test each 409 tests without skips and aggregate 654 cases.
+Exact published-commit CI is checked separately after publication.
+
 ## Reviewed current-sense resistor integration
 
-The collection now contains 30 batches / 42 source scopes / 284 annotations.
+At the preceding current-sense stage, the collection contained 30 batches / 42 source scopes / 284 annotations.
 Six exact WSLP2512R0100FEA annotations and three warnings retain component versus
 element TCR, conditioned power, resistance-specific geometry, additive test drift
 and unknown pulse/system accuracy. A compact hash-pinned successor adds 29 cases
