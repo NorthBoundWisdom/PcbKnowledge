@@ -542,3 +542,17 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   separating high/low duty conventions, rounded coefficients and physical uncertainty.
   Fixed-input arithmetic and independent source-bound review pass; no operating
   timing interval, new annotation, selected timing capacitor or circuit approval.
+
+## Executable ADS1115 pin-rail example
+
+- [x] Add a [fixed synthetic boundary evaluation](docs/worked-examples/ads1115-pin-boundary-eval.md)
+  which calculates each pin's interval against the reviewed rail, rather than
+  treating successful retrieval as a correct engineering conclusion.
+- Fourteen fixed cases preserve explicit unknowns, full pinned evidence and all
+  application warnings; no-violation never implies circuit qualification.
+  No source records, historical reports, existing evaluators or CI gates change.
+- Local verification (2026-10-28): 16 focused tests; Build and Test each 339 tests
+  without skips; all 539 existing aggregate/disposition cases; English/public/vendor,
+  workspace/Agent, Config and Package gates pass. Independent Agent review checked
+  35 additional exact-arithmetic pin pairs and complete evidence preservation.
+  Exact-commit remote CI is verified separately after publication.
