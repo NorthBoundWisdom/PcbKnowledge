@@ -1,0 +1,305 @@
+{
+  "format": "pcbknowledge-intake-retrieval-delta-v1",
+  "base": {
+    "path": "intake-retrieval-zener.json",
+    "sha256": "f384d0944e1679ebdaca37702767137ffb21a31d8c15d08defc966228b00aa3d"
+  },
+  "files": {
+    "knowledge/intake/bpw34-photodiode-constraints.json": "f495129cc4068f6519883de8b3c81d962ee6e727e5476d30efc7efc463dbe6bb"
+  },
+  "cases": [
+    {
+      "id": "bpw34-01-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "exact_orderable_and_optical_package"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-01"
+      ]
+    },
+    {
+      "id": "bpw34-02-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "illumination_conditioned_reverse_light_current"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-02"
+      ]
+    },
+    {
+      "id": "bpw34-03-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "conditioned_reverse_dark_current"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-03"
+      ]
+    },
+    {
+      "id": "bpw34-04-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "bias_and_frequency_conditioned_capacitance"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-04"
+      ]
+    },
+    {
+      "id": "bpw34-05-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "conditioned_response_time"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-05"
+      ]
+    },
+    {
+      "id": "bpw34-06-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "typical_spectral_response_scope"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-06"
+      ]
+    },
+    {
+      "id": "bpw34-07-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "absolute_reverse_bias_and_thermal_boundaries"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-07"
+      ]
+    },
+    {
+      "id": "bpw34-all-facts",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-01",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-02",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-03",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-04",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-05",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-06",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-07"
+      ]
+    },
+    {
+      "id": "bpw34-all-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-frontend-performance-unknown",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-optical-calibration-unknown",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-source-and-qualification-scope"
+      ]
+    },
+    {
+      "id": "bpw34-absolute_maximum_rating",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "kind": "absolute_maximum_rating"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-07"
+      ]
+    },
+    {
+      "id": "bpw34-electrical_characteristic",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "kind": "electrical_characteristic"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-02",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-03",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-04",
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-05"
+      ]
+    },
+    {
+      "id": "bpw34-identity",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "kind": "identity"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-01"
+      ]
+    },
+    {
+      "id": "bpw34-optical_characteristic",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "kind": "optical_characteristic"
+      },
+      "expected": [
+        "knowledge/intake/bpw34-photodiode-constraints.json#bpw34-photodiode-06"
+      ]
+    },
+    {
+      "id": "bpw34-wrong-source",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r1p0-bulk"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-vendor",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "manufacturer": "Synthetic Other Supplier"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-orderable",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "device": "BPW34S"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-package",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "package": "SOT-23"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-no-lux-conversion",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "universal_lux_to_current_conversion"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-no-hot-leakage",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "full_temperature_dark_current_max"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-no-zero-bias-max",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "zero_bias_capacitance_maximum"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-no-tia-bandwidth",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "guaranteed_tia_bandwidth"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-no-recommended-bias",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "parameter": "recommended_reverse_bias"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-source-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r1p0-bulk"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-vendor-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "manufacturer": "Synthetic Other Supplier"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-orderable-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "device": "BPW34S"
+      },
+      "expected": []
+    },
+    {
+      "id": "bpw34-wrong-package-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bpw34-vishay-81521-r2p1-bulk",
+        "package": "SOT-23"
+      },
+      "expected": []
+    }
+  ]
+}

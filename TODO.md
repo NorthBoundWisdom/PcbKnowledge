@@ -4,9 +4,19 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed photodiode integration
+
+The collection now contains 35 batches / 47 source scopes / 318 annotations.
+Seven exact BPW34 facts retain illumination, bias, load, frequency, typical/limit
+and unknown optical conditions; three warnings preserve application boundaries.
+The compact successor inherits 738 retrieval cases and adds 26 justified cases.
+Synthetic same-ID mutations protect full conditions, not lexical hits.
+See the [evaluation scope](docs/intake-evaluation-photodiode.md). Independent
+integration review, full final gates and published-commit CI remain separate.
+
 ## Reviewed Zener integration
 
-The collection now contains 34 batches / 46 source scopes / 311 annotations.
+At the Zener stage the collection contained 34 batches / 46 source scopes / 311 annotations.
 Six exact BZX84C5V1-E3-08 facts preserve pulse/test-current voltage, conditioned
 dynamic resistance, unpromoted leakage classification, temperature coefficient
 and distinct absolute-power boundaries. Precision-reference and clamp suitability

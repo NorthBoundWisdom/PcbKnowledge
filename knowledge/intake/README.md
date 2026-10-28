@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **34 reviewed batches, 46 batch-local source/device scopes, and 311 factual
+This queue contains **35 reviewed batches, 47 batch-local source/device scopes, and 318 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -43,6 +43,7 @@ provenance and batch bytes are preserved.
 | [Aluminum electrolytic constraints](146rti-bulk-capacitor-constraints.json) | Vishay MAL214636471E3, 470 uF / 25 V, Form TFA | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](146rti-bulk-capacitor-constraints-review.md) |
 | [Thermistor constraints](ntcle100-thermistor-constraints.json) | Vishay NTCLE100E3103JB0, no-A 10-kohm radial NTC | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](ntcle100-thermistor-constraints-review.md) |
 | [Zener conditions](bzx84c5v1-zener-constraints.json) | Vishay BZX84C5V1-E3-08, commercial SOT-23 | 6 | Actual PDF/identity HTML and independent rendered-page review; [receipt](bzx84c5v1-zener-constraints-review.md) |
+| [Photodiode conditions](bpw34-photodiode-constraints.json) | Vishay BPW34, bulk non-automotive leaded optical package | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](bpw34-photodiode-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -238,9 +239,20 @@ discontinuation statement for the exact no-A part.
 
 ## Zener integration
 
-The [current aggregate replay](../../docs/intake-evaluation-zener.md) adds six
+The [Zener-stage aggregate replay](../../docs/intake-evaluation-zener.md) adds six
 exact commercial BZX84C5V1-E3-08 facts and three warnings. Pulsed voltage at a
 specified bias current is not arbitrary-load regulation; small-signal dynamic
 resistance is not DC resistance. Leakage classification remains unpromoted where
 the table does not explicitly label it. Separate thermal power rows, grade
 identity and temperature coefficient cannot certify a reference or clamp circuit.
+
+## Photodiode integration
+
+The [current aggregate replay](../../docs/intake-evaluation-photodiode.md) adds
+seven exact BPW34 bulk annotations and three warnings. Illumination rows retain
+radiometric versus photometric conditions and unknown illuminant spectrum.
+Dark current, capacitance and response time retain bias, frequency, load,
+ambient and limit type. No unknown zero-bias maximum, optical pulse amplitude,
+edge thresholds, calibrated lux conversion or TIA bandwidth is invented.
+Absolute ratings remain separate from recommended operation. The compact
+successor preserves all historical case and batch pins.

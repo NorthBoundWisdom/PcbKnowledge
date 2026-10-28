@@ -1,0 +1,426 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "bpw34-photodiode-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+    "collected_at": "2026-10-28T23:49:33.908194+00:00"
+  },
+  "sources": [
+    {
+      "id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "full_orderable_mpn": "BPW34",
+      "document_url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+      "revision": "Rev. 2.1, 23-Aug-11",
+      "revision_date": "2011-08-23",
+      "identity_evidence": "Page 1 ordering code BPW34 (bulk); exact MAT_NO BPW34 in official quality HTML, Non-Automotive. No suffix invented.",
+      "pdf_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+      "pdf_byte_size": 113384,
+      "pdf_pages": 5,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "No open or redistribution license asserted; limited original factual annotations only, no source prose, full tables, artwork or PDF.",
+      "source_processing_scope": "Legal page 5 read before processing: rights reserved, no intellectual-property license, application validation required. No explicit prohibition of these limited original factual annotations identified.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "supplemental_identity_source": {
+        "url": "https://www.vishay.com/en/product/81521/tab/quality/",
+        "sha256": "6144b7f61582f54fb07d23dfb764d7b7e7659a2f2c24c36791fc8ed4473c93dd",
+        "byte_size": 763187,
+        "format": "HTML",
+        "revision": null,
+        "accessed_on": "2026-10-28",
+        "scope": "Exact MAT_NO BPW34 equality and Non-Automotive classification only; not stock, future supply or current compliance certification."
+      }
+    }
+  ],
+  "facts": [
+    {
+      "id": "bpw34-photodiode-01",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "identity",
+      "parameter": "exact_orderable_and_optical_package",
+      "value": {
+        "full_orderable_mpn": "BPW34",
+        "packaging": "bulk",
+        "grade": "Non-Automotive (official quality identity record)",
+        "radiant_sensitive_area_mm2": 7.5,
+        "sensitive_area_tolerance_mm2": null
+      },
+      "unit": null,
+      "conditions": "Exact BPW34 ordering row, leaded top-view clear plastic. BPW34S is a separate tube-packed orderable. Sensitive area is not a calibrated effective collecting area of an installed optical system; no footprint or current compliance certification is inferred.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Description, features and ordering information",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bpw34-photodiode-02",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "electrical_characteristic",
+      "parameter": "illumination_conditioned_reverse_light_current",
+      "value": {
+        "radiometric_test": {
+          "irradiance_mw_per_cm2": 1,
+          "wavelength_nm": 950,
+          "reverse_bias_v": 5,
+          "current_min_ua": 40,
+          "current_typ_ua": 50,
+          "current_max_ua": null
+        },
+        "photometric_test": {
+          "illuminance_klx": 1,
+          "reverse_bias_v": 5,
+          "current_typ_ua": 75,
+          "current_min_ua": null,
+          "current_max_ua": null,
+          "test_illuminant_spectrum": null
+        },
+        "ambient_temperature_c": 25
+      },
+      "unit": null,
+      "conditions": "Two separate source rows, not a unit conversion: irradiance and wavelength are explicit for the radiometric row; the 1 klx row does not specify the illuminant spectrum here. The 50 uA value is typical, not a maximum. Neither row supplies a universal lux-to-current or irradiance-to-ADC transfer function.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Basic characteristics: reverse light current rows",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bpw34-photodiode-03",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_reverse_dark_current",
+      "value": {
+        "current_typ_na": 2,
+        "current_max_na": 30,
+        "reverse_bias_v": 10,
+        "illumination": "E = 0",
+        "ambient_temperature_c": 25,
+        "full_temperature_current_max_na": null
+      },
+      "unit": null,
+      "conditions": "Dark current is measured without illumination at 10 V reverse bias and 25 C. The 30 nA maximum is not a full-temperature leakage limit, nor an amplifier offset/noise budget. Temperature plot is not digitized or promoted to guaranteed limits.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Basic characteristics: reverse dark current and table ambient header",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bpw34-photodiode-04",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "electrical_characteristic",
+      "parameter": "bias_and_frequency_conditioned_capacitance",
+      "value": {
+        "zero_bias": {
+          "reverse_bias_v": 0,
+          "capacitance_typ_pf": 70,
+          "capacitance_max_pf": null
+        },
+        "three_volt_bias": {
+          "reverse_bias_v": 3,
+          "capacitance_typ_pf": 25,
+          "capacitance_max_pf": 40
+        },
+        "frequency_hz": 1000000,
+        "illumination": "E = 0",
+        "ambient_temperature_c": 25
+      },
+      "unit": null,
+      "conditions": "Both source rows use 1 MHz and darkness; 40 pF maximum belongs only to the 3 V row, not zero bias. These are diode capacitances, not total amplifier input capacitance, a constant across bias, or a TIA stability guarantee.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Basic characteristics: two diode capacitance rows",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bpw34-photodiode-05",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_response_time",
+      "value": {
+        "rise_time_typ_ns": 100,
+        "fall_time_typ_ns": 100,
+        "rise_time_max_ns": null,
+        "fall_time_max_ns": null,
+        "reverse_bias_v": 10,
+        "load_resistance_ohm": 1000,
+        "wavelength_nm": 820,
+        "ambient_temperature_c": 25,
+        "optical_pulse_amplitude": null,
+        "edge_threshold_definition": null
+      },
+      "unit": null,
+      "conditions": "The response rows specify 10 V reverse bias, 1 kohm load and 820 nm. Typical 100 ns values are not maximum settling times or the bandwidth of a zero-bias/TIA/ADC implementation. Optical pulse amplitude and edge thresholds are not stated in these rows.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Basic characteristics: rise and fall time rows",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bpw34-photodiode-06",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "optical_characteristic",
+      "parameter": "typical_spectral_response_scope",
+      "value": {
+        "peak_sensitivity_wavelength_typ_nm": 900,
+        "spectral_bandwidth_lambda_0p1_typ_nm": [
+          430,
+          1100
+        ],
+        "half_sensitivity_angle_typ_deg": [
+          -65,
+          65
+        ],
+        "ambient_temperature_c": 25,
+        "guaranteed_flat_response_band_nm": null
+      },
+      "unit": null,
+      "conditions": "The spectral range is the table lambda_0.1 entry in the TYP column, not a flat-gain passband or a calibrated visible-light/lux response. Peak wavelength and angle are typical; unknown optical spectrum, window, angle and coupling must not become a guaranteed collected signal.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Basic characteristics: angle, peak wavelength and lambda_0.1 rows",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bpw34-photodiode-07",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BPW34",
+      "variant": "BPW34 bulk, non-automotive; not BPW34S tube",
+      "package": "Leaded top-view clear plastic",
+      "kind": "absolute_maximum_rating",
+      "parameter": "absolute_reverse_bias_and_thermal_boundaries",
+      "value": {
+        "reverse_voltage_abs_max_v": 60,
+        "power_abs_max_mw": 215,
+        "power_condition_ambient_c_max": 25,
+        "junction_temperature_max_c": 100,
+        "operating_ambient_range_c": [
+          -40,
+          100
+        ],
+        "thermal_resistance_junction_ambient_k_per_w": 350,
+        "thermal_test_connection": "Cu wire, 0.14 mm2",
+        "recommended_reverse_bias_v": null
+      },
+      "unit": null,
+      "conditions": "Absolute-rating table ambient header is 25 C unless specified; 215 mW explicitly requires ambient <=25 C. Thermal resistance uses the stated wire connection, not arbitrary PCB thermal performance. A 60 V absolute maximum is not a recommended bias, proof of avalanche operation, or a full-temperature photocurrent/dark-current guarantee.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+        "revision": "Rev. 2.1, 23-Aug-11",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Absolute maximum ratings and thermal connection condition",
+        "source_sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "bpw34-optical-calibration-unknown",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual spectrum, irradiance or illuminance distribution, optical window/geometry, angle and calibration are missing. Radiometric and photometric rows cannot supply a universal conversion or guaranteed installed photocurrent.",
+      "provenance": {
+        "actor": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "recorded_at": "2026-10-28T23:49:33.908194+00:00"
+      }
+    },
+    {
+      "id": "bpw34-frontend-performance-unknown",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Amplifier topology and bias, feedback impedance, total input capacitance, leakage, noise spectrum, bandwidth, settling target, ADC range/resolution and temperature are missing. Conditioned typical diode data do not establish TIA stability, signal-to-noise ratio or ADC accuracy.",
+      "provenance": {
+        "actor": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "recorded_at": "2026-10-28T23:49:33.908194+00:00"
+      }
+    },
+    {
+      "id": "bpw34-source-and-qualification-scope",
+      "source_id": "bpw34-vishay-81521-r2p1-bulk",
+      "issue_status": "SOURCE_SCOPE_LIMITATION",
+      "description": "Exact BPW34 bulk non-automotive scope only. Electrical revision 2011 and legal notice 2026 are different. No full CAD footprint, current compliance certificate, calibrated sensor model or system safety qualification is supplied. Unstated maximums, optical pulse amplitude and edge thresholds remain unknown.",
+      "provenance": {
+        "actor": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "recorded_at": "2026-10-28T23:49:33.908194+00:00"
+      }
+    }
+  ],
+  "limitations": [
+    "Exact BPW34 bulk only; BPW34S tube and other suppliers are not substituted.",
+    "Electrical document 81521 Rev.2.1 23-Aug-11 is separate from legal appendix 91000 01-Jan-2026.",
+    "Original PDF/HTML/text/renders remain local untracked; ordinary retrieval remains NOT_LOCALLY_VERIFIED.",
+    "No source table/artwork redistributed; no human, canonical or circuit approval."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T23:49:33.908194+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions/review_bpw34_source",
+      "action": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "timestamp": "2026-10-28T23:50:15.705713+00:00",
+      "draft_sha256": "8d5d073c32298164fb86e9ec4b5711336e7db5254e47020695cd75e95ecffe50",
+      "notes": "Full draft accepted without technical corrections; noncanonical owner-delegated Agent review only."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions/review_bpw34_source",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T23:50:15.705713+00:00",
+    "scope": "All seven complete facts, all three warnings, actual PDF and supplemental HTML bytes, rendered pages and legal notice.",
+    "draft_sha256": "8d5d073c32298164fb86e9ec4b5711336e7db5254e47020695cd75e95ecffe50",
+    "visual_pages": [
+      1,
+      2
+    ],
+    "legal_pdf_page_read": 5,
+    "engineering_corrections": [],
+    "warning_review": "All three full warnings retained; no universal illumination conversion, invented response maximum/threshold, thermal-board guarantee or system qualification."
+  }
+}
