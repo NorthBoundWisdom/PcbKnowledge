@@ -4,14 +4,25 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed current-sense resistor integration
+
+The collection now contains 30 batches / 42 source scopes / 284 annotations.
+Six exact WSLP2512R0100FEA annotations and three warnings retain component versus
+element TCR, conditioned power, resistance-specific geometry, additive test drift
+and unknown pulse/system accuracy. A compact hash-pinned successor adds 29 cases
+without copying historical manifests. Prior 278 annotations and owner receipts
+remain unchanged. See the [evaluation receipt](docs/intake-evaluation-current-sense.md).
+Final local gates passed: Build/Test each 406 tests without skips, and all 624
+aggregate cases. Exact-commit CI is checked separately after publication.
+
 ## Reviewed exact-bin optocoupler integration
 
-The coherent collection is 29 batches / 41 source scopes / 278 annotations.
+At the preceding optocoupler stage, the collection was 29 batches / 41 source scopes / 278 annotations.
 Eight exact VO617A-3 standard DIP-4 annotations are independently Agent-reviewed
 under owner delegation. All 270 prior annotations and historical manifests and
 receipts remain unchanged. CTR-bin and test-condition boundaries remain explicit;
 5 mA versus 10 mA saturated-test source wording is not silently reconciled and
-qualified saturated delay remains unknown. Both CI jobs select the optocoupler
+qualified saturated delay remains unknown. Both CI jobs selected the optocoupler
 successor with the unchanged separate MCP23017 disposition.
 See the [evaluation receipt](docs/intake-evaluation-optocoupler.md).
 Exact-commit publication and terminal CI are reported separately after verification.

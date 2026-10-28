@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **29 reviewed batches, 41 batch-local source/device scopes, and 278 factual
+This queue contains **30 reviewed batches, 42 batch-local source/device scopes, and 284 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -38,6 +38,7 @@ provenance and batch bytes are preserved.
 | [Inductor current constraints](bourns-srp4020ta-4r7m-current-constraints.json) | Bourns SRP4020TA-4R7M, exact lead-frame SMD | 6 | Exact independently reviewed handoff; [receipt](bourns-srp4020ta-4r7m-current-constraints-review.md) |
 | [Low-voltage MOSFET drive](si2342ds-low-voltage-drive-constraints.json) | Vishay Si2342DS-T1-GE3/SOT-23 (TO-236) | 6 | Actual hash and independent page 1/2 visual review; source-container warning retained; [receipt](si2342ds-low-voltage-drive-constraints-review.md) |
 | [Optocoupler logic constraints](vo617a-3-optocoupler-logic-constraints.json) | Vishay VO617A-3, standard DIP-4, CTR bin 3 | 8 | Actual hash and independent pages 1-4 visual review; saturated-current source conflict retained; [receipt](vo617a-3-optocoupler-logic-constraints-review.md) |
+| [Current-sense resistor constraints](wslp2512-current-sense-constraints.json) | Vishay WSLP2512R0100FEA, 10 milliohm, 2512 | 6 | Actual PDF/identity HTML and independent rendered-page review; [receipt](wslp2512-current-sense-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -185,7 +186,7 @@ Poppler's source-container recovery is disclosed, not upgraded to clean validati
 
 ## Optocoupler logic integration
 
-The [current aggregate replay](../../docs/intake-evaluation-optocoupler.md) adds
+The [optocoupler replay](../../docs/intake-evaluation-optocoupler.md) adds
 eight exact VO617A-3 annotations and three complete warnings. Bin-specific CTR
 at the stated active-region voltage does not guarantee saturated logic-low sink.
 LED voltage, saturation, leakage and typical switching retain different current,
@@ -193,3 +194,12 @@ load and temperature conditions. The saturated table/figure disagree on 5 mA
 versus 10 mA LED current; both are preserved, reconciled current and qualified
 delay remain unknown. No resistor, logic rate, continuous isolation rating or
 safety approval is synthesized from these records.
+
+## Current-sense resistor integration
+
+The [current aggregate replay](../../docs/intake-evaluation-current-sense.md) adds
+six exact WSLP2512R0100FEA annotations and three warnings. Component TCR is not
+the alloy-only element value; P70 and ambient derating do not approve an unknown
+board current. Resistance-specific terminal geometry, additive load-life drift
+and illustrative pulse scope are retained. Initial tolerance and typical sensing
+traces do not qualify total current-measurement accuracy.

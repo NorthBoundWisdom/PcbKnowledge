@@ -52,7 +52,7 @@ jobs:
         run: python configs/pcbknowledge_agent.py validate
 
       - name: Replay pinned intake retrieval cases
-        run: python configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-optocoupler.json --dispositions evals/intake-dispositions-2026-10-28.json
+        run: python configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-current-sense.json --dispositions evals/intake-dispositions-2026-10-28.json
 
       - name: Package reproducibility surface
         run: python configs/pcbknowledge_workflow.py package
@@ -100,4 +100,4 @@ jobs:
         run: python configs/pcbknowledge_workflow.py test
 
       - name: Replay pinned intake retrieval cases
-        run: python configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-optocoupler.json --dispositions evals/intake-dispositions-2026-10-28.json
+        run: python configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-current-sense.json --dispositions evals/intake-dispositions-2026-10-28.json
