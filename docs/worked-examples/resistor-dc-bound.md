@@ -171,3 +171,43 @@ bound, safety/compliance certification, footprint approval or other-part
 substitution follows. TCR, actual film temperature, long-term drift, waveform
 and mounting remain separate engineering inputs/evidence. The calculation does
 not solve for temperature or prove that the supplied resistance interval holds.
+
+## Executable fixed-case regression
+
+Run `python3 configs/pcbknowledge_resistor_dc_eval.py --repo .` to reproduce
+this example with the complete pinned seven-fact batch and all three warnings.
+The script accepts an explicit metadata workspace, but no user scenario input.
+It does not download or reverify the original PDF. The fixed regression includes
+14 synthetic cases covering the example, zero-voltage arithmetic, missing or
+invalid intervals, initial-tolerance substitution, identity mismatch and rejection
+of AC/pulse interpretations. Negative voltage is outside this bounded example;
+its refusal is not a claim that a resistor cannot operate with negative voltage.
+
+`CONDITIONAL_DC_BOUNDS` means only that the stated nonnegative DC and positive
+operating-resistance assumptions support the arithmetic. The output independently
+retains `NOT_ESTABLISHED` for operating-resistance guarantee, thermal qualification
+and circuit qualification. Even a zero-power calculation does not certify the
+part or the assumptions. The standard-P70 comparison is numerical only; it is
+never an allowed-power decision. `PASS`/exit 0 describes expected regression
+outcomes, including expected refusals, not application acceptance.
+
+The regression uses exact rational endpoints and outward six-decimal mA/mW
+displays. Source metadata is bound by its recorded JSON SHA-256; changed bytes,
+missing warnings or different source identity require review rather than automatic
+pin refresh. Full original facts, source conditions and warnings accompany results.
+This is an execution of the existing conditional example, not new manufacturer
+knowledge, canonical approval, human review or hardware verification.
+
+Focused implementation verification: 14 unit tests passed on 2026-10-28, including
+441 exact-arithmetic grid points, display enclosure, wrong-arithmetic and false
+qualification mutations, full evidence preservation and evidence-change refusal.
+Full repository gates and published-commit CI are recorded by the publication
+coordinator separately; this focused receipt does not claim they ran.
+
+Independent Agent review on 2026-10-28:
+`agent:/root/check_and_resume_knowledge/review_resistor_eval` replayed all
+14 focused tests, independently checked 20 endpoint/rounding combinations and
+compared the complete seven facts and three warnings to the pinned metadata.
+No blocking findings remained. Author:
+`agent:/root/check_and_resume_knowledge/implement_resistor_boundary_eval`.
+This review is under owner delegation, not a human or source-original audit.

@@ -556,3 +556,13 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   workspace/Agent, Config and Package gates pass. Independent Agent review checked
   35 additional exact-arithmetic pin pairs and complete evidence preservation.
   Exact-commit remote CI is verified separately after publication.
+
+## Executable conditional resistor DC example
+
+- [x] Turn the existing [resistor DC bound](docs/worked-examples/resistor-dc-bound.md)
+  into a fixed synthetic regression with complete pinned evidence and exact
+  arithmetic; no general calculator, new source records or circuit approval.
+- Fourteen cases preserve missing operating inputs and reject nominal-tolerance,
+  AC/pulse and wrong-identity substitutions. Fourteen focused tests pass, including
+  441 exact grid points and false-qualification mutations. Full gates and exact
+  published-commit CI remain separate publication checks.
