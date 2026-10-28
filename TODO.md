@@ -76,9 +76,10 @@ Remote CI is checked separately for the published commit.
 Issues #16 (CAN), #17 (EEPROM), and #18 (buck) add 23 reviewed conditional
 annotations and nine explicit application unknowns. One integrator owns the
 successor aggregate, tests and CI wiring; collectors own only their new pairs.
-The maintainer's coverage/read-only CLI and MCP6002 lane remain disjoint.
+The maintainer's coverage/read-only CLI lane remained disjoint; the later MCP6002
+integration is recorded below.
 
-The new `evals/intake-retrieval-network-memory-power.json` pins eleven batches /
+The historical `evals/intake-retrieval-network-memory-power.json` pins eleven batches /
 148 annotations while retaining immutable historical 100/125 receipts and full
 MCP23017 disposition metadata. Semantic mutation tests detect lost conditions,
 stress/typical/example promotion, ACK-to-persistence inference, page-wrap changes,
@@ -91,6 +92,31 @@ English/public/PDF.js guards and Package exited 0. The package has 17 metadata
 members, including all eleven batches and the exact disposition, with no originals.
 Independent source and integration review found no blocker. Remote CI remains
 a separate exact-commit publication check.
+
+## Signal-chain and logic application stage
+
+- [x] Integrate the independently reviewed MCP6002-I/SN and SN74HC00/D pairs without
+  modifying the original 100 annotations, historical manifests, owner receipt or
+  MCP23017 disposition. These add fourteen annotations and six source warnings;
+  acceptance is Agent review under owner delegation, not new human approval.
+- [x] Add the [signal/logic aggregate](docs/intake-evaluation-signal-logic.md): thirteen
+  batches / 162 annotations, 159 base cases plus six unchanged disposition cases.
+  All 108 prior case definitions and selections remain intact; 27 MCP6002 and 24
+  SN74HC00 recipes preserve complete payloads and exact-identity negatives.
+- [x] Retain the SN74HC00 RKS/20-pin figure exclusion, unresolved full orderable and
+  missing interface/load inputs; retain op-amp typical, load, temperature and
+  signal-envelope limits. Neither circuit suitability nor source correction is
+  inferred. Synthetic mutations cover these distinctions without source originals.
+
+Integrated local receipt (2026-10-28): independent aggregate review accepted all
+prior and new selections. All 12 focused replay tests passed; Build and Test each
+passed 276 tests, zero skips. All 165 full-payload CLI cases passed. English/public/PDF.js
+guards, workspace/Agent validation, Config, Package and staged diff checks exited 0.
+The package contains exactly 19 metadata members: thirteen batches, the unchanged
+disposition, workspace manifest, three schemas and derived manifest; every packaged
+input is byte-identical and no original/render/text is included. All nineteen
+protected baseline files and both immutable reviewed pairs were rechecked unchanged.
+Exact-commit remote CI remains a separate publication check.
 
 ## Next application-question milestones
 

@@ -7,6 +7,9 @@ five JSON batches, `evals/intake-retrieval-100.json`, and the snapshot-specific
 carry independent Agent review under owner delegation, not that earlier human
 batch acceptance, canonical approval, or engineering sign-off.
 
+This is now a historical snapshot; CI selects the
+[current signal/logic aggregate](intake-evaluation-signal-logic.md).
+
 ## Replay
 
 ```bash
@@ -15,7 +18,7 @@ python3 configs/pcbknowledge_intake_eval.py --repo . \
   --dispositions evals/intake-dispositions-2026-10-28.json
 ```
 
-Both existing CI jobs select this command. The evaluator still rejects changed
+Both CI jobs selected this command at the 125-annotation stage. The evaluator still rejects changed
 batch sets or bytes before running queries. It also requires the separately
 pinned source-disposition manifest and rejects changed disposition bytes/sets.
 No subset fallback, automatic pin refresh, or relaxed equality was introduced.

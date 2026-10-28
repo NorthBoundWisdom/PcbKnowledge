@@ -1,0 +1,507 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "mcp6002-signal-chain-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/collect_opamp_application_knowledge",
+    "collected_at": "2026-10-28T03:19:56.954875+00:00"
+  },
+  "sources": [
+    {
+      "id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "document_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+      "revision": "DS20001733L",
+      "revision_date": "2020-03",
+      "revision_date_evidence": "PDF/printed page 45, Appendix A",
+      "identity_evidence": "PDF/printed page 47, exact MCP6002-I/SN example and I/SN decoding",
+      "pdf_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+      "pdf_byte_size": 931340,
+      "pdf_pages": 50,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "Not asserted; public reference only; original excluded from Git and package",
+      "source_processing_scope": "Small noncanonical original annotations under ADR-021; no canonical license clearance asserted",
+      "cache_receipt": "Reused the previously acquired official PDF; independently recomputed bytes/hash on 2026-10-28 and matched the prior microchip-mcp6002-l receipt. No fresh download or latest-revision check claimed.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        3,
+        4,
+        13,
+        14,
+        45,
+        47
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "mcp6002-app-01",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "dc_operating_specification",
+      "parameter": "input_common_mode_range",
+      "value": {
+        "lower": "VSS - 0.3 V",
+        "upper": "VDD + 0.3 V"
+      },
+      "unit": "V",
+      "conditions": "DC table: TA=25 C, VDD=1.8..5.5 V, VSS=GND, VL=VDD/2, RL=10 kohm to VL, VOUT approximately VDD/2. Below VSS, input current can constrain high-impedance sources. Common-mode operation does not authorize arbitrary overvoltage, differential voltage or injected current; stress ratings are separate.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 3,
+        "pdf_page_index": 2,
+        "section": "1.0; DC Common-Mode row",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+          "revision": "DS20001733L",
+          "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "4.1.2; 4.1.3",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/collect_opamp_application_knowledge",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+          "reviewer": "agent:/root/verify_opamp_application_evidence"
+        }
+      ],
+      "related_existing_records": [
+        "b002-microchip-mcp6002-l-04",
+        "b002-microchip-mcp6002-l-05"
+      ]
+    },
+    {
+      "id": "mcp6002-app-02",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "application_guidance",
+      "parameter": "input_stage_transition",
+      "value": {
+        "transition_common_mode": "VDD - 1.1 V",
+        "guidance": "Avoid the crossover region when optimizing noninverting distortion and gain linearity."
+      },
+      "unit": "V",
+      "conditions": "Section 4.1.3 describes the crossover of two parallel input stages. No transition tolerance, distortion limit or exclusion-zone width is specified here. This guidance is not a reduced guaranteed common-mode range or a claim that every allowed common-mode voltage has equal precision.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 13,
+        "pdf_page_index": 12,
+        "section": "4.1.3",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "mcp6002-app-03",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "dc_electrical",
+      "parameter": "output_saturation_headroom",
+      "value": {
+        "VOL_max_expression": "VSS + 25 mV",
+        "VOH_min_expression": "VDD - 25 mV"
+      },
+      "unit": "mV",
+      "conditions": "VDD=5.5 V, TA=25 C, VSS=GND, VCM=VDD/2, RL=10 kohm to VDD/2, 0.5 V input overdrive. Section 4.2 identifies the low-output maximum and high-output minimum. These overdriven swing endpoints are not a guaranteed linear signal range and do not transfer to another load or supply.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 3,
+        "pdf_page_index": 2,
+        "section": "1.0; Output swing row",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+          "revision": "DS20001733L",
+          "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "4.2",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/collect_opamp_application_knowledge",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+          "reviewer": "agent:/root/verify_opamp_application_evidence"
+        }
+      ]
+    },
+    {
+      "id": "mcp6002-app-04",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "typical_characteristic",
+      "parameter": "gain_bandwidth_product",
+      "value": {
+        "typ": 1.0,
+        "min": null,
+        "max": null
+      },
+      "unit": "MHz",
+      "conditions": "TA=25 C, VDD=1.8..5.5 V, VSS=GND, VCM=VDD/2, VL=VDD/2, VOUT approximately VDD/2, RL=10 kohm to VL, CL=60 pF. The AC table supplies a typical value only; no minimum is specified. It is not a guaranteed closed-loop signal bandwidth at an unspecified gain/load.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 4,
+        "pdf_page_index": 3,
+        "section": "1.0; AC Response, GBWP",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "mcp6002-app-05",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "typical_characteristic",
+      "parameter": "slew_rate",
+      "value": {
+        "typ": 0.6,
+        "min": null,
+        "max": null
+      },
+      "unit": "V/us",
+      "conditions": "TA=25 C, VDD=1.8..5.5 V, VSS=GND, VCM=VDD/2, VL=VDD/2, VOUT approximately VDD/2, RL=10 kohm to VL, CL=60 pF. The AC table supplies a typical value only; no minimum is specified. Signal amplitude, frequency, settling tolerance and loading are needed before assessing large-signal performance.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 4,
+        "pdf_page_index": 3,
+        "section": "1.0; AC Response, SR",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "mcp6002-app-06",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "application_guidance",
+      "parameter": "capacitive_load_isolation",
+      "value": {
+        "approach": "Series RISO between the amplifier output and capacitive load; Figure 4-3 takes feedback before RISO.",
+        "noninverting_noise_gain": "GN = signal gain",
+        "inverting_noise_gain": "GN = 1 + abs(signal gain)",
+        "plot_abscissa": "CL / GN",
+        "selected_RISO_ohm": null
+      },
+      "unit": null,
+      "conditions": "Unity-gain buffers are most sensitive; all gains can show reduced phase margin/bandwidth, peaking or ringing. The >100 pF at G=+1 example motivates isolation, not a guaranteed stability cutoff. Figure 4-4 uses VDD=5.0 V and RL=100 kohm. No curve value is adopted; actual gain, load and response checks must determine RISO.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 14,
+        "pdf_page_index": 13,
+        "section": "4.3; Figures 4-3 and 4-4",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "mcp6002-app-07",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "manufacturer": "Microchip Technology",
+      "device": "MCP6002-I/SN",
+      "variant": "dual; industrial temperature grade",
+      "package": "8-lead SOIC",
+      "kind": "application_guidance",
+      "parameter": "supply_bypass_placement",
+      "value": {
+        "local_capacitance_uF": [
+          0.01,
+          0.1
+        ],
+        "local_max_distance_mm": 2,
+        "bulk_capacitance_min_uF": 1,
+        "bulk_max_distance_mm": 100,
+        "bulk_shared_with_nearby_analog_parts": true
+      },
+      "unit": null,
+      "conditions": "For this family, Section 4.4 gives local high-frequency bypass and nearby bulk-energy guidance at the supply pin (VDD for a single supply). These placement/capacitance examples do not specify dielectric, bias derating, loop inductance or a complete power-integrity design.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 14,
+        "pdf_page_index": 13,
+        "section": "4.4",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "mcp6002-app-envelope-unknown",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "question": "Does this part fit the requested supply, temperature and full input/output trajectory?",
+      "missing_inputs": [
+        "actual supply bounds and part date code",
+        "ambient temperature and required guaranteed limits",
+        "input common-mode and differential trajectories",
+        "load current, resistance and requested output accuracy"
+      ],
+      "conclusion": "UNKNOWN for an unspecified circuit. Reuse the existing operating-supply and stress records without conflating them. Industrial I grade is -40..85 C; page 4 describes operation beyond that with reduced performance, not an extension of all stated limits. The 25 mV endpoints do not certify linear rail-to-rail accuracy.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 4,
+        "pdf_page_index": 3,
+        "section": "Temperature Specifications and note 1; identity on page 47",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "collector": "agent:/root/collect_opamp_application_knowledge",
+      "additional_evidence": [
+        {
+          "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+          "revision": "DS20001733L",
+          "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+          "printed_page": 3,
+          "pdf_page_index": 2,
+          "section": "1.0; supply stress versus DC operation and output swing",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/collect_opamp_application_knowledge",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+          "reviewer": "agent:/root/verify_opamp_application_evidence"
+        },
+        {
+          "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+          "revision": "DS20001733L",
+          "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "4.2",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/collect_opamp_application_knowledge",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+          "reviewer": "agent:/root/verify_opamp_application_evidence"
+        },
+        {
+          "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+          "revision": "DS20001733L",
+          "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+          "printed_page": 47,
+          "pdf_page_index": 46,
+          "section": "Product Identification System; MCP6002-I/SN example",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/collect_opamp_application_knowledge",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+          "reviewer": "agent:/root/verify_opamp_application_evidence"
+        }
+      ]
+    },
+    {
+      "id": "mcp6002-app-dynamics-unknown",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "question": "Can a requested gain and capacitive load meet bandwidth, settling and stability requirements?",
+      "missing_inputs": [
+        "signal gain and noise gain topology",
+        "output and parasitic capacitance",
+        "resistive load and supply",
+        "signal amplitude, spectral content and allowable settling/overshoot",
+        "isolation choice and circuit-level response evidence"
+      ],
+      "conclusion": "UNKNOWN: typical GBWP/slew and application curves do not establish a guaranteed signal-chain response. No universal capacitance limit, RISO value or automatic circuit fit is inferred.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 14,
+        "pdf_page_index": 13,
+        "section": "4.3",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "collector": "agent:/root/collect_opamp_application_knowledge",
+      "additional_evidence": [
+        {
+          "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+          "revision": "DS20001733L",
+          "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+          "printed_page": 4,
+          "pdf_page_index": 3,
+          "section": "1.0; AC Response table/header",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/collect_opamp_application_knowledge",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+          "reviewer": "agent:/root/verify_opamp_application_evidence"
+        }
+      ]
+    },
+    {
+      "id": "mcp6002-app-sensor-unknown",
+      "source_id": "mcp6002-app-microchip-l-sn",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "question": "Can a high-impedance sensor use the complete nominal common-mode range at the required precision?",
+      "missing_inputs": [
+        "sensor/source impedance and current budget",
+        "input common-mode trajectory, especially below VSS and near crossover",
+        "gain, temperature and total error budget"
+      ],
+      "conclusion": "UNKNOWN: input-current behavior below VSS and crossover-related linearity guidance require application-specific assessment. Rail-to-rail labeling is not a sensor-accuracy guarantee.",
+      "evidence": {
+        "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+        "revision": "DS20001733L",
+        "source_sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+        "printed_page": 13,
+        "pdf_page_index": 12,
+        "section": "4.1.2; 4.1.3",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_opamp_application_knowledge",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and separate Agent reviewer independently recomputed the cached official PDF hash and inspected extracted text plus actual cited page renders; no bbox or human verification claimed.",
+        "reviewer": "agent:/root/verify_opamp_application_evidence"
+      },
+      "collector": "agent:/root/collect_opamp_application_knowledge"
+    }
+  ],
+  "limitations": [
+    "Only the exact MCP6002-I/SN, 8-lead SOIC scope and pinned DS20001733L bytes are selected; no transfer to another orderable, package, temperature grade or revision.",
+    "The original seven MCP6002 records in cross-manufacturer-pilot.json are referenced rather than duplicated or altered. The original 100-record owner acceptance does not cover this batch.",
+    "No original, full-page extract, page image, precise bbox, current procurement check or latest-revision guarantee is published.",
+    "No complete sensor interface, protection network, filter, output-load design, thermal design, power-integrity verification or hardware qualification is established. Section 4.5 unused-amplifier examples explicitly target MCP6004 and are not adopted for MCP6002.",
+    "Independent Agent source review is complete under owner delegation; coordinated aggregate integration, publication and exact-commit CI remain separate gates."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/collect_opamp_application_knowledge",
+      "decision": "DRAFT_COLLECTED",
+      "timestamp": "2026-10-28T03:19:56.954875+00:00",
+      "note": "Cached source identity and cited actual renders checked by collector; independent Agent review is a separate gate."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/collect_opamp_application_knowledge",
+      "decision": "DRAFT_CORRECTED",
+      "timestamp": "2026-10-28T03:24:12.405200+00:00",
+      "previous_json_sha256": "860a91fbbb0aec59ccd237879b742543ef10854942a44cf1fde3e25fee141faa",
+      "note": "Independent reviewer requested unambiguous VOL maximum/VOH minimum expressions and explicit output-test VCM=VDD/2 header condition; applied both. Added page 4 evidence to the dynamics warning for its typical GBWP/slew conclusion."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/verify_opamp_application_evidence",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T03:25:13Z",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "dacec5538e2fcef6c00ee0fd2727249f2fa055f077852ac1f0712980a9c020ef",
+      "notes": "Accepted seven facts and three warnings after inspecting actual byte identity and rendered pages 3, 4, 13, 14, 45, 47. Verified output-bound clarification, VCM header condition and added dynamics citation. Independent 27-case CLI replay and 67 focused tests passed. Aggregate integration and publication are separate."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/verify_opamp_application_evidence",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T03:25:13Z",
+    "scope": "Independent source-byte, rendered-page and conditional-semantics review; noncanonical, not human or complete circuit acceptance.",
+    "draft_sha256": "dacec5538e2fcef6c00ee0fd2727249f2fa055f077852ac1f0712980a9c020ef"
+  }
+}

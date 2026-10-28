@@ -7,6 +7,9 @@ This successor pins eleven reviewed batches / 148 annotations. It retains all
 byte-identical. New content has independent Agent review under owner delegation,
 not inherited human acceptance, canonical approval or engineering sign-off.
 
+This is now a historical snapshot; CI selects the
+[current signal/logic aggregate](intake-evaluation-signal-logic.md).
+
 ## Exact replay
 
 ```bash
@@ -15,7 +18,7 @@ python3 configs/pcbknowledge_intake_eval.py --repo . \
   --dispositions evals/intake-dispositions-2026-10-28.json
 ```
 
-Both CI jobs select this successor plus the unchanged disposition manifest.
+At this stage, both CI jobs selected this successor plus the unchanged disposition manifest.
 The evaluator rejects altered batch bytes/sets and compares full payloads,
 including conditions, source warnings, identity, provenance, review status and
 noncanonical/nonverification markers. No automatic expected-output capture,
@@ -24,7 +27,7 @@ Historical manifests replay their own snapshots, not the enlarged collection.
 
 The 108 aggregate cases comprise the previous 64, 23 new source/parameter
 selections, three source-warning selections, and 18 exact negative selections.
-The unchanged six disposition cases bring the current combined replay to 114.
+The unchanged six disposition cases bring this historical combined replay to 114.
 Selections are specified from independently reviewed source-to-record mappings,
 not learned from CLI output. One explicit successor-only lexical expansion was
 independently reviewed: `TPS62160 PG` also selects `buck-app-05`, `buck-app-07`
