@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **28 reviewed batches, 40 batch-local source/device scopes, and 270 factual
+This queue contains **29 reviewed batches, 41 batch-local source/device scopes, and 278 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -37,6 +37,7 @@ provenance and batch bytes are preserved.
 | [MLCC capacitance constraints](kemet-c0603c104k5ractu-capacitance-constraints.json) | KEMET C0603C104K5RACTU/0603, exact part and family scopes | 8 | Exact independently reviewed handoff; [receipt](kemet-c0603c104k5ractu-capacitance-constraints-review.md) |
 | [Inductor current constraints](bourns-srp4020ta-4r7m-current-constraints.json) | Bourns SRP4020TA-4R7M, exact lead-frame SMD | 6 | Exact independently reviewed handoff; [receipt](bourns-srp4020ta-4r7m-current-constraints-review.md) |
 | [Low-voltage MOSFET drive](si2342ds-low-voltage-drive-constraints.json) | Vishay Si2342DS-T1-GE3/SOT-23 (TO-236) | 6 | Actual hash and independent page 1/2 visual review; source-container warning retained; [receipt](si2342ds-low-voltage-drive-constraints-review.md) |
+| [Optocoupler logic constraints](vo617a-3-optocoupler-logic-constraints.json) | Vishay VO617A-3, standard DIP-4, CTR bin 3 | 8 | Actual hash and independent pages 1-4 visual review; saturated-current source conflict retained; [receipt](vo617a-3-optocoupler-logic-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -173,7 +174,7 @@ footprint or assembled-board qualification is inferred.
 
 ## Low-voltage MOSFET drive integration
 
-The [current aggregate replay](../../docs/intake-evaluation-low-voltage-mosfet.md)
+The [low-voltage MOSFET replay](../../docs/intake-evaluation-low-voltage-mosfet.md)
 adds six exact-orderable Si2342DS-T1-GE3 annotations and three full warnings.
 Gate threshold is not useful-load enhancement; the 1.2 V and 1.8 V on-resistance
 rows retain their test currents, temperature and pulse conditions. Short-time and
@@ -181,3 +182,14 @@ steady-state thermal references differ. Gate charge at 2.5 V does not qualify PW
 at 1.8 V. The 8 V drain stress limit does not permit a 12 V application or an
 AO3400A substitution. Actual waveform and board qualification remain unknown;
 Poppler's source-container recovery is disclosed, not upgraded to clean validation.
+
+## Optocoupler logic integration
+
+The [current aggregate replay](../../docs/intake-evaluation-optocoupler.md) adds
+eight exact VO617A-3 annotations and three complete warnings. Bin-specific CTR
+at the stated active-region voltage does not guarantee saturated logic-low sink.
+LED voltage, saturation, leakage and typical switching retain different current,
+load and temperature conditions. The saturated table/figure disagree on 5 mA
+versus 10 mA LED current; both are preserved, reconciled current and qualified
+delay remain unknown. No resistor, logic rate, continuous isolation rating or
+safety approval is synthesized from these records.

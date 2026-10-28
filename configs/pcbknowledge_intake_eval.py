@@ -9,6 +9,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+import re
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -72,6 +75,153 @@ def validate_manifest(manifest: dict) -> None:
             raise EvaluationError("expected must be an ordered array of batch-path#record-id strings")
         if len(set(expected)) != len(expected):
             raise EvaluationError("expected references must not repeat")
+
+
+DELTA_FORMAT = "pcbknowledge-intake-retrieval-delta-v1"
+MAX_MANIFEST_BYTES = 1024 * 1024
+MAX_CHAIN_BYTES = 8 * MAX_MANIFEST_BYTES
+MAX_MANIFEST_DEPTH = 16
+MAX_COMPOSED_CASES = 10000
+
+
+def _unique_keys(pairs: list[tuple[str, object]]) -> dict:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise EvaluationError("manifest JSON contains a duplicate key")
+        result[key] = value
+    return result
+
+
+def _reject_constant(value: str) -> None:
+    raise EvaluationError("manifest JSON contains a non-finite number")
+
+
+def _manifest_bytes(path: Path, boundary: Path) -> bytes:
+    """Bound reads and reject links or path replacement inside the selected root.
+
+    The caller explicitly selects a root manifest directory, resolved once. Its
+    ancestors are not a sandbox; referenced paths below it cannot follow links.
+    This is a local metadata loader, not an untrusted-filesystem security service.
+    """
+    relative = path.relative_to(boundary)
+    nodes = [boundary.joinpath(*relative.parts[:n]) for n in range(1, len(relative.parts) + 1)]
+    snapshots = []
+    for index, node in enumerate(nodes):
+        info = node.lstat()
+        if (stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & 0x400
+                or (not stat.S_ISDIR(info.st_mode) if index < len(nodes) - 1
+                    else not stat.S_ISREG(info.st_mode))):
+            raise EvaluationError("manifest paths require ordinary directories and regular files, not links")
+        snapshots.append(info)
+    if not snapshots or snapshots[-1].st_size > MAX_MANIFEST_BYTES:
+        raise EvaluationError("manifest exceeds the byte limit")
+    flags = (os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+             | getattr(os, "O_NONBLOCK", 0))
+    descriptor = os.open(path, flags)
+    with os.fdopen(descriptor, "rb") as stream:
+        opened = os.fstat(stream.fileno())
+        if not stat.S_ISREG(opened.st_mode):
+            raise EvaluationError("opened manifest is not a regular file")
+        if not os.path.samestat(snapshots[-1], opened):
+            raise EvaluationError("manifest changed while opening")
+        payload = stream.read(MAX_MANIFEST_BYTES + 1)
+    if len(payload) > MAX_MANIFEST_BYTES:
+        raise EvaluationError("manifest exceeds the byte limit")
+    for node, before in zip(nodes, snapshots):
+        after = node.lstat()
+        if (not os.path.samestat(before, after) or stat.S_ISLNK(after.st_mode)
+                or getattr(after, "st_file_attributes", 0) & 0x400
+                or (stat.S_ISREG(before.st_mode) and
+                    (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns))):
+            raise EvaluationError("manifest path changed during reading")
+    return payload
+
+
+def _base_path(parent: Path, value: object) -> Path:
+    if (not isinstance(value, str) or not value or len(value) > 512
+            or "\\" in value or ":" in value or value.startswith("/")
+            or any(ord(c) < 32 or ord(c) == 127 for c in value)
+            or any(part in {"", ".", ".."} or part != part.rstrip(" .")
+                   for part in value.split("/"))
+            or len(value.split("/")) > 16 or not value.endswith(".json")):
+        raise EvaluationError("base path must be a bounded normalized relative JSON path below its manifest")
+    return parent.joinpath(*value.split("/"))
+
+
+def _load_manifest(path: Path) -> tuple[dict, bytes, dict[str, str]]:
+    # Explicit top-level directory selection may itself use an OS alias. Resolve
+    # it once; do not resolve referenced descendants and hide their link identity.
+    path = Path(path)
+    boundary = path.parent.resolve(strict=True)
+    top = boundary / path.name
+    active: set[Path] = set()
+    dependencies: dict[str, str] = {}
+    total_bytes = 0
+    root_payload = b""
+
+    def visit(current: Path, expected: str | None, depth: int) -> dict:
+        nonlocal total_bytes, root_payload
+        if current in active:
+            raise EvaluationError("manifest composition cycle")
+        if depth > MAX_MANIFEST_DEPTH:
+            raise EvaluationError("manifest composition exceeds depth limit")
+        active.add(current)
+        payload = _manifest_bytes(current, boundary)
+        total_bytes += len(payload)
+        if total_bytes > MAX_CHAIN_BYTES:
+            raise EvaluationError("manifest composition exceeds total byte limit")
+        digest = hashlib.sha256(payload).hexdigest()
+        if expected is not None and digest != expected:
+            raise EvaluationError("baseline manifest SHA-256 mismatch")
+        if depth == 1:
+            root_payload = payload
+        else:
+            dependencies[current.relative_to(boundary).as_posix()] = digest
+        try:
+            data = json.loads(payload, object_pairs_hook=_unique_keys, parse_constant=_reject_constant)
+        except RecursionError as error:
+            raise EvaluationError("manifest JSON nesting is too deep") from error
+        if isinstance(data, dict) and data.get("format") == DELTA_FORMAT:
+            if set(data) != {"format", "base", "files", "cases"}:
+                raise EvaluationError("delta manifest requires only format, base, files and cases")
+            base = data["base"]
+            if (not isinstance(base, dict) or set(base) != {"path", "sha256"}
+                    or not isinstance(base["sha256"], str)
+                    or re.fullmatch(r"[0-9a-f]{64}", base["sha256"]) is None):
+                raise EvaluationError("delta base requires a relative path and exact SHA-256")
+            # Validate additions with the unchanged standalone case contract.
+            # Empty new file pins are legitimate for a case-only extension.
+            if not isinstance(data["files"], dict):
+                raise EvaluationError("delta files must be an object")
+            validate_manifest({"format": FORMAT,
+                               "files": data["files"] or {"synthetic-validation-only": "0" * 64},
+                               "cases": data["cases"]})
+            baseline = visit(_base_path(current.parent, base["path"]), base["sha256"], depth + 1)
+            if baseline["files"].keys() & data["files"].keys():
+                raise EvaluationError("delta file pins must be new; baseline pins cannot be repeated or replaced")
+            combined = {"format": FORMAT, "files": {**baseline["files"], **data["files"]},
+                        "cases": baseline["cases"] + data["cases"]}
+        else:
+            combined = data
+        validate_manifest(combined)
+        if len(combined["cases"]) > MAX_COMPOSED_CASES:
+            raise EvaluationError("manifest composition exceeds case limit")
+        active.remove(current)
+        return combined
+
+    try:
+        result = visit(top, None, 1)
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
+        if isinstance(error, EvaluationError):
+            raise
+        raise EvaluationError("cannot load local evaluation manifest: " + str(error)) from error
+    return result, root_payload, dependencies
+
+
+def load_manifest(path: Path) -> dict:
+    """Load standalone v1 or pinned additive delta into the unchanged v1 oracle."""
+    return _load_manifest(path)[0]
 
 
 def run_cli(root: Path, case: dict) -> list[dict]:
@@ -198,13 +348,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dispositions", type=Path, help="separate reviewed pins/cases for handling supplements")
     args = parser.parse_args(argv)
     try:
-        payload = args.cases.read_bytes()
+        manifest, payload, dependencies = _load_manifest(args.cases)
         supplement_payload = args.dispositions.read_bytes() if args.dispositions else None
-        report = evaluate(args.repo.resolve(), json.loads(payload),
+        report = evaluate(args.repo.resolve(), manifest,
                           disposition_manifest=json.loads(supplement_payload) if supplement_payload else None)
         if supplement_payload is not None:
             report["disposition_manifest_sha256"] = hashlib.sha256(supplement_payload).hexdigest()
         report["manifest_sha256"] = hashlib.sha256(payload).hexdigest()
+        if dependencies:
+            report["manifest_dependencies"] = dependencies
         print(json.dumps(report, indent=2, sort_keys=True))
         return 0 if report["status"] == "PASS" else 1
     except (EvaluationError, IntakeError, OSError, UnicodeError, json.JSONDecodeError) as error:

@@ -4,9 +4,21 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed exact-bin optocoupler integration
+
+The coherent collection is 29 batches / 41 source scopes / 278 annotations.
+Eight exact VO617A-3 standard DIP-4 annotations are independently Agent-reviewed
+under owner delegation. All 270 prior annotations and historical manifests and
+receipts remain unchanged. CTR-bin and test-condition boundaries remain explicit;
+5 mA versus 10 mA saturated-test source wording is not silently reconciled and
+qualified saturated delay remains unknown. Both CI jobs select the optocoupler
+successor with the unchanged separate MCP23017 disposition.
+See the [evaluation receipt](docs/intake-evaluation-optocoupler.md).
+Exact-commit publication and terminal CI are reported separately after verification.
+
 ## Reviewed low-voltage MOSFET integration
 
-The coherent collection is 28 batches / 40 source scopes / 270 annotations.
+At the preceding MOSFET integration, the collection was 28 batches / 40 source scopes / 270 annotations.
 Six exact-orderable Vishay Si2342DS-T1-GE3 annotations are independently
 Agent-reviewed under owner delegation. All 264 prior annotations and historical
 manifests/receipts remain unchanged. Low-gate-voltage resistance conditions,

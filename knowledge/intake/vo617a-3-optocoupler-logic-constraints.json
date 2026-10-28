@@ -1,0 +1,485 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "vo617a-3-optocoupler-logic-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+    "collected_at": "2026-10-28T20:45:23.407142+00:00"
+  },
+  "sources": [
+    {
+      "id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "full_orderable_mpn": "VO617A-3",
+      "document_url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+      "revision": "Rev. 2.8",
+      "revision_date": "2025-01-22",
+      "identity_evidence": "Page 2 standard DIP-4 ordering row lists exact VO617A-3; no option 1, 6, 7 or 8 suffix is inferred. Page 1 numbered schematic identifies terminals, not a complete footprint.",
+      "pdf_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+      "pdf_byte_size": 237004,
+      "pdf_pages": 11,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "Not asserted; public reference only, no IP license granted. No originals, source tables, prose sections or artwork redistributed.",
+      "source_processing_scope": "Small original noncanonical factual annotations under ADR-021; no canonical licensing or safety certification claim.",
+      "cache_receipt": "Downloaded from official URL successfully; unchanged bytes locally hashed. Original PDF, text and renders remain outside Git.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "vo617a-3-logic-01",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "pin",
+      "parameter": "exact_bin_orderable_and_terminals",
+      "value": {
+        "full_orderable_mpn": "VO617A-3",
+        "ctr_bin": "3",
+        "pins": {
+          "1": "LED anode",
+          "2": "LED cathode",
+          "3": "transistor emitter",
+          "4": "transistor collector"
+        },
+        "complete_cad_footprint": null
+      },
+      "unit": null,
+      "conditions": "Exact standard DIP-4 ordering entry and numbered schematic only; not another CTR bin or SMD/wide-lead/safety option. No footprint view or pad geometry invented.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1,
+          2
+        ],
+        "section": "Numbered circuit symbol; ordering information",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-02",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "absolute_maximum",
+      "parameter": "led_and_collector_stress_not_drive_targets",
+      "value": {
+        "LED_reverse_voltage_max_V": 6,
+        "LED_forward_current_max_mA": 60,
+        "collector_emitter_voltage_max_V": 80,
+        "collector_current_max_mA": 50
+      },
+      "unit": null,
+      "conditions": "Absolute stress ratings at Tamb=25 C unless specified. Not simultaneous operating permission, recommended LED current or pull-up design. Pulse-current ratings and power/temperature budgets are not replaced by these selected steady limits.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Selected input/output absolute maximum ratings and stress note",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-03",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "electrical_characteristic",
+      "parameter": "led_forward_voltage_at_60ma_not_5ma_design",
+      "value": {
+        "VF_min_V": 1,
+        "VF_typ_V": 1.35,
+        "VF_max_V": 1.65,
+        "IF_test_mA": 60,
+        "Tamb_C": 25,
+        "VF_max_at_5mA_V": null
+      },
+      "unit": null,
+      "conditions": "Selected forward-voltage specification at 60 mA only; do not transfer its bound to the 5-mA CTR test or pick an LED resistor without supply/driver/current/temperature tolerances. Min/max are testing requirements; typical is informational.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 2,
+        "printed_page": 3,
+        "supporting_pdf_pages": [
+          3
+        ],
+        "section": "Input forward voltage and min/max/typical note",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-04",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "electrical_characteristic",
+      "parameter": "bin3_ctr_at_active_region_test_not_saturated_sink",
+      "value": {
+        "CTR_min_percent": 100,
+        "CTR_max_percent": 200,
+        "CTR_typ_percent": null,
+        "IF_test_mA": 5,
+        "VCE_test_V": 5,
+        "Tamb_C": 25,
+        "guaranteed_CTR_at_logic_low_VCE_percent": null
+      },
+      "unit": null,
+      "conditions": "Exact VO617A-3 bin. IC/IF ratio at the stated active-region test is not a guaranteed low-VCE saturated sink capability, full-temperature/lifetime minimum, or value for a different LED current/bin. Do not infer 5-mA logic-low sink from 100-percent CTR.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 3,
+        "printed_page": 4,
+        "supporting_pdf_pages": [
+          4
+        ],
+        "section": "Current transfer ratio, VO617A-3 row",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-05",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "electrical_characteristic",
+      "parameter": "saturation_voltage_at_one_ma_not_ctr_derived_load",
+      "value": {
+        "VCEsat_typ_V": 0.25,
+        "VCEsat_max_V": 0.4,
+        "IF_test_mA": 5,
+        "IC_test_mA": 1,
+        "Tamb_C": 25,
+        "VCEsat_max_at_5mA_collector_V": null
+      },
+      "unit": null,
+      "conditions": "Separate saturation test, not the VCE=5 V CTR test. Typical is informational; maximum applies to stated conditions only. Receiver VIL, pull-up current/tolerance, ambient range and aging remain unknown.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 2,
+        "printed_page": 3,
+        "supporting_pdf_pages": [
+          3,
+          4
+        ],
+        "section": "Coupler saturation voltage; contrast with current transfer ratio test",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-06",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "electrical_characteristic",
+      "parameter": "bin3_off_state_leakage_at_stated_voltage",
+      "value": {
+        "ICEO_typ_nA": 5,
+        "ICEO_max_nA": 100,
+        "VCE_test_V": 10,
+        "Tamb_C": 25,
+        "hot_leakage_max_nA": null
+      },
+      "unit": null,
+      "conditions": "Exact VO617A-3 leakage row, not lower-bin leakage limits. No hot leakage limit or receiver high-state margin inferred; actual pull-up, receiver input leakage and ambient range must be established.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 2,
+        "printed_page": 3,
+        "supporting_pdf_pages": [
+          3
+        ],
+        "section": "Collector emitter leakage, VO617A-3 row",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-07",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "electrical_characteristic",
+      "parameter": "non_saturated_turn_off_typical_not_logic_rate",
+      "value": {
+        "toff_typ_us": 2.3,
+        "toff_max_us": null,
+        "IF_test_mA": 5,
+        "VCC_test_V": 5,
+        "RL_test_ohm": 75,
+        "Tamb_C": 25,
+        "figure2_pulse_width_us": 50,
+        "figure2_duty_ratio": 0.01,
+        "figure2_generator_resistance_ohm": 50,
+        "figure2_scope_resistance_ohm": 1000000,
+        "figure2_scope_capacitance_pF": 20,
+        "qualified_logic_bit_rate_bps": null
+      },
+      "unit": null,
+      "conditions": "Non-saturated table and Figure 2 measurement context only. Scope impedance is distinct from the 75-ohm circuit load. Typical time is not a worst-case guarantee, saturated switching time, or achievable rate for a different pull-up/load/receiver.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 3,
+        "printed_page": 4,
+        "supporting_pdf_pages": [
+          4
+        ],
+        "section": "Non-saturated switching turn-off row and Figure 2",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "vo617a-3-logic-08",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "VO617A-3",
+      "variant": "CTR bin 3; standard DIP-4 without option suffix",
+      "package": "DIP-4",
+      "kind": "electrical_characteristic",
+      "parameter": "saturated_timing_source_conflict_blocks_qualified_value",
+      "value": {
+        "table_forward_current_mA": 5,
+        "figure3_forward_current_mA": 10,
+        "figure3_supply_V": 5,
+        "figure3_load_ohm": 1000,
+        "resolved_forward_current_mA": null,
+        "qualified_saturated_turn_off_us": null
+      },
+      "unit": null,
+      "conditions": "The saturated switching table and adjacent Figure 3 both label saturated operation but disagree on LED current. No explicit row-to-figure reconciliation is provided on this page. Do not silently choose either current or treat typical saturated timing as established for either setup. Seek manufacturer clarification or independently characterize the exact intended circuit.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/83430/vo617a.pdf",
+        "revision": "Rev. 2.8",
+        "pdf_page_index": 3,
+        "printed_page": 4,
+        "supporting_pdf_pages": [
+          4
+        ],
+        "section": "Saturated switching table versus Figure 3 current label",
+        "source_sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash, size and page count. No measured bounding boxes, all-page visual inspection or human review claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "limitations": [
+    "Exact VO617A-3 standard DIP-4 only; no other CTR bin or package option substitution.",
+    "Electrical revision 22-Jan-2025 differs from separate legal appendix 01-Jan-2026; no latest-revision guarantee.",
+    "Noncanonical original annotations only; no human review, canonical license clearance, complete footprint or circuit qualification.",
+    "Source originals remain local; consumer reads without actual cached bytes are NOT_LOCALLY_VERIFIED."
+  ],
+  "review_history": [
+    {
+      "event": "COLLECTED_DRAFT",
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+      "recorded_at": "2026-10-28T20:45:23.407142+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T20:47:28.069443+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "e6598744935d92fe5a35c5e6e7a7a866742817241f1bca8d36af7c94fc6dfb8e",
+      "notes": "No electrical fact correction required. Corrected draft storage keys from issues/status to source_issues/issue_status so existing intake loader exposes all warnings without misclassifying issue state as acceptance status. All final payloads reviewed."
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "vo617a-3-saturated-test-current-conflict",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "description": "Page 4 saturated rows specify IF=5 mA while Figure 3 labels IF=10 mA. Retain both locations and do not assign a reconciled current or qualified saturated delay. Safe disposition is to withhold rate/saturated timing approval, request manufacturer clarification or characterize the intended circuit; no source correction is invented.",
+      "provenance": {
+        "actor_type": "AGENT",
+        "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "recorded_at": "2026-10-28T20:45:23.407142+00:00"
+      },
+      "issue_status": "UNRESOLVED_SOURCE_CONFLICT"
+    },
+    {
+      "id": "vo617a-3-logic-margin-unknown",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "description": "LED driver/current and tolerances, actual pull-up supply/resistance, receiver thresholds/input leakage, loading/capacitance, temperature and lifetime degradation are unknown. CTR at VCE=5 V cannot approve a logic-low saturated pull-down; no resistor, bit rate or logic margin is qualified.",
+      "provenance": {
+        "actor_type": "AGENT",
+        "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "recorded_at": "2026-10-28T20:45:23.407142+00:00"
+      },
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS"
+    },
+    {
+      "id": "vo617a-3-isolation-option-not-qualified",
+      "source_id": "vo617a-3-vishay-83430-2-8-dip4",
+      "description": "Family isolation headline and option-specific approval text do not qualify the selected standard DIP-4 for an application or establish continuous working voltage. Exact safety-option, applicable agency evidence, insulation system, board geometry and operating environment are not assessed. No safety or mains-isolation design approval is given.",
+      "provenance": {
+        "actor_type": "AGENT",
+        "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "recorded_at": "2026-10-28T20:45:23.407142+00:00"
+      },
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS"
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_vo617a3",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T20:47:28.069443+00:00",
+    "draft_sha256": "e6598744935d92fe5a35c5e6e7a7a866742817241f1bca8d36af7c94fc6dfb8e",
+    "scope": "Independent same-byte source and complete-payload review; not human review, canonical licensing clearance or circuit/safety qualification. Collector HTTP observation not independently attested.",
+    "source_byte_check": {
+      "sha256": "145893b5422f68cc3f2016e2dddfc33f6ee26f0d2444fe8889d0dc0388f805a1",
+      "byte_size": 237004,
+      "pdf_pages": 11,
+      "visual_pages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "legal_text_pages": [
+        11
+      ]
+    },
+    "fact_visual_pages": {
+      "vo617a-3-logic-01": [
+        1,
+        2
+      ],
+      "vo617a-3-logic-02": [
+        2
+      ],
+      "vo617a-3-logic-03": [
+        3
+      ],
+      "vo617a-3-logic-04": [
+        4
+      ],
+      "vo617a-3-logic-05": [
+        3,
+        4
+      ],
+      "vo617a-3-logic-06": [
+        3
+      ],
+      "vo617a-3-logic-07": [
+        4
+      ],
+      "vo617a-3-logic-08": [
+        4
+      ]
+    },
+    "source_warning_review": "All three warnings retained. Page 4 labels both saturated contexts but has no explicit reconciliation of 5-mA table and 10-mA Figure 3 input current; withhold a reconciled setup/delay rather than guess. Practical logic margins and isolation suitability remain unqualified."
+  }
+}
