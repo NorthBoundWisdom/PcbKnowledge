@@ -8,11 +8,14 @@ python3 configs/pcbknowledge_agent.py --repo <workspace> intake list
 python3 configs/pcbknowledge_agent.py --repo <workspace> intake search --device SYNTH-A
 python3 configs/pcbknowledge_agent.py --repo <workspace> intake issues --device SYNTH-A
 python3 configs/pcbknowledge_agent.py --repo <workspace> intake coverage
+python3 configs/pcbknowledge_agent.py --repo <workspace> intake report --device SYNTH-A
 ```
 
 `SYNTH-A` is an invented filter example, not component knowledge. `list` returns
 intake metadata batches; `search` returns noncanonical fact candidates; `issues`
-returns source warnings and any validated handling receipts. See the
+returns source warnings and any validated handling receipts. `report` renders
+a [scoped Markdown inspection aid](intake-report.md) with full recorded conditions
+and warnings; at least an exact source ID or device is required. See the
 [coverage inventory](intake-coverage.md) for the aggregate view and the
 [lightweight contract](lightweight-knowledge.md) for authority boundaries.
 
@@ -49,8 +52,7 @@ before/after trees, including empty directories, file bytes, modes, modification
 times and an existing Git index, and also runs against chmod-read-only temporary
 repositories. It covers successful empty/populated reads, malformed input,
 disposition errors, invalid filters, parser errors and workspace rejection. The
-separate coverage tests continue to cover that command's projection and read-only
-contract. Read-access timestamps are outside the snapshot assertion.
+separate coverage and report tests cover their projections and read-only contracts. Read-access timestamps are outside the snapshot assertion.
 
 Local verification on 2026-10-28: all 10 new tests and all 67 focused intake tests
 passed. Build and Test each passed 218 tests with no skips; the 70 pinned CLI

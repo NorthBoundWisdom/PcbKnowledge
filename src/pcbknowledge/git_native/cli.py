@@ -1036,6 +1036,12 @@ def _intake_coverage(repository: KnowledgeRepository, arguments: argparse.Namesp
     return 0
 
 
+def _intake_report(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake_report import intake_report
+    print(intake_report(repository.root, **_intake_source_filters(arguments)), end="")
+    return 0
+
+
 def _intake_search(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     from pcbknowledge.git_native.intake import search_intake
     _print(search_intake(repository.root, arguments.query,
@@ -1648,8 +1654,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     intake_issues = intake_actions.add_parser(
         "issues", allow_abbrev=False,
         help="retrieve source warnings and pinned handling receipts; no hits does not prove absence of ambiguity")
+    intake_report = intake_actions.add_parser(
+        "report", allow_abbrev=False,
+        help="print scoped read-only Markdown metadata; requires --source-id or --device")
+    intake_report.set_defaults(handler=_intake_report)
     for intake_command in (intake_search, intake_issues):
         intake_command.add_argument("query", nargs="?", default="", help="optional case-folded AND lexical terms")
+    for intake_command in (intake_search, intake_issues, intake_report):
         for field in ("source-id", "manufacturer", "device", "package"):
             intake_command.add_argument(f"--{field}", help="exact structured string; missing fields do not match")
     for field in ("kind", "parameter"):
@@ -1696,7 +1707,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         # Intake reads must not create canonical/cache directories even in a
         # fresh Git workspace. Other commands keep their existing layout contract.
-        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage):
+        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report):
             repository = KnowledgeRepository(Path(arguments.repo))
         else:
             repository = _repository(arguments.repo)
