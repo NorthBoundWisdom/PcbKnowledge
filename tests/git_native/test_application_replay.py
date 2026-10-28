@@ -36,7 +36,7 @@ class ApplicationManifestTests(unittest.TestCase):
         replay_lines = [line for line in workflow.splitlines() if "pcbknowledge_intake_eval.py --repo" in line]
         self.assertEqual(len(replay_lines), 2)
         for line in replay_lines:
-            self.assertIn("--cases evals/intake-retrieval-electrolytic.json", line)
+            self.assertIn("--cases evals/intake-retrieval-thermistor.json", line)
             self.assertIn("--dispositions evals/intake-dispositions-2026-10-28.json", line)
 
 

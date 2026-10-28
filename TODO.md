@@ -4,9 +4,19 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed thermistor integration
+
+The collection now contains 33 batches / 45 source scopes / 305 annotations.
+Seven exact NTCLE100E3103JB0 facts preserve R25/B tolerances, zero-power and
+derating conditions, informational response and self-heating, coating limits
+and exact-suffix design scope. Application accuracy remains unknown. A compact
+hash-pinned successor adds 30 recipes without copying accepted history.
+See the [evaluation receipt](docs/intake-evaluation-thermistor.md).
+Final local gates and exact published-commit CI are checked separately.
+
 ## Reviewed aluminum electrolytic integration
 
-The collection now contains 32 batches / 44 source scopes / 298 annotations.
+At the preceding electrolytic stage, the collection contained 32 batches / 44 source scopes / 298 annotations.
 Seven exact MAL214636471E3 facts preserve conditioned RMS ripple, impedance
 versus ESR, initial versus post-test limits and case-specific life-test scope.
 Unknown installed-board heating and field lifetime remain explicit. A compact

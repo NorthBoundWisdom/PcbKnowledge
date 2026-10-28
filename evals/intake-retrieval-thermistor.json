@@ -1,0 +1,342 @@
+{
+  "format": "pcbknowledge-intake-retrieval-delta-v1",
+  "base": {
+    "path": "intake-retrieval-electrolytic.json",
+    "sha256": "5680163544c970dbc3f1f0db4656a7dd44e7b0645dbc8f86da7c04293b93f021"
+  },
+  "files": {
+    "knowledge/intake/ntcle100-thermistor-constraints.json": "085793b239cb1a67f455f327c7214fa87b5ffbb3df0161eaee72e34d8d514a5a"
+  },
+  "cases": [
+    {
+      "id": "ntcle100-01-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "exact_orderable_r25_and_beta_tolerances"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-01"
+      ]
+    },
+    {
+      "id": "ntcle100-02-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "zero_power_temperature_scope"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-02"
+      ]
+    },
+    {
+      "id": "ntcle100-03-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "power_derating_and_voltage_bound"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-03"
+      ]
+    },
+    {
+      "id": "ntcle100-04-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "informational_thermal_response"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-04"
+      ]
+    },
+    {
+      "id": "ntcle100-05-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "informational_dissipation_factor"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-05"
+      ]
+    },
+    {
+      "id": "ntcle100-06-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "coating_and_mounting_limits"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-06"
+      ]
+    },
+    {
+      "id": "ntcle100-07-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "exact_suffix_design_preference"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-07"
+      ]
+    },
+    {
+      "id": "ntcle100-all-facts",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-01",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-02",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-03",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-04",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-05",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-06",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-07"
+      ]
+    },
+    {
+      "id": "ntcle100-all-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-conversion-accuracy-inputs-unknown",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-excitation-thermal-inputs-unknown",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-mounting-suffix-scope"
+      ]
+    },
+    {
+      "id": "ntcle100-electrical_characteristic",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "kind": "electrical_characteristic"
+      },
+      "expected": [
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-01",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-02",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-03",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-04",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-05",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-06",
+        "knowledge/intake/ntcle100-thermistor-constraints.json#ntcle100-sense-07"
+      ]
+    },
+    {
+      "id": "ntcle100-wrong-source",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20260101-10k5pct"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-vendor",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "manufacturer": "Bourns"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-a-suffix",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3103JB0A"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-tolerance",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3103GB0"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-packaging",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3103JT1"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-package",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "package": "SMD NTC thermistor"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-resistance",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3472JB0"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-no-system-accuracy",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "guaranteed_temperature_system_accuracy_c"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-no-guaranteed-response",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "guaranteed_max_response_s"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-no-insulation-rating",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "rated_insulation_voltage_v"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-no-field-life",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "guaranteed_field_lifetime_h"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-no-short-duration",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "permitted_150c_duration_s"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-no-zero-self-heating",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "parameter": "guaranteed_zero_self_heating_error_c"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-source-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20260101-10k5pct"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-vendor-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "manufacturer": "Bourns"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-a-suffix-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3103JB0A"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-tolerance-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3103GB0"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-packaging-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3103JT1"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-package-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "package": "SMD NTC thermistor"
+      },
+      "expected": []
+    },
+    {
+      "id": "ntcle100-wrong-resistance-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ntcle100-vishay-29049-20250507-10k5pct",
+        "device": "NTCLE100E3472JB0"
+      },
+      "expected": []
+    }
+  ]
+}

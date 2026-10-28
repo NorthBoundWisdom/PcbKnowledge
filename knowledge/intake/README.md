@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **32 reviewed batches, 44 batch-local source/device scopes, and 298 factual
+This queue contains **33 reviewed batches, 45 batch-local source/device scopes, and 305 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -41,6 +41,7 @@ provenance and batch bytes are preserved.
 | [Current-sense resistor constraints](wslp2512-current-sense-constraints.json) | Vishay WSLP2512R0100FEA, 10 milliohm, 2512 | 6 | Actual PDF/identity HTML and independent rendered-page review; [receipt](wslp2512-current-sense-constraints-review.md) |
 | [Legacy polymer PTC constraints](bourns-mf-msmf050-ptc-constraints.json) | Bourns MF-MSMF050-2, standard 1812 | 7 | Actual PDF and independent graphical legacy-warning review; [receipt](bourns-mf-msmf050-ptc-constraints-review.md) |
 | [Aluminum electrolytic constraints](146rti-bulk-capacitor-constraints.json) | Vishay MAL214636471E3, 470 uF / 25 V, Form TFA | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](146rti-bulk-capacitor-constraints-review.md) |
+| [Thermistor constraints](ntcle100-thermistor-constraints.json) | Vishay NTCLE100E3103JB0, no-A 10-kohm radial NTC | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](ntcle100-thermistor-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -216,10 +217,20 @@ and reset behavior do not establish fuse-like isolation or system safety.
 
 ## Aluminum electrolytic integration
 
-The [current aggregate replay](../../docs/intake-evaluation-electrolytic.md) adds
+The [electrolytic aggregate replay](../../docs/intake-evaluation-electrolytic.md) adds
 seven exact MAL214636471E3 annotations and three warnings. Rated RMS ripple
 retains frequency and temperature, and impedance is not relabeled as ESR.
 Case-specific endurance and useful-life tests differ from each other and from
 field lifetime. Initial tolerance, post-test criteria and surge limits do not
 qualify an unknown board; the graphical lifetime table-reference inconsistency
 is preserved without a synthesized life multiplier.
+
+## Thermistor integration
+
+The [current aggregate replay](../../docs/intake-evaluation-thermistor.md) adds
+seven exact NTCLE100E3103JB0 facts and three warnings. R25/B25-85 tolerances,
+zero-power definition and power derating do not establish system accuracy.
+Oil response and informational thermal time constant remain distinct, and
+self-heating depends on excitation and installation. Coating is not specified
+insulation; preferred A-suffix ordering is not an automatic substitution or a
+discontinuation statement for the exact no-A part.
