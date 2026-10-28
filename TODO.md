@@ -608,3 +608,14 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   actual selected-workspace CLI reads with unchanged filesystem bytes. Existing
   search/list/issues payloads and source records remain unchanged. Independent
   review, full repository gates and exact-commit CI remain publication checks.
+
+## Exact source-revision selection
+
+- [x] Extend the shared exact source filters with revision across fact/issue
+  retrieval, scoped reports, explicit byte-audit metadata selection and workbench.
+  Revision means the structured source field, not evidence/prose or a latest-version
+  inference. Missing or non-string revisions never match; existing unfiltered
+  candidate payloads and evidence pins stay unchanged.
+- Synthetic checks cover same IDs across batch revisions, misleading fact evidence,
+  missing/null/non-string revisions, exact Unicode/whitespace, conjunction, CLI
+  dispatch and actual workspace HTTP pagination. Publication gates remain separate.

@@ -1072,7 +1072,7 @@ def _intake_search(repository: KnowledgeRepository, arguments: argparse.Namespac
 
 def _intake_source_filters(arguments: argparse.Namespace) -> dict:
     return {name: getattr(arguments, name)
-            for name in ("source_id", "manufacturer", "device", "package")}
+            for name in ("source_id", "manufacturer", "device", "package", "revision")}
 
 
 def _intake_issues(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
@@ -1698,7 +1698,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     for intake_command in (intake_search, intake_issues):
         intake_command.add_argument("query", nargs="?", default="", help="optional case-folded AND lexical terms")
     for intake_command in (intake_search, intake_issues, intake_report, intake_audit):
-        for field in ("source-id", "manufacturer", "device", "package"):
+        for field in ("source-id", "manufacturer", "device", "package", "revision"):
             intake_command.add_argument(f"--{field}", help="exact structured string; missing fields do not match")
     for field in ("kind", "parameter"):
         intake_search.add_argument(f"--{field}", help="exact structured fact string")

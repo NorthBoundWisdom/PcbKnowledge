@@ -65,7 +65,7 @@ def _missing(record: dict, fields: tuple[str, ...]) -> list[str]:
 
 def intake_report(
     root: Path, *, source_id: str | None = None, manufacturer: str | None = None,
-    device: str | None = None, package: str | None = None,
+    device: str | None = None, package: str | None = None, revision: str | None = None,
 ) -> str:
     """Return a complete scoped Markdown report after whole-queue validation.
 
@@ -74,7 +74,7 @@ def intake_report(
     warnings remain visible, and IDs are never merged across batch boundaries.
     No PDF, canonical record, cache or network is read; nothing is written.
     """
-    filters = _filters(id=source_id, manufacturer=manufacturer, device=device, package=package)
+    filters = _filters(id=source_id, manufacturer=manufacturer, device=device, package=package, revision=revision)
     if source_id is None and device is None:
         raise IntakeError("intake report requires --source-id or --device")
     batches = load_intake(root)

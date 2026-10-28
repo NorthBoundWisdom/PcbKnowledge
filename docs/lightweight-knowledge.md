@@ -59,7 +59,7 @@ serialized fact and source JSON. Negative mentions and incidental prose can matc
 The query is optional: an empty query lists candidates in stable batch-path/fact-ID
 order, or performs a filter-only lookup when filters are supplied.
 
-Use `--source-id`, `--manufacturer`, `--device`, and `--package` to constrain actual
+Use `--source-id`, `--manufacturer`, `--device`, `--package`, and `--revision` to constrain actual
 structured source fields, and `--kind` and `--parameter` for structured fact fields.
 All filters are conjunctive and applied before lexical search. Matching is exact
 string equality: case, whitespace, Unicode code points, punctuation, and orderable
@@ -69,6 +69,10 @@ is applied to filters. Empty/whitespace-only filter arguments are errors. A miss
 null, or non-string structured field does not match. In particular, package prose
 in `scope` does not satisfy `--package`; an unknown package/device returns no
 candidates, not a fallback lexical result. Unknown filter options are errors.
+`--revision` matches only the exact structured source revision. It does not
+match fact evidence, revision dates, addendum text or comparison prose, infer the
+latest revision, or establish that two sources with the same revision label are
+identical. Combine it with source/device/package identity and inspect full evidence.
 
 Examples (identifiers are illustrative, not engineering recommendations):
 

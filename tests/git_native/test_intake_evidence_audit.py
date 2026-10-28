@@ -181,6 +181,22 @@ class IntakeEvidenceAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(IntakeError, "nonempty string"):
             self.run_audit(device=" ")
 
+    def test_revision_selects_only_structured_source_metadata(self) -> None:
+        self.batch["sources"][0]["revision"] = "Rev A"
+        self.batch["sources"][1]["revision"] = "Rev B"
+        self.batch["sources"][1]["description"] = "Rev A is only prose here"
+        self.write_batch()
+        selected = self.run_audit(revision="Rev A")
+        self.assertEqual(len(selected["sources"]), 1)
+        self.assertEqual(selected["sources"][0]["source_id"], "source-a")
+        self.assertEqual(selected["sources"][0]["local_byte_check"], "FOUND_MATCH")
+        self.assertEqual(self.run_audit(revision="rev a")["sources"], [])
+        self.assertEqual(self.run_audit(revision="Rev A", source_id="source-b")["sources"], [])
+        for value in (None, ["Rev A"], 1):
+            self.batch["sources"][0]["revision"] = value
+            self.write_batch()
+            self.assertEqual(self.run_audit(revision="Rev A")["sources"], [])
+
     def test_private_paths_hidden_by_default_and_only_relative_paths_opt_in(self) -> None:
         result = self.run_audit()
         self.assertNotIn("relative_path", result["candidates"][0])

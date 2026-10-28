@@ -9,8 +9,10 @@ service is introduced.
 
 The default view lists fact candidates. Choose **Source issues** to search warnings
 even when no fact matches the text query. Structured `source_id`, `manufacturer`,
-`device`, `package`, `kind` and `parameter` filters use exact strings, preserving
-case, Unicode and whitespace. Blank controls mean no filter. `kind` and `parameter`
+`device`, `package`, `revision`, `kind` and `parameter` filters use exact strings, preserving
+case, Unicode and whitespace. Revision matches the structured source revision only,
+not fact evidence or prose; it is not a latest-version selector or byte verification.
+Blank controls mean no filter. `kind` and `parameter`
 are fact-only; clear them before changing to issue mode. Text `q` uses the existing
 case-insensitive AND lexical search, not an electrical reasoning engine.
 

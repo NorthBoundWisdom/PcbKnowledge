@@ -181,7 +181,7 @@ def _source_check(source: dict, candidates: list[dict]) -> dict:
 def intake_evidence_audit(
     root: Path, *, cache_root: Path, cache_files: Sequence[str], include_paths: bool = False,
     source_id: str | None = None, manufacturer: str | None = None,
-    device: str | None = None, package: str | None = None,
+    device: str | None = None, package: str | None = None, revision: str | None = None,
 ) -> dict:
     """Compare full recorded pins with only explicit local candidates.
 
@@ -190,7 +190,7 @@ def intake_evidence_audit(
     """
     if not SECURE_PATHS_SUPPORTED:
         raise IntakeError("local byte audit unsupported: requires POSIX descriptor-relative no-follow filesystem operations")
-    filters = _filters(id=source_id, manufacturer=manufacturer, device=device, package=package)
+    filters = _filters(id=source_id, manufacturer=manufacturer, device=device, package=package, revision=revision)
     if (isinstance(cache_files, (str, bytes)) or not isinstance(cache_files, (list, tuple))
             or not 1 <= len(cache_files) <= MAX_CANDIDATES):
         raise IntakeError(f"supply 1 to {MAX_CANDIDATES} explicit cache-file candidates")

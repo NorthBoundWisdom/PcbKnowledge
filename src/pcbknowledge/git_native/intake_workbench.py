@@ -14,7 +14,7 @@ from pcbknowledge.git_native.intake_reference import (
     IntakeReference, candidate_digest, resolve_intake_reference,
 )
 
-FILTERS = ("source_id", "manufacturer", "device", "package", "kind", "parameter")
+FILTERS = ("source_id", "manufacturer", "device", "package", "revision", "kind", "parameter")
 PAGE_SIZE = 25
 
 

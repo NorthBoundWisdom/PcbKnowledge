@@ -9,7 +9,7 @@ python3 -B configs/pcbknowledge_agent.py --repo <workspace> intake report --sour
 ```
 
 The identifiers above are invented examples, not component knowledge. At least
-`--source-id` or `--device` is required. Optional `--manufacturer` and `--package`
+`--source-id` or `--device` is required. Optional `--manufacturer`, `--package` and `--revision`
 filters intersect with them. Like `intake search`, all filters compare exact
 structured source strings: case, Unicode, punctuation and whitespace matter.
 Missing, null or non-string identity fields do not match. Fact prose never fills
@@ -23,7 +23,7 @@ does not create a report file, launch a viewer, package anything or deploy a sit
 `-B` suppresses ordinary Python import caches when the software checkout is also
 the selected workspace. The Python API is
 `pcbknowledge.git_native.intake_report.intake_report(root: Path, *, source_id=None,
-manufacturer=None, device=None, package=None) -> str`.
+manufacturer=None, device=None, package=None, revision=None) -> str`.
 
 ## Reading a report
 

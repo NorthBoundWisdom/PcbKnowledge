@@ -204,7 +204,7 @@ def _candidate(batch: dict, source: dict, issue_id: str | None = None) -> dict:
 def search_intake(
     root: Path, query: str = "", *, source_id: str | None = None,
     manufacturer: str | None = None, device: str | None = None,
-    package: str | None = None, kind: str | None = None, parameter: str | None = None,
+    package: str | None = None, revision: str | None = None, kind: str | None = None, parameter: str | None = None,
 ) -> list[dict]:
     """Return noncanonical fact candidates, not synthesized electrical answers.
 
@@ -217,18 +217,18 @@ def search_intake(
     """
 
     return _search_loaded_facts(load_intake(root), query, source_id=source_id,
-                                manufacturer=manufacturer, device=device, package=package,
+                                manufacturer=manufacturer, device=device, package=package, revision=revision,
                                 kind=kind, parameter=parameter)
 
 
 def _search_loaded_facts(
     batches: list[dict], query: str = "", *, source_id: str | None = None,
     manufacturer: str | None = None, device: str | None = None,
-    package: str | None = None, kind: str | None = None, parameter: str | None = None,
+    package: str | None = None, revision: str | None = None, kind: str | None = None, parameter: str | None = None,
 ) -> list[dict]:
     """Project an already validated loader result without rereading mutable files."""
     source_filters = _filters(id=source_id, manufacturer=manufacturer, device=device,
-                              package=package)
+                              package=package, revision=revision)
     fact_filters = _filters(kind=kind, parameter=parameter)
     terms = query.casefold().split()
     matches: list[dict] = []
@@ -250,7 +250,7 @@ def _search_loaded_facts(
 def search_intake_issues(
     root: Path, query: str = "", *, source_id: str | None = None,
     manufacturer: str | None = None, device: str | None = None,
-    package: str | None = None,
+    package: str | None = None, revision: str | None = None,
 ) -> list[dict]:
     """Retrieve source warnings separately from Facts, including without facts.
 
@@ -260,17 +260,17 @@ def search_intake_issues(
     """
 
     return _search_loaded_issues(load_intake(root), query, source_id=source_id,
-                                 manufacturer=manufacturer, device=device, package=package)
+                                 manufacturer=manufacturer, device=device, package=package, revision=revision)
 
 
 def _search_loaded_issues(
     batches: list[dict], query: str = "", *, source_id: str | None = None,
     manufacturer: str | None = None, device: str | None = None,
-    package: str | None = None,
+    package: str | None = None, revision: str | None = None,
 ) -> list[dict]:
     """Project validated warnings without changing their batch-local identity."""
     source_filters = _filters(id=source_id, manufacturer=manufacturer, device=device,
-                              package=package)
+                              package=package, revision=revision)
     terms = query.casefold().split()
     matches: list[dict] = []
     for batch in batches:

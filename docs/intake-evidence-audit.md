@@ -25,7 +25,7 @@ opened. Every listed candidate is checked, even if no source passes the optional
 filters. The file suffix is not interpreted and PDF headers/content are not
 parsed. This command does not import evidence into a canonical workspace.
 
-Optional `--source-id`, `--manufacturer`, `--device` and `--package` filters use
+Optional `--source-id`, `--manufacturer`, `--device`, `--package` and `--revision` filters use
 the same exact structured string intersection as `intake search`. Source IDs
 remain batch-local. With no filters, all recorded intake source scopes are
 reported. Case, whitespace and Unicode are significant; missing/non-string
@@ -119,7 +119,7 @@ There is no retry, fallback cache or search outside the selected inputs.
 The Python API is
 `pcbknowledge.git_native.intake_evidence_audit.intake_evidence_audit(root: Path,
 *, cache_root: Path, cache_files: Sequence[str], include_paths=False,
-source_id=None, manufacturer=None, device=None, package=None) -> dict`.
+source_id=None, manufacturer=None, device=None, package=None, revision=None) -> dict`.
 The concrete candidate collection must be a bounded list or tuple.
 
 ## Verification
