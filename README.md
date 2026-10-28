@@ -45,6 +45,32 @@ Results remain `canonical: false`. `NOT_LOCALLY_VERIFIED` on a read means that r
 has not checked local original bytes; it does not erase the recorded independent
 review receipt. See [the contract](docs/lightweight-knowledge.md) for evidence levels.
 
+### Browse the included collection
+
+From the root of this software checkout, open its existing public knowledge workspace:
+
+```bash
+python3 configs/pcbknowledge_workflow.py open --workspace .
+```
+
+Choose **Curated intake** in the local workbench, or open
+`http://127.0.0.1:18080/intake` at the default port. `open` performs the existing
+Config/Build preparation when required; keep its terminal process running and
+use Ctrl+C to close it. See the [read-only intake workbench](docs/intake-workbench.md)
+for exact filters, source issues, pagination and complete evidence details.
+
+Here `.` deliberately selects the checkout containing the curated collection.
+A newly initialized external workspace starts empty and does **not** inherit
+these candidates. Select that external workspace when working with private data;
+an empty intake page there is expected isolation, not a failed collection load.
+Do not copy original PDFs or `.pcbknowledge/` caches into Git to populate it.
+
+Use the result's **Open exact pinned item** link rather than assembling hash
+selectors by hand. These are local review links, not hosted public sharing URLs;
+they require the same relevant metadata in the selected workspace. Changed batch
+bytes or candidate/disposition context explicitly expire an old link. Browsing
+never converts an intake candidate into an approved canonical Fact.
+
 ## Core authority
 
 ```text
@@ -127,6 +153,8 @@ Active routes:
 
 ```text
 /review
+/intake
+/intake/item
 /sources
 /sources/<id>
 /entities

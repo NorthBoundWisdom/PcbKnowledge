@@ -588,3 +588,12 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   disposition-only changes, traversal/malformed selectors, full escaped payload,
   one-load consistency and actual workspace-server HTTP behavior. Existing CLI
   candidate payloads remain unchanged; complete gates and CI are separate checks.
+
+## Included-collection onboarding
+
+- [x] Link the read-only intake guide from README and give the explicit public
+  checkout workspace launch command. Distinguish an empty private workspace from
+  missing public data; list both intake routes and explain local pinned links.
+- Existing loopback launch and HTTP checks verify the documented workspace path.
+  Browser visual acceptance remains unverified; cloud-browser loopback navigation
+  was blocked by its client policy, without a bypass or source-original access.
