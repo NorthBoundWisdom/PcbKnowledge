@@ -152,5 +152,5 @@ class MeasurementTimingManifestTests(unittest.TestCase):
         replay_lines = [line for line in ci.splitlines() if "pcbknowledge_intake_eval.py" in line]
         self.assertEqual(len(replay_lines), 2)
         for line in replay_lines:
-            self.assertIn("--cases evals/intake-retrieval-mlcc.json", line)
+            self.assertIn("--cases evals/intake-retrieval-inductor.json", line)
             self.assertIn("--dispositions evals/intake-dispositions-2026-10-28.json", line)

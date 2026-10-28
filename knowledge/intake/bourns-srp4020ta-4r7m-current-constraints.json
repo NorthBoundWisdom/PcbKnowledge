@@ -1,0 +1,402 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "bourns-srp4020ta-4r7m-current-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/collect_inductor_current_constraints",
+    "collected_at": "2026-10-28T05:44:03.393036+00:00"
+  },
+  "sources": [
+    {
+      "id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "full_orderable_mpn": "SRP4020TA-4R7M",
+      "product_url": "https://www.bourns.com/products/magnetic-products/product-detail/power-inductors-smd-high-current-shielded/srp4020ta",
+      "document_url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+      "revision": "SRP4020TA, REV. 07/20",
+      "revision_date": null,
+      "identity_evidence": "Exact manufacturer part-number row on PDF page 1, with How to Order model/value-code key; not inferred from a retailer or marking.",
+      "pdf_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+      "pdf_byte_size": 590377,
+      "pdf_pages": 4,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "Public reference only; no redistribution permission asserted; original excluded.",
+      "source_processing_scope": "Small original noncanonical annotations under ADR-021; no canonical license clearance asserted.",
+      "cache_receipt": "Official HTTPS PDF downloaded successfully on 2026-10-28; actual local bytes hashed.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "revision_scope": "Month/year revision appears on PDF page 3; exact revision day unknown. Page 4 legal notice C1753 05/17/18R is not the electrical revision.",
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+    }
+  ],
+  "facts": [
+    {
+      "id": "bourns-srp4020ta-4r7m-current-01",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "kind": "electrical_characteristic",
+      "parameter": "inductance_test_conditions",
+      "value": {
+        "nominal_uH": 4.7,
+        "tolerance_percent": 20,
+        "test_frequency_kHz": 100,
+        "test_voltage_V": 1,
+        "electrical_table_temperature_C": 25
+      },
+      "unit": null,
+      "conditions": "The tolerance is +/-20% at the stated test conditions, not effective inductance under arbitrary DC bias, ripple or temperature.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+        "revision": "SRP4020TA, REV. 07/20",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Electrical specifications, exact 4R7M row; General Specifications",
+        "source_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_inductor_current_constraints",
+        "method": "Collector and distinct Agent reviewer checked actual bytes and rendered evidence; no precise bounding box or human verification claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-current-02",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "kind": "electrical_characteristic",
+      "parameter": "saturation_current_criterion",
+      "value": {
+        "Isat_A": 3.5,
+        "inductance_drop_percent": 20,
+        "electrical_table_temperature_C": 25
+      },
+      "unit": null,
+      "conditions": "This inductance-drop criterion is distinct from heating and is not a universal safe DC current or a hard damage threshold. No guaranteed hot-bias curve is extracted.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+        "revision": "SRP4020TA, REV. 07/20",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Electrical specifications; Rated Current",
+        "source_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_inductor_current_constraints",
+        "method": "Collector and distinct Agent reviewer checked actual bytes and rendered evidence; no precise bounding box or human verification claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+      },
+      "existing_record_references": [
+        "buck-app-02"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-current-03",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "kind": "thermal_characteristic",
+      "parameter": "rms_current_temperature_rise_criterion",
+      "value": {
+        "Irms_A": 2.6,
+        "temperature_rise_C": 40,
+        "electrical_table_temperature_C": 25
+      },
+      "unit": null,
+      "conditions": "Thermal criterion, not Isat. Board copper, airflow and neighboring heat affect temperature; verify the assembled application. Datasheet fixture geometry and thermal equilibrium procedure are not specified. Page-2 curve and page-1 criterion cannot be reconciled from the supplied sample, mounting and curve-test conditions; the curve is not a replacement numeric rating or proof that the table is erroneous.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+        "revision": "SRP4020TA, REV. 07/20",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          2
+        ],
+        "section": "Electrical specifications; Temperature Rise and thermal footnote; page-2 SRP4020TA-4R7M curve applicability limits",
+        "source_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_inductor_current_constraints",
+        "method": "Collector and distinct Agent reviewer checked actual bytes and rendered evidence; no precise bounding box or human verification claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-current-04",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "kind": "electrical_characteristic",
+      "parameter": "dc_resistance_at_table_temperature",
+      "value": {
+        "DCR_typ_mohm": 95,
+        "DCR_max_mohm": 105,
+        "electrical_table_temperature_C": 25,
+        "hot_DCR_max_mohm": null
+      },
+      "unit": null,
+      "conditions": "The maximum is tied to the 25 C table, not every winding temperature. Units visually verified as milliohms, not OCR mW. No hot loss or switching-core-loss model inferred.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+        "revision": "SRP4020TA, REV. 07/20",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Electrical specifications, DCR headers and 4R7M row",
+        "source_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_inductor_current_constraints",
+        "method": "Collector and distinct Agent reviewer checked actual bytes and rendered evidence; no precise bounding box or human verification claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-current-05",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "kind": "operating_constraint",
+      "parameter": "temperature_budget_includes_self_heating",
+      "value": {
+        "operating_range_C": [
+          -55,
+          150
+        ],
+        "temperature_rise_included": true,
+        "qualified_board_continuous_current_A": null
+      },
+      "unit": null,
+      "conditions": "The upper temperature includes self-heating; 150 C ambient plus rated-current rise is not allowed by this range. The two current criteria alone do not qualify a buck BOM.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+        "revision": "SRP4020TA, REV. 07/20",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "General Specifications; thermal footnote",
+        "source_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_inductor_current_constraints",
+        "method": "Collector and distinct Agent reviewer checked actual bytes and rendered evidence; no precise bounding box or human verification claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-current-06",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "manufacturer": "Bourns",
+      "device": "SRP4020TA-4R7M",
+      "variant": "SRP4020TA-4R7M only",
+      "package": "SRP4020TA lead-frame SMD",
+      "kind": "package_geometry",
+      "parameter": "dimensioned_height_and_land_spans",
+      "value": {
+        "body_height_mm": 1.8,
+        "body_height_tolerance_mm": 0.2,
+        "recommended_land_outer_span_mm": 5.2,
+        "recommended_land_inner_gap_mm": 2.2,
+        "recommended_land_vertical_length_mm": 2.4,
+        "complete_footprint": null
+      },
+      "unit": null,
+      "conditions": "Millimeter dimensions only. Land spans are the drawing arrows, not pad pitch; no inferred pad width, mask, paste, courtyard, tolerance or complete CAD footprint.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/Product-Datasheets/SRP4020TA.pdf",
+        "revision": "SRP4020TA, REV. 07/20",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Product Dimensions side view; Recommended Layout",
+        "source_sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/collect_inductor_current_constraints",
+        "method": "Collector and distinct Agent reviewer checked actual bytes and rendered evidence; no precise bounding box or human verification claimed.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "bourns-srp4020ta-4r7m-application-inputs",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual peak/RMS waveform, switching frequency, DC bias, temperature, copper and cooling remain unknown. Saturation and temperature-rise criteria must both be checked; no universal board-current or TPS62160 compatibility guarantee.",
+      "provenance": {
+        "actor": "agent:/root/collect_inductor_current_constraints",
+        "recorded_at": "2026-10-28T05:44:03.393036+00:00"
+      },
+      "evidence_references": [
+        "PDF page 1"
+      ]
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-geometry-and-curves",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "issue_status": "UNRESOLVED_SOURCE_CONDITIONS",
+      "description": "Page-1 2.6-A/40-C criterion and page-2 temperature-rise curve cannot be reconciled with the supplied information: matched sample, mounting and curve-test conditions are unknown. This does not prove either presentation erroneous. Retain the table criterion; do not digitize the curve into a higher current rating. Manufacturer clarification and application thermal verification remain necessary. No complete CAD footprint, hot-bias envelope, thermal fixture or core-loss model is supplied.",
+      "provenance": {
+        "actor": "agent:/root/collect_inductor_current_constraints",
+        "recorded_at": "2026-10-28T05:44:03.393036+00:00"
+      },
+      "evidence_references": [
+        "PDF page 1",
+        "PDF page 2",
+        "PDF page 3"
+      ]
+    },
+    {
+      "id": "bourns-srp4020ta-4r7m-qualification-scope",
+      "source_id": "bourns-srp4020ta-0720-4r7m",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "The series advertises AEC-Q200 compliance; this is not whole-product certification or automatic automotive-application approval. The legal notice preserves application-specific verification responsibility.",
+      "provenance": {
+        "actor": "agent:/root/collect_inductor_current_constraints",
+        "recorded_at": "2026-10-28T05:44:03.393036+00:00"
+      },
+      "evidence_references": [
+        "PDF page 1",
+        "PDF page 4"
+      ]
+    }
+  ],
+  "limitations": [
+    "Exact manufacturer part only; no substitution for SRP4020 without TA or other values.",
+    "Public original annotations only; not canonical approval, human review, circuit qualification or source redistribution.",
+    "Ordinary metadata retrieval does not verify evidence-cache bytes."
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "reviewed_at": "2026-10-28T05:48:34.383869+00:00",
+    "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+    "authority": "OWNER_DELEGATION",
+    "input_json_sha256": "fe29066a5b67b3fc1ebb8f5fb4c7c3a59fa50859fd1ac730b31f132a4a52abc3",
+    "canonical": false,
+    "human_reviewed": false,
+    "source_byte_verification": {
+      "sha256": "601b2bd60f01531d3dd98df00eab15635fa971ebc03cf7ae4ccb5679faf03485",
+      "byte_size": 590377,
+      "pdf_pages": 4,
+      "visual_pages": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "fact_visual_pages": {
+      "bourns-srp4020ta-4r7m-current-01": [
+        1
+      ],
+      "bourns-srp4020ta-4r7m-current-02": [
+        1
+      ],
+      "bourns-srp4020ta-4r7m-current-03": [
+        1,
+        2
+      ],
+      "bourns-srp4020ta-4r7m-current-04": [
+        1
+      ],
+      "bourns-srp4020ta-4r7m-current-05": [
+        1
+      ],
+      "bourns-srp4020ta-4r7m-current-06": [
+        1
+      ]
+    },
+    "source_warning_review": "All three warnings reviewed. Table/curve comparability remains unknown without matched sample, mounting and curve-test conditions; no vendor-error assertion, greater current, whole-product certification, hot DCR or complete footprint inferred.",
+    "actor_id": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor"
+  },
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/collect_inductor_current_constraints",
+      "timestamp": "2026-10-28T05:44:03.393036+00:00",
+      "action": "COLLECTED_DRAFT"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T05:45:20.107588+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "fe29066a5b67b3fc1ebb8f5fb4c7c3a59fa50859fd1ac730b31f132a4a52abc3",
+      "notes": "Independent source review added an unresolved thermal curve/table discrepancy and explicit +/- tolerance wording; numeric table values retained."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/collect_inductor_current_constraints/review_bourns_inductor",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T05:48:34.383869+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "1a12bc2385ec13846ae5a6826d7847224fe675c79a4ec9e69de1b83e0001b9a0",
+      "notes": "Refined thermal warning: insufficient matched sample/mounting/curve-test conditions preclude reconciliation or a vendor-error conclusion. Page-1 numeric criterion retained; no curve-derived current or board qualification. Prior review history preserved."
+    }
+  ]
+}

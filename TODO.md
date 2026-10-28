@@ -4,17 +4,17 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
-## Reviewed MLCC handoff integration
+## Reviewed inductor handoff integration
 
-The coherent collection is 26 batches / 38 source scopes / 258 annotations.
-The exact eight-annotation KEMET C0603C104K5RACTU pair is reused from immutable
-`890c9b92cc88d80695cd0bfd4081104a91b698f4`, without recollection or altered review.
-All 250 earlier annotations and historical manifests/receipts remain unchanged.
-The successor `evals/intake-retrieval-mlcc.json` and separate MCP23017 disposition
-are required in both CI jobs. Nominal test capacitance, zero-bias temperature
-characteristics, aging and qualitative simulation do not establish guaranteed
-in-circuit effective capacitance or PCB suitability.
-See the [evaluation receipt](docs/intake-evaluation-mlcc.md).
+The coherent collection is 27 batches / 39 source scopes / 264 annotations.
+The exact six-annotation Bourns SRP4020TA-4R7M pair is reused from immutable
+`ce0f002a481fc4b9888079f4ed3204fa56dc0cf4`, without recollection or altered review.
+All 258 earlier annotations and historical manifests/receipts remain unchanged.
+The successor `evals/intake-retrieval-inductor.json` and separate MCP23017
+disposition are required in both CI jobs. Saturation and heating criteria remain
+distinct; unknown matched sample, mounting and curve-test conditions do not prove
+manufacturer error or permit a higher curve-derived rating.
+See the [evaluation receipt](docs/intake-evaluation-inductor.md).
 Exact-commit CI and publication are reported in the issue handoff.
 
 ## Practical task coverage receipt
