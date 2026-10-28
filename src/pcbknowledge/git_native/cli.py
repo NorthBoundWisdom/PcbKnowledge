@@ -1694,10 +1694,12 @@ def _error_code(error: BaseException) -> str:
 def main(argv: list[str] | None = None) -> int:
     arguments = parse_args(argv)
     try:
-        # Coverage must not create canonical/cache directories even in a fresh
-        # Git workspace. Other commands keep their existing layout contract.
-        repository = (KnowledgeRepository(Path(arguments.repo))
-                      if arguments.handler is _intake_coverage else _repository(arguments.repo))
+        # Intake reads must not create canonical/cache directories even in a
+        # fresh Git workspace. Other commands keep their existing layout contract.
+        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage):
+            repository = KnowledgeRepository(Path(arguments.repo))
+        else:
+            repository = _repository(arguments.repo)
         return int(arguments.handler(repository, arguments))
     except (OSError, ValueError, RepositoryError) as error:
         payload = {
