@@ -1,0 +1,427 @@
+{
+  "format": "pcbknowledge-practical-task-evaluation-receipt-v1",
+  "evaluated_at": "2026-10-28T05:45:00Z/2026-10-28T05:51:07Z",
+  "target_commit": "0373a341d5e12d50778f899848a078621dfa4790",
+  "target_tree": "8c83b2cd3cc3a2443ab584ccd16768455c49dda0",
+  "canonical": false,
+  "human_reviewed": false,
+  "scope": "metadata retrieval and bounded manual task coverage; not electrical solver or circuit qualification",
+  "original_bytes_rechecked": false,
+  "command_prefix": [
+    "python3",
+    "-B",
+    "configs/pcbknowledge_agent.py",
+    "--repo",
+    "."
+  ],
+  "command_cwd": "clean checkout of target_commit",
+  "stdout_hash_encoding": "SHA-256 of exact UTF-8 CLI stdout including trailing newline",
+  "report_sha256": "23a09f829aa3b0e04312961ad40d82adb6cfb24ee49bb4530d877f3e7f088f1f",
+  "cases": [
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "ldo-app-ti-lm1117-q"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ldo-app-ti-01",
+        "ldo-app-ti-02",
+        "ldo-app-ti-03",
+        "ldo-app-ti-04"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "9928249839070cf0b64cf36f9c919b37f68fc04a0ffce91c543fa3daf38d2afd"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "ldo-app-ti-lm1117-q"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ldo-app-ti-orderable-capacitor-gap",
+        "ldo-app-ti-operating-point-gap"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "182eec1d616c173d6a5ccba62b1367cdfacca021a63857b8ad73c1483e831e28"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "ldo-app-st-ld1117-r38"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ldo-app-st-01",
+        "ldo-app-st-02",
+        "ldo-app-st-03",
+        "ldo-app-st-04"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "970a8abd1dc43d12275cab5d1bd54cb3c9636ca2b5c634654b719b8a131fd0fc"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "ldo-app-st-ld1117-r38"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ldo-app-st-capacitor-gap",
+        "ldo-app-st-operating-point-gap"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "23896836c2353919b2c3e35abbc834e46f28bef5744f4b7d616f061176198aba"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "ads1115-app-ti-e-dgs"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ads1115-app-01",
+        "ads1115-app-02",
+        "ads1115-app-03",
+        "ads1115-app-04",
+        "ads1115-app-05",
+        "ads1115-app-06",
+        "ads1115-app-07",
+        "ads1115-app-08",
+        "ads1115-app-09"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "b62d31de68c7146b03018470bf284171984caff1382a1b41d08e2ad0d9965ade"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "ads1115-app-ti-e-dgs"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ads1115-app-sensor-uncertainty",
+        "ads1115-app-controller-uncertainty",
+        "ads1115-app-range-uncertainty"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "5d70c4944687619c27e1dcb6708907d0fa2c1a62ae81510bf45494d9392a3fb3"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "microchip-mcp23017"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "b005-microchip-mcp23017-01",
+        "b005-microchip-mcp23017-02",
+        "b005-microchip-mcp23017-03",
+        "b005-microchip-mcp23017-04",
+        "b005-microchip-mcp23017-05",
+        "b005-microchip-mcp23017-06",
+        "b005-microchip-mcp23017-07"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "342f32fa203c92051339a643db3b25e1dc8a6fa2a035490b194dac472f905c10"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "microchip-mcp23017"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "MCP23017-SUPPLY-TEMPERATURE-AMBIGUITY"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "732d30ee850aa4d8fc568f8855e0779ad91ce521ed0d43f709bc710f53ae737d"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "ao3400a-aos-r3p1-sot23"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ao3400a-drive-01",
+        "ao3400a-drive-02",
+        "ao3400a-drive-03",
+        "ao3400a-drive-04",
+        "ao3400a-drive-05",
+        "ao3400a-drive-06",
+        "ao3400a-drive-07",
+        "ao3400a-drive-08"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "3574cfdf7585a8ec5a6ecd772a100261b05bfa29ac5fe4dae5301839518b94b9"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "ao3400a-aos-r3p1-sot23"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ao3400a-numbered-pin-identity-unknown",
+        "ao3400a-gate-load-transient-inputs-unknown",
+        "ao3400a-pcb-thermal-inputs-unknown"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "521172a6cc201497cceddf508746d138d913d8d9939fac4997b29537b71f4fcb"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "vishay-ss14-88746-20200423-sma"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "vishay-ss14-app-01",
+        "vishay-ss14-app-02",
+        "vishay-ss14-app-03",
+        "vishay-ss14-app-04",
+        "vishay-ss14-app-05",
+        "vishay-ss14-app-06",
+        "vishay-ss14-app-07"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "2b240cabea81aeba45c6068d7386d5ffd1af1fc642da5c812efa7dc155bb39be"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "vishay-ss14-88746-20200423-sma"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "vishay-ss14-app-identity-and-orderable-unknown",
+        "vishay-ss14-app-application-waveform-unknown",
+        "vishay-ss14-app-thermal-design-unknown"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "7abbcf043f9c9c19fd30c3f5601a286c0a4f80dcf31093df34492061ef52b835"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "reset-app-ti-g33-dbv-n"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "reset-app-01",
+        "reset-app-02",
+        "reset-app-03",
+        "reset-app-04",
+        "reset-app-05",
+        "reset-app-06",
+        "reset-app-07",
+        "reset-app-08"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "a8fc9cd213fc4896e821cde0c4e53fbf3ce25b22dd340b3bcdfdff78936272fa"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "reset-app-ti-g33-dbv-n"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "reset-app-rail_receiver_unknown",
+        "reset-app-delay_drive_unknown",
+        "reset-app-footnote_mapping"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "aeb38d7fa72ac56c5d6d74d22f3ec01a68877dc7c894fc7c7395e83cddca69c5"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "rs485-app-ti-sllse11h-d"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "rs485-app-01",
+        "rs485-app-02",
+        "rs485-app-03",
+        "rs485-app-04",
+        "rs485-app-05",
+        "rs485-app-06",
+        "rs485-app-07",
+        "rs485-app-08",
+        "rs485-app-09"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "f13dae62ebba6aa34b7d05250d6a0f2269d99cf13614733c5ae40a27d21e8aaa"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "rs485-app-ti-sllse11h-d"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "rs485-app-network-unknown",
+        "rs485-app-timing-unknown",
+        "rs485-app-ground-protection-unknown"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "67224068450f1b737beff34259da264acdc022154c6c2f3d130705e4c777ccd2"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--source-id",
+        "wurth-61300211121-003000-20230108"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "wurth-61300211121-mech-01",
+        "wurth-61300211121-mech-02",
+        "wurth-61300211121-mech-03",
+        "wurth-61300211121-mech-04"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "2485e99aae0c00f1239041b340e87fd965a3e4aebbf8ae957f4fc986720e7d9a"
+    },
+    {
+      "args": [
+        "intake",
+        "issues",
+        "--source-id",
+        "wurth-61300211121-003000-20230108"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "wurth-61300211121-application-inputs-unknown"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "06205aa5ce94548dee141b93f8d13a5deee1f2cf31e9a3eefd19dca2c04b032f"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--device",
+        "ADS1115IDGSR",
+        "--parameter",
+        "analog_input_pin_voltage"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "b003-ti-ads1115-e-07"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "bdc52fe9afcc7ce28c2ba3c6aac16fd911bb1a167886f639e4d119916adfe1ed"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--device",
+        "AO3400"
+      ],
+      "exit_code": 0,
+      "expected_ids": [],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--device",
+        "61300211121",
+        "--package",
+        "SOT23"
+      ],
+      "exit_code": 0,
+      "expected_ids": [],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "args": [
+        "intake",
+        "search",
+        "--device",
+        "LM1117",
+        "--parameter",
+        "capacitor_requirements"
+      ],
+      "exit_code": 0,
+      "expected_ids": [
+        "ldo-app-ti-01"
+      ],
+      "expected_ids_comparison": "set equality",
+      "id_set_pass": true,
+      "stdout_sha256": "6fa2850bcc9863341648454d519625e0a3f30ca56032d56d6c353732d68cb687"
+    }
+  ],
+  "independent_review": {
+    "reviewer": "agent:/root/evaluate_practical_knowledge_tasks/review_practical_report",
+    "commands_replayed": 22,
+    "stdout_hashes_match": true,
+    "fact_appearances_full_payload_compared": 62,
+    "issue_appearances_full_payload_compared": 21,
+    "source_objects_compared": true,
+    "originals_reopened": false,
+    "human_reviewed": false
+  }
+}

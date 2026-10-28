@@ -18,6 +18,13 @@ blocking or current limiting. Mounted resistor thermal limits remain conditional
 See the [evaluation receipt](docs/intake-evaluation-translation-loadswitch.md).
 Publication and exact-commit CI are reported in the issue handoff.
 
+## Practical task coverage receipt
+
+The [2026-10-28 bounded evaluation](docs/practical-task-evaluation-2026-10-28.md)
+records eight evidence-supported narrow decisions at pinned `0373a341`, with
+22 replayable CLI commands and explicit remaining facts, inputs and analysis gaps.
+It is not a circuit qualification, new human acceptance, or formal pilot pass.
+
 ## 0. Permanent boundaries
 
 - The public repository also accepts small original curated summaries and metadata; never source originals or private material.
