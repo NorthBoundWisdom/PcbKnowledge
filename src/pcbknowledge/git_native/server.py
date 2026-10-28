@@ -49,9 +49,8 @@ from pcbknowledge.git_native.workbench_views import (
 
 
 from pcbknowledge.git_native.intake import IntakeError
-from pcbknowledge.git_native.intake_workbench import (
-    IntakeBrowseApplication, IntakeItemNotFound, StaleIntakeItem,
-)
+from pcbknowledge.git_native.intake_workbench import IntakeBrowseApplication
+from pcbknowledge.git_native.intake_reference import IntakeItemNotFound, StaleIntakeItem
 from pcbknowledge.git_native.intake_views import render_intake, render_intake_item
 
 

@@ -597,3 +597,14 @@ Use the narrowest relevant tests during editing, then the applicable repository 
 - Existing loopback launch and HTTP checks verify the documented workspace path.
   Browser visual acceptance remains unverified; cloud-browser loopback navigation
   was blocked by its client policy, without a bypass or source-original access.
+
+## Agent-native exact intake references
+
+- [x] Reuse one pure batch-local reference resolver for GUI and readonly CLI.
+  `intake pin` explicitly captures current metadata; `intake item` requires both
+  exact byte/context pins and never refreshes stale evidence automatically.
+- Synthetic tests cover full candidate parity, same IDs across batches and types,
+  one-load capture, changed bytes/dispositions, duplicate/missing selectors and
+  actual selected-workspace CLI reads with unchanged filesystem bytes. Existing
+  search/list/issues payloads and source records remain unchanged. Independent
+  review, full repository gates and exact-commit CI remain publication checks.

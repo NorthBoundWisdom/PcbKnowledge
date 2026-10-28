@@ -105,3 +105,58 @@ An actual workspace-server check followed seven MCP23017 fact links, preserving
 their full warnings and dispositions; changing only disposition bytes invalidated
 all seven old links with HTTP 409 while new browsing remained available. This is
 HTTP/data validation, not browser visual or original-PDF verification.
+
+## Agent CLI references without a running server
+
+The Agent CLI uses the same pure reference resolver as `/intake/item`. First
+**capture current metadata** for a known exact batch-local record:
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . intake pin \
+  --batch knowledge/intake/ads1115-input-interface-constraints.json \
+  --id ads1115-app-01 --type fact
+```
+
+`pin` does not verify an older reference or approve its contents. Its JSON result
+has format `pcbknowledge-intake-reference-v1`, operation
+`CAPTURE_CURRENT_METADATA`, a `reference` object containing `batch`, `id`, `type`,
+`sha256` and `context`, and the complete `candidate`. Inspect that candidate's
+source, conditions, evidence, warnings and any dispositions before reusing its
+reference. Both pins and the displayed candidate come from one validated load.
+
+To verify a saved reference later, pass **all five** exact values to `intake item`:
+
+```text
+python3 configs/pcbknowledge_agent.py --repo WORKSPACE intake item --batch BATCH --id ID --type TYPE --sha256 SHA256 --context CONTEXT
+```
+
+The uppercase words above are placeholders for the explicit workspace and values
+from the saved `reference`, not defaults or commands to run literally. `TYPE` is
+`fact` or `issue`; the same ID in the other type or another batch cannot substitute.
+The GUI link's five query selectors have these same names and values. No server,
+HTTP request, original PDF, online lookup or new runtime dependency is required.
+
+Successful `item` output uses operation `VERIFY_PINNED_METADATA`, retaining the
+same complete candidate and reference. It verifies only current metadata equality,
+not canonical publication, original source bytes, human review or engineering
+correctness. Both operations retain `canonical: false` and
+`evidence_verification: NOT_LOCALLY_VERIFIED`. Issue candidates retain the selected
+issue and its disposition context, not a claim to export the entire batch.
+
+Every selector is required exactly once; duplicate, missing, malformed and
+unsupported options fail rather than selecting the last value. Missing records
+report `INTAKE_ITEM_NOT_FOUND`; changed bytes or candidate/disposition context
+report `STALE_INTAKE_REFERENCE`. Failures exit 2 and emit no successful JSON on
+stdout. `item` never recaptures, updates or writes a reference. If it is stale,
+review new evidence explicitly before deliberately calling `pin` again. Neither
+operation writes files or initializes canonical/cache directories, and an empty
+selected workspace never falls back to the software checkout's collection.
+
+Independent Agent review on 2026-10-28 by
+`agent:/root/resume_knowledge_work/review_pinned_intake_cli` passed 25 focused tests,
+actual CLI duplicate/unknown-selector rejections, GUI/CLI reference equivalence,
+workspace byte/directory preservation, and seven old/current CLI stdout comparisons.
+Author: `agent:/root/resume_knowledge_work/implement_pinned_intake_cli`.
+Local Build/Test each passed 378 tests without skips; the unchanged 539 existing
+retrieval/disposition cases and metadata-only package passed. These are software
+checks, not new source-original, browser-visual or human engineering verification.

@@ -1030,6 +1030,18 @@ def _intake_list(repository: KnowledgeRepository, arguments: argparse.Namespace)
     return 0
 
 
+def _intake_reference(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake_reference import (
+        capture_intake_reference, resolve_intake_reference,
+    )
+    captured = arguments.intake_action == "pin"
+    keys = ("batch", "id", "type") if captured else ("batch", "id", "type", "sha256", "context")
+    parameters = {key: getattr(arguments, key) for key in keys}
+    operation = capture_intake_reference if captured else resolve_intake_reference
+    _print(operation(repository.root, parameters).projection(captured=captured))
+    return 0
+
+
 def _intake_coverage(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     from pcbknowledge.git_native.intake_coverage import intake_coverage
     _print(intake_coverage(repository.root))
@@ -1652,6 +1664,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     intake_actions = intake_parser.add_subparsers(dest="intake_action", required=True)
     intake_list = intake_actions.add_parser("list")
     intake_list.set_defaults(handler=_intake_list)
+    for action, help_text in (
+        ("pin", "capture current batch-local metadata, not verify an old reference"),
+        ("item", "verify both exact metadata pins and return complete candidate evidence"),
+    ):
+        command = intake_actions.add_parser(action, allow_abbrev=False, help=help_text)
+        keys = ("batch", "id", "type") if action == "pin" else ("batch", "id", "type", "sha256", "context")
+        for key in keys:
+            command.add_argument("--" + key, required=True, action="append",
+                                 help="one exact value; duplicate selectors are rejected")
+        command.set_defaults(handler=_intake_reference)
     intake_coverage = intake_actions.add_parser(
         "coverage", allow_abbrev=False,
         help="inventory recorded scope, evidence metadata and gaps; not completeness or readiness")
@@ -1702,6 +1724,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def _error_code(error: BaseException) -> str:
+    from pcbknowledge.git_native.intake_reference import IntakeItemNotFound, StaleIntakeItem
+    if isinstance(error, StaleIntakeItem):
+        return "STALE_INTAKE_REFERENCE"
+    if isinstance(error, IntakeItemNotFound):
+        return "INTAKE_ITEM_NOT_FOUND"
     if isinstance(error, AgentProcessingBlockedError):
         return "LICENSE_BLOCKED"
     if isinstance(error, RecordConflictError):
@@ -1722,7 +1749,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         # Intake reads must not create canonical/cache directories even in a
         # fresh Git workspace. Other commands keep their existing layout contract.
-        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report, _intake_evidence_audit):
+        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report, _intake_evidence_audit, _intake_reference):
             repository = KnowledgeRepository(Path(arguments.repo))
         else:
             repository = _repository(arguments.repo)

@@ -13,9 +13,8 @@ from urllib.parse import parse_qs, urlencode, urlsplit
 from unittest import mock
 
 from pcbknowledge.git_native.intake import IntakeError, load_intake
-from pcbknowledge.git_native.intake_workbench import (
-    IntakeBrowseApplication, IntakeItemNotFound, StaleIntakeItem,
-)
+from pcbknowledge.git_native.intake_workbench import IntakeBrowseApplication
+from pcbknowledge.git_native.intake_reference import IntakeItemNotFound, StaleIntakeItem
 from pcbknowledge.git_native.intake_views import render_intake, render_intake_item
 from pcbknowledge.git_native.workspace import initialize_workspace
 from pcbknowledge.git_native.workspace_server import create_server
@@ -82,7 +81,8 @@ class IntakeItemTests(RepositoryTestCase):
             'sha256': 'a' * 64, 'data': {'target': {'source_id': 'source-z', 'issue_id': 'fact-a'},
             'manufacturer_confirmed': False, 'description': 'conservative synthetic receipt'}}]
         original = self.path.read_bytes()
-        with mock.patch('pcbknowledge.git_native.intake_workbench.load_intake', return_value=batches):
+        with mock.patch('pcbknowledge.git_native.intake_workbench.load_intake', return_value=batches), \
+                mock.patch('pcbknowledge.git_native.intake_reference.load_intake', return_value=batches):
             _, params = self.link()
             item = self.app.item(params)
             self.assertEqual(item.candidate['source_issue_dispositions'], batches[0]['source_issue_dispositions'])

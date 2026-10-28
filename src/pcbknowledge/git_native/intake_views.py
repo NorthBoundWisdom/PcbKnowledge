@@ -4,7 +4,8 @@ from __future__ import annotations
 import json
 from urllib.parse import urlencode
 
-from pcbknowledge.git_native.intake_workbench import FILTERS, IntakeBrowseView, IntakeItemView
+from pcbknowledge.git_native.intake_workbench import FILTERS, IntakeBrowseView
+from pcbknowledge.git_native.intake_reference import IntakeReference
 from pcbknowledge.git_native.workbench_views import escape, page
 
 
@@ -70,7 +71,7 @@ compatibility, safety or absence of uncertainty.</p>
     return page("Curated intake", body, workspace=view.workspace, change_count=change_count, active="intake")
 
 
-def render_intake_item(view: IntakeItemView, *, change_count: int) -> str:
+def render_intake_item(view: IntakeReference, *, change_count: int) -> str:
     candidate = view.candidate
     record = candidate["fact" if view.record_type == "fact" else "source_issue"]
     payload = json.dumps(candidate, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False)
