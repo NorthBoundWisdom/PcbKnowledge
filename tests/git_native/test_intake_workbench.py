@@ -113,7 +113,7 @@ class IntakeWorkbenchTests(RepositoryTestCase):
             "original_status": "UNRESOLVED_SOURCE_WORDING", "details": "<untrusted>"}}]
         candidate["source"]["review"] = {"actor_type": "AGENT", "actor_id": "synthetic-reader"}
         before = copy.deepcopy(candidate)
-        with mock.patch("pcbknowledge.git_native.intake_workbench.search_intake", return_value=[candidate]):
+        with mock.patch("pcbknowledge.git_native.intake_workbench._search_loaded_facts", return_value=[candidate]):
             output = render_intake(self.application.browse({}), change_count=0)
         decoded = json.loads(html.unescape(re.search(r"<pre>(.*?)</pre>", output, re.S)[1]))
         self.assertEqual(decoded, before)

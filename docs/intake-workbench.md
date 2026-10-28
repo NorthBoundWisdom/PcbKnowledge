@@ -65,3 +65,43 @@ explicitly verified after its intake initialization was repaired. Author:
 Browser visual review was not completed: the available Chromium process could
 not start in the execution environment. HTTP behavior is verified, not visual
 layout. The manual acceptance steps above remain applicable.
+
+## Exact local item links
+
+Each browse result now provides **Open exact pinned item**, a read-only
+`GET /intake/item` URL. Its required selectors are `batch` (normalized
+`knowledge/intake/...json` path), batch-local `id`, `type` (`fact` or `issue`),
+`sha256` (batch JSON bytes) and `context` (the complete candidate projection).
+The context is SHA-256 of UTF-8 JSON with sorted keys, unescaped Unicode,
+no NaN and compact comma/colon separators. It includes linked disposition
+receipt paths and hashes, so changing a disposition alone expires the old link.
+It is a local review reference, not a canonical publication or PDF-verification
+receipt; it works only in a workspace containing the same relevant metadata.
+
+Browse labels and both digests come from one validated loader result. Opening a
+link resolves the exact record type and ID only inside its selected batch; a
+same-named record in another batch cannot substitute. Invalid/duplicate selectors
+or unsafe path spelling return HTTP 400, missing batches/records return 404, and
+changed batch bytes or context return 409 with a stale-link explanation. It never
+silently refreshes the pin or redirects to a newer record. Return to browse and
+review newly displayed evidence before using a replacement link.
+
+The detail page retains the full escaped search projection: source, record,
+conditions, record evidence, same-source warnings for facts, and applicable linked
+dispositions. Issue detail retains its complete selected issue and disposition
+context. It does not pretend to export the whole batch or unrelated warnings.
+No direct path supplied by the URL is opened: resolution uses only validated
+intake-loader results. The same selected-workspace and no-mutation rules apply.
+
+Manual check: open a result in another tab, confirm batch and context hashes, then
+modify a disposable synthetic batch or linked disposition and reload its old URL.
+Expect a stale-link error, never a newly substituted answer. Test this only in a
+disposable workspace, not by changing accepted knowledge as an experiment.
+
+Exact-link independent Agent review on 2026-10-28 by
+`agent:/root/check_and_resume_knowledge/review_resistor_eval` passed 25 focused
+tests and full-payload parity for 14 pre-change/current search and issue queries.
+An actual workspace-server check followed seven MCP23017 fact links, preserving
+their full warnings and dispositions; changing only disposition bytes invalidated
+all seven old links with HTTP 409 while new browsing remained available. This is
+HTTP/data validation, not browser visual or original-PDF verification.

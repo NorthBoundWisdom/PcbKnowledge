@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from urllib.parse import urlencode
 
-from pcbknowledge.git_native.intake_workbench import FILTERS, IntakeBrowseView
+from pcbknowledge.git_native.intake_workbench import FILTERS, IntakeBrowseView, IntakeItemView
 from pcbknowledge.git_native.workbench_views import escape, page
 
 
@@ -27,7 +27,7 @@ Text terms use case-insensitive AND matching. Kind and parameter apply only to f
 Switching to issues requires clearing those fact filters. No match does not prove
 compatibility, safety or absence of uncertainty.</p>
 <p>{view.total_count} candidates · page {view.page_number} of {view.page_count} · up to 25 per page</p></section>'''
-    for candidate in view.candidates:
+    for candidate, context_digest in zip(view.candidates, view.candidate_digests):
         record = candidate.get("fact", candidate.get("source_issue", {}))
         source = candidate["source"]
         payload = json.dumps(candidate, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False)
@@ -44,12 +44,16 @@ compatibility, safety or absence of uncertainty.</p>
             summary = (f'<p><strong>{escape(record.get("issue_status", "Unknown status"))}</strong></p>'
                        f'<p>{escape(record.get("description", "Not recorded"))}</p>'
                        f'<p>{disposition_count} linked dispositions; original issue remains visible.</p>')
+        item_query = urlencode({"batch": candidate["path"], "id": record["id"],
+                                "sha256": view.batch_digests[candidate["path"]], "context": context_digest,
+                                "type": "fact" if view.mode == "facts" else "issue"})
         body += (f'<article><h2>{escape(record.get("id", "Candidate"))}</h2>'
                  f'<p>{escape(source.get("manufacturer", "Unknown manufacturer"))} · '
                  f'{escape(source.get("device", "Unknown device"))} · '
                  f'{escape(source.get("package", "Unknown package"))}</p>'
                  f'<p>Batch: <code>{escape(candidate["path"])}</code> · '
                  f'{escape(candidate["acceptance_status"])}</p>'
+                 + f'<p><a href="/intake/item?{escape(item_query)}">Open exact pinned item</a></p>'
                  + summary + '<details><summary>Complete evidence and warnings</summary>'
                  '<p>Complete candidate payload: source revision and evidence, fact/issue '
                  'conditions, same-source warnings and linked dispositions are preserved below. '
@@ -64,3 +68,26 @@ compatibility, safety or absence of uncertainty.</p>
             links.append(f'<a href="/intake?{escape(query)}">{label}</a>')
     body += '<nav aria-label="Intake result pages">' + ' '.join(links) + '</nav>'
     return page("Curated intake", body, workspace=view.workspace, change_count=change_count, active="intake")
+
+
+def render_intake_item(view: IntakeItemView, *, change_count: int) -> str:
+    candidate = view.candidate
+    record = candidate["fact" if view.record_type == "fact" else "source_issue"]
+    payload = json.dumps(candidate, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False)
+    body = (f'<section><h1>{escape(record["id"])}</h1>'
+            '<p><strong>NONCANONICAL · NOT_LOCALLY_VERIFIED · READ ONLY</strong></p>'
+            f'<p>Exact {escape(view.record_type)} in <code>{escape(candidate["path"])}</code></p>'
+            f'<p>Batch JSON SHA-256: <code>{escape(view.batch_sha256)}</code></p>'
+            f'<p>Candidate context SHA-256: <code>{escape(view.context_sha256)}</code></p>'
+            '<p>This local link verifies the selected working-tree batch JSON bytes, not a '
+            'canonical published snapshot or original PDF. It is meaningful only in the '
+            'selected workspace. Agent review is not human approval or circuit qualification.</p>'
+            '<p>The context digest also pins the complete candidate projection and linked disposition '
+            'receipts, including their own paths and hashes. Changed metadata expires the link; '
+            'neither digest verifies original documents. A conservative disposition does not '
+            'erase original warnings.</p>'
+            '<p><a href="/intake">Return to intake browse</a></p>'
+            '<h2>Complete candidate, source conditions and warnings</h2>'
+            f'<pre>{escape(payload)}</pre></section>')
+    return page("Pinned intake item", body, workspace=view.workspace,
+                change_count=change_count, active="intake")

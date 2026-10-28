@@ -216,12 +216,23 @@ def search_intake(
     search_intake_issues to find warnings even without a matching fact.
     """
 
+    return _search_loaded_facts(load_intake(root), query, source_id=source_id,
+                                manufacturer=manufacturer, device=device, package=package,
+                                kind=kind, parameter=parameter)
+
+
+def _search_loaded_facts(
+    batches: list[dict], query: str = "", *, source_id: str | None = None,
+    manufacturer: str | None = None, device: str | None = None,
+    package: str | None = None, kind: str | None = None, parameter: str | None = None,
+) -> list[dict]:
+    """Project an already validated loader result without rereading mutable files."""
     source_filters = _filters(id=source_id, manufacturer=manufacturer, device=device,
                               package=package)
     fact_filters = _filters(kind=kind, parameter=parameter)
     terms = query.casefold().split()
     matches: list[dict] = []
-    for batch in load_intake(root):
+    for batch in batches:
         data = batch["data"]
         sources = {source["id"]: source for source in data["sources"]}
         issues = _source_issues(data)
@@ -248,11 +259,21 @@ def search_intake_issues(
     the absence of ambiguities: unrecorded or differently worded issues may exist.
     """
 
+    return _search_loaded_issues(load_intake(root), query, source_id=source_id,
+                                 manufacturer=manufacturer, device=device, package=package)
+
+
+def _search_loaded_issues(
+    batches: list[dict], query: str = "", *, source_id: str | None = None,
+    manufacturer: str | None = None, device: str | None = None,
+    package: str | None = None,
+) -> list[dict]:
+    """Project validated warnings without changing their batch-local identity."""
     source_filters = _filters(id=source_id, manufacturer=manufacturer, device=device,
                               package=package)
     terms = query.casefold().split()
     matches: list[dict] = []
-    for batch in load_intake(root):
+    for batch in batches:
         data = batch["data"]
         issues = _source_issues(data)
         for source in sorted(data["sources"], key=lambda record: record["id"]):

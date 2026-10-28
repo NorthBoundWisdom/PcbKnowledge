@@ -49,8 +49,10 @@ from pcbknowledge.git_native.workbench_views import (
 
 
 from pcbknowledge.git_native.intake import IntakeError
-from pcbknowledge.git_native.intake_workbench import IntakeBrowseApplication
-from pcbknowledge.git_native.intake_views import render_intake
+from pcbknowledge.git_native.intake_workbench import (
+    IntakeBrowseApplication, IntakeItemNotFound, StaleIntakeItem,
+)
+from pcbknowledge.git_native.intake_views import render_intake, render_intake_item
 
 
 DEFAULT_PORT = 18080
@@ -115,6 +117,10 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             self._dispatch_get()
         except HTTPRequestError as error:
             self._send_error_page(error.status, str(error))
+        except IntakeItemNotFound as error:
+            self._send_error_page(HTTPStatus.NOT_FOUND, str(error))
+        except StaleIntakeItem as error:
+            self._send_error_page(HTTPStatus.CONFLICT, str(error))
         except RecordNotFoundError:
             self._send_error_page(HTTPStatus.NOT_FOUND, "Record not found.")
         except (RecordValidationError, EvidenceError, RepositoryError, IntakeError) as error:
@@ -159,7 +165,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             overview = self.application.overview()
             self._send_html(render_review(overview, workspace=self.repository.root))
             return
-        if path == "/intake":
+        if path in {"/intake", "/intake/item"}:
             if len(parsed.query) > 8192 or re.search(r"%(?![0-9A-Fa-f]{2})", parsed.query):
                 raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Malformed or oversized intake query.")
             try:
@@ -167,8 +173,15 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
                                       strict_parsing=True, errors="strict", max_num_fields=10)
             except ValueError as error:
                 raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Invalid intake query encoding.") from error
-            self._send_html(render_intake(
-                self.editor_server.intake_application.browse(parameters),
+            application = self.editor_server.intake_application
+            if path == "/intake/item":
+                view = application.item(parameters)
+                renderer = render_intake_item
+            else:
+                view = application.browse(parameters)
+                renderer = render_intake
+            self._send_html(renderer(
+                view,
                 change_count=self.repository.git_changes().count,
             ))
             return

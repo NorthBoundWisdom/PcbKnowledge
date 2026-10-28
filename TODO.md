@@ -576,3 +576,15 @@ Use the narrowest relevant tests during editing, then the applicable repository 
 - Focused synthetic tests include actual loopback HTTP, external-workspace isolation,
   malformed/duplicate filters, escaping, warning/disposition preservation and POST
   rejection. Full gates and exact-commit CI are separate publication checks.
+
+## Exact local intake references
+
+- [x] Add read-only per-record intake links bound to batch-local identity, exact
+  batch JSON bytes and complete candidate/disposition context. Single-load browse
+  projections prevent attaching new hashes to an older displayed candidate.
+- Missing records return 404; malformed links 400; changed batch/context 409.
+  This is not a canonical immutable publication or source-original byte audit.
+- Focused checks cover duplicate IDs across batches/types, stale bytes and
+  disposition-only changes, traversal/malformed selectors, full escaped payload,
+  one-load consistency and actual workspace-server HTTP behavior. Existing CLI
+  candidate payloads remain unchanged; complete gates and CI are separate checks.
