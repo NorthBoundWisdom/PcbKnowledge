@@ -31,6 +31,10 @@ precise region bounding boxes remain unresolved. This is not a complete device
 model or a formal pilot pass. See the [collection index](knowledge/intake/README.md)
 and [replayable retrieval evaluation](docs/intake-evaluation-100.md).
 
+The owner gave [batch-level content acceptance on 2026-10-28](docs/owner-acceptance-2026-10-28.md)
+for that pinned 100-annotation snapshot. This does not claim per-annotation human
+evidence checks, canonical approval, or completion of the formal pilot.
+
 ```bash
 python3 configs/pcbknowledge_agent.py --repo . intake list
 python3 configs/pcbknowledge_agent.py --repo . intake search LM358

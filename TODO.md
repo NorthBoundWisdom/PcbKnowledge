@@ -2,7 +2,7 @@
 
 > Status: `LIGHTWEIGHT_CURATION_ACTIVE_FORMAL_PILOT_OPEN`
 > Updated: 2026-10-28
-> Goal: accumulate reviewable small summaries under owner delegation while preserving evidence limitations; keep the formal PDF/typed-authority pilot separate.
+> Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
 ## 0. Permanent boundaries
 
@@ -27,6 +27,7 @@
 - [x] Verify `typed-v2-local-cache`, metadata-only packages, and repository-wide index/working-tree guards.
 - [x] Add read-only `intake list` / `intake search` retrieval without mixing curation into canonical published Facts.
 - [x] Independently verify exact identity, pinned-snapshot parity and structured intake filters; [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10), [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11) and [#12](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/12) accepted and closed on 2026-10-28.
+- [x] Record [human owner batch-level content acceptance](docs/owner-acceptance-2026-10-28.md) dated 2026-10-28 for the immutable 100-annotation snapshot at `9530c0d`; preserve all original Agent provenance, unresolved issues and noncanonical status.
 - [ ] Complete byte identity, visual anchors, revision drift, and negative-case coverage in the formal pilot.
 
 Local receipt (2026-10-27): 141 tests pass; config/build/test, workspace/authority validation, repository-wide staged/worktree text-size gate, English guard, pinned PDF.js hashes, and metadata-only package pass. Read-only independent code audit cleared after cache-retention and alternate-folder original guards were repaired. Intake retrieval returns 1 batch / 20 annotations (LM358 search: 7); canonical counts remain zero. Remote CI is checked separately after the authorized main push, not inferred from these local results.
@@ -49,6 +50,69 @@ all 18 pinned CLI cases passed. English/public-source/PDF.js guards, workspace a
 Agent validation, Config and metadata-only Package also exited 0. The archive
 contains only five intake batches, the workspace manifest, three schemas and its
 derived manifest. Remote CI for this stage must be verified after publication.
+
+Owner-acceptance documentation receipt (2026-10-28): independent scope/provenance
+review passed. The five batch files and retrieval manifest are byte-identical to
+`9530c0d`; all 100 unique annotation IDs and 15 scopes were rechecked. Local gates
+exited 0: 31 focused intake tests, 178 tests in both Build and Test (no skips), all
+18 pinned CLI cases, Config, workspace/Agent validation, English/public/PDF.js
+guards, local Markdown link-target checks, and metadata-only Package. No new source
+evidence or canonical authority was added. Exact-commit remote CI is checked after
+publication, independently of this local receipt.
+
+### Next application-question milestones
+
+The accepted 100 annotations are a baseline, not a target to inflate. Prioritize
+knowledge that helps answer a concrete engineering question and identifies what
+is still missing. Candidate retrieval alone is never a recommendation or design
+sign-off. New material is not covered by the owner's snapshot-specific acceptance.
+
+- [ ] **Device selection with sufficient conditions:** choose bounded questions
+  about the existing device scopes, state required supply, temperature, package,
+  signal/load and performance constraints, and identify evidence-supported
+  candidates versus explicit unknowns. Keep absolute maximum separate from
+  recommended operation; do not infer cross-vendor replacements from family names.
+- [ ] **Setup and application conditions:** curate focused original annotations
+  for necessary connections, startup/reset, decoupling or external-component
+  constraints only where an authorized public source supports the exact device,
+  revision and conditions. Record omitted design/thermal assumptions; do not
+  elevate a typical circuit into a guaranteed universal design.
+- [ ] **Question-level evidence and negative cases:** pair each bounded slice with
+  concrete user questions, pinned source/fact selections, preserved conditions and
+  warnings, and unsupported/wrong-device/wrong-package negatives. Require an
+  independently reviewed, replayable receipt; report unanswered questions rather
+  than judging completion by annotation count alone.
+- [ ] **Resolve gaps only with new evidence:** keep the six Nexperia text-only
+  observations and MCP23017 source-wording ambiguity open until authorized evidence
+  actually supports a narrower resolution. No repeated blocked-source bypass, no
+  invented supply envelope, and no retroactive evidence upgrade.
+
+Parallel application-knowledge assignments (claim the issue before starting):
+
+| Issue | Application question | Exclusive new intake batch and review stem |
+| --- | --- | --- |
+| [#13](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/13) | What capacitor/ESR, dropout/load and thermal constraints govern the selected TI LM1117 / ST LD1117 scopes? | `knowledge/intake/ldo-application-constraints` |
+| [#14](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/14) | What input/PGA, loading/settling and controller-interface conditions govern ADS1115 use? | `knowledge/intake/ads1115-input-interface-constraints` |
+| [#15](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/15) | What clamp, input-drive and concurrent-channel thermal conditions govern ULN2003A inductive-load use? | `knowledge/intake/uln2003a-load-protection-constraints` |
+
+Each stem owns only its new `.json` batch and `-review.md` receipt. Existing 100
+annotations, the owner acceptance receipt, shared documentation and retrieval
+manifest stay coordinator-owned; agree any integration change explicitly. The
+issues require conditional evidence, independent Agent review and bounded questions
+plus negative cases, not a new owner certification or a quantity-only target.
+
+The current pinned retrieval evaluator rejects extra batches by design. New-batch
+publication therefore needs a coordinated maintainer integration step: explicitly
+review/update the current evaluation dataset pins and cases, preserve the immutable
+owner-accepted snapshot/receipt, and rerun the full gates before publication. Do not
+weaken the evaluator or silently refresh expectations to make new data pass.
+
+External-team work should use non-overlapping issues with explicit file ownership,
+source-access/evidence boundaries, acceptance criteria and verification receipts.
+Review delivered commits against those criteria before integration or issue closure;
+fetch latest main and never force-push. Continue small source/topic batches without
+committing originals. The formal canonical pilot below remains a separate gate,
+not a side effect of owner content acceptance or additional intake quantity.
 
 See [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md). Historic receipts below describe their original stage, not a claim that the new pilot is complete.
 

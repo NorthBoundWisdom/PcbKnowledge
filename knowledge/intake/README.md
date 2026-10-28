@@ -1,8 +1,11 @@
 # Curated collection
 
 This queue contains **5 reviewed batches, 15 source/device scopes, and 100 factual
-annotations**. All are noncanonical and Agent-reviewed under owner delegation,
-not human-approved or a complete component model.
+annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
+The owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
+for the pinned 100-annotation snapshot. This is not per-fact human evidence
+verification, canonical approval, or a complete component model. Original Agent
+provenance and batch bytes are preserved.
 
 | Batch | Source/device scopes | Annotations | Review evidence |
 | --- | --- | ---: | --- |

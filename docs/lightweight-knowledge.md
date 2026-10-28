@@ -35,6 +35,21 @@ human-review operations; this release does not impersonate a human through that 
 Intake search must retain the noncanonical marker and limitations and must not be
 mixed silently into published canonical Fact results.
 
+## Explicit owner content acceptance
+
+A later explicit human owner acceptance can be recorded separately as a dated,
+snapshot-bound documentary receipt. Distinguish the `HUMAN` decision-maker from
+the `AGENT` recorder and preserve the actual stated scope. Do not infer individual
+source/fact checks, visual acceptance, canonical approval, or engineering safety
+from a batch-level content acceptance. Do not rewrite historical Agent provenance
+or per-item `human_reviewed` fields to imply those stronger claims. New or changed
+records need their own review; acceptance never follows a mutable path by default.
+
+The [2026-10-28 owner receipt](owner-acceptance-2026-10-28.md) covers exactly the
+existing five batches / 100 annotations at its pinned commit and dataset hashes.
+It adds no executable status or canonical authority and leaves evidence limitations,
+source issues and the formal pilot gates unchanged.
+
 ## Intake candidate retrieval
 
 `intake search [query]` is read-only candidate retrieval, not an electrical answer,
