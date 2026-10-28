@@ -24,15 +24,16 @@ The P0 software path is implemented end-to-end: Agents can prepare typed Source/
 
 ## Curated intake
 
-The collection contains 5 batches, 15 source/device scopes and 100 independently
+The collection contains 8 batches, 19 batch-local source/device scopes and 125 independently
 Agent-reviewed annotations. Evidence levels differ by item; the six Nexperia
 observations remain text-only. Full orderable identity in the initial batch and
 precise region bounding boxes remain unresolved. This is not a complete device
 model or a formal pilot pass. See the [collection index](knowledge/intake/README.md)
-and [replayable retrieval evaluation](docs/intake-evaluation-100.md).
+and [current aggregate retrieval evaluation](docs/intake-evaluation-125.md).
 
 The owner gave [batch-level content acceptance on 2026-10-28](docs/owner-acceptance-2026-10-28.md)
-for that pinned 100-annotation snapshot. This does not claim per-annotation human
+for the original pinned 100-annotation snapshot, not the later application batches.
+This does not claim per-annotation human
 evidence checks, canonical approval, or completion of the formal pilot.
 
 ```bash

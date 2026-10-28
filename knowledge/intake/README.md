@@ -1,8 +1,8 @@
 # Curated collection
 
-This queue contains **5 reviewed batches, 15 source/device scopes, and 100 factual
+This queue contains **8 reviewed batches, 19 batch-local source/device scopes, and 125 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
-The owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
+For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
 verification, canonical approval, or a complete component model. Original Agent
 provenance and batch bytes are preserved.
@@ -14,6 +14,9 @@ provenance and batch bytes are preserved.
 | [Interface IC pilot](interface-ic-pilot.json) | ADS1115IDGSR/DGS; 24LC256-I/SN; SN65HVD230DR/D | 20 | Three original hashes and twelve rendered pages reviewed; Microchip revision date checked as text only |
 | [Timer, reference and driver](timer-reference-driver-pilot.json) | NE555DR/D; TL431CDBZR/DBZ; ULN2003ADR/D | 20 | Three original hashes and eleven rendered pages reviewed, including three identity pages |
 | [Power, monitor and GPIO](power-monitor-gpio-pilot.json) | TPS62160DSGR/DSG; INA219AIDCNR/DCN; MCP23017-E/SO | 20 | Three original hashes and twelve rendered pages reviewed; MCP23017 supply wording remains unresolved |
+| [LDO application constraints](ldo-application-constraints.json) | TI LM1117 adjustable/DCY; ST LD1117STR/SOT-223 | 8 | Two actual hashes and 11 independently inspected pages; [review](ldo-application-constraints-review.md) |
+| [ADC input/interface constraints](ads1115-input-interface-constraints.json) | ADS1115IDGSR/DGS | 9 | Actual hash and 12 independently inspected pages; [review](ads1115-input-interface-constraints-review.md) |
+| [Driver load/protection constraints](uln2003a-load-protection-constraints.json) | ULN2003ADR/D | 8 | Actual hash and 9 independently inspected pages; [review](uln2003a-load-protection-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -31,7 +34,7 @@ The fourth batch preserves the distinction between ULN2003A maximum ON-state inp
 requirement and absolute maximum input rating. Saturation data does not establish
 a simultaneous-channel current or thermal budget. See its [review](timer-reference-driver-review.md).
 
-Across these batches, 94 annotations have recorded byte-identified and rendered-page
+Across the original five batches, 94 annotations have recorded byte-identified and rendered-page
 review; six Nexperia annotations have official-text-only evidence. This describes
 recorded review work, not original-byte verification by each subsequent reader.
 
@@ -58,3 +61,19 @@ Reader `NOT_LOCALLY_VERIFIED` means that read has not verified original local by
 it does not erase prior independently recorded evidence work. Original PDFs, page
 renders, and full extracted text are excluded from Git and packages. The current
 contract is [lightweight knowledge](../../docs/lightweight-knowledge.md).
+
+## Application-question extension
+
+The three application batches add 25 condition-preserving annotations in four
+batch-local source scopes, with 11 explicit unresolved application warnings. They
+reuse device lanes but do not merge identities or inherit prior owner acceptance.
+A distinct Agent checked four actual original hashes and 32 cited rendered pages.
+All 25 have byte-identified, item-specific visual review receipts; no precise bbox
+or hardware qualification is claimed. TI full orderable identity, ST numeric ESR
+and unprovided sensor/controller/load/thermal inputs remain explicitly unknown.
+
+The [125-annotation aggregate replay](../../docs/intake-evaluation-125.md) pins all
+eight batches and retains separately pinned source dispositions. The original
+100-record manifest and owner receipt remain immutable historical baselines.
+Candidate retrieval is not electrical permission, typical-to-guaranteed conversion,
+cross-vendor interchangeability, or a complete protection/thermal design.

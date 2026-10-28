@@ -42,9 +42,9 @@ Issue implementation receipt (2026-10-27; independently verified 2026-10-28):
 - [#12](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/12): exact structured intake filters precede lexical candidate retrieval; missing structured fields fail closed. Full batch-local source warnings remain distinct and retrievable through `intake issues`.
 - Combined local verification: 169 tests passed with no skips; English/public-source/PDF.js guards, workspace validation, Config, Build, Test, Agent validate and Package passed. Independent focused review passed 25 tests without blocking findings. No live intake data, schema or cache policy changed. Remote CI is verified separately after publication.
 
-Current retrieval evaluation: [18 pinned real-data CLI cases](docs/intake-evaluation-100.md)
-exercise the existing 100 annotations without adding records. The replay is wired
-into the existing CI jobs; synthetic mutation tests detect lost conditions,
+Historical 100-record retrieval evaluation: [18 pinned real-data CLI cases](docs/intake-evaluation-100.md)
+exercise the original 100 annotations without adding records. Those cases are now
+retained inside the current aggregate selected by CI; synthetic mutation tests detect lost conditions,
 warnings/provenance and incorrect selections even with unchanged counts.
 Local receipt (2026-10-28): 178 tests passed with no skips in both Build and Test;
 all 18 pinned CLI cases passed. English/public-source/PDF.js guards, workspace and
@@ -96,7 +96,7 @@ sign-off. New material is not covered by the owner's snapshot-specific acceptanc
   actually supports a narrower resolution. No repeated blocked-source bypass, no
   invented supply envelope, and no retroactive evidence upgrade.
 
-Parallel application-knowledge assignments (claim the issue before starting):
+Application-knowledge assignments (independently reviewed; coordinated integration):
 
 | Issue | Application question | Exclusive new intake batch and review stem |
 | --- | --- | --- |
@@ -110,11 +110,24 @@ manifest stay coordinator-owned; agree any integration change explicitly. The
 issues require conditional evidence, independent Agent review and bounded questions
 plus negative cases, not a new owner certification or a quantity-only target.
 
-The current pinned retrieval evaluator rejects extra batches by design. New-batch
-publication therefore needs a coordinated maintainer integration step: explicitly
-review/update the current evaluation dataset pins and cases, preserve the immutable
-owner-accepted snapshot/receipt, and rerun the full gates before publication. Do not
-weaken the evaluator or silently refresh expectations to make new data pass.
+The coordinated integration uses a separate `evals/intake-retrieval-125.json`
+manifest for eight batches / 125 annotations, with the existing separately pinned
+disposition manifest retained. The original five JSONs, 100-record manifest and
+owner-acceptance receipt are unchanged. The evaluator still rejects unexpected
+bytes/batch sets; no gate was weakened. See the [aggregate receipt](docs/intake-evaluation-125.md).
+
+The three new pairs contain 25 annotations and 11 explicit application unknowns,
+independently reviewed against four actual source hashes and 32 rendered pages.
+The reviewer corrected ADS rate-tolerance conditions and ULN ambient/junction and
+GPIO-option wording before acceptance. These are Agent-reviewed noncanonical
+candidates, not new human acceptance, engineering sign-off or a formal pilot pass.
+Integrated local receipt (2026-10-28): independent aggregate review found no
+blocking issue. Build and Test each passed 195 tests without skips; all 70 CLI
+cases passed with complete disposition metadata. English/public/PDF.js guards,
+workspace/Agent validation, Config and Package exited 0. Package inspection found
+only eight intake JSONs, the unchanged disposition, workspace/schema metadata and
+derived manifest (14 members), with no originals. Exact-commit remote CI is
+verified separately after the authorized coherent main publication.
 
 External-team work should use non-overlapping issues with explicit file ownership,
 source-access/evidence boundaries, acceptance criteria and verification receipts.

@@ -1,6 +1,12 @@
 # 100-annotation retrieval evaluations
 
-## Current structured-retrieval replay (2026-10-28)
+## Historical structured-retrieval replay (2026-10-28)
+
+This manifest remains pinned to the original five-batch snapshot. The current
+expanded collection uses the [125-annotation aggregate replay](intake-evaluation-125.md).
+Running the old manifest against the expanded checkout intentionally fails the
+batch-set gate; use the original snapshot for this historical replay. Its pins and
+owner-acceptance coverage have not been rewritten.
 
 The original 100 annotations are unchanged. A reviewed, pinned
 [18-case manifest](../evals/intake-retrieval-100.json) now replays actual Agent CLI
