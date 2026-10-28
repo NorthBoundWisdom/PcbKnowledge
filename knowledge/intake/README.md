@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **22 reviewed batches, 33 batch-local source/device scopes, and 228 factual
+This queue contains **25 reviewed batches, 36 batch-local source/device scopes, and 250 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -31,6 +31,9 @@ provenance and batch bytes are preserved.
 | [Rectifier constraints](vishay-ss14-rectifier-constraints.json) | Vishay SS14/SMA; full orderable unknown | 7 | Exact independently reviewed maintainer handoff; [receipt](vishay-ss14-rectifier-constraints-review.md) |
 | [TVS pulse constraints](vishay-smbj5-0a-tvs-pulse-constraints.json) | Vishay SMBJ5.0A/SMB, unidirectional | 8 | Exact independently reviewed handoff; [receipt](vishay-smbj5-0a-tvs-pulse-constraints-review.md) |
 | [Connector geometry](wurth-61300211121-connector-geometry.json) | Wurth 61300211121, straight two-position header | 4 | Exact independently reviewed handoff; [receipt](wurth-61300211121-connector-geometry-review.md) |
+| [Level translation constraints](sn74lvc1t45-level-translation-constraints.json) | SN74LVC1T45DBVR/DBV | 7 | Actual hash and independent table/footnote review; [receipt](sn74lvc1t45-level-translation-constraints-review.md) |
+| [Load-switch constraints](tps22918-load-switch-constraints.json) | TPS22918DBVR/DBV | 8 | Actual hash and independent timing/QOD review; [receipt](tps22918-load-switch-constraints-review.md) |
+| [Resistor rating constraints](vishay-crcw060310k0fkea-rating-constraints.json) | Vishay CRCW060310K0FKEA/0603 | 7 | Exact independently reviewed handoff; [receipt](vishay-crcw060310k0fkea-rating-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not

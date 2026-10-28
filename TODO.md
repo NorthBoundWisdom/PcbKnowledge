@@ -4,17 +4,19 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
-## TVS and connector handoff integration
+## Translation, load-switch and reviewed resistor integration
 
-The coherent collection is 22 batches / 33 source scopes / 228 annotations.
-Exact reviewed TVS and connector pairs extend the accepted reset/RS-485 stage,
-without recollection or replacement of newer source handling. Historical
-100/125/148/162/184/216 manifests, receipts and prior intake bytes are preserved.
-The successor `evals/intake-retrieval-tvs-connector.json` and separate unchanged
-MCP23017 disposition remain required in both CI jobs. Source constraints remain
-conditional; no DC protection guarantee or complete connector footprint is inferred.
-See the [evaluation receipt](docs/intake-evaluation-tvs-connector.md) for actual
-checks. Publication and exact-commit CI are reported in the issue handoff.
+The coherent collection is 25 batches / 36 source scopes / 250 annotations.
+Independent collectors and a distinct source/full-payload reviewer cover exact
+SN74LVC1T45DBVR and TPS22918DBVR orderables. The seven-annotation CRCW060310K0FKEA
+handoff is reused byte-for-byte, without recollection. Historical
+100/125/148/162/184/216/228 manifests, receipts and prior intake bytes are preserved.
+The successor `evals/intake-retrieval-translation-loadswitch.json` and separate
+unchanged MCP23017 disposition remain required in both CI jobs. Grounded-rail
+Ioff is not arbitrary sequencing safety; QOD and slew control are not reverse
+blocking or current limiting. Mounted resistor thermal limits remain conditional.
+See the [evaluation receipt](docs/intake-evaluation-translation-loadswitch.md).
+Publication and exact-commit CI are reported in the issue handoff.
 
 ## 0. Permanent boundaries
 

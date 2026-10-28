@@ -1,0 +1,702 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "sn74lvc1t45-level-translation-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+    "collected_at": "2026-10-28T05:51:28.546172+00:00"
+  },
+  "sources": [
+    {
+      "id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "document_url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+      "revision": "SCES515N",
+      "revision_date": "2024-06",
+      "packaging_addendum_date": "2025-11-01",
+      "identity_evidence": "PDF page 21 / Addendum-Page 1 lists exact SN74LVC1T45DBVR as SOT-23 (DBV), 6 pins, -40 to 85 C; neighboring .A/E4/G4 and other packages are excluded.",
+      "pdf_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+      "pdf_byte_size": 1678649,
+      "pdf_pages": 42,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "Public reference; redistribution permission not asserted; originals excluded.",
+      "source_processing_scope": "Small original noncanonical annotations under ADR-021; no canonical license clearance.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        4,
+        5,
+        6,
+        8,
+        12,
+        13,
+        14,
+        16,
+        17,
+        21
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "translate-app-01",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "supply_domains_thresholds",
+      "value": {
+        "VCCA_V": [
+          1.65,
+          5.5
+        ],
+        "VCCB_V": [
+          1.65,
+          5.5
+        ],
+        "A_and_DIR_domain": "VCCA",
+        "B_domain": "VCCB",
+        "selected_3_to_3_6V_domain": {
+          "VIH_min_V": 2,
+          "VIL_max_V": 0.8
+        },
+        "other_unlisted_supply_values": {
+          "data_VIH_min": "0.7 * VCCI",
+          "data_VIL_max": "0.3 * VCCI",
+          "DIR_VIH_min": "0.7 * VCCA",
+          "DIR_VIL_max": "0.3 * VCCA"
+        }
+      },
+      "unit": null,
+      "conditions": "Recommended operation, TA -40 to 85 C. Selected thresholds apply only with corresponding input supply 3 to 3.6 V; DIR always uses VCCA, not VCCB. VCCI denotes input-port supply and VCCO output-port supply. Other explicitly tabulated supply bands have separate thresholds, not the fallback. Absolute maximum 6.5 V supply is stress-only, not an operating extension.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 4,
+        "pdf_page_index": 3,
+        "section": "5.1; 5.3",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 5,
+          "pdf_page_index": 4,
+          "section": "5.3 continuation and notes 1-5",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "7.1",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "translate-app-02",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "output_drive_input_edges",
+      "value": {
+        "selected_equal_3V_rails": {
+          "VOH_min_V": 2.4,
+          "IOH_mA": -24,
+          "VOL_max_V": 0.55,
+          "IOL_mA": 24
+        },
+        "recommended_3_to_3_6V_output_domain_current_mA": {
+          "IOH": -24,
+          "IOL": 24
+        },
+        "selected_3_to_3_6V_data_input_max_ns_per_V": 10,
+        "DIR_max_ns_per_V": 5
+      },
+      "unit": null,
+      "conditions": "TA -40 to 85 C. Loaded VOH test uses VI=VIH, VOL uses VI=VIL and both VCCA=VCCB=3 V; do not transfer this tested pair to arbitrary unequal rails. Current recommendation uses VCCO; edge recommendation uses VCCI, DIR spans 1.65 to 5.5 V. Recommended VI 0..5.5 V and VO 0..VCCO. Unused data inputs require VCCI or GND because input circuits remain active. Push-pull drive is not current limiting or permission for contention.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 6,
+        "pdf_page_index": 5,
+        "section": "5.5 VOH/VOL rows",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 5,
+          "pdf_page_index": 4,
+          "section": "5.3 and notes",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "7.3.4",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 14,
+          "pdf_page_index": 13,
+          "section": "Table 7-1 note",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "translate-app-03",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "grounded_rail_isolation_Ioff",
+      "value": {
+        "Ioff_max_magnitude_uA": {
+          "TA_25C": 1,
+          "TA_minus40_to85C": 2
+        },
+        "A_port_test": {
+          "VCCA_V": 0,
+          "VCCB_V": [
+            0,
+            5.5
+          ]
+        },
+        "B_port_test": {
+          "VCCA_V": [
+            0,
+            5.5
+          ],
+          "VCCB_V": 0
+        },
+        "VI_or_VO_V": [
+          0,
+          5.5
+        ],
+        "isolation": "Both ports high impedance when either supply is at GND and the other remains connected."
+      },
+      "unit": null,
+      "conditions": "The numerical Ioff bounds retain port-specific grounded-rail tests and applied input/output voltage range. Partial-power-down backflow inhibition is not zero leakage. Do not substitute floating, intermediate ramp voltage or disconnected rail for the specified 0 V numerical test.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 6,
+        "pdf_page_index": 5,
+        "section": "5.5 Ioff",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "7.3.3",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 14,
+          "pdf_page_index": 13,
+          "section": "7.3.6",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "translate-app-04",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "power_sequence_layout_boundary",
+      "value": {
+        "ground_reference": "Apply GND reference first.",
+        "rail_order": "Either rail may power on or off first.",
+        "ramp_requirements": "Source describes glitch-free sequencing without ramp-order or ramp-rate requirements.",
+        "layout": "Bypass both supplies and keep traces short; optional loading/pull-up tuning depends on system requirements."
+      },
+      "unit": null,
+      "conditions": "Sections 7.3.5 and 8.3 describe avoiding false I/O logic transitions during sequencing; preserve this functional statement. It is not a numeric Ioff specification for arbitrary floating/ramping rails or proof of complete board-level power-domain compatibility. No capacitor value, board stackup or timing budget is supplied here.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 17,
+        "pdf_page_index": 16,
+        "section": "8.3; 8.4.1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "7.3.5",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "translate-app-05",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "direction_contention_turnaround",
+      "value": {
+        "DIR_H": "A to B",
+        "DIR_L": "B to A",
+        "output_enable_pin": false,
+        "example_A_to_B_then_B_to_A": [
+          "DIR=H: external I/O-1 output, I/O-2 input",
+          "DIR=H: both external system I/Os high impedance",
+          "DIR=L: both external system I/Os remain high impedance",
+          "DIR=L: external I/O-1 input, I/O-2 output"
+        ]
+      },
+      "unit": null,
+      "conditions": "Table 8-2 is a system-controlled turnaround example, not automatic direction sensing or a device-wide disable state. Both external systems use matching pull direction (both up or both down). Avoid drive overlap; after DIR reversal wait for former output disable before applying an external input, then allow propagation. Input circuits always active. Numeric dead time depends on selected supplies, loading and external-controller timings.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 16,
+        "pdf_page_index": 15,
+        "section": "8.2.2; Figure 8-3; Table 8-2 and note",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 14,
+          "pdf_page_index": 13,
+          "section": "7.4 Table 7-1",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 17,
+          "pdf_page_index": 16,
+          "section": "8.2.2.2.1",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "translate-app-06",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "selected_pair_switching_limits",
+      "value": {
+        "VCCA_V": "3.3 +/- 0.3",
+        "VCCB_V": "1.8 +/- 0.15",
+        "ns_min_max": {
+          "A_to_B_tPLH": [
+            2.1,
+            15.5
+          ],
+          "A_to_B_tPHL": [
+            2,
+            12.6
+          ],
+          "B_to_A_tPLH": [
+            1.7,
+            8.3
+          ],
+          "B_to_A_tPHL": [
+            1.8,
+            7.1
+          ],
+          "DIR_to_A_tPHZ": [
+            2.9,
+            7.3
+          ],
+          "DIR_to_A_tPLZ": [
+            1.8,
+            5.6
+          ],
+          "DIR_to_B_tPHZ": [
+            5.4,
+            20.5
+          ],
+          "DIR_to_B_tPLZ": [
+            3.3,
+            14.5
+          ]
+        },
+        "calculated_enable_max_ns": {
+          "DIR_to_A_tPZH": 22.8,
+          "DIR_to_A_tPZL": 27.6,
+          "DIR_to_B_tPZH": 21.1,
+          "DIR_to_B_tPZL": 19.9
+        }
+      },
+      "unit": null,
+      "conditions": "Section 5.8 first VCCB column only; TA -40 to 85 C; min/max, not typical. Figure 6-1 CL=15 pF including probe/jig, RL=2 kohm; input crossing VCCI/2, output VCCO/2, control VCCA/2. VTP=0.15 V for B=1.8 V output and 0.3 V for A=3.3 V output; disable crossing VOL+VTP or VOH-VTP. S1 open for propagation, 2*VCCO for tPLZ/tPZL and GND for tPHZ/tPZH. Pulse generator PRR<=10 MHz, ZO=50 ohm, dv/dt>=1 V/ns, one output/transition per measurement. Enable maxima are calculated per footnote (1), not separately measured typicals. 420 Mbps at 3.3-to-5 V is not a universal rate or a substitute for these 3.3-to-1.8 V bounds.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 8,
+        "pdf_page_index": 7,
+        "section": "5.8 first supply column and note (1)",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 12,
+          "pdf_page_index": 11,
+          "section": "Figure 6-1 and notes A-J",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 13,
+          "pdf_page_index": 12,
+          "section": "7.3.2",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 17,
+          "pdf_page_index": 16,
+          "section": "8.2.2.2.1",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    },
+    {
+      "id": "translate-app-07",
+      "source_id": "translate-app-ti-dbvr-n",
+      "manufacturer": "Texas Instruments",
+      "device": "SN74LVC1T45DBVR",
+      "variant": "SN74LVC1T45 DBVR",
+      "package": "DBV (SOT-23, 6 pins)",
+      "kind": "application_constraint",
+      "parameter": "enable_time_equations",
+      "value": {
+        "tPZH_DIR_to_A": "tPLZ_DIR_to_B + tPLH_B_to_A",
+        "tPZL_DIR_to_A": "tPHZ_DIR_to_B + tPHL_B_to_A",
+        "tPZH_DIR_to_B": "tPLZ_DIR_to_A + tPLH_A_to_B",
+        "tPZL_DIR_to_B": "tPHZ_DIR_to_A + tPHL_A_to_B"
+      },
+      "unit": null,
+      "conditions": "Use the corresponding supply-pair timing table and measurement load/threshold conditions; these express maximum expected-output delay after DIR switches. They do not authorize new external driving before old output disables, and do not include external-controller or interconnect skew.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 17,
+        "pdf_page_index": 16,
+        "section": "8.2.2.2.1",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 8,
+          "pdf_page_index": 7,
+          "section": "5.8 enable-time footnote",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+          "revision": "SCES515N",
+          "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+          "printed_page": 12,
+          "pdf_page_index": 11,
+          "section": "Figure 6-1",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+        }
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "translate-app-rail_receiver_unknown",
+      "source_id": "translate-app-ti-dbvr-n",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUT",
+      "description": "Actual VCCA/VCCB tolerances, controller VOH/VOL, receiver VIH/VIL, DIR controller domain and unpowered-pin tolerances are absent. No board-level compatibility or external back-power guarantee is established.",
+      "provenance": {
+        "actor": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "recorded_at": "2026-10-28T05:51:28.546172+00:00"
+      },
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 4,
+        "pdf_page_index": 3,
+        "section": "5.3; application inputs absent",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "translate-app-turnaround_load_unknown",
+      "source_id": "translate-app-ti-dbvr-n",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUT",
+      "description": "Actual trace/load capacitance, edge rates, external-driver release/enable times, skew and setup/hold budget are absent. No contention-free timing or maximum system data rate is certified.",
+      "provenance": {
+        "actor": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "recorded_at": "2026-10-28T05:51:28.546172+00:00"
+      },
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 16,
+        "pdf_page_index": 15,
+        "section": "8.2.2; application inputs absent",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "translate-app-floating_rail_numeric_unknown",
+      "source_id": "translate-app-ti-dbvr-n",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUT",
+      "description": "The source permits glitch-free sequencing without ramp-order/rate requirements; nevertheless its numerical Ioff tests use a rail at 0 V. Floating/disconnected/intermediate-voltage rail leakage and external-system behavior have not been quantified here.",
+      "provenance": {
+        "actor": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "recorded_at": "2026-10-28T05:51:28.546172+00:00"
+      },
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf",
+        "revision": "SCES515N",
+        "source_sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+        "printed_page": 6,
+        "pdf_page_index": 5,
+        "section": "5.5 Ioff; application inputs absent",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector inspected identified bytes and rendered page; independent full-payload review pending. No measured bbox or human review."
+      },
+      "human_reviewed": false
+    }
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_translation_loadswitch_wave/collect_translation_constraints",
+      "decision": "DRAFT_COLLECTED",
+      "timestamp": "2026-10-28T05:51:28.546172+00:00",
+      "note": "Actual source bytes and rendered pages checked; distinct full-payload review pending."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_translation_loadswitch_wave/review_translation_loadswitch",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T05:53:05.112326+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "e29817a22e7206b131723c277457d38070b08ff2dc50ea531a69d740ee76b9d0",
+      "notes": "Accepted after distinct actual-source, visual and full-payload review; DRAFT history preserved. No factual corrections."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_translation_loadswitch_wave/review_translation_loadswitch",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T05:53:05.112326+00:00",
+    "draft_sha256": "e29817a22e7206b131723c277457d38070b08ff2dc50ea531a69d740ee76b9d0",
+    "scope": "Independent actual-source byte, rendered-page and complete payload/prose review. No human review, canonical approval or board qualification. Source download attributed to collector.",
+    "source_byte_check": {
+      "sha256": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+      "byte_size": 1678649,
+      "pdf_pages": 42,
+      "visual_pages": [
+        4,
+        5,
+        6,
+        8,
+        12,
+        13,
+        14,
+        16,
+        17,
+        21
+      ]
+    },
+    "complete_payload_review": {
+      "facts": 7,
+      "source_issues": 3,
+      "corrections": "No factual corrections required. Draft collector pending statements retained as historical checkpoints; this receipt supersedes their pending state.",
+      "cli_calls": 24,
+      "checks": "Complete source/fact/warning dictionaries, exact source/parameter selection, wrong source/device/manufacturer/package and unsupported-property exclusions; canonical false and NOT_LOCALLY_VERIFIED retained."
+    }
+  }
+}
