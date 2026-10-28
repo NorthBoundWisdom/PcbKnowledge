@@ -535,3 +535,10 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   The embedded standard-library check and independent arithmetic/source-linkage
   review pass; this is not an added annotation or application qualification.
   The frozen practical evaluation and all source records remain unchanged.
+
+## Nominal steady-state timer worked example
+
+- [x] Document the [NE555 astable nominal model](docs/worked-examples/ne555-astable-model-bound.md),
+  separating high/low duty conventions, rounded coefficients and physical uncertainty.
+  Fixed-input arithmetic and independent source-bound review pass; no operating
+  timing interval, new annotation, selected timing capacitor or circuit approval.
