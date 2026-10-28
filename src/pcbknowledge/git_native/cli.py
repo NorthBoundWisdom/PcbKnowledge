@@ -1036,6 +1036,14 @@ def _intake_coverage(repository: KnowledgeRepository, arguments: argparse.Namesp
     return 0
 
 
+def _intake_evidence_audit(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake_evidence_audit import intake_evidence_audit
+    _print(intake_evidence_audit(repository.root, cache_root=Path(arguments.cache_root),
+                                 cache_files=arguments.cache_file, include_paths=arguments.include_paths,
+                                 **_intake_source_filters(arguments)))
+    return 0
+
+
 def _intake_report(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     from pcbknowledge.git_native.intake_report import intake_report
     print(intake_report(repository.root, **_intake_source_filters(arguments)), end="")
@@ -1658,9 +1666,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "report", allow_abbrev=False,
         help="print scoped read-only Markdown metadata; requires --source-id or --device")
     intake_report.set_defaults(handler=_intake_report)
+    intake_audit = intake_actions.add_parser(
+        "evidence-audit", allow_abbrev=False,
+        help="compare explicit local candidate bytes only; no fetch, PDF review or authority upgrade")
+    intake_audit.add_argument("--cache-root", required=True, help="explicit nonsymlink local cache directory")
+    intake_audit.add_argument("--cache-file", required=True, action="append", help="relative candidate path; repeatable, no discovery")
+    intake_audit.add_argument("--include-paths", action="store_true", help="include candidate-relative paths, never absolute paths")
+    intake_audit.set_defaults(handler=_intake_evidence_audit)
     for intake_command in (intake_search, intake_issues):
         intake_command.add_argument("query", nargs="?", default="", help="optional case-folded AND lexical terms")
-    for intake_command in (intake_search, intake_issues, intake_report):
+    for intake_command in (intake_search, intake_issues, intake_report, intake_audit):
         for field in ("source-id", "manufacturer", "device", "package"):
             intake_command.add_argument(f"--{field}", help="exact structured string; missing fields do not match")
     for field in ("kind", "parameter"):
@@ -1707,7 +1722,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         # Intake reads must not create canonical/cache directories even in a
         # fresh Git workspace. Other commands keep their existing layout contract.
-        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report):
+        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report, _intake_evidence_audit):
             repository = KnowledgeRepository(Path(arguments.repo))
         else:
             repository = _repository(arguments.repo)
