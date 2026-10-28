@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **25 reviewed batches, 36 batch-local source/device scopes, and 250 factual
+This queue contains **26 reviewed batches, 38 batch-local source/device scopes, and 258 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -34,6 +34,7 @@ provenance and batch bytes are preserved.
 | [Level translation constraints](sn74lvc1t45-level-translation-constraints.json) | SN74LVC1T45DBVR/DBV | 7 | Actual hash and independent table/footnote review; [receipt](sn74lvc1t45-level-translation-constraints-review.md) |
 | [Load-switch constraints](tps22918-load-switch-constraints.json) | TPS22918DBVR/DBV | 8 | Actual hash and independent timing/QOD review; [receipt](tps22918-load-switch-constraints-review.md) |
 | [Resistor rating constraints](vishay-crcw060310k0fkea-rating-constraints.json) | Vishay CRCW060310K0FKEA/0603 | 7 | Exact independently reviewed handoff; [receipt](vishay-crcw060310k0fkea-rating-constraints-review.md) |
+| [MLCC capacitance constraints](kemet-c0603c104k5ractu-capacitance-constraints.json) | KEMET C0603C104K5RACTU/0603, exact part and family scopes | 8 | Exact independently reviewed handoff; [receipt](kemet-c0603c104k5ractu-capacitance-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -143,9 +144,18 @@ source wording conflicts are not resolved by Agent acceptance.
 
 ## TVS and connector handoff integration
 
-The [current aggregate replay](../../docs/intake-evaluation-tvs-connector.md)
+The [historical aggregate replay](../../docs/intake-evaluation-tvs-connector.md)
 adds twelve original annotations and four warnings from exact accepted handoffs.
 Pulse/current/thermal conditions are not DC or system protection guarantees.
 Connector dimensions do not constitute a complete footprint, numbered pin map or
 electrical polarity. Original source rights and missing application inputs remain
 explicit. Both JSON/review pairs and all prior receipts stay byte-identical.
+
+## MLCC handoff integration
+
+The [current aggregate replay](../../docs/intake-evaluation-mlcc.md) adds the exact
+reviewed eight-record KEMET pair. Its nominal measurement, short withstand,
+zero-bias temperature and decade-hour aging conditions remain distinct from
+qualitative simulation and unknown effective capacitance. Body dimensions are not
+a selected footprint. The original source review is preserved, not repeated or
+upgraded by integration; batch-local warnings remain retrievable.

@@ -4,19 +4,18 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
-## Translation, load-switch and reviewed resistor integration
+## Reviewed MLCC handoff integration
 
-The coherent collection is 25 batches / 36 source scopes / 250 annotations.
-Independent collectors and a distinct source/full-payload reviewer cover exact
-SN74LVC1T45DBVR and TPS22918DBVR orderables. The seven-annotation CRCW060310K0FKEA
-handoff is reused byte-for-byte, without recollection. Historical
-100/125/148/162/184/216/228 manifests, receipts and prior intake bytes are preserved.
-The successor `evals/intake-retrieval-translation-loadswitch.json` and separate
-unchanged MCP23017 disposition remain required in both CI jobs. Grounded-rail
-Ioff is not arbitrary sequencing safety; QOD and slew control are not reverse
-blocking or current limiting. Mounted resistor thermal limits remain conditional.
-See the [evaluation receipt](docs/intake-evaluation-translation-loadswitch.md).
-Publication and exact-commit CI are reported in the issue handoff.
+The coherent collection is 26 batches / 38 source scopes / 258 annotations.
+The exact eight-annotation KEMET C0603C104K5RACTU pair is reused from immutable
+`890c9b92cc88d80695cd0bfd4081104a91b698f4`, without recollection or altered review.
+All 250 earlier annotations and historical manifests/receipts remain unchanged.
+The successor `evals/intake-retrieval-mlcc.json` and separate MCP23017 disposition
+are required in both CI jobs. Nominal test capacitance, zero-bias temperature
+characteristics, aging and qualitative simulation do not establish guaranteed
+in-circuit effective capacitance or PCB suitability.
+See the [evaluation receipt](docs/intake-evaluation-mlcc.md).
+Exact-commit CI and publication are reported in the issue handoff.
 
 ## Practical task coverage receipt
 
