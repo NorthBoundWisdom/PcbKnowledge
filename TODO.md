@@ -4,9 +4,19 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed Zener integration
+
+The collection now contains 34 batches / 46 source scopes / 311 annotations.
+Six exact BZX84C5V1-E3-08 facts preserve pulse/test-current voltage, conditioned
+dynamic resistance, unpromoted leakage classification, temperature coefficient
+and distinct absolute-power boundaries. Precision-reference and clamp suitability
+remain unknown. A compact pinned successor adds 30 recipes without copying history.
+See the [evaluation receipt](docs/intake-evaluation-zener.md).
+Final local gates and exact published-commit CI are checked separately.
+
 ## Reviewed thermistor integration
 
-The collection now contains 33 batches / 45 source scopes / 305 annotations.
+At the preceding thermistor stage, the collection contained 33 batches / 45 source scopes / 305 annotations.
 Seven exact NTCLE100E3103JB0 facts preserve R25/B tolerances, zero-power and
 derating conditions, informational response and self-heating, coating limits
 and exact-suffix design scope. Application accuracy remains unknown. A compact

@@ -1,0 +1,373 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "bzx84c5v1-zener-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+    "collected_at": "2026-10-28T23:22:40.581148+00:00"
+  },
+  "sources": [
+    {
+      "id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "full_orderable_mpn": "BZX84C5V1-E3-08",
+      "document_url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+      "revision": "Rev. 1.1, 24-Jan-2024",
+      "revision_date": "2024-01-24",
+      "identity_evidence": "Page 1 ordering range includes C5V1/E3/-08; page 2 C5V1 row; exact MAT_NO entry in official quality HTML confirms orderable independently of similar -18 or HE3_A suffixes.",
+      "pdf_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+      "pdf_byte_size": 117279,
+      "pdf_pages": 6,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "No open or redistribution license asserted. Limited original factual annotations only; no source table, prose, artwork or PDF.",
+      "source_processing_scope": "Legal page 6 read before processing: rights reserved, no intellectual-property license, customer application validation required. No explicit prohibition of these limited original annotations identified.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "supplemental_identity_source": {
+        "url": "https://www.vishay.com/en/product/86338/tab/quality/",
+        "sha256": "c0be1f305b2c2dbf0309504f400ec527333febfc98c1bf79a457b0e59112788e",
+        "byte_size": 824432,
+        "format": "HTML",
+        "revision": null,
+        "accessed_on": "2026-10-28",
+        "scope": "Exact MAT_NO equality only; not current stock, future production or automotive certification."
+      }
+    }
+  ],
+  "facts": [
+    {
+      "id": "bzx84-zener-01",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "kind": "identity",
+      "parameter": "exact_orderable_tolerance_and_grade",
+      "value": {
+        "full_orderable_mpn": "BZX84C5V1-E3-08",
+        "zener_tolerance_code": "C",
+        "tolerance_percent": 5,
+        "grade": "commercial E3",
+        "aec_q101_qualified_ordering_row": false,
+        "reel_units": 3000,
+        "tape_width_mm": 8,
+        "reel_diameter_inch": 7,
+        "marking_type_code": "G58"
+      },
+      "unit": null,
+      "conditions": "Exact E3/-08 ordering row; HE3_A automotive qualification, B tolerance and -18 reel are different orderables. Generic automotive availability and ESD marketing do not qualify this selected part or an installed system.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+        "revision": "Rev. 1.1, 24-Jan-2024",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1,
+          2
+        ],
+        "section": "Ordering information, package and C5V1 marking row",
+        "source_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bzx84-zener-02",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_zener_voltage",
+      "value": {
+        "voltage_min_v": 4.85,
+        "voltage_nominal_v": 5.1,
+        "voltage_max_v": 5.36,
+        "test_current_izt1_ma": 5,
+        "ambient_c": 25,
+        "specification_mode": "pulse current",
+        "pulse_duration_s": null,
+        "continuous_application_voltage_v": null
+      },
+      "unit": null,
+      "conditions": "Electrical table uses Tamb=25 C unless otherwise specified. Page 1 labels the VZ specification pulse current; no pulse duration is established by these entries. Nominal 5.1 V and this test-current range do not guarantee regulation/clamping at other currents, loads or self-heated operating temperatures.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+        "revision": "Rev. 1.1, 24-Jan-2024",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2,
+          1
+        ],
+        "section": "C5V1 electrical row and primary VZ specification",
+        "source_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bzx84-zener-03",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_dynamic_resistance",
+      "value": {
+        "zz_max_ohm": 60,
+        "zz_test_current_ma": 5,
+        "zzk_max_ohm": 480,
+        "zzk_test_current_ma": 1,
+        "test_frequency_hz": 1000,
+        "ambient_c": 25,
+        "dc_resistance_ohm": null,
+        "all_current_voltage_slope_ohm": null
+      },
+      "unit": null,
+      "conditions": "These are separately bounded small-signal dynamic-resistance entries at f=1 kHz and different bias currents. They are not DC V/I, a constant resistor, a guaranteed arbitrary-frequency slope or a safe linear extrapolation of the whole Zener curve.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+        "revision": "Rev. 1.1, 24-Jan-2024",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Dynamic resistance columns, C5V1 row",
+        "source_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bzx84-zener-04",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_reverse_leakage_entry",
+      "value": {
+        "tabulated_reverse_current_ua": 2,
+        "reverse_test_voltage_v": 2,
+        "ambient_c": 25,
+        "column_explicit_min_max_label": null,
+        "full_temperature_max_leakage_ua": null
+      },
+      "unit": null,
+      "conditions": "IR at VR is tabulated without an explicit MIN/MAX heading in this source table, unlike the adjacent dynamic-resistance columns; preserve it as a conditioned tabulated entry, not an invented max guarantee. This reverse bias is below the Zener test voltage; it is not the current at 5.1 V.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+        "revision": "Rev. 1.1, 24-Jan-2024",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Reverse leakage IR at VR columns, C5V1 row",
+        "source_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bzx84-zener-05",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_temperature_coefficient",
+      "value": {
+        "alpha_min_per_10000_per_c": -3,
+        "alpha_max_per_10000_per_c": 4,
+        "test_current_izt1_ma": 5,
+        "source_column_unit": "10^-4/degC",
+        "ambient_header_c": 25,
+        "guaranteed_wide_temperature_voltage_v": null
+      },
+      "unit": null,
+      "conditions": "The coefficient interval at IZT1 includes both signs. It is not zero drift, a guaranteed constant coefficient across the whole operating-temperature range or a complete voltage-reference error budget. No temperature span or extrapolated output bound is synthesized.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+        "revision": "Rev. 1.1, 24-Jan-2024",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Temperature coefficient alphaVZ at IZT1, C5V1 row",
+        "source_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "bzx84-zener-06",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "manufacturer": "Vishay Semiconductors",
+      "device": "BZX84C5V1-E3-08",
+      "variant": "BZX84C5V1; C tolerance; E3 commercial; -08 reel",
+      "package": "SOT-23",
+      "kind": "absolute_maximum_rating",
+      "parameter": "absolute_power_and_thermal_boundaries",
+      "value": {
+        "power_mw_with_rthjl_250_k_per_w": 500,
+        "power_mw_on_fr4_recommended_footprint": 300,
+        "junction_to_lead_k_per_w": 250,
+        "junction_to_ambient_k_per_w": 420,
+        "junction_max_c": 150,
+        "operating_temperature_c": [
+          -55,
+          150
+        ],
+        "storage_temperature_c": [
+          -65,
+          150
+        ],
+        "qualified_board_power_mw": null,
+        "continuous_zener_current_limit_ma": null
+      },
+      "unit": null,
+      "conditions": "Absolute maximum section: 500 mW has RthJL=250 K/W condition; 300 mW is on FR-4 with recommended solder footprint. RthJA=420 K/W uses JEDEC 51-3 FR-4/recommended-footprint context. The absolute table does not state an ambient or lead temperature for those power rows; do not invent it or divide maximum power by nominal VZ to certify current. Layout, thermal boundary and junction rise require application assessment.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/86338/bzx84_series.pdf",
+        "revision": "Rev. 1.1, 24-Jan-2024",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Absolute maximum ratings and thermal resistance test conditions",
+        "source_sha256": "e9ce55f99308e0487ed8516ac4e0c1c88b010d7cb415df5b5d885ddafa432ca7",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed PDF/HTML hashes and exact identity. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "bzx84-bias-load-accuracy-unknown",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual supply, series impedance, load range, Zener bias current/waveform, ambient/junction temperature and accuracy budget are missing. Pulsed VZ and 1-kHz dynamic resistance do not certify DC regulation or a precision reference.",
+      "provenance": {
+        "actor": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "recorded_at": "2026-10-28T23:22:40.581148+00:00"
+      }
+    },
+    {
+      "id": "bzx84-pulse-thermal-protection-unknown",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Fault waveform, source energy, duration/repetition, board thermal path and protected-node limits are unknown. No surge-energy, TVS-like clamping or safe installed current is inferred from the absolute power entries.",
+      "provenance": {
+        "actor": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "recorded_at": "2026-10-28T23:22:40.581148+00:00"
+      }
+    },
+    {
+      "id": "bzx84-grade-and-source-scope",
+      "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+      "issue_status": "SOURCE_SCOPE_LIMITATION",
+      "description": "Exact C/E3/-08 orderable is commercial, not the HE3_A automotive variant. Leakage min/max classification and voltage-test pulse duration are not explicit in the cited entries; unknowns remain. No complete CAD footprint, assembly qualification, hardware validation or safety certification is supplied.",
+      "provenance": {
+        "actor": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+        "recorded_at": "2026-10-28T23:22:40.581148+00:00"
+      }
+    }
+  ],
+  "limitations": [
+    "Exact commercial BZX84C5V1-E3-08 only, no B/HE3_A/-18 substitution.",
+    "Electrical Rev.1.1 24-Jan-2024 is separate from legal appendix 01-Jan-2026.",
+    "Original PDF/HTML/text/renders remain local untracked; ordinary retrieval remains NOT_LOCALLY_VERIFIED.",
+    "No source table/artwork or original redistributed; no human, canonical or circuit approval."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T23:22:40.581148+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions/review_zener_source",
+      "action": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "timestamp": "2026-10-28T23:23:49.103057+00:00",
+      "draft_sha256": "fa2a1883f2f07cd86f6446d16c64f6879bbf5db6087f1334fb2470ce3cc92231",
+      "notes": "Full draft accepted without technical corrections; noncanonical owner-delegated Agent review only."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_ntc_collection/curate_zener_conditions/review_zener_source",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T23:23:49.103057+00:00",
+    "scope": "All six complete facts, all three warnings, actual PDF and supplemental HTML bytes, rendered pages and legal notice.",
+    "draft_sha256": "fa2a1883f2f07cd86f6446d16c64f6879bbf5db6087f1334fb2470ce3cc92231",
+    "visual_pages": [
+      1,
+      2
+    ],
+    "legal_pdf_page_read": 6,
+    "engineering_corrections": [],
+    "warning_review": "All three full warnings retained; no guessed leakage max label, pulse duration, thermal ambient condition or application qualification."
+  }
+}

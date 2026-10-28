@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **33 reviewed batches, 45 batch-local source/device scopes, and 305 factual
+This queue contains **34 reviewed batches, 46 batch-local source/device scopes, and 311 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -42,6 +42,7 @@ provenance and batch bytes are preserved.
 | [Legacy polymer PTC constraints](bourns-mf-msmf050-ptc-constraints.json) | Bourns MF-MSMF050-2, standard 1812 | 7 | Actual PDF and independent graphical legacy-warning review; [receipt](bourns-mf-msmf050-ptc-constraints-review.md) |
 | [Aluminum electrolytic constraints](146rti-bulk-capacitor-constraints.json) | Vishay MAL214636471E3, 470 uF / 25 V, Form TFA | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](146rti-bulk-capacitor-constraints-review.md) |
 | [Thermistor constraints](ntcle100-thermistor-constraints.json) | Vishay NTCLE100E3103JB0, no-A 10-kohm radial NTC | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](ntcle100-thermistor-constraints-review.md) |
+| [Zener conditions](bzx84c5v1-zener-constraints.json) | Vishay BZX84C5V1-E3-08, commercial SOT-23 | 6 | Actual PDF/identity HTML and independent rendered-page review; [receipt](bzx84c5v1-zener-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -227,10 +228,19 @@ is preserved without a synthesized life multiplier.
 
 ## Thermistor integration
 
-The [current aggregate replay](../../docs/intake-evaluation-thermistor.md) adds
+The [thermistor aggregate replay](../../docs/intake-evaluation-thermistor.md) adds
 seven exact NTCLE100E3103JB0 facts and three warnings. R25/B25-85 tolerances,
 zero-power definition and power derating do not establish system accuracy.
 Oil response and informational thermal time constant remain distinct, and
 self-heating depends on excitation and installation. Coating is not specified
 insulation; preferred A-suffix ordering is not an automatic substitution or a
 discontinuation statement for the exact no-A part.
+
+## Zener integration
+
+The [current aggregate replay](../../docs/intake-evaluation-zener.md) adds six
+exact commercial BZX84C5V1-E3-08 facts and three warnings. Pulsed voltage at a
+specified bias current is not arbitrary-load regulation; small-signal dynamic
+resistance is not DC resistance. Leakage classification remains unpromoted where
+the table does not explicitly label it. Separate thermal power rows, grade
+identity and temperature coefficient cannot certify a reference or clamp circuit.

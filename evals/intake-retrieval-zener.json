@@ -1,0 +1,340 @@
+{
+  "format": "pcbknowledge-intake-retrieval-delta-v1",
+  "base": {
+    "path": "intake-retrieval-thermistor.json",
+    "sha256": "1b58e5a4409a22d40c94d1baabe07203555f377098f9e24cc75b9c49873cc758"
+  },
+  "files": {
+    "knowledge/intake/bzx84c5v1-zener-constraints.json": "6cedd7a538975b627d609bdfd0fa1fdaeae3ecc9386250c84732e4a6b78352a1"
+  },
+  "cases": [
+    {
+      "id": "bzx84-01-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "exact_orderable_tolerance_and_grade"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-01"
+      ]
+    },
+    {
+      "id": "bzx84-02-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "conditioned_zener_voltage"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-02"
+      ]
+    },
+    {
+      "id": "bzx84-03-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "conditioned_dynamic_resistance"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-03"
+      ]
+    },
+    {
+      "id": "bzx84-04-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "conditioned_reverse_leakage_entry"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-04"
+      ]
+    },
+    {
+      "id": "bzx84-05-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "conditioned_temperature_coefficient"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-05"
+      ]
+    },
+    {
+      "id": "bzx84-06-parameter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "absolute_power_and_thermal_boundaries"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-06"
+      ]
+    },
+    {
+      "id": "bzx84-all-facts",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-01",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-02",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-03",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-04",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-05",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-06"
+      ]
+    },
+    {
+      "id": "bzx84-all-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-bias-load-accuracy-unknown",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-grade-and-source-scope",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-pulse-thermal-protection-unknown"
+      ]
+    },
+    {
+      "id": "bzx84-absolute_maximum_rating",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "kind": "absolute_maximum_rating"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-06"
+      ]
+    },
+    {
+      "id": "bzx84-electrical_characteristic",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "kind": "electrical_characteristic"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-02",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-03",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-04",
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-05"
+      ]
+    },
+    {
+      "id": "bzx84-identity",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "kind": "identity"
+      },
+      "expected": [
+        "knowledge/intake/bzx84c5v1-zener-constraints.json#bzx84-zener-01"
+      ]
+    },
+    {
+      "id": "bzx84-wrong-source",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r0p1-e3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-vendor",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "manufacturer": "Diodes Incorporated"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-tolerance",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84B5V1-E3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-grade",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84C5V1-HE3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-reel",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84C5V1-E3-18"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-voltage",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84C6V2-E3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-package",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "package": "SOD-123"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-no-reference",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "guaranteed_precision_reference_voltage_v"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-no-hot-leakage",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "guaranteed_hot_leakage_ua"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-no-fault-clamp",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "qualified_fault_clamp_voltage_v"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-no-energy",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "guaranteed_pulse_energy_j"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-no-current-permission",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "parameter": "safe_continuous_zener_current_ma"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-source-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r0p1-e3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-vendor-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "manufacturer": "Diodes Incorporated"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-tolerance-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84B5V1-E3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-grade-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84C5V1-HE3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-reel-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84C5V1-E3-18"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-voltage-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "device": "BZX84C6V2-E3-08"
+      },
+      "expected": []
+    },
+    {
+      "id": "bzx84-wrong-package-warnings",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "bzx84c5v1-vishay-86338-r1p1-e3-08",
+        "package": "SOD-123"
+      },
+      "expected": []
+    }
+  ]
+}
