@@ -4,9 +4,19 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed aluminum electrolytic integration
+
+The collection now contains 32 batches / 44 source scopes / 298 annotations.
+Seven exact MAL214636471E3 facts preserve conditioned RMS ripple, impedance
+versus ESR, initial versus post-test limits and case-specific life-test scope.
+Unknown installed-board heating and field lifetime remain explicit. A compact
+hash-pinned successor adds 30 recipes without copying accepted history.
+See the [evaluation receipt](docs/intake-evaluation-electrolytic.md).
+Final local gates and exact published-commit CI are checked separately.
+
 ## Reviewed legacy polymer PTC integration
 
-The collection now contains 31 batches / 43 source scopes / 291 annotations.
+At the preceding PTC stage, the collection contained 31 batches / 43 source scopes / 291 annotations.
 Seven exact MF-MSMF050-2 facts retain its source no-new-design warning, conditioned
 hold/trip/time-to-trip limits, temperature derating and unknown residual/reset
 behavior. The source is not a fuse or safety-system qualification. A compact

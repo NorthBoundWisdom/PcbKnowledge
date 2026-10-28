@@ -1,0 +1,438 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "146rti-bulk-capacitor-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+    "collected_at": "2026-10-28T22:21:13.283143+00:00"
+  },
+  "sources": [
+    {
+      "id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "full_orderable_mpn": "MAL214636471E3",
+      "document_url": "https://www.vishay.com/docs/28401/146rti.pdf",
+      "revision": "22-Mar-17",
+      "revision_date": "2017-03-22",
+      "identity_evidence": "Page 3 explicit ordering example and 25-V/470-uF Table 2 row identify MAL214636471E3, Form TFA, 10 x 16 mm. Exact orderable also found in separately byte-pinned official product quality HTML; no production-continuity or inventory guarantee.",
+      "pdf_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+      "pdf_byte_size": 134598,
+      "pdf_pages": 9,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "No open license or original-document redistribution license asserted; small original factual annotations only.",
+      "source_processing_scope": "Legal page 9 read first: rights reserved, no IP license, application validation required. No explicit prohibition on these original factual annotations identified. No original prose/table/artwork/PDF redistribution.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "supplemental_identity_source": {
+        "url": "https://www.vishay.com/en/product/28401/tab/quality/",
+        "sha256": "285e1f07638edfb9f74da4f16905fb4805dd2bde43342ba14b90461c59bee984",
+        "byte_size": 813868,
+        "format": "HTML",
+        "revision": null,
+        "accessed_on": "2026-10-28",
+        "scope": "Exact orderable listing only; not inventory, future supply or qualification evidence."
+      }
+    }
+  ],
+  "facts": [
+    {
+      "id": "146rti-bulk-01",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "electrical_characteristic",
+      "parameter": "exact_orderable_capacitance_voltage_scope",
+      "value": {
+        "full_orderable_mpn": "MAL214636471E3",
+        "rated_capacitance_uF": 470,
+        "capacitance_test_frequency_Hz": 100,
+        "initial_capacitance_tolerance_percent": 20,
+        "rated_voltage_V": 25,
+        "polarized": true,
+        "field_effective_capacitance_uF": null
+      },
+      "unit": null,
+      "conditions": "Table 2 defaults: ambient 20 C, pressure 86-106 kPa and RH 45-75%, except specifically stated conditions. The explicit ordering example and selected row apply to Form TFA only; initial 100-Hz capacitance/tolerance is not an all-frequency, aged or loaded minimum. No other family rating or case is substituted.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 2,
+        "printed_page": 3,
+        "supporting_pdf_pages": [
+          1,
+          3
+        ],
+        "section": "Electrical definitions; ordering example; Table 2 25 V / 470 uF row",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "146rti-bulk-02",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "electrical_characteristic",
+      "parameter": "rated_rms_ripple_and_selected_frequency_scaling",
+      "value": {
+        "rated_ripple_current_mA_RMS": 1100,
+        "rating_frequency_Hz": 100000,
+        "rating_temperature_C": 125,
+        "selected_frequency_multipliers": [
+          {
+            "frequency_Hz": 100,
+            "multiplier": 0.7
+          },
+          {
+            "frequency_Hz": 10000,
+            "multiplier": 1.0
+          },
+          {
+            "frequency_Hz": 100000,
+            "multiplier": 1.0
+          }
+        ],
+        "qualified_mixed_spectrum_ripple_mA_RMS": null
+      },
+      "unit": null,
+      "conditions": "RMS ripple rating is explicitly 100 kHz and 125 C, not peak current or a universal frequency-independent rating. Selected multipliers use only the 25-V Table 4 row; no interpolation, mixed-spectrum heating budget or operating-life multiplier is derived.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 2,
+        "printed_page": 3,
+        "supporting_pdf_pages": [
+          3,
+          7
+        ],
+        "section": "Table 2 ripple column and definitions; Table 4 25-V frequency multipliers",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "146rti-bulk-03",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "electrical_characteristic",
+      "parameter": "impedance_not_esr_at_different_conditions",
+      "value": {
+        "max_impedance_ohm_at_100kHz_20C": 0.075,
+        "max_impedance_ohm_at_100kHz_minus40C": 0.45,
+        "max_dissipation_factor_at_100Hz": 0.14,
+        "source_ESR_formula": "ESR = tan(delta) / (2 * pi * f * CR)",
+        "guaranteed_ESR_ohm_at_100kHz": null
+      },
+      "unit": null,
+      "conditions": "Table 2 defaults: ambient 20 C, pressure 86-106 kPa and RH 45-75%, except specifically stated conditions. Impedance magnitude and ESR are not relabeled as one another. The source ESR expression uses dissipation factor and capacitance; its 100-Hz inputs do not provide a guaranteed 100-kHz ESR. No exact-part guarantee is digitized from family typical curves.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 2,
+        "printed_page": 3,
+        "supporting_pdf_pages": [
+          3,
+          4
+        ],
+        "section": "Table 2 selected impedance/dissipation values; page 4 ESR expression",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "146rti-bulk-04",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "electrical_characteristic",
+      "parameter": "surge_reverse_and_leakage_condition_boundaries",
+      "value": {
+        "surge_voltage_upper_multiple_of_rated": 1.15,
+        "reverse_voltage_upper_V": 0.5,
+        "max_leakage_after_2min_at_rated_uA": 121,
+        "allowable_surge_duration_s": null,
+        "allowable_surge_repetition_Hz": null
+      },
+      "unit": null,
+      "conditions": "Table 2 defaults: ambient 20 C, pressure 86-106 kPa and RH 45-75%, except specifically stated conditions. Surge/reverse entries are bounded additional ratings, not recommended continuous operating voltages or permission to reverse the polarized capacitor. Leakage is after two minutes at rated voltage, not a start-up peak. This source section does not establish permissible surge duration/repetition for an actual waveform.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 3,
+        "printed_page": 4,
+        "supporting_pdf_pages": [
+          3,
+          4
+        ],
+        "section": "Additional electrical data; page 3 selected leakage row",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "146rti-bulk-05",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "mechanical",
+      "parameter": "exact_case_and_packaging_mounting_scope",
+      "value": {
+        "nominal_diameter_mm": 10,
+        "nominal_length_mm": 16,
+        "case_code": "15",
+        "max_diameter_mm": 10.5,
+        "max_length_mm": 17.5,
+        "lead_pitch_mm": 5.0,
+        "lead_pitch_tolerance_mm": 0.5,
+        "lead_diameter_mm": 0.6,
+        "form": "TFA",
+        "form_meaning": "taped in box (ammopack)",
+        "complete_board_footprint": null,
+        "pressure_relief_clearance_mm": null
+      },
+      "unit": null,
+      "conditions": "Use Table 1 case-code 15 and explicit Form TFA identity. Do not substitute Form CA long-lead or CB cut-lead lead-length specifications. Dimensions are not drill/pad design, vent clearance or solder-process qualification; package/polarity implementation still needs verification.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2,
+          3
+        ],
+        "section": "Figures 2-4 and Table 1 10 x 16 mm row; page 3 ordering example",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "146rti-bulk-06",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "qualification_test",
+      "parameter": "endurance_and_useful_life_are_distinct_tests",
+      "value": {
+        "case_code": "15",
+        "endurance_duration_h": 2000,
+        "endurance_ambient_C": 125,
+        "endurance_rated_voltage_applied": true,
+        "useful_life_duration_h": 2500,
+        "useful_life_ambient_C": 125,
+        "useful_life_rated_voltage_and_ripple_applied": true,
+        "field_service_lifetime_h": null,
+        "guaranteed_durability": false
+      },
+      "unit": null,
+      "conditions": "Table 3 selects the 10 x 16 mm case, not the family 6000-hour headline. Table 5 distinguishes endurance with rated voltage from useful life with rated voltage and rated ripple. The page-8 disclaimer treats lifetime statements as estimates dependent on field conditions, not a durability guarantee. No ten-degree doubling rule or Figure 12 interpolation is performed.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 5,
+        "printed_page": 6,
+        "supporting_pdf_pages": [
+          6,
+          8
+        ],
+        "section": "Table 3 case 15; Table 5 test procedures and lifetime disclaimer",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "146rti-bulk-07",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "manufacturer": "Vishay BCcomponents",
+      "device": "MAL214636471E3",
+      "variant": "146 RTI; 470 uF; 25 V; Form TFA",
+      "package": "Radial aluminum electrolytic, nominal diameter 10 mm x length 16 mm, Form TFA",
+      "kind": "qualification_test",
+      "parameter": "post_test_change_criteria_not_initial_tolerance",
+      "value": {
+        "endurance_capacitance_change_limit_percent": 15,
+        "useful_life_capacitance_change_limit_percent": 30,
+        "useful_life_impedance_max_multiple_of_spec": 3,
+        "useful_life_total_failure_percentage_max": 1,
+        "individual_field_failure_probability": null
+      },
+      "unit": null,
+      "conditions": "Selected post-test acceptance criteria from Table 5 have different meaning from the initial capacitance tolerance and initial impedance limits. The useful-life total failure percentage is a stated test requirement, not a prediction of this capacitor's field reliability or an individual lifetime guarantee. This annotation is not a reproduction of the complete test table.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/28401/146rti.pdf",
+        "revision": "22-Mar-17",
+        "pdf_page_index": 7,
+        "printed_page": 8,
+        "supporting_pdf_pages": [
+          8
+        ],
+        "section": "Table 5 endurance and useful-life requirements",
+        "source_sha256": "3a6ebd75687bd5c8207b0182c22367cfa3ebb94a5033c8e25f4bd087e37f084b",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "method": "Collector and distinct independent Agent reviewer inspected actual rendered cited pages and source text; byte identity recomputed by reviewer. No measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "146rti-ripple-thermal-inputs-unknown",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual ripple spectrum/RMS waveform, ambient and internal heating, airflow and nearby heat sources are unknown. The 100-kHz/125-C current rating and selected frequency multipliers do not qualify mixed-spectrum ripple or service life.",
+      "provenance": {
+        "actor": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "recorded_at": "2026-10-28T22:21:13.283143+00:00"
+      }
+    },
+    {
+      "id": "146rti-voltage-mounting-inputs-unknown",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "DC voltage, start-up/load transients, surge duration/repetition, reverse excursions, polarity, lead forming, vent clearance, board support and solder process are unspecified. Neither surge/reverse entries nor case dimensions establish a safe installed capacitor.",
+      "provenance": {
+        "actor": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "recorded_at": "2026-10-28T22:21:13.283143+00:00"
+      }
+    },
+    {
+      "id": "146rti-lifetime-impedance-interpretation-limits",
+      "source_id": "146rti-vishay-28401-20170322-470uf25v-tfa",
+      "issue_status": "SOURCE_SCOPE_LIMITATION",
+      "description": "No field-lifetime estimate or guaranteed broadband ESR is established. Endurance/useful-life conditions and acceptance limits differ; family typical curves are not exact-part limits. Figure 12 footnote points to Table 4 although the case durations are in Table 3; no graphical life multiplier is used or silently corrected. Actual hold-up/dropout/accuracy requirements and aged effective capacitance remain unknown.",
+      "provenance": {
+        "actor": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+        "recorded_at": "2026-10-28T22:21:13.283143+00:00"
+      }
+    }
+  ],
+  "limitations": [
+    "Exact MAL214636471E3/Form TFA only; no family-wide substitution or lifetime warranty.",
+    "Electrical revision 22-Mar-17 differs from PDF container metadata and 2026 legal appendix.",
+    "Original PDF, HTML, extracts and renders remain local untracked; ordinary retrieval stays NOT_LOCALLY_VERIFIED.",
+    "No original table, plot, full document or artwork redistributed; no human/canonical/circuit approval."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T22:21:13.283143+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source",
+      "action": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "timestamp": "2026-10-28T22:24:32.533515+00:00",
+      "draft_sha256": "99a93a1d43c4cc0fd52079c663379f490316459360712ba218abc48705d6a249",
+      "notes": "Independent review accepted the bounded original annotations; no human or canonical approval. Historical draft remains in this receipt."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/resume_compact_evaluation/curate_current_sense_resistor/review_146rti_source",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T22:24:32.533515+00:00",
+    "scope": "All seven complete facts, three warnings, PDF and supplemental HTML byte identity, cited page visuals and legal appendix. Noncanonical intake only.",
+    "draft_sha256": "99a93a1d43c4cc0fd52079c663379f490316459360712ba218abc48705d6a249",
+    "source_byte_check": "PDF SHA-256 and 134598 bytes, 9 pages; supplemental HTML SHA-256 and 813868 bytes independently matched. Exact orderable found in HTML.",
+    "visual_pages": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      8
+    ],
+    "legal_pdf_page_read": 9,
+    "engineering_corrections": [],
+    "warning_review": "All three retained; unknown application inputs and Figure 12/Table 4 cross-reference not silently resolved."
+  }
+}
