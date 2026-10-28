@@ -128,3 +128,33 @@ Independently reran all 14 new-lane documented commands after acceptance: exit 0
 Final JSON SHA-256: `e9e38e94ec1b2c2883ad992eea7e0b6302b0b61174d1339ef4e33a4ddbc37ed1`. Reviewed source/fact/warning payload SHA-256 (JSON sorted keys, compact separators, UTF-8): `c73880f6b31e434c381a2cb4ae7b39fb1403ee736918e01052f7bc230da536f2`. Original draft SHA-256: `96809dcea22d7878de8a82daf2fea6bdfc9960b7f2a1dc22150c2d60d872df35`. Full suite and exact-commit CI remain integrator-owned.
 
 Reviewer also executed the two unchanged-baseline commands: exact IDs b005-ti-ina219-05 and b005-ti-ina219-06 observed. Corrected this receipt to identify them as supply-operating/full-scale, not stress records.
+
+## Operational readiness amendment (2026-10-28)
+
+DRAFT amendment requested in issue #19 comment `6460732615`, collected at
+2026-10-28T04:39:00.936532+00:00. Earlier accepted-state receipts and hashes above describe the
+pre-amendment snapshot, not acceptance of this amendment. Previous JSON hash:
+`e9e38e94ec1b2c2883ad992eea7e0b6302b0b61174d1339ef4e33a4ddbc37ed1`. Source bytes, identifiers and original evidence anchors are unchanged.
+
+Only `monitor-app-06` conditions and `monitor-app-readiness-wording` operational
+boundary change. A previous CNVR observation does not guarantee readiness survives
+intervening accesses or that a later multi-register sample is fresh and coherent.
+A guaranteed poll/read/clear procedure is **BLOCKED**, not inferred from either
+conflicting source paragraph. Required manufacturer clarification or hardware
+validation must cover the exact INA219AIDCNR MODE/SADC/BADC, complete register
+access order, reset/calibration history, conversion timing and sample-age/coherence
+requirements. None is supplied. This is an explicit knowledge boundary, not a
+claim that a particular undocumented clearing behavior occurs.
+
+The existing conversion_ready_overflow search and source-filtered issues commands
+remain runnable with unchanged expected IDs. Inspect the complete amended
+conditions and readiness-warning payload; retaining IDs alone is insufficient.
+Negative semantic case: observing CNVR before an intervening access cannot be
+used as proof of a fresh coherent later sample or as a guaranteed polling recipe.
+Distinct Agent review must append its own acceptance and replay receipt.
+
+### Independent amendment acceptance
+
+At 2026-10-28T04:39:36.972641+00:00, `agent:/root/curate_measurement_timing_wave/review_measurement_timing` reviewed the complete amended JSON and prose, verified unchanged source SHA-256 and all unaffected fact/source/warning payloads against c36256e, and checked the operational boundary against the already inspected pages 10/23. No new source or guessed clearing behavior is asserted. Current amended status: `AGENT_REVIEWED_UNDER_OWNER_DELEGATION`. All 14 new-lane commands rerun: exit 0, exact selections and complete source/fact/warning payloads, attached operational blocker and noncanonical/NOT_LOCALLY_VERIFIED markers passed. Source conflict remains unresolved; no human review or hardware validation occurred.
+
+Amendment draft SHA-256: `c2a69aeb73311f9e312fbc163bb5be8af188cd27ea352d7447ed1596fd597799`. Final amended JSON SHA-256: `9b5206cb30d221dffcb9b5b036a67e2ee623ea07f15ad43fca4de81d46d2e3cb`. Reviewed source/fact/warning payload SHA-256 (same compact sorted-key method above): `099d07e440530de701f8ccbca47a8ec4cea530cfd1dd75fd188f8e7e01450a8b`. Earlier hashes above are preserved historical checkpoints.

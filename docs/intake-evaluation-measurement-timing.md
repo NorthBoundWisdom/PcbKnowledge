@@ -13,7 +13,7 @@ exact reviewed handoff bytes in the preceding stage; it is not recollected here.
 
 ```bash
 python3 configs/pcbknowledge_intake_eval.py --repo . \
-  --cases evals/intake-retrieval-measurement-timing.json \
+  --cases evals/intake-retrieval-measurement-timing-operational.json \
   --dispositions evals/intake-dispositions-2026-10-28.json
 ```
 
@@ -78,3 +78,26 @@ exact-commit CI are separate publication gates; retrieval is not electrical reas
   `bfc5dfc6678160c93f5241855c3fe05964bf7b7ab1426878bad65b5363f86d11`.
 - Exact published-commit CI is reported separately in the issue handoffs; this
   local receipt does not claim a CI result before publication.
+
+## Operational conflict regression follow-up
+
+Issue #19's independent source checkpoint is covered with an append-reviewed INA219 clarification and an explicit operational
+successor manifest; the initial manifest and immutable commit receipt stay intact. The INA219 warning blocks a guaranteed
+read-clear/freshness sequence pending device-specific manufacturer clarification
+or validated hardware behavior; a readiness observation must not be assumed to
+survive intervening reads. The TL431 expression stays scoped to its cited figure,
+resistor roles, inward reference current and sufficient bias, with its sign conflict
+attached; it is not a universal equation or complete accuracy budget.
+
+Additional symbolic mutations explicitly reject lost conflict warnings, a claimed
+read-clear sequence, survival of readiness across reads, dropped divider roles,
+current direction or bias, and promotion to an accuracy guarantee. Independent review accepted the amended full payload; 14 focused CLI commands
+and five synthetic/integration tests (25 semantic mutations) passed.
+Source bytes and identities remain unchanged. The operational successor retains
+all 236 recipes and updates only the independently re-reviewed INA219 byte pin.
+
+Operational successor local gates: 236/236 replay, Config, Build/Test (281 tests
+each), validation and all repository guards passed. Its 22-member metadata-only
+package matches every reviewed intake/disposition input; package SHA-256
+`6489b94987da5cc026c9f98623b50ea6b8efc2134822a809ec68111c817e1ca1`.
+Exact operational-commit CI is reported separately in the issue handoffs.

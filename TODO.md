@@ -133,7 +133,10 @@ their definitions and selections. New full-payload/identity negatives and synthe
 semantic corruptions preserve calibration, grade, timing/topology, test conditions,
 warning association and noncanonical/nonverification status. Maintainer report and
 evidence-audit tools are left unchanged. Publication gates are recorded in the
-final issue receipts, separately from source review.
+final issue receipts, separately from source review. A bounded operational successor
+retains the initial measurement/timing manifest and updates only the re-reviewed
+INA219 clarification pin; named source-conflict mutations protect blocked sequences
+and scoped divider conditions.
 
 ## Next application-question milestones
 

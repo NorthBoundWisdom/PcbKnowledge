@@ -337,7 +337,7 @@
         ]
       },
       "unit": "status bits",
-      "conditions": "These clear conditions are a scoped page-23 statement, not a resolved device-side-effect contract: page 10 uses inconsistent Status-register/convert-pin wording (see warning). OVF is not a general shunt clipping or wiring detector; OVF=0 does not certify analog validity. An I2C read alone does not establish freshness.",
+      "conditions": "These clear conditions are a scoped page-23 statement, not a resolved device-side-effect contract: page 10 uses inconsistent Status-register/convert-pin wording (see warning). OVF is not a general shunt clipping or wiring detector; OVF=0 does not certify analog validity. An I2C read alone does not establish freshness. A prior CNVR observation does not guarantee that readiness survives intervening accesses or that a later multi-register sample is fresh and coherent. A guaranteed poll/read/clear sequence is BLOCKED until manufacturer clarification or hardware validation covers the exact INA219AIDCNR configuration and access sequence; none is supplied here.",
       "evidence": {
         "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
         "revision": "SBOS448G",
@@ -582,9 +582,13 @@
       "issue_status": "UNRESOLVED_SOURCE_WORDING",
       "question": "Which CNVR clear side effects apply on the actual device?",
       "missing_inputs": [
-        "manufacturer clarification or validated hardware sequence"
+        "exact INA219AIDCNR MODE, SADC and BADC settings",
+        "complete register access order, including polling and reads that may clear readiness",
+        "reset history and calibration programming state",
+        "conversion timing and required sample freshness/coherence",
+        "manufacturer clarification or hardware validation covering that exact configuration and sequence; none supplied"
       ],
-      "conclusion": "UNRESOLVED SOURCE WORDING: page 10 mentions Status-register read and convert-pin trigger; page 23 instead names Power-register read and mode writes. Preserve both anchors; do not invent a Status register, convert pin, or resolved firmware sequence.",
+      "conclusion": "UNRESOLVED SOURCE WORDING: page 10 mentions Status-register read and convert-pin trigger; page 23 instead names Power-register read and mode writes. Preserve both anchors; do not invent a Status register, convert pin, or resolved firmware sequence. A prior CNVR observation does not establish survival across intervening accesses or freshness/coherence of later samples. A guaranteed poll/read/clear procedure is BLOCKED pending the exact configuration-, access-order-, reset/calibration- and timing-specific evidence listed here. No such evidence is supplied and no device behavior is guessed.",
       "evidence": {
         "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
         "revision": "SBOS448G",
@@ -645,6 +649,23 @@
       "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
       "draft_sha256": "96809dcea22d7878de8a82daf2fea6bdfc9960b7f2a1dc22150c2d60d872df35",
       "notes": "Classified readiness wording warning as UNRESOLVED_SOURCE_WORDING rather than application inputs; discrepancy remains unresolved. No numeric correction."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+      "decision": "DRAFT_CORRECTED",
+      "timestamp": "2026-10-28T04:39:00.936532+00:00",
+      "previous_json_sha256": "e9e38e94ec1b2c2883ad992eea7e0b6302b0b61174d1339ef4e33a4ddbc37ed1",
+      "note": "Issue #19 comment 6460732615: bound readiness observation and block guaranteed polling/read/clear procedures pending configuration-specific evidence. Prior acceptance preserved as historical; changed fact and batch await distinct review. Source bytes and all identifiers unchanged."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T04:39:36.972641+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "c2a69aeb73311f9e312fbc163bb5be8af188cd27ea352d7447ed1596fd597799",
+      "notes": "Independently reviewed complete amended payload and prose against issue6460732615 and previously rendered p10/p23 source; rechecked unchanged source hash. Only explicit blocked operational conclusion and required configuration/access/reset/calibration/timing validation were added. No source conflict resolved or device behavior inferred."
     }
   ],
   "review": {
@@ -671,6 +692,15 @@
         29
       ]
     },
-    "corrections": "Classified readiness wording warning as UNRESOLVED_SOURCE_WORDING rather than application inputs; discrepancy remains unresolved. No numeric correction."
+    "corrections": "Classified readiness wording warning as UNRESOLVED_SOURCE_WORDING rather than application inputs; discrepancy remains unresolved. No numeric correction.",
+    "amendment_review": {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T04:39:36.972641+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "c2a69aeb73311f9e312fbc163bb5be8af188cd27ea352d7447ed1596fd597799",
+      "notes": "Independently reviewed complete amended payload and prose against issue6460732615 and previously rendered p10/p23 source; rechecked unchanged source hash. Only explicit blocked operational conclusion and required configuration/access/reset/calibration/timing validation were added. No source conflict resolved or device behavior inferred."
+    }
   }
 }
