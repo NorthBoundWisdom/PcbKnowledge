@@ -1,0 +1,676 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "ina219-measurement-calibration-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+    "collected_at": "2026-10-28T04:28:40.054946+00:00"
+  },
+  "sources": [
+    {
+      "id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "document_url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+      "revision": "SBOS448G",
+      "revision_date": "2015-12",
+      "packaging_addendum_date": "2026-03-05",
+      "identity_evidence": "PDF page 29, Addendum-Page 1: exact INA219AIDCNR orderable, SOT-23/DCN, 8 pins; electrical page headers identify SBOS448G.",
+      "pdf_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+      "pdf_byte_size": 892731,
+      "pdf_pages": 38,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "Not asserted; public reference only; originals excluded from Git and package",
+      "source_processing_scope": "Small noncanonical original annotations under ADR-021; no canonical license clearance asserted",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        5,
+        9,
+        10,
+        12,
+        19,
+        20,
+        23,
+        24,
+        27,
+        29
+      ],
+      "cache_receipt": "Fresh official download matched the prior ti-ina219 byte hash. Local ignored cache only. Packaging date is not the electrical revision date.",
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "monitor-app-01",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "raw_voltage_decoding",
+      "value": {
+        "shunt": "signed two-complement register 01h times 10 uV",
+        "bus": "unsigned register 02h shifted right 3 times 4 mV",
+        "bus_reference": "IN- relative to GND",
+        "shunt_polarity": "IN+ minus IN-"
+      },
+      "unit": "register scaling",
+      "conditions": "Shunt sign extension depends on PGA representation. Bus low bits are not voltage data: bit 1 CNVR, bit 0 OVF; bit 2 reserved. Raw registers do not require calibration. A negative shunt code must not become an unsigned positive current.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 12,
+        "pdf_page_index": 11,
+        "section": "8.5.1; raw scaling",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 20,
+          "pdf_page_index": 19,
+          "section": "8.6.3.1; signed shunt",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 23,
+          "pdf_page_index": 22,
+          "section": "Figure 24; bus register",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 9,
+          "pdf_page_index": 8,
+          "section": "8.3.1; input reference",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-02",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "calibration_and_scale",
+      "value": {
+        "minimum_current_lsb": "maximum expected current / 32768",
+        "calibration": "trunc(0.04096 / (Current_LSB * RSHUNT))",
+        "power_lsb": "20 * Current_LSB",
+        "calibration_bit0": "FS0 is read-only zero; programmable bits FS15:FS1"
+      },
+      "unit": "A/bit; ohm; W/bit",
+      "conditions": "Use amperes and ohms in the equation. Current_LSB may be rounded upward for practical scaling; check representable calibration and current range. Use the actual programmed calibration after truncation and the fixed-zero bit, not an ideal real number. A changed shunt or desired range requires re-evaluation; this is not a default-shunt assumption.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 12,
+        "pdf_page_index": 11,
+        "section": "8.5.1; Equations 1-3",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 24,
+          "pdf_page_index": 23,
+          "section": "Figure 27; fixed-zero FS0",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-03",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "calibration_reset_zero",
+      "value": {
+        "unprogrammed_calibration": "current and power registers remain zero",
+        "reset": "RST bit 15 resets all registers to defaults and self-clears"
+      },
+      "unit": "state",
+      "conditions": "Zero computed output after power-up/reset does not prove zero load current. Program calibration for the actual shunt and scale before interpreting computed current/power; raw voltage decoding is separate.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 12,
+        "pdf_page_index": 11,
+        "section": "8.5.1; calibration prerequisite",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 19,
+          "pdf_page_index": 18,
+          "section": "8.6.2.1; RST",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-04",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "computed_current_power",
+      "value": {
+        "current_code": "shunt register * calibration register / 4096",
+        "current_encoding": "signed two-complement; multiply by Current_LSB",
+        "power_encoding": "16 data bits; multiply by Power_LSB"
+      },
+      "unit": "A; W",
+      "conditions": "Register 04h is signed current; 03h does not document a signed negative-power encoding here. Do not apply signed-current interpretation to power or promise bidirectional signed power. Results depend on valid calibration and OVF; truncation/range effects require checking. No synthetic firmware arithmetic model is asserted.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 12,
+        "pdf_page_index": 11,
+        "section": "8.5.1; Equation 4 and scaling",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 23,
+          "pdf_page_index": 22,
+          "section": "8.6.3.3-8.6.3.4; Figures 25-26",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-05",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "shunt_range_and_accuracy",
+      "value": {
+        "pga_full_scale_mV": {
+          "1": 40,
+          "/2": 80,
+          "/4": 160,
+          "/8": 320
+        },
+        "A_grade_current_error_percent": {
+          "typical_magnitude": 0.2,
+          "maximum_magnitude": 0.5,
+          "maximum_magnitude_at_minus25_to85C": 1.0
+        }
+      },
+      "unit": "mV; percent",
+      "conditions": "PGA ranges are bipolar. Error table header: TA=25 C, VS=3.3 V, VIN+=12 V, VSHUNT=32 mV, PGA=/1, BRNG=1 unless specified. Over-temperature row changes TA only. INA219B tighter limits do not transfer. This is not total shunt/circuit accuracy and not an arbitrary-current guarantee. Choose shunt and PGA against peak differential voltage as well as digital range; 32 V bus scaling is not a pin-voltage allowance.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 5,
+        "pdf_page_index": 4,
+        "section": "7.5; header, current measurement error and note 2",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 19,
+          "pdf_page_index": 18,
+          "section": "Table 4; bipolar PGA ranges",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-06",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "conversion_ready_overflow",
+      "value": {
+        "bus_bit1": "CNVR set after conversions, averaging and multiplication complete",
+        "bus_bit0": "OVF indicates out-of-range current or power arithmetic",
+        "page23_clear_conditions": [
+          "new operating mode written except power-down/ADC-disabled",
+          "Power register read"
+        ]
+      },
+      "unit": "status bits",
+      "conditions": "These clear conditions are a scoped page-23 statement, not a resolved device-side-effect contract: page 10 uses inconsistent Status-register/convert-pin wording (see warning). OVF is not a general shunt clipping or wiring detector; OVF=0 does not certify analog validity. An I2C read alone does not establish freshness.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 23,
+        "pdf_page_index": 22,
+        "section": "Figure 24 and CNVR/OVF descriptions",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 10,
+          "pdf_page_index": 9,
+          "section": "8.3.1 continued; differing clear wording",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-07",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "conversion_sequence_and_timing",
+      "value": {
+        "continuous_both_mode": "111; shunt then bus, independently configured SADC/BADC",
+        "triggered_both_mode": "011; writing triggered mode starts a conversion even if unchanged",
+        "12_bit_single_conversion_us": {
+          "typical": 532,
+          "maximum": 586
+        },
+        "128_sample_table_time_ms": 68.1
+      },
+      "unit": "mode; us; ms",
+      "conditions": "The 12-bit min/max table entry uses page-5 electrical header conditions; minimum is not stated. 68.10 ms is Table-5 timing, not a separately guaranteed maximum. Both-channel conversion/averaging is sequential, not simultaneous; the page-10 example allows about 68 ms between samples at 128 averaging. Reading retained data early does not make it fresh. Timing budget needs both channel settings, mode, bus/host latency and required age.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 20,
+        "pdf_page_index": 19,
+        "section": "Tables 5-6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 5,
+          "pdf_page_index": 4,
+          "section": "7.5; header and ADC timing",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 9,
+          "pdf_page_index": 8,
+          "section": "8.3.1; sequence and trigger",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 10,
+          "pdf_page_index": 9,
+          "section": "8.3.1.1; sample separation",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-08",
+      "source_id": "monitor-app-ti-g-dcn",
+      "manufacturer": "Texas Instruments",
+      "device": "INA219AIDCNR",
+      "variant": "INA219A accuracy grade",
+      "package": "DCN (SOT-23, 8 pins)",
+      "kind": "application_constraint",
+      "parameter": "kelvin_shunt_layout",
+      "value": {
+        "sense_connection": "Kelvin or four-wire connection at the shunt",
+        "error_mechanism": "extra current-carrying resistance inside sense points contributes measurement error"
+      },
+      "unit": "layout guidance",
+      "conditions": "This guidance does not determine a shunt value, tolerance, temperature coefficient, power rating, permitted heating or a finished board layout. Those application inputs and actual current peaks remain required.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 27,
+        "pdf_page_index": 26,
+        "section": "11.1; Layout Guidelines",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "monitor-app-shunt-unknown",
+      "source_id": "monitor-app-ti-g-dcn",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "question": "Can this circuit meet current range and total accuracy?",
+      "missing_inputs": [
+        "actual shunt resistance/tolerance/tempco/power rating",
+        "peak current and transient/common-mode envelope",
+        "temperature and allowed error",
+        "Kelvin routing and parasitic resistance"
+      ],
+      "conclusion": "UNKNOWN. Device table accuracy does not include unspecified external shunt/layout errors; digital scale, analog PGA range and physical shunt limits require separate checks.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 5,
+        "pdf_page_index": 4,
+        "section": "7.5; conditional accuracy",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 27,
+          "pdf_page_index": 26,
+          "section": "11.1; Kelvin guidance",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-calibration-freshness-unknown",
+      "source_id": "monitor-app-ti-g-dcn",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "question": "Are the returned current and power readings scaled and fresh?",
+      "missing_inputs": [
+        "actual calibration value and configured Current_LSB",
+        "power/reset history and register writes",
+        "MODE/SADC/BADC and host read timing",
+        "CNVR/OVF observations and allowable sample age"
+      ],
+      "conclusion": "UNKNOWN. Zero after reset need not mean zero current; old readings and arithmetic overflow cannot certify valid instantaneous load power.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 12,
+        "pdf_page_index": 11,
+        "section": "8.5.1; calibration",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 23,
+          "pdf_page_index": 22,
+          "section": "CNVR/OVF; output registers",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        },
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 20,
+          "pdf_page_index": 19,
+          "section": "Tables 5-6",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    },
+    {
+      "id": "monitor-app-readiness-wording",
+      "source_id": "monitor-app-ti-g-dcn",
+      "issue_status": "UNRESOLVED_SOURCE_WORDING",
+      "question": "Which CNVR clear side effects apply on the actual device?",
+      "missing_inputs": [
+        "manufacturer clarification or validated hardware sequence"
+      ],
+      "conclusion": "UNRESOLVED SOURCE WORDING: page 10 mentions Status-register read and convert-pin trigger; page 23 instead names Power-register read and mode writes. Preserve both anchors; do not invent a Status register, convert pin, or resolved firmware sequence.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+        "revision": "SBOS448G",
+        "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+        "printed_page": 10,
+        "pdf_page_index": 9,
+        "section": "8.3.1 continued",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+      },
+      "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+      "additional_evidence": [
+        {
+          "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+          "revision": "SBOS448G",
+          "source_sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+          "printed_page": 23,
+          "pdf_page_index": 22,
+          "section": "Figure 24; CNVR clearing",
+          "bbox": null,
+          "visual_checked": true,
+          "collector": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+          "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+          "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Noncanonical, not a circuit recommendation or automatic fitting decision.",
+    "Existing ti-ina219 identity, supply, stress, common-mode and address records remain authoritative for their original scope; no replacement or duplicate facts.",
+    "Actual shunt, firmware sequence, input envelope and total accuracy remain unknown."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+      "decision": "DRAFT_COLLECTED",
+      "timestamp": "2026-10-28T04:28:40.054946+00:00",
+      "note": "Actual source bytes and renders checked by collector; separate reviewer gate remains pending."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/collect_ina219_constraints",
+      "decision": "DRAFT_CORRECTED",
+      "timestamp": "2026-10-28T04:29:58.219996+00:00",
+      "previous_json_sha256": "1a1044eb8237c2ae5ed4263c4fd393e3799ec2bd45e2d27b6ece5057173ddb0d",
+      "note": "Integrator requested issue-contract monitor-app- identifiers; independent reviewer requested source-wording issue classification. Both applied before acceptance."
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T04:30:26.529554+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "96809dcea22d7878de8a82daf2fea6bdfc9960b7f2a1dc22150c2d60d872df35",
+      "notes": "Classified readiness wording warning as UNRESOLVED_SOURCE_WORDING rather than application inputs; discrepancy remains unresolved. No numeric correction."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T04:30:26.529554+00:00",
+    "scope": "Independent actual cached-source byte and rendered-page review plus complete payload, conditions, warnings and review prose; collector fresh-download attribution retained. Noncanonical, not human or circuit qualification.",
+    "draft_sha256": "96809dcea22d7878de8a82daf2fea6bdfc9960b7f2a1dc22150c2d60d872df35",
+    "source_byte_check": {
+      "sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+      "byte_size": 892731,
+      "pdf_pages": 38,
+      "visual_pages": [
+        5,
+        9,
+        10,
+        12,
+        19,
+        20,
+        23,
+        24,
+        27,
+        29
+      ]
+    },
+    "corrections": "Classified readiness wording warning as UNRESOLVED_SOURCE_WORDING rather than application inputs; discrepancy remains unresolved. No numeric correction."
+  }
+}

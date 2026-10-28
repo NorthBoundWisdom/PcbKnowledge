@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **13 reviewed batches, 24 batch-local source/device scopes, and 162 factual
+This queue contains **16 reviewed batches, 27 batch-local source/device scopes, and 184 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -22,6 +22,9 @@ provenance and batch bytes are preserved.
 | [Buck component/layout constraints](tps62160-component-layout-constraints.json) | TPS62160DSGR/DSG | 8 | Actual hash and rendered Table 2 cell review; [receipt](tps62160-component-layout-constraints-review.md) |
 | [Op-amp signal-chain constraints](mcp6002-signal-chain-constraints.json) | MCP6002-I/SN | 7 | Actual hash and six independently inspected pages; [receipt](mcp6002-signal-chain-constraints-review.md) |
 | [Logic input/output constraints](sn74hc00-input-output-constraints.json) | SN74HC00/D; full orderable unresolved | 7 | Actual hash and nine independently inspected pages; [receipt](sn74hc00-input-output-constraints-review.md) |
+| [Current-monitor calibration](ina219-measurement-calibration-constraints.json) | INA219AIDCNR/DCN, A grade | 8 | Actual hash and distinct rendered-page review; [receipt](ina219-measurement-calibration-constraints-review.md) |
+| [Shunt-reference regulation](tl431-feedback-regulation-constraints.json) | TL431CDBZR/DBZ, standard C grade | 6 | Actual hash and rendered stability/circuit review; [receipt](tl431-feedback-regulation-constraints-review.md) |
+| [Timer application constraints](ne555-timing-application-constraints.json) | NE555DR/D | 8 | Actual hash and rendered circuits/timing tables; [receipt](ne555-timing-application-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -103,8 +106,19 @@ D/SOIC-14 scope without inventing a full orderable. Its RKS/20-pin Figure 11-1 i
 explicitly excluded from D-package pin/layout inference; two other warnings retain
 unknown interface/load/timing/power inputs. No manufacturer correction is asserted.
 
-The [current signal/logic replay](../../docs/intake-evaluation-signal-logic.md)
+The [historical signal/logic replay](../../docs/intake-evaluation-signal-logic.md)
 retains the historical 100/125/148 manifests and unchanged MCP23017 disposition.
 All 162 annotations remain noncanonical; the owner's earlier 100-record acceptance
 does not cover these additions. Missing circuit inputs and the source-figure
 mismatch are not resolved by retrieval or by the separate local byte-audit command.
+
+## Measurement, reference and timing extension
+
+Three independently reviewed application lanes add 22 annotations and ten warnings.
+INA219 calibration/register/readiness, TL431 divider/current/stability and NE555
+mode/timing constraints retain exact grade/package and source test conditions.
+Two source-wording discrepancies remain unresolved: INA219 CNVR clearing language
+and TL431 reference-current equation signs. No correction or circuit permission is
+inferred. The [current replay](../../docs/intake-evaluation-measurement-timing.md)
+preserves all earlier snapshots and the separate MCP23017 disposition. New records
+do not inherit the owner's original 100-record acceptance.

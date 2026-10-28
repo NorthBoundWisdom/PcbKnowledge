@@ -118,6 +118,23 @@ input is byte-identical and no original/render/text is included. All nineteen
 protected baseline files and both immutable reviewed pairs were rechecked unchanged.
 Exact-commit remote CI remains a separate publication check.
 
+## Measurement, reference and timing application stage
+
+Issues #19 (INA219), #20 (TL431) and #21 (NE555) add 22 independently reviewed
+conditional annotations and ten explicit source/application warnings. The single
+integrator preserves the already landed MCP6002/SN74HC00 stage, exact historical
+100/125/148/162 snapshots, owner acceptance and MCP23017 disposition. The source
+CNVR-clear wording and reference-current equation signs remain unresolved; this
+stage does not guess corrections or promote unknowns into circuit permission.
+
+The [successor replay](docs/intake-evaluation-measurement-timing.md) has 230 base
+cases plus six unchanged disposition cases. All earlier 159 base recipes retain
+their definitions and selections. New full-payload/identity negatives and synthetic
+semantic corruptions preserve calibration, grade, timing/topology, test conditions,
+warning association and noncanonical/nonverification status. Maintainer report and
+evidence-audit tools are left unchanged. Publication gates are recorded in the
+final issue receipts, separately from source review.
+
 ## Next application-question milestones
 
 The accepted 100 annotations are a baseline, not a target to inflate. Prioritize

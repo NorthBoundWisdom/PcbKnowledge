@@ -1,0 +1,386 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "reference-app-tl431-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+    "collected_at": "2026-10-28T04:26:41.599229+00:00"
+  },
+  "sources": [
+    {
+      "id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "revision": "SLVS543S",
+      "revision_date": "2024-05",
+      "packaging_addendum_date": "2026-09-18",
+      "document_url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+      "pdf_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+      "pdf_byte_size": 3087819,
+      "pdf_local_path": ".pcbknowledge/evidence/sha256/ed/ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22.pdf",
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "identity_evidence": {
+        "pdf_page_index": 40,
+        "printed_page": "Addendum-Page 8",
+        "visual_checked": true
+      },
+      "visual_pages": [
+        6,
+        17,
+        18,
+        19,
+        22,
+        26,
+        27,
+        31,
+        41
+      ],
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "redistribution_license": "Not asserted; original excluded from Git and packages",
+      "source_processing_lane": "Owner-authorized noncanonical public factual curation; no canonical license clearance asserted",
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "facts": [
+    {
+      "id": "reference-app-01",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "kind": "source_equation_with_conflict",
+      "parameter": "divider_reference_current",
+      "value": {
+        "figure_7_2_equation": "VKA = Vref * (1 + R1/R2) + Iref * R1",
+        "section_9_2_2_2_1_equation": "Vo = (1 + R1/R2) * VREF - IREF * R1",
+        "unified_source_equation": null
+      },
+      "unit": null,
+      "conditions": "Figure 7-2 defines R1 from cathode to REF, R2 from REF to anode, and Iref flowing into REF. Figure 9-3 gives only the approximate ratio equation. Section 9.2.2.2.1 prints the opposite sign for the reference-current term and requires sufficient bias to meet Imin. The discrepancy is unresolved; this candidate records source-specific expressions, not an authoritative corrected equation or setpoint guarantee. Read reference-app-equation-conflict.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+        "revision": "SLVS543S",
+        "pdf_page_index": 18,
+        "printed_page": 19,
+        "section": "Figure 7-2; also Figure 9-3 and section 9.2.2.2.1, page 26",
+        "source_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-tl431-06",
+        "b004-ti-tl431-07"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "reference-app-02",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "kind": "electrical_characteristic",
+      "parameter": "reference_input_current",
+      "value": {
+        "typ": 2,
+        "max": 4,
+        "min": null
+      },
+      "unit": "uA",
+      "conditions": "Standard TL431C table, recommended operating conditions, TA=25 C unless otherwise noted; IKA=10 mA, R1=10 kohm, R2=open, Figure 7-2. These are reference-input-current values, not a required cathode-current minimum or A/B-grade tolerance. Actual divider error also depends on R1 and the unresolved source equation sign.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+        "revision": "SLVS543S",
+        "pdf_page_index": 5,
+        "printed_page": 6,
+        "section": "6.5, Iref row; Figure 7-2",
+        "source_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-tl431-06"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "reference-app-03",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "kind": "derived_topology_constraint",
+      "parameter": "cathode_current_budget",
+      "value": {
+        "dc_relation": "Ifeed = Iload + IR1 + IKA",
+        "feed_relation": "Ifeed = (VSUP - VO) / RSUP",
+        "divider_relation": "IR1 = IR2 + Iref"
+      },
+      "unit": null,
+      "conditions": "KCL/Ohm-law interpretation of Figure 9-3, not a new manufacturer guaranteed limit. Anode at common return; external load draws current from VO, R1 joins VO to REF and R2 joins REF to return; DC excludes capacitor transient current. Check low-input/high-load starvation and high-input/light-load cathode dissipation separately. Existing minimum-regulation and allowed cathode-current/voltage records retain their own conditions; independently maximal voltage/current values cannot be combined into package power permission. Actual supply/load/resistor/thermal inputs are absent.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+        "revision": "SLVS543S",
+        "pdf_page_index": 25,
+        "printed_page": 26,
+        "section": "Figure 9-3 and section 9.2.2.2.1; power-current limiting section 9.4 page 31",
+        "source_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-tl431-04",
+        "b004-ti-tl431-05",
+        "b004-ti-tl431-07"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "reference-app-04",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "kind": "application_accuracy_constraint",
+      "parameter": "divider_accuracy_budget",
+      "value": {
+        "contributors": [
+          "R1 and R2 accuracy",
+          "reference variation over temperature",
+          "reference change with cathode voltage",
+          "dynamic impedance versus cathode current"
+        ]
+      },
+      "unit": null,
+      "conditions": "Section 9.2.2.2.2 addresses a programmed shunt output beyond the direct-reference configuration. Divider ratio alone is insufficient; use standard-C reference bounds, not A/B initial accuracy. Table 9-2 values are an example, not this exact part/application guarantee. Actual resistor tolerances, temperatures, cathode operating point, load and reference-current contribution are required; source equation discrepancy remains unresolved.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+        "revision": "SLVS543S",
+        "pdf_page_index": 26,
+        "printed_page": 27,
+        "section": "9.2.2.2.2; Table 9-2 page 26",
+        "source_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-tl431-06"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "reference-app-05",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "kind": "typical_curve_constraint",
+      "parameter": "capacitive_load_stability",
+      "value": {
+        "applicable_figure": "6-18",
+        "excluded_figure": "6-16",
+        "ambient_C": 25,
+        "curve_VKA_V": {
+          "A": "Vref",
+          "B": 5,
+          "C": 10,
+          "D": 15
+        },
+        "x_axis": "CL in uF, logarithmic",
+        "y_axis": "IKA in mA",
+        "numeric_boundaries": null
+      },
+      "unit": null,
+      "conditions": "DBZ SOT-23 uses Figure 6-18; Figure 6-16 excludes SOT23-3. Typical-characteristic curves mark regions under the curves as potentially oscillatory. Figure 6-19 uses a 150 ohm feed; curve A ties REF to cathode, B/C/D use R1=10 kohm and adjusted R2. Initial VKA and IKA are established with CL=0, then VBATT and CL varied. No interpolation, precise allowable capacitance/ESR envelope, temperature extrapolation or guaranteed full-loop stability is asserted.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+        "revision": "SLVS543S",
+        "pdf_page_index": 17,
+        "printed_page": 18,
+        "section": "6.14, Figures 6-18 and 6-19; Figure 6-16 exclusion page 17",
+        "source_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "reference-app-06",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "manufacturer": "Texas Instruments",
+      "device": "TL431CDBZR",
+      "variant": "TL431 standard accuracy, C temperature grade; not TL432, A/B or I/Q",
+      "package": "DBZ, 3-pin SOT-23",
+      "kind": "application_guidance",
+      "parameter": "capacitor_and_current_limiting",
+      "value": {
+        "no_output_capacitor_required_for_internal_stability": true,
+        "arbitrary_output_capacitor_approved": false
+      },
+      "unit": null,
+      "conditions": "Sections 8.3 and 9.2.2.2.3 describe compensation without an output capacitor; added cathode-to-anode capacitance must be considered against the applicable stability curves. Section 9.4 requires supply current limiting to respect cathode current and limiting REF current. Section 9.5 advises nearby bypass placement and appropriate current-carrying trace widths. Figure 9-16 is explicitly TL432 DBZ, not a TL431 pin-routing template. No universal capacitor/ESR recommendation, startup guarantee or board thermal approval follows.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+        "revision": "SLVS543S",
+        "pdf_page_index": 30,
+        "printed_page": 31,
+        "section": "9.4-9.5; supporting sections 8.3 page 22 and 9.2.2.2.3 page 27",
+        "source_sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-tl431-01",
+        "b004-ti-tl431-02",
+        "b004-ti-tl431-03",
+        "b004-ti-tl431-05"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "reference-app-equation-conflict",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "issue_status": "UNRESOLVED_SOURCE_WORDING",
+      "description": "Figure 7-2 shows a positive Iref*R1 term and inward reference current, but section 9.2.2.2.1 prints a negative term. No manufacturer correction or reconciled source formula is asserted. Preserve both locators; a retrieved divider expression does not settle the discrepancy.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "recorded_at": "2026-10-28T04:26:41.599229+00:00"
+      },
+      "evidence_references": [
+        "SLVS543S printed/PDF page 19",
+        "SLVS543S printed/PDF page 26"
+      ]
+    },
+    {
+      "id": "reference-app-operating-point-unknown",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Supply range, load range, R1/R2/RSUP values and tolerances, actual bias and temperature, board thermal conditions and allowable dissipation are unspecified. Low-input/high-load regulation and high-input/light-load stress are unknown. A maximum required minimum is not a maximum allowed current; a typical minimum does not establish worst-case bias.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "recorded_at": "2026-10-28T04:26:41.599229+00:00"
+      },
+      "evidence_references": [
+        "SLVS543S printed/PDF page 6",
+        "SLVS543S printed/PDF page 26",
+        "SLVS543S printed/PDF page 27",
+        "SLVS543S printed/PDF page 31"
+      ]
+    },
+    {
+      "id": "reference-app-stability-unknown",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual load capacitance, ESR, parasitics, cathode voltage/current, temperature and any external loop are unknown. Figure 6-18 is typical at 25 C and no curve coordinates were digitized. It cannot establish arbitrary capacitor suitability, a universal ESR bound, phase margin, or complete optocoupler/SMPS loop stability.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "recorded_at": "2026-10-28T04:26:41.599229+00:00"
+      },
+      "evidence_references": [
+        "SLVS543S printed/PDF page 18",
+        "SLVS543S printed/PDF page 22",
+        "SLVS543S printed/PDF page 27"
+      ]
+    },
+    {
+      "id": "reference-app-layout-scope",
+      "source_id": "reference-app-ti-tl431-slvs543s-dbz",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Figure 9-16 is labeled TL432 DBZ, not TL431. Generic bypass/current-limiting prose is retained, but its pin-number drawing is not transferred to TL431CDBZR; use existing exact TL431 pin records. No circuit startup or thermal sign-off is provided.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+        "recorded_at": "2026-10-28T04:26:41.599229+00:00"
+      },
+      "evidence_references": [
+        "SLVS543S printed/PDF page 31"
+      ]
+    }
+  ],
+  "limitations": [
+    "Noncanonical conditional candidates, not a setpoint calculator or circuit/thermal certification.",
+    "Actual freshly accessed bytes match the prior source hash; old receipts and facts remain unchanged.",
+    "No precise bbox or numeric stability-curve interpolation. No supplemental source was processed."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/collect_tl431_constraints",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T04:26:41.599229+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T04:29:35.846475+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "ab199bcfefeac1c300b17192ee7205af06eb6e7ae6b561e0fb0caa345a162dcd",
+      "notes": "No factual correction required; review metadata updated, DRAFT history preserved."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T04:29:35.846475+00:00",
+    "scope": "Independent actual cached-source byte and rendered-page review plus complete payload, conditions, warnings and review prose; collector fresh-download attribution retained. Noncanonical, not human or circuit qualification.",
+    "draft_sha256": "ab199bcfefeac1c300b17192ee7205af06eb6e7ae6b561e0fb0caa345a162dcd",
+    "source_byte_check": {
+      "sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+      "byte_size": 3087819,
+      "pdf_pages": 85,
+      "visual_pages": [
+        6,
+        17,
+        18,
+        19,
+        22,
+        26,
+        27,
+        31,
+        41
+      ]
+    },
+    "corrections": "No factual correction required; review metadata updated, DRAFT history preserved."
+  }
+}

@@ -1,0 +1,455 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "timer-app-ne555-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+    "collected_at": "2026-10-28T04:26:45.193469+00:00"
+  },
+  "sources": [
+    {
+      "id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "revision": "SLFS022K",
+      "revision_date": "2026-03",
+      "packaging_addendum_date": "2026-09-18",
+      "document_url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+      "pdf_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+      "pdf_byte_size": 2258813,
+      "pdf_local_path": ".pcbknowledge/evidence/sha256/a3/a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6.pdf",
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "identity_evidence": {
+        "pdf_page_index": 20,
+        "printed_page": "Addendum-Page 1",
+        "visual_checked": true
+      },
+      "visual_pages": [
+        5,
+        6,
+        7,
+        11,
+        12,
+        13,
+        18,
+        19,
+        21
+      ],
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "redistribution_license": "Not asserted; original excluded from Git and packages",
+      "source_processing_lane": "Owner-authorized noncanonical public factual curation; no canonical license clearance asserted",
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "facts": [
+    {
+      "id": "timer-app-01",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "functional_constraint",
+      "parameter": "monostable_trigger_duration",
+      "value": {
+        "approximate_pulse_width": "1.1 * RA * C",
+        "RA_unit": "ohm",
+        "C_unit": "F",
+        "pulse_unit": "s",
+        "trigger_high_before_interval_end_us": 10,
+        "grounded_trigger_storage_time_up_to_us": 10
+      },
+      "unit": null,
+      "conditions": "Figure 6-2 topology: C charges through RA; THRES and DISCH join the capacitor node, TRIG is separate, RESET is held high. The threshold can terminate the interval only after TRIG has returned high. Source gives 10 us minimum monostable pulse width in this grounded-trigger storage context. Nominal threshold/control conditions and constant VCC during the interval apply; neither RC nominal values nor supply proportionality establish total timing tolerance.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 10,
+        "printed_page": 11,
+        "section": "6.3.1; Figure 6-2",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-ne555-02",
+        "b004-ti-ne555-03"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-02",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "functional_constraint",
+      "parameter": "reset_interruption_retrigger",
+      "value": {
+        "reset_low": "Output held low; capacitor discharges",
+        "simultaneous_RESET_TRIG_pulse": "Cycle restarts on positive edge of reset pulse",
+        "ordinary_trigger_retrigger_during_cycle": false
+      },
+      "unit": null,
+      "conditions": "Section 6.3.1 describes a negative-going pulse applied simultaneously to RESET and TRIG during timing, not an arbitrary TRIG-only retrigger guarantee. Section 6.3.3 uses inability to retrigger during the basic timing cycle. Table 6-1 nominal levels assume CONT open or 2/3 VCC; valid RESET high is required. Existing pin semantics remain referenced.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 10,
+        "printed_page": 11,
+        "section": "6.3.1; 6.3.3 and Table 6-1 on page 13",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-ne555-02",
+        "b004-ti-ne555-03"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-03",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "functional_relationship",
+      "parameter": "astable_frequency_duty",
+      "value": {
+        "tH_s": "0.693 * (RA + RB) * C",
+        "tL_s": "0.693 * RB * C",
+        "period_s": "0.693 * (RA + 2 * RB) * C",
+        "frequency_Hz": "1.44 / ((RA + 2 * RB) * C)",
+        "output_driver_duty_low_fraction": "RB / (RA + 2 * RB)",
+        "output_waveform_duty_high_fraction": "(RA + RB) / (RA + 2 * RB)",
+        "distortion_guidance_max_frequency_Hz": 100000
+      },
+      "unit": null,
+      "conditions": "Approximate relationships for Figure 6-5 only, RA/RB in ohms and C in F. TRIG joins THRES at C; C charges through RA+RB and discharges through RB. Nominal capacitor swing is about 1/3 to 2/3 VCC. Driver duty is tL/T, waveform duty is tH/T, not interchangeable. Source recommends 100 kHz or below to reduce distortion, not a guaranteed accuracy or arbitrary duty-range entitlement. No alternate diode topology, changed CONT bias or CMOS part substitution is included.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 11,
+        "printed_page": 12,
+        "section": "6.3.2; Figure 6-5; equations 1-6",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-04",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "switching_characteristic",
+      "parameter": "monostable_timing_characteristics",
+      "value": {
+        "temperature_coefficient_ppm_per_C": {
+          "typ": 50,
+          "max": null
+        },
+        "supply_sensitivity_percent_per_V": {
+          "typ": 0.1,
+          "max": 0.5
+        }
+      },
+      "unit": null,
+      "conditions": "NE555 row only, section 5.6: VCC=5..15 V, TA=25 C unless noted. Temperature coefficient covers TA=MIN..MAX of the recommended NE555 range (0..70 C), not SE555 range. Monostable similar to Figure 6-2, RA=2..100 kohm and C=0.1 uF. Values are by design/characterization, not production tested. Typical coefficient has no NE555 maximum in this table; supply-sensitivity maximum is not a total RC timing-error bound.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 6,
+        "printed_page": 7,
+        "section": "5.6; footnotes 1-2",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-ne555-06"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-05",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "switching_characteristic",
+      "parameter": "astable_timing_characteristics",
+      "value": {
+        "temperature_coefficient_ppm_per_C": {
+          "typ": 150,
+          "max": null
+        },
+        "supply_sensitivity_percent_per_V": {
+          "typ": 0.3,
+          "max": null
+        }
+      },
+      "unit": null,
+      "conditions": "NE555 row only, section 5.6: VCC=5..15 V, TA=25 C unless noted; temperature coefficient TA=MIN..MAX of recommended NE555 range (0..70 C). Astable similar to Figure 6-5; footnote 3 states RA=1..100 kohm, C=0.1 uF and does not give an RB range. Do not invent RB coverage. Both recorded values are typical, not guaranteed maxima; by design/characterization and not production tested. Actual R/C tolerances, leakage and loading remain additional unknowns.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 6,
+        "printed_page": 7,
+        "section": "5.6; footnotes 1,3",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-ne555-06"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-06",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "electrical_characteristic",
+      "parameter": "timing_node_leakage_constraints",
+      "value": {
+        "threshold_current_nA": {
+          "typ": 30,
+          "max": 250
+        },
+        "discharge_off_current_nA": {
+          "typ": 20,
+          "max": 100
+        },
+        "timing_resistance_examples_Mohm": {
+          "at_5V": 3.4,
+          "at_15V": 10
+        }
+      },
+      "unit": null,
+      "conditions": "Section 5.5 at VCC=5..15 V and TA=25 C unless noted. Page 6 footnote 1 links THRES current to approximate RA+RB limits for Figure 6-5, with the 5 V and 15 V examples shown. These are not arbitrary long-delay or all-temperature accuracy guarantees. External capacitor leakage and component tolerance are not supplied by these device currents.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 4,
+        "printed_page": 5,
+        "section": "5.5; footnote 1 on page 6",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-07",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "switching_characteristic",
+      "parameter": "output_edge_test_conditions",
+      "value": {
+        "rise_ns": {
+          "typ": 100,
+          "max": 300,
+          "measurement": "20% to 80%"
+        },
+        "fall_ns": {
+          "typ": 100,
+          "max": 300,
+          "measurement": "80% to 20%"
+        }
+      },
+      "unit": "ns",
+      "conditions": "NE555 row, VCC=5..15 V, CL=15 pF, TA=25 C. Specified by design/characterization, not production tested. Output-edge time under this load is not monostable delay accuracy, an arbitrary output-load guarantee, or proof of rail-compatible logic.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 6,
+        "printed_page": 7,
+        "section": "5.6",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "timer-app-08",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "manufacturer": "Texas Instruments",
+      "device": "NE555DR",
+      "variant": "NE555; not NA555, SA555, SE555, TLC555 or LMC555",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_guidance",
+      "parameter": "control_reset_supply_practices",
+      "value": {
+        "unused_RESET": "Connect to VCC",
+        "used_RESET": "External pullup to VCC for valid reset voltage",
+        "CONT_decoupling": "Figure 6-5 shows optional 0.01 uF to ground; evaluate the individual application",
+        "supply_bypass": "Section 7.3 recommends ceramic 0.1 uF between VCC and ground"
+      },
+      "unit": null,
+      "conditions": "Reset practice from 6.3.1/6.4 and CONT note from Figure 6-5; nominal function-table thresholds use CONT open or 2/3 VCC. Supply guidance is application information, not a complete board qualification. Source guidance does not establish startup pulse behavior, power-ramp immunity, arbitrary noise immunity, or output rail compatibility. Existing VCC/pin records are referenced rather than duplicated.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+        "revision": "SLFS022K",
+        "pdf_page_index": 17,
+        "printed_page": 18,
+        "section": "7.3; Figure 6-5 page 12; 6.4 page 13",
+        "source_sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "method": "Collector and distinct independent reviewer inspected actual byte-identified source and cited rendered pages; see review receipt. No measured bbox or human review asserted.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL"
+      },
+      "existing_record_references": [
+        "b004-ti-ne555-01",
+        "b004-ti-ne555-02",
+        "b004-ti-ne555-04",
+        "b004-ti-ne555-05"
+      ],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "timer-app-timing-budget-unknown",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Requested pulse/frequency tolerance, actual R/C values and tolerances, capacitor leakage, supply variation, temperature, load/noise and desired circuit topology are unspecified. Total timing accuracy is UNKNOWN. SLFS022K has no initial timing-error specification in 5.6; revision history records its deletion in J. Older initial-error values and typical curves must not be imported as a current guarantee.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "recorded_at": "2026-10-28T04:26:45.193469+00:00"
+      },
+      "evidence_references": [
+        "SLFS022K sections 5.5-5.6, 6.3-6.4, 7.3 and revision history page 19"
+      ]
+    },
+    {
+      "id": "timer-app-startup-control-unknown",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Power-ramp shape, initial capacitor charge, RESET/TRIG/CONT waveforms and sequencing are absent. Startup pulse and unwanted-trigger immunity remain UNKNOWN; bypass and reset guidance do not certify them.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "recorded_at": "2026-10-28T04:26:45.193469+00:00"
+      },
+      "evidence_references": [
+        "SLFS022K sections 5.5-5.6, 6.3-6.4, 7.3 and revision history page 19"
+      ]
+    },
+    {
+      "id": "timer-app-mode-duty-unknown",
+      "source_id": "timer-app-ti-ne555dr-slfs022k",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Requested frequency and high-versus-low duty convention, component values and topology are unspecified. Feasibility is UNKNOWN; Figure 6-5 equations do not authorize a changed topology or arbitrary duty range. Ordinary monostable triggering is not a blanket retrigger guarantee.",
+      "provenance": {
+        "actor": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+        "recorded_at": "2026-10-28T04:26:45.193469+00:00"
+      },
+      "evidence_references": [
+        "SLFS022K sections 5.5-5.6, 6.3-6.4, 7.3 and revision history page 19"
+      ]
+    }
+  ],
+  "limitations": [
+    "Noncanonical candidate annotations, not a timer simulation or circuit/timing certification.",
+    "Actual fresh bytes match the prior NE555 receipt; no historical record or evidence level is changed.",
+    "No supplemental source, CMOS timer transfer or alternative oscillator topology included."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/collect_ne555_constraints",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T04:26:45.193469+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T04:29:53.850200+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "c754a61726233c508e84bfed007c6e5798b1ab4b77f9e42883d91ee083cbf221",
+      "notes": "No factual correction required; review metadata updated, DRAFT history preserved."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_measurement_timing_wave/review_measurement_timing",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T04:29:53.850200+00:00",
+    "scope": "Independent actual cached-source byte and rendered-page review plus complete payload, conditions, warnings and review prose; collector fresh-download attribution retained. Noncanonical, not human or circuit qualification.",
+    "draft_sha256": "c754a61726233c508e84bfed007c6e5798b1ab4b77f9e42883d91ee083cbf221",
+    "source_byte_check": {
+      "sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+      "byte_size": 2258813,
+      "pdf_pages": 39,
+      "visual_pages": [
+        5,
+        6,
+        7,
+        11,
+        12,
+        13,
+        18,
+        19,
+        21
+      ]
+    },
+    "corrections": "No factual correction required; review metadata updated, DRAFT history preserved."
+  }
+}
