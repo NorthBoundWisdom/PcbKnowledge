@@ -1,7 +1,6 @@
 """Synthetic semantic regressions for measurement, reference and timing candidates."""
 from __future__ import annotations
 
-import copy
 import hashlib
 import json
 import subprocess
@@ -94,10 +93,22 @@ class MeasurementTimingPreservationTests(unittest.TestCase):
             ("timer", lambda item: item.update(source_issues=[])),
             ("unknown", lambda item: item["source_issue"].update(answer="SAFE")),
         ]
+        # Inputs stay fixed: only returned JSON is mutated. Acquire each genuine
+        # CLI response once here, never across tests; decode fresh mutable objects.
+        fixture_bytes = (self.root / self.relative).read_bytes()
+        baseline = json.dumps({case["id"]: evaluation.run_cli(self.root, case)
+                               for case in self.manifest["cases"]}, sort_keys=True)
+
+        def pristine_runner(root, case):
+            self.assertEqual(root, self.root)
+            return json.loads(baseline)[case["id"]]
+
+        pristine = evaluation.evaluate(self.root, self.manifest, runner=pristine_runner)
+        self.assertEqual(pristine["status"], "PASS")
         for target, mutate in mutations:
             with self.subTest(target=target, mutation=mutate):
                 def runner(root, case):
-                    items = copy.deepcopy(evaluation.run_cli(root, case))
+                    items = pristine_runner(root, case)
                     if case["id"] == target:
                         mutate(items[0])
                     return items
@@ -106,6 +117,10 @@ class MeasurementTimingPreservationTests(unittest.TestCase):
                 failed = next(case for case in result["cases"] if case["id"] == target)
                 self.assertFalse(failed["passed"])
                 self.assertEqual(failed["actual"], next(case["expected"] for case in self.manifest["cases"] if case["id"] == target))
+                # A mutation must not poison later mutations or the pinned input.
+                self.assertEqual(evaluation.evaluate(self.root, self.manifest,
+                                                     runner=pristine_runner), pristine)
+                self.assertEqual((self.root / self.relative).read_bytes(), fixture_bytes)
 
 
 class MeasurementTimingManifestTests(unittest.TestCase):
