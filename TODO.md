@@ -4,9 +4,22 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed low-voltage MOSFET integration
+
+The coherent collection is 28 batches / 40 source scopes / 270 annotations.
+Six exact-orderable Vishay Si2342DS-T1-GE3 annotations are independently
+Agent-reviewed under owner delegation. All 264 prior annotations and historical
+manifests/receipts remain unchanged. Low-gate-voltage resistance conditions,
+stress versus operating limits, thermal references and unknown PWM/board
+qualification remain explicit. Both CI jobs select the successor aggregate and
+the unchanged separate MCP23017 disposition; neither issue #31 nor its files
+are claimed by this independent collection task.
+See the [evaluation receipt](docs/intake-evaluation-low-voltage-mosfet.md).
+Exact-commit CI and publication are reported separately after verification.
+
 ## Reviewed inductor handoff integration
 
-The coherent collection is 27 batches / 39 source scopes / 264 annotations.
+At the preceding inductor integration, the collection was 27 batches / 39 source scopes / 264 annotations.
 The exact six-annotation Bourns SRP4020TA-4R7M pair is reused from immutable
 `ce0f002a481fc4b9888079f4ed3204fa56dc0cf4`, without recollection or altered review.
 All 258 earlier annotations and historical manifests/receipts remain unchanged.

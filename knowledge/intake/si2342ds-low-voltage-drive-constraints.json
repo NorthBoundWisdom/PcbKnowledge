@@ -1,0 +1,406 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "si2342ds-low-voltage-drive-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+    "collected_at": "2026-10-28T20:17:19.741328+00:00"
+  },
+  "sources": [
+    {
+      "id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "full_orderable_mpn": "Si2342DS-T1-GE3",
+      "document_url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+      "revision": "S11-1388-Rev. A",
+      "revision_date": "2011-07-11",
+      "identity_evidence": "PDF/printed page 1 ordering row identifies Si2342DS-T1-GE3 in SOT-23; top view explicitly labels 1 G, 2 S, 3 D. Electrical pages 1-6 carry S11-1388-Rev. A, 11-Jul-11; separate legal page 9 is 01-Jan-2026, not a newer electrical revision.",
+      "pdf_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+      "pdf_byte_size": 208998,
+      "pdf_pages": 9,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "redistribution_license": "Not asserted; public reference only, no IP license granted by document. No source originals, tables or artwork redistributed.",
+      "source_processing_scope": "Small original noncanonical factual annotations under ADR-021; no canonical license clearance or application qualification.",
+      "cache_receipt": "Official URL downloaded successfully without alternate host. Exact unchanged PDF bytes hashed locally. Poppler reported xref num 103 missing and reconstructed in memory; cited pages rendered legibly. This warning is retained, not presented as a clean container validation.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "si2342ds-drive-01",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "kind": "pin",
+      "parameter": "exact_orderable_numbered_terminal_identity",
+      "value": {
+        "full_orderable_mpn": "Si2342DS-T1-GE3",
+        "view": "top",
+        "pins": {
+          "1": "G",
+          "2": "S",
+          "3": "D"
+        },
+        "complete_cad_footprint": null
+      },
+      "unit": null,
+      "conditions": "Exact device drawing and ordering row only; no generic SOT-23 substitution, alternate suffix, footprint-pad convention or complete CAD model inferred.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+        "revision": "S11-1388-Rev. A",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Top-view terminal drawing and ordering information",
+        "source_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash and size. No measured bounding boxes or human review claimed; Poppler reconstruction warning retained.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "si2342ds-drive-02",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "kind": "absolute_maximum",
+      "parameter": "voltage_and_junction_stress_limits",
+      "value": {
+        "VDS_max_V": 8,
+        "VGS_min_V": -5,
+        "VGS_max_V": 5,
+        "TJ_min_C": -55,
+        "TJ_max_C": 150
+      },
+      "unit": null,
+      "conditions": "Stress limits, TA=25 C unless noted; not recommended operation. A synthetic 12-V drain-source exposure exceeds the 8-V stress limit; low gate-voltage specifications cannot establish an AO3400A replacement. Actual overshoot and margins remain unknown.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+        "revision": "S11-1388-Rev. A",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1,
+          2
+        ],
+        "section": "Absolute maximum ratings; stress disclaimer",
+        "source_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash and size. No measured bounding boxes or human review claimed; Poppler reconstruction warning retained.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "si2342ds-drive-03",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "kind": "electrical_characteristic",
+      "parameter": "threshold_not_on_resistance_drive",
+      "value": {
+        "VGS_threshold_min_V": 0.35,
+        "VGS_threshold_max_V": 0.8,
+        "ID_test_uA": 250,
+        "VDS_equals_VGS": true,
+        "TJ_C": 25
+      },
+      "unit": null,
+      "conditions": "Threshold test at a small current is not useful-load enhancement or an RDS(on) guarantee. No typical threshold value is specified in this row.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+        "revision": "S11-1388-Rev. A",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Static gate-source threshold voltage",
+        "source_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash and size. No measured bounding boxes or human review claimed; Poppler reconstruction warning retained.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "si2342ds-drive-04",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "kind": "electrical_characteristic",
+      "parameter": "low_gate_voltage_on_resistance_conditions",
+      "value": {
+        "rows": [
+          {
+            "VGS_V": 1.8,
+            "ID_A": 6.4,
+            "RDS_typ_ohm": 0.018,
+            "RDS_max_ohm": 0.022
+          },
+          {
+            "VGS_V": 1.2,
+            "ID_A": 1.3,
+            "RDS_typ_ohm": 0.025,
+            "RDS_max_ohm": 0.075
+          }
+        ],
+        "TJ_C": 25,
+        "pulse_width_max_us": 300,
+        "duty_cycle_max_percent": 2,
+        "hot_RDS_max_ohm": null
+      },
+      "unit": null,
+      "conditions": "Selected table rows and footnote a only. Specified test currents are not continuous board-current recommendations. VGS is gate relative to source, not unloaded GPIO voltage. No hot-junction guarantee or arbitrary interpolation between gate voltages is inferred.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+        "revision": "S11-1388-Rev. A",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Static drain-source on-state resistance; note a",
+        "source_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash and size. No measured bounding boxes or human review claimed; Poppler reconstruction warning retained.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "si2342ds-drive-05",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "kind": "thermal_characteristic",
+      "parameter": "duration_and_reference_dependent_thermal_resistance",
+      "value": {
+        "RthJA_short_typ_C_per_W": 75,
+        "RthJA_short_max_C_per_W": 100,
+        "short_duration_max_s": 5,
+        "RthJA_steady_max_C_per_W": 166,
+        "RthJF_steady_typ_C_per_W": 40,
+        "RthJF_steady_max_C_per_W": 50,
+        "ambient_test_board_inch": [
+          1,
+          1
+        ],
+        "ambient_test_board_material": "FR4",
+        "foot_reference": "drain"
+      },
+      "unit": null,
+      "conditions": "Page-1 thermal table and notes b/d: the ambient result depends on mounting and duration; junction-to-foot is a different reference. These are not interchangeable with a user board or an ambient-only continuous-power allowance.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+        "revision": "S11-1388-Rev. A",
+        "pdf_page_index": 0,
+        "printed_page": 1,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Thermal resistance ratings and notes b/d",
+        "source_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash and size. No measured bounding boxes or human review claimed; Poppler reconstruction warning retained.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "si2342ds-drive-06",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "manufacturer": "Vishay Siliconix",
+      "device": "Si2342DS-T1-GE3",
+      "variant": "Si2342DS single N-channel; exact T1-GE3 orderable",
+      "package": "SOT-23 (TO-236)",
+      "kind": "electrical_characteristic",
+      "parameter": "gate_charge_at_specified_drive_not_pwm_qualification",
+      "value": {
+        "Qg_typ_nC": 6,
+        "Qg_max_nC": 9,
+        "VDS_V": 4,
+        "VGS_V": 2.5,
+        "ID_A": 7.2,
+        "TJ_C": 25,
+        "guaranteed_by_design": true,
+        "production_tested": false,
+        "Qg_at_1_8V_nC": null,
+        "qualified_pwm_frequency_Hz": null
+      },
+      "unit": null,
+      "conditions": "Selected total-charge row and dynamic note b. Neither this 2.5-V charge nor static low-VGS resistance supplies 1.8-V switching time, actual driver current, load energy, loss or thermal qualification.",
+      "evidence": {
+        "url": "https://www.vishay.com/docs/63302/si2342ds.pdf",
+        "revision": "S11-1388-Rev. A",
+        "pdf_page_index": 1,
+        "printed_page": 2,
+        "supporting_pdf_pages": [
+          2
+        ],
+        "section": "Dynamic total gate charge; note b",
+        "source_sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "method": "Collector and distinct Agent reviewer inspected cited pages rendered from the same byte-identified source. Reviewer independently recomputed source hash and size. No measured bounding boxes or human review claimed; Poppler reconstruction warning retained.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "si2342ds-drive-waveform-unknown",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual loaded GPIO voltage/current, source bounce, VGS/VDS waveforms, duty, repetition, inductive energy and clamp behavior are unknown. No 12-V switching-stage suitability, automatic replacement or safe PWM rate is established.",
+      "provenance": {
+        "actor": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "recorded_at": "2026-10-28T20:17:19.741328+00:00"
+      }
+    },
+    {
+      "id": "si2342ds-drive-thermal-unknown",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "PCB copper, mounting, airflow, foot/ambient/junction temperatures and losses are unknown. Pulse-tested resistance and short-duration thermal data cannot certify continuous load current or a hot RDS(on) maximum.",
+      "provenance": {
+        "actor": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "recorded_at": "2026-10-28T20:17:19.741328+00:00"
+      }
+    },
+    {
+      "id": "si2342ds-source-container-warning",
+      "source_id": "si2342ds-vishay-63302-a-sot23",
+      "issue_status": "SOURCE_PROCESSING_LIMITATION",
+      "description": "Poppler reconstructed a missing PDF xref entry in memory while reading the unchanged downloaded bytes. Cited pages 1-2 were visually readable, but clean whole-container validity, precise bounding boxes and all-page content review are not claimed.",
+      "provenance": {
+        "actor": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+        "recorded_at": "2026-10-28T20:17:19.741328+00:00"
+      }
+    }
+  ],
+  "limitations": [
+    "Exact Si2342DS-T1-GE3/SOT-23 only; not interchangeable with AO3400A.",
+    "Original annotations are noncanonical; no human review, complete device model, complete footprint or qualified circuit.",
+    "Original bytes/extracts/renders stay local and outside Git/package; normal readers remain NOT_LOCALLY_VERIFIED.",
+    "Electrical revision date differs from legal appendix and PDF container creation dates."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T20:17:19.741328+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds",
+      "authority": "OWNER_DELEGATION",
+      "timestamp": "2026-10-28T20:20:02.376484+00:00",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "draft_sha256": "686df148a73bae539baf93115451483d8acc0e97b31240c26a18953e1d75e0e0",
+      "notes": "Independently verified local bytes, size and page count; rerendered and inspected pages 1-2; read legal page 9 and electrical revision footers on pages 3-6. All six full facts and three warnings checked. No factual correction required; acceptance and actual review provenance only."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/continue_pcbknowledge_iteration/collect_low_voltage_mosfet/review_si2342ds",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T20:20:02.376484+00:00",
+    "scope": "Independent same-byte factual and complete-payload review; not human review, canonical approval, open-license clearance or circuit qualification. Collector live-download attribution retained; reviewer verified local source bytes, not HTTP behavior.",
+    "draft_sha256": "686df148a73bae539baf93115451483d8acc0e97b31240c26a18953e1d75e0e0",
+    "source_byte_check": {
+      "sha256": "eba3913f3b9856077dd8ba9b1e81d691fbe958c759075b89ff7fcb605f0e0a03",
+      "byte_size": 208998,
+      "pdf_pages": 9,
+      "visual_pages": [
+        1,
+        2
+      ],
+      "legal_text_pages": [
+        9
+      ],
+      "processing_warning": "Poppler xref num 103 missing; reconstructed in memory. Cited pages legible, not clean whole-container validation."
+    },
+    "fact_visual_pages": {
+      "si2342ds-drive-01": [
+        1
+      ],
+      "si2342ds-drive-02": [
+        1,
+        2
+      ],
+      "si2342ds-drive-03": [
+        2
+      ],
+      "si2342ds-drive-04": [
+        2
+      ],
+      "si2342ds-drive-05": [
+        1
+      ],
+      "si2342ds-drive-06": [
+        2
+      ]
+    },
+    "source_warning_review": "All three complete warnings retained: actual waveform/driver and thermal inputs unknown; source-container reconstruction explicit. No generic replacement, 12-V suitability, hot resistance, safe PWM frequency or complete footprint inferred."
+  }
+}

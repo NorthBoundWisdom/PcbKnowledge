@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **27 reviewed batches, 39 batch-local source/device scopes, and 264 factual
+This queue contains **28 reviewed batches, 40 batch-local source/device scopes, and 270 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -36,6 +36,7 @@ provenance and batch bytes are preserved.
 | [Resistor rating constraints](vishay-crcw060310k0fkea-rating-constraints.json) | Vishay CRCW060310K0FKEA/0603 | 7 | Exact independently reviewed handoff; [receipt](vishay-crcw060310k0fkea-rating-constraints-review.md) |
 | [MLCC capacitance constraints](kemet-c0603c104k5ractu-capacitance-constraints.json) | KEMET C0603C104K5RACTU/0603, exact part and family scopes | 8 | Exact independently reviewed handoff; [receipt](kemet-c0603c104k5ractu-capacitance-constraints-review.md) |
 | [Inductor current constraints](bourns-srp4020ta-4r7m-current-constraints.json) | Bourns SRP4020TA-4R7M, exact lead-frame SMD | 6 | Exact independently reviewed handoff; [receipt](bourns-srp4020ta-4r7m-current-constraints-review.md) |
+| [Low-voltage MOSFET drive](si2342ds-low-voltage-drive-constraints.json) | Vishay Si2342DS-T1-GE3/SOT-23 (TO-236) | 6 | Actual hash and independent page 1/2 visual review; source-container warning retained; [receipt](si2342ds-low-voltage-drive-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -163,9 +164,20 @@ upgraded by integration; batch-local warnings remain retrievable.
 
 ## Inductor handoff integration
 
-The [current aggregate replay](../../docs/intake-evaluation-inductor.md) adds the
+The [inductor aggregate replay](../../docs/intake-evaluation-inductor.md) adds the
 exact reviewed six-record Bourns pair and preserves three complete warnings.
 Inductance-drop and heating-current criteria are not interchangeable. Unknown
 matched sample, mounting and curve-test conditions do not establish manufacturer
 error or support a higher graph-derived rating. No hot-loss model, complete CAD
 footprint or assembled-board qualification is inferred.
+
+## Low-voltage MOSFET drive integration
+
+The [current aggregate replay](../../docs/intake-evaluation-low-voltage-mosfet.md)
+adds six exact-orderable Si2342DS-T1-GE3 annotations and three full warnings.
+Gate threshold is not useful-load enhancement; the 1.2 V and 1.8 V on-resistance
+rows retain their test currents, temperature and pulse conditions. Short-time and
+steady-state thermal references differ. Gate charge at 2.5 V does not qualify PWM
+at 1.8 V. The 8 V drain stress limit does not permit a 12 V application or an
+AO3400A substitution. Actual waveform and board qualification remain unknown;
+Poppler's source-container recovery is disclosed, not upgraded to clean validation.
