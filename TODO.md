@@ -69,6 +69,27 @@ English/public/PDF.js guards and metadata-only Package exited 0. The original
 normal queries and packaged without originals. See the [dated disposition](docs/mcp23017-source-disposition-2026-10-28.md).
 Remote CI is checked separately for the published commit.
 
+## Network, memory and power application stage
+
+Issues #16 (CAN), #17 (EEPROM), and #18 (buck) add 23 reviewed conditional
+annotations and nine explicit application unknowns. One integrator owns the
+successor aggregate, tests and CI wiring; collectors own only their new pairs.
+The maintainer's coverage/read-only CLI and MCP6002 lane remain disjoint.
+
+The new `evals/intake-retrieval-network-memory-power.json` pins eleven batches /
+148 annotations while retaining immutable historical 100/125 receipts and full
+MCP23017 disposition metadata. Semantic mutation tests detect lost conditions,
+stress/typical/example promotion, ACK-to-persistence inference, page-wrap changes,
+unchecked LC acceptance and unknown-to-safety claims. This is not a circuit-answer
+engine or completion of the formal pilot. Final reconciled gates and exact-commit
+CI are recorded with the issue delivery receipts.
+Local integrated receipt: Build and Test each passed 222 tests without skips;
+all 114 full CLI cases passed. Config, workspace/Agent validation,
+English/public/PDF.js guards and Package exited 0. The package has 17 metadata
+members, including all eleven batches and the exact disposition, with no originals.
+Independent source and integration review found no blocker. Remote CI remains
+a separate exact-commit publication check.
+
 ## Next application-question milestones
 
 The accepted 100 annotations are a baseline, not a target to inflate. Prioritize

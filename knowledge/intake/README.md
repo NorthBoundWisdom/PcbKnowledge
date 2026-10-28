@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **8 reviewed batches, 19 batch-local source/device scopes, and 125 factual
+This queue contains **11 reviewed batches, 22 batch-local source/device scopes, and 148 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -17,6 +17,9 @@ provenance and batch bytes are preserved.
 | [LDO application constraints](ldo-application-constraints.json) | TI LM1117 adjustable/DCY; ST LD1117STR/SOT-223 | 8 | Two actual hashes and 11 independently inspected pages; [review](ldo-application-constraints-review.md) |
 | [ADC input/interface constraints](ads1115-input-interface-constraints.json) | ADS1115IDGSR/DGS | 9 | Actual hash and 12 independently inspected pages; [review](ads1115-input-interface-constraints-review.md) |
 | [Driver load/protection constraints](uln2003a-load-protection-constraints.json) | ULN2003ADR/D | 8 | Actual hash and 9 independently inspected pages; [review](uln2003a-load-protection-constraints-review.md) |
+| [CAN network constraints](sn65hvd230-network-constraints.json) | SN65HVD230DR/D | 8 | Actual hash and distinct rendered-page review; [receipt](sn65hvd230-network-constraints-review.md) |
+| [EEPROM transactions](24lc256-write-transaction-constraints.json) | 24LC256-I/SN | 7 | Actual hash and distinct rendered-page review; [receipt](24lc256-write-transaction-constraints-review.md) |
+| [Buck component/layout constraints](tps62160-component-layout-constraints.json) | TPS62160DSGR/DSG | 8 | Actual hash and rendered Table 2 cell review; [receipt](tps62160-component-layout-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -77,3 +80,13 @@ eight batches and retains separately pinned source dispositions. The original
 100-record manifest and owner receipt remain immutable historical baselines.
 Candidate retrieval is not electrical permission, typical-to-guaranteed conversion,
 cross-vendor interchangeability, or a complete protection/thermal design.
+
+## Network, memory and power extension
+
+Three further reviewed batches add 23 bounded annotations and nine unknown-input
+warnings. CAN timing/topology, EEPROM write semantics and buck effective-component
+constraints remain conditional candidates, not network qualification, persistence
+assurance or PCB sign-off. A distinct Agent inspected actual source hashes and
+cited rendered pages, including the checked LC matrix cells. The current
+[successor replay](../../docs/intake-evaluation-network-memory-power.md) retains
+historical 100/125 manifests and the separately pinned MCP23017 disposition.
