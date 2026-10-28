@@ -24,10 +24,12 @@ The P0 software path is implemented end-to-end: Agents can prepare typed Source/
 
 ## Curated intake
 
-The first batch contains 3 TI sources and 20 independently Agent-reviewed annotations.
-Source hashes and seven rendered-page review receipts are retained; exact orderable
-identity and region bounding boxes remain unresolved. This is not a complete device
-model or a formal pilot pass. Review details live in `knowledge/intake/`.
+The collection contains 5 batches, 15 source/device scopes and 100 independently
+Agent-reviewed annotations. Evidence levels differ by item; the six Nexperia
+observations remain text-only. Full orderable identity in the initial batch and
+precise region bounding boxes remain unresolved. This is not a complete device
+model or a formal pilot pass. See the [collection index](knowledge/intake/README.md)
+and [replayable retrieval evaluation](docs/intake-evaluation-100.md).
 
 ```bash
 python3 configs/pcbknowledge_agent.py --repo . intake list

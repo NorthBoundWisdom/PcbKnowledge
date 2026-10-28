@@ -1,0 +1,200 @@
+{
+  "format": "pcbknowledge-intake-retrieval-eval-v1",
+  "files": {
+    "knowledge/intake/cross-manufacturer-pilot.json": "e13060b1ac0a2b03ee742bf06c6b019cd04f46e74974d7b087408bfd6442bc97",
+    "knowledge/intake/interface-ic-pilot.json": "3738281495ba3e2fa1120e0f501239ab1608c6ce0781e7dc4b5c0f2b32b7ab55",
+    "knowledge/intake/power-monitor-gpio-pilot.json": "32ac40f0a7e5e35e2840a032e2575394c1dc1e5ef26e1fbe3bacaa7133f02e2a",
+    "knowledge/intake/ti-three-ic-pilot.json": "33de0de3404f1c81e540dab4dceb72ae1f14de242a1ec7fd9fac53a618a4be08",
+    "knowledge/intake/timer-reference-driver-pilot.json": "e2539fa657705a79dc6245cedb1b98c1a2eb0237e865deb7afa064a5167fe695"
+  },
+  "cases": [
+    {
+      "id": "legacy-negative-mention",
+      "command": "search",
+      "query": "LM1117 absolute",
+      "filters": {},
+      "expected": [
+        "knowledge/intake/cross-manufacturer-pilot.json#b002-st-ld1117-r38-05",
+        "knowledge/intake/ti-three-ic-pilot.json#ti-lm1117-q-04"
+      ]
+    },
+    {
+      "id": "exact-source-stress",
+      "command": "search",
+      "query": "absolute",
+      "filters": {
+        "source_id": "ti-lm1117-q"
+      },
+      "expected": [
+        "knowledge/intake/ti-three-ic-pilot.json#ti-lm1117-q-04"
+      ]
+    },
+    {
+      "id": "exact-manufacturer-stress",
+      "command": "search",
+      "query": "LM1117 absolute",
+      "filters": {
+        "manufacturer": "Texas Instruments"
+      },
+      "expected": [
+        "knowledge/intake/ti-three-ic-pilot.json#ti-lm1117-q-04"
+      ]
+    },
+    {
+      "id": "operating-not-stress-or-pin",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "device": "LM1117",
+        "kind": "recommended_operating",
+        "parameter": "VIN_to_GND"
+      },
+      "expected": [
+        "knowledge/intake/ti-three-ic-pilot.json#ti-lm1117-q-05"
+      ]
+    },
+    {
+      "id": "temperature-is-source-scoped-condition",
+      "command": "search",
+      "query": "temperature",
+      "filters": {
+        "source_id": "ti-sn74hc00-h"
+      },
+      "expected": [
+        "knowledge/intake/ti-three-ic-pilot.json#ti-sn74hc00-h-05",
+        "knowledge/intake/ti-three-ic-pilot.json#ti-sn74hc00-h-06",
+        "knowledge/intake/ti-three-ic-pilot.json#ti-sn74hc00-h-07"
+      ]
+    },
+    {
+      "id": "conditional-stress-values-not-collapsed",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "device": "LD1117STR",
+        "parameter": "input_voltage"
+      },
+      "expected": [
+        "knowledge/intake/cross-manufacturer-pilot.json#b002-st-ld1117-r38-05",
+        "knowledge/intake/cross-manufacturer-pilot.json#b002-st-ld1117-r38-06"
+      ]
+    },
+    {
+      "id": "legacy-pg-also-matches-pgnd",
+      "command": "search",
+      "query": "TPS62160 PG",
+      "filters": {},
+      "expected": [
+        "knowledge/intake/power-monitor-gpio-pilot.json#b005-ti-tps62160-02",
+        "knowledge/intake/power-monitor-gpio-pilot.json#b005-ti-tps62160-06"
+      ]
+    },
+    {
+      "id": "exact-pg-keeps-off-state-condition",
+      "command": "search",
+      "query": "TPS62160 PG",
+      "filters": {
+        "parameter": "PG"
+      },
+      "expected": [
+        "knowledge/intake/power-monitor-gpio-pilot.json#b005-ti-tps62160-06"
+      ]
+    },
+    {
+      "id": "structured-package-and-orderable-device",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "device": "TPS62160DSGR",
+        "package": "DSG, 8-pin WSON",
+        "parameter": "PG"
+      },
+      "expected": [
+        "knowledge/intake/power-monitor-gpio-pilot.json#b005-ti-tps62160-06"
+      ]
+    },
+    {
+      "id": "prose-package-is-not-identity",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "source_id": "ti-lm1117-q",
+        "package": "DCY"
+      },
+      "expected": []
+    },
+    {
+      "id": "unknown-device-not-inferred",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "device": "LM358B"
+      },
+      "expected": []
+    },
+    {
+      "id": "orderable-suffix-not-discarded",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "device": "TPS62160",
+        "parameter": "PG"
+      },
+      "expected": []
+    },
+    {
+      "id": "case-sensitive-filter",
+      "command": "search",
+      "query": "",
+      "filters": {
+        "device": "lm1117"
+      },
+      "expected": []
+    },
+    {
+      "id": "supply-pin-keeps-full-source-warning",
+      "command": "search",
+      "query": "MCP23017 supply",
+      "filters": {},
+      "expected": [
+        "knowledge/intake/power-monitor-gpio-pilot.json#b005-microchip-mcp23017-01"
+      ]
+    },
+    {
+      "id": "warning-not-fabricated-as-fact",
+      "command": "search",
+      "query": "MCP23017 AMBIGUITY",
+      "filters": {},
+      "expected": []
+    },
+    {
+      "id": "warning-query-is-discoverable",
+      "command": "issues",
+      "query": "MCP23017 AMBIGUITY",
+      "filters": {},
+      "expected": [
+        "knowledge/intake/power-monitor-gpio-pilot.json#MCP23017-SUPPLY-TEMPERATURE-AMBIGUITY"
+      ]
+    },
+    {
+      "id": "filter-only-warning-lookup",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "microchip-mcp23017"
+      },
+      "expected": [
+        "knowledge/intake/power-monitor-gpio-pilot.json#MCP23017-SUPPLY-TEMPERATURE-AMBIGUITY"
+      ]
+    },
+    {
+      "id": "warning-does-not-leak-to-other-source",
+      "command": "issues",
+      "query": "",
+      "filters": {
+        "source_id": "ti-tps62160"
+      },
+      "expected": []
+    }
+  ]
+}

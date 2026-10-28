@@ -51,6 +51,9 @@ jobs:
       - name: Validate authority
         run: python configs/pcbknowledge_agent.py validate
 
+      - name: Replay pinned intake retrieval cases
+        run: python configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-100.json
+
       - name: Package reproducibility surface
         run: python configs/pcbknowledge_workflow.py package
 
@@ -95,3 +98,6 @@ jobs:
 
       - name: Test
         run: python configs/pcbknowledge_workflow.py test
+
+      - name: Replay pinned intake retrieval cases
+        run: python configs/pcbknowledge_intake_eval.py --repo . --cases evals/intake-retrieval-100.json

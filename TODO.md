@@ -1,7 +1,7 @@
 # TODO — PcbKnowledge Roadmap
 
 > Status: `LIGHTWEIGHT_CURATION_ACTIVE_FORMAL_PILOT_OPEN`
-> Updated: 2026-10-27
+> Updated: 2026-10-28
 > Goal: accumulate reviewable small summaries under owner delegation while preserving evidence limitations; keep the formal PDF/typed-authority pilot separate.
 
 ## 0. Permanent boundaries
@@ -26,19 +26,29 @@
 - [x] Expand the curated collection to 5 batches / 15 device scopes / 100 unique reviewed annotations. Ninety-four have byte-identity and visual-page receipts; 6 Nexperia observations remain explicitly text-only. Preserve the MCP23017 source-wording discrepancy without synthesizing a supply envelope. Precise bbox and full component coverage remain unresolved.
 - [x] Verify `typed-v2-local-cache`, metadata-only packages, and repository-wide index/working-tree guards.
 - [x] Add read-only `intake list` / `intake search` retrieval without mixing curation into canonical published Facts.
-- [x] Delegate independent exact-identity and pinned-snapshot work through [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10) and [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11); these issues remain open until reviewed.
+- [x] Independently verify exact identity, pinned-snapshot parity and structured intake filters; [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10), [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11) and [#12](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/12) accepted and closed on 2026-10-28.
 - [ ] Complete byte identity, visual anchors, revision drift, and negative-case coverage in the formal pilot.
 
 Local receipt (2026-10-27): 141 tests pass; config/build/test, workspace/authority validation, repository-wide staged/worktree text-size gate, English guard, pinned PDF.js hashes, and metadata-only package pass. Read-only independent code audit cleared after cache-retention and alternate-folder original guards were repaired. Intake retrieval returns 1 batch / 20 annotations (LM358 search: 7); canonical counts remain zero. Remote CI is checked separately after the authorized main push, not inferred from these local results.
 
 Cross-platform correction receipt: commit `8515bf5` passed all four jobs in [CI run 40552649329](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/runs/40552649329), including 143 Windows tests. This fixed native symlink separators without relaxing the pinned-target boundary. The following data-only expansion retains the same executable contract and is verified separately; see the [collection index](knowledge/intake/README.md) and [23-query evaluation receipt](docs/intake-evaluation-100.md).
 
-Issue implementation receipt (2026-10-27; maintainer verification remains open):
+Issue implementation receipt (2026-10-27; independently verified 2026-10-28):
 
 - [#10](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/10): exact component identity uses manufacturer ID and outer-trimmed raw MPN, preserving case, Unicode, punctuation, suffixes and internal whitespace. Existing serialized records, IDs, Fact references and approved bytes are unchanged.
 - [#11](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/11): the publication equality gate and scenario receipts share one canonical-content fingerprint; local evidence availability is excluded and existing approval/stale-receipt protections remain.
 - [#12](https://github.com/NorthBoundWisdom/PcbKnowledge/issues/12): exact structured intake filters precede lexical candidate retrieval; missing structured fields fail closed. Full batch-local source warnings remain distinct and retrievable through `intake issues`.
 - Combined local verification: 169 tests passed with no skips; English/public-source/PDF.js guards, workspace validation, Config, Build, Test, Agent validate and Package passed. Independent focused review passed 25 tests without blocking findings. No live intake data, schema or cache policy changed. Remote CI is verified separately after publication.
+
+Current retrieval evaluation: [18 pinned real-data CLI cases](docs/intake-evaluation-100.md)
+exercise the existing 100 annotations without adding records. The replay is wired
+into the existing CI jobs; synthetic mutation tests detect lost conditions,
+warnings/provenance and incorrect selections even with unchanged counts.
+Local receipt (2026-10-28): 178 tests passed with no skips in both Build and Test;
+all 18 pinned CLI cases passed. English/public-source/PDF.js guards, workspace and
+Agent validation, Config and metadata-only Package also exited 0. The archive
+contains only five intake batches, the workspace manifest, three schemas and its
+derived manifest. Remote CI for this stage must be verified after publication.
 
 See [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md). Historic receipts below describe their original stage, not a claim that the new pilot is complete.
 
