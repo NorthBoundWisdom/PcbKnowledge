@@ -1030,6 +1030,12 @@ def _intake_list(repository: KnowledgeRepository, arguments: argparse.Namespace)
     return 0
 
 
+def _intake_coverage(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake_coverage import intake_coverage
+    _print(intake_coverage(repository.root))
+    return 0
+
+
 def _intake_search(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     from pcbknowledge.git_native.intake import search_intake
     _print(search_intake(repository.root, arguments.query,
@@ -1632,6 +1638,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     intake_actions = intake_parser.add_subparsers(dest="intake_action", required=True)
     intake_list = intake_actions.add_parser("list")
     intake_list.set_defaults(handler=_intake_list)
+    intake_coverage = intake_actions.add_parser(
+        "coverage", allow_abbrev=False,
+        help="inventory recorded scope, evidence metadata and gaps; not completeness or readiness")
+    intake_coverage.set_defaults(handler=_intake_coverage)
     intake_search = intake_actions.add_parser(
         "search", allow_abbrev=False,
         help="retrieve fact candidates, not electrical answers; see intake issues")
@@ -1684,7 +1694,10 @@ def _error_code(error: BaseException) -> str:
 def main(argv: list[str] | None = None) -> int:
     arguments = parse_args(argv)
     try:
-        repository = _repository(arguments.repo)
+        # Coverage must not create canonical/cache directories even in a fresh
+        # Git workspace. Other commands keep their existing layout contract.
+        repository = (KnowledgeRepository(Path(arguments.repo))
+                      if arguments.handler is _intake_coverage else _repository(arguments.repo))
         return int(arguments.handler(repository, arguments))
     except (OSError, ValueError, RepositoryError) as error:
         payload = {
