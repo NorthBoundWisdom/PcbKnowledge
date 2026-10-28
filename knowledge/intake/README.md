@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **20 reviewed batches, 31 batch-local source/device scopes, and 216 factual
+This queue contains **22 reviewed batches, 33 batch-local source/device scopes, and 228 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -29,6 +29,8 @@ provenance and batch bytes are preserved.
 | [RS-485 interface constraints](sn65hvd75-rs485-interface-constraints.json) | SN65HVD75DR/D | 9 | Actual hash and HVD75-specific timing/load review; [receipt](sn65hvd75-rs485-interface-constraints-review.md) |
 | [MOSFET drive constraints](ao3400a-gate-drive-constraints.json) | AOS AO3400A/SOT23; full orderable unknown | 8 | Exact independently reviewed maintainer handoff; [receipt](ao3400a-gate-drive-constraints-review.md) |
 | [Rectifier constraints](vishay-ss14-rectifier-constraints.json) | Vishay SS14/SMA; full orderable unknown | 7 | Exact independently reviewed maintainer handoff; [receipt](vishay-ss14-rectifier-constraints-review.md) |
+| [TVS pulse constraints](vishay-smbj5-0a-tvs-pulse-constraints.json) | Vishay SMBJ5.0A/SMB, unidirectional | 8 | Exact independently reviewed handoff; [receipt](vishay-smbj5-0a-tvs-pulse-constraints-review.md) |
+| [Connector geometry](wurth-61300211121-connector-geometry.json) | Wurth 61300211121, straight two-position header | 4 | Exact independently reviewed handoff; [receipt](wurth-61300211121-connector-geometry-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -123,15 +125,24 @@ INA219 calibration/register/readiness, TL431 divider/current/stability and NE555
 mode/timing constraints retain exact grade/package and source test conditions.
 Two source-wording discrepancies remain unresolved: INA219 CNVR clearing language
 and TL431 reference-current equation signs. No correction or circuit permission is
-inferred. The [current replay](../../docs/intake-evaluation-measurement-timing.md)
+inferred. The [historical replay](../../docs/intake-evaluation-measurement-timing.md)
 preserves all earlier snapshots and the separate MCP23017 disposition. New records
 do not inherit the owner's original 100-record acceptance.
 
 ## Reset, interface and discrete stage
 
-The [current aggregate replay](../../docs/intake-evaluation-reset-rs485-discretes.md)
+The [historical aggregate replay](../../docs/intake-evaluation-reset-rs485-discretes.md)
 adds the TPS3808G33 and SN65HVD75 issue lanes plus the exact reviewed AO3400A and
 SS14 handoff pairs. No old annotation or review receipt was rewritten. Reset
 validity, interface timing/load, gate-drive, waveform and thermal conditions are
 not universal board guarantees. Missing inputs remain batch-local warnings;
 source wording conflicts are not resolved by Agent acceptance.
+
+## TVS and connector handoff integration
+
+The [current aggregate replay](../../docs/intake-evaluation-tvs-connector.md)
+adds twelve original annotations and four warnings from exact accepted handoffs.
+Pulse/current/thermal conditions are not DC or system protection guarantees.
+Connector dimensions do not constitute a complete footprint, numbered pin map or
+electrical polarity. Original source rights and missing application inputs remain
+explicit. Both JSON/review pairs and all prior receipts stay byte-identical.
