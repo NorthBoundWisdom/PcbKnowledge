@@ -124,6 +124,7 @@ def page(
       {nav('/sources', 'Sources', 'sources')}
       {nav('/entities', 'Entities', 'entities')}
       {nav('/facts', 'Facts', 'facts')}
+      {nav('/intake', 'Curated intake', 'intake')}
       {nav('/diff', f'Changes ({change_count})', 'diff')}
     </nav>
   </header>

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import secrets
+import re
 import sys
 from dataclasses import dataclass
 from email import policy
@@ -47,6 +48,11 @@ from pcbknowledge.git_native.workbench_views import (
 )
 
 
+from pcbknowledge.git_native.intake import IntakeError
+from pcbknowledge.git_native.intake_workbench import IntakeBrowseApplication
+from pcbknowledge.git_native.intake_views import render_intake
+
+
 DEFAULT_PORT = 18080
 MAX_FORM_BYTES = MAX_PDF_BYTES + 2 * 1024 * 1024
 
@@ -76,6 +82,7 @@ class EditorHTTPServer(ThreadingHTTPServer):
         super().__init__(address, EditorRequestHandler)
         self.repository = repository
         self.application = WorkbenchApplication(repository)
+        self.intake_application = IntakeBrowseApplication(repository.root)
         self.csrf_token = secrets.token_urlsafe(32)
 
 
@@ -110,7 +117,7 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             self._send_error_page(error.status, str(error))
         except RecordNotFoundError:
             self._send_error_page(HTTPStatus.NOT_FOUND, "Record not found.")
-        except (RecordValidationError, EvidenceError, RepositoryError) as error:
+        except (RecordValidationError, EvidenceError, RepositoryError, IntakeError) as error:
             self._send_error_page(HTTPStatus.BAD_REQUEST, str(error))
 
     def do_POST(self) -> None:  # noqa: N802
@@ -151,6 +158,19 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         if path in {"/", "/review"}:
             overview = self.application.overview()
             self._send_html(render_review(overview, workspace=self.repository.root))
+            return
+        if path == "/intake":
+            if len(parsed.query) > 8192 or re.search(r"%(?![0-9A-Fa-f]{2})", parsed.query):
+                raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Malformed or oversized intake query.")
+            try:
+                parameters = parse_qs(parsed.query, keep_blank_values=True,
+                                      strict_parsing=True, errors="strict", max_num_fields=10)
+            except ValueError as error:
+                raise HTTPRequestError(HTTPStatus.BAD_REQUEST, "Invalid intake query encoding.") from error
+            self._send_html(render_intake(
+                self.editor_server.intake_application.browse(parameters),
+                change_count=self.repository.git_changes().count,
+            ))
             return
         if path == "/sources":
             selected = self._status_filter(parsed.query)

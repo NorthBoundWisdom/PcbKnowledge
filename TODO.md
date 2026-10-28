@@ -566,3 +566,13 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   AC/pulse and wrong-identity substitutions. Fourteen focused tests pass, including
   441 exact grid points and false-qualification mutations. Full gates and exact
   published-commit CI remain separate publication checks.
+
+## Read-only intake workbench
+
+- [x] Expose curated fact candidates and source issues through the existing local
+  workbench's [read-only intake page](docs/intake-workbench.md), bound exclusively
+  to the selected workspace with exact filters, explicit pagination and complete
+  escaped candidate payloads. No canonical approval or original-file access.
+- Focused synthetic tests include actual loopback HTTP, external-workspace isolation,
+  malformed/duplicate filters, escaping, warning/disposition preservation and POST
+  rejection. Full gates and exact-commit CI are separate publication checks.

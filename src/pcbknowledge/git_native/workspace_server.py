@@ -9,6 +9,7 @@ from http.server import ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from pcbknowledge.git_native.intake_workbench import IntakeBrowseApplication
 from pcbknowledge.git_native.evidence_review import EvidenceReviewApplication
 from pcbknowledge.git_native.evidence_review_views import render_fact_evidence_review
 from pcbknowledge.git_native.pdfjs_vendor import PdfJsVendorError, validate_pdfjs_vendor
@@ -136,6 +137,7 @@ class WorkspaceEditorHTTPServer(EditorHTTPServer):
         ThreadingHTTPServer.__init__(self, address, WorkspaceEditorRequestHandler)
         self.repository = repository
         self.application = WorkbenchApplication(repository)
+        self.intake_application = IntakeBrowseApplication(repository.root)
         self.csrf_token = secrets.token_urlsafe(32)
 
 
