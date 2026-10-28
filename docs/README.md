@@ -17,6 +17,12 @@
 | Architecture decisions and current status | [`adr/README.md`](adr/README.md) |
 | Current phase, unfinished work, and completion gates | [`../TODO.md`](../TODO.md) |
 
+## Worked examples
+
+- [Synthetic DC resistor bound](worked-examples/resistor-dc-bound.md): exact
+  interval arithmetic with explicitly supplied operating resistance; reference-only
+  power comparison, not board qualification.
+
 ## Maintenance rules
 
 1. Keep one durable authority per topic. Adjacent documents link to it instead of copying status, boundaries, or schema contracts.

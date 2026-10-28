@@ -527,3 +527,11 @@ Use the narrowest relevant tests during editing, then the applicable repository 
   authority validation, unchanged 228-annotation aggregate/disposition replay and
   Package all exit zero. Independent security review cleared the implementation.
   Exact published-commit cross-platform CI is checked separately after publication.
+
+## Bounded synthetic resistor worked example
+
+- [x] Document a [DC resistor bound](docs/worked-examples/resistor-dc-bound.md)
+  with independently supplied synthetic operating resistance and exact arithmetic.
+  The embedded standard-library check and independent arithmetic/source-linkage
+  review pass; this is not an added annotation or application qualification.
+  The frozen practical evaluation and all source records remain unchanged.
