@@ -4,6 +4,20 @@
 > Updated: 2026-10-28
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reset, RS-485 and discrete integration
+
+Issues #22 and #23 add fixed-threshold reset and HVD75-specific interface
+constraints. The same integrator carries the exact reviewed AO3400A and Vishay
+SS14 metadata pairs, without recollection or replacement of newer source handling.
+The coherent collection is 20 batches / 31 source scopes / 216 annotations.
+Historical 100/125/148/162/184 manifests, receipts, prior intake bytes and the
+MCP23017 disposition are preserved. The new successor is
+`evals/intake-retrieval-reset-rs485-discretes.json`, with the separate disposition
+replay retained in both CI jobs. Maintainer TVS/tool work is not included.
+See the [evaluation receipt](docs/intake-evaluation-reset-rs485-discretes.md)
+for final gates and evidence boundaries; publication and exact-commit CI are
+reported in the issue handoffs.
+
 ## 0. Permanent boundaries
 
 - The public repository also accepts small original curated summaries and metadata; never source originals or private material.

@@ -1,0 +1,652 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "rs485-app-interface-constraints-20261028",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-28",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+    "collected_at": "2026-10-28T04:58:22.856360+00:00"
+  },
+  "sources": [
+    {
+      "id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "revision": "SLLSE11H",
+      "revision_date": "2019-03",
+      "packaging_addendum_date": "2026-07-15",
+      "document_url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+      "pdf_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+      "pdf_byte_size": 1554999,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-28",
+      "latest_revision_guaranteed": false,
+      "identity_evidence": {
+        "pdf_page_index": 28,
+        "printed_page": "Addendum-Page 2",
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints"
+      },
+      "visual_pages": [
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        29
+      ],
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "redistribution_license": "Not asserted; original excluded from Git and packages",
+      "source_processing_lane": "Owner-authorized noncanonical public factual curation; no canonical license clearance asserted",
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "facts": [
+    {
+      "id": "rs485-app-01",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "bus_operating_envelope",
+      "value": {
+        "supply_V": {
+          "min": 3,
+          "nom": 3.3,
+          "max": 3.6
+        },
+        "bus_pin_separate_or_common_mode_V": {
+          "min": -7,
+          "max": 12
+        },
+        "differential_input_V": {
+          "min": -12,
+          "max": 12
+        },
+        "receiver_positive_threshold_mV": {
+          "min": null,
+          "typ": -70,
+          "max": -20,
+          "unit": "mV"
+        },
+        "receiver_negative_threshold_mV": {
+          "min": -200,
+          "typ": -150,
+          "max": null,
+          "unit": "mV"
+        },
+        "receiver_hysteresis_mV": {
+          "min": 50,
+          "typ": 80,
+          "max": null,
+          "unit": "mV"
+        },
+        "driver_differential_output_at_RL54ohm_V": {
+          "min": 1.5,
+          "typ": 2,
+          "max": null,
+          "unit": "V"
+        }
+      },
+      "unit": null,
+      "conditions": "Section 7.3 and 7.5 recommended operating conditions apply together. Threshold blanks are not zero bounds: footnote assures VIT+ is at least VHYS above VIT- under specific conditions. Both individual-pin/common-mode and differential constraints must hold. Ambient -40..125 C, junction -40..150 C; account for self-heating. Absolute maximum, transient and ESD ratings do not extend normal operation or prove board IEC/isolation compliance.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 4,
+        "printed_page": 5,
+        "supporting_pdf_pages": [
+          5,
+          6
+        ],
+        "section": "7.1-7.5",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-02",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "bus_loading_and_logic_levels",
+      "value": {
+        "bus_input_at_12V_uA": {
+          "min": null,
+          "typ": 75,
+          "max": 150,
+          "unit": "uA"
+        },
+        "bus_input_at_minus7V_uA": {
+          "min": -100,
+          "typ": -40,
+          "max": null,
+          "unit": "uA"
+        },
+        "logic_input_high_V": "2 to VCC",
+        "logic_input_low_V": "0 to 0.8",
+        "receiver_output_high_at_minus8mA_V": {
+          "min": 2.4,
+          "typ": "VCC - 0.3",
+          "max": null,
+          "unit": "V"
+        },
+        "receiver_output_low_at_8mA_V": {
+          "min": null,
+          "typ": 0.2,
+          "max": 0.4,
+          "unit": "V"
+        },
+        "receiver_load_fraction": "3/20 unit load"
+      },
+      "unit": null,
+      "conditions": "HVD75 bus-current rows require DE=0 V, VCC=3..3.6 V or 0 V. D/DE/RE logic levels require powered recommended operation; no arbitrary controller compatibility follows. The application discussion of at most 213 transceivers is loading-only, not approval of 213 nodes at any rate/cable/topology. HVD78 loading rows are excluded.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 6,
+        "printed_page": 7,
+        "supporting_pdf_pages": [
+          7,
+          5,
+          6,
+          19
+        ],
+        "section": "7.3;7.5;10.2.1.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-03",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "enable_polarity_and_standby",
+      "value": {
+        "DE_high": "Driver follows D: D high gives A high/B low; D low reverses polarity.",
+        "DE_low_or_open": "Driver high impedance.",
+        "RE_low": "Receiver enabled.",
+        "RE_high_or_open": "Receiver output high impedance.",
+        "D_open_with_DE_high": "Internal pullup selects A high/B low.",
+        "standby": "Both driver and receiver disabled.",
+        "standby_no_load_current_uA": {
+          "min": null,
+          "typ": 0.1,
+          "max": 2,
+          "unit": "uA"
+        }
+      },
+      "unit": null,
+      "conditions": "RE denotes the active-low receiver enable. Standby current row requires DE=GND, RE=VCC, D open and no load, over recommended conditions. Receiver-enabled driver-disabled operation is not standby. Control pin thresholds, actual output loading and supply remain relevant; tri-state does not prove bus release scheduling or contention avoidance.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 14,
+        "printed_page": 15,
+        "supporting_pdf_pages": [
+          15,
+          16,
+          7,
+          5
+        ],
+        "section": "9.1;9.4;7.5;7.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-04",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "conditional_receiver_failsafe",
+      "value": {
+        "enabled_receiver_open_short_idle": "High output for disconnected bus, A-B short, or idle terminated bus.",
+        "threshold_behavior": "VID=VA-VB above VIT+ selects high; below VIT- selects low; between thresholds is indeterminate.",
+        "noise_example": "Section 9.3 describes bus-idle or bus-short with VIT+=-20 mV and VHYS=50 mV maintaining high with 140 mV peak-to-peak differential noise."
+      },
+      "unit": null,
+      "conditions": "Receiver must be enabled (RE low) and operating voltage limits satisfied. An A-B short is not a short to arbitrary power or ground. The bounded noise example does not establish immunity to arbitrary noise, ground shift, transients or missing/incorrect termination; external bias suitability remains application dependent. No universal no-bias guarantee follows.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 14,
+        "printed_page": 15,
+        "supporting_pdf_pages": [
+          15,
+          16,
+          19,
+          6,
+          5
+        ],
+        "section": "9.3;9.4 Table 2;10.2.1.4;7.3;7.5",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-05",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "termination_and_topology",
+      "value": {
+        "placement": "For the typical parallel multipoint cable, terminate each cable end to its characteristic impedance.",
+        "stubs": "Keep node stubs short; driver edge time and cable propagation matter."
+      },
+      "unit": null,
+      "conditions": "Typical application guidance, not a universal 120-ohm prescription, termination at every node, or approval of star topology. Cable impedance/length, stubs, total loading, bias and removable nodes are unspecified. Cable-length examples do not guarantee 20 Mbps over 1200 m; the HVD75 20 Mbps device ceiling is not network qualification.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 17,
+        "printed_page": 18,
+        "supporting_pdf_pages": [
+          18,
+          19,
+          5
+        ],
+        "section": "10.2;10.2.1.1-10.2.1.3;7.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-06",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "driver_propagation_and_edges",
+      "value": {
+        "rise_fall": {
+          "min": 2,
+          "typ": 7,
+          "max": 14,
+          "unit": "ns"
+        },
+        "propagation": {
+          "min": 7,
+          "typ": 11,
+          "max": 17,
+          "unit": "ns"
+        },
+        "pulse_skew": {
+          "min": null,
+          "typ": 0,
+          "max": 2,
+          "unit": "ns"
+        },
+        "load": "RL=54 ohm +/-1%; CL=50 pF +/-20%",
+        "measurement": "Figure 12: D 0..3 V, DE=VCC; input 50% to differential output zero crossing for propagation; differential output 10%/90% for edges."
+      },
+      "unit": null,
+      "conditions": "SN65HVD75 section 7.8 only, over recommended operation, bit time >=50 ns. Missing minima remain unknown, not zero. Section 8 generator: 100 kbps, 50% duty, edges <6 ns, 50-ohm output. Fixture/instrument capacitance is included. These device measurements are not a complete controller/cable turnaround budget or collision-free protocol guarantee.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 7,
+        "printed_page": 8,
+        "supporting_pdf_pages": [
+          8,
+          11,
+          5
+        ],
+        "section": "7.8;8 Figure 12;7.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-07",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "driver_enable_disable_timing",
+      "value": {
+        "disable": {
+          "min": null,
+          "typ": 12,
+          "max": 50,
+          "unit": "ns"
+        },
+        "enable_receiver_enabled": {
+          "min": null,
+          "typ": 10,
+          "max": 20,
+          "unit": "ns"
+        },
+        "enable_receiver_disabled": {
+          "min": null,
+          "typ": 3,
+          "max": 7,
+          "unit": "us"
+        },
+        "load": "Figures 13/14: RL=110 ohm +/-1% to ground for high output or 3 V for low output; CL=50 pF +/-20%",
+        "measurement": "DE 0..3 V, input 50%; enable to output 50%; Figure 13 high-output disable has VOH minus 0.5 V marker (also 90% label), Figure 14 low-output disable 10%. D selects tested A/B polarity."
+      },
+      "unit": null,
+      "conditions": "SN65HVD75 section 7.8 only, over recommended operation, bit time >=50 ns. Missing minima remain unknown, not zero. Section 8 generator: 100 kbps, 50% duty, edges <6 ns, 50-ohm output. Fixture/instrument capacitance is included. These device measurements are not a complete controller/cable turnaround budget or collision-free protocol guarantee. Receiver-disabled enable is the microsecond standby-wake row, not the nanosecond propagation row. Enable/disable test load differs from the 54-ohm differential propagation load.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 7,
+        "printed_page": 8,
+        "supporting_pdf_pages": [
+          8,
+          11,
+          12,
+          5
+        ],
+        "section": "7.8;8 Figures 13-14;7.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-08",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "receiver_propagation_and_edges",
+      "value": {
+        "rise_fall": {
+          "min": null,
+          "typ": 5,
+          "max": 10,
+          "unit": "ns"
+        },
+        "propagation": {
+          "min": null,
+          "typ": 60,
+          "max": 70,
+          "unit": "ns"
+        },
+        "pulse_skew": {
+          "min": null,
+          "typ": 0,
+          "max": 6,
+          "unit": "ns"
+        },
+        "load": "Figure 15: CL=15 pF +/-20%",
+        "measurement": "RE=0 V; B=1.5 V, A switches 0..3 V; input/output 50% for propagation, output 10%/90% for edges."
+      },
+      "unit": null,
+      "conditions": "SN65HVD75 section 7.8 only, over recommended operation, bit time >=50 ns. Missing minima remain unknown, not zero. Section 8 generator: 100 kbps, 50% duty, edges <6 ns, 50-ohm output. Fixture/instrument capacitance is included. These device measurements are not a complete controller/cable turnaround budget or collision-free protocol guarantee.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 7,
+        "printed_page": 8,
+        "supporting_pdf_pages": [
+          8,
+          12,
+          11,
+          5
+        ],
+        "section": "7.8;8 Figure 15;7.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "rs485-app-09",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "manufacturer": "Texas Instruments",
+      "device": "SN65HVD75DR",
+      "variant": "SN65HVD75; not SN65HVD72 or SN65HVD78",
+      "package": "D, 8-pin SOIC",
+      "kind": "application_constraint",
+      "parameter": "receiver_enable_disable_timing",
+      "value": {
+        "disable": {
+          "min": null,
+          "typ": 15,
+          "max": 30,
+          "unit": "ns"
+        },
+        "enable_driver_enabled": {
+          "min": null,
+          "typ": 10,
+          "max": 50,
+          "unit": "ns"
+        },
+        "enable_driver_disabled": {
+          "min": null,
+          "typ": 3,
+          "max": 8,
+          "unit": "us"
+        },
+        "load": "Figures 16/17: 1 kohm +/-1% to ground for high output or VCC for low output, CL=15 pF +/-20%",
+        "measurement": "RE 0..3 V, input 50%; enable output 50%, disable 90% high or 10% low. Figure 16: DE=3 V, D selects polarity. Figure 17: driver disabled, A/B=1.5/0 V for high or 0/1.5 V for low."
+      },
+      "unit": null,
+      "conditions": "SN65HVD75 section 7.8 only, over recommended operation, bit time >=50 ns. Missing minima remain unknown, not zero. Section 8 generator: 100 kbps, 50% duty, edges <6 ns, 50-ohm output. Fixture/instrument capacitance is included. These device measurements are not a complete controller/cable turnaround budget or collision-free protocol guarantee. Driver-disabled receiver enable is the microsecond wake row; driver-enabled receiver enable is a separate nanosecond row. Propagation is neither enable nor disable time.",
+      "evidence": {
+        "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+        "revision": "SLLSE11H",
+        "pdf_page_index": 7,
+        "printed_page": 8,
+        "supporting_pdf_pages": [
+          8,
+          13,
+          14,
+          11,
+          5
+        ],
+        "section": "7.8;8 Figures 16-17;7.3",
+        "source_sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "method": "Collector and distinct agent reviewer inspected SHA-identified bytes and cited renders; complete final payload reviewed under owner delegation. No measured bounding box or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "reviewer": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+        "reviewed_at": "2026-10-28T05:00:07.586809+00:00"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "rs485-app-network-unknown",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual cable impedance/length/stubs/topology, termination placement and tolerances, node loading and bias network are unspecified. Bus loading, failsafe and typical topology facts do not validate a complete network.",
+      "provenance": {
+        "actor": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "recorded_at": "2026-10-28T04:58:22.856360+00:00"
+      },
+      "evidence_references": [
+        "SLLSE11H 10.2;10.2.1.1-10.2.1.4"
+      ]
+    },
+    {
+      "id": "rs485-app-timing-unknown",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Controller logic thresholds, output loading, supply sequencing, data rate, cable delay, DE/RE scheduling and turnaround/sample budget are unspecified. Neither 20 Mbps nor propagation/enable maxima proves collision-free communication.",
+      "provenance": {
+        "actor": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "recorded_at": "2026-10-28T04:58:22.856360+00:00"
+      },
+      "evidence_references": [
+        "SLLSE11H 7.3;7.8;8 Figures 12-17;9.4"
+      ]
+    },
+    {
+      "id": "rs485-app-ground-protection-unknown",
+      "source_id": "rs485-app-ti-sllse11h-d",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Ground offset, individual bus-pin waveform, differential noise, transient exposure, protection circuit and isolation needs are unspecified. Normal operating, absolute-maximum and component ESD tests are distinct; no board-level IEC/EMC qualification or arbitrary fault survival is established.",
+      "provenance": {
+        "actor": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+        "recorded_at": "2026-10-28T04:58:22.856360+00:00"
+      },
+      "evidence_references": [
+        "SLLSE11H 7.1-7.3;9.3;10.2"
+      ]
+    }
+  ],
+  "limitations": [
+    "Noncanonical factual constraints, not a validated RS-485 network, board IEC qualification or isolation design.",
+    "Only the identified official source was consulted; no supplemental source or redistribution license is asserted.",
+    "Independent Agent review completed under owner delegation; aggregate integration and exact-commit CI are separate gates."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_reset_rs485_wave/collect_rs485_constraints",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-28T04:58:22.856360+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+      "authority": "OWNER_DELEGATION",
+      "decision": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "timestamp": "2026-10-28T05:00:07.586809+00:00",
+      "draft_sha256": "5b2c0f2960d668174a11523ba415a4232c28b353f6ac961aa48b464474f4ac1b",
+      "note": "Independent full source/fact/warning/provenance and prose review. Corrected omitted receiver VOH typical expression to VCC - 0.3 V from rendered p6; made local path null while exact ignored cache path remains in receipt. Preserved all operating conditions, HVD75-only timing/load/crossing limits and application unknowns."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/curate_reset_rs485_wave/review_reset_rs485_sources",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-28T05:00:07.586809+00:00",
+    "scope": "Independent full source/fact/warning/provenance and prose review. Corrected omitted receiver VOH typical expression to VCC - 0.3 V from rendered p6; made local path null while exact ignored cache path remains in receipt. Preserved all operating conditions, HVD75-only timing/load/crossing limits and application unknowns.",
+    "draft_sha256": "5b2c0f2960d668174a11523ba415a4232c28b353f6ac961aa48b464474f4ac1b",
+    "source_byte_check": {
+      "sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+      "byte_size": 1554999,
+      "visual_pages": [
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        29
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **16 reviewed batches, 27 batch-local source/device scopes, and 184 factual
+This queue contains **20 reviewed batches, 31 batch-local source/device scopes, and 216 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -25,6 +25,10 @@ provenance and batch bytes are preserved.
 | [Current-monitor calibration](ina219-measurement-calibration-constraints.json) | INA219AIDCNR/DCN, A grade | 8 | Actual hash and distinct rendered-page review; [receipt](ina219-measurement-calibration-constraints-review.md) |
 | [Shunt-reference regulation](tl431-feedback-regulation-constraints.json) | TL431CDBZR/DBZ, standard C grade | 6 | Actual hash and rendered stability/circuit review; [receipt](tl431-feedback-regulation-constraints-review.md) |
 | [Timer application constraints](ne555-timing-application-constraints.json) | NE555DR/D | 8 | Actual hash and rendered circuits/timing tables; [receipt](ne555-timing-application-constraints-review.md) |
+| [Reset supervisor constraints](tps3808-reset-supervisor-constraints.json) | TPS3808G33DBVR/DBV, fixed G33 | 8 | Actual hash and distinct rendered-page review; [receipt](tps3808-reset-supervisor-constraints-review.md) |
+| [RS-485 interface constraints](sn65hvd75-rs485-interface-constraints.json) | SN65HVD75DR/D | 9 | Actual hash and HVD75-specific timing/load review; [receipt](sn65hvd75-rs485-interface-constraints-review.md) |
+| [MOSFET drive constraints](ao3400a-gate-drive-constraints.json) | AOS AO3400A/SOT23; full orderable unknown | 8 | Exact independently reviewed maintainer handoff; [receipt](ao3400a-gate-drive-constraints-review.md) |
+| [Rectifier constraints](vishay-ss14-rectifier-constraints.json) | Vishay SS14/SMA; full orderable unknown | 7 | Exact independently reviewed maintainer handoff; [receipt](vishay-ss14-rectifier-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -122,3 +126,12 @@ and TL431 reference-current equation signs. No correction or circuit permission 
 inferred. The [current replay](../../docs/intake-evaluation-measurement-timing.md)
 preserves all earlier snapshots and the separate MCP23017 disposition. New records
 do not inherit the owner's original 100-record acceptance.
+
+## Reset, interface and discrete stage
+
+The [current aggregate replay](../../docs/intake-evaluation-reset-rs485-discretes.md)
+adds the TPS3808G33 and SN65HVD75 issue lanes plus the exact reviewed AO3400A and
+SS14 handoff pairs. No old annotation or review receipt was rewritten. Reset
+validity, interface timing/load, gate-drive, waveform and thermal conditions are
+not universal board guarantees. Missing inputs remain batch-local warnings;
+source wording conflicts are not resolved by Agent acceptance.
