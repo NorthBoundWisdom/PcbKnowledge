@@ -502,3 +502,20 @@ Before implementation:
 ## 8. Verification contract
 
 Use the narrowest relevant tests during editing, then the applicable repository checkpoint. GUI work requires focused HTTP/view-model coverage and a real loopback smoke. Workspace work requires a temporary external Git repository and tamper tests. Pilot/evaluation work additionally requires deterministic synthetic structural/negative/visual/publication closure. Public intake must obey the lightweight contract; private pilot data and original PDFs are never added. Interrupted, truncated, skipped, or unexecuted checks are not passes.
+
+## Offline intake handoff preflight
+
+- [x] Add the bounded, pinned Git-object [handoff preflight](docs/intake-handoff-preflight.md)
+  without changing intake content, schemas, evaluators or CI. Batch-local IDs remain
+  batch-local; shared source/device metadata across distinct batches is legal.
+- Verification: synthetic real-object tests cover immutable additive scope,
+  forged object identities, hostile Git configuration/environment, bounded payloads,
+  parsing/reference failures and path safety. Four original local delivery commits
+  match separately recorded pair pins against the historical pre-integration target;
+  already integrated pairs correctly collide against the newer target. These are
+  compatibility observations, not new source review or aggregate acceptance.
+- Local receipt (2026-10-28): 24 focused tests and 314 tests each in Build/Test,
+  zero skips; English/public/vendor guards, workspace validation, Config,
+  authority validation, unchanged 228-annotation aggregate/disposition replay and
+  Package all exit zero. Independent security review cleared the implementation.
+  Exact published-commit cross-platform CI is checked separately after publication.
