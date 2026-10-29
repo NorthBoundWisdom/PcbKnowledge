@@ -428,7 +428,7 @@ Work in order; each item is one coherent commit or a small group.
 Exit: CI runs the commit, style, audit and golden-hash guards; zero unreachable
 records; LDL1117 package re-recorded; G1 still `EXPANDED` with all checks passing.
 
-Receipt (2026-10-29): guards `363a2b3`, contracts `80653b3`, data `3a8268e`; full gate PASS, 179 tests, zero skips, 66/66 audited records reachable; G1 reference and three preserved graphs EXPANDED.
+Receipt (2026-10-29): guards `287ae6a`, contracts `19f68bc`, data `79d4bb2`; full gate PASS, 179 tests, zero skips, 66/66 audited records reachable; G1 reference and three preserved graphs EXPANDED.
 Review: 13 checks, three commit-guard findings fixed; independent source/package review sampled seven dimensions and two pin maps. Canonical G1 hash changed intentionally for own-source LDL packaging and explicit assembly metadata; readability refactor preserves bytes.
 Next: Stage 7 derived layout handoff and exported-board checks; owner-only hardware/layout work remains unclaimed.
 
