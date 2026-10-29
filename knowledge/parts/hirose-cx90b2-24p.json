@@ -1,31 +1,32 @@
 {
-  "id": "part:wurth-632723300011",
+  "id": "part:hirose-cx90b2-24p",
   "identity_evidence": {
     "page": 1,
-    "source": "source:wurth-632723300011"
+    "source": "source:hirose-cx90b2-24p-drawing"
   },
-  "manufacturer": "Würth Elektronik",
-  "mpn": "632723300011",
-  "package": "package:wurth-632723300011",
+  "manufacturer": "Hirose Electric",
+  "mpn": "CX90B2-24P",
+  "package": "package:hirose-cx90b2-24p",
   "parameters": {
     "current_rating": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 3,
-        "source": "source:wurth-632723300011"
+        "page": 4,
+        "source": "source:hirose-cx90b2-24p-guide"
       },
-      "max": 5,
-      "unit": "A"
+      "note": "Overall rating with four VBUS/GND contacts; each power contact maximum 1.25 A. G1 uses a 0.5 A input budget.",
+      "unit": "A",
+      "value": 5
     },
     "thickness": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 1,
-        "source": "source:wurth-632723300011"
+        "page": 11,
+        "source": "source:hirose-cx90b2-24p-guide"
       },
-      "note": "Manufacturer recommended PCB thickness1.6mm; selected for G1 fabrication profile. 24contact connector used power-only with data contacts intentionally unconnected.",
+      "note": "Recommended PCB thickness 1.6 +/- 0.05 mm for 1.2 +/- 0.1 mm PIP legs; assembly solder volume requires process verification.",
       "unit": "mm",
       "value": 1.6
     },
@@ -33,18 +34,19 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 3,
-        "source": "source:wurth-632723300011"
+        "page": 4,
+        "source": "source:hirose-cx90b2-24p-guide"
       },
+      "note": "48 V AC/DC connector rating; G1 block remains fixed at 5 V, without PD.",
       "unit": "V",
       "value": 48
     }
   },
   "pin_evidence": {
     "basis": "DATASHEET",
-    "note": "A1-A12 and B1-B12 are manufacturer contact numbers. SHELL1-4 identify unnumbered shell slots; SHELL5-6 identify the two ground-plate through-hole pins; SHELL7-8 identify the two small shell-rest pads. These shell identifiers are local, not manufacturer contact numbers.",
-    "page": 3,
-    "source": "source:wurth-632723300011"
+    "note": "A/B contact and MD identifiers follow the drawing. SHELL1-4 are local aliases for shell slots; SHELL5-6 label the two shell-rest solder lands. Local shell identifiers are not manufacturer contact numbers.",
+    "page": 5,
+    "source": "source:hirose-cx90b2-24p-guide"
   },
   "pins": [
     {
@@ -68,7 +70,7 @@
       "type": "PASSIVE"
     },
     {
-      "name": "CC",
+      "name": "CC1",
       "number": "A5",
       "type": "PASSIVE"
     },
@@ -128,7 +130,7 @@
       "type": "PASSIVE"
     },
     {
-      "name": "VCONN",
+      "name": "CC2",
       "number": "B5",
       "type": "PASSIVE"
     },
@@ -168,6 +170,16 @@
       "type": "GROUND"
     },
     {
+      "name": "MID_PLATE",
+      "number": "MD1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "MID_PLATE",
+      "number": "MD2",
+      "type": "PASSIVE"
+    },
+    {
       "name": "SHIELD",
       "number": "SHELL1",
       "type": "PASSIVE"
@@ -191,34 +203,22 @@
       "type": "PASSIVE"
     },
     {
-      "name": "GROUND_PLATE",
+      "name": "SHIELD",
       "number": "SHELL5",
       "same_net_as": "SHELL1",
       "type": "PASSIVE"
     },
     {
-      "name": "GROUND_PLATE",
+      "name": "SHIELD",
       "number": "SHELL6",
-      "same_net_as": "SHELL1",
-      "type": "PASSIVE"
-    },
-    {
-      "name": "SHIELD_REST",
-      "number": "SHELL7",
-      "same_net_as": "SHELL1",
-      "type": "PASSIVE"
-    },
-    {
-      "name": "SHIELD_REST",
-      "number": "SHELL8",
       "same_net_as": "SHELL1",
       "type": "PASSIVE"
     }
   ],
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "roles": [

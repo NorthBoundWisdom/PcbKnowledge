@@ -5,11 +5,11 @@
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:wurth-632723300011"
+        "source": "source:hirose-cx90b2-24p-drawing"
       },
-      "max": 3.16,
-      "min": 2.76,
-      "typ": 2.96,
+      "max": 3.32,
+      "min": 3.02,
+      "typ": 3.17,
       "unit": "mm"
     },
     "length": {
@@ -17,11 +17,11 @@
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:wurth-632723300011"
+        "source": "source:hirose-cx90b2-24p-drawing"
       },
-      "max": 11.4,
-      "min": 11,
-      "typ": 11.2,
+      "max": 8.3,
+      "min": 8.0,
+      "typ": 8.15,
       "unit": "mm"
     },
     "width": {
@@ -29,25 +29,33 @@
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:wurth-632723300011"
+        "source": "source:hirose-cx90b2-24p-drawing"
       },
-      "max": 8.94,
-      "min": 8.54,
-      "typ": 8.74,
+      "max": 9.09,
+      "min": 8.79,
+      "typ": 8.94,
       "unit": "mm"
     }
   },
   "courtyard_margin": {
     "basis": "ENGINEERING_DEFAULT",
     "conditions": {},
-    "note": "G1 D8 courtyard allowance.",
+    "note": "Retain manufacturer rear-row pad datum; exact body-center offset is unspecified. Margin covers half maximum body length plus 0.25 mm; conservative enclosure, not measured body outline.",
     "unit": "mm",
-    "value": 0.25
+    "value": 4.4
   },
   "evidence": [
     {
       "page": 1,
-      "source": "source:wurth-632723300011"
+      "source": "source:hirose-cx90b2-24p-drawing"
+    },
+    {
+      "page": 2,
+      "source": "source:hirose-cx90b2-24p-drawing"
+    },
+    {
+      "page": 11,
+      "source": "source:hirose-cx90b2-24p-guide"
     }
   ],
   "explicit_pads": [
@@ -57,17 +65,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A1",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -77,31 +85,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -2.75
+        "value": -2.625
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -110,17 +117,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -2.875
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A2",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -130,31 +189,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -2.25
+        "value": -2.125
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -163,17 +221,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B11",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -2.375
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A3",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -183,31 +293,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -1.75
+        "value": -1.625
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -216,17 +325,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B10",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -1.875
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A4",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -236,31 +397,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -1.25
+        "value": -1.125
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -269,17 +429,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -1.375
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A5",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -289,31 +501,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -0.75
+        "value": -0.625
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -322,17 +533,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -0.875
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A6",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -342,31 +605,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -0.25
+        "value": -0.125
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -375,17 +637,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -0.375
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A7",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -395,31 +709,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.25
+        "value": 0.375
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -428,17 +741,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.125
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A8",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -448,31 +813,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.75
+        "value": 0.875
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -481,17 +845,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.625
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A9",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -501,31 +917,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.25
+        "value": 1.375
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -534,17 +949,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.125
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A10",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -554,31 +1021,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.75
+        "value": 1.875
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -587,17 +1053,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.625
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A11",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -607,31 +1125,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 2.25
+        "value": 2.375
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
@@ -640,17 +1157,69 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "B2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 2.125
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
       },
       "kind": "SMD",
       "number": "A12",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -660,787 +1229,186 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.3
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 2.75
+        "value": 2.875
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -5.93
+        "value": -0.425
       }
     },
     {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
       "height": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
         "value": 0.65
       },
-      "kind": "THROUGH_HOLE",
-      "number": "B12",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": -2.8
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -4.68
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B11",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": -2.4
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -3.98
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B10",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": -1.6
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -3.98
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B9",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": -1.2
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -4.68
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B8",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": -0.8
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -3.98
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B7",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": -0.4
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -4.68
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B6",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -4.68
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B5",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.8
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -3.98
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B4",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 1.2
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -4.68
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B3",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 1.6
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -3.98
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
-      "number": "B2",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 2.4
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -3.98
-      }
-    },
-    {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "kind": "THROUGH_HOLE",
+      "kind": "SMD",
       "number": "B1",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
-      "shape": "ROUND",
+      "shape": "RECT",
       "width": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.65
+        "value": 0.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 2.8
+        "value": 2.625
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -4.68
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "MD1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.27
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": -3.385
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "SMD",
+      "number": "MD2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Top-view axis-aligned manufacturer land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 0.27
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 3.385
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:hirose-cx90b2-24p-drawing"
+        },
+        "unit": "mm",
+        "value": 1.075
       }
     },
     {
@@ -1449,17 +1417,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 1.6
       },
       "drill_width": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
         "value": 0.6
@@ -1469,17 +1437,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.6
+        "value": 2.2
       },
       "kind": "THROUGH_HOLE",
       "number": "SHELL1",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -1489,31 +1457,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1
+        "value": 1.2
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -4.27
+        "value": -4.32
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -3.53
+        "value": 0
       }
     },
     {
@@ -1522,17 +1489,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 1.6
       },
       "drill_width": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
         "value": 0.6
@@ -1542,17 +1509,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.6
+        "value": 2.2
       },
       "kind": "THROUGH_HOLE",
       "number": "SHELL2",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -1562,31 +1529,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1
+        "value": 1.2
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 4.27
+        "value": 4.32
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -3.53
+        "value": 0
       }
     },
     {
@@ -1595,17 +1561,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 1.6
       },
       "drill_width": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
         "value": 0.6
@@ -1615,17 +1581,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.6
+        "value": 2.2
       },
       "kind": "THROUGH_HOLE",
       "number": "SHELL3",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -1635,31 +1601,30 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1
+        "value": 1.2
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -4.27
+        "value": -4.32
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": 1.2
+        "value": 5.1
       }
     },
     {
@@ -1668,17 +1633,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.2
+        "value": 1.6
       },
       "drill_width": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
         "value": 0.6
@@ -1688,17 +1653,17 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1.6
+        "value": 2.2
       },
       "kind": "THROUGH_HOLE",
       "number": "SHELL4",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -1708,176 +1673,101 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 1
+        "value": 1.2
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 4.27
+        "value": 4.32
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": 1.2
+        "value": 5.1
       }
     },
     {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
       "height": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.65
+        "value": 3.5
       },
-      "kind": "THROUGH_HOLE",
+      "kind": "SMD",
       "number": "SHELL5",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
-      "shape": "ROUND",
+      "shape": "RECT",
       "width": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.65
+        "value": 1.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": -2
+        "value": -1.125
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
         "unit": "mm",
-        "value": -4.68
+        "value": 4.75
       }
     },
     {
-      "drill": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.4
-      },
       "height": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.65
+        "value": 3.5
       },
-      "kind": "THROUGH_HOLE",
+      "kind": "SMD",
       "number": "SHELL6",
       "rotation": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "ROUND",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0.65
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 2
-      },
-      "y": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -4.68
-      }
-    },
-    {
-      "height": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 1
-      },
-      "kind": "SMD",
-      "number": "SHELL7",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
+        "note": "Top-view axis-aligned manufacturer land pattern.",
         "unit": "deg",
         "value": 0
       },
@@ -1887,82 +1777,35 @@
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.2
+        "value": 1.25
       },
       "x": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0
+        "value": 1.125
       },
       "y": {
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
           "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
-        "unit": "mm",
-        "value": -1.35
-      }
-    },
-    {
-      "height": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "Lower shell rest height assumed equal to dimensioned1.0mm upper rest; anchored to manufacturer lower-edge datum2.4mm from PCB edge, then shifted4.65mm to body center.",
-        "unit": "mm",
-        "value": 1
-      },
-      "kind": "SMD",
-      "number": "SHELL8",
-      "rotation": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "G1 original engineering decision.",
-        "unit": "deg",
-        "value": 0
-      },
-      "shape": "RECT",
-      "width": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
+          "source": "source:hirose-cx90b2-24p-drawing"
         },
         "unit": "mm",
-        "value": 0.2
-      },
-      "x": {
-        "basis": "DATASHEET",
-        "conditions": {},
-        "evidence": {
-          "page": 1,
-          "source": "source:wurth-632723300011"
-        },
-        "unit": "mm",
-        "value": 0
-      },
-      "y": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "Lower shell rest height assumed equal to dimensioned1.0mm upper rest; anchored to manufacturer lower-edge datum2.4mm from PCB edge, then shifted4.65mm to body center.",
-        "unit": "mm",
-        "value": 1.75
+        "value": 4.75
       }
     }
   ],
   "family": "EXPLICIT",
-  "id": "package:wurth-632723300011",
+  "id": "package:hirose-cx90b2-24p",
   "mount_type": "THT",
   "pin1": "A1",
   "provenance": {
@@ -1977,11 +1820,15 @@
     "evidence": [
       {
         "page": 1,
-        "source": "source:wurth-632723300011"
+        "source": "source:hirose-cx90b2-24p-drawing"
+      },
+      {
+        "page": 4,
+        "source": "source:hirose-cx90b2-24p-guide"
       }
     ],
     "mpns": [
-      "632723300011"
+      "CX90B2-24P"
     ]
   },
   "verification": "AGENT_VERIFIED"
