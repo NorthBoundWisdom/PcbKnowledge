@@ -1,0 +1,84 @@
+{
+  "id": "part:microchip-24lc256-i-sn",
+  "identity_evidence": {
+    "page": 45,
+    "source": "source:eeprom-app-microchip-24lc256-y-sn"
+  },
+  "manufacturer": "Microchip Technology",
+  "mpn": "24LC256-I/SN",
+  "package": "package:soic-8-sn",
+  "parameters": {
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:eeprom-app-microchip-24lc256-y-sn"
+      },
+      "max": 5.5,
+      "min": 2.5,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 7,
+    "source": "source:eeprom-app-microchip-24lc256-y-sn"
+  },
+  "pins": [
+    {
+      "name": "A0",
+      "number": "1",
+      "type": "INPUT"
+    },
+    {
+      "name": "A1",
+      "number": "2",
+      "type": "INPUT"
+    },
+    {
+      "name": "A2",
+      "number": "3",
+      "type": "INPUT"
+    },
+    {
+      "name": "VSS",
+      "number": "4",
+      "type": "GROUND"
+    },
+    {
+      "name": "SDA",
+      "number": "5",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "SCL",
+      "number": "6",
+      "type": "INPUT"
+    },
+    {
+      "name": "WP",
+      "number": "7",
+      "type": "INPUT"
+    },
+    {
+      "name": "VCC",
+      "number": "8",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root",
+    "verified_by": [
+      "agent:/root/verify_g1_source_access"
+    ]
+  },
+  "roles": [
+    "memory.eeprom"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,84 @@
+{
+  "id": "part:ti-ina219aidcnr",
+  "identity_evidence": {
+    "page": 29,
+    "source": "source:ti-ina219"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "INA219AIDCNR",
+  "package": "package:sot-23-8-dcn",
+  "parameters": {
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:ti-ina219"
+      },
+      "max": 5.5,
+      "min": 3,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-ina219"
+  },
+  "pins": [
+    {
+      "name": "IN+",
+      "number": "1",
+      "type": "ANALOG"
+    },
+    {
+      "name": "IN-",
+      "number": "2",
+      "type": "ANALOG"
+    },
+    {
+      "name": "GND",
+      "number": "3",
+      "type": "GROUND"
+    },
+    {
+      "name": "VS",
+      "number": "4",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "SCL",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "SDA",
+      "number": "6",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "A0",
+      "number": "7",
+      "type": "INPUT"
+    },
+    {
+      "name": "A1",
+      "number": "8",
+      "type": "INPUT"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root",
+    "verified_by": [
+      "agent:/root/verify_g1_source_access"
+    ]
+  },
+  "roles": [
+    "monitor.current"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

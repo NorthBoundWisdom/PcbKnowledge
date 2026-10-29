@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 727562,
+  "id": "source:eeprom-app-microchip-24lc256-y-sn",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 48,
+  "provenance": {
+    "created_by": "agent:/root",
+    "verified_by": [
+      "agent:/root/verify_g1_source_access"
+    ]
+  },
+  "publisher": "Microchip Technology",
+  "revision": "DS20001203Y",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "37280f68ad38b83241cacfc3f470dcb9b2e787586beca22520f37d1c03a006db",
+  "title": "24AA256/24LC256/24FC256 serial EEPROM datasheet",
+  "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/MPD/ProductDocuments/DataSheets/24AA256-24LC256-24FC256-256K-I2C-Serial-EEPROM-DS20001203.pdf",
+  "verification": "AGENT_VERIFIED"
+}

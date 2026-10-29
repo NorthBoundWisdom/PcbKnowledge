@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 892731,
+  "id": "source:ti-ina219",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 38,
+  "provenance": {
+    "created_by": "agent:/root",
+    "verified_by": [
+      "agent:/root/verify_g1_source_access"
+    ]
+  },
+  "publisher": "Texas Instruments",
+  "revision": "SBOS448G",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "58004eda854d07478e6fc6f4398c114f60a3bcf18d4877471c7c1a306d1fa1cb",
+  "title": "INA219 current and power monitor datasheet",
+  "url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+  "verification": "AGENT_VERIFIED"
+}
