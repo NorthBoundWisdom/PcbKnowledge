@@ -4,17 +4,8 @@
 
 `knowledge/intake/` contains small, original paraphrased summaries and annotations.
 It is a curation queue, not canonical `Source`/`Entity`/`Fact` authority. Its format
-is `pcbknowledge-independent-intake-v1`, with `canonical: false`. Acceptance here
-means useful reviewed material may accumulate; it does not assert engineering
-sign-off, complete component coverage, validated procurement identity, or a passed
-formal pilot.
-
-The owner delegates review of these drafts to the Agent. Record the actual actor
-as an Agent and the authority as owner delegation. Use
-`AGENT_REVIEWED_UNDER_OWNER_DELEGATION` only after an actual review; unreviewed
-material stays `DRAFT`. Never invent a human reviewer or imply that an
-owner read each fact. The owner may audit, correct, or withdraw accepted intake.
-No per-fact human wait is required for this delegated curation lane.
+is `pcbknowledge-independent-intake-v1`, with `canonical: false`. The queue is frozen under ADR-022. Existing metadata remains readable for
+selective v2 migration; do not add records, reviews or acceptance receipts.
 
 An intake item must retain source URL, document revision when known, exact device
 and package scope, parameter conditions, and known limitations. `TEXT_LOCATOR_ONLY`
@@ -34,21 +25,6 @@ canonical record is not promotion. Existing canonical workbench decisions remain
 human-review operations; this release does not impersonate a human through that API.
 Intake search must retain the noncanonical marker and limitations and must not be
 mixed silently into published canonical Fact results.
-
-## Explicit owner content acceptance
-
-A later explicit human owner acceptance can be recorded separately as a dated,
-snapshot-bound documentary receipt. Distinguish the `HUMAN` decision-maker from
-the `AGENT` recorder and preserve the actual stated scope. Do not infer individual
-source/fact checks, visual acceptance, canonical approval, or engineering safety
-from a batch-level content acceptance. Do not rewrite historical Agent provenance
-or per-item `human_reviewed` fields to imply those stronger claims. New or changed
-records need their own review; acceptance never follows a mutable path by default.
-
-The [2026-10-28 owner receipt](../../archive/receipts/owner-acceptance-2026-10-28.md) covers exactly the
-existing five batches / 100 annotations at its pinned commit and dataset hashes.
-It adds no executable status or canonical authority and leaves evidence limitations,
-source issues and the formal pilot gates unchanged.
 
 ## Intake candidate retrieval
 
@@ -156,17 +132,10 @@ constants for exact limits. Passing the size guard is not a copyright or factual
 quality approval. Split knowledge by meaningful source/topic, never to disguise a
 raw document or evade the guard.
 
-## Collaboration and publication
+## Frozen queue and migration
 
-The owner authorizes focused main-branch commits and pushes for this work. Fetch
-and reconcile the latest remote before pushing; never force-push or overwrite
-others' changes. The GUI still performs no Git writes. Separate canonical data
-publication from schema/policy changes; a bootstrap noncanonical intake batch may
-accompany its tooling and must not be described as canonical publication.
-
-Use issues for independently actionable work: give scope, source/evidence level,
-acceptance criteria, file ownership, and forbidden raw artifacts. Review delivered
-work against those criteria, leave specific corrections, and close only completed
-issues with a verifiable receipt. Do not duplicate an existing active assignment.
-Continue bounded batches with counts, provenance, corrections, and unresolved
-questions; do not present unchecked quantity as knowledge quality.
+The intake queue is read-only pending selective G1 migration under ADR-022.
+Do not create batches, collection issues, review cards or acceptance receipts.
+Current publication instructions come from `AGENTS.md` and the active owner task;
+this legacy format document grants no publication authority. The GUI performs no
+Git writes. V2 data and its schema/policy changes use separate commits.

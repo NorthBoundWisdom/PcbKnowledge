@@ -19,8 +19,7 @@ The active roadmap is the root [`TODO.md`](../TODO.md). Agent rules are in the r
 ## Legacy and archive
 
 - [`legacy/`](legacy/README.md): accurate descriptions of subsystems that still
-  run but are scheduled for removal (intake queue, pilot harness, worked-example
-  evaluators, v1 typed ingestion). Delete each document with its code.
+  run but are scheduled for removal (intake queue and v1 typed ingestion). Delete each document with its code.
 - [`archive/`](archive/README.md): frozen historical receipts (batch evaluations,
   owner acknowledgements, application handoffs, source investigations). Not
   maintained; useful only as source material during migration.

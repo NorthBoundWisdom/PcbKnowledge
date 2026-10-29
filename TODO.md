@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `STAGE_0_COURSE_CORRECTION`
+> Status: `STAGE_1_CONTRACTS`
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -34,7 +34,7 @@ answer here.
 | D5 | Keep a GUI after v2 | Remove v1 decision UI; keep the PDF evidence viewer only if a v2 read-only browser needs it in Stage 2 |
 | D6 | Distributor part numbers in public records | Allowed as identifiers only (no copied catalog data) |
 
-## Stage 0 — Course correction (active)
+## Stage 0 — Course correction (complete)
 
 Stop expanding the old design, remove dead weight, align instructions.
 
@@ -42,26 +42,18 @@ Stop expanding the old design, remove dead weight, align instructions.
   golden designs, this roadmap; retiring-subsystem docs moved to `docs/legacy/`,
   historical receipts to `docs/archive/`, links rewritten.
 - [x] Update `AGENTS.md`, `README.md` and `CONTRIBUTING.md` to ADR-022.
-- [ ] Freeze the intake queue: no new batches, annotations, handoff cards,
-  evaluation manifests or worked examples. Tag the current state `intake-final`
-  (owner pushes the tag).
-- [ ] Delete the pilot harness: `src/pcbknowledge/git_native/pilot_eval.py`,
-  `pilot_scenarios.py`, `pilot_session.py`, `pilot_session_status.py`,
-  `configs/pcbknowledge_pilot.py`, `tests/git_native/test_pilot_*.py`,
-  `evals/pilot-*.example.json`, `docs/legacy/pilot/`, and every reference to them.
-- [ ] Delete fixed per-device evaluators: `configs/pcbknowledge_{resistor_dc,
-  ads1115_boundary,ne555_astable,eeprom_page,ina219_register}_eval.py`, their
-  tests, and `docs/legacy/worked-examples/`.
-- [ ] Delete the intake growth tool `configs/pcbknowledge_intake_handoff.py`, its
-  tests and `docs/legacy/intake/intake-handoff-preflight.md`.
-- [ ] Gates: English, public-source, PDF.js vendor, workspace validate, Config,
-  Build, Test, Agent validate, Package. Record the new test count (was 486 at
-  `58c6614`).
+- [x] Freeze the intake queue: no new batches, annotations, handoff cards,
+  evaluation manifests or worked examples. Local tag `intake-final` pins `82b4eff`; the owner pushes the tag.
+- [x] Remove the pilot harness and its exclusive snapshot helper, all fixed
+  per-device evaluators, and the intake growth handoff tool with their tests/docs.
+- [x] Run the full repository gate: Build/Test each 378 tests, no skips; all guards,
+  workspace/authority validation, Config and Package pass. The local `intake-final`
+  tag retains the frozen pre-removal tree. Verification details are in the stage commit.
 
 Exit: the deletions above are complete, all gates pass, and no document or
 instruction asks for new intake batches or per-batch receipts.
 
-## Stage 1 — Contracts for the first golden design
+## Stage 1 — Contracts for the first golden design (active)
 
 - [ ] Write the brief JSON Schema and machine-readable G1, G2, G3 briefs in
   `evals/golden-designs/`.

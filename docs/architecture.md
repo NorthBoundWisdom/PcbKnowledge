@@ -33,9 +33,11 @@ Ownership:
 PcbKnowledge is not a PcbCore runtime dependency and never reads or mutates a live
 board (ADR-001). Consumers pin a bundle built from one validated commit.
 
-## 2. Current implementation (commit `58c6614`)
+## 2. Current implementation
 
-The code still implements the earlier review-centric design. It is tested, but it
+Stage 0 removed the unused pilot harness, its snapshot fingerprint helper,
+fixed per-device evaluators and intake handoff tool. The remaining code still
+implements the earlier review-centric design. It is tested, but it
 is not the target. Status of each part:
 
 | Subsystem | Code | Status |
@@ -48,8 +50,6 @@ is not the target. Status of each part:
 | v1 typed records: Source, Manufacturer/Component/Package, ComponentPin/ParameterLimit Facts | `model.py`, `store.py`, `cli.py` | **Replace** by v2 records (zero canonical records exist) |
 | v1 human approve/reject review closure and decision UI | `review_closure*.py`, `workbench*.py`, `server.py` | **Remove** decision flows; keep a read-only browser and the PDF evidence viewer only if v2 needs them |
 | Noncanonical intake queue (`knowledge/intake/`, 37 batches / 329 annotations) | `intake*.py`, `configs/pcbknowledge_intake_*.py`, replay tests, `evals/intake-*.json` | **Frozen**; migrate golden-design parts, then delete |
-| Pilot harness (P0.4a) | `pilot_*.py`, `configs/pcbknowledge_pilot.py` | **Remove** |
-| Fixed per-device worked-example evaluators | `configs/pcbknowledge_*_eval.py` (resistor, ADS1115, NE555, 24LC256, INA219) | **Remove**; reusable math returns as generic calculators when a block needs it |
 
 Documentation for retiring subsystems is under [`legacy/`](legacy/README.md) until
 their code is removed. Historical receipts are under [`archive/`](archive/README.md).

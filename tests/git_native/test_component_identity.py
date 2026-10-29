@@ -19,11 +19,6 @@ from pcbknowledge.git_native.model import (
     RecordTransitionError,
     exact_mpn_key,
 )
-from pcbknowledge.git_native.pilot_scenarios import (
-    PILOT_SCENARIO_FORMAT,
-    PilotScenarioSuite,
-    run_pilot_scenarios,
-)
 from pcbknowledge.git_native.store import RecordConflictError
 from tests.git_native.support import RepositoryTestCase, minimal_pdf
 
@@ -160,18 +155,3 @@ class ExactComponentIdentityTests(RepositoryTestCase):
         with self.assertRaises(RecordTransitionError):
             changed = replace(approved, conditions=("rewritten",))
             self.repository.save_fact(approved, changed, approved.revision_token)
-
-    def test_scenario_runner_does_not_promote_lossy_candidates(self) -> None:
-        self.component("AB-12", "scenario-component")
-        suite = PilotScenarioSuite.from_dict({
-            "format": PILOT_SCENARIO_FORMAT, "dataset_name": "exact-identity", "notes": None,
-            "scenarios": [
-                {"id": f"scenario_identity_{index}", "pilot_case_id": f"case_identity_{index}", "kind": "COMPONENT_LOOKUP",
-                 "expected_code": expected, "snapshot": "WORKING", "notes": None,
-                 "parameters": {"manufacturer_id": self.manufacturer.id, "raw_mpn": query}}
-                for index, (query, expected) in enumerate((("AB-12", "EXACT"), ("AB12", "UNKNOWN"), ("ab-12", "UNKNOWN")))
-            ],
-        })
-        report = run_pilot_scenarios(self.repository, suite)
-        self.assertTrue(report.passed)
-        self.assertEqual([result.observed_code for result in report.results], ["EXACT", "UNKNOWN", "UNKNOWN"])

@@ -7,7 +7,5 @@ deletes its code; see [`TODO.md`](../../TODO.md) for the order.
 
 | Folder / page | Subsystem | Planned outcome |
 | --- | --- | --- |
-| [`intake/`](intake/lightweight-knowledge.md) | Noncanonical intake queue, its CLI, workbench page, bundle, report, audit and preflight tools | Frozen; golden-design parts migrate to v2, then deleted |
-| [`pilot/`](pilot/pilot-evaluation.md) | P0.4a pilot harness | Deleted in Stage 0 |
-| [`worked-examples/`](worked-examples/resistor-dc-bound.md) | Fixed per-device evaluators in `configs/pcbknowledge_*_eval.py` | Deleted in Stage 0 |
+| [`intake/`](intake/lightweight-knowledge.md) | Noncanonical intake queue, its CLI, workbench page, bundle, report and audit tools | Frozen; golden-design parts migrate to v2, then deleted |
 | [`agent-workflow-v1.md`](agent-workflow-v1.md) | v1 typed Source/Entity/Fact ingestion and repository skills | Replaced by the v2 workflow |
