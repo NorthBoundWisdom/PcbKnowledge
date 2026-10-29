@@ -31,7 +31,9 @@
         "sensor.current",
         "memory.eeprom",
         "interface.header",
-        "mechanical.mounting"
+        "mechanical.mounting",
+        "sensor.temperature",
+        "interface.usb-uart"
       ]
     },
     "parameters": {

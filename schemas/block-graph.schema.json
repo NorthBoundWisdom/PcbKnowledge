@@ -4,35 +4,86 @@
   "title": "Planned block graph input",
   "type": "object",
   "properties": {
-    "schema": {"const": "pcbknowledge.block-graph.v2"},
-    "id": {"type": "string", "minLength": 1},
-    "brief": {"enum": ["G1", "G2", "G3"]},
-    "status": {"const": "DRAFT"},
-    "interface_status": {"const": "PLANNED_BLOCK_CONTRACTS"},
+    "schema": {
+      "const": "pcbknowledge.block-graph.v2"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "brief": {
+      "enum": [
+        "G1",
+        "G2",
+        "G3",
+        "G1V1",
+        "G1V2",
+        "N1",
+        "N2",
+        "N3"
+      ]
+    },
+    "status": {
+      "const": "DRAFT"
+    },
+    "interface_status": {
+      "const": "PLANNED_BLOCK_CONTRACTS"
+    },
     "instances": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
-          "block": {"type": "string", "pattern": "^block:[a-z][a-z0-9-]*$"},
-          "parameters": {"$ref": "parameters.schema.json"},
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "block": {
+            "type": "string",
+            "pattern": "^block:[a-z][a-z0-9-]*$"
+          },
+          "parameters": {
+            "$ref": "parameters.schema.json"
+          },
           "ports": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "name": {"type": "string", "minLength": 1},
-                "type": {"type": "string", "minLength": 1, "maxLength": 256}
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
               },
-              "required": ["name", "type"],
+              "required": [
+                "name",
+                "type"
+              ],
               "additionalProperties": false
             },
             "minItems": 0
           },
-          "requirements": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1}
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
         },
-        "required": ["id", "block", "parameters", "ports", "requirements"],
+        "required": [
+          "id",
+          "block",
+          "parameters",
+          "ports",
+          "requirements"
+        ],
         "additionalProperties": false
       },
       "minItems": 1
@@ -42,25 +93,59 @@
       "items": {
         "type": "object",
         "properties": {
-          "net": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+          "net": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
           "endpoints": {
             "type": "array",
             "items": {
               "type": "object",
-              "properties": {"instance": {"type": "string", "minLength": 1}, "port": {"type": "string", "minLength": 1}},
-              "required": ["instance", "port"],
+              "properties": {
+                "instance": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "port": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "instance",
+                "port"
+              ],
               "additionalProperties": false
             },
             "minItems": 2
           }
         },
-        "required": ["net", "endpoints"],
+        "required": [
+          "net",
+          "endpoints"
+        ],
         "additionalProperties": false
       },
       "minItems": 1
     },
-    "requirements": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1}
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
   },
-  "required": ["schema", "id", "brief", "status", "interface_status", "instances", "connections", "requirements"],
+  "required": [
+    "schema",
+    "id",
+    "brief",
+    "status",
+    "interface_status",
+    "instances",
+    "connections",
+    "requirements"
+  ],
   "additionalProperties": false
 }

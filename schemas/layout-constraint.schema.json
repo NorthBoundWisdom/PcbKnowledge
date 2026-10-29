@@ -132,6 +132,37 @@
     },
     "distance": {
       "$ref": "quantity.schema.json"
+    },
+    "nets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "gap": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "max_skew": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
     }
   },
   "required": [
