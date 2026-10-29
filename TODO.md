@@ -480,7 +480,7 @@ Exit: the G1 handoff project opens in KiCad 9; DRC with generated rules reports
 only unrouted/placement findings; `layout check` passes the fixture board and
 fails every mutation with the expected kind.
 
-Receipt (2026-10-29): data `e91e2f9`, implementation `9cc21c5`; full gate PASS, 226 tests/no skips, 85 records and 67/67 audited authority reachable; G1 remains A2 with 88 checks.
+Receipt (2026-10-29): data `b4b606e`, implementation `e82bfe3`; full gate PASS, 226 tests/no skips, 85 records and 67/67 audited authority reachable; G1 remains A2 with 88 checks.
 Native KiCad 9.0.2 on authenticated bundle: zero rule violations and 119 unconnected items; parked layout correctly reports FAIL (24 placement findings, eight NOT_CHECKABLE), not A3/A4 acceptance. D24-D27 record measurement, fillet and compatible USB/courtyard decisions.
 Review: 13 checks; pad-geometry forgery and two source-claim findings fixed, board/courtyard checks strengthened, independent actual-source and generated-footprint visual review passed. Next: Stage 8 corpus and honest query-isolated synthesis.
 
