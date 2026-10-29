@@ -1,12 +1,21 @@
 # TODO — PcbKnowledge Roadmap
 
 > Status: `LIGHTWEIGHT_CURATION_ACTIVE_FORMAL_PILOT_OPEN`
-> Updated: 2026-10-28
+> Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
+
+## Reviewed ferrite bead integration
+
+The collection now contains 36 batches / 48 source scopes / 323 annotations.
+Five exact MH2029-601T facts preserve frequency, measurement amplitude, DCR,
+current temperature-rise basis and graph limitations. Sixteen distinct recipes
+extend immutable history, with full-payload semantic mutation tests.
+See the [evaluation scope](docs/intake-evaluation-ferrite.md). Independent source
+and integration reviews, full gates and exact-commit CI remain separate receipts.
 
 ## Reviewed photodiode integration
 
-The collection now contains 35 batches / 47 source scopes / 318 annotations.
+At the photodiode stage the collection contained 35 batches / 47 source scopes / 318 annotations.
 Seven exact BPW34 facts retain illumination, bias, load, frequency, typical/limit
 and unknown optical conditions; three warnings preserve application boundaries.
 The compact successor inherits 738 retrieval cases and adds 26 justified cases.
