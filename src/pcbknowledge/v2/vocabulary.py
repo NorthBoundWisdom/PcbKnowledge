@@ -1,7 +1,7 @@
 """Registry membership, canonical quantities and parameter condition validation."""
 from __future__ import annotations
 
-import json
+from pcbknowledge.serialization import read_json
 from pathlib import Path
 
 from .schema import validate
@@ -25,10 +25,13 @@ class Vocabulary:
     @classmethod
     def load(cls, directory: Path, schema_dir: Path):
         documents = []
+        for path in (directory, directory.parent):
+            if path.is_symlink():raise ValueError('Registry directory symlinks are forbidden')
         for path in sorted(directory.glob('*.json')):
             if path.is_symlink():
                 raise ValueError('Registry symlinks are forbidden')
-            document = json.loads(path.read_text(encoding='utf-8'))
+            if path.stat().st_size > 1_000_000:raise ValueError('Oversized registry')
+            document = read_json(path.read_bytes())
             validate(document, 'registry.schema.json', schema_dir)
             if path.stem != document['id'].removeprefix('registry:'):
                 raise ValueError('Registry filename does not match its identity')
@@ -99,6 +102,10 @@ class Vocabulary:
                 if name in value:
                     for item in value[name] if isinstance(value[name], list) else [value[name]]:
                         self.member(registry, item)
+            if key == 'ports' and 'kind' in value:
+                self.member('pin-types', value['kind'])
+            if 'pin_type' in value:
+                self.member('pin-types', value['pin_type'])
             if 'role' in value:
                 self.member('roles', value['role'])
             if key in ('pins', 'ports') and 'type' in value:

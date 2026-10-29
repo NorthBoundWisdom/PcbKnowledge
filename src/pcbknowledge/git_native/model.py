@@ -6,6 +6,7 @@ an independent write path.
 """
 
 from __future__ import annotations
+from pcbknowledge.serialization import canonical_json
 
 import hashlib
 import json
@@ -211,7 +212,7 @@ def exact_mpn_key(value: str) -> str:
 
 
 def _canonical_json(value: Mapping[str, object]) -> str:
-    return json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+    return canonical_json(value, sort_keys=False)
 
 
 def _revision_token(value: Mapping[str, object]) -> str:

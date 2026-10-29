@@ -50,6 +50,7 @@ BUILD_INPUT_FILES = (
     Path("configs/pcbknowledge_workspace.py"),
     Path("configs/pcbknowledge_workflow.py"),
     Path("src/pcbknowledge/v2/schema.py"),
+    Path("src/pcbknowledge/serialization.py"),
     WORKSPACE_MANIFEST_PATH,
     *SCHEMA_PATHS,
 )

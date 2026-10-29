@@ -111,12 +111,12 @@ coherent commit or a small group of commits. Data and contract commits stay sepa
 
 ### 2b v2 runtime alongside v1 (code only, no catalog data yet)
 
-- [ ] `src/pcbknowledge/v2/`: loader, canonical serialization (reuse existing
+- [x] `src/pcbknowledge/v2/`: loader, canonical serialization (reuse existing
   helpers), structural validator from 2a, semantic validator covering the list in
   knowledge-model-v2 "Validation boundary".
-- [ ] Read-only CLI: `v2 validate`, `part show|search`, `package show`,
+- [x] Read-only CLI: `v2 validate`, `part show|search`, `package show`,
   `block show|search`, `fab show`, `registry show`. JSON output.
-- [ ] Tests on synthetic records in a temporary external Git workspace, including
+- [x] Tests on synthetic records in a temporary external Git workspace, including
   tamper cases (unknown registry name, wrong unit, pin without pad, dangling block
   reference, fabricated human verifier).
 

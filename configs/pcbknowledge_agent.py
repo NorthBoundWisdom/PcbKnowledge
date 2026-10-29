@@ -34,6 +34,13 @@ def _selected_repository(arguments: list[str]) -> Path:
 
 def main(argv: list[str] | None = None) -> int:
     arguments = list(sys.argv[1:] if argv is None else argv)
+    commands = [a for a in arguments if not a.startswith('--repo=')]
+    if '--repo' in commands:
+        index = commands.index('--repo')
+        commands[index:index+2] = []
+    if commands and commands[0] in {'v2','part','package','block','fab','registry'}:
+        from pcbknowledge.v2.cli import main as v2_main
+        return v2_main(arguments)
     root = _selected_repository(arguments)
     try:
         validate_workspace(root)

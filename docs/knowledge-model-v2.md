@@ -67,21 +67,26 @@ quantity of each allowed condition in the parameter registry.
 G1 design inputs use D7 engineering defaults. An unconstrained component height
 is explicit. G2 and G3 decisions are completed when their stages start.
 
-This is not the Stage 2 catalog validator. That validator must enforce:
+`v2/catalog.py` loads canonical records from the selected workspace and validates
+source/page/license closure, independent verifier identities, exact part/package
+pin coverage and aliases, block connectivity and satisfiable selections.
+`v2/intent.py` checks component/net/BOM closure, mechanical references, required
+electrical checks, power decoupling connectivity and the weakest verification
+level across parts, packages, rules, the fab profile and cited sources. Footprint
+identifiers are derived as `pcbknowledge:<package ID suffix>`.
 
-- canonical serialization, registry closure, parameter-specific condition rules
-  and numeric ordering (`min <= typ <= max`);
-- source existence, page count and license eligibility;
-- independent verifier identity and truthful verification provenance;
-- complete part-pin/package-pad coverage and pin aliases;
-- block references, port/pin connectivity, satisfiable part selection, supported
-  calculator and constraint names;
-- design-intent component/net/BOM closure, electrical check completeness and
-  the computed weakest verification level.
+The read-only JSON CLI provides `v2 validate`, `part show|search`, `package show`,
+`block show|search`, `fab show` and `registry show`, with an explicit `--repo`.
+It validates the whole catalog before querying it. Local source-cache absence is
+reported as `NOT_LOCALLY_VERIFIED`; bytes with a wrong identity fail validation.
+A source with blocked rights cannot back a value. Verifier actor types and
+independence are machine checked; the Git reviewer checks that the named actor
+actually performed the observation.
 
-A structural pass does not resolve a planned block against a catalog. The G1
-expected graph is a hand-made planning answer; its referenced catalog records
-and electrical operating points still need implementation and verification.
+Calculators are unavailable until their executable implementations arrive in
+Stage 4. A block containing a calculator check is refused now. These owner-facing
+working-tree queries precede the commit-pinned consumer bundle in Stage 5.
+The G1 reference graph still names planned blocks rather than collected records.
 
 ## Consumer pipeline
 
