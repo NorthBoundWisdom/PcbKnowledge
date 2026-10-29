@@ -3,52 +3,239 @@
   "$id": "package.schema.json",
   "type": "object",
   "properties": {
-    "schema": {"const": "pcbknowledge.package.v2"},
-    "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^package:[a-z0-9][a-z0-9/_-]*$"},
-    "verification": {"$ref": "envelope.schema.json#/$defs/verification"},
-    "provenance": {"$ref": "envelope.schema.json#/$defs/provenance"},
-    "family": {"type": "string", "minLength": 1, "maxLength": 256},
+    "schema": {
+      "const": "pcbknowledge.package.v2"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^package:[a-z0-9][a-z0-9/_-]*$"
+    },
+    "verification": {
+      "$ref": "envelope.schema.json#/$defs/verification"
+    },
+    "provenance": {
+      "$ref": "envelope.schema.json#/$defs/provenance"
+    },
+    "family": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
     "body": {
       "type": "object",
       "properties": {
-        "length": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-        "width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-        "height": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
-      },
-      "required": ["length", "width", "height"],
-      "additionalProperties": false
-    },
-    "footprint": {
-      "type": "object",
-      "properties": {
-        "mode": {"type": "string", "minLength": 1, "maxLength": 256},
-        "pads": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "number": {"type": "string", "minLength": 1, "maxLength": 256},
-              "kind": {"enum": ["SMD", "THROUGH_HOLE", "MECHANICAL"]},
-              "shape": {"enum": ["RECT", "ROUND", "OVAL"]},
-              "x": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-              "y": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-              "width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-              "height": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-              "drill": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-              "rotation": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
+        "length": {
+          "oneOf": [
+            {
+              "$ref": "quantity.schema.json"
             },
-            "required": ["number", "kind", "shape", "x", "y", "width", "height", "rotation"],
-            "additionalProperties": false
-          },
-          "minItems": 1
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "width": {
+          "oneOf": [
+            {
+              "$ref": "quantity.schema.json"
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "height": {
+          "oneOf": [
+            {
+              "$ref": "quantity.schema.json"
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
         }
       },
-      "required": ["mode", "pads"],
+      "required": [
+        "length",
+        "width",
+        "height"
+      ],
       "additionalProperties": false
     },
-    "pin1": {"type": "string", "minLength": 1, "maxLength": 256},
-    "courtyard_margin": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "minItems": 1}
+    "pin1": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "courtyard_margin": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence.schema.json"
+      },
+      "minItems": 1
+    },
+    "explicit_pads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "kind": {
+            "enum": [
+              "SMD",
+              "THROUGH_HOLE",
+              "MECHANICAL"
+            ]
+          },
+          "shape": {
+            "enum": [
+              "RECT",
+              "ROUND",
+              "OVAL"
+            ]
+          },
+          "x": {
+            "$ref": "quantity.schema.json"
+          },
+          "y": {
+            "$ref": "quantity.schema.json"
+          },
+          "width": {
+            "$ref": "quantity.schema.json"
+          },
+          "height": {
+            "$ref": "quantity.schema.json"
+          },
+          "drill": {
+            "$ref": "quantity.schema.json"
+          },
+          "rotation": {
+            "$ref": "quantity.schema.json"
+          },
+          "drill_width": {
+            "$ref": "quantity.schema.json"
+          },
+          "drill_height": {
+            "$ref": "quantity.schema.json"
+          }
+        },
+        "required": [
+          "number",
+          "kind",
+          "shape",
+          "x",
+          "y",
+          "width",
+          "height",
+          "rotation"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "generator": {
+      "enum": [
+        "chip",
+        "molded_diode",
+        "gullwing_two_side",
+        "gullwing_four_side",
+        "crystal_four_pad",
+        "pin_header",
+        "mechanical_hole"
+      ]
+    },
+    "density": {
+      "enum": [
+        "COMPACT",
+        "NOMINAL",
+        "ROBUST"
+      ]
+    },
+    "drawing": {
+      "type": "object",
+      "properties": {
+        "lead_span": {
+          "$ref": "quantity.schema.json"
+        },
+        "lead_width": {
+          "$ref": "quantity.schema.json"
+        },
+        "lead_length": {
+          "$ref": "quantity.schema.json"
+        },
+        "pitch": {
+          "$ref": "quantity.schema.json"
+        },
+        "row_pitch": {
+          "$ref": "quantity.schema.json"
+        },
+        "drill": {
+          "$ref": "quantity.schema.json"
+        },
+        "pad_width": {
+          "$ref": "quantity.schema.json"
+        },
+        "pad_height": {
+          "$ref": "quantity.schema.json"
+        },
+        "pin_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "row_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "pad_numbers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "tab": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "string",
+              "minLength": 1
+            },
+            "width": {
+              "$ref": "quantity.schema.json"
+            }
+          },
+          "required": [
+            "number",
+            "width"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "pin_count"
+      ],
+      "additionalProperties": false
+    }
   },
   "required": [
     "schema",
@@ -57,7 +244,6 @@
     "provenance",
     "family",
     "body",
-    "footprint",
     "pin1",
     "courtyard_margin",
     "evidence"
@@ -66,11 +252,68 @@
   "allOf": [
     {
       "oneOf": [
-        {"properties": {"verification": {"const": "DRAFT"}}},
         {
           "properties": {
-            "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
-            "provenance": {"properties": {"verified_by": {"minItems": 1}}}
+            "verification": {
+              "const": "DRAFT"
+            }
+          }
+        },
+        {
+          "properties": {
+            "verification": {
+              "enum": [
+                "AGENT_VERIFIED",
+                "HUMAN_VERIFIED"
+              ]
+            },
+            "provenance": {
+              "properties": {
+                "verified_by": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "required": [
+            "drawing",
+            "generator",
+            "density"
+          ],
+          "not": {
+            "required": [
+              "explicit_pads"
+            ]
+          }
+        },
+        {
+          "required": [
+            "explicit_pads"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "drawing"
+                ]
+              },
+              {
+                "required": [
+                  "generator"
+                ]
+              },
+              {
+                "required": [
+                  "density"
+                ]
+              }
+            ]
           }
         }
       ]
