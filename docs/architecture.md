@@ -72,6 +72,12 @@ their code is removed. Historical receipts are under [`archive/`](archive/README
 - **Unknown is a result.** Missing facts are never filled from a similar device,
   package, free text or model prior.
 
+Stage 1 adds target JSON Schemas in `docs/contracts/v2/`, six G1 vocabulary
+registries, three synthetic briefs and the expected G1 graph. Offline contract
+tests check these shapes. They do not replace the active v1 model or its pinned
+workspace schemas; Stage 2 owns that change. Build receipts track the contract
+test inputs so schema, registry or golden-fixture edits require a fresh Build.
+
 ## 3. Target architecture (v2)
 
 See [knowledge-model-v2.md](knowledge-model-v2.md) for the full model. In short:

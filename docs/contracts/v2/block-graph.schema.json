@@ -1,0 +1,345 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "block-graph.schema.json",
+  "title": "Planned block graph input",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "pcbknowledge.block-graph.v2"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "brief": {
+      "enum": [
+        "G1",
+        "G2",
+        "G3"
+      ]
+    },
+    "status": {
+      "const": "DRAFT"
+    },
+    "interface_status": {
+      "const": "PLANNED_BLOCK_CONTRACTS"
+    },
+    "instances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "block": {
+            "type": "string",
+            "pattern": "^block:[a-z][a-z0-9-]*$"
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input_voltage": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "V"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "input_current": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "A"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "output_voltage": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "V"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "output_current": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "A"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "clock_frequency": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "Hz"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "bus_frequency": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "Hz"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "length": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "mm"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "width": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "mm"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "thickness": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "mm"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "enum": [
+                    "POWER_IN",
+                    "POWER_OUT",
+                    "GROUND",
+                    "INPUT",
+                    "OUTPUT",
+                    "BIDIRECTIONAL",
+                    "OPEN_DRAIN"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "block",
+          "parameters",
+          "ports",
+          "requirements"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "net": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "instance": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "port": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "instance",
+                "port"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          }
+        },
+        "required": [
+          "net",
+          "endpoints"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema",
+    "id",
+    "brief",
+    "status",
+    "interface_status",
+    "instances",
+    "connections",
+    "requirements"
+  ],
+  "additionalProperties": false
+}

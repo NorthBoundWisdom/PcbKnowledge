@@ -9,7 +9,7 @@ The active roadmap is the root [`TODO.md`](../TODO.md). Agent rules are in the r
 | --- | --- |
 | Direction and why it changed | [ADR-022](adr/ADR-022-board-generation-knowledge.md) |
 | System boundary, current code status, target summary | [`architecture.md`](architecture.md) |
-| Target data model, consumer queries, API | [`knowledge-model-v2.md`](knowledge-model-v2.md) |
+| Staged v2 contracts, consumer queries and implementation boundary | [`knowledge-model-v2.md`](knowledge-model-v2.md) |
 | Golden designs, brief format, acceptance levels A1 to A6 | [`golden-designs.md`](golden-designs.md) |
 | Public versus private content and source originals | [`open-source-boundary.md`](open-source-boundary.md) |
 | Local Config/Build/Open/Test/Package and workspaces | [`local-workflow.md`](local-workflow.md) |

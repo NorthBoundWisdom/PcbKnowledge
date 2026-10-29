@@ -73,6 +73,18 @@ class LocalWorkflowTests(WorkflowTestCase):
         with self.assertRaisesRegex(workflow.WorkflowError, "source changed"):
             workflow.require_build(self.root)
 
+    def test_build_receipt_tracks_staged_contract_test_inputs(self) -> None:
+        for relative in (Path("tests/contract_schema.py"),
+                         Path("docs/contracts/v2/owned.py"),
+                         Path("evals/golden-designs/owned.py"),
+                         Path("knowledge/registry/owned.py")):
+            with self.subTest(path=relative):
+                self.prepare_receipts()
+                target = self.root / relative
+                target.write_text(target.read_text("utf-8") + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(workflow.WorkflowError, "source changed"):
+                    workflow.require_build(self.root)
+
     def test_source_dependency_template_must_remain_empty(self) -> None:
         workflow._require_prerequisites(self.root)
         template = self.root / "source_roots.lock.jsonc.in"

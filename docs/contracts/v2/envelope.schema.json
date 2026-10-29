@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "envelope.schema.json",
+  "type": "object",
+  "properties": {
+    "schema": {"$ref": "envelope.schema.json#/$defs/schema"},
+    "id": {"$ref": "envelope.schema.json#/$defs/id"},
+    "verification": {"$ref": "envelope.schema.json#/$defs/verification"},
+    "provenance": {"$ref": "envelope.schema.json#/$defs/provenance"}
+  },
+  "required": ["schema", "id", "verification", "provenance"],
+  "additionalProperties": false,
+  "$defs": {
+    "schema": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^pcbknowledge\\.[a-z_]+\\.v2$"},
+    "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[a-z_]+:[a-z0-9][a-z0-9/_-]*$"},
+    "verification": {
+      "enum": ["DRAFT", "AGENT_VERIFIED", "HUMAN_VERIFIED"]
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "created_by": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^(agent|human):[^\\s]+$"},
+        "verified_by": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^(agent|human):[^\\s]+$"},
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "notes": {"type": "string", "minLength": 1, "maxLength": 256}
+      },
+      "required": ["created_by", "verified_by"],
+      "additionalProperties": false
+    }
+  }
+}

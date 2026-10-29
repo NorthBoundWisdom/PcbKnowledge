@@ -1,0 +1,754 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "design-brief.schema.json",
+  "title": "Synthetic golden design brief",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "pcbknowledge.design-brief.v2"
+    },
+    "id": {
+      "enum": [
+        "G1",
+        "G2",
+        "G3"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "const": "DRAFT"
+    },
+    "origin": {
+      "const": "SYNTHETIC"
+    },
+    "owner_decisions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6"
+        ]
+      },
+      "minItems": 0
+    },
+    "power": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "voltage": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "V"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "current_budget": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "A"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "description",
+              "voltage",
+              "current_budget"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "rails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "voltage": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "V"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "current_budget": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "A"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "voltage",
+              "current_budget"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "sources",
+        "rails"
+      ],
+      "additionalProperties": false
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "part_preferences": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input_voltage": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "V"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "input_current": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "A"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "output_voltage": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "V"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "output_current": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "A"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "clock_frequency": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "Hz"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "bus_frequency": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "Hz"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "length": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "mm"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "width": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "mm"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              },
+              "thickness": {
+                "oneOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "quantity.schema.json"
+                      },
+                      {
+                        "properties": {
+                          "unit": {
+                            "const": "mm"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "count",
+          "part_preferences",
+          "requirements",
+          "parameters"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "signals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "voltage": {
+            "oneOf": [
+              {
+                "allOf": [
+                  {
+                    "$ref": "quantity.schema.json"
+                  },
+                  {
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "$ref": "unknown.schema.json"
+              }
+            ]
+          },
+          "current_limit": {
+            "oneOf": [
+              {
+                "allOf": [
+                  {
+                    "$ref": "quantity.schema.json"
+                  },
+                  {
+                    "properties": {
+                      "unit": {
+                        "const": "A"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "$ref": "unknown.schema.json"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "signals",
+          "voltage",
+          "current_limit"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "mechanical": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "oneOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "properties": {
+                    "unit": {
+                      "const": "mm"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "width": {
+          "oneOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "properties": {
+                    "unit": {
+                      "const": "mm"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "mounting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "description"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        },
+        "edge_interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "height": {
+          "oneOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "properties": {
+                    "unit": {
+                      "const": "mm"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        }
+      },
+      "required": [
+        "length",
+        "width",
+        "mounting",
+        "edge_interfaces",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "manufacturing": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "layers": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "thickness": {
+          "oneOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "properties": {
+                    "unit": {
+                      "const": "mm"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "copper": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assembly": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preferred_passives": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "profile",
+        "layers",
+        "thickness",
+        "copper",
+        "assembly",
+        "preferred_passives"
+      ],
+      "additionalProperties": false
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "enum": [
+              "A1",
+              "A2",
+              "A3",
+              "A4",
+              "A5",
+              "A6"
+            ]
+          },
+          "owner": {
+            "enum": [
+              "PcbKnowledge",
+              "PcbAtlas",
+              "Owner"
+            ]
+          },
+          "criterion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "NOT_RUN"
+          }
+        },
+        "required": [
+          "level",
+          "owner",
+          "criterion",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 6
+    }
+  },
+  "required": [
+    "schema",
+    "id",
+    "title",
+    "summary",
+    "status",
+    "origin",
+    "owner_decisions",
+    "power",
+    "functions",
+    "interfaces",
+    "mechanical",
+    "manufacturing",
+    "constraints",
+    "acceptance"
+  ],
+  "additionalProperties": false
+}

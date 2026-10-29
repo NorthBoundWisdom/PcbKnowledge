@@ -1,0 +1,282 @@
+{
+  "schema": "pcbknowledge.design-brief.v2",
+  "id": "G2",
+  "title": "Motor and actuator controller",
+  "summary": "Motor and relay controller adding switching conversion, power switching and current sensing to the G1 MCU core.",
+  "status": "DRAFT",
+  "origin": "SYNTHETIC",
+  "owner_decisions": [],
+  "power": {
+    "sources": [
+      {
+        "id": "terminal_input",
+        "description": "Terminal-block power input.",
+        "voltage": {
+          "min": 7,
+          "max": 12,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic design requirement."
+        },
+        "current_budget": {
+          "status": "UNKNOWN",
+          "reason": "Motor, relay and external-load current budgets are not specified.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    ],
+    "rails": [
+      {
+        "id": "logic_3v3",
+        "voltage": {
+          "value": 3.3,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic design requirement."
+        },
+        "current_budget": {
+          "status": "UNKNOWN",
+          "reason": "Logic current budget not specified.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    ]
+  },
+  "functions": [
+    {
+      "id": "input_protection",
+      "description": "Fuse, reverse protection and bulk electrolytic input capacitance.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "Fuse, reverse protection and bulk electrolytic input capacitance."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "buck",
+      "description": "TPS62160 buck converter with SRP4020TA inductor.",
+      "count": 1,
+      "part_preferences": [
+        "TPS62160",
+        "SRP4020TA"
+      ],
+      "requirements": [
+        "TPS62160 buck converter with SRP4020TA inductor."
+      ],
+      "parameters": {
+        "output_voltage": {
+          "value": 3.3,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic design requirement."
+        }
+      }
+    },
+    {
+      "id": "mcu",
+      "description": "Reuse the G1 MCU core.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "Reuse the G1 MCU core."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "stepper_relays",
+      "description": "ULN2003A actuation for a unipolar stepper or relays.",
+      "count": 1,
+      "part_preferences": [
+        "ULN2003A"
+      ],
+      "requirements": [
+        "Select the load and channel allocation before generation."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "low_side",
+      "description": "Low-side MOSFET switch with flyback diode.",
+      "count": 1,
+      "part_preferences": [
+        "AO3400A",
+        "Si2342DS"
+      ],
+      "requirements": [
+        "Choose one supported switch and a flyback diode for the selected load."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "current_monitor",
+      "description": "WSLP2512 shunt with INA219 current monitor.",
+      "count": 1,
+      "part_preferences": [
+        "WSLP2512",
+        "INA219"
+      ],
+      "requirements": [
+        "WSLP2512 shunt with INA219 current monitor."
+      ],
+      "parameters": {}
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "input_terminal",
+      "description": "Power terminal block",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "min": 7,
+        "max": 12,
+        "unit": "V",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "Original synthetic design requirement."
+      },
+      "current_limit": {
+        "status": "UNKNOWN",
+        "reason": "External load current limit is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      }
+    },
+    {
+      "id": "actuator",
+      "description": "Load connections; exact channel count and pinout to be selected.",
+      "signals": [
+        "LOAD",
+        "RETURN"
+      ],
+      "voltage": {
+        "status": "UNKNOWN",
+        "reason": "Electrical voltage range is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      },
+      "current_limit": {
+        "status": "UNKNOWN",
+        "reason": "External load current limit is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      }
+    }
+  ],
+  "mechanical": {
+    "length": {
+      "status": "UNKNOWN",
+      "reason": "Board length not specified.",
+      "blocks": [
+        "Q11"
+      ]
+    },
+    "width": {
+      "status": "UNKNOWN",
+      "reason": "Board width not specified.",
+      "blocks": [
+        "Q11"
+      ]
+    },
+    "mounting": [],
+    "edge_interfaces": [],
+    "height": {
+      "status": "UNKNOWN",
+      "reason": "Component height limit not specified.",
+      "blocks": [
+        "Q11"
+      ]
+    }
+  },
+  "manufacturing": {
+    "profile": {
+      "status": "UNKNOWN",
+      "reason": "Fab profile not selected.",
+      "blocks": [
+        "Q9"
+      ]
+    },
+    "layers": {
+      "status": "UNKNOWN",
+      "reason": "Layer count not specified.",
+      "blocks": [
+        "Q9"
+      ]
+    },
+    "thickness": {
+      "status": "UNKNOWN",
+      "reason": "Board thickness not specified.",
+      "blocks": [
+        "Q9"
+      ]
+    },
+    "copper": "Unspecified",
+    "assembly": "Unspecified",
+    "preferred_passives": "Unspecified"
+  },
+  "constraints": [
+    {
+      "id": "buck_loop",
+      "description": "Constrain the buck hot loop."
+    },
+    {
+      "id": "kelvin",
+      "description": "Use Kelvin current-sense connections."
+    },
+    {
+      "id": "power_routing",
+      "description": "Size high-current net widths and thermal copper from selected loads and fab limits."
+    }
+  ],
+  "acceptance": [
+    {
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A6",
+      "owner": "Owner",
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "status": "NOT_RUN"
+    }
+  ]
+}

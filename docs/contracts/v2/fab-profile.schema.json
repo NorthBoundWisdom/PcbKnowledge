@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fab-profile.schema.json",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "pcbknowledge.fab_profile.v2"},
+    "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$"},
+    "verification": {"$ref": "envelope.schema.json#/$defs/verification"},
+    "provenance": {"$ref": "envelope.schema.json#/$defs/provenance"},
+    "owner_decision": {"const": "D2"},
+    "layer_count": {"const": 2},
+    "assembly_side": {"const": "TOP"},
+    "thickness": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "copper_thickness": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "trace_width_min": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "clearance_min": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "drill_min": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "annular_ring_min": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "solder_mask_web_min": {
+      "oneOf": [
+        {
+          "allOf": [
+            {"$ref": "quantity.schema.json"},
+            {
+              "properties": {
+                "unit": {"const": "mm"}
+              }
+            }
+          ]
+        },
+        {"$ref": "unknown.schema.json"}
+      ]
+    },
+    "via_types": {
+      "type": "array",
+      "items": {
+        "enum": ["THROUGH"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "stackup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string", "minLength": 1, "maxLength": 256},
+          "kind": {
+            "enum": ["COPPER", "DIELECTRIC"]
+          },
+          "thickness": {
+            "oneOf": [
+              {
+                "allOf": [
+                  {"$ref": "quantity.schema.json"},
+                  {
+                    "properties": {
+                      "unit": {"const": "mm"}
+                    }
+                  }
+                ]
+              },
+              {"$ref": "unknown.schema.json"}
+            ]
+          }
+        },
+        "required": ["name", "kind", "thickness"],
+        "additionalProperties": false
+      },
+      "minItems": 3
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "evidence.schema.json"},
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema",
+    "id",
+    "verification",
+    "provenance",
+    "owner_decision",
+    "layer_count",
+    "assembly_side",
+    "thickness",
+    "copper_thickness",
+    "trace_width_min",
+    "clearance_min",
+    "drill_min",
+    "annular_ring_min",
+    "solder_mask_web_min",
+    "via_types",
+    "stackup",
+    "evidence"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "verification": {"const": "DRAFT"}
+          }
+        },
+        {
+          "properties": {
+            "verification": {
+              "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
+            },
+            "provenance": {
+              "properties": {
+                "verified_by": {"minItems": 1}
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

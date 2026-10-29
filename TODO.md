@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `STAGE_1_CONTRACTS`
+> Status: `STAGE_1_OWNER_REVIEW`
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -55,18 +55,24 @@ instruction asks for new intake batches or per-batch receipts.
 
 ## Stage 1 — Contracts for the first golden design (active)
 
-- [ ] Write the brief JSON Schema and machine-readable G1, G2, G3 briefs in
+- [x] Write the brief JSON Schema and machine-readable G1, G2, G3 briefs in
   `evals/golden-designs/`.
-- [ ] Write a hand-made expected **block graph** for G1 (the reference answer the
+- [x] Write a hand-made expected **block graph** for G1 (the reference answer the
   AI synthesis is later compared against).
-- [ ] Write JSON Schemas for v2 records (envelope, typed quantity, unknown, source,
+- [x] Write JSON Schemas for v2 records (envelope, typed quantity, unknown, source,
   package, part, block, rule, fab profile) and the initial registries, limited to
   what G1 needs.
-- [ ] Write the block-graph input schema and the design-intent output schema.
+- [x] Write the block-graph input schema and the design-intent output schema.
 - [ ] Agree the design-intent handoff with the PcbAtlas owner (D3, D4) and record
-  it as ADR-023.
+  it as ADR-023. Draft [ADR-023](docs/adr/ADR-023-design-intent-handoff.md)
+  uses D3/D4 defaults and remains Proposed for owner acceptance.
 
 Exit: schemas validate the G1 brief and G1 block graph; ADR-023 accepted.
+The implementation is ready for review, but this exit is pending owner acceptance.
+Stage 2 has not started. Target schemas remain outside the active v1 schema pin.
+Stage receipt: Build/Test each 406 tests, no skips; full gate and 801 retained intake cases pass.
+Independent review passed 44 focused checks after fixing manufacturing handoff and mechanical blocks.
+Contract and registry data use separate commits; exact remote CI is checked after publication.
 
 ## Stage 2 — v2 core, migration and hard cut
 

@@ -1,8 +1,9 @@
 # Golden designs
 
 > Status: target accepted by [ADR-022](adr/ADR-022-board-generation-knowledge.md).
-> Machine-readable briefs will live in `evals/golden-designs/`; until then this page
-> is the authority for their scope.
+> Machine-readable briefs live in [`evals/golden-designs/`](../evals/golden-designs/).
+> The [brief](contracts/v2/design-brief.schema.json) and [block-graph](contracts/v2/block-graph.schema.json)
+> schemas define their structure; this page explains their purpose and acceptance levels.
 
 Golden designs are original, synthetic design packages in the style of a simple
 hardware-competition task. They decide what knowledge to collect next and how to
@@ -10,7 +11,7 @@ measure progress. Knowledge that no golden design needs waits.
 
 ## Design brief format
 
-A brief is JSON with these sections (the first schema version may simplify):
+The brief schema defines JSON sections for the following requirements:
 
 ```text
 id, title, summary              short natural-language task statement
@@ -89,3 +90,18 @@ For each golden design, report:
 - **highest acceptance level passed** (A1 to A6), with the exact commit and bundle.
 
 A design counts as done only at A6. Lower levels are progress, not completion.
+
+## Stage 1 reference inputs
+
+`g1.brief.json`, `g2.brief.json` and `g3.brief.json` are original synthetic briefs.
+`g1.block-graph.json` is the hand-made reference answer, with declared planning
+interfaces and requirement links. Its catalog block identifiers are targets, not
+existing verified records. Unknown current budgets and other unprovided inputs
+remain typed `UNKNOWN`; all acceptance levels are `NOT_RUN`.
+
+G1 places the monitor shunt between the regulator output and logger rail, with
+the monitor itself supplied upstream. This is an explicit synthetic design
+choice for later expansion checks, not a claim about a collected component.
+Stage 1 tests check shapes, reference closure and requirement coverage. A1/A2
+remain for catalog completion and expansion; Stage 2 does not start until the
+owner accepts the proposed handoff.

@@ -1,0 +1,413 @@
+{
+  "schema": "pcbknowledge.design-brief.v2",
+  "id": "G1",
+  "title": "Sensor logger node",
+  "summary": "USB-powered low-power sensor logger with MCU, current monitor, EEPROM and expansion headers.",
+  "status": "DRAFT",
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D1",
+    "D2"
+  ],
+  "power": {
+    "sources": [
+      {
+        "id": "usb_5v",
+        "description": "USB-C sink only; no USB data or power delivery required.",
+        "voltage": {
+          "value": 5,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic design requirement."
+        },
+        "current_budget": {
+          "status": "UNKNOWN",
+          "reason": "USB source current allowance and total input budget must be selected.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    ],
+    "rails": [
+      {
+        "id": "logic_3v3",
+        "voltage": {
+          "value": 3.3,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic design requirement."
+        },
+        "current_budget": {
+          "status": "UNKNOWN",
+          "reason": "MCU, monitor, EEPROM, indicators and expansion load budgets are not specified.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    ]
+  },
+  "functions": [
+    {
+      "id": "usb_sink",
+      "description": "USB-C receptacle configured as a 5 V sink.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "CC pull-down resistors; no source role."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "input_protection",
+      "description": "Protect the input power path.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "PTC or fuse, TVS and reverse-current Schottky."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "regulation",
+      "description": "Fixed 3.3 V LDO rail.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "Fixed 3.3 V LDO rail."
+      ],
+      "parameters": {
+        "output_voltage": {
+          "value": 3.3,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic design requirement."
+        }
+      }
+    },
+    {
+      "id": "power_led",
+      "description": "Power indicator LED.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "Power indicator LED."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "mcu",
+      "description": "32-bit MCU core in LQFP-48 or smaller.",
+      "count": 1,
+      "part_preferences": [
+        "STM32F103C8T6"
+      ],
+      "requirements": [
+        "D1 default MCU is STM32F103C8T6 in LQFP-48.",
+        "Include crystal, reset, boot configuration and every required decoupling component."
+      ],
+      "parameters": {
+        "clock_frequency": {
+          "status": "UNKNOWN",
+          "reason": "Crystal frequency and load requirements await MCU-block definition.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    },
+    {
+      "id": "debug",
+      "description": "SWD programming and debug header.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "SWD programming and debug header."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "user_leds",
+      "description": "Two MCU-controlled user LEDs.",
+      "count": 2,
+      "part_preferences": [],
+      "requirements": [
+        "Two MCU-controlled user LEDs."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "user_button",
+      "description": "One MCU-readable user button.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "One MCU-readable user button."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "i2c_bus",
+      "description": "I2C bus with pull-ups.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "I2C bus with pull-ups."
+      ],
+      "parameters": {
+        "bus_frequency": {
+          "status": "UNKNOWN",
+          "reason": "Bus speed, capacitance and pull-up sizing inputs are not specified.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    },
+    {
+      "id": "power_monitor",
+      "description": "INA219 power monitor.",
+      "count": 1,
+      "part_preferences": [
+        "INA219"
+      ],
+      "requirements": [
+        "Monitor the regulated logger load through a current-sense element.",
+        "Current range, shunt value and thermal budget remain to be specified."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "eeprom",
+      "description": "I2C EEPROM.",
+      "count": 1,
+      "part_preferences": [
+        "24LC256"
+      ],
+      "requirements": [
+        "I2C EEPROM."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "i2c_expansion",
+      "description": "One four-pin I2C expansion header.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "One four-pin I2C expansion header."
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "uart",
+      "description": "UART header.",
+      "count": 1,
+      "part_preferences": [],
+      "requirements": [
+        "UART header."
+      ],
+      "parameters": {}
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "usb",
+      "description": "USB-C power entry",
+      "signals": [
+        "VBUS",
+        "GND",
+        "CC1",
+        "CC2"
+      ],
+      "voltage": {
+        "value": 5,
+        "unit": "V",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "Original synthetic design requirement."
+      },
+      "current_limit": {
+        "status": "UNKNOWN",
+        "reason": "External load current limit is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      }
+    },
+    {
+      "id": "swd",
+      "description": "Debug header",
+      "signals": [
+        "VREF",
+        "GND",
+        "SWDIO",
+        "SWCLK",
+        "NRST"
+      ],
+      "voltage": {
+        "value": 3.3,
+        "unit": "V",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "Original synthetic design requirement."
+      },
+      "current_limit": {
+        "status": "UNKNOWN",
+        "reason": "External load current limit is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      }
+    },
+    {
+      "id": "i2c_header",
+      "description": "Four-pin I2C expansion",
+      "signals": [
+        "VDD",
+        "GND",
+        "SDA",
+        "SCL"
+      ],
+      "voltage": {
+        "value": 3.3,
+        "unit": "V",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "Original synthetic design requirement."
+      },
+      "current_limit": {
+        "status": "UNKNOWN",
+        "reason": "External load current limit is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      }
+    },
+    {
+      "id": "uart_header",
+      "description": "UART expansion",
+      "signals": [
+        "VREF",
+        "GND",
+        "TX",
+        "RX"
+      ],
+      "voltage": {
+        "value": 3.3,
+        "unit": "V",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "Original synthetic design requirement."
+      },
+      "current_limit": {
+        "status": "UNKNOWN",
+        "reason": "External load current limit is not specified.",
+        "blocks": [
+          "Q11"
+        ]
+      }
+    }
+  ],
+  "mechanical": {
+    "length": {
+      "max": 50,
+      "unit": "mm",
+      "conditions": {},
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "Original synthetic design requirement."
+    },
+    "width": {
+      "max": 50,
+      "unit": "mm",
+      "conditions": {},
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "Original synthetic design requirement."
+    },
+    "mounting": [
+      {
+        "id": "mounting",
+        "description": "Four mounting holes for M3 fasteners; hole dimensions and clearances require definition."
+      }
+    ],
+    "edge_interfaces": [
+      "usb",
+      "swd",
+      "i2c_header",
+      "uart_header"
+    ],
+    "height": {
+      "status": "UNKNOWN",
+      "reason": "Component height limit not specified.",
+      "blocks": [
+        "Q11"
+      ]
+    }
+  },
+  "manufacturing": {
+    "profile": "fab_profile:generic-two-layer-default",
+    "layers": 2,
+    "thickness": {
+      "value": 1.6,
+      "unit": "mm",
+      "conditions": {},
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "Original synthetic design requirement."
+    },
+    "copper": "1 oz copper per D2; detailed stackup awaits the selected fab.",
+    "assembly": "Single-side assembly",
+    "preferred_passives": "0603"
+  },
+  "constraints": [
+    {
+      "id": "closed_world",
+      "description": "Use catalog blocks and parts only; missing values produce typed refusals."
+    },
+    {
+      "id": "monitor_scope",
+      "description": "Synthetic planning choice: INA219 senses the regulated logger load; its own supply is upstream of the shunt."
+    }
+  ],
+  "acceptance": [
+    {
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "status": "NOT_RUN"
+    },
+    {
+      "level": "A6",
+      "owner": "Owner",
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "status": "NOT_RUN"
+    }
+  ]
+}

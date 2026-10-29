@@ -8,6 +8,7 @@ from pathlib import Path
 
 from pcbknowledge.git_native.public_repo import (
     ALLOWED_AUTHORITY_PLACEHOLDERS,
+    ALLOWED_REGISTRY_PATHS,
     _native_link_target_bytes,
     MAX_METADATA_BYTES,
     PINNED_RUNTIME_FILES,
@@ -26,6 +27,13 @@ class PublicRepositoryPolicyTests(unittest.TestCase):
             "knowledge/intake/pilot/summary.md",
             "knowledge/intake/pilot/candidates.json",
         ]), ())
+
+    def test_only_initial_registry_json_paths_are_allowed(self) -> None:
+        self.assertEqual(public_distribution_violations(ALLOWED_REGISTRY_PATHS), ())
+        forbidden = ["knowledge/registry/extra.json", "knowledge/registry/roles.md",
+                     "knowledge/registry/nested/roles.json", "knowledge/registry/roles.pdf",
+                     "knowledge/parts/part.json"]
+        self.assertEqual(public_distribution_violations(forbidden), tuple(sorted(forbidden)))
 
     def test_originals_caches_and_retired_authority_are_rejected(self) -> None:
         paths = [
@@ -72,6 +80,16 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         self.stage("knowledge/intake/pilot.md", "# Review draft\n\u5f85\u9a8c\u6536\n".encode())
         self.stage("knowledge/sources/source-1.json", b"{}\n")
         self.assertEqual(check_public_distribution(self.root), ())
+
+    def test_registry_allowlist_does_not_bypass_content_or_index_checks(self) -> None:
+        path = "knowledge/registry/roles.json"
+        target = self.stage(path, b'{"schema":"pcbknowledge.registry.v2"}\n')
+        self.assertEqual(check_public_distribution(self.root), ())
+        target.write_bytes(b"%PDF-1.4\noriginal")
+        self.assertEqual(check_public_distribution(self.root), (path,))
+        self.git("add", "--", path)
+        target.write_bytes(b"{}\n")
+        self.assertEqual(check_public_distribution(self.root), (path,))
 
     def test_index_bytes_cannot_be_hidden_by_clean_worktree(self) -> None:
         path = "knowledge/intake/disguised.json"

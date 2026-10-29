@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "layout-constraint.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "PLACE_NEAR"},
+        "subject": {"type": "string", "minLength": 1, "maxLength": 256},
+        "target": {"type": "string", "minLength": 1, "maxLength": 256},
+        "max_distance": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "subject", "target", "max_distance"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "GROUP"},
+        "subjects": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 256},
+          "minItems": 2,
+          "uniqueItems": true
+        }
+      },
+      "required": ["kind", "subjects"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "MINIMIZE_LOOP"},
+        "path": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 256},
+          "minItems": 3
+        },
+        "max_area": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm2"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "path", "max_area"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "KELVIN"},
+        "sense_nets": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 256},
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "target": {"type": "string", "minLength": 1, "maxLength": 256}
+      },
+      "required": ["kind", "sense_nets", "target"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "NET_WIDTH_MIN"},
+        "net": {"type": "string", "minLength": 1, "maxLength": 256},
+        "min_width": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "net", "min_width"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "CLEARANCE_MIN"},
+        "subjects": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 256},
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "min_clearance": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "subjects", "min_clearance"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "KEEPOUT"},
+        "subject": {"type": "string", "minLength": 1, "maxLength": 256},
+        "margin": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "subject", "margin"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "COPPER_AREA"},
+        "target": {"type": "string", "minLength": 1, "maxLength": 256},
+        "min_area": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm2"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "target", "min_area"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "EDGE_PLACEMENT"},
+        "subject": {"type": "string", "minLength": 1, "maxLength": 256},
+        "edge": {
+          "enum": ["TOP", "BOTTOM", "LEFT", "RIGHT"]
+        },
+        "max_distance": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "mm"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "subject", "edge", "max_distance"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "ORIENTATION"},
+        "subject": {"type": "string", "minLength": 1, "maxLength": 256},
+        "angle": {
+          "oneOf": [
+            {
+              "allOf": [
+                {"$ref": "quantity.schema.json"},
+                {
+                  "properties": {
+                    "unit": {"const": "deg"}
+                  }
+                }
+              ]
+            },
+            {"$ref": "unknown.schema.json"}
+          ]
+        }
+      },
+      "required": ["kind", "subject", "angle"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {"const": "TEST_POINT"},
+        "net": {"type": "string", "minLength": 1, "maxLength": 256},
+        "subject": {"type": "string", "minLength": 1, "maxLength": 256}
+      },
+      "required": ["kind", "net", "subject"],
+      "additionalProperties": false
+    }
+  ]
+}

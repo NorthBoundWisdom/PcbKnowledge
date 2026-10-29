@@ -1,0 +1,313 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "registry.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"const": "registry:quantities"},
+        "scope": {"const": "G1"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "voltage",
+              "current",
+              "power",
+              "resistance",
+              "capacitance",
+              "frequency",
+              "time",
+              "temperature",
+              "length",
+              "area",
+              "angle",
+              "ratio"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "unit": {
+                "enum": ["V", "A", "W", "ohm", "F", "Hz", "s", "degC", "mm", "mm2", "deg", "1"]
+              }
+            },
+            "required": ["unit"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"const": "registry:parameters"},
+        "scope": {"const": "G1"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "input_current",
+              "input_voltage",
+              "output_voltage",
+              "output_current",
+              "voltage_rating",
+              "current_rating",
+              "power_rating",
+              "capacitance",
+              "resistance",
+              "clock_frequency",
+              "bus_frequency",
+              "frequency",
+              "length",
+              "width",
+              "height",
+              "thickness",
+              "pitch",
+              "drill",
+              "clearance",
+              "trace_width",
+              "annular_ring",
+              "solder_mask_web",
+              "copper_thickness",
+              "temperature",
+              "time"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "quantity": {
+                "enum": [
+                  "voltage",
+                  "current",
+                  "power",
+                  "resistance",
+                  "capacitance",
+                  "frequency",
+                  "time",
+                  "temperature",
+                  "length",
+                  "area",
+                  "angle",
+                  "ratio"
+                ]
+              },
+              "conditions": {
+                "type": "array",
+                "items": {
+                  "enum": ["TA", "input_voltage", "output_current", "frequency"]
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "queries": {
+                "type": "array",
+                "items": {
+                  "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": ["quantity", "conditions", "queries"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"const": "registry:pin-types"},
+        "scope": {"const": "G1"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "POWER_IN",
+              "POWER_OUT",
+              "GROUND",
+              "INPUT",
+              "OUTPUT",
+              "BIDIRECTIONAL",
+              "OPEN_DRAIN",
+              "ANALOG",
+              "PASSIVE",
+              "NO_CONNECT"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "type": "array",
+                "items": {
+                  "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": ["queries"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"const": "registry:roles"},
+        "scope": {"const": "G1"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "connector.usb-c-sink",
+              "protection.fuse",
+              "protection.tvs",
+              "diode.schottky",
+              "regulator.linear.fixed",
+              "capacitor.ceramic",
+              "capacitor.bulk",
+              "resistor",
+              "mcu.32-bit",
+              "crystal",
+              "connector.header",
+              "led",
+              "switch.button",
+              "monitor.current",
+              "memory.eeprom",
+              "mechanical.mounting-hole"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "type": "array",
+                "items": {
+                  "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": ["queries"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"const": "registry:package-families"},
+        "scope": {"const": "G1"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "CHIP_0603",
+              "SOD-123",
+              "SMB",
+              "SOT-223",
+              "SOIC-8",
+              "SOT-23-8",
+              "LQFP-48",
+              "CRYSTAL_3225",
+              "HEADER_2P54",
+              "EXPLICIT"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "type": "array",
+                "items": {
+                  "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": ["queries"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"const": "registry:layout-constraints"},
+        "scope": {"const": "G1"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "PLACE_NEAR",
+              "GROUP",
+              "MINIMIZE_LOOP",
+              "KELVIN",
+              "NET_WIDTH_MIN",
+              "CLEARANCE_MIN",
+              "KEEPOUT",
+              "COPPER_AREA",
+              "EDGE_PLACEMENT",
+              "ORIENTATION",
+              "TEST_POINT"
+            ]
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "type": "array",
+                "items": {
+                  "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "fields": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1, "maxLength": 256},
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": ["queries", "fields"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
+    }
+  ]
+}

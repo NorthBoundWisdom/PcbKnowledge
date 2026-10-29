@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rule.schema.json",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "pcbknowledge.rule.v2"},
+    "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^rule:[a-z0-9][a-z0-9/_-]*$"},
+    "verification": {"$ref": "envelope.schema.json#/$defs/verification"},
+    "provenance": {"$ref": "envelope.schema.json#/$defs/provenance"},
+    "applies_to": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "enum": [
+            "connector.usb-c-sink",
+            "protection.fuse",
+            "protection.tvs",
+            "diode.schottky",
+            "regulator.linear.fixed",
+            "capacitor.ceramic",
+            "capacitor.bulk",
+            "resistor",
+            "mcu.32-bit",
+            "crystal",
+            "connector.header",
+            "led",
+            "switch.button",
+            "monitor.current",
+            "memory.eeprom",
+            "mechanical.mounting-hole"
+          ]
+        },
+        "pin_type": {
+          "enum": [
+            "POWER_IN",
+            "POWER_OUT",
+            "GROUND",
+            "INPUT",
+            "OUTPUT",
+            "BIDIRECTIONAL",
+            "OPEN_DRAIN",
+            "ANALOG",
+            "PASSIVE",
+            "NO_CONNECT"
+          ]
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "array",
+      "items": {"$ref": "layout-constraint.schema.json"},
+      "minItems": 1
+    },
+    "basis": {
+      "enum": ["STANDARD_CONVENTION", "ENGINEERING_DEFAULT", "DATASHEET"]
+    },
+    "note": {"type": "string", "minLength": 1, "maxLength": 256},
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "evidence.schema.json"},
+      "minItems": 0
+    },
+    "convention": {"type": "string", "minLength": 1, "maxLength": 256}
+  },
+  "required": ["schema", "id", "verification", "provenance", "applies_to", "layout", "basis", "note", "evidence"],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "verification": {"const": "DRAFT"}
+          }
+        },
+        {
+          "properties": {
+            "verification": {
+              "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
+            },
+            "provenance": {
+              "properties": {
+                "verified_by": {"minItems": 1}
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "basis": {"const": "STANDARD_CONVENTION"}
+          },
+          "required": ["convention"]
+        },
+        {
+          "properties": {
+            "basis": {"const": "DATASHEET"},
+            "evidence": {"minItems": 1}
+          }
+        },
+        {
+          "properties": {
+            "basis": {"const": "ENGINEERING_DEFAULT"}
+          }
+        }
+      ]
+    }
+  ]
+}

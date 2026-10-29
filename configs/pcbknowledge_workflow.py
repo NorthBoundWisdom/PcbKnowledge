@@ -49,6 +49,7 @@ BUILD_INPUT_FILES = (
     Path("configs/pcbknowledge_agent.py"),
     Path("configs/pcbknowledge_workspace.py"),
     Path("configs/pcbknowledge_workflow.py"),
+    Path("tests/contract_schema.py"),
     WORKSPACE_MANIFEST_PATH,
     *SCHEMA_PATHS,
 )
@@ -56,6 +57,9 @@ BUILD_INPUT_ROOTS = (
     Path(".codex/skills"),
     Path("src/pcbknowledge/git_native"),
     Path("tests/git_native"),
+    Path("docs/contracts/v2"),
+    Path("evals/golden-designs"),
+    Path("knowledge/registry"),
 )
 IGNORED_SOURCE_NAMES = frozenset({"__pycache__", ".DS_Store"})
 PACKAGE_DIRECTORY = Path("build/package")

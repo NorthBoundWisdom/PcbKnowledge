@@ -1,0 +1,729 @@
+{
+  "schema": "pcbknowledge.block-graph.v2",
+  "id": "G1-expected",
+  "brief": "G1",
+  "status": "DRAFT",
+  "interface_status": "PLANNED_BLOCK_CONTRACTS",
+  "instances": [
+    {
+      "id": "usb",
+      "block": "block:usb-c-5v-sink",
+      "ports": [
+        {
+          "name": "VBUS",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "usb_sink",
+        "usb"
+      ],
+      "parameters": {
+        "output_voltage": {
+          "value": 5,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic G1 design requirement."
+        },
+        "output_current": {
+          "status": "UNKNOWN",
+          "reason": "Allowed USB sink current must be selected.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    },
+    {
+      "id": "protection",
+      "block": "block:input-protection",
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VOUT",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "input_protection"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "ldo",
+      "block": "block:ldo-fixed",
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VOUT",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "regulation"
+      ],
+      "parameters": {
+        "output_voltage": {
+          "value": 3.3,
+          "unit": "V",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Original synthetic G1 design requirement."
+        },
+        "output_current": {
+          "status": "UNKNOWN",
+          "reason": "Total regulated load current must be established.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    },
+    {
+      "id": "monitor",
+      "block": "block:ina219-monitor",
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "SENSE_IN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "SENSE_OUT",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "INPUT"
+        }
+      ],
+      "requirements": [
+        "power_monitor",
+        "monitor_scope"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "mcu",
+      "block": "block:mcu-core",
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SWDIO",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SWCLK",
+          "type": "INPUT"
+        },
+        {
+          "name": "NRST",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "LED1",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "LED2",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "BUTTON",
+          "type": "INPUT"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "UART_TX",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "UART_RX",
+          "type": "INPUT"
+        }
+      ],
+      "requirements": [
+        "mcu"
+      ],
+      "parameters": {
+        "clock_frequency": {
+          "status": "UNKNOWN",
+          "reason": "Crystal frequency and load requirements await MCU-block definition.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    },
+    {
+      "id": "swd",
+      "block": "block:swd-header",
+      "ports": [
+        {
+          "name": "VREF",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SWDIO",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SWCLK",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "NRST",
+          "type": "BIDIRECTIONAL"
+        }
+      ],
+      "requirements": [
+        "debug",
+        "swd"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "power_led",
+      "block": "block:led-indicator",
+      "ports": [
+        {
+          "name": "DRIVE",
+          "type": "INPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "power_led"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "user_led1",
+      "block": "block:led-indicator",
+      "ports": [
+        {
+          "name": "DRIVE",
+          "type": "INPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "user_leds"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "user_led2",
+      "block": "block:led-indicator",
+      "ports": [
+        {
+          "name": "DRIVE",
+          "type": "INPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "user_leds"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "button",
+      "block": "block:button-input",
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SIGNAL",
+          "type": "OUTPUT"
+        }
+      ],
+      "requirements": [
+        "user_button"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "i2c",
+      "block": "block:i2c-pullups",
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "BIDIRECTIONAL"
+        }
+      ],
+      "requirements": [
+        "i2c_bus"
+      ],
+      "parameters": {
+        "bus_frequency": {
+          "status": "UNKNOWN",
+          "reason": "Bus speed and capacitance must be specified before pull-up sizing.",
+          "blocks": [
+            "Q11"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eeprom",
+      "block": "block:i2c-eeprom",
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "INPUT"
+        }
+      ],
+      "requirements": [
+        "eeprom"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "i2c_header",
+      "block": "block:i2c-header",
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "BIDIRECTIONAL"
+        }
+      ],
+      "requirements": [
+        "i2c_expansion",
+        "i2c_header"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "uart",
+      "block": "block:uart-header",
+      "ports": [
+        {
+          "name": "VREF",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "TX",
+          "type": "INPUT"
+        },
+        {
+          "name": "RX",
+          "type": "OUTPUT"
+        }
+      ],
+      "requirements": [
+        "uart",
+        "uart_header"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "mounting",
+      "block": "block:mounting-holes",
+      "ports": [],
+      "requirements": [
+        "mounting"
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": [
+    {
+      "net": "USB_VBUS",
+      "endpoints": [
+        {
+          "instance": "usb",
+          "port": "VBUS"
+        },
+        {
+          "instance": "protection",
+          "port": "VIN"
+        }
+      ]
+    },
+    {
+      "net": "PROTECTED_5V",
+      "endpoints": [
+        {
+          "instance": "protection",
+          "port": "VOUT"
+        },
+        {
+          "instance": "ldo",
+          "port": "VIN"
+        }
+      ]
+    },
+    {
+      "net": "REGULATED_3V3",
+      "endpoints": [
+        {
+          "instance": "ldo",
+          "port": "VOUT"
+        },
+        {
+          "instance": "monitor",
+          "port": "VDD"
+        },
+        {
+          "instance": "monitor",
+          "port": "SENSE_IN"
+        }
+      ]
+    },
+    {
+      "net": "LOGGER_3V3",
+      "endpoints": [
+        {
+          "instance": "monitor",
+          "port": "SENSE_OUT"
+        },
+        {
+          "instance": "mcu",
+          "port": "VDD"
+        },
+        {
+          "instance": "swd",
+          "port": "VREF"
+        },
+        {
+          "instance": "power_led",
+          "port": "DRIVE"
+        },
+        {
+          "instance": "button",
+          "port": "VDD"
+        },
+        {
+          "instance": "i2c",
+          "port": "VDD"
+        },
+        {
+          "instance": "eeprom",
+          "port": "VDD"
+        },
+        {
+          "instance": "i2c_header",
+          "port": "VDD"
+        },
+        {
+          "instance": "uart",
+          "port": "VREF"
+        }
+      ]
+    },
+    {
+      "net": "GND",
+      "endpoints": [
+        {
+          "instance": "usb",
+          "port": "GND"
+        },
+        {
+          "instance": "protection",
+          "port": "GND"
+        },
+        {
+          "instance": "ldo",
+          "port": "GND"
+        },
+        {
+          "instance": "monitor",
+          "port": "GND"
+        },
+        {
+          "instance": "mcu",
+          "port": "GND"
+        },
+        {
+          "instance": "swd",
+          "port": "GND"
+        },
+        {
+          "instance": "power_led",
+          "port": "GND"
+        },
+        {
+          "instance": "user_led1",
+          "port": "GND"
+        },
+        {
+          "instance": "user_led2",
+          "port": "GND"
+        },
+        {
+          "instance": "button",
+          "port": "GND"
+        },
+        {
+          "instance": "eeprom",
+          "port": "GND"
+        },
+        {
+          "instance": "i2c_header",
+          "port": "GND"
+        },
+        {
+          "instance": "uart",
+          "port": "GND"
+        }
+      ]
+    },
+    {
+      "net": "SWDIO",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "SWDIO"
+        },
+        {
+          "instance": "swd",
+          "port": "SWDIO"
+        }
+      ]
+    },
+    {
+      "net": "SWCLK",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "SWCLK"
+        },
+        {
+          "instance": "swd",
+          "port": "SWCLK"
+        }
+      ]
+    },
+    {
+      "net": "NRST",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "NRST"
+        },
+        {
+          "instance": "swd",
+          "port": "NRST"
+        }
+      ]
+    },
+    {
+      "net": "USER_LED1",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "LED1"
+        },
+        {
+          "instance": "user_led1",
+          "port": "DRIVE"
+        }
+      ]
+    },
+    {
+      "net": "USER_LED2",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "LED2"
+        },
+        {
+          "instance": "user_led2",
+          "port": "DRIVE"
+        }
+      ]
+    },
+    {
+      "net": "USER_BUTTON",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "BUTTON"
+        },
+        {
+          "instance": "button",
+          "port": "SIGNAL"
+        }
+      ]
+    },
+    {
+      "net": "I2C_SDA",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "SDA"
+        },
+        {
+          "instance": "monitor",
+          "port": "SDA"
+        },
+        {
+          "instance": "i2c",
+          "port": "SDA"
+        },
+        {
+          "instance": "eeprom",
+          "port": "SDA"
+        },
+        {
+          "instance": "i2c_header",
+          "port": "SDA"
+        }
+      ]
+    },
+    {
+      "net": "I2C_SCL",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "SCL"
+        },
+        {
+          "instance": "monitor",
+          "port": "SCL"
+        },
+        {
+          "instance": "i2c",
+          "port": "SCL"
+        },
+        {
+          "instance": "eeprom",
+          "port": "SCL"
+        },
+        {
+          "instance": "i2c_header",
+          "port": "SCL"
+        }
+      ]
+    },
+    {
+      "net": "UART_TX",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "UART_TX"
+        },
+        {
+          "instance": "uart",
+          "port": "TX"
+        }
+      ]
+    },
+    {
+      "net": "UART_RX",
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "UART_RX"
+        },
+        {
+          "instance": "uart",
+          "port": "RX"
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    "closed_world"
+  ]
+}

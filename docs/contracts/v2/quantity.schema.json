@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "quantity.schema.json",
+  "type": "object",
+  "properties": {
+    "value": {"type": "number"},
+    "min": {"type": "number"},
+    "typ": {"type": "number"},
+    "max": {"type": "number"},
+    "unit": {
+      "enum": ["V", "A", "W", "ohm", "F", "Hz", "s", "degC", "mm", "mm2", "deg", "1"]
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "TA": {
+          "type": "object",
+          "properties": {
+            "value": {"type": "number"},
+            "unit": {"const": "degC"}
+          },
+          "required": ["value", "unit"],
+          "additionalProperties": false
+        },
+        "input_voltage": {
+          "type": "object",
+          "properties": {
+            "value": {"type": "number"},
+            "unit": {"const": "V"}
+          },
+          "required": ["value", "unit"],
+          "additionalProperties": false
+        },
+        "output_current": {
+          "type": "object",
+          "properties": {
+            "value": {"type": "number"},
+            "unit": {"const": "A"}
+          },
+          "required": ["value", "unit"],
+          "additionalProperties": false
+        },
+        "frequency": {
+          "type": "object",
+          "properties": {
+            "value": {"type": "number"},
+            "unit": {"const": "Hz"}
+          },
+          "required": ["value", "unit"],
+          "additionalProperties": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "basis": {
+      "enum": ["DATASHEET", "STANDARD_CONVENTION", "ENGINEERING_DEFAULT", "CALCULATED"]
+    },
+    "evidence": {"$ref": "evidence.schema.json"},
+    "convention": {"type": "string", "minLength": 1, "maxLength": 256},
+    "note": {"type": "string", "minLength": 1, "maxLength": 256},
+    "calculator": {
+      "enum": ["ldo_dissipation", "led_resistor", "i2c_pullup", "ipc2152_width"]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {"$ref": "quantity.schema.json"},
+      "minProperties": 1
+    }
+  },
+  "required": ["unit", "conditions", "basis"],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "required": ["value"],
+          "not": {
+            "anyOf": [
+              {
+                "required": ["min"]
+              },
+              {
+                "required": ["typ"]
+              },
+              {
+                "required": ["max"]
+              }
+            ]
+          }
+        },
+        {
+          "anyOf": [
+            {
+              "required": ["min"]
+            },
+            {
+              "required": ["typ"]
+            },
+            {
+              "required": ["max"]
+            }
+          ],
+          "not": {
+            "required": ["value"]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "basis": {"const": "DATASHEET"}
+          },
+          "required": ["evidence"]
+        },
+        {
+          "properties": {
+            "basis": {"const": "STANDARD_CONVENTION"}
+          },
+          "required": ["convention"]
+        },
+        {
+          "properties": {
+            "basis": {"const": "ENGINEERING_DEFAULT"}
+          },
+          "required": ["note"]
+        },
+        {
+          "properties": {
+            "basis": {"const": "CALCULATED"}
+          },
+          "required": ["calculator", "inputs"]
+        }
+      ]
+    }
+  ]
+}

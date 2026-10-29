@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "unknown.schema.json",
+  "type": "object",
+  "properties": {
+    "status": {"const": "UNKNOWN"},
+    "reason": {"type": "string", "minLength": 1, "maxLength": 256},
+    "blocks": {
+      "type": "array",
+      "items": {
+        "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": ["status", "reason", "blocks"],
+  "additionalProperties": false
+}

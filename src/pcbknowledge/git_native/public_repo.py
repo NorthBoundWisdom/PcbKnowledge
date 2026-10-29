@@ -28,6 +28,11 @@ ALLOWED_AUTHORITY_PLACEHOLDERS = frozenset(
         "evidence/sha256/.gitkeep",
     }
 )
+ALLOWED_REGISTRY_PATHS = frozenset(
+    f"knowledge/registry/{name}.json" for name in (
+        "quantities", "parameters", "pin-types", "layout-constraints", "package-families", "roles"
+    )
+)
 PROTECTED_AUTHORITY_PREFIXES = ("knowledge/", "evidence/", ".pcbknowledge/")
 RAW_DOCUMENT_SUFFIXES = frozenset({
     ".pdf", ".zip", ".gz", ".tar", ".7z", ".rar", ".doc", ".docx", ".ppt",
@@ -59,6 +64,8 @@ def _allowed_metadata_path(path: str) -> bool:
     parts = PurePosixPath(path).parts
     if ".." in parts or len(parts) < 3 or parts[0] != "knowledge":
         return False
+    if parts[1] == "registry":
+        return path in ALLOWED_REGISTRY_PATHS
     if parts[1] in {"sources", "entities", "facts"}:
         return len(parts) == 3 and path.endswith(".json")
     return parts[1] in {"intake", "intake-dispositions"} and PurePosixPath(path).suffix in {".json", ".md"}
