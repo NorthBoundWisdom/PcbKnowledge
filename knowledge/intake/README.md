@@ -1,6 +1,6 @@
 # Curated collection
 
-This queue contains **36 reviewed batches, 48 batch-local source/device scopes, and 323 factual
+This queue contains **37 reviewed batches, 49 batch-local source/device scopes, and 329 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
 For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
@@ -45,6 +45,7 @@ provenance and batch bytes are preserved.
 | [Zener conditions](bzx84c5v1-zener-constraints.json) | Vishay BZX84C5V1-E3-08, commercial SOT-23 | 6 | Actual PDF/identity HTML and independent rendered-page review; [receipt](bzx84c5v1-zener-constraints-review.md) |
 | [Photodiode conditions](bpw34-photodiode-constraints.json) | Vishay BPW34, bulk non-automotive leaded optical package | 7 | Actual PDF/identity HTML and independent rendered-page review; [receipt](bpw34-photodiode-constraints-review.md) |
 | [Ferrite bead conditions](mh2029-ferrite-constraints.json) | Bourns MH2029-601T high-current chip bead | 5 | Actual PDF and independent rendered-page review; [receipt](mh2029-ferrite-constraints-review.md) |
+| [Once-only fuse conditions](sf1206s-fuse-constraints.json) | Bourns SF-1206S050-2 slow-blow chip fuse | 6 | Current product-linked PDF and independent rendered-page review; [receipt](sf1206s-fuse-constraints-review.md) |
 
 The second batch records eight rendered pages for ST and Microchip, including
 identity/revision pages. Nexperia direct acquisition returned HTTP 403; it was not
@@ -260,8 +261,17 @@ successor preserves all historical case and batch pins.
 
 ## Ferrite bead conditions
 
-The [current aggregate replay](../../docs/intake-evaluation-ferrite.md) adds five
+The [ferrite aggregate replay](../../docs/intake-evaluation-ferrite.md) adds five
 exact MH2029-601T facts and three warnings. Test-frequency impedance magnitude
 is not DC resistance or network attenuation; rated current uses its specified
 temperature-rise basis, not a hot-ambient rail approval. DC bias, signal-amplitude
 convention, plot limit classification and network performance stay unknown.
+
+## Once-only fuse conditions
+
+The [current aggregate replay](../../docs/intake-evaluation-fuse.md) adds six
+exact SF-1206S050-2 facts and three warnings. Interrupt rating, conditioned
+resistance, clearing-time specification and separate reliability test retain
+their conditions. Typical melting I2t and average curves are not guaranteed
+total interruption energy, pulse endurance or system protection coordination.
+No hot-ambient permitted current or circuit safety qualification is inferred.

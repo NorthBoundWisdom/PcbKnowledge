@@ -1,0 +1,382 @@
+{
+  "format": "pcbknowledge-independent-intake-v1",
+  "batch_id": "sf1206s-fuse-constraints-20261029",
+  "canonical": false,
+  "human_reviewed": false,
+  "created_on": "2026-10-29",
+  "acceptance_status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+  "collector": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+    "collected_at": "2026-10-29T01:13:53.935848+00:00"
+  },
+  "sources": [
+    {
+      "id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "full_orderable_mpn": "SF-1206S050-2",
+      "document_url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+      "revision": "Rev. 10/26",
+      "revision_date": "2026-10",
+      "identity_evidence": "Exact model row on PDF page 1 and ordering scheme on PDF page 3; -2 is 5000-piece tape and reel.",
+      "pdf_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+      "pdf_byte_size": 215457,
+      "pdf_pages": 5,
+      "pdf_local_path": null,
+      "accessed_on": "2026-10-29",
+      "latest_revision_guaranteed": false,
+      "product_page_url": "https://www.bourns.com/products/circuit-protection/product-detail/singlfusethinfilmchipfuses/sf1206sseries",
+      "product_link_provenance": "Official product page fetched on 2026-10-29 linked this exact document URL. The older sf-1206s.pdf URL returned Rev. J 04/21 and is not the evidence for this batch.",
+      "redistribution_license": "No open or redistribution license asserted; only small original factual annotations, no source table, figure or PDF.",
+      "source_processing_scope": "Current legal disclaimer read before factual processing; actual embedded PDF page 5 visually checked, K2540 08/26R. No explicit prohibition of these limited original factual annotations identified. Application-specific suitability and rights remain separate.",
+      "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+      "visual_pages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "human_reviewed": false,
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION"
+    }
+  ],
+  "facts": [
+    {
+      "id": "sf1206s-fuse-01",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "kind": "identity",
+      "parameter": "exact_orderable_and_package",
+      "value": {
+        "full_orderable_mpn": "SF-1206S050-2",
+        "footprint_designation": "3216 (EIA 1206)",
+        "fuse_type": "slow-blow thin-film chip fuse",
+        "packaging_suffix": "-2",
+        "reel_quantity": 5000,
+        "lifecycle_status": null
+      },
+      "unit": null,
+      "conditions": "Exact 050 current code and -2 packaging suffix only. This evidence does not establish substitution with similarly named SF-1206S-W, -M or -R families. Package designation is not a complete footprint approval; lifecycle and stock are not inferred.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+        "revision": "Rev. 10/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          3
+        ],
+        "section": "Electrical model row; How to Order; Packaging",
+        "source_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed source hash and byte count and verified all five PDF pages; no measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "page_locator_note": "Source pages have no printed page numbers; locators identify physical PDF pages.",
+        "reviewer": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "sf1206s-fuse-02",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "kind": "electrical_rating",
+      "parameter": "current_voltage_and_interrupt_rating",
+      "value": {
+        "rated_current_a": 0.5,
+        "rated_voltage_vdc": 63,
+        "interrupting_current_a": 50,
+        "interrupting_test_voltage_vdc": 63,
+        "ac_voltage_rating": null,
+        "interrupt_test_circuit_time_constant": null
+      },
+      "unit": null,
+      "conditions": "The exact model row belongs to the 63 VDC / 50 A at 63 VDC merged cells, not the 32 VDC group. Rated current is not a trip threshold; interrupting rating is not permissible continuous load current. AC operation and a particular fault-source impedance are not established.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+        "revision": "Rev. 10/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Electrical Characteristics; SF-1206S050-2 row and merged voltage/interrupt cells",
+        "source_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed source hash and byte count and verified all five PDF pages; no measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "page_locator_note": "Source pages have no printed page numbers; locators identify physical PDF pages.",
+        "reviewer": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "sf1206s-fuse-03",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "kind": "electrical_characteristic",
+      "parameter": "conditioned_resistance",
+      "value": {
+        "resistance_typ_ohm": 0.596,
+        "stated_tolerance_percent": 25,
+        "measurement_current_max_percent_of_rated": 10,
+        "ambient_temperature_c": 25,
+        "full_temperature_resistance_max_ohm": null
+      },
+      "unit": null,
+      "conditions": "Resistance is labeled typical with a separate plus/minus 25 percent tolerance footnote, measured at no more than 10 percent rated current and 25 C ambient. Do not silently promote it to an independently specified maximum over all temperatures or to operating-hot voltage drop.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+        "revision": "Rev. 10/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1
+        ],
+        "section": "Electrical Characteristics; resistance column and footnote ***",
+        "source_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed source hash and byte count and verified all five PDF pages; no measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "page_locator_note": "Source pages have no printed page numbers; locators identify physical PDF pages.",
+        "reviewer": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "sf1206s-fuse-04",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "kind": "test_condition",
+      "parameter": "clearing_and_reliability_test_scopes",
+      "value": {
+        "series_clearing_temperature_c": 25,
+        "series_clearing_100_percent_min_hours": 4,
+        "series_clearing_100_percent_max_hours": null,
+        "series_clearing_250_percent_max_seconds": 5,
+        "series_clearing_250_percent_min_seconds": null,
+        "reliability_fusing_current_percent": 200,
+        "reliability_fusing_max_seconds": 5,
+        "reliability_fusing_ambient_temperature_c": null
+      },
+      "unit": null,
+      "conditions": "The page 1 series clearing-time specification applies at 25 C: its two percentage rows have different minimum/maximum directions. Page 4 separately lists a reliability fusing-time requirement at 200 percent; it does not state the ambient for that row. Preserve both scopes, without inventing contradiction or replacing the 250 percent specification with a universal 200 percent guarantee. Neither establishes arbitrary-fault timing or an all-temperature envelope.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+        "revision": "Rev. 10/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          4
+        ],
+        "section": "Clearing Time Characteristics for Series; Reliability Testing row 2",
+        "source_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed source hash and byte count and verified all five PDF pages; no measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "page_locator_note": "Source pages have no printed page numbers; locators identify physical PDF pages.",
+        "reviewer": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "sf1206s-fuse-05",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "kind": "electrical_characteristic",
+      "parameter": "melting_i2t_and_average_curve_scope",
+      "value": {
+        "melting_i2t_typ_a2s": 0.03,
+        "calculation_current_multiple_of_rated": 10,
+        "source_curve_classification": "average",
+        "source_curve_quantities": [
+          "pre-arcing time versus current",
+          "I2t versus time"
+        ],
+        "guaranteed_total_clearing_i2t_a2s": null,
+        "repetitive_pulse_endurance": null
+      },
+      "unit": null,
+      "conditions": "Table I2t is typical and its footnote says melting I2t calculated at ten times rated current. Page 2 curves are average, including pre-arcing time, not a guaranteed total interruption envelope. No curve points are digitized. Do not use melting I2t alone as guaranteed total let-through energy, repeated-inrush survival or downstream protection coordination.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+        "revision": "Rev. 10/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          2
+        ],
+        "section": "Electrical Characteristics footnote ****; Average Pre-Arcing Time and Average I2t curves",
+        "source_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed source hash and byte count and verified all five PDF pages; no measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "page_locator_note": "Source pages have no printed page numbers; locators identify physical PDF pages.",
+        "reviewer": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    },
+    {
+      "id": "sf1206s-fuse-06",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "manufacturer": "Bourns",
+      "device": "SF-1206S050-2",
+      "variant": "SF-1206S slow-blow thin-film chip fuse; not SF-1206S-W, -M or -R",
+      "package": "3216 (EIA 1206) SMD",
+      "kind": "application_guidance",
+      "parameter": "operating_temperature_and_derating_scope",
+      "value": {
+        "operating_temperature_min_c": -20,
+        "operating_temperature_max_c": 105,
+        "thermal_derating_curve_present": true,
+        "derating_axes": [
+          "ambient temperature in C",
+          "rated current percentage"
+        ],
+        "derating_curve_min_typ_max_classification": null,
+        "digitized_derating_points": null,
+        "application_mounting_thermal_model": null
+      },
+      "unit": null,
+      "conditions": "The operating range does not mean full rated current across that range. Page 3 supplies a declining thermal-derating graph but no tabulated points, tolerance band or mounting thermal model; no exact hot-ambient current is digitized or calculated here. A board operating-point or safety qualification requires actual ambient, load, mounting and fault conditions.",
+      "evidence": {
+        "url": "https://www.bourns.com/docs/product-datasheets/sf-1206s04ec4f2c90e165f58a72ff000066632f.pdf",
+        "revision": "Rev. 10/26",
+        "pdf_page_index": 0,
+        "printed_page": null,
+        "supporting_pdf_pages": [
+          1,
+          3
+        ],
+        "section": "Environmental Characteristics; Thermal Derating Curve",
+        "source_sha256": "c3f0ce8a2261275ec124d674df021da3998f1ab2a28a1b7830e7dd87a2ca6086",
+        "bbox": null,
+        "visual_checked": true,
+        "collector": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "method": "Collector and distinct Agent reviewer inspected actual rendered cited pages and byte-identified text. Reviewer independently recomputed source hash and byte count and verified all five PDF pages; no measured bounding boxes or human review.",
+        "evidence_level": "BYTE_IDENTIFIED_TEXT_AND_VISUAL",
+        "page_locator_note": "Source pages have no printed page numbers; locators identify physical PDF pages.",
+        "reviewer": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source"
+      },
+      "existing_record_references": [],
+      "status": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "human_reviewed": false
+    }
+  ],
+  "source_issues": [
+    {
+      "id": "sf1206s-protection-coordination-unknown",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Actual available fault current, source voltage/transients and impedance, protected-device withstand, wiring limits, and acceptable disconnection behavior are missing. Component interrupt rating and typical melting I2t do not establish safe system protection or coordination.",
+      "provenance": {
+        "actor": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "recorded_at": "2026-10-29T01:13:53.935848+00:00"
+      }
+    },
+    {
+      "id": "sf1206s-pulse-and-thermal-unknown",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "issue_status": "UNRESOLVED_APPLICATION_INPUTS",
+      "description": "Continuous and inrush current waveforms, pulse repetition, ambient, board mounting and thermal margin are unknown. Average pre-arcing curves and typical melting I2t do not establish repetitive-pulse endurance; operating range alone does not establish permitted load current.",
+      "provenance": {
+        "actor": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "recorded_at": "2026-10-29T01:13:53.935848+00:00"
+      }
+    },
+    {
+      "id": "sf1206s-source-scope-limits",
+      "source_id": "sf1206s050-2-bourns-r1026",
+      "issue_status": "SOURCE_SCOPE_LIMITATION",
+      "description": "Exact SF-1206S050-2 and electrical Rev. 10/26 only; legal appendix K2540 08/26R is separate. Clearing at 250 percent/25 C and reliability fusing at 200 percent retain distinct scopes, not a manufactured conflict. Reliability-row ambient, AC rating, guaranteed total clearing I2t, derating tolerance and full-temperature resistance bound remain unknown; no circuit safety certification inferred.",
+      "provenance": {
+        "actor": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+        "recorded_at": "2026-10-29T01:13:53.935848+00:00"
+      }
+    }
+  ],
+  "limitations": [
+    "One exact orderable; no catalog-wide substitutions.",
+    "No curve digitization, complete protection coordination, circuit safety or certification approval.",
+    "Raw source/text/rendered pages stay local and untracked; ordinary retrieval is NOT_LOCALLY_VERIFIED.",
+    "No canonical or human approval and no open-license claim."
+  ],
+  "review_history": [
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions",
+      "action": "COLLECTED_DRAFT",
+      "timestamp": "2026-10-29T01:13:53.935848+00:00"
+    },
+    {
+      "actor_type": "AGENT",
+      "actor_id": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source",
+      "action": "AGENT_REVIEWED_UNDER_OWNER_DELEGATION",
+      "timestamp": "2026-10-29T01:15:05.295392+00:00",
+      "draft_sha256": "41cc936906f97f2f42ed73faefe5b8519f9422859a7c2b097b6dac03c1580a43",
+      "notes": "All six full facts and three warnings accepted after one scope-wording clarification. Narrowed blanket non-substitution wording to no substitution evidence for similarly named families; no numeric or test-condition changes."
+    }
+  ],
+  "review": {
+    "actor_type": "AGENT",
+    "actor_id": "agent:/root/finish_bpw34_stage/curate_ferrite_conditions/review_fuse_source",
+    "authority": "OWNER_DELEGATION",
+    "reviewed_at": "2026-10-29T01:15:05.295392+00:00",
+    "scope": "All six complete facts, three warnings, actual PDF hash/byte size/page count, rendered pages 1-5 including embedded legal notice and current product-page link in saved official HTML.",
+    "draft_sha256": "41cc936906f97f2f42ed73faefe5b8519f9422859a7c2b097b6dac03c1580a43",
+    "visual_pages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "legal_pdf_page_read": 5,
+    "engineering_corrections": [
+      "Narrowed blanket non-substitution wording to no substitution evidence for similarly named families; no numeric or test-condition changes."
+    ],
+    "metadata_corrections": [],
+    "warning_review": "Clearing and reliability criteria retain different temperature scopes. Typical melting I2t, average curves and unclassified derating curve are not promoted to guaranteed total interruption, repeated-pulse survival or circuit safety approval."
+  }
+}

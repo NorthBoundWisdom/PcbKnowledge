@@ -4,6 +4,16 @@
 > Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Reviewed once-only fuse integration
+
+The collection now contains 37 batches / 49 source scopes / 329 annotations.
+Six SF-1206S050-2 facts bind the current product-linked Rev. 10/26 document,
+not the older search-result PDF. Clearing specifications and reliability test
+criteria remain distinct. Typical melting I2t does not establish total clearing
+energy or system coordination; thermal and pulse inputs remain unknown.
+See the [evaluation scope](docs/intake-evaluation-fuse.md). Independent source
+and integration reviews, final gates and exact-commit CI remain separate receipts.
+
 ## Fixed synthetic NE555 model regression
 
 The existing nominal astable worked example now has a fixed-input evaluator,
@@ -16,7 +26,7 @@ Independent review, full gates and exact published-commit CI are separate receip
 
 ## Reviewed ferrite bead integration
 
-The collection now contains 36 batches / 48 source scopes / 323 annotations.
+At the ferrite stage the collection contained 36 batches / 48 source scopes / 323 annotations.
 Five exact MH2029-601T facts preserve frequency, measurement amplitude, DCR,
 current temperature-rise basis and graph limitations. Sixteen distinct recipes
 extend immutable history, with full-payload semantic mutation tests.
