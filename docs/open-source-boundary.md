@@ -1,7 +1,7 @@
 # Public knowledge and source-original boundary
 
 The owner has replaced the former data-empty public-software restriction. The
-current contract is [lightweight knowledge](lightweight-knowledge.md), accepted in
+current contract is [lightweight knowledge](legacy/intake/lightweight-knowledge.md), accepted in
 [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md). Earlier ADRs preserve
 historical design rationale, not a prohibition on the newly authorized curation.
 

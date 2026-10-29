@@ -2,7 +2,7 @@
 
 This queue contains **37 reviewed batches, 49 batch-local source/device scopes, and 329 factual
 annotations**. All are noncanonical and were Agent-reviewed under owner delegation.
-For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/owner-acceptance-2026-10-28.md)
+For the original five batches only, the owner subsequently gave [batch-level content acceptance on 2026-10-28](../../docs/archive/receipts/owner-acceptance-2026-10-28.md)
 for the pinned 100-annotation snapshot. This is not per-fact human evidence
 verification, canonical approval, or a complete component model. Original Agent
 provenance and batch bytes are preserved.
@@ -71,7 +71,7 @@ The fifth batch preserves `MCP23017-SUPPLY-TEMPERATURE-AMBIGUITY` as
 `UNRESOLVED_SOURCE_WORDING`. Its cover and electrical table give different supply
 versus temperature wording. No supply-envelope fact was inferred; acceptance of
 unrelated pin annotations does not resolve the issue. See its [review](power-monitor-gpio-review.md).
-A later [separate disposition](../../docs/mcp23017-source-disposition-2026-10-28.md)
+A later [separate disposition](../../docs/archive/receipts/mcp23017-source-disposition-2026-10-28.md)
 rechecks official Revision E (July 2026), contains use to an explicit conservative
 preliminary supply/ambient subset, and preserves the original wording conflict.
 Normal reads expose both records; none of these 100 annotation bytes were changed.
@@ -89,7 +89,7 @@ python3 configs/pcbknowledge_agent.py --repo . intake search MCP6002
 Reader `NOT_LOCALLY_VERIFIED` means that read has not verified original local bytes;
 it does not erase prior independently recorded evidence work. Original PDFs, page
 renders, and full extracted text are excluded from Git and packages. The current
-contract is [lightweight knowledge](../../docs/lightweight-knowledge.md).
+contract is [lightweight knowledge](../../docs/legacy/intake/lightweight-knowledge.md).
 
 ## Application-question extension
 
@@ -101,7 +101,7 @@ All 25 have byte-identified, item-specific visual review receipts; no precise bb
 or hardware qualification is claimed. TI full orderable identity, ST numeric ESR
 and unprovided sensor/controller/load/thermal inputs remain explicitly unknown.
 
-The [125-annotation aggregate replay](../../docs/intake-evaluation-125.md) pins all
+The [125-annotation aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-125.md) pins all
 eight batches and retains separately pinned source dispositions. The original
 100-record manifest and owner receipt remain immutable historical baselines.
 Candidate retrieval is not electrical permission, typical-to-guaranteed conversion,
@@ -114,7 +114,7 @@ warnings. CAN timing/topology, EEPROM write semantics and buck effective-compone
 constraints remain conditional candidates, not network qualification, persistence
 assurance or PCB sign-off. A distinct Agent inspected actual source hashes and
 cited rendered pages, including the checked LC matrix cells. Its historical
-[successor replay](../../docs/intake-evaluation-network-memory-power.md) retains
+[successor replay](../../docs/archive/intake-evaluations/intake-evaluation-network-memory-power.md) retains
 historical 100/125 manifests and the separately pinned MCP23017 disposition.
 
 ## Signal-chain and logic extension
@@ -127,7 +127,7 @@ D/SOIC-14 scope without inventing a full orderable. Its RKS/20-pin Figure 11-1 i
 explicitly excluded from D-package pin/layout inference; two other warnings retain
 unknown interface/load/timing/power inputs. No manufacturer correction is asserted.
 
-The [historical signal/logic replay](../../docs/intake-evaluation-signal-logic.md)
+The [historical signal/logic replay](../../docs/archive/intake-evaluations/intake-evaluation-signal-logic.md)
 retains the historical 100/125/148 manifests and unchanged MCP23017 disposition.
 All 162 annotations remain noncanonical; the owner's earlier 100-record acceptance
 does not cover these additions. Missing circuit inputs and the source-figure
@@ -140,13 +140,13 @@ INA219 calibration/register/readiness, TL431 divider/current/stability and NE555
 mode/timing constraints retain exact grade/package and source test conditions.
 Two source-wording discrepancies remain unresolved: INA219 CNVR clearing language
 and TL431 reference-current equation signs. No correction or circuit permission is
-inferred. The [historical replay](../../docs/intake-evaluation-measurement-timing.md)
+inferred. The [historical replay](../../docs/archive/intake-evaluations/intake-evaluation-measurement-timing.md)
 preserves all earlier snapshots and the separate MCP23017 disposition. New records
 do not inherit the owner's original 100-record acceptance.
 
 ## Reset, interface and discrete stage
 
-The [historical aggregate replay](../../docs/intake-evaluation-reset-rs485-discretes.md)
+The [historical aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-reset-rs485-discretes.md)
 adds the TPS3808G33 and SN65HVD75 issue lanes plus the exact reviewed AO3400A and
 SS14 handoff pairs. No old annotation or review receipt was rewritten. Reset
 validity, interface timing/load, gate-drive, waveform and thermal conditions are
@@ -155,7 +155,7 @@ source wording conflicts are not resolved by Agent acceptance.
 
 ## TVS and connector handoff integration
 
-The [historical aggregate replay](../../docs/intake-evaluation-tvs-connector.md)
+The [historical aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-tvs-connector.md)
 adds twelve original annotations and four warnings from exact accepted handoffs.
 Pulse/current/thermal conditions are not DC or system protection guarantees.
 Connector dimensions do not constitute a complete footprint, numbered pin map or
@@ -164,7 +164,7 @@ explicit. Both JSON/review pairs and all prior receipts stay byte-identical.
 
 ## MLCC handoff integration
 
-The [MLCC aggregate replay](../../docs/intake-evaluation-mlcc.md) adds the exact
+The [MLCC aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-mlcc.md) adds the exact
 reviewed eight-record KEMET pair. Its nominal measurement, short withstand,
 zero-bias temperature and decade-hour aging conditions remain distinct from
 qualitative simulation and unknown effective capacitance. Body dimensions are not
@@ -173,7 +173,7 @@ upgraded by integration; batch-local warnings remain retrievable.
 
 ## Inductor handoff integration
 
-The [inductor aggregate replay](../../docs/intake-evaluation-inductor.md) adds the
+The [inductor aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-inductor.md) adds the
 exact reviewed six-record Bourns pair and preserves three complete warnings.
 Inductance-drop and heating-current criteria are not interchangeable. Unknown
 matched sample, mounting and curve-test conditions do not establish manufacturer
@@ -182,7 +182,7 @@ footprint or assembled-board qualification is inferred.
 
 ## Low-voltage MOSFET drive integration
 
-The [low-voltage MOSFET replay](../../docs/intake-evaluation-low-voltage-mosfet.md)
+The [low-voltage MOSFET replay](../../docs/archive/intake-evaluations/intake-evaluation-low-voltage-mosfet.md)
 adds six exact-orderable Si2342DS-T1-GE3 annotations and three full warnings.
 Gate threshold is not useful-load enhancement; the 1.2 V and 1.8 V on-resistance
 rows retain their test currents, temperature and pulse conditions. Short-time and
@@ -193,7 +193,7 @@ Poppler's source-container recovery is disclosed, not upgraded to clean validati
 
 ## Optocoupler logic integration
 
-The [optocoupler replay](../../docs/intake-evaluation-optocoupler.md) adds
+The [optocoupler replay](../../docs/archive/intake-evaluations/intake-evaluation-optocoupler.md) adds
 eight exact VO617A-3 annotations and three complete warnings. Bin-specific CTR
 at the stated active-region voltage does not guarantee saturated logic-low sink.
 LED voltage, saturation, leakage and typical switching retain different current,
@@ -204,7 +204,7 @@ safety approval is synthesized from these records.
 
 ## Current-sense resistor integration
 
-The [current-sense replay](../../docs/intake-evaluation-current-sense.md) adds
+The [current-sense replay](../../docs/archive/intake-evaluations/intake-evaluation-current-sense.md) adds
 six exact WSLP2512R0100FEA annotations and three warnings. Component TCR is not
 the alloy-only element value; P70 and ambient derating do not approve an unknown
 board current. Resistance-specific terminal geometry, additive load-life drift
@@ -213,7 +213,7 @@ traces do not qualify total current-measurement accuracy.
 
 ## Legacy polymer PTC integration
 
-The [PTC aggregate replay](../../docs/intake-evaluation-ptc.md) adds seven
+The [PTC aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-ptc.md) adds seven
 exact MF-MSMF050-2 facts and three warnings. This source-marked legacy part is
 not recommended for new designs. Hold, trip and timed-test currents remain
 distinct; temperature derating, typical tripped power, unknown residual current
@@ -221,7 +221,7 @@ and reset behavior do not establish fuse-like isolation or system safety.
 
 ## Aluminum electrolytic integration
 
-The [electrolytic aggregate replay](../../docs/intake-evaluation-electrolytic.md) adds
+The [electrolytic aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-electrolytic.md) adds
 seven exact MAL214636471E3 annotations and three warnings. Rated RMS ripple
 retains frequency and temperature, and impedance is not relabeled as ESR.
 Case-specific endurance and useful-life tests differ from each other and from
@@ -231,7 +231,7 @@ is preserved without a synthesized life multiplier.
 
 ## Thermistor integration
 
-The [thermistor aggregate replay](../../docs/intake-evaluation-thermistor.md) adds
+The [thermistor aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-thermistor.md) adds
 seven exact NTCLE100E3103JB0 facts and three warnings. R25/B25-85 tolerances,
 zero-power definition and power derating do not establish system accuracy.
 Oil response and informational thermal time constant remain distinct, and
@@ -241,7 +241,7 @@ discontinuation statement for the exact no-A part.
 
 ## Zener integration
 
-The [Zener-stage aggregate replay](../../docs/intake-evaluation-zener.md) adds six
+The [Zener-stage aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-zener.md) adds six
 exact commercial BZX84C5V1-E3-08 facts and three warnings. Pulsed voltage at a
 specified bias current is not arbitrary-load regulation; small-signal dynamic
 resistance is not DC resistance. Leakage classification remains unpromoted where
@@ -250,7 +250,7 @@ identity and temperature coefficient cannot certify a reference or clamp circuit
 
 ## Photodiode integration
 
-The [photodiode aggregate replay](../../docs/intake-evaluation-photodiode.md) adds
+The [photodiode aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-photodiode.md) adds
 seven exact BPW34 bulk annotations and three warnings. Illumination rows retain
 radiometric versus photometric conditions and unknown illuminant spectrum.
 Dark current, capacitance and response time retain bias, frequency, load,
@@ -261,7 +261,7 @@ successor preserves all historical case and batch pins.
 
 ## Ferrite bead conditions
 
-The [ferrite aggregate replay](../../docs/intake-evaluation-ferrite.md) adds five
+The [ferrite aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-ferrite.md) adds five
 exact MH2029-601T facts and three warnings. Test-frequency impedance magnitude
 is not DC resistance or network attenuation; rated current uses its specified
 temperature-rise basis, not a hot-ambient rail approval. DC bias, signal-amplitude
@@ -269,7 +269,7 @@ convention, plot limit classification and network performance stay unknown.
 
 ## Once-only fuse conditions
 
-The [current aggregate replay](../../docs/intake-evaluation-fuse.md) adds six
+The [current aggregate replay](../../docs/archive/intake-evaluations/intake-evaluation-fuse.md) adds six
 exact SF-1206S050-2 facts and three warnings. Interrupt rating, conditioned
 resistance, clearing-time specification and separate reliability test retain
 their conditions. Typical melting I2t and average curves are not guaranteed

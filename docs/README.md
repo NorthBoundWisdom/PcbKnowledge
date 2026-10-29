@@ -1,36 +1,36 @@
 # PcbKnowledge documentation
 
-`docs/` contains the durable product, architecture, open-source-boundary, workflow, and evaluation documentation. The repository root keeps the active execution roadmap in [`TODO.md`](../TODO.md).
+The active roadmap is the root [`TODO.md`](../TODO.md). Agent rules are in the root
+[`AGENTS.md`](../AGENTS.md).
 
-## Start here
+## Current
 
-| Topic | Authoritative document |
+| Topic | Document |
 | --- | --- |
-| Curation, delegated review, evidence levels, and local cache | [`lightweight-knowledge.md`](lightweight-knowledge.md) |
-| Product role, Git-native authority, runtime boundary, and evolution | [`architecture.md`](architecture.md) |
-| Separation between open-source software and private knowledge/evidence | [`open-source-boundary.md`](open-source-boundary.md) |
-| Local workflow for product managers and engineers | [`local-workflow.md`](local-workflow.md) |
-| Agent typed ingestion and human handoff | [`agent-workflow.md`](agent-workflow.md) |
-| P0.4a private pilot evaluation contract and closure gates | [`pilot-evaluation.md`](pilot-evaluation.md) |
-| P0.4a three-root bootstrap/session/status workflow | [`pilot-session.md`](pilot-session.md) |
-| Executable read-only pilot scenario contract | [`pilot-scenarios.md`](pilot-scenarios.md) |
-| Architecture decisions and current status | [`adr/README.md`](adr/README.md) |
-| Current phase, unfinished work, and completion gates | [`../TODO.md`](../TODO.md) |
+| Direction and why it changed | [ADR-022](adr/ADR-022-board-generation-knowledge.md) |
+| System boundary, current code status, target summary | [`architecture.md`](architecture.md) |
+| Target data model, consumer queries, API | [`knowledge-model-v2.md`](knowledge-model-v2.md) |
+| Golden designs, brief format, acceptance levels A1 to A6 | [`golden-designs.md`](golden-designs.md) |
+| Public versus private content and source originals | [`open-source-boundary.md`](open-source-boundary.md) |
+| Local Config/Build/Open/Test/Package and workspaces | [`local-workflow.md`](local-workflow.md) |
+| Architecture decisions | [`adr/README.md`](adr/README.md) |
+| Course-correction brief for implementers (temporary) | [`course-correction-prompt.md`](course-correction-prompt.md) |
 
-## Worked examples
+## Legacy and archive
 
-- [Synthetic DC resistor bound](worked-examples/resistor-dc-bound.md): exact
-  interval arithmetic with explicitly supplied operating resistance; reference-only
-  power comparison, not board qualification.
+- [`legacy/`](legacy/README.md): accurate descriptions of subsystems that still
+  run but are scheduled for removal (intake queue, pilot harness, worked-example
+  evaluators, v1 typed ingestion). Delete each document with its code.
+- [`archive/`](archive/README.md): frozen historical receipts (batch evaluations,
+  owner acknowledgements, application handoffs, source investigations). Not
+  maintained; useful only as source material during migration.
 
 ## Maintenance rules
 
-1. Keep one durable authority per topic. Adjacent documents link to it instead of copying status, boundaries, or schema contracts.
-2. Architecture documents describe stable current behavior and explicit evolution boundaries. Unfinished execution work belongs in the root TODO.
-3. Public curated metadata follows [ADR-021](adr/ADR-021-lightweight-curation-local-evidence.md); private data stays controlled and original documents stay outside Git.
-4. Evaluation metadata for deliberately wrong/ambiguous scenarios is not canonical engineering authority; keep sensitive real pilot observations private.
-5. Pilot session/evaluation state stays outside the selected knowledge workspace so it cannot contaminate `DATA_ONLY` publication scope or P0.3c review decisions.
-6. When moving, renaming, or merging documents, update repository links in README files, ADRs, scripts, tests, and skills in the same change.
-7. A mismatch among implementation, schema, validator, workflow, and documentation is contract drift and must be converged in the same change.
-8. Historical decisions remain in ADRs and Git history. Superseded designs must not continue to describe the current runtime.
-9. Repository-facing documentation remains English so that the public project has one contributor language.
+1. One durable authority per topic; other documents link to it.
+2. Code, schemas and tests are the authority. When a contract changes, update the
+   matching document in the same change.
+3. Unfinished work lives only in `TODO.md`. Do not create per-batch, per-stage or
+   per-receipt documents; put receipts in commit messages and one-line TODO entries.
+4. When moving or deleting a document, fix every link in the same change.
+5. Repository documents stay English.

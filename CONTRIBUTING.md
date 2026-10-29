@@ -1,6 +1,6 @@
 # Contributing to PcbKnowledge
 
-Thank you for improving PcbKnowledge. The primary constraint of this project is not to collect as much material as possible; it is to keep engineering knowledge, licensing, evidence, dependencies, and review provenance and publication boundaries verifiable.
+Thank you for improving PcbKnowledge. The project exists to let a design brief become a manufacturable board ([ADR-022](docs/adr/ADR-022-board-generation-knowledge.md)). Contributions should serve the active stage in [`TODO.md`](TODO.md) or a [golden design](docs/golden-designs.md), while keeping licensing, evidence and publication boundaries verifiable.
 
 ## 1. Publish processed metadata, never source originals
 
@@ -12,7 +12,7 @@ The following content is not accepted in the public upstream by default:
 - credentials, tokens, private keys, production URLs, or identifiable internal infrastructure details;
 - test fixtures you do not have the right to publish or redistribute.
 
-Small original paraphrased annotations and metadata are permitted under [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md). `knowledge/intake/` is explicitly noncanonical, with actual Agent review under owner delegation. `python3 configs/check_public_repo.py` checks tracked and staged content; no raw documents or oversized knowledge payloads are allowed.
+Small original summaries, structured values with citations and metadata are permitted under [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md) and ADR-022. `knowledge/intake/` is frozen and noncanonical; do not add to it. `python3 configs/check_public_repo.py` checks tracked and staged content; no raw documents or oversized knowledge payloads are allowed.
 
 Prefer synthetic fixtures for tests. If third-party material genuinely needs to be public, document its source, license, redistribution basis, exact version, and integrity information in the pull request and obtain explicit maintainer review.
 
@@ -20,8 +20,8 @@ Prefer synthetic fixtures for tests. If third-party material genuinely needs to 
 
 - Do not make PcbKnowledge a runtime dependency of PcbCore and do not mutate live PCB board state.
 - Keep the current runtime loopback-only and Python-standard-library-first.
-- Agents may review intake under owner delegation and use the authorized main-branch publication workflow. Never impersonate human approval in the canonical review API.
-- Unknown values, conflicts, wrong revisions, wrong packages, and license blocks must fail closed.
+- Agents may verify records (`AGENT_VERIFIED`) and use the authorized main-branch publication workflow. Never record a human verifier who did not act.
+- Unknown values, conflicts, wrong revisions, wrong packages, and license blocks must fail closed; generation refuses rather than guesses.
 - Canonical knowledge data commits must not be mixed with code, schema, policy, or documentation changes.
 - Explicit workspace selection remains mandatory. Private data stays in controlled workspaces; original PDFs stay in ignored local caches and never enter packages.
 - Repository documentation, UI text, comments intended for contributors, and public test fixtures must remain English. `python3 configs/check_english_repo.py` enforces this for tracked UTF-8 text.
@@ -58,7 +58,7 @@ Keep each pull request focused. Describe:
 - which contract or behavior changed;
 - why the change is necessary;
 - which tests cover it;
-- whether Source / Entity / Fact / EvidenceAnchor schemas are affected;
+- whether knowledge schemas or registries are affected;
 - whether the license gate, publication boundary, workspace boundary, Agent privileges, CSP, or vendored dependency contract is affected.
 
 Do not make a fixture pass by weakening a validator, relaxing fail-closed policy, skipping tests, or mixing data with the policy that validates it.

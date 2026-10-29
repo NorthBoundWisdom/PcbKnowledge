@@ -2,293 +2,89 @@
 
 [![CI](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/workflows/ci.yml)
 
-PcbKnowledge is a **Git-native, Agent-native, evidence-backed** PCB engineering knowledge repository and local review tool. It turns engineering statements from datasheets, application notes, reference designs, and similar sources into validated `Source`, `Entity`, `Fact`, and `EvidenceAnchor` records, with explicit review provenance, evidence levels, and Git publication boundaries.
+PcbKnowledge is the knowledge side of a pipeline that turns a design package (for
+example a simple hardware-competition brief) into a manufacturable PCB. It keeps a
+closed-world, evidence-backed catalog of parts, footprints, reusable circuit blocks,
+layout rules, fab profiles and calculators in Git, and expands a block graph into a
+design intent (netlist, BOM and layout constraints) for
+[PcbAtlas](docs/architecture.md#1-product-role) to place, route, check and fabricate.
 
-> **Lightweight knowledge:** this repository also accepts small original summaries and annotations reviewed by an Agent under owner delegation. Intake is explicitly noncanonical; no human review or complete byte/bbox verification is invented. Original PDFs stay in an ignored local cache and are never committed or packaged. See [`docs/lightweight-knowledge.md`](docs/lightweight-knowledge.md).
+Unknown is a result: missing evidence makes generation refuse rather than guess.
 
-## Current status
+## Status
 
-```text
-P0.0 Git-native hardening             COMPLETE
-P0.1 Typed authority model            COMPLETE
-P0.2 Agent-native ingestion           COMPLETE
-P0.2.5 Knowledge Workspace boundary   COMPLETE
-P0.3a Typed Workbench Foundation      COMPLETE
-P0.3b Visual Evidence Review          COMPLETE
-P0.3c Review Closure                  COMPLETE
-P0.4a Pilot evaluation harness        READY
-P0.4a Real private pilot              NEXT
-```
+The project is in **Stage 0, course correction**. The direction changed on
+2026-10-29 ([ADR-022](docs/adr/ADR-022-board-generation-knowledge.md)):
 
-The P0 software path is implemented end-to-end: Agents can prepare typed Source/Entity/Fact authority in an explicitly selected knowledge workspace; humans can inspect exact Source evidence, review typed closure, approve or reject Source/Fact records, and then publish with ordinary Git. The GUI never stages, commits, or pushes.
+- The earlier review-centric design is implemented and tested, but its canonical
+  store is empty and its 329 curated intake annotations are prose-heavy and not
+  machine-queryable. The intake queue is now frozen.
+- The target is the [v2 knowledge model](docs/knowledge-model-v2.md), driven by
+  [golden designs](docs/golden-designs.md). The first target, G1, is a small
+  USB-powered sensor-logger board that must go all the way to a working fabricated board.
 
-## Curated intake
+See [`TODO.md`](TODO.md) for the stage plan and [`docs/`](docs/README.md) for
+documentation.
 
-The collection contains 37 batches, 49 batch-local source/device scopes and 329 independently
-Agent-reviewed annotations. Evidence levels differ by item; the six Nexperia
-observations remain text-only. Full orderable identity in the initial batch and
-precise region bounding boxes remain unresolved. This is not a complete device
-model or a formal pilot pass. See the [collection index](knowledge/intake/README.md)
-and [current aggregate retrieval evaluation](docs/intake-evaluation-fuse.md).
-
-The owner gave [batch-level content acceptance on 2026-10-28](docs/owner-acceptance-2026-10-28.md)
-for the original pinned 100-annotation snapshot, not the later application batches.
-This does not claim per-annotation human
-evidence checks, canonical approval, or completion of the formal pilot.
-A later [overall owner acknowledgement](docs/owner-acknowledgement-2026-10-29.md)
-is anchored to the observed published snapshot, without an itemized human audit
-claim, authority upgrade or automatic acceptance of future work.
-
-```bash
-python3 configs/pcbknowledge_agent.py --repo . intake list
-python3 configs/pcbknowledge_agent.py --repo . intake search LM358
-```
-
-Results remain `canonical: false`. `NOT_LOCALLY_VERIFIED` on a read means that reader
-has not checked local original bytes; it does not erase the recorded independent
-review receipt. See [the contract](docs/lightweight-knowledge.md) for evidence levels.
-
-### Browse the included collection
-
-From the root of this software checkout, open its existing public knowledge workspace:
-
-```bash
-python3 configs/pcbknowledge_workflow.py open --workspace .
-```
-
-Choose **Curated intake** in the local workbench, or open
-`http://127.0.0.1:18080/intake` at the default port. `open` performs the existing
-Config/Build preparation when required; keep its terminal process running and
-use Ctrl+C to close it. See the [read-only intake workbench](docs/intake-workbench.md)
-for exact filters, source issues, pagination and complete evidence details.
-
-Here `.` deliberately selects the checkout containing the curated collection.
-A newly initialized external workspace starts empty and does **not** inherit
-these candidates. Select that external workspace when working with private data;
-an empty intake page there is expected isolation, not a failed collection load.
-Do not copy original PDFs or `.pcbknowledge/` caches into Git to populate it.
-
-Use the result's **Open exact pinned item** link rather than assembling hash
-selectors by hand. These are local review links, not hosted public sharing URLs;
-they require the same relevant metadata in the selected workspace. Changed batch
-bytes or candidate/disposition context explicitly expire an old link. Browsing
-never converts an intake candidate into an approved canonical Fact.
-
-### Reproduce bounded engineering examples
-
-These fixed synthetic regressions show what the existing annotations can and
-cannot answer. Each page provides its supported CLI command, evidence pins and
-explicit unknowns; none executes hardware or certifies a circuit.
-
-- [Resistor DC bounds](docs/worked-examples/resistor-dc-bound.md): supplied operating intervals, not initial-tolerance assumptions.
-- [ADS1115 pin boundaries](docs/worked-examples/ads1115-pin-boundary-eval.md): differential range is not independent pin-voltage permission.
-- [NE555 nominal timing](docs/worked-examples/ne555-astable-model-bound.md): rounded coefficients and explicitly labeled high/low fractions.
-- [24LC256 page planning](docs/worked-examples/24lc256-page-write-plan.md): complete synthetic split plans, not successful programming or persistence.
-- [INA219 register scaling](docs/worked-examples/ina219-register-scale.md): supplied register words and scales, not chip arithmetic, sample freshness or analog accuracy.
-
-A regression PASS means its fixed numerical and refusal cases matched their
-reviewed expectations. It does not close the retained application warnings.
-
-## Core authority
-
-```text
-knowledge/
-├── sources/       SourceRecordV1
-├── entities/      ManufacturerV1 / ComponentV1 / PackageV1
-└── facts/         ComponentPinFactV1 / ParameterLimitFactV1
-
-.pcbknowledge/evidence/sha256/  ignored local original cache (not Git authority)
-```
-
-A Fact can bind to an exact Source revision, PDF page, normalized bounding box, and quote hash. Unknown values, conflicts, wrong packages, wrong revisions, missing evidence, and license blocks remain explicit instead of being filled from model priors.
-
-Published Knowledge is read only from a fully validated immutable Git ref containing committed `APPROVED` authority. Working-tree approval is not publication.
-
-## Explicit workspaces and lightweight curation
-
-The software checkout can contain curated metadata. Use a separate controlled workspace for private knowledge; both pin their schema contract. `knowledge/intake/` is a reviewable noncanonical queue, not a replacement for typed Facts:
-
-```text
-PcbKnowledge/                     public software
-
-PcbKnowledgeData/                 private workspace
-├── .git/
-├── pcbknowledge.workspace.json
-├── schemas/
-├── knowledge/
-│   ├── sources/
-│   ├── entities/
-│   └── facts/
-└── .pcbknowledge/evidence/sha256/  # ignored local cache
-```
-
-Create a clean workspace:
-
-```bash
-python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData --init-git
-```
-
-Or initialize an existing empty Git repository:
-
-```bash
-python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData
-```
-
-Initialization pins the current schemas and creates the empty authority/evidence layout. It does **not** stage, commit, push, or create production data.
-
-Validate working files or an immutable ref:
-
-```bash
-python3 configs/pcbknowledge_workspace.py validate ../PcbKnowledgeData
-python3 configs/pcbknowledge_workspace.py validate-ref ../PcbKnowledgeData --ref HEAD
-```
-
-A manifest/schema mismatch fails closed. Schema upgrades are explicit contract changes; existing workspaces are never silently rewritten to the software checkout's latest schema.
-
-## Local workbench
-
-Requirements:
+## Requirements
 
 - Git
 - Python 3.11+
 
-No Docker, database, account system, hosted service, or Node runtime is required at runtime.
+No Docker, database, account system, hosted service or Node runtime is required.
 
-Prepare the software checkout:
+## Quick start
 
 ```bash
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
+python3 configs/pcbknowledge_workflow.py test
 ```
 
-Open a selected workspace:
+Browse the frozen intake collection in this checkout (read-only, noncanonical):
 
 ```bash
-python3 configs/pcbknowledge_workflow.py open --workspace ../PcbKnowledgeData
+python3 configs/pcbknowledge_agent.py --repo . intake list
+python3 configs/pcbknowledge_agent.py --repo . intake search LD1117
+python3 configs/pcbknowledge_workflow.py open --workspace .
 ```
 
-Active routes:
+`open` serves a loopback-only workbench at `http://127.0.0.1:18080/` by default;
+keep the terminal running and use Ctrl+C to stop it. Details of the legacy
+commands are in [`docs/legacy/`](docs/legacy/README.md).
 
-```text
-/review
-/intake
-/intake/item
-/sources
-/sources/<id>
-/entities
-/entities/<id>
-/facts
-/facts/<id>
-/diff
-```
+## Workspaces
 
-Every page shows the exact selected workspace root. Source/Entity/Fact authority, evidence, review state, and Git diffs come only from that workspace; code and static assets come from the PcbKnowledge software checkout.
-
-### Visual evidence review
-
-Fact detail keeps typed payload, component/package identity, conditions/applicability, Source revision, and EvidenceAnchor metadata beside a local PDF rendering. The workbench renders the exact referenced Source page and overlays the `PDF_NORMALIZED_V1` bbox. Multiple anchors remain independently navigable, and quote plus `quote_sha256` stay visible.
-
-PDF rendering uses the pinned local `pdfjs-dist` 6.2.108 display layer and worker. Viewer code is not fetched from a CDN at runtime. Source evidence is served only when the Source license policy permits Agent/model processing; blocked evidence is rejected by the backend endpoint, not merely hidden in the browser. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and [`ADR-013`](docs/adr/ADR-013-evidence-anchor-coordinates.md).
-
-### Human review closure
-
-For a `READY_FOR_REVIEW` Source or Fact, the workbench recomputes the decision closure before showing or accepting a human review write.
-
-Fact approval fails closed on:
-
-- missing or incomplete evidence anchors;
-- unresolved semantic conflicts;
-- referenced Source not `APPROVED`;
-- missing Source PDF evidence;
-- Source license classes that block evidence processing.
-
-Both approval and rejection require the current next-commit candidate to be `CLEAN` or `DATA_ONLY`. `CODE_ONLY` and `MIXED` block the decision so review history cannot be mixed with software/schema/policy changes.
-
-Before a decision the UI shows the exact selected closure paths, selected Git status, and selected diff. The POST path recomputes the same gates immediately before mutation; the browser is not the authority for review policy.
-
-Approved Facts are immutable in place and expose no mutation form. Corrections use a new Fact plus explicit `supersedes`.
-
-## P0.4a private pilot harness
-
-Curated public intake is separate from the formal evidence-complete pilot. The repository provides a deterministic evaluator for the first 3–5 IC / 20–40 Fact dataset. Deliberately wrong MPN/package/revision inputs are recorded as evaluation scenarios rather than false canonical Facts or Entities.
-
-Create a private evaluation manifest:
+A knowledge workspace is a Git repository with a pinned manifest and schemas. This
+checkout holds public curated data; private knowledge goes in a separate workspace:
 
 ```bash
-python3 configs/pcbknowledge_pilot.py scaffold \
-  --output ../PcbKnowledgeData-pilot-evaluation.json
+python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData --init-git
+python3 configs/pcbknowledge_workspace.py validate ../PcbKnowledgeData
 ```
 
-Inspect working versus committed Published Knowledge coverage:
+Selection is always explicit (`--workspace` or `--repo`). Initialization never
+stages, commits or pushes. See [local workflow](docs/local-workflow.md).
 
-```bash
-python3 configs/pcbknowledge_pilot.py metrics \
-  --workspace ../PcbKnowledgeData
-```
+## Evidence and public-source boundary
 
-Run the structural, negative-case, visual-acceptance, human-review, and publication gates:
-
-```bash
-python3 configs/pcbknowledge_pilot.py report \
-  --workspace ../PcbKnowledgeData \
-  --manifest ../PcbKnowledgeData-pilot-evaluation.json \
-  --require-pass
-```
-
-The evaluator intentionally distinguishes reviewed working-tree authority from committed Published Knowledge. It also requires explicit unknown preservation, table-pin and footnote-limit cases, multi-package coverage, a Source revision/supersedes chain, negative scenario receipts, and at least one real browser visual-evidence receipt before the private pilot can close.
-
-See [`docs/pilot-evaluation.md`](docs/pilot-evaluation.md) and [`evals/pilot-evaluation.example.json`](evals/pilot-evaluation.example.json).
-
-## Agent / human boundary
-
-Agents may:
-
-- create and edit Source/Entity/Fact drafts;
-- attach evidence that passed the Source license gate;
-- validate authority and inspect unknown/conflict/missing-anchor state;
-- submit Source/Fact records for human review;
-- prepare a `DATA_ONLY` handoff.
-
-Agents may review intake under explicit owner delegation and use the authorized main-branch Git workflow. Record the actual Agent actor. The canonical CLI still has no human-decision or Git-write operation. Agents may not:
-
-- impersonate human canonical approval;
-- bypass Source license policy;
-- infer facts from similar MPNs/devices or model priors;
-- silently switch workspaces;
-- mutate live PCB board state.
-
-Use an explicit workspace:
-
-```bash
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData validate
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData source list
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData entity list
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData fact list
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData change-scope
-```
-
-Repository-local Agent skills enforce the same explicit-workspace boundary.
-
-## Public source guard
-
-The public upstream permits small original summaries, annotations, and metadata. The guard checks tracked files and the Git index, rejects source originals and oversized/binary knowledge payloads, and retains only explicitly reviewed software-vendor exceptions.
-
-The machine gate is:
+Source documents are identified by the SHA-256 of their bytes. Originals live only
+in the ignored local cache `.pcbknowledge/evidence/sha256/` and are never committed
+or packaged. The public repository accepts small original summaries and metadata
+only. See [open-source boundary](docs/open-source-boundary.md).
 
 ```bash
 python3 configs/check_public_repo.py
+python3 configs/check_english_repo.py
 ```
 
-`PUBLIC_REFERENCE` means publicly accessible, not automatically redistributable. Apache-2.0 applies to this repository's software/documentation unless stated otherwise; third-party engineering documents retain their own rights and licenses.
-
 ## Verification
-
-Main repository gate sequence:
 
 ```bash
 python3 configs/check_english_repo.py
 python3 configs/check_public_repo.py
 python3 configs/check_pdfjs_vendor.py
+python3 configs/pcbknowledge_workspace.py validate .
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_workflow.py test
@@ -296,22 +92,18 @@ python3 configs/pcbknowledge_agent.py validate
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-The completed P0.3 checkpoint ran 96 tests with 0 failures, errors, or skips across Ubuntu/Python 3.11, Ubuntu/Python 3.14, macOS/Python 3.11, and Windows/Python 3.11. P0.4a adds a synthetic 3-Component / 20-Fact vertical evaluator to that suite.
-
-Automated HTTP tests verify loopback Host/Origin, CSRF, optimistic revisions, selected workspace identity, Source/Fact decision gating, immutable approved UX, PDF license blocking, and GUI no-stage behavior. Pixel-level PDF/bbox placement on a real vendor document remains a required private-workspace P0.4a acceptance rather than a synthetic browser claim.
-
-## Next: execute the P0.4a private pilot
-
-The next stage is not another infrastructure expansion. Use the completed harness on 3–5 common ICs, 20–40 Facts, at least one multi-package case, one revision/supersedes case, 5–10 deliberately wrong/ambiguous scenarios, and real visual evidence acceptance. Record modeling failures before P1 retrieval or broader Fact families are built.
-
-See [`TODO.md`](TODO.md) for the executable roadmap.
+A skipped, interrupted or truncated run is not a pass.
 
 ## Contributing
 
-Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and [`docs/open-source-boundary.md`](docs/open-source-boundary.md) before contributing. Do not place internal material, unlicensed PDFs, real credentials, or private knowledge fixtures in issues, pull requests, Actions artifacts, or Git history.
-
-Report security issues privately according to [`SECURITY.md`](SECURITY.md).
+Read [`AGENTS.md`](AGENTS.md), [`CONTRIBUTING.md`](CONTRIBUTING.md),
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and
+[`docs/open-source-boundary.md`](docs/open-source-boundary.md). Report security
+issues privately according to [`SECURITY.md`](SECURITY.md).
 
 ## License
 
-PcbKnowledge software and repository documentation are licensed under the [Apache License 2.0](LICENSE), unless a file explicitly states otherwise. Vendored third-party assets retain their upstream notices and licenses. Third-party engineering documents and knowledge datasets retain their own rights and licenses.
+Software and repository documentation are licensed under the
+[Apache License 2.0](LICENSE) unless a file states otherwise. Vendored third-party
+assets keep their upstream licenses. Third-party engineering documents keep their
+own rights.

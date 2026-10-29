@@ -11,7 +11,7 @@ Config and Build are software-checkout operations. They validate the repository'
 
 ## Create a knowledge workspace
 
-Private knowledge belongs in a separate Git repository; public curated intake may live with the software. See [the current contract](lightweight-knowledge.md).
+Private knowledge belongs in a separate Git repository; public curated intake may live with the software. See [the current contract](legacy/intake/lightweight-knowledge.md).
 
 ```bash
 mkdir ../PcbKnowledgeData
