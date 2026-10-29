@@ -9,7 +9,7 @@ batch-set gate; use the original snapshot for this historical replay. Its pins a
 owner-acceptance coverage have not been rewritten.
 
 The original 100 annotations are unchanged. A reviewed, pinned
-[18-case manifest](../../../evals/intake-retrieval-100.json) now replays actual Agent CLI
+18-case manifest (`evals/intake-retrieval-100.json` at tag `intake-final`) now replays actual Agent CLI
 commands, rather than leaving the retrieval observations as a prose-only receipt:
 
 ```bash

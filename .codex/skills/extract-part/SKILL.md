@@ -24,8 +24,12 @@ infer a variant from a related device or suffix. Follow
 
 Cite `identity_evidence` and `pin_evidence` separately. Every datasheet quantity
 carries its source and 1-based PDF page, canonical unit and structured conditions.
-Do not manufacture terminal numbers from package conventions. If a complete
-numbered map is unavailable, report that blocker instead of creating a guessed part.
+Terminal numbering follows ADR-024. Two-terminal parts use `STANDARD_CONVENTION`
+numbering (unpolarized `1`/`2`; diodes, LEDs and unidirectional TVS `1` = cathode;
+polarized capacitors `1` = positive) and cite the page that shows polarity. Parts
+with more than two electrical terminals need a numbered map from a cited page; never
+take one from a generic package convention. If that map is unavailable, report the
+blocker and pick an equivalent part with an accessible official source.
 Quantity facts may be typed `UNKNOWN` with reason and affected queries. Design
 choices use `ENGINEERING_DEFAULT`, not missing-evidence status.
 

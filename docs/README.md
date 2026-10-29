@@ -14,11 +14,12 @@ The active roadmap is the root [`TODO.md`](../TODO.md). Agent rules are in the r
 | Public versus private content and source originals | [`open-source-boundary.md`](open-source-boundary.md) |
 | Local Config/Build/Open/Test/Package and workspaces | [`local-workflow.md`](local-workflow.md) |
 | Architecture decisions | [`adr/README.md`](adr/README.md) |
+| Implementer brief for the current round (temporary) | [`implementer-brief.md`](implementer-brief.md) |
 
 ## History
 
 [`archive/`](archive/README.md) and Git retain historical receipts. The retired
-intake input is available at the local `intake-final` tag; current records are v2.
+intake input is available at the `intake-final` tag; current records are v2.
 
 ## Maintenance rules
 

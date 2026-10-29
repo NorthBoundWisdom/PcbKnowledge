@@ -37,8 +37,15 @@ is G1; later designs do not justify adding unused types now.
 - Values identify `DATASHEET`, `STANDARD_CONVENTION`, `ENGINEERING_DEFAULT` or
   `CALCULATED` basis. Datasheet values require source/page evidence.
 - Orderable parts have exact manufacturer/MPN identity, a package and a complete
-  numbered pin map. Package geometry and generated land patterns become usable
-  only after the later footprint stage.
+  numbered pin map. Two-terminal parts use convention numbering with cited
+  polarity; parts with more terminals need a cited numbered map
+  ([ADR-024](adr/ADR-024-terminals-packages-selection.md)).
+- Standard-family packages record cited drawing dimensions, a generator and a
+  density level; pads are derived. Irregular parts record explicit pads from the
+  manufacturer's land pattern (ADR-024).
+- Part selection matches a requested nominal against the part's `value` or `typ`,
+  and requested `min`/`max` against the part's guaranteed bounds; `UNKNOWN` never
+  matches (ADR-024).
 - Blocks declare components, nets, ports, checks and layout constraints. Contract
   parameter references are data, not executable Python or shell expressions.
 - Sources retain SHA-256 document identity and license class. Original bytes stay

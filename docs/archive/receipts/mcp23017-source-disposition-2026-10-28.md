@@ -58,7 +58,7 @@ no other undiscovered inconsistency.
 
 The five accepted JSON batches, the 100 annotation IDs, original warning payload,
 [owner acceptance](owner-acceptance-2026-10-28.md), and original
-[18-case manifest](../../../evals/intake-retrieval-100.json) remain byte-identical.
+18-case manifest (`evals/intake-retrieval-100.json` at tag `intake-final`) remain byte-identical.
 Existing MCP23017 pin facts are not relabeled as Revision E-reviewed.
 
 The supplement pins the exact historical batch path/hash, issue ID, source

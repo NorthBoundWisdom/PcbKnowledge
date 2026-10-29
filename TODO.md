@@ -35,6 +35,10 @@ answer here.
 | D6 | Distributor part numbers in public records | Allowed as identifiers only (no copied catalog data) |
 | D7 | G1 design inputs (these are design decisions, not missing evidence) | USB-C sink input budget 500 mA (5.1 kOhm Rd on CC1/CC2, default USB power); 3.3 V rail load budget 150 mA including 50 mA for expansion headers; MCU external crystal 8 MHz; I2C standard mode 100 kHz with a 100 pF bus-capacitance budget; four 3.2 mm non-plated M3 holes with 6.0 mm keepout, centers 3.5 mm from the board edges; no component height limit for G1. Agent allocation of the 50 mA header budget: SWD 5 mA, I2C 40 mA, UART 5 mA |
 | D8 | Package courtyard allowance for Stage 3 | 0.25 mm, selected by the agent as an engineering default; check against generated geometry and the selected fab profile |
+| D9 | G1 USB-C input protection topology | No series Schottky on the USB-C sink input (reverse polarity cannot occur on USB-C). Use PTC (MF-MSMF050-2) plus unidirectional TVS (SMBJ5.0A) ahead of the LDO. SS14 is reserved for G2. `ldo_headroom` still checks the worst case at VBUS 4.75 V |
+| D10 | Substitution when an official source is inaccessible | Select an equivalent part whose manufacturer drawing or datasheet downloads without bypass; record the substitution and the failed URL in the commit body. Example: Wurth 61300211121 (HTTP 403) is replaced by another manufacturer's 2.54 mm header |
+| D11 | G1 passive parts | One series per passive type so one cited source covers every value: KEMET C0603C ceramic capacitors (and the same family in 0805 where 10 uF needs it) and Vishay CRCW0603 thick-film resistors. Each value is its own orderable `part` record citing the series datasheet |
+| D12 | Fab profile for G1 (refines D2) | JLCPCB standard two-layer, 1.6 mm FR-4, 1 oz outer copper, single-side SMT assembly. Values are cited from its public capability pages with access date; the owner may replace the fab |
 
 ## Stage 0 — Course correction (complete)
 
@@ -161,54 +165,163 @@ full gate passes; record the test count and lines removed.
 Stage receipt (2026-10-29): all gate commands exit 0; Build/Test each 81 tests, no skips; 19 pins across three independently verified parts and sources.
 One v2 model/validator, read-only HTTP/PDF smoke and deterministic public/external metadata packages passed; +4356 / -97806 lines overall. Exact commands and first failures are in commit bodies.
 Browser canvas visual acceptance remains manual because no browser surface was available; steps are in `docs/local-workflow.md`. G1 acceptance levels remain NOT_RUN.
+Review (2026-10-29, `4a79bf2`): one model, one validator and one write path are in
+place; 81 tests and the full gate pass on a local rerun; the three IC sources match
+their recorded SHA-256. Three issues are fixed by
+[ADR-024](docs/adr/ADR-024-terminals-packages-selection.md) in Stages 3 and 4:
+two-terminal parts were blocked for lacking numbered tables, packages stored
+placeholder pad arrays as authority (SOT-223 without its tab), and selection
+matching ignored min/typ/max ranges. LD1117S33TR also needs the parameters that
+`ldo_headroom` and `ldo_dissipation` read.
+
+## Round 3 scope
+
+Round 3 runs Stages 3, 4 and 5 in one long task and ends with G1 at A2 from an
+AI-produced block graph. Each stage exit is a checkpoint: run the full gate, record
+the receipt, push (when the brief authorizes it) and continue.
 
 ## Stage 3 — Packages and footprints (active)
 
-- [ ] Parametric land-pattern generators (original code) for the G1 package
-  families: chip 0402/0603/0805, SOD-123, SMA/SMB, SOT-23-3/5, SOT-223, SOIC-8,
-  TSSOP/VSSOP, LQFP-48, crystal 3225, 2.54 mm headers.
-- [ ] Explicit-pad packages for irregular G1 parts: USB-C receptacle, tactile
-  switch, connectors.
-- [ ] Tests against hand-checked dimension tables; pad-to-pin closure for every part.
-  Include the LD1117 tab as a separate physical VOUT pad sharing the evidenced
-  electrical pin number, and check that no extra electrical pin is invented.
-- [ ] Derived KiCad `.kicad_mod` export.
-- [ ] Manual acceptance: open the exported footprints in KiCad or PcbAtlas and
-  compare against the manufacturer drawings.
+### 3a Package contract per ADR-024 (contract-only commit)
 
-Exit: every G1 part has a validated package and exported footprint.
+- [ ] Change `schemas/package.schema.json` so a package holds exactly one of:
+  `drawing` (cited body and lead dimensions, pitch, pin count, tab or exposed pad)
+  plus `generator` and `density`, or `explicit_pads` (irregular parts, cited land
+  pattern). Remove stored pads from standard families. Re-pin the contract digest.
+- [ ] Validator: derive pads for both forms before pin/pad coverage; reject records
+  with both forms or neither; keep `pin1`, courtyard and the D8 margin.
+
+### 3b Generators (code)
+
+- [ ] Original-code generators in `src/pcbknowledge/v2/footprints/`: two-terminal
+  chip (0402, 0603, 0805, 1206 and the 1812 PTC body), molded diode (SOD-123,
+  SMA, SMB), gull-wing two-side (SOT-23-3/5/6/8, SOT-223 with tab, SOIC-8,
+  TSSOP/VSSOP), gull-wing four-side (LQFP-48), four-pad crystal (3225), and
+  through-hole pin header (2.54 mm, 1 to 2 rows).
+- [ ] Pad sizes follow one documented, original rule set per family (toe, heel and
+  side fillets by density level), written as code with named constants; do not
+  read IPC documents (ADR-015).
+- [ ] Tests: for every family, a hand-checked table of expected pad centers and
+  sizes for at least one real G1 package; symmetry, pitch, pin-1 position, no
+  overlapping copper, courtyard encloses pads and body.
+
+### 3c Re-record the existing packages (data-only commit)
+
+- [ ] Replace the three placeholder records (SOIC-8 for 24LC256, SOT-23-8 for
+  INA219, SOT-223 for LD1117) with cited drawing dimensions. The SOT-223 tab is a
+  separate physical pad sharing the evidenced VOUT number; no extra electrical
+  pin is invented. Independent agent verification to `AGENT_VERIFIED`.
+
+### 3d KiCad footprint export and manual check
+
+- [ ] Derived `.kicad_mod` export for every package, deterministic bytes, written
+  under `build/`. Tests check structure, pad count, numbers and coordinates.
+- [ ] If `kicad-cli` is available locally, load each exported footprint with it and
+  record the result; otherwise say so in the receipt (not a failure).
+- [ ] Add owner manual-acceptance steps to `docs/local-workflow.md`: open the
+  exported library in KiCad and compare against the cited drawing pages.
+
+Exit: every current package validates from drawing dimensions or explicit pads,
+exports to KiCad, and passes generator tests.
 
 ## Stage 4 — G1 knowledge content
 
-- [ ] Remaining G1 parts (MCU per D1, crystal, USB-C receptacle, LEDs, switch,
-  passives) with pins, key parameters and sourcing.
-- [ ] G1 blocks: USB-C 5 V sink input, input protection, fixed LDO, MCU core
-  (decoupling, crystal, reset, boot), SWD header, LED indicator, button input,
-  I2C bus with pull-ups, INA219 monitor, I2C EEPROM, UART header, mounting holes.
-- [ ] Rules: default IC decoupling, edge-connector placement, power net class.
-- [ ] Fab profile per D2.
-- [ ] Calculators needed by these blocks: `ldo_dissipation`, `ldo_headroom`,
-  `led_resistor`, `i2c_pullup`, `ipc2152_width`.
-- [ ] Known design risk the A2 checks must catch: USB VBUS can be 4.75 V. A series
-  Schottky (about 0.4 V to 0.5 V) leaves about 1 V for a 3.3 V regulator, and an
-  LD1117-class LDO needs about 1 V of dropout. The input-protection and LDO blocks
-  must either omit the series diode on a USB-C sink or use a lower-dropout
-  regulator, and `ldo_headroom` must refuse a combination that does not fit.
+### 4a Selection semantics and coverage tool (code)
 
-Exit: G1 knowledge coverage is 100% for the hand-made block graph (A1 reachable).
+- [ ] Implement ADR-024 selection matching in `catalog.py` with tests for nominal,
+  `typ`-only, min/max range and `UNKNOWN` cases.
+- [ ] `v2 coverage <block-graph>`: for each block instance, report whether the
+  block exists, its selections resolve, every referenced part and package is
+  `AGENT_VERIFIED` or better, and which items remain. Use it to drive the rest of
+  the round; record its output summary at each checkpoint.
+
+### 4b Parts (data-only commits, independently verified)
+
+Use D9 to D11. Every part has a cited source, a package from Stage 3 and the
+parameters its blocks and calculators read.
+
+- [ ] Power path: USB-C 16-pin USB 2.0 receptacle (explicit pads), MF-MSMF050-2
+  PTC, SMBJ5.0A TVS (convention numbering, cited cathode band), LD1117S33TR with
+  the parameters `ldo_headroom` and `ldo_dissipation` need (dropout versus output
+  current, maximum input voltage, output current, output-voltage range, thermal
+  resistance for SOT-223).
+- [ ] MCU per D1: STM32F103C8T6 (LQFP-48) with its full numbered pin map, power
+  pin groups, BOOT0, NRST, HSE pins and SWD pins; an 8 MHz 3225 crystal with load
+  capacitance and ESR.
+- [ ] Monitor and memory: INA219AIDCNR and 24LC256-I/SN parameters for supply range
+  and I2C; a shunt resistor sized by a calculator for the G1 current budget.
+- [ ] Passives per D11: the capacitor and resistor values the blocks need
+  (decoupling, bulk, LDO input and output, crystal load, CC 5.1 kOhm, I2C
+  pull-ups, LED series, reset and BOOT0 networks).
+- [ ] Indicators and input: one 0603 LED color with cited polarity, one tactile
+  switch with a numbered terminal drawing.
+- [ ] Headers: 2.54 mm single-row headers for SWD, I2C and UART per D10; M3
+  mounting hole as a mechanical package.
+
+### 4c Blocks, rules, fab profile and calculators
+
+- [ ] Calculators (pure, unit tested, refusing on missing inputs):
+  `ldo_headroom`, `ldo_dissipation`, `led_resistor`, `i2c_pullup`,
+  `shunt_resistor`, `trace_width`. `trace_width` uses the widely published
+  IPC-2221 external-layer equation implemented from first principles; do not read
+  IPC documents (ADR-015).
+- [ ] Register calculators so block `checks` and `CALCULATED` values validate;
+  remove the fail-closed placeholders in `catalog.py`.
+- [ ] Blocks: USB-C 5 V sink input (CC resistors), input protection (D9), fixed LDO,
+  MCU core (per-pin decoupling, bulk, crystal with load caps, NRST, BOOT0
+  pull-down, VDDA filtering), SWD header, LED indicator, button input, I2C bus with
+  pull-ups, INA219 monitor with shunt, I2C EEPROM (address and WP strapping),
+  I2C header, UART header, mounting holes. Each block has layout constraints
+  (`PLACE_NEAR`, `GROUP`, `EDGE_PLACEMENT`, `NET_WIDTH_MIN` and others the block needs).
+- [ ] Rules: default IC decoupling, edge-connector placement, power net class.
+- [ ] Fab profile per D12 with cited values.
+- [ ] Design risk: with D9 (no series Schottky), `ldo_headroom` must still pass at
+  VBUS 4.75 V minus the PTC drop at the G1 current budget. If it fails, record the
+  failure and switch the LDO block to a lower-dropout part rather than relaxing
+  the check.
+
+Exit: `v2 coverage` reports 100% for the hand-made G1 block graph (A1 reachable).
 
 ## Stage 5 — Bundle, expansion and AI synthesis
 
-- [ ] `bundle build` from one validated commit; query CLI over the bundle.
-- [ ] `expand`: block graph to design intent (components, parts, footprints, nets,
-  BOM, layout and net constraints, check results, weakest verification level,
-  typed refusals). Deterministic and pure.
-- [ ] A2 electrical checks inside `expand`.
-- [ ] Derived KiCad netlist and footprint-library export from a design intent.
-- [ ] Agent skill: brief to block graph using only the query API. Evaluate on G1
-  against the hand-made block graph; must pass A1 and A2.
+### 5a Bundle and queries
 
-Exit: G1 reaches A2 from an AI-produced block graph.
+- [ ] `bundle build` from one validated commit (refuse a dirty or unvalidated
+  tree), deterministic bytes, written under `build/bundle/`; query commands accept
+  `--bundle` as well as `--repo`.
+
+### 5b Expansion
+
+- [ ] `expand --bundle <bundle> <block-graph>`: design intent per ADR-023 and
+  `schemas/design-intent.schema.json` (components with parts, packages and
+  footprints; nets with physical pin numbers; BOM; complete layout and net
+  constraints; fab profile and mechanical inputs; check results; weakest
+  verification level; typed refusals). Deterministic and pure; identical inputs
+  give identical bytes.
+- [ ] A2 checks inside `expand`: every IC power and ground pin connected; decoupling
+  per rule; no required input floating (BOOT0, NRST, WP, address pins); every block
+  calculator check passes; I2C pull-ups present once per bus; LED currents and
+  LDO headroom and dissipation within limits.
+- [ ] Tests: the G1 reference graph expands to `EXPANDED` with all A2 checks
+  passing; mutated graphs (missing decoupling, floating BOOT0, LDO over budget,
+  unknown part) produce the expected typed refusals.
+
+### 5c KiCad interchange
+
+- [ ] Derived KiCad netlist and footprint library from a design intent, written
+  under `build/`. If `kicad-cli` is available, import-check them and record the
+  result.
+
+### 5d AI synthesis
+
+- [ ] Skill `.codex/skills/synthesize-block-graph/`: brief to block graph using only
+  the read-only query CLI over a bundle; never invent blocks or parts.
+- [ ] Evaluation command: run synthesis on G1, expand the result, and compare it
+  with the reference graph (same blocks and connections, or a documented
+  equivalent). Run at least three independent attempts and record pass counts.
+
+Exit: G1 reaches A2 from an AI-produced block graph in at least two of three
+attempts, and the reference graph reaches A2 deterministically.
 
 ## Stage 6 — G1 end to end with PcbAtlas (cross-repository)
 
