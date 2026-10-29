@@ -1,0 +1,1975 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-632723300011"
+      },
+      "max": 3.16,
+      "min": 2.76,
+      "typ": 2.96,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-632723300011"
+      },
+      "max": 11.4,
+      "min": 11,
+      "typ": 11.2,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-632723300011"
+      },
+      "max": 8.94,
+      "min": 8.54,
+      "typ": 8.74,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G1 D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-632723300011"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -2.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -2.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -1.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -1.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -0.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -0.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A10",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A11",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 2.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 2.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -5.93
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -2.8
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B11",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -2.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.98
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B10",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -1.6
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.98
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -1.2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -0.8
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.98
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -0.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.8
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.98
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.6
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.98
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 2.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.98
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "B1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 2.8
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -4.27
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.53
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 4.27
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -3.53
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -4.27
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": 1.2
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 4.27
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": 1.2
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": -2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.4
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -4.68
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "kind": "SMD",
+      "number": "SHELL7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.2
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "note": "Drawing datum PCB edge transformed to housing center: front shell at3.45mm from PCB edge and4.4mm from housing front, so11.2mm housing center is4.65mm behind PCB edge.",
+        "unit": "mm",
+        "value": -1.35
+      }
+    },
+    {
+      "height": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Lower shell rest height assumed equal to dimensioned1.0mm upper rest; anchored to manufacturer lower-edge datum2.4mm from PCB edge, then shifted4.65mm to body center.",
+        "unit": "mm",
+        "value": 1
+      },
+      "kind": "SMD",
+      "number": "SHELL8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0.2
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-632723300011"
+        },
+        "unit": "mm",
+        "value": 0
+      },
+      "y": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Lower shell rest height assumed equal to dimensioned1.0mm upper rest; anchored to manufacturer lower-edge datum2.4mm from PCB edge, then shifted4.65mm to body center.",
+        "unit": "mm",
+        "value": 1.75
+      }
+    }
+  ],
+  "family": "EXPLICIT",
+  "id": "package:wurth-632723300011",
+  "pin1": "A1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

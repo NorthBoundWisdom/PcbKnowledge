@@ -1,51 +1,129 @@
 {
-  "schema": "pcbknowledge.registry.v2",
-  "id": "registry:layout-constraints",
-  "scope": "G1",
   "entries": {
-    "PLACE_NEAR": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["subject", "target", "max_distance"]
-    },
-    "GROUP": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["subjects"]
-    },
-    "MINIMIZE_LOOP": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["path", "max_area"]
-    },
-    "KELVIN": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["sense_nets", "target"]
-    },
-    "NET_WIDTH_MIN": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["net", "min_width"]
-    },
     "CLEARANCE_MIN": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["subjects", "min_clearance"]
-    },
-    "KEEPOUT": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["subject", "margin"]
+      "fields": [
+        "subjects",
+        "min_clearance"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
     },
     "COPPER_AREA": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["target", "min_area"]
+      "fields": [
+        "target",
+        "min_area"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "EDGE_DISTANCE": {
+      "fields": [
+        "subject",
+        "edge",
+        "distance"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
     },
     "EDGE_PLACEMENT": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["subject", "edge", "max_distance"]
+      "fields": [
+        "subject",
+        "edge",
+        "max_distance"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "GROUP": {
+      "fields": [
+        "subjects"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "KEEPOUT": {
+      "fields": [
+        "subject",
+        "margin"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "KELVIN": {
+      "fields": [
+        "sense_nets",
+        "target"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "MINIMIZE_LOOP": {
+      "fields": [
+        "path",
+        "max_area"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "NET_WIDTH_MIN": {
+      "fields": [
+        "net",
+        "min_width"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
     },
     "ORIENTATION": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["subject", "angle"]
+      "fields": [
+        "subject",
+        "angle"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
+    "PLACE_NEAR": {
+      "fields": [
+        "subject",
+        "target",
+        "max_distance"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
     },
     "TEST_POINT": {
-      "queries": ["Q6", "Q7"],
-      "fields": ["net", "subject"]
+      "fields": [
+        "net",
+        "subject"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
     }
-  }
+  },
+  "id": "registry:layout-constraints",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "G1"
 }

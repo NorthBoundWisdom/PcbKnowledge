@@ -1,0 +1,1121 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:amphenol-10155435"
+      },
+      "max": 3.37,
+      "min": 3.17,
+      "typ": 3.27,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:amphenol-10155435"
+      },
+      "max": 7.6,
+      "min": 7.1,
+      "typ": 7.35,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:amphenol-10155435"
+      },
+      "max": 9.19,
+      "min": 8.69,
+      "note": "Drawing titleblock .00 dimensions tolerance±0.25mm.",
+      "typ": 8.94,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G1 D8 courtyard allowance; pad coordinates shifted to geometric housing center.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:amphenol-10155435"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A1_B12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -3.2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A4_B9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -2.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -1.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -1.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -0.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -0.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B4_A9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 2.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B1_A12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 3.2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.67
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.7
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 2.1
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.105
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.7
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 2.1
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -3.105
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.4
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.8
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.4
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1.8
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": 1.075
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "MECHANICAL",
+      "number": "MH1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": -2.89
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -2.605
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "MECHANICAL",
+      "number": "MH2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "unit": "mm",
+        "value": 2.89
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:amphenol-10155435"
+        },
+        "note": "Body-center transform: shell rows4.18 apart; side-view front edge to front shell row2.60, body length7.35. Thus front row y=7.35/2-2.60=1.075, rear row=-3.105. Other y coordinates follow land-pattern dimension chains.",
+        "unit": "mm",
+        "value": -2.605
+      }
+    }
+  ],
+  "family": "EXPLICIT",
+  "id": "package:amphenol-10155435",
+  "pin1": "A1_B12",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

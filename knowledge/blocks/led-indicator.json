@@ -1,0 +1,134 @@
+{
+  "category": "ui.indicator",
+  "checks": [
+    {
+      "calculator": "led_resistor",
+      "inputs": {
+        "forward_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "forward_current": {
+              "unit": "A",
+              "value": 0.02
+            }
+          },
+          "evidence": {
+            "page": 2,
+            "source": "source:wurth-150060rs75000"
+          },
+          "max": 2.4,
+          "min": 0,
+          "note": "Upper Vf2.4V is specified at20mA; lower bound0V is a conservative safety assumption. This check bounds maximum current only, not brightness or minimum current.",
+          "unit": "V"
+        },
+        "resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "supply": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Low-power G1 indicator current ceiling; below MCU and LED drive ratings.",
+          "unit": "A",
+          "value": 0.004
+        },
+        "operator": "LE",
+        "output": "current"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "D1",
+      "select": {
+        "part": "part:wurth-150060rs75000"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 1000
+          }
+        },
+        "role": "resistor"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-150060rs75000"
+    },
+    {
+      "page": 2,
+      "source": "source:wurth-150060rs75000"
+    }
+  ],
+  "id": "block:led-indicator",
+  "layout": [
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "D1",
+        "R1"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:DRIVE",
+        "R1.pin:1"
+      ],
+      "name": "DRIVE"
+    },
+    {
+      "connect": [
+        "R1.pin:2",
+        "D1.pin:2"
+      ],
+      "name": "ANODE"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "D1.pin:1"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "INPUT",
+      "name": "DRIVE"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

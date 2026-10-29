@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 55580,
+  "id": "source:yageo-rl1206fr-070r1l",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 1,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "publisher": "Yageo",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "2606dad6af9791d6875c10e719ca825196bf1a30149f80996183ad066dec00ae",
+  "title": "RL1206FR-070R1L component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RL1206FR-070R1L",
+  "verification": "AGENT_VERIFIED"
+}

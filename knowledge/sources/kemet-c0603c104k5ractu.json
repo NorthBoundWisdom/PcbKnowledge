@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 289556,
+  "id": "source:kemet-c0603c104k5ractu",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 4,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "publisher": "KEMET / Yageo Group",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "da66d11551fd2631ebd99772b61a1da25be58614980831a57327e1af857ab427",
+  "title": "C0603C104K5RACTU component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/C0603C104K5RACTU",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,63 @@
+{
+  "id": "part:wurth-61300411121",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:wurth-61300411121"
+  },
+  "manufacturer": "Würth Elektronik",
+  "mpn": "61300411121",
+  "package": "package:header-2p54-4",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:wurth-61300411121"
+      },
+      "unit": "A",
+      "value": 3
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 1,
+    "source": "source:wurth-61300411121"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "3",
+      "number": "3",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "4",
+      "number": "4",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "connector.header"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

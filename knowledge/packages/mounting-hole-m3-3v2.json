@@ -1,0 +1,56 @@
+{
+  "body": {
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "No component body; D7 has no component height limit.",
+      "unit": "mm",
+      "value": 0
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Owner decision D7: 3.2 mm non-plated M3 mounting hole with 6.0 mm mechanical keepout; four centers 3.5 mm from board edges.",
+      "unit": "mm",
+      "value": 6
+    },
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Owner decision D7: 3.2 mm non-plated M3 mounting hole with 6.0 mm mechanical keepout; four centers 3.5 mm from board edges.",
+      "unit": "mm",
+      "value": 6
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D7 keepout is already represented by the 6 mm mechanical envelope.",
+    "unit": "mm",
+    "value": 0
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "drill": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Owner decision D7: 3.2 mm non-plated M3 mounting hole with 6.0 mm mechanical keepout; four centers 3.5 mm from board edges.",
+      "unit": "mm",
+      "value": 3.2
+    },
+    "pin_count": 1
+  },
+  "evidence": [],
+  "family": "MOUNTING_HOLE",
+  "generator": "mechanical_hole",
+  "id": "package:mounting-hole-m3-3v2",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

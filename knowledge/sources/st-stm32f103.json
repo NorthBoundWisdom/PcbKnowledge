@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 1965230,
+  "id": "source:st-stm32f103",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 114,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "STMicroelectronics",
+  "revision": "DS5319 Rev20",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "1e54ce18e6c34c5b4a78986f26e245e143748c721009fc9af5953795c30686bc",
+  "title": "STM32F103x8 STM32F103xB datasheet",
+  "url": "https://www.st.com/resource/en/datasheet/stm32f103c8.pdf",
+  "verification": "AGENT_VERIFIED"
+}

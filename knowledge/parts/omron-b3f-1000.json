@@ -1,0 +1,75 @@
+{
+  "id": "part:omron-b3f-1000",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:omron-b3f"
+  },
+  "manufacturer": "Omron",
+  "mpn": "B3F-1000",
+  "package": "package:omron-b3f-1000",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:omron-b3f"
+      },
+      "max": 0.05,
+      "unit": "A"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:omron-b3f"
+      },
+      "max": 24,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 4,
+    "source": "source:omron-b3f"
+  },
+  "pins": [
+    {
+      "name": "CONTACT_A",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CONTACT_A",
+      "number": "2",
+      "same_net_as": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CONTACT_B",
+      "number": "3",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CONTACT_B",
+      "number": "4",
+      "same_net_as": "3",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "switch.button"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

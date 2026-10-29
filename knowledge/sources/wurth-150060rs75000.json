@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 901101,
+  "id": "source:wurth-150060rs75000",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 8,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "Würth Elektronik",
+  "revision": "002.009 2019-02-26",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "53fc6e5139c3738e3b8880e67a004a68b9d66627272a534ae81cb7ff6ffbdbbb",
+  "title": "WL-SMCW 150060RS75000 red LED",
+  "url": "https://www.we-online.com/components/products/datasheet/150060RS75000.pdf",
+  "verification": "AGENT_VERIFIED"
+}

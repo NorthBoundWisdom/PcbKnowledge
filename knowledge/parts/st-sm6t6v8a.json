@@ -1,0 +1,65 @@
+{
+  "id": "part:st-sm6t6v8a",
+  "identity_evidence": {
+    "page": 10,
+    "source": "source:st-sm6t"
+  },
+  "manufacturer": "STMicroelectronics",
+  "mpn": "SM6T6V8A",
+  "package": "package:smb-st-sm6t",
+  "parameters": {
+    "clamping_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:st-sm6t"
+      },
+      "max": 10.5,
+      "note": "57 A peak, 10/1000 us pulse at 25 degC; not a continuous DC clamp.",
+      "unit": "V"
+    },
+    "standoff_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:st-sm6t"
+      },
+      "unit": "V",
+      "value": 5.8
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Two-terminal unidirectional TVS: pin 1 cathode K, pin 2 anode A; polarity follows source symbol.",
+    "page": 1,
+    "source": "source:st-sm6t"
+  },
+  "pins": [
+    {
+      "name": "K",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "A",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+    ]
+  },
+  "roles": [
+    "protection.tvs"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

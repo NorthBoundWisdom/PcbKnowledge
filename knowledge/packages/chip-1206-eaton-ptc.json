@@ -1,0 +1,110 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 1.06,
+      "min": 0.28,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 1.8,
+      "min": 1.5,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 3.5,
+      "min": 3,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "ADR-024 D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 0.5,
+      "min": 0.18,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 3.5,
+      "min": 3,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 1.8,
+      "min": 1.5,
+      "unit": "mm"
+    },
+    "opposite_lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 0.45,
+      "min": 0.1,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 2,
+      "source": "source:eaton-pts1206"
+    }
+  ],
+  "family": "CHIP_1206",
+  "generator": "chip",
+  "id": "package:chip-1206-eaton-ptc",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

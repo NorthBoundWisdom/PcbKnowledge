@@ -1,0 +1,104 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      "max": 4.2,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      "max": 4.85,
+      "min": 4.55,
+      "typ": 4.7,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      "max": 11.6,
+      "min": 11.2,
+      "typ": 11.4,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G1 D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      "max": 4.31,
+      "min": 3.51,
+      "note": "Each terminal length=(overall terminal span12.7±0.6 minus inner gap4.88±0.2)/2, conservative independent bounds.",
+      "typ": 3.91,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      "max": 13.3,
+      "min": 12.1,
+      "typ": 12.7,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      "max": 0.8,
+      "min": 0.5,
+      "typ": 0.6,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:abracon-abls"
+    }
+  ],
+  "family": "HC49_US_SMD",
+  "generator": "chip",
+  "id": "package:hc49-us-smd-abls",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

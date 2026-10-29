@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 1043519,
+  "id": "source:wurth-632723300011",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 9,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "Würth Elektronik",
+  "revision": "003.000 2025-09-04",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "3c504f51cf0f241b3d81d1c6b022029473e1e5e5a414e66eb0f5ad66182bfb05",
+  "title": "WR-COM USB3.1 horizontal receptacle THR/SMT 632723300011",
+  "url": "https://www.we-online.com/components/products/datasheet/632723300011.pdf",
+  "verification": "AGENT_VERIFIED"
+}

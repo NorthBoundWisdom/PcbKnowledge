@@ -1,0 +1,70 @@
+{
+  "id": "part:wurth-150060rs75000",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:wurth-150060rs75000"
+  },
+  "manufacturer": "Würth Elektronik",
+  "mpn": "150060RS75000",
+  "package": "package:chip-0603-wurth-led",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-150060rs75000"
+      },
+      "max": 0.03,
+      "unit": "A"
+    },
+    "forward_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "forward_current": {
+          "unit": "A",
+          "value": 0.02
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:wurth-150060rs75000"
+      },
+      "max": 2.4,
+      "typ": 2,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Two-terminal LED: pin1 cathodeK, pin2 anodeA; polarity also matches the numbered manufacturer schematic on page1.",
+    "page": 1,
+    "source": "source:wurth-150060rs75000"
+  },
+  "pins": [
+    {
+      "name": "K",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "A",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "led"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

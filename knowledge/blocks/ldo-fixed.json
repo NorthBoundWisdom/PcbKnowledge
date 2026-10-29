@@ -1,0 +1,251 @@
+{
+  "category": "power.linear",
+  "checks": [
+    {
+      "calculator": "ldo_headroom",
+      "inputs": {
+        "dropout": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "dropout_voltage"
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D7 USB input budget; conservative PTC drop at full input budget.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D9 worst-case USB source voltage before PTC.",
+          "unit": "V",
+          "value": 4.75
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "series_resistance": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 2,
+            "source": "source:eaton-pts1206"
+          },
+          "note": "Maximum PTS120615V050 resistance one hour after reflow at 23 C, per note6; use full USB budget for drop.",
+          "unit": "ohm",
+          "value": 0.7
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "headroom"
+      }
+    },
+    {
+      "calculator": "ldo_dissipation",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D13: G1 evaluated at 23 degC, matching the PTC resistance condition; not all-temperature qualification.",
+          "unit": "degC",
+          "value": 23
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Upper USB supply design bound.",
+          "unit": "V",
+          "value": 5.25
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "quiescent_current": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "quiescent_current"
+        },
+        "thermal_resistance": {
+          "component": "U1",
+          "parameter": "thermal_resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:st-ldl1117"
+          },
+          "unit": "degC",
+          "value": 125
+        },
+        "operator": "LE",
+        "output": "junction_temperature"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:st-ldl1117s33r"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0805c106k8pactu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 5,
+      "source": "source:st-ldl1117"
+    },
+    {
+      "page": 6,
+      "source": "source:st-ldl1117"
+    },
+    {
+      "page": 2,
+      "source": "source:eaton-pts1206"
+    }
+  ],
+  "id": "block:ldo-fixed",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C2",
+      "target": "U1.pin:2"
+    },
+    {
+      "kind": "COPPER_AREA",
+      "min_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Engineering thermal-spreading target; dissipation check uses conservative datasheet thermal resistance.",
+        "unit": "mm2",
+        "value": 100
+      },
+      "target": "U1.pin:2"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VOUT"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "U1.pin:3",
+        "C1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:VOUT",
+        "U1.pin:2",
+        "C2.pin:1"
+      ],
+      "name": "VOUT"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:1",
+        "C1.pin:2",
+        "C2.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+        "unit": "V",
+        "value": 3.3
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VOUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

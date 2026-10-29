@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 56583,
+  "id": "source:yageo-rc0603fr-075k1l",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 1,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "publisher": "Yageo",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "39e486d6dad812ac426ef918a5cf3ee6608eb1ec444335c8e3a45ea1e615e6ef",
+  "title": "RC0603FR-075K1L component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-075K1L",
+  "verification": "AGENT_VERIFIED"
+}

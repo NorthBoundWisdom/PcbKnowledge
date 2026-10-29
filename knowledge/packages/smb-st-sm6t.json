@@ -1,0 +1,99 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-sm6t"
+      },
+      "max": 2.45,
+      "min": 1.9,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-sm6t"
+      },
+      "max": 3.95,
+      "min": 3.3,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-sm6t"
+      },
+      "max": 4.6,
+      "min": 4.05,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "ADR-024 D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-sm6t"
+      },
+      "max": 1.5,
+      "min": 0.75,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-sm6t"
+      },
+      "max": 5.6,
+      "min": 5.1,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-sm6t"
+      },
+      "max": 2.2,
+      "min": 1.95,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 6,
+      "source": "source:st-sm6t"
+    }
+  ],
+  "family": "SMB",
+  "generator": "molded_diode",
+  "id": "package:smb-st-sm6t",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

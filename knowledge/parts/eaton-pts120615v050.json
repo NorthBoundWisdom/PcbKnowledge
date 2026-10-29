@@ -1,0 +1,88 @@
+{
+  "id": "part:eaton-pts120615v050",
+  "identity_evidence": {
+    "page": 2,
+    "source": "source:eaton-pts1206"
+  },
+  "manufacturer": "Eaton",
+  "mpn": "PTS120615V050",
+  "package": "package:chip-1206-eaton-ptc",
+  "parameters": {
+    "hold_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "note": "23 degC still air; temperature derating applies.",
+      "unit": "A",
+      "value": 0.5
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 0.7,
+      "min": 0.15,
+      "note": "Minimum initial at23degC; maximum measured one hour post reflow at23degC (datasheet note6).",
+      "unit": "ohm"
+    },
+    "trip_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "note": "23 degC still air.",
+      "unit": "A",
+      "value": 1
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      },
+      "max": 15,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 2,
+    "source": "source:eaton-pts1206"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+    ]
+  },
+  "roles": [
+    "protection.fuse"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

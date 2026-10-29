@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 236803,
+  "id": "source:kemet-c0603c270j5gactu",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 4,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "publisher": "KEMET / Yageo Group",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "909bdca06bb735835159eb85549d7c3fe6ca5c97377f05e48f451e97e1fa2d89",
+  "title": "C0603C270J5GACTU component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/C0603C270J5GACTU",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,105 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      },
+      "max": 1.45,
+      "min": 1.05,
+      "typ": 1.25,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      },
+      "max": 1.45,
+      "min": 1.05,
+      "typ": 1.25,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      },
+      "max": 2.2,
+      "min": 1.8,
+      "typ": 2,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "ADR-024 D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      },
+      "max": 0.75,
+      "min": 0.25,
+      "typ": 0.5,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      },
+      "max": 2.2,
+      "min": 1.8,
+      "typ": 2,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      },
+      "max": 1.45,
+      "min": 1.05,
+      "typ": 1.25,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:kemet-c0805c106k3pactu"
+    }
+  ],
+  "family": "CHIP_0805",
+  "generator": "chip",
+  "id": "package:chip-0805-kemet-x5r-25v",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,31 @@
+{
+  "applies_to": {
+    "role": "connector.header"
+  },
+  "basis": "ENGINEERING_DEFAULT",
+  "evidence": [],
+  "id": "rule:edge-connector-placement",
+  "layout": [
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "component"
+    }
+  ],
+  "note": "Place user-accessible headers near a board edge; final edge and orientation remain layout decisions.",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "schema": "pcbknowledge.rule.v2",
+  "verification": "AGENT_VERIFIED"
+}

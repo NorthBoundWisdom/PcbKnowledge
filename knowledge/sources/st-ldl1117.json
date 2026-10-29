@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 2747031,
+  "id": "source:st-ldl1117",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 23,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "publisher": "STMicroelectronics",
+  "revision": "DS12022 Rev 7",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "ffbb9e03f7f6d0c4e9d33df10fadef5204022bf6208d93f95e516e69badb62b1",
+  "title": "LDL1117 low-dropout linear regulator",
+  "url": "https://www.st.com/resource/en/datasheet/ldl1117.pdf",
+  "verification": "AGENT_VERIFIED"
+}

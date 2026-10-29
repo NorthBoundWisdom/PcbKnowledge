@@ -1,0 +1,213 @@
+{
+  "category": "bus.i2c",
+  "checks": [
+    {
+      "calculator": "i2c_pullup",
+      "inputs": {
+        "capacitance": {
+          "parameter": "capacitance"
+        },
+        "low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "rise_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Standard-mode design requirement at 100 kHz.",
+          "unit": "s",
+          "value": 1e-06
+        },
+        "sink_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "supply": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "ohm",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "margin"
+      }
+    },
+    {
+      "calculator": "i2c_pullup",
+      "inputs": {
+        "capacitance": {
+          "parameter": "capacitance"
+        },
+        "low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "resistance": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "rise_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Standard-mode design requirement at 100 kHz.",
+          "unit": "s",
+          "value": 1e-06
+        },
+        "sink_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "supply": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "ohm",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "margin"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "R1",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 4700
+          }
+        },
+        "role": "resistor"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 4700
+          }
+        },
+        "role": "resistor"
+      }
+    }
+  ],
+  "evidence": [],
+  "id": "block:i2c-pullups",
+  "layout": [
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "R1",
+        "R2"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "R1.pin:1",
+        "R2.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:SDA",
+        "R1.pin:2"
+      ],
+      "name": "SDA"
+    },
+    {
+      "connect": [
+        "port:SCL",
+        "R2.pin:2"
+      ],
+      "name": "SCL"
+    }
+  ],
+  "parameters": {
+    "bus_frequency": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+        "unit": "Hz",
+        "value": 100000
+      },
+      "quantity": "frequency",
+      "required": true
+    },
+    "capacitance": {
+      "quantity": "capacitance",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SDA"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SCL"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

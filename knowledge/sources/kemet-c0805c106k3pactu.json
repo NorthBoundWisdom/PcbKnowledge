@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 242593,
+  "id": "source:kemet-c0805c106k3pactu",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 4,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "KEMET / Yageo Group",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "829cf99db94e52eced0b2c87e1290b3062f7e198e80a0de9aa3c923ecb649366",
+  "title": "C0805C106K3PACTU component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/C0805C106K3PACTU",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,95 @@
+{
+  "id": "part:abracon-abls-8-18",
+  "identity_evidence": {
+    "page": 2,
+    "source": "source:abracon-abls"
+  },
+  "manufacturer": "Abracon",
+  "mpn": "ABLS-8.000MHZ-18",
+  "package": "package:hc49-us-smd-abls",
+  "parameters": {
+    "equivalent_series_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abls"
+      },
+      "max": 80,
+      "unit": "ohm"
+    },
+    "frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abls"
+      },
+      "unit": "Hz",
+      "value": 8000000.0
+    },
+    "load_capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abls"
+      },
+      "unit": "F",
+      "value": 1.8e-11
+    },
+    "power_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abls"
+      },
+      "max": 0.001,
+      "note": "Maximum crystal drive level; typical drive100µW.",
+      "unit": "W"
+    },
+    "shunt_capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abls"
+      },
+      "max": 7e-12,
+      "unit": "F"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal crystal: terminals numbered1 and2; drawing establishes two physical leads.",
+    "page": 3,
+    "source": "source:abracon-abls"
+  },
+  "pins": [
+    {
+      "name": "XTAL1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "XTAL2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "crystal"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

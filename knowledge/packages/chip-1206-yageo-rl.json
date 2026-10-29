@@ -1,0 +1,105 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      },
+      "max": 0.65,
+      "min": 0.45,
+      "typ": 0.55,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      },
+      "max": 1.7,
+      "min": 1.5,
+      "typ": 1.6,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      },
+      "max": 3.2,
+      "min": 3.0,
+      "typ": 3.1,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "ADR-024 D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      },
+      "max": 0.6,
+      "min": 0.2,
+      "typ": 0.4,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      },
+      "max": 3.2,
+      "min": 3.0,
+      "typ": 3.1,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      },
+      "max": 1.7,
+      "min": 1.5,
+      "typ": 1.6,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:yageo-rl1206fr-070r1l"
+    }
+  ],
+  "family": "CHIP_1206",
+  "generator": "chip",
+  "id": "package:chip-1206-yageo-rl",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

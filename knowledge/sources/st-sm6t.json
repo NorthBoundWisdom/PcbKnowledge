@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 895852,
+  "id": "source:st-sm6t",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 12,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+    ]
+  },
+  "publisher": "STMicroelectronics",
+  "revision": "DS0684 Rev 15",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "32ee1ff8300e6eb51e1a48fbabd9e6e5988ddb66a182e1b295f8fa4f835b4e6e",
+  "title": "SM6T transient voltage suppressors",
+  "url": "https://www.st.com/resource/en/datasheet/sm6t6v8ca.pdf",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,107 @@
+{
+  "annular_ring_min": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Adopt JLCPCB recommended two-layer 1 oz PTH annular ring, not absolute minimum.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "assembly_side": "TOP",
+  "clearance_min": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Conservative design floor above JLCPCB 1 oz two-layer 0.10 mm capability.",
+    "unit": "mm",
+    "value": 0.15
+  },
+  "copper_thickness": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D12: 1 oz nominal copper represented as 35 um for engineering calculations.",
+    "unit": "mm",
+    "value": 0.035
+  },
+  "drill_min": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Conservative mechanical through-via drill choice; above JLCPCB minimum.",
+    "unit": "mm",
+    "value": 0.3
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:jlcpcb-capabilities-2026-10-29"
+    }
+  ],
+  "id": "fab_profile:generic-two-layer-default",
+  "layer_count": 2,
+  "owner_decision": "D12",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "schema": "pcbknowledge.fab_profile.v2",
+  "solder_mask_web_min": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Design bridge-width floor referencing JLCPCB pad-spacing guidance (0.10 mm colored masks, 0.13 mm black/white), not guaranteed finished mask web. Check opening expansion and fabrication constraints separately.",
+    "unit": "mm",
+    "value": 0.13
+  },
+  "stackup": [
+    {
+      "kind": "COPPER",
+      "name": "F.Cu",
+      "thickness": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D12: nominal 1 oz copper.",
+        "unit": "mm",
+        "value": 0.035
+      }
+    },
+    {
+      "kind": "DIELECTRIC",
+      "name": "FR4",
+      "thickness": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Nominal model: 1.6 mm minus two 0.035 mm copper layers; not a controlled-impedance stackup.",
+        "unit": "mm",
+        "value": 1.53
+      }
+    },
+    {
+      "kind": "COPPER",
+      "name": "B.Cu",
+      "thickness": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D12: nominal 1 oz copper.",
+        "unit": "mm",
+        "value": 0.035
+      }
+    }
+  ],
+  "thickness": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D12: JLCPCB standard two-layer FR4 nominal finished thickness.",
+    "unit": "mm",
+    "value": 1.6
+  },
+  "trace_width_min": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Conservative design floor above JLCPCB 1 oz two-layer 0.10 mm capability.",
+    "unit": "mm",
+    "value": 0.15
+  },
+  "verification": "AGENT_VERIFIED",
+  "via_types": [
+    "THROUGH"
+  ]
+}

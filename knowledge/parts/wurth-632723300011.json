@@ -1,0 +1,232 @@
+{
+  "id": "part:wurth-632723300011",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:wurth-632723300011"
+  },
+  "manufacturer": "Würth Elektronik",
+  "mpn": "632723300011",
+  "package": "package:wurth-632723300011",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:wurth-632723300011"
+      },
+      "max": 5,
+      "unit": "A"
+    },
+    "thickness": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-632723300011"
+      },
+      "note": "Manufacturer recommended PCB thickness1.6mm; selected for G1 fabrication profile. 24contact connector used power-only with data contacts intentionally unconnected.",
+      "unit": "mm",
+      "value": 1.6
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:wurth-632723300011"
+      },
+      "unit": "V",
+      "value": 48
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "note": "A1-A12 and B1-B12 are manufacturer contact numbers. SHELL1-4 identify unnumbered shell slots; SHELL5-6 identify the two ground-plate through-hole pins; SHELL7-8 identify the two small shell-rest pads. These shell identifiers are local, not manufacturer contact numbers.",
+    "page": 3,
+    "source": "source:wurth-632723300011"
+  },
+  "pins": [
+    {
+      "name": "GND",
+      "number": "A1",
+      "type": "GROUND"
+    },
+    {
+      "name": "SSTXp1",
+      "number": "A2",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SSTXn1",
+      "number": "A3",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VBUS",
+      "number": "A4",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CC",
+      "number": "A5",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dp1",
+      "number": "A6",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dn1",
+      "number": "A7",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SBU1",
+      "number": "A8",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VBUS",
+      "number": "A9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SSRXn2",
+      "number": "A10",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SSRXp2",
+      "number": "A11",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "A12",
+      "type": "GROUND"
+    },
+    {
+      "name": "GND",
+      "number": "B1",
+      "type": "GROUND"
+    },
+    {
+      "name": "SSTXp2",
+      "number": "B2",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SSTXn2",
+      "number": "B3",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VBUS",
+      "number": "B4",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VCONN",
+      "number": "B5",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dp2",
+      "number": "B6",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dn2",
+      "number": "B7",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SBU2",
+      "number": "B8",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VBUS",
+      "number": "B9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SSRXn1",
+      "number": "B10",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SSRXp1",
+      "number": "B11",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "B12",
+      "type": "GROUND"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL2",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL3",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL4",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GROUND_PLATE",
+      "number": "SHELL5",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GROUND_PLATE",
+      "number": "SHELL6",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD_REST",
+      "number": "SHELL7",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD_REST",
+      "number": "SHELL8",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "connector.usb-c-sink"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,105 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 0.87,
+      "min": 0.73,
+      "typ": 0.8,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 0.95,
+      "min": 0.65,
+      "typ": 0.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 1.75,
+      "min": 1.45,
+      "typ": 1.6,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "ADR-024 D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 0.5,
+      "min": 0.2,
+      "typ": 0.35,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 1.75,
+      "min": 1.45,
+      "typ": 1.6,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 0.95,
+      "min": 0.65,
+      "typ": 0.8,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:kemet-c0603c270j5gactu"
+    }
+  ],
+  "family": "CHIP_0603",
+  "generator": "chip",
+  "id": "package:chip-0603-kemet-c0g",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

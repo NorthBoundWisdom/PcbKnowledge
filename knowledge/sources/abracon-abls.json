@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 918329,
+  "id": "source:abracon-abls",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 5,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "Abracon",
+  "revision": "AD 2022-09-07 drawing450669",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "649cda5a6e08b2e5a044efc5d1405588ff85cf5428b4e9fe12aae3d1d0c7203e",
+  "title": "ABLS HC49/US SMD microprocessor crystal",
+  "url": "https://abracon.com/Resonators/abls.pdf",
+  "verification": "AGENT_VERIFIED"
+}

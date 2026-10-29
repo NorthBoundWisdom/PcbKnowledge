@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 287981,
+  "id": "source:kemet-c0805c106k8pactu",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 4,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "publisher": "KEMET / Yageo Group",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "6995172fc04f1f36ab19fdceb0730601f6043bc2abd5eb3ea4adcf13ec0f77c4",
+  "title": "C0805C106K8PACTU component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/C0805C106K8PACTU",
+  "verification": "AGENT_VERIFIED"
+}

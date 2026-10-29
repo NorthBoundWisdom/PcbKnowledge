@@ -1,0 +1,131 @@
+{
+  "category": "power.protection",
+  "checks": [],
+  "components": [
+    {
+      "ref": "F1",
+      "select": {
+        "part": "part:eaton-pts120615v050"
+      }
+    },
+    {
+      "ref": "D1",
+      "select": {
+        "part": "part:st-sm6t6v8a"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 2,
+      "source": "source:eaton-pts1206"
+    },
+    {
+      "page": 1,
+      "source": "source:st-sm6t"
+    },
+    {
+      "page": 3,
+      "source": "source:st-sm6t"
+    }
+  ],
+  "id": "block:input-protection",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "D1",
+      "target": "F1"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VIN"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VOUT"
+    },
+    {
+      "kind": "MINIMIZE_LOOP",
+      "max_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Keep TVS transient return short; D9 omits a series Schottky.",
+        "unit": "mm2",
+        "value": 25
+      },
+      "path": [
+        "F1.pin:2",
+        "D1.pin:1",
+        "D1.pin:2"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "F1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:VOUT",
+        "F1.pin:2",
+        "D1.pin:1"
+      ],
+      "name": "VOUT"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "D1.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VOUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

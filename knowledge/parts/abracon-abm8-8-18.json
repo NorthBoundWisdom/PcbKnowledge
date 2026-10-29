@@ -1,0 +1,84 @@
+{
+  "id": "part:abracon-abm8-8-18",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:abracon-abm8"
+  },
+  "manufacturer": "Abracon",
+  "mpn": "ABM8-8.000MHZ-18",
+  "package": "package:crystal-3225-abm8",
+  "parameters": {
+    "equivalent_series_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abm8"
+      },
+      "max": 400,
+      "unit": "ohm"
+    },
+    "frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abm8"
+      },
+      "note": "Manufacturer lists8MHz as family minimum but explicitly requires contacting Abracon for available frequencies below10MHz; exact8MHz procurement availability is not asserted.",
+      "unit": "Hz",
+      "value": 8000000.0
+    },
+    "load_capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:abracon-abm8"
+      },
+      "unit": "F",
+      "value": 1.8e-11
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 2,
+    "source": "source:abracon-abm8"
+  },
+  "pins": [
+    {
+      "name": "XTAL1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "2",
+      "type": "GROUND"
+    },
+    {
+      "name": "XTAL2",
+      "number": "3",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "4",
+      "type": "GROUND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "crystal"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

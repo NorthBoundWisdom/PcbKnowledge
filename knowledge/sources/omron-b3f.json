@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 711882,
+  "id": "source:omron-b3f",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 9,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "Omron",
+  "revision": "A070-E1-08",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "be9cf69e5f43fb7689448a2097c19858e5643c0e2e49cd77d018881543e27a1f",
+  "title": "B3F tactile switches",
+  "url": "https://omronfs.omron.com/en_US/ecb/products/pdf/en-b3f.pdf",
+  "verification": "AGENT_VERIFIED"
+}

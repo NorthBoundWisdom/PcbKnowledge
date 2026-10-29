@@ -1,19 +1,49 @@
 {
-  "schema": "pcbknowledge.registry.v2",
-  "id": "registry:quantities",
-  "scope": "G1",
   "entries": {
-    "voltage": {"unit": "V"},
-    "current": {"unit": "A"},
-    "power": {"unit": "W"},
-    "resistance": {"unit": "ohm"},
-    "capacitance": {"unit": "F"},
-    "frequency": {"unit": "Hz"},
-    "time": {"unit": "s"},
-    "temperature": {"unit": "degC"},
-    "length": {"unit": "mm"},
-    "area": {"unit": "mm2"},
-    "angle": {"unit": "deg"},
-    "ratio": {"unit": "1"}
-  }
+    "angle": {
+      "unit": "deg"
+    },
+    "area": {
+      "unit": "mm2"
+    },
+    "capacitance": {
+      "unit": "F"
+    },
+    "conductance": {
+      "unit": "S"
+    },
+    "current": {
+      "unit": "A"
+    },
+    "frequency": {
+      "unit": "Hz"
+    },
+    "length": {
+      "unit": "mm"
+    },
+    "power": {
+      "unit": "W"
+    },
+    "ratio": {
+      "unit": "1"
+    },
+    "resistance": {
+      "unit": "ohm"
+    },
+    "temperature": {
+      "unit": "degC"
+    },
+    "thermal_resistance": {
+      "unit": "degC/W"
+    },
+    "time": {
+      "unit": "s"
+    },
+    "voltage": {
+      "unit": "V"
+    }
+  },
+  "id": "registry:quantities",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "G1"
 }

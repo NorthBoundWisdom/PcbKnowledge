@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 444188,
+  "id": "source:wurth-61300511121",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 7,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "publisher": "Würth Elektronik",
+  "revision": "003.001 2023-08-15",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "b91171c2b94275ccb3824762a4b77dcd0cd9031e8a818e869a6c9f18c053ad8b",
+  "title": "WR-PHD 61300511121 pin header",
+  "url": "https://www.we-online.com/components/products/datasheet/61300511121.pdf",
+  "verification": "AGENT_VERIFIED"
+}

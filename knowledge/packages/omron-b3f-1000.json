@@ -1,0 +1,290 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:omron-b3f"
+      },
+      "max": 4.5,
+      "min": 4.1,
+      "typ": 4.3,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:omron-b3f"
+      },
+      "max": 6.2,
+      "min": 5.8,
+      "typ": 6,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:omron-b3f"
+      },
+      "max": 6.2,
+      "min": 5.8,
+      "typ": 6,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G1 D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:omron-b3f"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "height": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 3.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 2.25
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "height": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": -3.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 2.25
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "height": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 3.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": -2.25
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": 1
+      },
+      "height": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 original engineering decision.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "1.0 mm manufacturer hole plus0.30 mm annular ring each side.",
+        "unit": "mm",
+        "value": 1.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": -3.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 4,
+          "source": "source:omron-b3f"
+        },
+        "unit": "mm",
+        "value": -2.25
+      }
+    }
+  ],
+  "family": "EXPLICIT",
+  "id": "package:omron-b3f-1000",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}

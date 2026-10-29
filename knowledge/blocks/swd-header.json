@@ -1,0 +1,135 @@
+{
+  "category": "digital.debug",
+  "checks": [
+    {
+      "calculator": "trace_width",
+      "inputs": {
+        "copper_thickness": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "mm",
+          "value": 0.035
+        },
+        "current": {
+          "parameter": "output_current"
+        },
+        "temperature_rise": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "degC",
+          "value": 10
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "mm",
+          "value": 0.3
+        },
+        "operator": "LE",
+        "output": "trace_width"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "J1",
+      "select": {
+        "part": "part:wurth-61300511121"
+      }
+    }
+  ],
+  "evidence": [],
+  "id": "block:swd-header",
+  "layout": [
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "J1"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VREF",
+        "J1.pin:1"
+      ],
+      "name": "VREF"
+    },
+    {
+      "connect": [
+        "port:SWDIO",
+        "J1.pin:2"
+      ],
+      "name": "SWDIO"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "J1.pin:3"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:SWCLK",
+        "J1.pin:4"
+      ],
+      "name": "SWCLK"
+    },
+    {
+      "connect": [
+        "port:NRST",
+        "J1.pin:5"
+      ],
+      "name": "NRST"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "quantity": "current",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VREF"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SWDIO"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "SWCLK"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "NRST"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

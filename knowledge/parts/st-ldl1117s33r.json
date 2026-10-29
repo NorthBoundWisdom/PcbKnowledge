@@ -1,0 +1,125 @@
+{
+  "id": "part:st-ldl1117s33r",
+  "identity_evidence": {
+    "page": 18,
+    "source": "source:st-ldl1117"
+  },
+  "manufacturer": "STMicroelectronics",
+  "mpn": "LDL1117S33R",
+  "package": "package:sot-223-ld1117",
+  "parameters": {
+    "dropout_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-ldl1117"
+      },
+      "max": 0.6,
+      "note": "IOUT=1.2 A, VOUT>2.5 V, -40<TJ<125 degC; dropout is defined at 100 mV output reduction.",
+      "typ": 0.35,
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-ldl1117"
+      },
+      "max": 18,
+      "min": 2.6,
+      "unit": "V"
+    },
+    "junction_temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:st-ldl1117"
+      },
+      "max": 125,
+      "min": -40,
+      "unit": "degC"
+    },
+    "output_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:st-ldl1117"
+      },
+      "max": 1.2,
+      "unit": "A"
+    },
+    "output_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 18,
+        "source": "source:st-ldl1117"
+      },
+      "unit": "V",
+      "value": 3.3
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:st-ldl1117"
+      },
+      "max": 0.0005,
+      "note": "IOUT=0..1.2 A, -40<TJ<125 degC.",
+      "typ": 0.00025,
+      "unit": "A"
+    },
+    "thermal_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:st-ldl1117"
+      },
+      "note": "Junction-to-ambient; actual board copper changes thermal performance.",
+      "unit": "degC/W",
+      "value": 120
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:st-ldl1117"
+  },
+  "pins": [
+    {
+      "name": "GND",
+      "number": "1",
+      "type": "GROUND"
+    },
+    {
+      "name": "VOUT",
+      "number": "2",
+      "type": "POWER_OUT"
+    },
+    {
+      "name": "VIN",
+      "number": "3",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
+  },
+  "roles": [
+    "regulator.linear.fixed"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 729328,
+  "id": "source:eaton-pts1206",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 5,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+    ]
+  },
+  "publisher": "Eaton",
+  "revision": "Technical Data 4397, November 2021",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "265512260b6eadb256a9bb80284940cb8cf03cfe6124b47a9d754a01c0f35b3c",
+  "title": "PTS1206 surface-mount resettable PTC fuses",
+  "url": "https://www.eaton.com/content/dam/eaton/products/electronic-components/resources/data-sheet/eaton-pts1206-6-60-volt-dc-surface-mount-resettable-ptc-data-sheet.pdf",
+  "verification": "AGENT_VERIFIED"
+}

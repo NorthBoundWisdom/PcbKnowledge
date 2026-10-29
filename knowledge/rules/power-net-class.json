@@ -1,0 +1,30 @@
+{
+  "applies_to": {
+    "pin_type": "POWER_OUT"
+  },
+  "basis": "ENGINEERING_DEFAULT",
+  "evidence": [],
+  "id": "rule:power-net-class",
+  "layout": [
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "net"
+    }
+  ],
+  "note": "G1 external power-track design floor; not a current-capacity guarantee. Calculator checks establish current capacity separately.",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "schema": "pcbknowledge.rule.v2",
+  "verification": "AGENT_VERIFIED"
+}

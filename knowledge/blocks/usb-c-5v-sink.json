@@ -1,0 +1,228 @@
+{
+  "category": "power.input",
+  "checks": [
+    {
+      "calculator": "trace_width",
+      "inputs": {
+        "copper_thickness": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "mm",
+          "value": 0.035
+        },
+        "current": {
+          "parameter": "output_current"
+        },
+        "temperature_rise": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "degC",
+          "value": 10
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G1 engineering design choice; verify during board layout.",
+          "unit": "mm",
+          "value": 0.3
+        },
+        "operator": "LE",
+        "output": "trace_width"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "J1",
+      "select": {
+        "part": "part:wurth-632723300011"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 5100
+          }
+        },
+        "role": "resistor"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 5100
+          }
+        },
+        "role": "resistor"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-632723300011"
+    },
+    {
+      "page": 3,
+      "source": "source:wurth-632723300011"
+    }
+  ],
+  "id": "block:usb-c-5v-sink",
+  "layout": [
+    {
+      "edge": "LEFT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "J1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "R1",
+      "target": "J1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "R2",
+      "target": "J1"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VBUS"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VBUS",
+        "J1.pin:A4",
+        "J1.pin:A9",
+        "J1.pin:B4",
+        "J1.pin:B9"
+      ],
+      "name": "VBUS"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "J1.pin:A1",
+        "J1.pin:A12",
+        "J1.pin:B1",
+        "J1.pin:B12",
+        "J1.pin:SHELL1",
+        "J1.pin:SHELL2",
+        "J1.pin:SHELL3",
+        "J1.pin:SHELL4",
+        "J1.pin:SHELL5",
+        "J1.pin:SHELL6",
+        "J1.pin:SHELL7",
+        "J1.pin:SHELL8",
+        "R1.pin:2",
+        "R2.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "J1.pin:A5",
+        "R1.pin:1"
+      ],
+      "name": "CC1"
+    },
+    {
+      "connect": [
+        "J1.pin:B5",
+        "R2.pin:1"
+      ],
+      "name": "CC2"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+        "unit": "V",
+        "value": 5
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "resistance": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+        "unit": "ohm",
+        "value": 5100
+      },
+      "quantity": "resistance",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_OUT",
+      "name": "VBUS"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

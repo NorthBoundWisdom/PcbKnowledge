@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 56503,
+  "id": "source:yageo-rc0603fr-074k7l",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 1,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "publisher": "Yageo",
+  "revision": "Generated 2026-10-29",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "c7d039de4fa7dd2f4a51f44895f67bd79599c00399cd72c0c33e6747b3e30ff1",
+  "title": "RC0603FR-074K7L component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-074K7L",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,67 @@
+{
+  "id": "part:kemet-c0603c270j5gactu",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:kemet-c0603c270j5gactu"
+  },
+  "manufacturer": "KEMET",
+  "mpn": "C0603C270J5GACTU",
+  "package": "package:chip-0603-kemet-c0g",
+  "parameters": {
+    "capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 2.835e-11,
+      "min": 2.565e-11,
+      "note": "Measured at1MHz,1Vrms; 5% capacitance tolerance.",
+      "typ": 2.7e-11,
+      "unit": "F"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c270j5gactu"
+      },
+      "max": 50,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 1,
+    "source": "source:kemet-c0603c270j5gactu"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+    ]
+  },
+  "roles": [
+    "capacitor.ceramic"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

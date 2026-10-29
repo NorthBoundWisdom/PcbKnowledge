@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 3207867,
+  "id": "source:st-an2867",
+  "license_class": "PUBLIC_REFERENCE",
+  "pages": 60,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "publisher": "STMicroelectronics",
+  "revision": "AN2867 Rev24",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "1c92e22e215ca66a159c790589d568830c619d14f31193429787902664eae04e",
+  "title": "Guidelines for oscillator design on STM8AF/AL/S and STM32 MCUs/MPUs",
+  "url": "https://www.st.com/resource/en/application_note/cd00221665.pdf",
+  "verification": "AGENT_VERIFIED"
+}

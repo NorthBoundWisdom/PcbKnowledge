@@ -1,0 +1,294 @@
+{
+  "id": "part:st-stm32f103c8t6",
+  "identity_evidence": {
+    "page": 104,
+    "source": "source:st-stm32f103"
+  },
+  "manufacturer": "STMicroelectronics",
+  "mpn": "STM32F103C8T6",
+  "package": "package:lqfp-48-stm32",
+  "parameters": {
+    "clock_frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:st-stm32f103"
+      },
+      "max": 72000000.0,
+      "unit": "Hz"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:st-stm32f103"
+      },
+      "max": 3.6,
+      "min": 2,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 26,
+    "source": "source:st-stm32f103"
+  },
+  "pins": [
+    {
+      "name": "VBAT",
+      "number": "1",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "PC13-TAMPER-RTC",
+      "number": "2",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PC14-OSC32_IN",
+      "number": "3",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PC15-OSC32_OUT",
+      "number": "4",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PD0-OSC_IN",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "PD1-OSC_OUT",
+      "number": "6",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "NRST",
+      "number": "7",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "VSSA",
+      "number": "8",
+      "type": "GROUND"
+    },
+    {
+      "name": "VDDA",
+      "number": "9",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "PA0-WKUP",
+      "number": "10",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA1",
+      "number": "11",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA2",
+      "number": "12",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA3",
+      "number": "13",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA4",
+      "number": "14",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA5",
+      "number": "15",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA6",
+      "number": "16",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA7",
+      "number": "17",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB0",
+      "number": "18",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB1",
+      "number": "19",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB2",
+      "number": "20",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB10",
+      "number": "21",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB11",
+      "number": "22",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "VSS_1",
+      "number": "23",
+      "type": "GROUND"
+    },
+    {
+      "name": "VDD_1",
+      "number": "24",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "PB12",
+      "number": "25",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB13",
+      "number": "26",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB14",
+      "number": "27",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB15",
+      "number": "28",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA8",
+      "number": "29",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA9",
+      "number": "30",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA10",
+      "number": "31",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA11",
+      "number": "32",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA12",
+      "number": "33",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA13",
+      "number": "34",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "VSS_2",
+      "number": "35",
+      "type": "GROUND"
+    },
+    {
+      "name": "VDD_2",
+      "number": "36",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "PA14",
+      "number": "37",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PA15",
+      "number": "38",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB3",
+      "number": "39",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB4",
+      "number": "40",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB5",
+      "number": "41",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB6",
+      "number": "42",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB7",
+      "number": "43",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "BOOT0",
+      "number": "44",
+      "type": "INPUT"
+    },
+    {
+      "name": "PB8",
+      "number": "45",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "PB9",
+      "number": "46",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "VSS_3",
+      "number": "47",
+      "type": "GROUND"
+    },
+    {
+      "name": "VDD_3",
+      "number": "48",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "roles": [
+    "mcu.32-bit"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

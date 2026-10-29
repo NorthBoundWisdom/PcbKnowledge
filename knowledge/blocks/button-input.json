@@ -1,0 +1,92 @@
+{
+  "category": "ui.button",
+  "checks": [],
+  "components": [
+    {
+      "ref": "SW1",
+      "select": {
+        "part": "part:omron-b3f-1000"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 10000
+          }
+        },
+        "role": "resistor"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:omron-b3f"
+    }
+  ],
+  "id": "block:button-input",
+  "layout": [
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "SW1",
+        "R1"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "R1.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:SIGNAL",
+        "R1.pin:2",
+        "SW1.pin:1",
+        "SW1.pin:2"
+      ],
+      "name": "SIGNAL"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "SW1.pin:3",
+        "SW1.pin:4"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "SIGNAL"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "verified_by": [
+      "agent:/root"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

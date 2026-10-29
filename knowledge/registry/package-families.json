@@ -1,37 +1,92 @@
 {
-  "schema": "pcbknowledge.registry.v2",
-  "id": "registry:package-families",
-  "scope": "G1",
   "entries": {
+    "CHIP_0402": {
+      "queries": [
+        "Q3"
+      ]
+    },
     "CHIP_0603": {
-      "queries": ["Q3"]
+      "queries": [
+        "Q3"
+      ]
     },
-    "SOD-123": {
-      "queries": ["Q3"]
+    "CHIP_0805": {
+      "queries": [
+        "Q3"
+      ]
     },
-    "SMB": {
-      "queries": ["Q3"]
+    "CHIP_1206": {
+      "queries": [
+        "Q3"
+      ]
     },
-    "SOT-223": {
-      "queries": ["Q3"]
-    },
-    "SOIC-8": {
-      "queries": ["Q3"]
-    },
-    "SOT-23-8": {
-      "queries": ["Q3"]
-    },
-    "LQFP-48": {
-      "queries": ["Q3"]
+    "CHIP_1812": {
+      "queries": [
+        "Q3"
+      ]
     },
     "CRYSTAL_3225": {
-      "queries": ["Q3"]
-    },
-    "HEADER_2P54": {
-      "queries": ["Q3"]
+      "queries": [
+        "Q3"
+      ]
     },
     "EXPLICIT": {
-      "queries": ["Q3"]
+      "queries": [
+        "Q3"
+      ]
+    },
+    "HC49_US_SMD": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "HEADER_2P54": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "LQFP-48": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "MOUNTING_HOLE": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "SMA": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "SMB": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "SOD-123": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "SOIC-8": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "SOT-223": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "SOT-23-8": {
+      "queries": [
+        "Q3"
+      ]
     }
-  }
+  },
+  "id": "registry:package-families",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "G1"
 }

@@ -1,0 +1,38 @@
+{
+  "id": "part:mounting-hole-m3-3v2",
+  "identity_evidence": {
+    "basis": "ENGINEERING_DEFAULT",
+    "note": "Owner decision D7: 3.2 mm non-plated M3 mounting hole with 6.0 mm mechanical keepout; four centers 3.5 mm from board edges."
+  },
+  "manufacturer": "Engineering default",
+  "mpn": "M3-NPTH-3.2",
+  "package": "package:mounting-hole-m3-3v2",
+  "parameters": {
+    "drill": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Owner decision D7: 3.2 mm non-plated M3 mounting hole with 6.0 mm mechanical keepout; four centers 3.5 mm from board edges.",
+      "unit": "mm",
+      "value": 3.2
+    }
+  },
+  "pin_evidence": {
+    "basis": "ENGINEERING_DEFAULT",
+    "note": "Mechanical NPTH feature has no electrical terminals; D7."
+  },
+  "pins": [],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief"
+    ]
+  },
+  "roles": [
+    "mechanical.mounting-hole"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

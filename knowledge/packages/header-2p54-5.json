@@ -1,0 +1,101 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-61300511121"
+      },
+      "max": 8.94,
+      "note": "Above-board envelope: maximum total11.74 minus minimum solder-tail2.8.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-61300511121"
+      },
+      "max": 13.049999999999999,
+      "min": 12.35,
+      "typ": 12.7,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-61300511121"
+      },
+      "max": 2.69,
+      "min": 2.39,
+      "typ": 2.54,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G1 D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "drill": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-61300511121"
+      },
+      "unit": "mm",
+      "value": 1.1
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-61300511121"
+      },
+      "max": 0.79,
+      "min": 0.49,
+      "typ": 0.64,
+      "unit": "mm"
+    },
+    "pin_count": 5,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-61300511121"
+      },
+      "unit": "mm",
+      "value": 2.54
+    },
+    "row_count": 1
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-61300511121"
+    }
+  ],
+  "family": "HEADER_2P54",
+  "generator": "pin_header",
+  "id": "package:header-2p54-5",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "verification": "AGENT_VERIFIED"
+}
