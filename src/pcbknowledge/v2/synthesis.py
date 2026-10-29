@@ -85,3 +85,158 @@ def evaluate(bundle, reference, attempts):
     return {'status': 'PASS' if passed >= 2 else 'FAIL', 'bundle_commit': bundle.commit,
             'reference_status': reference_intent['status'], 'attempts': results,
             'passed': passed, 'total': len(results), 'required': 2}
+
+
+def _text_digest(text):
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError('Preserved skill and transcript text must be nonempty strings')
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+
+def _transcript_digest(transcript):
+    if not isinstance(transcript, (dict, list)) or not transcript:
+        raise ValueError('Preserved query transcript must be a nonempty object or list')
+    return digest(transcript)
+
+
+def _corpus_receipts(bundle, brief, attempts, *, orchestrator, skill_text, bundle_sha256, negative):
+    if not isinstance(orchestrator, str) or not orchestrator.startswith('agent:'):
+        raise ValueError('Corpus evaluation requires an explicit orchestrator identity')
+    if not isinstance(attempts, list) or len(attempts) != 3:
+        raise ValueError('Corpus evaluation requires exactly three fresh attempts')
+    if (not isinstance(bundle_sha256, str) or len(bundle_sha256) != 64
+            or any(character not in '0123456789abcdef' for character in bundle_sha256)):
+        raise ValueError('Corpus evaluation requires the actual bundle file SHA-256')
+    authors = set()
+    for attempt in attempts:
+        if not isinstance(attempt, dict) or not isinstance(attempt.get('receipt'), dict):
+            raise ValueError('Malformed corpus attempt receipt')
+        actor = attempt['receipt'].get('agent')
+        if not isinstance(actor, str) or not actor.startswith('agent:') or actor in authors or actor == orchestrator:
+            raise ValueError('Corpus authors must be distinct fresh agents, not the orchestrator')
+        authors.add(actor)
+    key = 'refusal' if negative else 'graph'
+    expected = {'bundle_commit': bundle.commit, 'bundle_sha256': bundle_sha256,
+                'brief_sha256': digest(brief), 'skill_sha256': _text_digest(skill_text),
+                'orchestrator': orchestrator, 'reference_accessed': False, 'mode': 'QUERY_MEDIATED'}
+    for attempt in attempts:
+        receipt = attempt['receipt']
+        reviewer = receipt.get('reviewer')
+        if (not isinstance(reviewer, str) or not reviewer.startswith('agent:')
+                or reviewer in authors or reviewer == orchestrator):
+            raise ValueError('Corpus reviewer must be independent of every author and orchestrator')
+        if not isinstance(attempt.get(key), dict) or ('graph' in attempt if negative else 'refusal' in attempt):
+            raise ValueError('Corpus attempt must contain only the requested graph or refusal output')
+        checks = {**expected, key + '_sha256': digest(attempt[key]),
+                  'transcript_sha256': _transcript_digest(attempt.get('transcript'))}
+        if any(receipt.get(name) != value for name, value in checks.items()):
+            raise ValueError('Corpus receipt does not match exact preserved inputs/output')
+        if receipt.get('reference_accessed') is not False:
+            raise ValueError('Reference access is prohibited during corpus synthesis')
+        if not negative and receipt.get('reviewer_verdict') not in ('EQUIVALENT', 'NOT_EQUIVALENT'):
+            raise ValueError('Positive corpus receipt requires an explicit controlled reviewer verdict')
+        review = receipt.get('equivalence_review')
+        if not isinstance(review, str) or not review.strip():
+            raise ValueError('Corpus outputs require an explicit independent review statement')
+
+
+def corpus_topology(graph):
+    """Conservative labeled structure; duplicate signatures require independent equivalence review.
+
+    Never equate repeated block instances by collapsing them into one signature.
+    This is deliberately not a full graph-isomorphism solver.
+    """
+    identities = {}
+    for item in graph['instances']:
+        signature = canonical_json({
+            'block': item['block'], 'requirements': sorted(item['requirements']),
+            'parameters': item.get('parameters', {}),
+            'ports': sorted(item.get('ports', []), key=canonical_json),
+        })
+        if item['id'] in identities:
+            raise ValueError('Duplicate corpus graph instance identity')
+        identities[item['id']] = signature
+    if len(set(identities.values())) != len(identities):
+        return None
+    nets = []
+    for connection in graph['connections']:
+        endpoints = []
+        for endpoint in connection['endpoints']:
+            if endpoint['instance'] not in identities:
+                raise ValueError('Invalid corpus graph endpoint')
+            endpoints.append((identities[endpoint['instance']], endpoint['port']))
+        nets.append(sorted(endpoints))
+    return {'instances': sorted(identities.values()), 'nets': sorted(nets),
+            'requirements': sorted(graph.get('requirements', []), key=canonical_json)}
+
+
+def _positive_corpus(bundle, brief, attempts, reference):
+    if not isinstance(reference, dict) or reference.get('brief') != brief['id']:
+        raise ValueError('Positive corpus reference must match the requested brief')
+    if any(attempt['graph'].get('brief') != brief['id'] for attempt in attempts):
+        raise ValueError('Corpus attempt brief differs from reference/benchmark brief')
+    # Reuse replay and distinct graph checks without changing historical G1 receipts.
+    reference_structure = corpus_topology(reference)
+    result = evaluate(bundle, reference, attempts)
+    for row, attempt in zip(result['attempts'], attempts):
+        verdict = attempt['receipt']['reviewer_verdict']
+        structure = corpus_topology(attempt['graph'])
+        row['structural_match'] = (reference_structure is not None and structure is not None
+                                   and reference_structure == structure)
+        row['structural_comparison'] = ('AMBIGUOUS_REPEATED_SIGNATURE'
+                                        if reference_structure is None or structure is None else 'COMPARED')
+        row['equivalence_review'] = attempt['receipt']['equivalence_review']
+        row['reviewer_verdict'] = verdict
+        row['a2'] = row['a2'] and verdict == 'EQUIVALENT'
+        row['reference_equivalent'] = verdict == 'EQUIVALENT'
+    result['passed'] = sum(row['a2'] for row in result['attempts'])
+    result['status'] = 'PASS' if result['passed'] >= result['required'] else 'FAIL'
+    if result['reference_status'] != 'EXPANDED':
+        result['status'] = 'FAIL'
+    return result
+
+
+def _negative_corpus(bundle, brief, attempts, expected):
+    from .requirements import assess_brief
+
+    if not isinstance(expected, dict) or any(not isinstance(expected.get(k), str) for k in ('code', 'path')):
+        raise ValueError('Negative corpus requires an expected refusal code and path')
+    refusals = assess_brief(bundle.catalog, brief)
+    reproducible = any(item.get('code') == expected['code'] and item.get('path') == expected['path']
+                       for item in refusals)
+    results = []
+    for attempt in attempts:
+        refusal = attempt['refusal']
+        valid = (set(refusal) == {'brief', 'code', 'path', 'reason'} and refusal['brief'] == brief['id']
+                 and refusal['code'] == expected['code'] and refusal['path'] == expected['path']
+                 and isinstance(refusal['reason'], str) and bool(refusal['reason'].strip()))
+        results.append({'agent': attempt['receipt']['agent'], 'refusal_sha256': digest(refusal),
+                        'status': 'REFUSED' if valid and reproducible else 'INVALID_REFUSAL',
+                        'correct_refusal': valid and reproducible})
+    passed = sum(item['correct_refusal'] for item in results)
+    return {'status': 'PASS' if passed == 3 else 'FAIL', 'bundle_commit': bundle.commit,
+            'attempts': results, 'passed': passed, 'total': 3, 'required': 3,
+            'replayed_refusals': refusals}
+
+
+def evaluate_corpus(bundle, brief_id, attempts, reference=None, expected_refusal=None, *,
+                    orchestrator, skill_text, bundle_sha256):
+    """Evaluate fresh benchmark receipts; provenance remains an attestation, not agent identity proof.
+
+    Caller supplies the SHA-256 of the actual validated bundle bytes and actual
+    skill text. Preserved transcript objects use canonical JSON hashes; query
+    mediation is an attested workflow, not a hard-sandbox guarantee.
+    Negative outputs are independently reproduced, not accepted for plausible prose.
+    """
+    if brief_id not in bundle.briefs:
+        raise ValueError('Unknown corpus brief')
+    negative = expected_refusal is not None
+    if negative and reference is not None:
+        raise ValueError('Negative corpus evaluation must not receive a reference graph')
+    brief = bundle.briefs[brief_id]
+    _corpus_receipts(bundle, brief, attempts, orchestrator=orchestrator, skill_text=skill_text,
+                     bundle_sha256=bundle_sha256, negative=negative)
+    result = (_negative_corpus(bundle, brief, attempts, expected_refusal) if negative
+              else _positive_corpus(bundle, brief, attempts, reference))
+    return {**result, 'brief': brief_id, 'mode': 'negative' if negative else 'positive',
+            'orchestrator': orchestrator, 'bundle_sha256': bundle_sha256}

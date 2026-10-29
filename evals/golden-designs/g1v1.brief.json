@@ -1,0 +1,484 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "Use catalog blocks and parts only; missing values produce typed refusals.",
+      "id": "closed_world"
+    },
+    {
+      "description": "The LDO directly supplies the logger rail; no current shunt is retained. Sensor budget is 7 mA within the unchanged 150 mA rail budget.",
+      "id": "temperature_rail"
+    }
+  ],
+  "functions": [
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "USB-C receptacle configured as a 5 V sink.",
+      "id": "usb_sink",
+      "parameters": {
+        "resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D7: one Rd on each CC pin.",
+          "unit": "ohm",
+          "value": 5100
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "CC pull-down resistors; no source role."
+      ]
+    },
+    {
+      "category": "power.protection",
+      "count": 1,
+      "description": "Protect the input power path.",
+      "id": "input_protection",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "PTC and unidirectional TVS; no series Schottky on the USB-C sink input (D9)."
+      ]
+    },
+    {
+      "category": "power.linear",
+      "count": 1,
+      "description": "Fixed 3.3 V LDO rail.",
+      "id": "regulation",
+      "parameters": {
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic design requirement.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Fixed 3.3 V LDO rail."
+      ]
+    },
+    {
+      "category": "ui.indicator",
+      "count": 1,
+      "description": "Power indicator LED.",
+      "id": "power_led",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Power indicator LED."
+      ]
+    },
+    {
+      "category": "digital.mcu",
+      "count": 1,
+      "description": "32-bit MCU core in LQFP-48 or smaller.",
+      "id": "mcu",
+      "parameters": {
+        "clock_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "Hz",
+          "value": 8000000
+        }
+      },
+      "part_preferences": [
+        "STM32F103C8T6"
+      ],
+      "requirements": [
+        "D1 default MCU is STM32F103C8T6 in LQFP-48.",
+        "Include crystal, reset, boot configuration and every required decoupling component."
+      ]
+    },
+    {
+      "category": "digital.debug",
+      "count": 1,
+      "description": "SWD programming and debug header.",
+      "id": "debug",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "SWD programming and debug header."
+      ]
+    },
+    {
+      "category": "ui.indicator",
+      "count": 2,
+      "description": "Two MCU-controlled user LEDs.",
+      "id": "user_leds",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Two MCU-controlled user LEDs."
+      ]
+    },
+    {
+      "category": "ui.button",
+      "count": 1,
+      "description": "One MCU-readable user button.",
+      "id": "user_button",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "One MCU-readable user button."
+      ]
+    },
+    {
+      "category": "bus.i2c",
+      "count": 1,
+      "description": "I2C bus with pull-ups.",
+      "id": "i2c_bus",
+      "parameters": {
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "F",
+          "value": 1e-10
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "I2C bus with pull-ups."
+      ]
+    },
+    {
+      "category": "sensor.temperature",
+      "count": 1,
+      "description": "I2C temperature sensor on the regulated logger rail.",
+      "id": "temperature_sensor",
+      "parameters": {
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D28 budget includes full-range OS pull-up sink and sensor current.",
+          "unit": "A",
+          "value": 0.007
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D28 regulated sensor supply.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "part_preferences": [
+        "PCT2075D,118"
+      ],
+      "requirements": [
+        "Measure temperature through the shared I2C bus; address 0x48, local decoupling and defined OS bias."
+      ]
+    },
+    {
+      "category": "memory.eeprom",
+      "count": 1,
+      "description": "I2C EEPROM.",
+      "id": "eeprom",
+      "parameters": {},
+      "part_preferences": [
+        "24LC256"
+      ],
+      "requirements": [
+        "I2C EEPROM."
+      ]
+    },
+    {
+      "category": "interface.header",
+      "count": 1,
+      "description": "One four-pin I2C expansion header.",
+      "id": "i2c_expansion",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "One four-pin I2C expansion header."
+      ]
+    },
+    {
+      "category": "interface.header",
+      "count": 1,
+      "description": "UART header.",
+      "id": "uart",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "UART header."
+      ]
+    }
+  ],
+  "id": "G1V1",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D7: 500 mA USB input; other headers share one 50 mA expansion budget.",
+        "unit": "A",
+        "value": 0.5
+      },
+      "description": "USB-C power entry",
+      "id": "usb",
+      "signals": [
+        "VBUS",
+        "GND",
+        "CC1",
+        "CC2"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic design requirement.",
+        "unit": "V",
+        "value": 5
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "Debug header",
+      "id": "swd",
+      "signals": [
+        "VREF",
+        "GND",
+        "SWDIO",
+        "SWCLK",
+        "NRST"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic design requirement.",
+        "unit": "V",
+        "value": 3.3
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA.",
+        "unit": "A",
+        "value": 0.04
+      },
+      "description": "Four-pin I2C expansion",
+      "id": "i2c_header",
+      "signals": [
+        "VDD",
+        "GND",
+        "SDA",
+        "SCL"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic design requirement.",
+        "unit": "V",
+        "value": 3.3
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "UART expansion",
+      "id": "uart_header",
+      "signals": [
+        "VREF",
+        "GND",
+        "TX",
+        "RX"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic design requirement.",
+        "unit": "V",
+        "value": 3.3
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "1 oz copper per D2; detailed stackup awaits the selected fab.; Single-side assembly",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "usb",
+      "swd",
+      "i2c_header",
+      "uart_header"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "D7: no component height limit.",
+      "status": "UNCONSTRAINED"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic design requirement.",
+      "unit": "mm"
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic design requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D1",
+    "D2",
+    "D7",
+    "D9",
+    "D12",
+    "D13",
+    "D14",
+    "D21",
+    "D28"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "function": "regulation",
+        "id": "logic_3v3",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic design requirement.",
+          "unit": "V",
+          "value": 3.3
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "description": "USB-C sink only; no USB data or power delivery required.",
+        "function": "usb_sink",
+        "id": "usb_5v",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic design requirement.",
+          "unit": "V",
+          "value": 5
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Original synthetic G1 variant replacing current monitoring with an I2C temperature sensor; no current-sense shunt.",
+  "title": "G1 variant: I2C temperature logger"
+}

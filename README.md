@@ -26,6 +26,8 @@ python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_agent.py --repo . v2 validate
 python3 configs/pcbknowledge_agent.py --repo . part search --role monitor.current
 python3 configs/pcbknowledge_agent.py --repo . v2 coverage evals/golden-designs/g1.block-graph.json
+python3 configs/pcbknowledge_agent.py --repo . v2 coverage --all
+python3 configs/pcbknowledge_agent.py --repo . v2 coverage --all --json
 python3 configs/pcbknowledge_agent.py --repo . bundle build
 python3 configs/pcbknowledge_workflow.py open --workspace .
 ```
@@ -33,6 +35,12 @@ python3 configs/pcbknowledge_workflow.py open --workspace .
 The viewer runs at `http://127.0.0.1:18080/`; keep the terminal open and use Ctrl+C
 to stop. Select a citation to inspect its source evidence. The GUI and query CLI are
 read-only. Missing facts stay explicit; generation refuses rather than guesses.
+
+`coverage --all` prints one line per brief: reference blocks ready, eligibility,
+graph replay and typed refusals. `--json` preserves the structured report; the
+single-graph command remains JSON. Coverage is not a fresh synthesis receipt.
+The [golden-design corpus](docs/golden-designs.md) defines positive variants and
+negative refusal cases, with query-mediated independent evaluation.
 
 ## Workspaces and evidence
 

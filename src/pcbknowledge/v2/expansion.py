@@ -157,6 +157,7 @@ class _Expansion:
             self.check_function_requirements(iid, instance, block)
             self.check_instance_inputs(iid, instance, block)
             self.resolve_components(iid, block)
+            self.check_package_family(iid, instance)
             self.index_block_nets(iid, block)
             self.check_calculators(iid, instance, block)
 
@@ -220,6 +221,17 @@ class _Expansion:
                 'footprint': 'pcbknowledge:' + footprint_name(part['package'])})
             if 'mechanical.mounting-hole' in part['roles']:
                 self.intent['mechanical']['mounting'].append({'ref': ref, 'fastener': 'M3'})
+
+    def check_package_family(self, iid, instance):
+        from .requirements import package_selection_matches
+        for function in self.brief['functions']:
+            if function['id'] not in instance['requirements']:
+                continue
+            selected = self.local_parts[iid].values()
+            if not package_selection_matches(self.catalog, function, selected):
+                self.refuse('UNSATISFIED_SELECTION', iid + '.requirements',
+                            'Selected role component does not satisfy package family: ' + function['package_family'],
+                            ('Q1',))
 
     def index_block_nets(self, iid, block):
         for net in block['nets']:
@@ -358,7 +370,7 @@ class _Expansion:
                     if key in constraint:
                         value = constraint[key]
                         constraint[key] = iid + '_' + value if isinstance(value,str) else [iid+'_'+v for v in value]
-                for key in ('net','sense_nets'):
+                for key in ('net','sense_nets','nets'):
                     if key in constraint:
                         value = constraint[key]
                         constraint[key] = (

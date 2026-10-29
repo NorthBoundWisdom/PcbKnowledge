@@ -63,3 +63,30 @@ def coverage(catalog, graph):
             'ready': ready, 'total': len(results),
             'percent': round(100*ready/len(results), 2) if results else 100,
             'instances': results}
+
+
+def coverage_all(catalog, briefs, graphs=None, expectations=None):
+    """Per-brief feasibility and optional graph replay, never a synthesis/A2 receipt."""
+    from .expansion import expand
+    from .requirements import assess_brief
+    graphs = graphs or {}
+    expectations = expectations or {}
+    rows = []
+    for identity, brief in sorted(briefs.items()):
+        refusals = assess_brief(catalog, brief)
+        graph = graphs.get(identity)
+        row = {'brief': identity, 'expected': expectations.get(identity, {'outcome': 'UNSPECIFIED'}),
+               'screening': 'REFUSED' if refusals else 'ELIGIBLE', 'refusals': refusals,
+               'graph_readiness': 'NOT_PROVIDED', 'graph_refusals': []}
+        if graph is not None:
+            try:
+                intent = expand(catalog, graph, brief, bundle_commit='a' * 40)
+                row['graph_readiness'] = intent['status']
+                row['graph_refusals'] = intent['refusals']
+            except (ValueError, KeyError, TypeError) as error:
+                row['graph_readiness'] = 'REFUSED'
+                row['graph_refusals'] = [{'code': 'INVALID_REFERENCE', 'path': 'graph',
+                                          'reason': str(error)[:256], 'queries': ['Q10']}]
+        rows.append(row)
+    return {'schema': 'pcbknowledge.corpus-coverage.v2', 'briefs': rows,
+            'scope': 'Eligibility screening and optional current-input graph replay only; no new A2 or synthesis proof'}

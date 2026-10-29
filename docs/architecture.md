@@ -23,7 +23,7 @@ One v2 record model lives in `schemas/` and `src/pcbknowledge/v2/`:
 | Original footprints and calculators | `v2/footprints/`, `v2/calculators.py` |
 | Commit-authenticated snapshots | `v2/bundle.py` |
 | Expansion, rules and interchange | `v2/expansion.py`, `rules.py`, `netlist.py` |
-| Coverage and independent synthesis evaluation | `v2/coverage.py`, `synthesis.py` |
+| Coverage and independent synthesis evaluation | `v2/requirements.py`, `coverage.py`, `synthesis.py` |
 | Query CLI, explicit evidence cache commands and change scope | `v2/cli.py` |
 | Derived KiCad project, rules and assembly BOM | `v2/handoff.py`, `handoff_rules.py` |
 | Exported-board parser and measured checks | `v2/sexpr.py`, `boardview.py`, `layout.py` |
@@ -115,3 +115,30 @@ published bundle or receipt with its recorded software checkout and pinned input
 commit, rather than rewriting the historical artifact to satisfy current schemas.
 Current bundles include their committed design audit inputs. Stage 7 layout and
 board checks remain separate from these Stage 6 infrastructure changes.
+
+## Corpus screening and independent synthesis
+
+Brief screening matches explicit function categories, fixed operating parameters,
+and role-qualified package requirements. Expansion rechecks the actual selected
+part; an unrelated passive in the requested family cannot satisfy an IC package
+requirement. `coverage --all` separates eligibility from reference block readiness
+and graph replay. No screening result creates a new acceptance receipt.
+
+Corpus attempts use query-mediated access to a pinned bundle. Because bundles
+include reference/audit inputs, fresh authors must not receive raw bundles or
+reference graphs: the coordinator mediates catalog queries and preserves the
+actual requests and responses. Filesystem access is limited to exact broker-supplied input/response packets
+outside the repository and the author's designated output directory. The initial
+packet contains only the skill, target brief, schema, decisions and hashes;
+response packets contain only requested catalog projections. Other reads, path
+listing and direct repository/network access are forbidden. Exactly three distinct fresh authors and a reviewer
+independent of every author and the coordinator are required. Receipts bind the
+actual bundle file, brief, skill, output and transcript hashes. This is an auditable
+workflow attestation, not an operating-system isolation or identity guarantee.
+Positive reviews use `EQUIVALENT` or `NOT_EQUIVALENT`, never prose truthiness;
+negative refusals are reproduced against the pinned catalog and expected code/path.
+Historical G1 evaluation remains a separate mode and is not rewritten.
+
+USB differential constraints derive KiCad width, gap, skew and netclass rules.
+Matching P/N or +/- net suffixes are required. These engineering constraints are
+not controlled-impedance or USB compliance certification and do not route a board.
