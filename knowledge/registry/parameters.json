@@ -5,128 +5,353 @@
   "entries": {
     "input_current": {
       "quantity": "current",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "input_voltage": {
       "quantity": "voltage",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "output_voltage": {
       "quantity": "voltage",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "output_current": {
       "quantity": "current",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "voltage_rating": {
       "quantity": "voltage",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "current_rating": {
       "quantity": "current",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "power_rating": {
       "quantity": "power",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "capacitance": {
       "quantity": "capacitance",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "resistance": {
       "quantity": "resistance",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "clock_frequency": {
       "quantity": "frequency",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "bus_frequency": {
       "quantity": "frequency",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "frequency": {
       "quantity": "frequency",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "length": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "width": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "height": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "thickness": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "pitch": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "drill": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "clearance": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "trace_width": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "annular_ring": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "solder_mask_web": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "copper_thickness": {
       "quantity": "length",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "temperature": {
       "quantity": "temperature",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     },
     "time": {
       "quantity": "time",
-      "conditions": ["TA", "input_voltage", "output_current", "frequency"],
-      "queries": ["Q1", "Q5", "Q10"]
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage",
+        "output_current": "current",
+        "frequency": "frequency"
+      },
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
     }
   }
 }
