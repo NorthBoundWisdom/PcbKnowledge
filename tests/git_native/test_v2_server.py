@@ -23,7 +23,9 @@ class ServerTests(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name)/'workspace'
-        initialize_workspace(self.root,schema_source_root=ROOT,init_git=True)
+        self.root = initialize_workspace(
+            self.root, schema_source_root=ROOT, init_git=True
+        ).validation.root
         self.pdf=b'%PDF-1.4\nsynthetic fixture\n'
         records=fixtures();self.source=records['source']
         self.source.update(license_class='PUBLIC_REFERENCE',sha256=hashlib.sha256(self.pdf).hexdigest(),bytes=len(self.pdf))
