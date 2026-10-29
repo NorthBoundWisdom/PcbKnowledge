@@ -26,7 +26,7 @@ ADRs record durable choices from the architecture baseline. `Accepted` decisions
 | [020](ADR-020-knowledge-workspace-boundary.md) | Partly superseded by 021 | Explicit workspaces and pinned schemas remain; public data-empty rule retired |
 | [021](ADR-021-lightweight-curation-local-evidence.md) | Accepted; intake lane superseded by 022 | Original evidence in ignored local cache; the intake queue is frozen |
 | [022](ADR-022-board-generation-knowledge.md) | Accepted | Consumer-driven v2 knowledge for board generation; one model; golden designs |
-| [023](ADR-023-design-intent-handoff.md) | Proposed | D3/D4 design-intent JSON handoff and PcbAtlas synthesis ownership |
+| [023](ADR-023-design-intent-handoff.md) | Accepted | D3/D4 design-intent JSON handoff and PcbAtlas synthesis ownership |
 
 ADR-018 supersedes ADR-002, ADR-003, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009, and ADR-017 for the executable local product. Those files remain historical records rather than descriptions of the current runtime.
 

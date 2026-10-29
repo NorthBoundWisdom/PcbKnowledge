@@ -96,12 +96,13 @@ A design counts as done only at A6. Lower levels are progress, not completion.
 `g1.brief.json`, `g2.brief.json` and `g3.brief.json` are original synthetic briefs.
 `g1.block-graph.json` is the hand-made reference answer, with declared planning
 interfaces and requirement links. Its catalog block identifiers are targets, not
-existing verified records. Unknown current budgets and other unprovided inputs
-remain typed `UNKNOWN`; all acceptance levels are `NOT_RUN`.
+existing verified records. All acceptance levels are `NOT_RUN`.
 
 G1 places the monitor shunt between the regulator output and logger rail, with
 the monitor itself supplied upstream. This is an explicit synthetic design
 choice for later expansion checks, not a claim about a collected component.
-Stage 1 tests check shapes, reference closure and requirement coverage. A1/A2
-remain for catalog completion and expansion; Stage 2 does not start until the
-owner accepts the proposed handoff.
+Contract tests check shapes, reference closure and requirement coverage. G1
+operating and mechanical inputs use D7 engineering defaults. Header allowances
+share one 50 mA expansion budget within the 150 mA logger budget; expansion must
+check that aggregate. The component height is explicitly unconstrained.
+A1/A2 require the catalog and expansion stages.

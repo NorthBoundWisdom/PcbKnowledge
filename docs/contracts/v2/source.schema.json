@@ -38,21 +38,11 @@
   "allOf": [
     {
       "oneOf": [
+        {"properties": {"verification": {"const": "DRAFT"}}},
         {
           "properties": {
-            "verification": {"const": "DRAFT"}
-          }
-        },
-        {
-          "properties": {
-            "verification": {
-              "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
-            },
-            "provenance": {
-              "properties": {
-                "verified_by": {"minItems": 1}
-              }
-            }
+            "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
+            "provenance": {"properties": {"verified_by": {"minItems": 1}}}
           }
         }
       ]

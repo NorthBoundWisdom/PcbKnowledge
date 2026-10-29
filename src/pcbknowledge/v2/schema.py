@@ -1,8 +1,4 @@
-"""Offline test evaluator for the JSON Schema subset used by staged v2 contracts.
-
-This is not a runtime catalog validator. Unknown schema keywords fail closed;
-reference resolution is restricted to sibling JSON files and local JSON pointers.
-"""
+"""Offline structural validator for the workspace JSON Schema subset."""
 from __future__ import annotations
 
 import json
@@ -10,7 +6,7 @@ import math
 from pathlib import Path
 import re
 
-SCHEMA_DIR = Path(__file__).resolve().parents[1] / 'docs/contracts/v2'
+SCHEMA_DIR = Path(__file__).resolve().parents[3] / 'docs/contracts/v2'
 KEYWORDS = frozenset({'$schema', '$id', '$ref', '$defs', 'title', 'description',
     'type', 'const', 'enum', 'properties', 'required', 'additionalProperties',
     'propertyNames', 'items', 'minItems', 'maxItems', 'uniqueItems', 'minProperties', 'maxProperties',
@@ -86,7 +82,7 @@ class ContractSchemas:
 
     def apply(self, value, schema, current, depth=0):
         if depth > 80:
-            raise ValueError('Contract nesting exceeds test evaluator bound')
+            raise ValueError('Contract nesting exceeds schema evaluator bound')
         if schema is True:
             return
         if schema is False:

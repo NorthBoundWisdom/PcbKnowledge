@@ -13,9 +13,7 @@
   "$defs": {
     "schema": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^pcbknowledge\\.[a-z_]+\\.v2$"},
     "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[a-z_]+:[a-z0-9][a-z0-9/_-]*$"},
-    "verification": {
-      "enum": ["DRAFT", "AGENT_VERIFIED", "HUMAN_VERIFIED"]
-    },
+    "verification": {"enum": ["DRAFT", "AGENT_VERIFIED", "HUMAN_VERIFIED"]},
     "provenance": {
       "type": "object",
       "properties": {

@@ -6,9 +6,20 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from tests.contract_schema import ContractSchemas, SCHEMA_DIR, validate
+from pcbknowledge.v2.schema import ContractSchemas, SCHEMA_DIR, validate as structural_validate
+from pcbknowledge.v2.vocabulary import Vocabulary
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def validate(instance, name, directory=None):
+    structural_validate(instance, name, directory)
+    if directory is None:
+        vocabulary = Vocabulary.load(ROOT / 'knowledge/registry', SCHEMA_DIR)
+        if name == 'parameters.schema.json':
+            vocabulary.parameters(instance)
+        else:
+            vocabulary.document(instance)
 
 
 def unknown(query='Q1'):
@@ -124,30 +135,29 @@ class RecordContractTests(unittest.TestCase):
     def test_registry_files_validate_and_unknown_vocabulary_is_rejected(self):
         for path in sorted((ROOT/'knowledge/registry').glob('*.json')):
             data=json.loads(path.read_text());validate(data,'registry.schema.json')
-            data['entries']['invented']={}
+            data['entries']['invented']={'unexpected':True}
             with self.assertRaises(ValueError):validate(data,'registry.schema.json')
 
-    def test_schema_vocabulary_and_registry_data_have_one_matching_contract(self):
-        def registry(name):
-            return json.loads((ROOT/'knowledge/registry'/f'{name}.json').read_text())['entries']
-        def schema(name):
-            return json.loads((SCHEMA_DIR/f'{name}.schema.json').read_text())
-        quantities=registry('quantities')
-        self.assertEqual(set(schema('quantity')['properties']['unit']['enum']),
-                         {item['unit'] for item in quantities.values()})
-        parameters=registry('parameters')
-        props=schema('parameters')['properties']
-        self.assertEqual(set(props),set(parameters))
-        for name,entry in parameters.items():
-            self.assertEqual(props[name]['oneOf'][0]['allOf'][1]['properties']['unit']['const'],
-                             quantities[entry['quantity']]['unit'])
-        self.assertEqual(set(schema('part')['properties']['roles']['items']['enum']),set(registry('roles')))
-        self.assertEqual(set(schema('part')['properties']['pins']['items']['properties']['type']['enum']),
-                         set(registry('pin-types')))
-        self.assertEqual(set(schema('package')['properties']['family']['enum']),set(registry('package-families')))
-        layouts={branch['properties']['kind']['const']:set(branch['required'])-{'kind'}
-                 for branch in schema('layout-constraint')['oneOf']}
-        self.assertEqual(layouts,{name:set(entry['fields']) for name,entry in registry('layout-constraints').items()})
+    def test_numeric_ordering_and_parameter_condition_units(self):
+        vocabulary = Vocabulary.load(ROOT/'knowledge/registry', SCHEMA_DIR)
+        for updates in ({'min':3,'max':1}, {'conditions':{'TA':{'value':25,'unit':'V'}}},
+                        {'conditions':{'invented':{'value':1,'unit':'V'}}}):
+            data=quantity();data.pop('value');data.update(min=1,max=3);data.update(updates)
+            with self.assertRaises(ValueError):vocabulary.parameters({'input_voltage':data})
+        documents=[json.loads(p.read_text()) for p in (ROOT/'knowledge/registry').glob('*.json')]
+        parameters=next(d for d in documents if d['id']=='registry:parameters')
+        parameters['entries']['input_voltage']['conditions']={}
+        data=quantity();data['conditions']={'TA':{'value':25,'unit':'degC'}}
+        with self.assertRaises(ValueError):Vocabulary(documents).parameters({'input_voltage':data})
+
+    def test_parameter_addition_changes_only_the_registry(self):
+        documents = [json.loads(p.read_text()) for p in (ROOT/'knowledge/registry').glob('*.json')]
+        parameters = next(d for d in documents if d['id'] == 'registry:parameters')
+        parameters['entries']['new_voltage'] = {'quantity':'voltage','conditions':{},'queries':['Q1']}
+        structural_validate({'new_voltage':quantity()}, 'parameters.schema.json')
+        Vocabulary(documents).parameters({'new_voltage':quantity()})
+        with self.assertRaises(ValueError):
+            Vocabulary(documents).parameters({'new_voltage':quantity(1,'A')})
 
     def test_record_pins_roles_packages_license_and_verification_are_typed(self):
         mutations=[('part',lambda d:d['pins'][0].update(type='SUPPLY')),

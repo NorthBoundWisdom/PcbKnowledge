@@ -1,9 +1,9 @@
 # ADR-023: Design intent handoff to PcbAtlas
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-10-29
 - Applies owner-decision defaults D3 and D4 from `TODO.md`.
-- Requires: owner acceptance before the Stage 1 exit.
+- Accepted: 2026-10-29 by the agent under explicit owner delegation (AGENTS.md section 3).
 
 ## Context
 
@@ -12,7 +12,7 @@ ADR-022 assigns the catalog, calculators and pure block expansion to PcbKnowledg
 PcbAtlas owns synthesis orchestration, board state and manufacturing outputs.
 This proposal specifies the handoff without modifying PcbAtlas.
 
-## Proposed contract
+## Contract
 
 ### Inputs and ownership
 
@@ -85,5 +85,5 @@ profile (A4), and fabrication outputs (A5). The owner performs hardware bring-up
   capabilities are collected in Stage 4. Stage 1 assigns no manufacturer limits.
 - Schema shape checks ship now. Domain validation, bundle compilation, expansion,
   exporters and PcbAtlas import/checking remain in their roadmap stages.
-- D3/D4 defaults let implementation preparation proceed, but this ADR remains
-  Proposed until the owner accepts it. Stage 2 must not start automatically.
+- Acceptance applies the D3/D4 defaults and closes the Stage 1 exit; Stage 2
+  implements against this contract.

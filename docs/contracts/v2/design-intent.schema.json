@@ -8,9 +8,7 @@
     "brief_id": {"type": "string", "minLength": 1, "maxLength": 256},
     "bundle_commit": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[0-9a-f]{40}$"},
     "block_graph_sha256": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[0-9a-f]{64}$"},
-    "status": {
-      "enum": ["EXPANDED", "REFUSED"]
-    },
+    "status": {"enum": ["EXPANDED", "REFUSED"]},
     "components": {
       "type": "array",
       "items": {
@@ -71,20 +69,14 @@
       },
       "minItems": 0
     },
-    "layout": {
-      "type": "array",
-      "items": {"$ref": "layout-constraint.schema.json"},
-      "minItems": 0
-    },
+    "layout": {"type": "array", "items": {"$ref": "layout-constraint.schema.json"}, "minItems": 0},
     "checks": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "id": {"type": "string", "minLength": 1, "maxLength": 256},
-          "result": {
-            "enum": ["PASS", "FAIL", "UNKNOWN"]
-          },
+          "result": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
           "reason": {"type": "string", "minLength": 1, "maxLength": 256}
         },
         "required": ["id", "result"],
@@ -92,9 +84,7 @@
       },
       "minItems": 0
     },
-    "verification": {
-      "enum": ["DRAFT", "AGENT_VERIFIED", "HUMAN_VERIFIED"]
-    },
+    "verification": {"enum": ["DRAFT", "AGENT_VERIFIED", "HUMAN_VERIFIED"]},
     "refusals": {
       "type": "array",
       "items": {
@@ -115,9 +105,7 @@
           "reason": {"type": "string", "minLength": 1, "maxLength": 256},
           "queries": {
             "type": "array",
-            "items": {
-              "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
-            },
+            "items": {"enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]},
             "minItems": 1,
             "uniqueItems": true
           }
@@ -127,11 +115,7 @@
       },
       "minItems": 0
     },
-    "evidence": {
-      "type": "array",
-      "items": {"$ref": "evidence.schema.json"},
-      "minItems": 0
-    },
+    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "minItems": 0},
     "fab_profile": {
       "oneOf": [
         {"type": "string", "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$", "maxLength": 256},
@@ -145,73 +129,30 @@
           "type": "object",
           "properties": {
             "shape": {"const": "RECTANGLE"},
-            "max_length": {
-              "oneOf": [
-                {
-                  "allOf": [
-                    {"$ref": "quantity.schema.json"},
-                    {
-                      "properties": {
-                        "unit": {"const": "mm"}
-                      }
-                    }
-                  ]
-                },
-                {"$ref": "unknown.schema.json"}
-              ]
-            },
-            "max_width": {
-              "oneOf": [
-                {
-                  "allOf": [
-                    {"$ref": "quantity.schema.json"},
-                    {
-                      "properties": {
-                        "unit": {"const": "mm"}
-                      }
-                    }
-                  ]
-                },
-                {"$ref": "unknown.schema.json"}
-              ]
-            }
+            "max_length": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+            "max_width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
           },
           "required": ["shape", "max_length", "max_width"],
           "additionalProperties": false
         },
         "height_limit": {
           "oneOf": [
-            {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
-            },
-            {"$ref": "unknown.schema.json"}
+            {"$ref": "quantity.schema.json"},
+            {"$ref": "unknown.schema.json"},
+            {"$ref": "quantity.schema.json#/$defs/unconstrained"}
           ]
         },
         "mounting": {
           "type": "array",
           "items": {
             "type": "object",
-            "properties": {
-              "ref": {"type": "string", "minLength": 1, "maxLength": 256},
-              "fastener": {"const": "M3"}
-            },
+            "properties": {"ref": {"type": "string", "minLength": 1, "maxLength": 256}, "fastener": {"const": "M3"}},
             "required": ["ref", "fastener"],
             "additionalProperties": false
           },
           "uniqueItems": true
         },
-        "edge_interfaces": {
-          "type": "array",
-          "items": {"type": "string", "minLength": 1, "maxLength": 256},
-          "uniqueItems": true
-        }
+        "edge_interfaces": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 256}, "uniqueItems": true}
       },
       "required": ["outline_envelope", "height_limit", "mounting", "edge_interfaces"],
       "additionalProperties": false
@@ -219,39 +160,10 @@
     "manufacturing": {
       "type": "object",
       "properties": {
-        "layers": {
-          "oneOf": [
-            {"const": 2},
-            {"$ref": "unknown.schema.json"}
-          ]
-        },
-        "thickness": {
-          "oneOf": [
-            {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
-            },
-            {"$ref": "unknown.schema.json"}
-          ]
-        },
-        "copper_requirement": {
-          "oneOf": [
-            {"const": "ONE_OZ_NOMINAL"},
-            {"$ref": "unknown.schema.json"}
-          ]
-        },
-        "assembly_side": {
-          "oneOf": [
-            {"const": "TOP"},
-            {"$ref": "unknown.schema.json"}
-          ]
-        }
+        "layers": {"oneOf": [{"const": 2}, {"$ref": "unknown.schema.json"}]},
+        "thickness": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+        "copper_requirement": {"oneOf": [{"const": "ONE_OZ_NOMINAL"}, {"$ref": "unknown.schema.json"}]},
+        "assembly_side": {"oneOf": [{"const": "TOP"}, {"$ref": "unknown.schema.json"}]}
       },
       "required": ["layers", "thickness", "copper_requirement", "assembly_side"],
       "additionalProperties": false
@@ -284,53 +196,17 @@
         "components": {"minItems": 1},
         "nets": {"minItems": 1},
         "bom": {"minItems": 1},
-        "verification": {
-          "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
-        },
+        "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
         "refusals": {"maxItems": 0},
-        "checks": {
-          "items": {
-            "properties": {
-              "result": {"const": "PASS"}
-            }
-          }
-        },
+        "checks": {"items": {"properties": {"result": {"const": "PASS"}}}},
         "fab_profile": {"type": "string", "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$", "maxLength": 256},
         "mechanical": {
           "properties": {
             "outline_envelope": {
-              "properties": {
-                "max_length": {
-                  "allOf": [
-                    {"$ref": "quantity.schema.json"},
-                    {
-                      "properties": {
-                        "unit": {"const": "mm"}
-                      }
-                    }
-                  ]
-                },
-                "max_width": {
-                  "allOf": [
-                    {"$ref": "quantity.schema.json"},
-                    {
-                      "properties": {
-                        "unit": {"const": "mm"}
-                      }
-                    }
-                  ]
-                }
-              }
+              "properties": {"max_length": {"$ref": "quantity.schema.json"}, "max_width": {"$ref": "quantity.schema.json"}}
             },
             "height_limit": {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
+              "oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "quantity.schema.json#/$defs/unconstrained"}]
             },
             "mounting": {"minItems": 1}
           }
@@ -338,27 +214,13 @@
         "manufacturing": {
           "properties": {
             "layers": {"const": 2},
-            "thickness": {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
-            },
+            "thickness": {"$ref": "quantity.schema.json"},
             "copper_requirement": {"const": "ONE_OZ_NOMINAL"},
             "assembly_side": {"const": "TOP"}
           }
         }
       }
     },
-    {
-      "properties": {
-        "status": {"const": "REFUSED"},
-        "refusals": {"minItems": 1}
-      }
-    }
+    {"properties": {"status": {"const": "REFUSED"}, "refusals": {"minItems": 1}}}
   ]
 }

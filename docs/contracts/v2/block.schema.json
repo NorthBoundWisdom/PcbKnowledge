@@ -25,235 +25,13 @@
     },
     "parameters": {
       "type": "object",
-      "properties": {
-        "input_current": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "current"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "input_voltage": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "voltage"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "output_voltage": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "voltage"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "output_current": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "current"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "voltage_rating": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "voltage"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "current_rating": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "current"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "power_rating": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "power"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "capacitance": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "capacitance"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "resistance": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "resistance"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "clock_frequency": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "frequency"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "bus_frequency": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "frequency"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "frequency": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "frequency"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "length": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "width": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "height": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "thickness": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "pitch": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "drill": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "clearance": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "trace_width": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "annular_ring": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "solder_mask_web": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "copper_thickness": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "length"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "temperature": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "temperature"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        },
-        "time": {
-          "type": "object",
-          "properties": {
-            "quantity": {"const": "time"},
-            "required": {"type": "boolean"}
-          },
-          "required": ["quantity", "required"],
-          "additionalProperties": false
-        }
-      },
-      "required": [],
-      "additionalProperties": false
+      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 256},
+      "additionalProperties": {
+        "type": "object",
+        "properties": {"quantity": {"type": "string", "minLength": 1, "maxLength": 256}, "required": {"type": "boolean"}},
+        "required": ["quantity", "required"],
+        "additionalProperties": false
+      }
     },
     "ports": {
       "type": "array",
@@ -261,20 +39,7 @@
         "type": "object",
         "properties": {
           "name": {"type": "string", "minLength": 1, "maxLength": 256},
-          "kind": {
-            "enum": [
-              "POWER_IN",
-              "POWER_OUT",
-              "GROUND",
-              "INPUT",
-              "OUTPUT",
-              "BIDIRECTIONAL",
-              "OPEN_DRAIN",
-              "ANALOG",
-              "PASSIVE",
-              "NO_CONNECT"
-            ]
-          }
+          "kind": {"type": "string", "minLength": 1, "maxLength": 256}
         },
         "required": ["name", "kind"],
         "additionalProperties": false
@@ -305,26 +70,7 @@
               {
                 "type": "object",
                 "properties": {
-                  "role": {
-                    "enum": [
-                      "connector.usb-c-sink",
-                      "protection.fuse",
-                      "protection.tvs",
-                      "diode.schottky",
-                      "regulator.linear.fixed",
-                      "capacitor.ceramic",
-                      "capacitor.bulk",
-                      "resistor",
-                      "mcu.32-bit",
-                      "crystal",
-                      "connector.header",
-                      "led",
-                      "switch.button",
-                      "monitor.current",
-                      "memory.eeprom",
-                      "mechanical.mounting-hole"
-                    ]
-                  },
+                  "role": {"type": "string", "minLength": 1, "maxLength": 256},
                   "match": {"$ref": "parameters.schema.json"}
                 },
                 "required": ["role", "match"],
@@ -361,52 +107,15 @@
       "items": {
         "type": "object",
         "properties": {
-          "calculator": {
-            "enum": ["ldo_dissipation", "led_resistor", "i2c_pullup", "ipc2152_width"]
-          },
+          "calculator": {"enum": ["ldo_dissipation", "led_resistor", "i2c_pullup", "ipc2152_width"]},
           "inputs": {
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                {
-                  "oneOf": [
-                    {"$ref": "quantity.schema.json"},
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
+                {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
                 {
                   "type": "object",
-                  "properties": {
-                    "parameter": {
-                      "enum": [
-                        "input_current",
-                        "input_voltage",
-                        "output_voltage",
-                        "output_current",
-                        "voltage_rating",
-                        "current_rating",
-                        "power_rating",
-                        "capacitance",
-                        "resistance",
-                        "clock_frequency",
-                        "bus_frequency",
-                        "frequency",
-                        "length",
-                        "width",
-                        "height",
-                        "thickness",
-                        "pitch",
-                        "drill",
-                        "clearance",
-                        "trace_width",
-                        "annular_ring",
-                        "solder_mask_web",
-                        "copper_thickness",
-                        "temperature",
-                        "time"
-                      ]
-                    }
-                  },
+                  "properties": {"parameter": {"type": "string", "minLength": 1, "maxLength": 256}},
                   "required": ["parameter"],
                   "additionalProperties": false
                 }
@@ -417,15 +126,8 @@
             "type": "object",
             "properties": {
               "output": {"type": "string", "minLength": 1, "maxLength": 256},
-              "operator": {
-                "enum": ["LE", "GE"]
-              },
-              "limit": {
-                "oneOf": [
-                  {"$ref": "quantity.schema.json"},
-                  {"$ref": "unknown.schema.json"}
-                ]
-              }
+              "operator": {"enum": ["LE", "GE"]},
+              "limit": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
             },
             "required": ["output", "operator", "limit"],
             "additionalProperties": false
@@ -436,16 +138,8 @@
       },
       "minItems": 0
     },
-    "layout": {
-      "type": "array",
-      "items": {"$ref": "layout-constraint.schema.json"},
-      "minItems": 0
-    },
-    "evidence": {
-      "type": "array",
-      "items": {"$ref": "evidence.schema.json"},
-      "minItems": 0
-    }
+    "layout": {"type": "array", "items": {"$ref": "layout-constraint.schema.json"}, "minItems": 0},
+    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "minItems": 0}
   },
   "required": [
     "schema",
@@ -465,21 +159,11 @@
   "allOf": [
     {
       "oneOf": [
+        {"properties": {"verification": {"const": "DRAFT"}}},
         {
           "properties": {
-            "verification": {"const": "DRAFT"}
-          }
-        },
-        {
-          "properties": {
-            "verification": {
-              "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
-            },
-            "provenance": {
-              "properties": {
-                "verified_by": {"minItems": 1}
-              }
-            }
+            "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
+            "provenance": {"properties": {"verified_by": {"minItems": 1}}}
           }
         }
       ]
@@ -487,17 +171,11 @@
     {
       "oneOf": [
         {
-          "properties": {
-            "category": {"const": "mechanical.mounting"},
-            "ports": {"maxItems": 0},
-            "nets": {"maxItems": 0}
-          }
+          "properties": {"category": {"const": "mechanical.mounting"}, "ports": {"maxItems": 0}, "nets": {"maxItems": 0}}
         },
         {
           "properties": {
-            "category": {
-              "not": {"const": "mechanical.mounting"}
-            },
+            "category": {"not": {"const": "mechanical.mounting"}},
             "ports": {"minItems": 1},
             "nets": {"minItems": 1}
           }

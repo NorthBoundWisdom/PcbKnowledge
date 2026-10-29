@@ -74,7 +74,7 @@ class LocalWorkflowTests(WorkflowTestCase):
             workflow.require_build(self.root)
 
     def test_build_receipt_tracks_staged_contract_test_inputs(self) -> None:
-        for relative in (Path("tests/contract_schema.py"),
+        for relative in (Path("src/pcbknowledge/v2/schema.py"),
                          Path("docs/contracts/v2/owned.py"),
                          Path("evals/golden-designs/owned.py"),
                          Path("knowledge/registry/owned.py")):

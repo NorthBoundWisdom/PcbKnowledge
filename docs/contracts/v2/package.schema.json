@@ -7,342 +7,48 @@
     "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^package:[a-z0-9][a-z0-9/_-]*$"},
     "verification": {"$ref": "envelope.schema.json#/$defs/verification"},
     "provenance": {"$ref": "envelope.schema.json#/$defs/provenance"},
-    "family": {
-      "enum": [
-        "CHIP_0603",
-        "SOD-123",
-        "SMB",
-        "SOT-223",
-        "SOIC-8",
-        "SOT-23-8",
-        "LQFP-48",
-        "CRYSTAL_3225",
-        "HEADER_2P54",
-        "EXPLICIT"
-      ]
-    },
+    "family": {"type": "string", "minLength": 1, "maxLength": 256},
     "body": {
       "type": "object",
       "properties": {
-        "length": {
-          "oneOf": [
-            {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
-            },
-            {"$ref": "unknown.schema.json"}
-          ]
-        },
-        "width": {
-          "oneOf": [
-            {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
-            },
-            {"$ref": "unknown.schema.json"}
-          ]
-        },
-        "height": {
-          "oneOf": [
-            {
-              "allOf": [
-                {"$ref": "quantity.schema.json"},
-                {
-                  "properties": {
-                    "unit": {"const": "mm"}
-                  }
-                }
-              ]
-            },
-            {"$ref": "unknown.schema.json"}
-          ]
-        }
+        "length": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+        "width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+        "height": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
       },
       "required": ["length", "width", "height"],
       "additionalProperties": false
     },
     "footprint": {
-      "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "mode": {"const": "EXPLICIT"},
-            "pads": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "number": {"type": "string", "minLength": 1, "maxLength": 256},
-                  "kind": {
-                    "enum": ["SMD", "THROUGH_HOLE", "MECHANICAL"]
-                  },
-                  "shape": {
-                    "enum": ["RECT", "ROUND", "OVAL"]
-                  },
-                  "x": {
-                    "oneOf": [
-                      {
-                        "allOf": [
-                          {"$ref": "quantity.schema.json"},
-                          {
-                            "properties": {
-                              "unit": {"const": "mm"}
-                            }
-                          }
-                        ]
-                      },
-                      {"$ref": "unknown.schema.json"}
-                    ]
-                  },
-                  "y": {
-                    "oneOf": [
-                      {
-                        "allOf": [
-                          {"$ref": "quantity.schema.json"},
-                          {
-                            "properties": {
-                              "unit": {"const": "mm"}
-                            }
-                          }
-                        ]
-                      },
-                      {"$ref": "unknown.schema.json"}
-                    ]
-                  },
-                  "width": {
-                    "oneOf": [
-                      {
-                        "allOf": [
-                          {"$ref": "quantity.schema.json"},
-                          {
-                            "properties": {
-                              "unit": {"const": "mm"}
-                            }
-                          }
-                        ]
-                      },
-                      {"$ref": "unknown.schema.json"}
-                    ]
-                  },
-                  "height": {
-                    "oneOf": [
-                      {
-                        "allOf": [
-                          {"$ref": "quantity.schema.json"},
-                          {
-                            "properties": {
-                              "unit": {"const": "mm"}
-                            }
-                          }
-                        ]
-                      },
-                      {"$ref": "unknown.schema.json"}
-                    ]
-                  },
-                  "drill": {
-                    "oneOf": [
-                      {
-                        "allOf": [
-                          {"$ref": "quantity.schema.json"},
-                          {
-                            "properties": {
-                              "unit": {"const": "mm"}
-                            }
-                          }
-                        ]
-                      },
-                      {"$ref": "unknown.schema.json"}
-                    ]
-                  },
-                  "rotation": {
-                    "oneOf": [
-                      {
-                        "allOf": [
-                          {"$ref": "quantity.schema.json"},
-                          {
-                            "properties": {
-                              "unit": {"const": "deg"}
-                            }
-                          }
-                        ]
-                      },
-                      {"$ref": "unknown.schema.json"}
-                    ]
-                  }
-                },
-                "required": ["number", "kind", "shape", "x", "y", "width", "height", "rotation"],
-                "additionalProperties": false
-              },
-              "minItems": 1
-            }
-          },
-          "required": ["mode", "pads"],
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "properties": {
-            "mode": {"const": "PARAMETRIC"},
-            "generator": {
-              "enum": ["chip", "gullwing", "sod", "header", "crystal"]
+      "type": "object",
+      "properties": {
+        "mode": {"type": "string", "minLength": 1, "maxLength": 256},
+        "pads": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "number": {"type": "string", "minLength": 1, "maxLength": 256},
+              "kind": {"enum": ["SMD", "THROUGH_HOLE", "MECHANICAL"]},
+              "shape": {"enum": ["RECT", "ROUND", "OVAL"]},
+              "x": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+              "y": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+              "width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+              "height": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+              "drill": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+              "rotation": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
             },
-            "parameters": {
-              "type": "object",
-              "properties": {
-                "body_length": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
-                "body_width": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
-                "pad_length": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
-                "pad_width": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
-                "pitch": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
-                "row_spacing": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                },
-                "courtyard_margin": {
-                  "oneOf": [
-                    {
-                      "allOf": [
-                        {"$ref": "quantity.schema.json"},
-                        {
-                          "properties": {
-                            "unit": {"const": "mm"}
-                          }
-                        }
-                      ]
-                    },
-                    {"$ref": "unknown.schema.json"}
-                  ]
-                }
-              },
-              "required": ["body_length", "body_width", "pad_length", "pad_width", "courtyard_margin"],
-              "additionalProperties": false
-            },
-            "pad_numbers": {
-              "type": "array",
-              "items": {"type": "string", "minLength": 1, "maxLength": 256},
-              "minItems": 1,
-              "uniqueItems": true
-            }
+            "required": ["number", "kind", "shape", "x", "y", "width", "height", "rotation"],
+            "additionalProperties": false
           },
-          "required": ["mode", "generator", "parameters", "pad_numbers"],
-          "additionalProperties": false
+          "minItems": 1
         }
-      ]
+      },
+      "required": ["mode", "pads"],
+      "additionalProperties": false
     },
     "pin1": {"type": "string", "minLength": 1, "maxLength": 256},
-    "courtyard_margin": {
-      "oneOf": [
-        {
-          "allOf": [
-            {"$ref": "quantity.schema.json"},
-            {
-              "properties": {
-                "unit": {"const": "mm"}
-              }
-            }
-          ]
-        },
-        {"$ref": "unknown.schema.json"}
-      ]
-    },
-    "evidence": {
-      "type": "array",
-      "items": {"$ref": "evidence.schema.json"},
-      "minItems": 1
-    }
+    "courtyard_margin": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "minItems": 1}
   },
   "required": [
     "schema",
@@ -360,21 +66,11 @@
   "allOf": [
     {
       "oneOf": [
+        {"properties": {"verification": {"const": "DRAFT"}}},
         {
           "properties": {
-            "verification": {"const": "DRAFT"}
-          }
-        },
-        {
-          "properties": {
-            "verification": {
-              "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
-            },
-            "provenance": {
-              "properties": {
-                "verified_by": {"minItems": 1}
-              }
-            }
+            "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
+            "provenance": {"properties": {"verified_by": {"minItems": 1}}}
           }
         }
       ]

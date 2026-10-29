@@ -57,11 +57,15 @@ record authority is introduced by these contract files.
 
 ## Validation boundary
 
-The standard-library test helper in `tests/contract_schema.py` evaluates only the
-JSON Schema keywords used by these staged contracts, offline, rejecting unknown
-keywords and external references. Contract tests validate synthetic records,
-registry structure, the three briefs and the G1 expected graph. They also check
-G1 graph endpoint closure and requirement coverage.
+The standard-library structural evaluator in `src/pcbknowledge/v2/schema.py` is
+shared by runtime code and tests. It evaluates the supported JSON Schema subset
+offline and rejects unknown keywords and external references. Schemas define
+structure; `v2/vocabulary.py` resolves registry membership, canonical units,
+parameter condition keys and numeric ordering. Parameter condition maps name the
+quantity of each allowed condition in the parameter registry.
+
+G1 design inputs use D7 engineering defaults. An unconstrained component height
+is explicit. G2 and G3 decisions are completed when their stages start.
 
 This is not the Stage 2 catalog validator. That validator must enforce:
 
@@ -87,13 +91,13 @@ brief -> block graph -> expand(pinned bundle, graph) -> design intent -> PcbAtla
 
 PcbKnowledge owns the catalog, generic calculators and deterministic pure
 expansion. PcbAtlas owns brief synthesis, board state, placement, routing, DRC
-and fabrication output. [ADR-023](adr/ADR-023-design-intent-handoff.md) proposes
-the D3/D4 handoff defaults; owner acceptance is still required.
+and fabrication output. [ADR-023](adr/ADR-023-design-intent-handoff.md) defines
+the handoff (D3/D4).
 
 Later stages implement read-only bundle queries for parts, packages, blocks and
 fab profiles; generic calculators only when a G1 block needs them; bundle
 compilation from one validated Git commit; and expansion with typed refusals.
-Design intent JSON is the proposed authority, with derived KiCad netlist and
+Design intent JSON is the handoff authority, with derived KiCad netlist and
 footprint-library exports. None of those runtime v2 operations ships in Stage 1.
 
 ## Migration

@@ -1,91 +1,96 @@
-# Course-correction brief for implementers
+# Implementer brief, round 2
 
-> Temporary. Delete this file when Stage 1 in `TODO.md` is complete.
+> Temporary. Delete this file at the Stage 2 exit (task 2e).
 
 Copy everything below the line into the implementing agent's or engineer's task.
 
 ---
 
-You are taking over implementation of PcbKnowledge, a Python standard-library
-repository. The project direction changed on 2026-10-29. Your job is to execute
-the remaining **Stage 0** items and then **Stage 1** in `TODO.md`, and to keep the
-work from drifting back into the old pattern.
+You are continuing PcbKnowledge after Stage 0 and Stage 1 (commits `bb55fe9`,
+`ea622e0`, `6a69feb`). This round is **Stage 2** in `TODO.md`, tasks 2a to 2e.
+ADR-023 (`docs/adr/ADR-023-design-intent-handoff.md`) is accepted; implement
+against it.
 
-## Read first, in this order
+## Read first
 
-1. `AGENTS.md` (rules; section 0 is new and overrides habits from earlier work)
-2. `docs/adr/ADR-022-board-generation-knowledge.md` (why the direction changed)
-3. `TODO.md` (stages, owner decisions with defaults, exit criteria)
-4. `docs/knowledge-model-v2.md` (target model, consumer queries, API)
-5. `docs/golden-designs.md` (targets G1 to G3, acceptance levels A1 to A6)
-6. `docs/architecture.md` (what the current code is, and what is kept, replaced or removed)
+1. `AGENTS.md` (section 0 overrides older habits)
+2. `TODO.md`: owner decisions D1 to D7, and the full Stage 2 section
+3. `docs/knowledge-model-v2.md`, especially "Validation boundary"
+4. `docs/adr/ADR-022-board-generation-knowledge.md` and ADR-023
+5. `docs/golden-designs.md`, `evals/golden-designs/`, `knowledge/registry/`
 
-## The goal in one paragraph
+## Review of the last round
 
-A design package (for example a simple hardware-competition brief) should become
-a manufacturable board. PcbKnowledge supplies a closed-world catalog of parts,
-footprints, reusable circuit blocks with layout constraints, class-level rules,
-fab profiles and calculators, and a pure `expand` step that turns a block graph
-into a design intent (netlist, BOM, constraints). PcbAtlas, a separate repository
-you must not modify, does placement, routing, DRC and fabrication output. The
-first target is golden design G1, a small USB-powered sensor-logger board.
+The Stage 0 removal was clean and correct. Stage 1 shapes are usable and the
+data/contract commit split was right. Four things must be corrected before
+anything is built on top of them:
 
-## What went wrong before (do not repeat)
+1. **`UNKNOWN` was used for design decisions.** The G1 brief has 9 `UNKNOWN`
+   values and the reference graph has 4, for things like the USB current budget,
+   the 3.3 V load budget, the crystal frequency and the I2C speed. Those are
+   choices the brief author or the synthesizer makes, not evidence a datasheet must
+   supply. With them, A1 ("no refusal") can never pass. Use the D7 values. Keep
+   `UNKNOWN` for facts that must come from a cited source.
+2. **Vocabulary exists twice.** Parameter names, units, condition keys, roles, pin
+   types, package families and constraint kinds live in both the registries and the
+   schema enums, kept equal by a test. Make the registries the only authority.
+   Schemas check structure; the semantic validator checks registry membership.
+3. **A test-only validator.** `tests/contract_schema.py` would become a second
+   validator next to the Stage 2 runtime one. Promote it into the runtime package
+   and use it from both places.
+4. **Contracts are larger than one design needs.** About 4.2k lines of schema
+   (754 for the brief alone) before any runtime exists. Cut every property that no
+   G1 fixture, consumer query or ADR-023 field uses.
 
-- **Data nobody could query.** 329 annotations used 302 distinct parameter names,
-  1018 value keys and prose conditions, with no unit on 71% of items. Every value
-  you add from now on uses registry names, canonical units and structured
-  conditions, or it does not get added.
-- **Collecting what the consumer does not need.** Work went into device-selection
-  limits while layout needs pin-to-pad maps, footprints, decoupling placement,
-  current loops and fab limits. Before adding anything, name the consumer query
-  (Q1 to Q12 in the model doc) or golden-design requirement it serves.
-- **Process instead of product.** A pilot harness that never ran, per-device demo
-  evaluators, one narrative review document per batch, dated acknowledgement
-  documents, receipts copied across README, TODO and docs, and commit titles like
-  "without hardware claims". Do not create receipt documents. Put verification in
-  commit bodies and one-line TODO receipts.
-- **Defensive prose.** Repeated "not a certification / bounded / no claim of"
-  wording. A typed `UNKNOWN` or a refusal reason says this once, in data.
-- **Two models in parallel.** A typed canonical store with zero records next to a
-  noncanonical queue holding all the content. There will be one model (v2), and
-  the old ones are deleted, not kept as a compatibility layer.
-- **Tests that pin document bytes.** Replay tests hashed review Markdown files.
-  Test behavior and data contracts, not prose.
+Also watch the prose. ADR-023, the model doc and the commit bodies drifted back
+toward repeated disclaimers ("not a claim", "does not assert", "remains for").
+State what something does and what is missing, once. Keep commit bodies to what
+changed, why, and the verification receipt.
 
-## Your tasks
+## Tasks, in order
 
-1. Finish Stage 0: freeze intake, delete the pilot harness, the per-device
-   evaluators and the intake handoff tool with all their tests, docs, CLI wiring and
-   CI steps, as listed in `TODO.md`. Run the full gate and record the new test
-   count. Use a hard cut; do not leave stubs or compatibility aliases.
-2. Do Stage 1: the brief schema and G1 to G3 briefs, the hand-made G1 block graph,
-   the v2 record and registry JSON Schemas limited to G1 needs, and the block-graph
-   and design-intent schemas. Draft ADR-023 for the PcbAtlas handoff using the D3
-   and D4 defaults, marked `Proposed`, for the owner to accept.
-3. Stop at the Stage 1 exit and report. Do not start Stage 2 without the owner.
+- **2a** The four corrections above, plus their tests.
+- **2b** `src/pcbknowledge/v2/`: loader, structural and semantic validators, and a
+  read-only JSON CLI. Test against a temporary external Git workspace, including
+  tamper cases. v1 keeps running during this step.
+- **2c** One contract-only commit: corrected schemas move into `schemas/`, the
+  workspace format is bumped, and the digest is pinned. Old v1 workspaces fail with
+  a clear message.
+- **2d** Data-only commits. The evidence cache in this checkout is empty, so
+  re-download each G1 source from its recorded official URL and confirm the
+  recorded SHA-256 (a mismatch is a new revision, never an override). Write v2
+  `source` and `part` records with complete numbered pin maps for the G1 devices
+  listed in `TODO.md`. Most pin maps are new extraction; intake has pins only for
+  LD1117, INA219 and 24LC256. G1 needs a fixed 3.3 V LD1117 orderable; confirm it in
+  the same document rather than reusing the adjustable record. A second agent
+  re-checks every value and pin and records itself as the verifier.
+- **2e** Hard cut. Delete v1, the intake toolchain, the review/decision UI and
+  `docs/legacy/`. Keep the server shell, PDF.js and the evidence endpoint, and add
+  minimal read-only v2 part and block pages per D5. Rewrite `.codex/skills/` for
+  v2. Update `AGENTS.md` sections 6 and 7, `architecture.md` and `README.md`. Delete
+  this file.
 
-Owner decisions D1 to D6 in `TODO.md` have defaults. Use the defaults. Do not
-stop to ask unless a default is impossible to apply.
+## Rules that matter most this round
 
-## How to work
+- Exactly one model, one validator and one write path at the end of 2e. No
+  compatibility aliases or "v1 still readable" paths.
+- Never fill a value or pin from a similar part, package convention or memory.
+  If the cited page does not show it, it is `UNKNOWN` with a reason.
+- `HUMAN_VERIFIED` only when a person actually checked the values; no part has
+  one yet. Delegated decisions follow AGENTS.md section 3: decide, record the
+  delegation, continue.
+- Data commits and contract commits stay separate (`change-scope` must not be
+  `MIXED`).
+- Push the `intake-final` tag only if the owner asks; otherwise mention it.
+- If the plan conflicts with the code, write the disagreement and your alternative
+  in the report instead of silently diverging.
+- Repository writes: commit to `main` in coherent commits using
+  `[type]: description`. Push only after the owner reviews, unless told otherwise.
 
-- Keep the invariants: SHA-256 source identity, originals only in the ignored
-  cache, license gates, explicit workspace selection, pinned schemas, loopback-only
-  standard-library runtime, separate data and contract commits, unknown is a
-  result, no fabricated human verifier.
-- Prefer deleting over keeping. Git history is the archive.
-- Keep schemas small: only what G1 needs. A registry name, layout-constraint kind
-  or calculator is added when a G1 block uses it, not in anticipation.
-- If you find that the plan conflicts with the code or is wrong, do not silently
-  diverge. Write the disagreement and your proposed alternative in your report.
-- Repository writes: commit to `main` in coherent stage commits using the
-  `[type]: description` format. Do not push until the owner has reviewed, unless the
-  owner tells you otherwise.
+## Report when you stop (at the Stage 2 exit or when blocked)
 
-## Report when you stop
-
-- What changed, by stage item, with commit hashes.
-- Lines of code and tests removed and added; new test count.
-- Exact gate commands and exit codes; any skip or failure.
-- Disagreements with the plan, open questions, and what Stage 2 should start with.
+- Commits per task with hashes; lines removed and added; test count before and after.
+- Gate commands with exit codes; any skip or failure.
+- For each G1 part: source URL, SHA-256 match yes/no, pins extracted, verifier.
+- Remaining `UNKNOWN` values in G1 and why each one needs evidence rather than a decision.
+- Disagreements with the plan and what Stage 3 should start with.

@@ -31,11 +31,18 @@
           "note": "Original synthetic G1 design requirement."
         },
         "output_current": {
-          "status": "UNKNOWN",
-          "reason": "Allowed USB sink current must be selected.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 0.5,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        },
+        "resistance": {
+          "value": 5100,
+          "unit": "ohm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     },
@@ -90,11 +97,11 @@
           "note": "Original synthetic G1 design requirement."
         },
         "output_current": {
-          "status": "UNKNOWN",
-          "reason": "Total regulated load current must be established.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 0.15,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     },
@@ -191,11 +198,11 @@
       ],
       "parameters": {
         "clock_frequency": {
-          "status": "UNKNOWN",
-          "reason": "Crystal frequency and load requirements await MCU-block definition.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 8000000,
+          "unit": "Hz",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     },
@@ -228,7 +235,15 @@
         "debug",
         "swd"
       ],
-      "parameters": {}
+      "parameters": {
+        "output_current": {
+          "value": 0.05,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "D7: headers share one 50 mA expansion budget."
+        }
+      }
     },
     {
       "id": "power_led",
@@ -328,11 +343,18 @@
       ],
       "parameters": {
         "bus_frequency": {
-          "status": "UNKNOWN",
-          "reason": "Bus speed and capacitance must be specified before pull-up sizing.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 100000,
+          "unit": "Hz",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        },
+        "capacitance": {
+          "value": 1e-10,
+          "unit": "F",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     },
@@ -387,7 +409,15 @@
         "i2c_expansion",
         "i2c_header"
       ],
-      "parameters": {}
+      "parameters": {
+        "output_current": {
+          "value": 0.05,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "D7: headers share one 50 mA expansion budget."
+        }
+      }
     },
     {
       "id": "uart",
@@ -414,7 +444,15 @@
         "uart",
         "uart_header"
       ],
-      "parameters": {}
+      "parameters": {
+        "output_current": {
+          "value": 0.05,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "D7: headers share one 50 mA expansion budget."
+        }
+      }
     },
     {
       "id": "mounting",
@@ -423,7 +461,29 @@
       "requirements": [
         "mounting"
       ],
-      "parameters": {}
+      "parameters": {
+        "drill": {
+          "value": 3.2,
+          "unit": "mm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        },
+        "clearance": {
+          "value": 6,
+          "unit": "mm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "D7: keepout diameter."
+        },
+        "length": {
+          "value": 3.5,
+          "unit": "mm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "D7: center offset from each board edge."
+        }
+      }
     }
   ],
   "connections": [

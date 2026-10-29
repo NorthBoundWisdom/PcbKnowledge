@@ -12,26 +12,7 @@
     "package": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^package:[a-z0-9][a-z0-9/_-]*$"},
     "roles": {
       "type": "array",
-      "items": {
-        "enum": [
-          "connector.usb-c-sink",
-          "protection.fuse",
-          "protection.tvs",
-          "diode.schottky",
-          "regulator.linear.fixed",
-          "capacitor.ceramic",
-          "capacitor.bulk",
-          "resistor",
-          "mcu.32-bit",
-          "crystal",
-          "connector.header",
-          "led",
-          "switch.button",
-          "monitor.current",
-          "memory.eeprom",
-          "mechanical.mounting-hole"
-        ]
-      },
+      "items": {"type": "string", "minLength": 1, "maxLength": 256},
       "minItems": 1,
       "uniqueItems": true
     },
@@ -42,20 +23,7 @@
         "properties": {
           "number": {"type": "string", "minLength": 1, "maxLength": 256},
           "name": {"type": "string", "minLength": 1, "maxLength": 256},
-          "type": {
-            "enum": [
-              "POWER_IN",
-              "POWER_OUT",
-              "GROUND",
-              "INPUT",
-              "OUTPUT",
-              "BIDIRECTIONAL",
-              "OPEN_DRAIN",
-              "ANALOG",
-              "PASSIVE",
-              "NO_CONNECT"
-            ]
-          },
+          "type": {"type": "string", "minLength": 1, "maxLength": 256},
           "same_net_as": {"type": "string", "minLength": 1, "maxLength": 256}
         },
         "required": ["number", "name", "type"],
@@ -76,15 +44,7 @@
     },
     "sourcing": {
       "type": "object",
-      "properties": {
-        "lifecycle": {
-          "enum": ["ACTIVE", "NRND", "OBSOLETE", "UNKNOWN"]
-        },
-        "distributor_ids": {
-          "type": "object",
-          "additionalProperties": {"type": "string", "minLength": 1, "maxLength": 256}
-        }
-      },
+      "properties": {"lifecycle": {"enum": ["ACTIVE", "NRND", "OBSOLETE", "UNKNOWN"]}},
       "required": ["lifecycle"],
       "additionalProperties": false
     },
@@ -94,9 +54,7 @@
         "type": "object",
         "properties": {
           "rule": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^rule:[a-z0-9][a-z0-9/_-]*$"},
-          "replace_with": {
-            "enum": ["block-provided"]
-          }
+          "replace_with": {"enum": ["block-provided"]}
         },
         "required": ["rule", "replace_with"],
         "additionalProperties": false
@@ -122,21 +80,11 @@
   "allOf": [
     {
       "oneOf": [
+        {"properties": {"verification": {"const": "DRAFT"}}},
         {
           "properties": {
-            "verification": {"const": "DRAFT"}
-          }
-        },
-        {
-          "properties": {
-            "verification": {
-              "enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]
-            },
-            "provenance": {
-              "properties": {
-                "verified_by": {"minItems": 1}
-              }
-            }
+            "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
+            "provenance": {"properties": {"verified_by": {"minItems": 1}}}
           }
         }
       ]

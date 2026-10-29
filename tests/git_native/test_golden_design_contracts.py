@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import unittest
 
-from tests.contract_schema import validate
+from tests.git_native.test_v2_record_contracts import validate
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -91,7 +91,7 @@ class GoldenDesignContractTests(unittest.TestCase):
         unknowns = [value for instance in self.graph['instances']
                     for value in instance['parameters'].values()
                     if value.get('status') == 'UNKNOWN']
-        self.assertGreater(len(unknowns), 0)
+        self.assertEqual(unknowns, [])
 
     def test_brief_rejects_raw_quantities_authority_upgrade_and_unknown_fields(self):
         mutations = [lambda d: d.update(status='AGENT_VERIFIED'),
@@ -100,7 +100,7 @@ class GoldenDesignContractTests(unittest.TestCase):
                      lambda d: d['mechanical']['length'].update(unit='cm'),
                      lambda d: d['power']['sources'][0]['voltage'].update(unit='A'),
                      lambda d: d['acceptance'][0].update(status='PASS'),
-                     lambda d: d['power']['sources'][0]['current_budget'].pop('reason')]
+                     lambda d: d['power']['sources'][0]['current_budget'].pop('note')]
         for mutation in mutations:
             bad = copy.deepcopy(self.brief)
             mutation(bad)
@@ -132,16 +132,22 @@ class GoldenDesignContractTests(unittest.TestCase):
             with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
                 self.check_graph(bad)
 
-    def test_g2_and_g3_keep_unspecified_requirements_unknown(self):
-        for name in ('g2', 'g3'):
-            brief = read(name + '.brief.json')
-            self.assertEqual(brief['mechanical']['length']['status'], 'UNKNOWN')
-            self.assertEqual(brief['manufacturing']['profile']['status'], 'UNKNOWN')
-            self.assertEqual(brief['power']['sources'][0]['current_budget']['status'], 'UNKNOWN')
-        g2 = read('g2.brief.json')
-        self.assertEqual(g2['power']['sources'][0]['voltage']['min'], 7)
-        self.assertEqual(g2['power']['sources'][0]['voltage']['max'], 12)
-        self.assertEqual(read('g3.brief.json')['power']['sources'][0]['voltage']['status'], 'UNKNOWN')
+    def test_every_required_g1_design_input_is_concrete(self):
+        def check(value):
+            if isinstance(value, dict):
+                self.assertNotEqual(value.get('status'), 'UNKNOWN')
+                for child in value.values():check(child)
+            elif isinstance(value, list):
+                for child in value:check(child)
+        check(self.brief);check(self.graph)
+        self.assertEqual(self.brief['power']['sources'][0]['current_budget']['value'], .5)
+        self.assertEqual(self.brief['power']['rails'][0]['current_budget']['value'], .15)
+        self.assertEqual(self.brief['mechanical']['height']['status'], 'UNCONSTRAINED')
+        parameters = {i['id']:i['parameters'] for i in self.graph['instances']}
+        self.assertEqual(parameters['mcu']['clock_frequency']['value'], 8000000)
+        self.assertEqual(parameters['i2c']['bus_frequency']['value'], 100000)
+        self.assertEqual(parameters['i2c']['capacitance']['value'], 1e-10)
+        self.assertEqual(parameters['mounting']['drill']['value'], 3.2)
 
 
 if __name__ == '__main__':

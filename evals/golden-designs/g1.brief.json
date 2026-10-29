@@ -7,7 +7,8 @@
   "origin": "SYNTHETIC",
   "owner_decisions": [
     "D1",
-    "D2"
+    "D2",
+    "D7"
   ],
   "power": {
     "sources": [
@@ -22,11 +23,11 @@
           "note": "Original synthetic design requirement."
         },
         "current_budget": {
-          "status": "UNKNOWN",
-          "reason": "USB source current allowance and total input budget must be selected.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 0.5,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     ],
@@ -41,11 +42,11 @@
           "note": "Original synthetic design requirement."
         },
         "current_budget": {
-          "status": "UNKNOWN",
-          "reason": "MCU, monitor, EEPROM, indicators and expansion load budgets are not specified.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 0.15,
+          "unit": "A",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     ]
@@ -59,7 +60,15 @@
       "requirements": [
         "CC pull-down resistors; no source role."
       ],
-      "parameters": {}
+      "parameters": {
+        "resistance": {
+          "value": 5100,
+          "unit": "ohm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "D7: one Rd on each CC pin."
+        }
+      }
     },
     {
       "id": "input_protection",
@@ -112,11 +121,11 @@
       ],
       "parameters": {
         "clock_frequency": {
-          "status": "UNKNOWN",
-          "reason": "Crystal frequency and load requirements await MCU-block definition.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 8000000,
+          "unit": "Hz",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     },
@@ -160,11 +169,18 @@
       ],
       "parameters": {
         "bus_frequency": {
-          "status": "UNKNOWN",
-          "reason": "Bus speed, capacitance and pull-up sizing inputs are not specified.",
-          "blocks": [
-            "Q11"
-          ]
+          "value": 100000,
+          "unit": "Hz",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        },
+        "capacitance": {
+          "value": 1e-10,
+          "unit": "F",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
         }
       }
     },
@@ -232,11 +248,11 @@
         "note": "Original synthetic design requirement."
       },
       "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "value": 0.5,
+        "unit": "A",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "D7: 500 mA USB input; other headers share one 50 mA expansion budget."
       }
     },
     {
@@ -257,11 +273,11 @@
         "note": "Original synthetic design requirement."
       },
       "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "value": 0.05,
+        "unit": "A",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "D7: 500 mA USB input; other headers share one 50 mA expansion budget."
       }
     },
     {
@@ -281,11 +297,11 @@
         "note": "Original synthetic design requirement."
       },
       "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "value": 0.05,
+        "unit": "A",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "D7: 500 mA USB input; other headers share one 50 mA expansion budget."
       }
     },
     {
@@ -305,11 +321,11 @@
         "note": "Original synthetic design requirement."
       },
       "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "value": 0.05,
+        "unit": "A",
+        "conditions": {},
+        "basis": "ENGINEERING_DEFAULT",
+        "note": "D7: 500 mA USB input; other headers share one 50 mA expansion budget."
       }
     }
   ],
@@ -331,7 +347,28 @@
     "mounting": [
       {
         "id": "mounting",
-        "description": "Four mounting holes for M3 fasteners; hole dimensions and clearances require definition."
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "value": 3.2,
+          "unit": "mm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        },
+        "keepout_diameter": {
+          "value": 6,
+          "unit": "mm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        },
+        "edge_offset": {
+          "value": 3.5,
+          "unit": "mm",
+          "conditions": {},
+          "basis": "ENGINEERING_DEFAULT",
+          "note": "Owner decision D7."
+        }
       }
     ],
     "edge_interfaces": [
@@ -341,11 +378,9 @@
       "uart_header"
     ],
     "height": {
-      "status": "UNKNOWN",
-      "reason": "Component height limit not specified.",
-      "blocks": [
-        "Q11"
-      ]
+      "status": "UNCONSTRAINED",
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "D7: no component height limit."
     }
   },
   "manufacturing": {

@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `STAGE_1_OWNER_REVIEW`
+> Status: `STAGE_2_ACTIVE`
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -31,8 +31,9 @@ answer here.
 | D2 | Fab and assembly house for the first fab profile | A generic low-cost two-layer, 1.6 mm, 1 oz, single-side assembly profile; values cited from the selected fab's public capability page |
 | D3 | Handoff format to PcbAtlas | Design intent JSON as the authority, plus derived KiCad netlist and footprint library (PcbAtlas already imports KiCad) |
 | D4 | Where brief-to-block-graph synthesis runs | PcbAtlas AI runtime calling the PcbKnowledge query API; PcbKnowledge ships the agent skill and golden evaluations |
-| D5 | Keep a GUI after v2 | Remove v1 decision UI; keep the PDF evidence viewer only if a v2 read-only browser needs it in Stage 2 |
+| D5 | Keep a GUI after v2 | Stage 2 deletes all v1 pages, decision flows and intake pages. Keep the loopback server shell, pinned PDF.js and the evidence endpoint, and add minimal read-only v2 part and block pages that show each value beside its cited PDF page, for owner spot checks |
 | D6 | Distributor part numbers in public records | Allowed as identifiers only (no copied catalog data) |
+| D7 | G1 design inputs (these are design decisions, not missing evidence) | USB-C sink input budget 500 mA (5.1 kOhm Rd on CC1/CC2, default USB power); 3.3 V rail load budget 150 mA including 50 mA for expansion headers; MCU external crystal 8 MHz; I2C standard mode 100 kHz with a 100 pF bus-capacitance budget; four 3.2 mm non-plated M3 holes with 6.0 mm keepout, centers 3.5 mm from the board edges; no component height limit for G1 |
 
 ## Stage 0 — Course correction (complete)
 
@@ -53,7 +54,7 @@ Stop expanding the old design, remove dead weight, align instructions.
 Exit: the deletions above are complete, all gates pass, and no document or
 instruction asks for new intake batches or per-batch receipts.
 
-## Stage 1 — Contracts for the first golden design (active)
+## Stage 1 — Contracts for the first golden design (complete)
 
 - [x] Write the brief JSON Schema and machine-readable G1, G2, G3 briefs in
   `evals/golden-designs/`.
@@ -63,37 +64,99 @@ instruction asks for new intake batches or per-batch receipts.
   package, part, block, rule, fab profile) and the initial registries, limited to
   what G1 needs.
 - [x] Write the block-graph input schema and the design-intent output schema.
-- [ ] Agree the design-intent handoff with the PcbAtlas owner (D3, D4) and record
-  it as ADR-023. Draft [ADR-023](docs/adr/ADR-023-design-intent-handoff.md)
-  uses D3/D4 defaults and remains Proposed for owner acceptance.
+- [x] Agree the design-intent handoff (D3, D4) and record it as
+  [ADR-023](docs/adr/ADR-023-design-intent-handoff.md): accepted 2026-10-29 by the
+  agent under explicit owner delegation.
 
 Exit: schemas validate the G1 brief and G1 block graph; ADR-023 accepted.
-The implementation is ready for review, but this exit is pending owner acceptance.
-Stage 2 has not started. Target schemas remain outside the active v1 schema pin.
+Target schemas remain outside the active v1 schema pin until Stage 2c.
 Stage receipt: Build/Test each 406 tests, no skips; full gate and 801 retained intake cases pass.
 Independent review passed 44 focused checks after fixing manufacturing handoff and mechanical blocks.
 Contract and registry data use separate commits; exact remote CI is checked after publication.
+Review (2026-10-29, `6a69feb`): Stage 0 removal is clean (−9.7k lines, no stale
+references, identity coverage kept, CI green). Stage 1 shapes are usable. Four
+corrections moved into Stage 2a: design decisions recorded as `UNKNOWN`,
+vocabulary duplicated between schemas and registries, a test-only validator that
+would become a second validator, and contract size (about 4.2k lines of schema for
+one design). The local `intake-final` tag is not yet on the remote.
 
-## Stage 2 — v2 core, migration and hard cut
+## Stage 2 — Contract corrections, v2 core and hard cut (active)
 
-- [ ] Implement the v2 model and validator (knowledge-model-v2 section 7), reusing
-  canonical JSON, deterministic IDs, the SHA-256 evidence cache, workspace pinning
-  and change-scope.
-- [ ] Bump the workspace format to v2 in a contract-only commit; data commits follow.
-- [ ] Read-only CLI: `validate`, `part show|search`, `package show`,
-  `block show|search`, `fab show`.
-- [ ] Migrate the G1 parts that exist in intake (see golden designs) into v2 `source`
-  and `part` records, re-checking pins against the cited source.
-- [ ] Rewrite the repository Agent skills (`.codex/skills/`) for v2 ingestion:
-  register source, extract part, verify part, write block.
-- [ ] Hard cut: delete v1 Source/Entity/Fact families, the approve/reject review
-  closure and its UI, the intake queue and its whole toolchain (`intake*.py`,
+Work in the order 2a to 2e; each step is a
+coherent commit or a small group of commits. Data and contract commits stay separate.
+
+### 2a Contract corrections from the Stage 1 review
+
+- [x] **Design inputs are decisions, not unknowns.** `UNKNOWN` means evidence a
+  source must supply. A brief author or synthesizer decides current budgets,
+  crystal frequency, bus speed and hole sizes. Replace the design-choice `UNKNOWN`
+  values in `g1.brief.json` (9) and `g1.block-graph.json` (4) with the D7 values
+  (`basis: ENGINEERING_DEFAULT`). Replace
+  `test_g2_and_g3_keep_unspecified_requirements_unknown` with a test that every
+  required G1 design input is concrete. G2 and G3 get concrete inputs when their
+  stage starts. Otherwise A1 ("no refusal") can never pass, by construction.
+- [x] **Registries are the only vocabulary authority.** Remove parameter names,
+  units, condition keys, roles, pin types, package families and layout-constraint
+  kinds from schema `enum`/`const`/`properties`. Schemas check structure (ID
+  strings, quantity shape); the semantic validator checks registry membership, the
+  canonical unit per quantity and the allowed condition keys per parameter. Delete
+  `test_schema_vocabulary_and_registry_data_have_one_matching_contract`. Adding a
+  parameter must be a one-file registry change.
+- [x] **One validator.** Move `tests/contract_schema.py` to the runtime package
+  (for example `src/pcbknowledge/v2/schema.py`) as the single structural
+  validator; tests import it from there. No second schema evaluator.
+- [x] **Shrink to G1.** Remove schema properties that no G1 fixture, consumer query
+  or ADR-023 field uses (the brief schema alone is 754 lines). Record the before
+  and after line counts in the commit body.
+
+### 2b v2 runtime alongside v1 (code only, no catalog data yet)
+
+- [ ] `src/pcbknowledge/v2/`: loader, canonical serialization (reuse existing
+  helpers), structural validator from 2a, semantic validator covering the list in
+  knowledge-model-v2 "Validation boundary".
+- [ ] Read-only CLI: `v2 validate`, `part show|search`, `package show`,
+  `block show|search`, `fab show`, `registry show`. JSON output.
+- [ ] Tests on synthetic records in a temporary external Git workspace, including
+  tamper cases (unknown registry name, wrong unit, pin without pad, dangling block
+  reference, fabricated human verifier).
+
+### 2c Workspace contract v2 (contract-only commit)
+
+- [ ] Move the corrected schemas from `docs/contracts/v2/` into `schemas/`, bump the
+  workspace format, pin the new digest, and update `workspace init|validate`.
+  Existing v1 workspaces fail with a clear upgrade message; no silent rewrite.
+
+### 2d G1 sources and parts (data-only commits)
+
+- [ ] The local evidence cache in this checkout is empty. Re-download each G1
+  source PDF from its recorded official URL into `.pcbknowledge/evidence/sha256/`
+  and confirm the recorded SHA-256. A mismatch is a new source revision recorded as
+  such, never an override.
+- [ ] Write v2 `source` and `part` records for the G1 devices present in intake:
+  LD1117 (G1 needs a fixed 3.3 V orderable such as LD1117S33TR; intake covers the
+  adjustable LD1117STR, so confirm the fixed variant in the same document),
+  SMBJ5.0A, SS14, MF-MSMF050-2 or SF-1206S050-2, C0603C104K5RACTU,
+  CRCW060310K0FKEA, INA219AIDCNR, 24LC256-I/SN, Wurth 61300211121. Intake holds
+  pin facts only for LD1117, INA219 and 24LC256; every other numbered pin map is
+  new extraction from the cited page.
+- [ ] An independent agent re-checks every cited value and pin, then sets
+  `AGENT_VERIFIED` with its actual identity.
+
+### 2e Hard cut
+
+- [ ] Delete v1 Source/Entity/Fact families, the approve/reject review closure, all
+  v1 and intake GUI pages, the intake queue and its whole toolchain (`intake*.py`,
   intake CLI commands, replay tests, `evals/intake-*.json`, the CI replay step,
-  `docs/legacy/intake/`, `docs/legacy/agent-workflow-v1.md`). Later migrations read
-  intake content from the `intake-final` tag.
-- [ ] Decide D5 and either adapt the evidence viewer to v2 or delete it.
+  `docs/legacy/`). Later migrations read intake from the `intake-final` tag.
+- [ ] Per D5, keep the server shell, PDF.js and the evidence endpoint, and add
+  read-only v2 part and block pages that show each value beside its cited page.
+- [ ] Rewrite `.codex/skills/` for v2: register source, extract part, verify part,
+  write block.
+- [ ] Update `AGENTS.md` sections 6 and 7, `architecture.md` and `README.md` to
+  describe only v2; delete `docs/course-correction-prompt.md`.
 
-Exit: one model; all gates pass; G1 migrated parts validate as `AGENT_VERIFIED`.
+Exit: one model and one validator; G1 parts from 2d validate as `AGENT_VERIFIED`;
+full gate passes; record the test count and lines removed.
 
 ## Stage 3 — Packages and footprints
 
@@ -118,8 +181,13 @@ Exit: every G1 part has a validated package and exported footprint.
   I2C bus with pull-ups, INA219 monitor, I2C EEPROM, UART header, mounting holes.
 - [ ] Rules: default IC decoupling, edge-connector placement, power net class.
 - [ ] Fab profile per D2.
-- [ ] Calculators needed by these blocks: `ldo_dissipation`, `led_resistor`,
-  `i2c_pullup`, `ipc2152_width`.
+- [ ] Calculators needed by these blocks: `ldo_dissipation`, `ldo_headroom`,
+  `led_resistor`, `i2c_pullup`, `ipc2152_width`.
+- [ ] Known design risk the A2 checks must catch: USB VBUS can be 4.75 V. A series
+  Schottky (about 0.4 V to 0.5 V) leaves about 1 V for a 3.3 V regulator, and an
+  LD1117-class LDO needs about 1 V of dropout. The input-protection and LDO blocks
+  must either omit the series diode on a USB-C sink or use a lower-dropout
+  regulator, and `ldo_headroom` must refuse a combination that does not fit.
 
 Exit: G1 knowledge coverage is 100% for the hand-made block graph (A1 reachable).
 
@@ -143,7 +211,7 @@ Work in PcbAtlas is tracked there; this list records what PcbKnowledge needs bac
 - [ ] PcbAtlas imports the G1 design intent (or KiCad export per D3).
 - [ ] PcbAtlas checks layout constraints from the design intent (A3).
 - [ ] DRC against the fab profile (A4) and fabrication outputs (A5).
-- [ ] Owner orders G1 boards; bring-up: rails, programmer connects, LED and I2C
+- [ ] (owner-only) Owner orders G1 boards; bring-up: rails, programmer connects, LED and I2C
   test (A6).
 - [ ] Every knowledge gap found here becomes a fix in PcbKnowledge with a test.
 
@@ -202,7 +270,8 @@ Exit: G2 and G3 at A5, then A6.
 - PcbKnowledge never reads or mutates a live board and is not a PcbCore runtime
   dependency.
 - Loopback-only, standard-library-only runtime unless a new ADR is accepted.
-- Never record a human verifier who did not act.
+- Owner decisions may be delegated to the agent and are recorded as delegated
+  (AGENTS.md section 3). `HUMAN_VERIFIED` requires a person who actually checked.
 
 ## Verification contract
 
