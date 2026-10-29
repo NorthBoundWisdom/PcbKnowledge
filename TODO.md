@@ -4,6 +4,17 @@
 > Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Fixed synthetic EEPROM transaction geometry
+
+A [24LC256 page-write example](docs/worked-examples/24lc256-page-write-plan.md)
+now evaluates complete fixed synthetic splits, address roles and whole-request
+range refusal. It extends the existing short wrap-counter example rather than
+claiming that page boundaries were previously untested. All seven existing
+facts and three warnings remain pinned and unchanged. Geometry, valid WP-high
+assumptions and matching-device ACK readiness never establish data persistence,
+supply/WP timing, lifetime or circuit qualification. Independent review, full
+gates and exact published-commit CI are separate receipts.
+
 ## Source-access prerequisites recorded
 
 A bounded [source-access investigation](docs/source-investigations/source-access-observations-2026-10-29.md)
