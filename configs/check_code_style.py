@@ -55,9 +55,10 @@ def check(root, allowlist):
     source_root = root / 'src/pcbknowledge'
     if not source_root.is_dir() or source_root.is_symlink():
         raise ValueError('A regular src/pcbknowledge directory is required')
-    for path in sorted(source_root.rglob('*.py')):
+    for path in source_root.rglob('*'):
         if path.is_symlink():
             raise ValueError(f'Source symlinks are forbidden: {path}')
+    for path in sorted(source_root.rglob('*.py')):
         findings.extend(inspect_source(path.read_text(encoding='utf-8'), path.relative_to(root).as_posix()))
     document = json.loads(allowlist.read_text(encoding='utf-8'))
     if set(document) != {'temporary_until', 'entries'} or document['temporary_until'] != 'Stage 6c':

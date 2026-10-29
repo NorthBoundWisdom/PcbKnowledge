@@ -12,7 +12,7 @@ SOURCE_ROOT = REPO_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from pcbknowledge.git_native.pdfjs_vendor import PdfJsVendorError, validate_pdfjs_vendor  # noqa: E402
+from pcbknowledge.pdfjs_vendor import PdfJsVendorError, validate_pdfjs_vendor  # noqa: E402
 
 
 def main() -> int:

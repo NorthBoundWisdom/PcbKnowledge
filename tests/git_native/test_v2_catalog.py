@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 import unittest
 
-from pcbknowledge.git_native.workspace import initialize_workspace, WorkspaceError
+from pcbknowledge.workspace import initialize_workspace, WorkspaceError
 from pcbknowledge.serialization import canonical_json
 from pcbknowledge.v2.catalog import Catalog, record_path
 from pcbknowledge.v2.cli import main
@@ -32,6 +32,18 @@ class CatalogTests(unittest.TestCase):
         self.documents.pop('rule');self.documents.pop('design-intent');self.documents.pop('fab-profile')
         self.documents['source']['license_class']='PUBLIC_REFERENCE'
         self.save()
+        graph = {
+            'schema': 'pcbknowledge.block-graph.v2', 'id': 'synthetic-audit', 'brief': 'G1',
+            'status': 'DRAFT', 'interface_status': 'PLANNED_BLOCK_CONTRACTS',
+            'instances': [{'id': 'sample', 'block': 'block:synthetic', 'parameters': {},
+                           'ports': [], 'requirements': ['synthetic']}],
+            'connections': [{'net': 'TEST', 'endpoints': [
+                {'instance': 'sample', 'port': 'A'}, {'instance': 'sample', 'port': 'B'}]}],
+            'requirements': ['synthetic'],
+        }
+        path = self.root / 'evals/corpus/synthetic.json'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(canonical_json(graph), encoding='utf-8')
 
     def save(self):
         for doc in self.documents.values():
@@ -185,6 +197,8 @@ class CatalogTests(unittest.TestCase):
         intent['components'][0]['footprint']='pcbknowledge:synthetic'
         intent['components'].append({'ref':'H1','part':'part:mount','package':'package:synthetic','footprint':'pcbknowledge:synthetic'})
         intent['bom'].append({'part':'part:mount','refs':['H1'],'quantity':1})
+        for item in [*intent['components'], *intent['bom']]:
+            item.update(mount_type='SMT', assembly_method='SMT_ASSEMBLY')
         intent['mechanical']['mounting']=[{'ref':'H1','fastener':'M3'}]
         intent['mechanical']['edge_interfaces']=['D1']
         return intent

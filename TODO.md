@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_6_ACTIVE` (G1 at A2)
+> Status: `CONTINUOUS_MODE_STAGE_7_ACTIVE` (G1 at A2)
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -364,57 +364,57 @@ Work in order; each item is one coherent commit or a small group.
 
 ### 6a Mechanical guards (code, CI)
 
-- [ ] `configs/check_commits.py <range>`: subject format `[type]: description`
+- [x] `configs/check_commits.py <range>`: subject format `[type]: description`
   with the AGENTS types plus `data` (D19); `[data]` commits are `DATA_ONLY`,
   others touch no `knowledge/` path; no `MIXED` commit. Run it in CI over the
   pushed range (AGENTS section 1 already lists `data`). Existing history is not
   rewritten.
-- [ ] `configs/check_code_style.py` (standard library only): maximum line length
+- [x] `configs/check_code_style.py` (standard library only): maximum line length
   120, one statement per line, no function longer than 80 lines in
   `src/pcbknowledge/`. Add to the full gate and CI. Fix existing violations in
   6c; until then the checker may carry an explicit allowlist that 6c empties.
-- [ ] `v2 audit` (part of `v2 validate`): every part, package and source must be
+- [x] `v2 audit` (part of `v2 validate`): every part, package and source must be
   reachable from the expansion of at least one golden or corpus block graph, or
   from a block selection that some graph uses. Unreachable records fail
   validation with their IDs. Delete the four unused parts
   (`abracon-abm8-8-18`, `amphenol-10155435-00011lf`, `kemet-c0603c270j5gactu`,
   `st-ld1117s33tr`) and whatever packages and sources become unreachable, in a
   `[data]` commit.
-- [ ] Package scope: a package record lists the MPNs or series its cited drawing
+- [x] Package scope: a package record lists the MPNs or series its cited drawing
   covers, with page evidence; the validator rejects a part whose MPN is not
   covered by its package. Re-record LDL1117S33R's SOT-223 from the LDL1117
   datasheet's own package page (do not reuse the LD1117 drawing).
-- [ ] Golden regression: the G1 reference expansion's canonical bytes are pinned by
+- [x] Golden regression: the G1 reference expansion's canonical bytes are pinned by
   a SHA-256 in a test. An intended change updates the hash in the same commit and
   states why in the body.
 
 ### 6b Contract corrections
 
-- [ ] Brief `manufacturing.copper` and `manufacturing.assembly` become controlled
+- [x] Brief `manufacturing.copper` and `manufacturing.assembly` become controlled
   values (registry or enum, for example `ONE_OZ`, `SINGLE_SIDE_TOP`), prose moves
   to `note`. Remove the string matching in `expansion.py`. Contract-only commit,
   re-pinned digest.
-- [ ] Mount type per D18: packages state `SMT`, `THT` or `MECHANICAL`; the fab
+- [x] Mount type per D18: packages state `SMT`, `THT` or `MECHANICAL`; the fab
   profile states assembled mount types; design intent and BOM mark THT items.
   Expansion reports the THT count as a check, not a refusal.
-- [ ] Web-page sources per D20: `media_type` on sources, cache accepts the saved
+- [x] Web-page sources per D20: `media_type` on sources, cache accepts the saved
   bytes, the viewer shows non-PDF sources as a link plus hash.
 
 ### 6c Code readability (behavior unchanged)
 
-- [ ] Split `expand` into named phases (resolve instances, unite nets, apply
+- [x] Split `expand` into named phases (resolve instances, unite nets, apply
   rules, run checks, assemble intent) and split `_drawing_pads` per family.
   Golden hash from 6a must not change. Empty the style allowlist.
-- [ ] Move the workspace and policy helpers the v2 code imports from
+- [x] Move the workspace and policy helpers the v2 code imports from
   `pcbknowledge.git_native` into a neutral module; delete the old name.
 
 ### 6d Evidence for the owner
 
-- [ ] `evidence fetch [--source <id>]`: download missing sources from their recorded
+- [x] `evidence fetch [--source <id>]`: download missing sources from their recorded
   URL into the cache, verify SHA-256, report `MATCH`, `DIFFERENT_BYTES` (kept
   aside, never replaces the cache) or `FAILED` with the HTTP status. Never retry
   around bot checks or access controls.
-- [ ] `evidence add <file>`: import a manually downloaded file and accept it only
+- [x] `evidence add <file>`: import a manually downloaded file and accept it only
   when its SHA-256 equals a recorded source. Document both in
   `docs/local-workflow.md`, including which publishers block scripted downloads
   (ST and Wurth did on 2026-10-29) and that some spec-sheet generators stamp the
@@ -422,11 +422,15 @@ Work in order; each item is one coherent commit or a small group.
 
 ### 6e Review procedure
 
-- [ ] Use `docs/review-checklist.md` at this stage exit and keep it current: each
+- [x] Use `docs/review-checklist.md` at this stage exit and keep it current: each
   check that 6a or a later stage automates moves to its "Automated" list.
 
 Exit: CI runs the commit, style, audit and golden-hash guards; zero unreachable
 records; LDL1117 package re-recorded; G1 still `EXPANDED` with all checks passing.
+
+Receipt (2026-10-29): guards `363a2b3`, contracts `80653b3`, data `3a8268e`; full gate PASS, 179 tests, zero skips, 66/66 audited records reachable; G1 reference and three preserved graphs EXPANDED.
+Review: 13 checks, three commit-guard findings fixed; independent source/package review sampled seven dimensions and two pin maps. Canonical G1 hash changed intentionally for own-source LDL packaging and explicit assembly metadata; readability refactor preserves bytes.
+Next: Stage 7 derived layout handoff and exported-board checks; owner-only hardware/layout work remains unclaimed.
 
 ## Stage 7 — Layout handoff and board-level checks for G1
 

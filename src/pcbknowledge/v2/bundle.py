@@ -7,7 +7,9 @@ import subprocess
 import tempfile
 
 from pcbknowledge.serialization import canonical_json, read_json
-from .catalog import Catalog, DIRECTORIES, MAX_RECORD_BYTES
+from .catalog import Catalog, DIRECTORIES, MAX_RECORD_BYTES, record_path
+from .audit import design_inputs, require_audit
+from pcbknowledge.workspace import _load_manifest_bytes, schema_digest
 from .schema import ContractSchemas
 from .vocabulary import Vocabulary
 
@@ -27,7 +29,7 @@ def _selected(path):
     return (path in ('.gitignore', 'pcbknowledge.workspace.json')
             or path.startswith(('schemas/', 'knowledge/registry/'))
             or any(path.startswith('knowledge/' + directory + '/') for directory in DIRECTORIES.values())
-            or (path.startswith('evals/golden-designs/') and path.endswith('.brief.json')))
+            or (path.startswith('evals/') and path.endswith('.json')))
 
 
 def _tree_oid(entries):
@@ -69,6 +71,7 @@ def build_bundle(root, output_dir=None):
     if _git(root, 'status', '--porcelain', '--untracked-files=all').strip():
         raise ValueError('Bundle requires a clean committed workspace')
     catalog = Catalog(root, root / 'schemas')
+    require_audit(catalog)
     commit = _git(root, 'rev-parse', '--verify', 'HEAD^{commit}').decode().strip()
     commit_object = _git(root, 'cat-file', 'commit', commit).decode('utf-8')
     entries = []
@@ -142,61 +145,63 @@ class Bundle:
             if set(document['files']) != expected:
                 raise ValueError('Bundle is missing or adds authority files')
             self._temporary = tempfile.TemporaryDirectory(prefix='pcbknowledge-bundle-')
-            root = Path(self._temporary.name)
-            for path, text in document['files'].items():
-                entry = entries[path]
-                payload = text.encode('utf-8')
-                if entry['mode'] not in ('100644', '100755') or len(payload) > MAX_RECORD_BYTES:
-                    raise ValueError('Unsafe bundle authority')
-                if _oid('blob', payload) != entry['oid']:
-                    raise ValueError('Bundle file does not match committed blob')
-                destination = root / path
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                destination.write_bytes(payload)
-            # A snapshot is not a new mutable Git workspace; only the existing
-            # structural/vocabulary/semantic validators run on its materialization.
-            from pcbknowledge.git_native.workspace import _load_manifest_bytes, schema_digest
-            manifest = _load_manifest_bytes((root / 'pcbknowledge.workspace.json').read_bytes(), label='bundle manifest')
-            if manifest.schema_digest != schema_digest(root):
-                raise ValueError('Bundle workspace schema digest mismatch')
-            catalog = Catalog.__new__(Catalog)
-            catalog.root = root
-            catalog.schemas = ContractSchemas(root / 'schemas')
-            catalog.vocabulary = Vocabulary.load(root / 'knowledge/registry', root / 'schemas')
-            catalog.records = {}
-            for kind, directory in DIRECTORIES.items():
-                prefix = 'knowledge/' + directory + '/'
-                for path, text in sorted(document['files'].items()):
-                    if not path.startswith(prefix):
-                        continue
-                    if path.endswith('/.gitkeep') and not text.strip():
-                        continue
-                    if not path.endswith('.json'):
-                        raise ValueError('Unexpected bundle authority file')
-                    record = read_json(text.encode())
-                    catalog.structure(record, kind.replace('_', '-') + '.schema.json')
-                    from .catalog import record_path
-                    if record_path(root, record['id']) != root / path or canonical_json(record) != text:
-                        raise ValueError('Noncanonical bundle record or path')
-                    if record['id'] in catalog.records:
-                        raise ValueError('Duplicate bundle record')
-                    catalog.records[record['id']] = record
-            catalog.validate()
-            self.catalog = catalog
-            self.briefs = {}
-            for path, text in document['files'].items():
-                if path.startswith('evals/golden-designs/') and path.endswith('.brief.json'):
-                    brief = read_json(text.encode())
-                    catalog.structure(brief, 'design-brief.schema.json')
-                    if brief['id'] in self.briefs:
-                        raise ValueError('Duplicate bundle brief')
-                    self.briefs[brief['id']] = brief
+            root = Path(self._temporary.name).resolve()
+            self._materialize(root, document['files'], entries)
+            self.catalog = self._catalog(root, document['files'])
+            require_audit(self.catalog)
+            _, self.briefs = design_inputs(root)
+            for brief in self.briefs.values():
+                self.catalog.structure(brief, 'design-brief.schema.json')
         except (KeyError, TypeError, AttributeError, IndexError) as error:
             self.close()
             raise ValueError('Malformed bundle structure') from error
         except Exception:
             self.close()
             raise
+
+    @staticmethod
+    def _materialize(root, files, entries):
+        for path, text in files.items():
+            entry = entries[path]
+            payload = text.encode('utf-8')
+            if entry['mode'] not in ('100644', '100755') or len(payload) > MAX_RECORD_BYTES:
+                raise ValueError('Unsafe bundle authority')
+            if _oid('blob', payload) != entry['oid']:
+                raise ValueError('Bundle file does not match committed blob')
+            destination = root / path
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(payload)
+
+    @staticmethod
+    def _catalog(root, files):
+        # A snapshot is not a mutable Git workspace. Validate authenticated
+        # materialized authority using the same structural/semantic contracts.
+        manifest = _load_manifest_bytes((root / 'pcbknowledge.workspace.json').read_bytes(), label='bundle manifest')
+        if manifest.schema_digest != schema_digest(root):
+            raise ValueError('Bundle workspace schema digest mismatch')
+        catalog = Catalog.__new__(Catalog)
+        catalog.root = root
+        catalog.schemas = ContractSchemas(root / 'schemas')
+        catalog.vocabulary = Vocabulary.load(root / 'knowledge/registry', root / 'schemas')
+        catalog.records = {}
+        for kind, directory in DIRECTORIES.items():
+            prefix = 'knowledge/' + directory + '/'
+            for path, text in sorted(files.items()):
+                if not path.startswith(prefix):
+                    continue
+                if path.endswith('/.gitkeep') and not text.strip():
+                    continue
+                if not path.endswith('.json'):
+                    raise ValueError('Unexpected bundle authority file')
+                record = read_json(text.encode())
+                catalog.structure(record, kind.replace('_', '-') + '.schema.json')
+                if record_path(root, record['id']) != root / path or canonical_json(record) != text:
+                    raise ValueError('Noncanonical bundle record or path')
+                if record['id'] in catalog.records:
+                    raise ValueError('Duplicate bundle record')
+                catalog.records[record['id']] = record
+        catalog.validate()
+        return catalog
 
     def close(self):
         if self._temporary is not None:

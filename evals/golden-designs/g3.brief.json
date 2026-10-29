@@ -1,301 +1,302 @@
 {
-  "schema": "pcbknowledge.design-brief.v2",
-  "id": "G3",
-  "title": "Analog acquisition front end",
-  "summary": "Thermistor and photodiode acquisition with reference, ADC, filtered rail and RS-485 link.",
-  "status": "DRAFT",
-  "origin": "SYNTHETIC",
-  "owner_decisions": [],
-  "power": {
-    "sources": [
-      {
-        "id": "input_power",
-        "description": "Power source to be selected.",
-        "voltage": {
-          "status": "UNKNOWN",
-          "reason": "Supply voltage not specified.",
-          "blocks": [
-            "Q11"
-          ]
-        },
-        "current_budget": {
-          "status": "UNKNOWN",
-          "reason": "Supply current budget not specified.",
-          "blocks": [
-            "Q11"
-          ]
-        }
-      }
-    ],
-    "rails": []
-  },
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "Constrain analog and digital return paths.",
+      "id": "return_paths"
+    },
+    {
+      "description": "Define guard and keepout geometry for the sensitive analog nodes.",
+      "id": "guard_keepout"
+    },
+    {
+      "description": "Keep sensitive nets short; numerical limits await the analog block requirements.",
+      "id": "sensitive_nets"
+    }
+  ],
   "functions": [
     {
-      "id": "thermistor",
-      "description": "NTCLE100 thermistor divider.",
       "count": 1,
+      "description": "NTCLE100 thermistor divider.",
+      "id": "thermistor",
+      "parameters": {},
       "part_preferences": [
         "NTCLE100"
       ],
       "requirements": [
         "NTCLE100 thermistor divider."
-      ],
-      "parameters": {}
+      ]
     },
     {
-      "id": "photodiode",
-      "description": "BPW34 photodiode with MCP6002 transimpedance stage.",
       "count": 1,
+      "description": "BPW34 photodiode with MCP6002 transimpedance stage.",
+      "id": "photodiode",
+      "parameters": {},
       "part_preferences": [
         "BPW34",
         "MCP6002"
       ],
       "requirements": [
         "Optical spectrum, intensity, bandwidth and error requirements must be supplied before sizing."
-      ],
-      "parameters": {}
+      ]
     },
     {
-      "id": "reference",
-      "description": "TL431 reference.",
       "count": 1,
+      "description": "TL431 reference.",
+      "id": "reference",
+      "parameters": {},
       "part_preferences": [
         "TL431"
       ],
       "requirements": [
         "TL431 reference."
-      ],
-      "parameters": {}
+      ]
     },
     {
-      "id": "adc",
-      "description": "ADS1115 ADC on I2C.",
       "count": 1,
+      "description": "ADS1115 ADC on I2C.",
+      "id": "adc",
+      "parameters": {},
       "part_preferences": [
         "ADS1115"
       ],
       "requirements": [
         "ADS1115 ADC on I2C."
-      ],
-      "parameters": {}
+      ]
     },
     {
-      "id": "rail_filter",
-      "description": "MH2029 ferrite rail filter.",
       "count": 1,
+      "description": "MH2029 ferrite rail filter.",
+      "id": "rail_filter",
+      "parameters": {},
       "part_preferences": [
         "MH2029"
       ],
       "requirements": [
         "MH2029 ferrite rail filter."
-      ],
-      "parameters": {}
+      ]
     },
     {
-      "id": "rs485",
-      "description": "SN65HVD75 RS-485 link.",
       "count": 1,
+      "description": "SN65HVD75 RS-485 link.",
+      "id": "rs485",
+      "parameters": {},
       "part_preferences": [
         "SN65HVD75"
       ],
       "requirements": [
         "Termination and bias options depend on bus topology and node role."
-      ],
-      "parameters": {}
+      ]
     }
   ],
+  "id": "G3",
   "interfaces": [
     {
-      "id": "optical",
+      "current_limit": {
+        "blocks": [
+          "Q11"
+        ],
+        "reason": "External load current limit is not specified.",
+        "status": "UNKNOWN"
+      },
       "description": "Optical signal at the photodiode",
+      "id": "optical",
       "signals": [
         "LIGHT"
       ],
       "voltage": {
-        "status": "UNKNOWN",
+        "blocks": [
+          "Q11"
+        ],
         "reason": "Electrical voltage range is not specified.",
-        "blocks": [
-          "Q11"
-        ]
-      },
-      "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "status": "UNKNOWN"
       }
     },
     {
-      "id": "thermistor_input",
+      "current_limit": {
+        "blocks": [
+          "Q11"
+        ],
+        "reason": "External load current limit is not specified.",
+        "status": "UNKNOWN"
+      },
       "description": "Thermistor sensing input",
+      "id": "thermistor_input",
       "signals": [
         "SENSE",
         "RETURN"
       ],
       "voltage": {
-        "status": "UNKNOWN",
+        "blocks": [
+          "Q11"
+        ],
         "reason": "Electrical voltage range is not specified.",
-        "blocks": [
-          "Q11"
-        ]
-      },
-      "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "status": "UNKNOWN"
       }
     },
     {
-      "id": "i2c",
+      "current_limit": {
+        "blocks": [
+          "Q11"
+        ],
+        "reason": "External load current limit is not specified.",
+        "status": "UNKNOWN"
+      },
       "description": "Host I2C connection",
+      "id": "i2c",
       "signals": [
         "SDA",
         "SCL",
         "GND"
       ],
       "voltage": {
-        "status": "UNKNOWN",
+        "blocks": [
+          "Q11"
+        ],
         "reason": "Electrical voltage range is not specified.",
-        "blocks": [
-          "Q11"
-        ]
-      },
-      "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "status": "UNKNOWN"
       }
     },
     {
-      "id": "rs485",
+      "current_limit": {
+        "blocks": [
+          "Q11"
+        ],
+        "reason": "External load current limit is not specified.",
+        "status": "UNKNOWN"
+      },
       "description": "RS-485 link",
+      "id": "rs485",
       "signals": [
         "A",
         "B",
         "GND"
       ],
       "voltage": {
-        "status": "UNKNOWN",
+        "blocks": [
+          "Q11"
+        ],
         "reason": "Electrical voltage range is not specified.",
-        "blocks": [
-          "Q11"
-        ]
-      },
-      "current_limit": {
-        "status": "UNKNOWN",
-        "reason": "External load current limit is not specified.",
-        "blocks": [
-          "Q11"
-        ]
+        "status": "UNKNOWN"
       }
     }
   ],
-  "mechanical": {
-    "length": {
-      "status": "UNKNOWN",
-      "reason": "Board length not specified.",
-      "blocks": [
-        "Q11"
-      ]
-    },
-    "width": {
-      "status": "UNKNOWN",
-      "reason": "Board width not specified.",
-      "blocks": [
-        "Q11"
-      ]
-    },
-    "mounting": [],
-    "edge_interfaces": [],
-    "height": {
-      "status": "UNKNOWN",
-      "reason": "Component height limit not specified.",
-      "blocks": [
-        "Q11"
-      ]
-    }
-  },
   "manufacturing": {
-    "profile": {
-      "status": "UNKNOWN",
-      "reason": "Fab profile not selected.",
-      "blocks": [
-        "Q9"
-      ]
-    },
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
     "layers": {
-      "status": "UNKNOWN",
-      "reason": "Layer count not specified.",
       "blocks": [
         "Q9"
-      ]
+      ],
+      "reason": "Layer count not specified.",
+      "status": "UNKNOWN"
+    },
+    "note": "Unspecified; Unspecified",
+    "preferred_passives": "Unspecified",
+    "profile": {
+      "blocks": [
+        "Q9"
+      ],
+      "reason": "Fab profile not selected.",
+      "status": "UNKNOWN"
     },
     "thickness": {
-      "status": "UNKNOWN",
-      "reason": "Board thickness not specified.",
       "blocks": [
         "Q9"
-      ]
-    },
-    "copper": "Unspecified",
-    "assembly": "Unspecified",
-    "preferred_passives": "Unspecified"
+      ],
+      "reason": "Board thickness not specified.",
+      "status": "UNKNOWN"
+    }
   },
-  "constraints": [
-    {
-      "id": "return_paths",
-      "description": "Constrain analog and digital return paths."
+  "mechanical": {
+    "edge_interfaces": [],
+    "height": {
+      "blocks": [
+        "Q11"
+      ],
+      "reason": "Component height limit not specified.",
+      "status": "UNKNOWN"
     },
-    {
-      "id": "guard_keepout",
-      "description": "Define guard and keepout geometry for the sensitive analog nodes."
+    "length": {
+      "blocks": [
+        "Q11"
+      ],
+      "reason": "Board length not specified.",
+      "status": "UNKNOWN"
     },
-    {
-      "id": "sensitive_nets",
-      "description": "Keep sensitive nets short; numerical limits await the analog block requirements."
+    "mounting": [],
+    "width": {
+      "blocks": [
+        "Q11"
+      ],
+      "reason": "Board width not specified.",
+      "status": "UNKNOWN"
     }
-  ],
-  "acceptance": [
-    {
-      "level": "A1",
-      "owner": "PcbKnowledge",
-      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
-      "status": "NOT_RUN"
-    },
-    {
-      "level": "A2",
-      "owner": "PcbKnowledge",
-      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
-      "status": "NOT_RUN"
-    },
-    {
-      "level": "A3",
-      "owner": "PcbAtlas",
-      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
-      "status": "NOT_RUN"
-    },
-    {
-      "level": "A4",
-      "owner": "PcbAtlas",
-      "criterion": "Zero DRC violations against the selected fab profile.",
-      "status": "NOT_RUN"
-    },
-    {
-      "level": "A5",
-      "owner": "PcbAtlas",
-      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
-      "status": "NOT_RUN"
-    },
-    {
-      "level": "A6",
-      "owner": "Owner",
-      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
-      "status": "NOT_RUN"
-    }
-  ]
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [],
+  "power": {
+    "rails": [],
+    "sources": [
+      {
+        "current_budget": {
+          "blocks": [
+            "Q11"
+          ],
+          "reason": "Supply current budget not specified.",
+          "status": "UNKNOWN"
+        },
+        "description": "Power source to be selected.",
+        "id": "input_power",
+        "voltage": {
+          "blocks": [
+            "Q11"
+          ],
+          "reason": "Supply voltage not specified.",
+          "status": "UNKNOWN"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Thermistor and photodiode acquisition with reference, ADC, filtered rail and RS-485 link.",
+  "title": "Analog acquisition front end"
 }

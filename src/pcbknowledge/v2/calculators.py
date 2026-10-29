@@ -42,7 +42,9 @@ def validate_inputs(name, inputs, *, allow_parameters=False):
         raise CalculationError(f'{name} inputs must be exactly {sorted(required)}')
     for key, unit in required.items():
         value = inputs[key]
-        if allow_parameters and isinstance(value, dict) and set(value) in ({'parameter'}, {'component', 'parameter'}, {'component', 'parameter', 'bound'}):
+        if (allow_parameters and isinstance(value, dict)
+                and set(value) in ({'parameter'}, {'component', 'parameter'},
+                                   {'component', 'parameter', 'bound'})):
             continue
         bounds(value, unit, key)
 
@@ -166,7 +168,10 @@ def evaluate_check(check, parameters, components=None):
                 bound = value['bound']
                 if bound not in ('min', 'max', 'value') or bound not in quantity:
                     raise CalculationError('Requested guaranteed bound is unavailable')
-                return {**{k:v for k,v in quantity.items() if k not in ('value','min','typ','max')}, 'value': quantity[bound]}
+                return {
+                    **{k:v for k,v in quantity.items() if k not in ('value','min','typ','max')},
+                    'value': quantity[bound],
+                }
             return value
         resolved = {key: resolve(value) for key, value in check['inputs'].items()}
         outputs = calculate(check['calculator'], resolved)

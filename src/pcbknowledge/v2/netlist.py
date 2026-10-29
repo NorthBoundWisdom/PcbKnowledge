@@ -63,6 +63,7 @@ def export_design(intent, bundle, graph, output_dir):
     (output / 'design-intent.json').write_text(canonical_json(intent), encoding='utf-8', newline='\n')
     (output / 'design.net').write_text(payload, encoding='utf-8', newline='\n')
     (output / 'graph.json').write_text(canonical_json(graph), encoding='utf-8', newline='\n')
-    packages = [bundle.catalog.get(identity, 'package') for identity in sorted({c['package'] for c in intent['components']})]
+    identities = sorted({component['package'] for component in intent['components']})
+    packages = [bundle.catalog.get(identity, 'package') for identity in identities]
     export_library(packages, output / 'pcbknowledge.pretty')
     return output

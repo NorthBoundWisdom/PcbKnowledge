@@ -29,7 +29,7 @@ python3 configs/pcbknowledge_workflow.py open --workspace .
 ```
 
 The viewer runs at `http://127.0.0.1:18080/`; keep the terminal open and use Ctrl+C
-to stop. Select a citation to inspect its PDF page. The GUI and query CLI are
+to stop. Select a citation to inspect its source evidence. The GUI and query CLI are
 read-only. Missing facts stay explicit; generation refuses rather than guesses.
 
 ## Workspaces and evidence
@@ -45,13 +45,25 @@ falls back. Initialization never stages, commits or pushes.
 
 Source originals stay in ignored `.pcbknowledge/evidence/sha256/` caches. Public
 Git and packages contain small original metadata and citations. Cache absence is
-`NOT_LOCALLY_VERIFIED`. See [local workflow](docs/local-workflow.md),
+`NOT_LOCALLY_VERIFIED`. Explicit cache imports are separate from read-only queries:
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . evidence fetch --source source:example
+python3 configs/pcbknowledge_agent.py --repo . evidence add /path/to/original.pdf
+python3 configs/pcbknowledge_agent.py --repo . v2 audit
+```
+
+Use an existing eligible source ID. Fetch/add never edit knowledge or Git; changed
+bytes remain separate and failed fetches do not bypass access restrictions.
+`v2 validate` rejects unreachable parts, packages and sources. See [local workflow](docs/local-workflow.md),
 [architecture](docs/architecture.md), [knowledge model](docs/knowledge-model-v2.md)
 and [public-source boundary](docs/open-source-boundary.md).
 
 ## Verify
 
 ```bash
+python3 configs/check_commits.py origin/main..HEAD
+python3 configs/check_code_style.py
 python3 configs/check_english_repo.py
 python3 configs/check_public_repo.py
 python3 configs/check_pdfjs_vendor.py

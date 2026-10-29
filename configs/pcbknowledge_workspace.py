@@ -14,7 +14,7 @@ SOURCE_ROOT = REPO_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from pcbknowledge.git_native.workspace import (  # noqa: E402
+from pcbknowledge.workspace import (  # noqa: E402
     WorkspaceError,
     pin_contract,
     initialize_workspace,

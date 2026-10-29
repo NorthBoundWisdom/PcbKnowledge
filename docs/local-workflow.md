@@ -184,8 +184,10 @@ ID appears on exactly its requested number of implementing instances.
 
 The preserved G1 attempts in `evals/synthesis/g1/` target catalog commit
 `ad7b84352f27cff6a65ec24e43eb474a42506ec2`. Rebuild its bundle from a clean detached
-worktree at that commit to reproduce their original input, then run the current
-evaluation command against the preserved attempt files. Their author receipts
+worktree at that commit to reproduce their original input, and run that
+checkout's evaluation command against the preserved attempt files. Current
+contracts additionally require package scopes, assembly metadata and audited
+graph inputs; historical bundles are not silently migrated by the current loader. Their author receipts
 retain the actual input hashes and iterative public-contract clarification.
 All three graphs were authored in distinct fresh contexts without reference
 access and independently reviewed; moving `monitor_scope` to the graph level
@@ -197,3 +199,38 @@ subcommand: full PCB import remains a manual KiCad step, not a claimed CLI pass.
 Import `design.net` in PCB Editor after adding the generated `pcbknowledge.pretty`
 footprint library, inspect all associations and unrouted nets, and perform the
 Stage 7 layout/DRC/hardware checks separately.
+
+## Fetch or add local evidence
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . evidence fetch
+python3 configs/pcbknowledge_agent.py --repo . evidence fetch --source source:st-ldl1117
+python3 configs/pcbknowledge_agent.py --repo . evidence add /path/to/manually-downloaded.pdf
+```
+
+Fetching requests only missing, processing-eligible sources at their recorded
+HTTPS URLs. An already verified original returns `MATCH` with `cached: true`.
+A new matching download enters the local SHA-256 cache; `DIFFERENT_BYTES` keeps
+the actual bytes separately under `.pcbknowledge/evidence/different/` and never
+changes a source record or overwrites the expected original. `FAILED` includes
+the HTTP status when the server supplies one. Requests have size/time limits,
+validate public redirect destinations and never retry or switch hosts after an
+access failure. No credentials, cookies or source bytes enter public Git.
+
+ST and Wurth blocked some scripted requests with HTTP 403 on 2026-10-29. Stop
+at access controls or bot checks. If the publisher permits an ordinary manual
+download, use its normal download process and then `evidence add`; the import
+accepts only bytes whose SHA-256 matches an eligible recorded source. An unknown
+or blocked source is not made eligible by importing it.
+
+Some generated spec sheets stamp the download date into their bytes. The same
+URL can therefore produce `DIFFERENT_BYTES` later. Review that document as a new
+source revision rather than editing the stored digest to suppress a mismatch.
+The evidence cache is local and ignored; fetch/import does not alter knowledge.
+
+HTML citations in the local catalog open the recorded publisher HTTPS URL in a
+separate tab, with the recorded SHA-256 and access date displayed beside the link.
+The live page can differ from the cached snapshot. Saved HTML is never served as
+active content from the local application's origin, and its `/content` endpoint
+is rejected rather than passed to PDF.js. Engineering-default mechanical records
+without source/page citations display an explicit no-citation label.

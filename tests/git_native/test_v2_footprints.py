@@ -13,7 +13,10 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def package(generator, *, count=2, length=1.6, width=.8, height=.5, **dimensions):
-    return record('package', family='CHIP_0603', body={
+    mount_type = {'pin_header': 'THT', 'mechanical_hole': 'MECHANICAL'}.get(generator, 'SMT')
+    scope = {'basis': 'DATASHEET', 'mpns': ['SYNTH-1'],
+             'evidence': [{'source': 'source:synthetic', 'page': 1}]}
+    return record('package', family='CHIP_0603', mount_type=mount_type, scope=scope, body={
         'length': quantity(length, 'mm'), 'width': quantity(width, 'mm'),
         'height': quantity(height, 'mm')}, drawing={
         'pin_count': count, **{k: quantity(v, 'mm') for k, v in dimensions.items()}},
@@ -75,9 +78,9 @@ class FootprintTests(unittest.TestCase):
         self.assertEqual(pads[7]['x'],1.2)
 
     def test_real_sot223_tab_number_and_projection(self):
-        # ST LD1117 Rev38 p29 H6.7..7.3,E3.3..3.7,B1max3.15,e2.3;
-        # p6 says tab VOUT, same electrical pin2. Outer3.95,inner1.55.
-        p=json.loads((ROOT/'knowledge/packages/sot-223-ld1117.json').read_text())
+        # ST LDL1117 package record p15: H6.7..7.3,E3.3..3.7,B1max3.15,e2.3;
+        # p3 says tab VOUT, same electrical pin2. Outer3.95,inner1.55.
+        p=json.loads((ROOT/'knowledge/packages/sot-223-ldl1117.json').read_text())
         pads=derive_footprint(p)['pads']
         self.assertEqual([p['number'] for p in pads],['1','2','3','2'])
         self.assertEqual((pads[0]['x'],pads[0]['y'],pads[0]['width'],pads[0]['height']),(-2.75,-2.3,2.4,.95))
@@ -175,7 +178,7 @@ class FootprintTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'symlinks'):export_library([p],root/'linked.pretty')
 
     def test_export_is_deterministic_structure_coordinates_and_nonmutating(self):
-        p=json.loads((ROOT/'knowledge/packages/sot-223-ld1117.json').read_text())
+        p=json.loads((ROOT/'knowledge/packages/sot-223-ldl1117.json').read_text())
         before=copy.deepcopy(p);text=export_kicad(p)
         self.assertEqual(text,export_kicad(p));self.assertEqual(p,before)
         self.assertEqual(text.count('(pad '),4)

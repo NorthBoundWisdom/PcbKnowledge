@@ -42,14 +42,21 @@ is G1; later designs do not justify adding unused types now.
   ([ADR-024](adr/ADR-024-terminals-packages-selection.md)).
 - Standard-family packages record cited drawing dimensions, a generator and a
   density level; pads are derived. Irregular parts record explicit pads from the
-  manufacturer's land pattern (ADR-024).
+  manufacturer's land pattern (ADR-024). Package `scope.mpns` includes the exact
+  selected MPN and its evidence source agrees with part identity evidence; only
+  mechanical packages may use engineering-default scope. `mount_type` is `SMT`,
+  `THT` or `MECHANICAL`. Selected fab `assembled_mount_types` determine assembly
+  versus `HAND_SOLDER` in both components and BOM, with a through-hole count check.
 - Part selection matches a requested nominal against the part's `value` or `typ`,
   and requested `min`/`max` against the part's guaranteed bounds; `UNKNOWN` never
   matches (ADR-024).
 - Blocks declare components, nets, ports, checks and layout constraints. Contract
   parameter references are data, not executable Python or shell expressions.
+- Brief function `category` and power-source/rail `function` bindings are explicit
+  inputs to matching. Descriptions are display prose, never inferred requirements.
+  Missing bindings produce typed refusals.
 - Sources retain SHA-256 document identity and license class. Original bytes stay
-  only in the ignored local cache; public availability does not grant processing
+  only in the ignored local cache, as PDF or HTML with a checked media signature; public availability does not grant processing
   or redistribution permission.
 - Verification levels are `DRAFT`, `AGENT_VERIFIED`, `HUMAN_VERIFIED`. The actual
   creator and verifier are recorded. Generation computes the weakest level used.
@@ -88,11 +95,18 @@ A source with blocked rights cannot back a value. Verifier actor types and
 independence are machine checked; the Git reviewer checks that the named actor
 actually performed the observation.
 
-Calculators are unavailable until their executable implementations arrive in
-Stage 4. A block calculator check or a `CALCULATED` quantity is refused until its executable
-implementation is registered. These owner-facing
-working-tree queries precede the commit-pinned consumer bundle in Stage 5.
-The G1 reference graph still names planned blocks rather than collected records.
+Executable calculators validate registered inputs and recompute `CALCULATED`
+quantities. The G1 reference and independent graphs use collected records, not
+planned identifiers. `v2 audit` follows reference/corpus and preserved synthesis
+graph selections plus dependency closure; unreachable parts, packages and sources
+fail `v2 validate` and bundle compilation. A refusal fixture may demonstrate a
+used selection; reachability alone does not establish electrical acceptance.
+
+Explicit `evidence fetch [--source <id>]` and `evidence add <file>` are cache-writing
+commands, unlike queries. Fetch honors source eligibility, bounds downloads and
+reports failures without workarounds. Exact bytes return `MATCH`; changed bytes
+return `DIFFERENT_BYTES` and stay separate; manual add requires a recorded digest.
+Neither command changes knowledge or Git, or marks a record verified.
 
 ## Consumer pipeline
 
@@ -105,11 +119,14 @@ expansion. PcbAtlas owns brief synthesis, board state, placement, routing, DRC
 and fabrication output. [ADR-023](adr/ADR-023-design-intent-handoff.md) defines
 the handoff (D3/D4).
 
-Later stages implement read-only bundle queries for parts, packages, blocks and
-fab profiles; generic calculators only when a G1 block needs them; bundle
-compilation from one validated Git commit; and expansion with typed refusals.
-Design intent JSON is the handoff authority, with derived KiCad netlist and
-footprint-library exports. Bundle compilation and expansion start in Stage 5.
+Commit-pinned bundles support read-only part, package, block and fab queries,
+generic calculators and deterministic expansion with typed refusals. Design intent
+JSON is the handoff authority; KiCad netlist and footprint-library exports are
+derived. Stage 7 layout handoff and board checks remain separate work.
+
+Historical receipts retain their original schema/software context. Use the
+recorded software checkout and pinned input commit to reproduce them; current
+strict contracts and audit inputs are not retroactive compatibility promises.
 
 ## Migration
 

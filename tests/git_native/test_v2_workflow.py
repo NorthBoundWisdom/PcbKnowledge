@@ -12,7 +12,7 @@ import unittest
 import zipfile
 
 from configs import pcbknowledge_workflow as workflow
-from pcbknowledge.git_native.workspace import initialize_workspace, validate_workspace, validate_workspace_ref, WorkspaceError
+from pcbknowledge.workspace import initialize_workspace, validate_workspace, validate_workspace_ref, WorkspaceError
 from pcbknowledge.serialization import canonical_json
 from pcbknowledge.v2.cli import main
 

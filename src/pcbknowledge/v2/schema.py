@@ -69,7 +69,8 @@ class ContractSchemas:
         if 'type' in schema and schema['type'] not in ('object','array','string','boolean','integer','number','null'):
             raise ValueError('Unsupported schema type')
         for keyword in ('properties','$defs'):
-            if keyword in schema and not isinstance(schema[keyword],dict):raise ValueError('Malformed schema map')
+            if keyword in schema and not isinstance(schema[keyword], dict):
+                raise ValueError('Malformed schema map')
         for keyword in ('oneOf','anyOf','allOf','enum'):
             if keyword in schema and (not isinstance(schema[keyword],list) or not schema[keyword]):
                 raise ValueError('Malformed schema alternatives')
@@ -81,12 +82,15 @@ class ContractSchemas:
             if keyword in schema and (type(schema[keyword]) is not int or schema[keyword]<0):
                 raise ValueError('Malformed schema bound')
         for keyword in ('minimum','maximum','exclusiveMinimum'):
-            if keyword in schema and not _number(schema[keyword]):raise ValueError('Malformed numeric bound')
+            if keyword in schema and not _number(schema[keyword]):
+                raise ValueError('Malformed numeric bound')
         if 'uniqueItems' in schema and type(schema['uniqueItems']) is not bool:
             raise ValueError('Malformed uniqueItems')
         if 'pattern' in schema:
-            try:re.compile(schema['pattern'])
-            except (TypeError,re.error) as error:raise ValueError('Malformed schema pattern') from error
+            try:
+                re.compile(schema['pattern'])
+            except (TypeError, re.error) as error:
+                raise ValueError('Malformed schema pattern') from error
         visited = set() if visited is None else visited
         if '$ref' in schema:
             key = (current, schema['$ref'])
@@ -156,20 +160,30 @@ class ContractSchemas:
                 raise ValueError('Numeric range mismatch')
             if 'exclusiveMinimum' in schema and value<=schema['exclusiveMinimum']:
                 raise ValueError('Exclusive minimum mismatch')
-        for key in ('oneOf','anyOf','allOf'):
-            if key in schema:
-                passes=0
-                for branch in schema[key]:
-                    try: child(value,branch)
-                    except ValueError: pass
-                    else: passes+=1
-                if ((key=='oneOf' and passes!=1) or (key=='anyOf' and passes==0)
-                        or (key=='allOf' and passes!=len(schema[key]))):
-                    raise ValueError(key+' mismatch')
-        if 'not' in schema:
-            try: child(value,schema['not'])
-            except ValueError: pass
-            else: raise ValueError('Forbidden shape')
+        _apply_combinations(value, schema, child)
+
+
+def _apply_combinations(value, schema, child):
+    for key in ('oneOf','anyOf','allOf'):
+        if key in schema:
+            passes=0
+            for branch in schema[key]:
+                try:
+                    child(value, branch)
+                except ValueError:
+                    pass
+                else:
+                    passes += 1
+            if ((key=='oneOf' and passes!=1) or (key=='anyOf' and passes==0)
+                    or (key=='allOf' and passes!=len(schema[key]))):
+                raise ValueError(key+' mismatch')
+    if 'not' in schema:
+        try:
+            child(value, schema['not'])
+        except ValueError:
+            pass
+        else:
+            raise ValueError('Forbidden shape')
 
 
 def validate(instance, schema_name, schema_dir=None):

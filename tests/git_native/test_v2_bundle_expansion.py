@@ -7,7 +7,7 @@ import tempfile
 import unittest
 
 from pcbknowledge.v2.bundle import Bundle, build_bundle, _tree_oid, _git
-from pcbknowledge.git_native.workspace import initialize_workspace
+from pcbknowledge.workspace import initialize_workspace
 from pcbknowledge.v2.intent import electrical_checks
 from pcbknowledge.v2.netlist import export_netlist
 
@@ -52,6 +52,68 @@ class BundleTests(unittest.TestCase):
             (root/'dirty.txt').write_text('dirty')
             with self.assertRaisesRegex(ValueError,'clean committed'):
                 build_bundle(root,output)
+
+    def test_audit_authenticates_original_corpus_graph_and_rejects_orphan(self):
+        from pcbknowledge.serialization import canonical_json
+        from pcbknowledge.v2.catalog import record_path
+        from pcbknowledge.v2.bundle import _selected
+        from tests.git_native.test_v2_record_contracts import fixtures, quantity
+        with tempfile.TemporaryDirectory() as temp, tempfile.TemporaryDirectory() as output:
+            root = Path(temp).resolve() / 'workspace'
+            initialize_workspace(root, schema_source_root=ROOT, init_git=True)
+            def git(*args):
+                return _git(root, *args)
+            git('config', 'user.name', 'Synthetic')
+            git('config', 'user.email', 'synthetic@example.invalid')
+            records = fixtures()
+            records['source']['license_class'] = 'PUBLIC_REFERENCE'
+            for kind in ('source', 'package', 'part', 'block'):
+                record = records[kind]
+                destination = record_path(root, record['id'])
+                destination.write_text(canonical_json(record), encoding='utf-8')
+            graph = {
+                'schema': 'pcbknowledge.block-graph.v2', 'id': 'synthetic', 'brief': 'G1',
+                'status': 'DRAFT', 'interface_status': 'PLANNED_BLOCK_CONTRACTS', 'requirements': ['test'],
+                'instances': [{'id': identity, 'block': 'block:synthetic',
+                    'parameters': {'input_voltage': quantity(1)},
+                    'ports': [{'name': 'VIN', 'type': 'POWER_IN'}], 'requirements': ['test']}
+                    for identity in ('first', 'second')],
+                'connections': [{'net': 'VIN', 'endpoints': [
+                    {'instance': identity, 'port': 'VIN'} for identity in ('first', 'second')]}],
+            }
+            path = root / 'evals/corpus/synthetic/input.json'
+            path.parent.mkdir(parents=True)
+            path.write_text(canonical_json(graph), encoding='utf-8')
+            git('add', '.')
+            git('commit', '-m', 'Synthetic original graph')
+            result = build_bundle(root, Path(output).resolve())
+            with Bundle(result) as bundle:
+                self.assertEqual(len(bundle.catalog.records), 4)
+            document = json.loads(result.read_bytes())
+            self.assertEqual(json.loads(document['files'][path.relative_to(root).as_posix()]), graph)
+            # A new authentic commit with the original graph removed is still
+            # invalid authority: authentication cannot substitute reachability.
+            path.unlink()
+            git('add', '.')
+            git('commit', '-m', 'Synthetic orphan mutation')
+            with self.assertRaisesRegex(ValueError, 'Unreachable catalog records'):
+                build_bundle(root, Path(output).resolve())
+            commit = git('rev-parse', 'HEAD').decode().strip()
+            entries = []
+            files = {}
+            for raw in git('ls-tree', '-rz', '--full-tree', commit).split(b'\0'):
+                if not raw:
+                    continue
+                metadata, name = raw.split(b'\t', 1)
+                mode, _, oid = metadata.decode().split()
+                name = name.decode()
+                entries.append({'path': name, 'mode': mode, 'oid': oid})
+                if _selected(name):
+                    files[name] = git('cat-file', 'blob', oid).decode()
+            document.update(commit=commit, commit_object=git('cat-file', 'commit', commit).decode(),
+                            tree=entries, files=files)
+            with self.assertRaisesRegex(ValueError, 'Unreachable catalog records'):
+                Bundle.from_document(document)
 
     def test_unsafe_tree_rejected(self):
         for path in ('../escape','/escape','a/../../escape','.git/config','a\\b'):

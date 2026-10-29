@@ -4,16 +4,19 @@ An independent reviewer agent runs this list at every stage exit, after the full
 gate passes and before the push. The reviewer is not the agent that wrote the
 stage's code or records. Findings are fixed in the same stage; anything that
 cannot be fixed becomes a `TODO.md` item. Record one summary line in the stage
-receipt, for example `Review: 14 checks, 2 findings fixed (<commits>)`.
+receipt, for example `Review: 13 checks, 2 findings fixed (<commits>)`.
 
 When a guard automates a check, delete the check here and name the guard in the
 "Automated" list.
 
 ## Automated (do not repeat by hand)
 
-- Full gate: English, public source, PDF.js vendor, workspace, Config, Build, Test,
+- Full gate: commit range, code style, English, public source, PDF.js vendor, workspace, Config, Build, Test,
   `v2 validate`, Package (`AGENTS.md` section 10).
-- `test_v2_g1_acceptance`: G1 reference and preserved attempts reach A2.
+- `test_v2_g1_acceptance` and synthesis evaluation tests: G1 reference and preserved attempts reach A2.
+- `check_commits.py`: subject type/format and knowledge-only data commits for the introduced range.
+- `check_code_style.py`: 120-character lines, one statement per line, functions at most 80 physical lines; no Stage 6c allowances.
+- `v2 audit` through `v2 validate` and bundle compilation: parts, packages and sources are reachable from design graphs. This does not establish electrical acceptance.
 
 ## Evidence
 
@@ -31,8 +34,8 @@ When a guard automates a check, delete the check here and name the guard in the
 
 ## Design
 
-6. Every new record is used by some golden or corpus expansion. Nothing is kept
-   "for later".
+6. New blocks, rules and fab profiles serve an actual golden or corpus design;
+   automated part/package/source reachability is not a license for unused abstractions.
 7. Checks were not weakened to pass: compare check counts, thresholds and test
    assertions with the previous stage. A removed or relaxed check needs an
    escalation answer from the owner.
@@ -43,12 +46,10 @@ When a guard automates a check, delete the check here and name the guard in the
 
 ## Code and documents
 
-10. New code is ordinary readable Python: no compressed one-line blocks, functions
-    under about 80 lines, no new third-party runtime dependency.
+10. New code has cohesive responsibilities and explicit dependencies; mechanical
+    formatting is automated. No unapproved third-party runtime dependency.
 11. No string matching on prose fields; decisions use controlled values.
-12. Commits: `[type]: description`, data separate from code and contracts, bodies
-    hold the receipt without repeated disclaimers.
-13. `TODO.md`, `README.md`, `architecture.md` and `knowledge-model-v2.md` match the
+12. `TODO.md`, `README.md`, `architecture.md` and `knowledge-model-v2.md` match the
     code; completed temporary documents are deleted.
-14. Any new public file is original work or small cited metadata; no copied
+13. Any new public file is original work or small cited metadata; no copied
     third-party data.

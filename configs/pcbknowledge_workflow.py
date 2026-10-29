@@ -26,7 +26,7 @@ if str(SOURCE_ROOT) not in sys.path:
 
 from pcbknowledge.v2.server import DEFAULT_PORT  # noqa: E402
 from pcbknowledge.v2.catalog import Catalog, record_path  # noqa: E402
-from pcbknowledge.git_native.workspace import (  # noqa: E402
+from pcbknowledge.workspace import (  # noqa: E402
     SCHEMA_PATHS,
     REGISTRY_PATHS,
     WORKSPACE_MANIFEST_PATH,

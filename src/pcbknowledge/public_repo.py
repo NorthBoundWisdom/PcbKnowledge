@@ -35,7 +35,7 @@ RAW_DOCUMENT_SUFFIXES = frozenset({
 })
 PINNED_SOFTWARE_LINKS = {".grok/skills": b"../.codex/skills"}
 PINNED_RUNTIME_FILES = {
-    (Path("src/pcbknowledge/git_native/static") / PDFJS_STATIC_RELATIVE / name).as_posix(): identity
+    (Path("src/pcbknowledge/static") / PDFJS_STATIC_RELATIVE / name).as_posix(): identity
     for name, identity in PDFJS_RUNTIME_FILES.items()
 }
 

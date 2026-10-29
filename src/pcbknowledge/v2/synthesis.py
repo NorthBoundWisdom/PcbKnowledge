@@ -39,10 +39,12 @@ def evaluate(bundle, reference, attempts):
     if not isinstance(attempts, list):
         raise ValueError('Attempts must be a list of preserved graph receipts')
     for attempt in attempts:
-        if not isinstance(attempt, dict) or not isinstance(attempt.get('graph'), dict) or not isinstance(attempt.get('receipt'), dict):
+        if (not isinstance(attempt, dict) or not isinstance(attempt.get('graph'), dict)
+                or not isinstance(attempt.get('receipt'), dict)):
             raise ValueError('Attempt must contain graph and receipt objects')
         receipt = attempt['receipt']
-        if any(not isinstance(receipt.get(key), str) for key in ('agent','reviewer','bundle_commit','graph_sha256','brief_sha256')):
+        if any(not isinstance(receipt.get(key), str)
+               for key in ('agent','reviewer','bundle_commit','graph_sha256','brief_sha256')):
             raise ValueError('Synthesis receipt fields must be strings')
         bundle.catalog.structure(attempt['graph'], 'block-graph.schema.json')
     reference_intent = expand(bundle.catalog, reference, bundle.briefs[reference['brief']],
@@ -67,7 +69,8 @@ def evaluate(bundle, reference, attempts):
                 or not receipt.get('reviewer', '').startswith('agent:')
                 or receipt['reviewer'] == actor):
             raise ValueError('Invalid synthesis independence receipt')
-        actors.add(actor); outputs.add(graph_hash)
+        actors.add(actor)
+        outputs.add(graph_hash)
         intent = expand(bundle.catalog, graph, brief, bundle_commit=bundle.commit)
         same = topology(graph) == expected
         equivalent = receipt.get('equivalence_review')

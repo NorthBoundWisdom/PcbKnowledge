@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 from pathlib import Path
 
-from pcbknowledge.git_native.public_repo import (
+from pcbknowledge.public_repo import (
     ALLOWED_AUTHORITY_PLACEHOLDERS,
     ALLOWED_REGISTRY_PATHS,
     _native_link_target_bytes,
@@ -155,7 +155,7 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         target.write_bytes(b"X" + original[1:])
         self.assertEqual(check_public_distribution(self.root), (path,))
         # Arbitrary file in the vendor directory is not exempt.
-        extra = "src/pcbknowledge/git_native/static/vendor/pdfjs/6.2.108/new.mjs"
+        extra = "src/pcbknowledge/static/vendor/pdfjs/6.2.108/new.mjs"
         self.stage(extra, b"a" * (MAX_METADATA_BYTES + 1))
         self.assertEqual(check_public_distribution(self.root), tuple(sorted((path, extra))))
 
@@ -169,10 +169,10 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         self.assertEqual(check_public_distribution(self.root), (".grok/skills",))
 
     def test_native_windows_link_separators_preserve_exact_target_boundary(self) -> None:
-        with patch("pcbknowledge.git_native.public_repo.os.sep", "\\"):
+        with patch("pcbknowledge.public_repo.os.sep", "\\"):
             self.assertEqual(_native_link_target_bytes(r"..\.codex\skills"), b"../.codex/skills")
             self.assertNotEqual(_native_link_target_bytes(r"..\outside\skills"), b"../.codex/skills")
-        with patch("pcbknowledge.git_native.public_repo.os.sep", "/"):
+        with patch("pcbknowledge.public_repo.os.sep", "/"):
             # Backslashes remain literal on POSIX, not path separators.
             self.assertNotEqual(_native_link_target_bytes(r"..\.codex\skills"), b"../.codex/skills")
 
@@ -186,10 +186,10 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         except (OSError, NotImplementedError):
             self.skipTest("symlinks are unavailable on this platform")
         self.assertEqual(check_public_distribution(self.root), ())
-        with patch("pcbknowledge.git_native.public_repo.os.sep", "\\"):
-            with patch("pcbknowledge.git_native.public_repo.os.readlink", return_value=r"..\.codex\skills"):
+        with patch("pcbknowledge.public_repo.os.sep", "\\"):
+            with patch("pcbknowledge.public_repo.os.readlink", return_value=r"..\.codex\skills"):
                 self.assertEqual(check_public_distribution(self.root), ())
-            with patch("pcbknowledge.git_native.public_repo.os.readlink", return_value=r"..\outside\skills"):
+            with patch("pcbknowledge.public_repo.os.readlink", return_value=r"..\outside\skills"):
                 self.assertEqual(check_public_distribution(self.root), (".grok/skills",))
 
     def test_symlink_index_mode_is_rejected_without_following_target(self) -> None:

@@ -340,9 +340,10 @@
     }
   ],
   "manufacturing": {
-    "assembly": "Single-side assembly",
-    "copper": "1 oz copper per D2; detailed stackup awaits the selected fab.",
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
     "layers": 2,
+    "note": "1 oz copper per D2; detailed stackup awaits the selected fab.; Single-side assembly",
     "preferred_passives": "0603",
     "profile": "fab_profile:generic-two-layer-default",
     "thickness": {

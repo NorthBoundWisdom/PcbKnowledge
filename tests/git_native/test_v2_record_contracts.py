@@ -41,8 +41,9 @@ def fixtures():
     evidence = {'source': 'source:synthetic', 'page': 1}
     source = record('source', title='Synthetic source', publisher='Synthetic publisher',
                     revision='A', url='https://example.invalid/source', accessed_on='2026-10-29',
-                    sha256='a'*64, bytes=1, pages=1, license_class='UNKNOWN')
-    package = record('package', family='EXPLICIT',
+                    sha256='a'*64, bytes=1, pages=1, license_class='UNKNOWN', media_type='application/pdf')
+    package = record('package', family='EXPLICIT', mount_type='SMT',
+        scope={'basis':'DATASHEET','mpns':['SYNTH-1','SYNTH-MOUNT'],'evidence':[evidence]},
         body={key: quantity(1,'mm') for key in ('length','width','height')},
         explicit_pads=[{'number':'1','kind':'SMD','shape':'RECT',
             'x':quantity(0,'mm'),'y':quantity(0,'mm'),
@@ -57,16 +58,16 @@ def fixtures():
     rule = record('rule',applies_to={'pin_type':'POWER_IN'},
         layout=[{'kind':'PLACE_NEAR','subject':'C','target':'U.pin:VDD','max_distance':quantity(2,'mm')}],
         basis='ENGINEERING_DEFAULT',note='Synthetic rule.',evidence=[])
-    fab = record('fab_profile',owner_decision='D2',layer_count=2,assembly_side='TOP',
+    fab = record('fab_profile',owner_decision='D2',layer_count=2,assembly_side='TOP',assembled_mount_types=['SMT'],
         **{key:unknown('Q9') for key in ('thickness','copper_thickness','trace_width_min','clearance_min',
            'drill_min','annular_ring_min','solder_mask_web_min')},via_types=['THROUGH'],
         stackup=[{'name':str(i),'kind':k,'thickness':unknown('Q9')}
                  for i,k in enumerate(['COPPER','DIELECTRIC','COPPER'])],evidence=[evidence])
     intent={'schema':'pcbknowledge.design_intent.v2','id':'synthetic','brief_id':'G1',
         'bundle_commit':'a'*40,'block_graph_sha256':'b'*64,'status':'EXPANDED',
-        'components':[{'ref':'D1','part':'part:synthetic','package':'package:synthetic','footprint':'synthetic.pretty:D1'}],
+        'components':[{'ref':'D1','part':'part:synthetic','package':'package:synthetic','footprint':'synthetic.pretty:D1','mount_type':'SMT','assembly_method':'SMT_ASSEMBLY'}],
         'nets':[{'name':'N1','pins':[{'ref':'D1','pin':'1'}],'class':'signal'}],
-        'bom':[{'part':'part:synthetic','refs':['D1'],'quantity':1}], 'layout':[],
+        'bom':[{'part':'part:synthetic','refs':['D1'],'quantity':1,'mount_type':'SMT','assembly_method':'SMT_ASSEMBLY'}], 'layout':[],
         'dependencies':[], 'checks':[{'id':'synthetic-check','result':'PASS'}], 'verification':'AGENT_VERIFIED','refusals':[], 'evidence':[]}
     intent.update(fab_profile='fab_profile:synthetic',
         mechanical={'outline_envelope':{'shape':'RECTANGLE','max_length':quantity(50,'mm'),'max_width':quantity(50,'mm')},

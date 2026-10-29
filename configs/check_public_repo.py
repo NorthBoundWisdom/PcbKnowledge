@@ -13,7 +13,7 @@ SOURCE_ROOT = REPO_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from pcbknowledge.git_native.public_repo import (  # noqa: E402
+from pcbknowledge.public_repo import (  # noqa: E402
     check_public_distribution,
 )
 

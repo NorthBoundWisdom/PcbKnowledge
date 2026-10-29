@@ -40,7 +40,10 @@ def apply_rules(catalog, parts, nets, block_layout=()):
                         continue
                     options = [bindings]
                     if raw.get('subject') == 'decoupling_capacitor':
-                        grounds = {connections.get((ref,p['number'])) for p in part['pins'] if p['type']=='GROUND'} - {None}
+                        grounds = {
+                            connections.get((ref, p['number'])) for p in part['pins']
+                            if p['type'] == 'GROUND'
+                        } - {None}
                         candidates = [c for c,p in sorted(parts.items())
                             if 'capacitor.ceramic' in p['roles'] and bindings.get('net') in component_nets(c)
                             and grounds & component_nets(c)]

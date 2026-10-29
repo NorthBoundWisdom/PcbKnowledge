@@ -147,6 +147,20 @@ class CodeStyleGuardTests(unittest.TestCase):
             allowlist.write_text(json.dumps({'temporary_until': 'Stage 6c', 'entries': []}))
             self.assertEqual(len(style.check(root, allowlist)[1]), 1)
 
+    def test_nested_source_directory_symlink_cannot_escape_scan(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            source = root / 'src/pcbknowledge'
+            source.mkdir(parents=True)
+            outside = root / 'outside'
+            outside.mkdir()
+            (outside / 'hidden.py').write_text('x = 1; y = 2\n')
+            (source / 'nested').symlink_to(outside, target_is_directory=True)
+            allowlist = root / 'allowlist.json'
+            allowlist.write_text(json.dumps({'temporary_until':'Stage 6c','entries':[]}))
+            with self.assertRaisesRegex(ValueError, 'symlinks'):
+                style.check(root, allowlist)
+
     def test_bad_allowlist_and_syntax_fail_closed(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary).resolve()

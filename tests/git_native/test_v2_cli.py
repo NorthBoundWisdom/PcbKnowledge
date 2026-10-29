@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from pcbknowledge.git_native.workspace import initialize_workspace
+from pcbknowledge.workspace import initialize_workspace
 from pcbknowledge.v2.cli import main
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -133,6 +133,44 @@ class CliTests(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertIn('Replay mismatch', result['message'])
         self.assertFalse((self.root / 'build/design').exists())
+
+    def test_audit_returns_orphans_and_validate_requires_audit(self):
+        invalid = {'status': 'INVALID', 'unreachable': ['part:unused']}
+        with patch('pcbknowledge.v2.cli.audit_catalog', return_value=invalid) as audit:
+            code, result = self.run_cli('v2', 'audit')
+            self.assertEqual((code, result), (2, invalid))
+            audit.assert_called_once()
+        with patch('pcbknowledge.v2.cli.require_audit', side_effect=ValueError('Unreachable part:unused')):
+            code, result = self.run_cli('v2', 'validate')
+            self.assertEqual(code, 2)
+            self.assertIn('Unreachable', result['message'])
+        code, result = self.run_cli('v2', 'audit')
+        self.assertEqual((code, result['status'], result['unreachable']), (0, 'VALID', []))
+        code, result = self.run_cli('v2', 'validate')
+        self.assertEqual((code, result['status']), (0, 'VALID'))
+        self.assertEqual(result['audit']['unreachable'], [])
+
+    def test_evidence_fetch_dispatch_and_nonzero_failure_results(self):
+        for status, expected in (('MATCH', 0), ('DIFFERENT_BYTES', 2), ('FAILED', 2)):
+            payload = {'status': status, 'results': []}
+            with self.subTest(status=status):
+                with patch('pcbknowledge.v2.cli.fetch_evidence', return_value=payload) as fetch:
+                    code, result = self.run_cli('evidence', 'fetch', '--source', 'source:synthetic')
+                    self.assertEqual((code, result), (expected, payload))
+                    self.assertEqual(fetch.call_args.args[1], 'source:synthetic')
+        with patch('pcbknowledge.v2.cli.fetch_evidence', return_value={'status': 'MATCH'}) as fetch:
+            self.assertEqual(self.run_cli('evidence', 'fetch')[0], 0)
+            self.assertIsNone(fetch.call_args.args[1])
+
+    def test_evidence_add_dispatch_and_file_error(self):
+        file = self.root / 'manual.pdf'
+        with patch('pcbknowledge.v2.cli.add_evidence', return_value={'status': 'MATCH'}) as add:
+            code, result = self.run_cli('evidence', 'add', file)
+            self.assertEqual((code, result['status']), (0, 'MATCH'))
+            self.assertEqual(add.call_args.args[1], file)
+        code, result = self.run_cli('evidence', 'add', file)
+        self.assertEqual(code, 2)
+        self.assertEqual(result['status'], 'ERROR')
 
 
 if __name__ == '__main__':

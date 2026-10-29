@@ -50,7 +50,10 @@ class WorkspaceManifest:
 
     def validate(self) -> "WorkspaceManifest":
         if self.format != WORKSPACE_FORMAT:
-            raise WorkspaceError(f"unsupported workspace format: {self.format!r}; create a v2 workspace and explicitly re-extract its data")
+            raise WorkspaceError(
+                f"unsupported workspace format: {self.format!r}; "
+                "create a v2 workspace and explicitly re-extract its data"
+            )
         if self.schema_contract != SCHEMA_CONTRACT:
             raise WorkspaceError(
                 f"unsupported workspace schema contract: {self.schema_contract!r}"
@@ -326,12 +329,7 @@ def _atomic_write(path: Path, payload: bytes) -> None:
         temporary.unlink(missing_ok=True)
 
 
-def initialize_workspace(
-    target: Path,
-    *,
-    schema_source_root: Path,
-    init_git: bool = False,
-) -> WorkspaceInitialization:
+def _prepare_workspace_target(target: Path, init_git: bool) -> Path:
     target = target.expanduser()
     if not target.exists():
         if not init_git:
@@ -354,25 +352,10 @@ def initialize_workspace(
         subprocess.run(["git", "init", "-q", str(target)], check=True)
         resolved = _git_root(target)
 
-    source_payloads = schema_payloads(schema_source_root.resolve())
-    registry_payloads = {p: _read_regular_file(schema_source_root/p,
-        label='registry', maximum_bytes=MAX_SCHEMA_BYTES) for p in REGISTRY_PATHS}
-    desired_digest = schema_digest_from_payloads(source_payloads)
-    manifest_path = resolved / WORKSPACE_MANIFEST_PATH
+    return resolved
 
-    if manifest_path.exists():
-        validation = validate_workspace(resolved)
-        if validation.manifest.schema_digest != desired_digest:
-            raise WorkspaceError(
-                "existing workspace uses a different schema snapshot; use an explicit schema-upgrade workflow"
-            )
-        if any(
-            (resolved / relative).read_bytes() != source_payloads[relative.as_posix()]
-            for relative in SCHEMA_PATHS
-        ):
-            raise WorkspaceError("existing workspace schema bytes differ from the requested contract")
-        return WorkspaceInitialization(validation=validation, replayed=True)
 
+def _validate_empty_workspace(resolved: Path) -> None:
     if not _working_tree_is_clean(resolved):
         raise WorkspaceError("workspace initialization requires a clean Git working tree")
 
@@ -397,6 +380,36 @@ def initialize_workspace(
                 raise WorkspaceError(
                     f"workspace authority directory is not empty: {relative}"
                 )
+
+
+def initialize_workspace(
+    target: Path,
+    *,
+    schema_source_root: Path,
+    init_git: bool = False,
+) -> WorkspaceInitialization:
+    resolved = _prepare_workspace_target(target, init_git)
+
+    source_payloads = schema_payloads(schema_source_root.resolve())
+    registry_payloads = {p: _read_regular_file(schema_source_root/p,
+        label='registry', maximum_bytes=MAX_SCHEMA_BYTES) for p in REGISTRY_PATHS}
+    desired_digest = schema_digest_from_payloads(source_payloads)
+    manifest_path = resolved / WORKSPACE_MANIFEST_PATH
+
+    if manifest_path.exists():
+        validation = validate_workspace(resolved)
+        if validation.manifest.schema_digest != desired_digest:
+            raise WorkspaceError(
+                "existing workspace uses a different schema snapshot; use an explicit schema-upgrade workflow"
+            )
+        if any(
+            (resolved / relative).read_bytes() != source_payloads[relative.as_posix()]
+            for relative in SCHEMA_PATHS
+        ):
+            raise WorkspaceError("existing workspace schema bytes differ from the requested contract")
+        return WorkspaceInitialization(validation=validation, replayed=True)
+
+    _validate_empty_workspace(resolved)
 
     created: list[Path] = []
     try:

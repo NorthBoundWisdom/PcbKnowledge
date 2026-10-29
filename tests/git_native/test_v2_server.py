@@ -9,7 +9,7 @@ import tempfile
 import threading
 import unittest
 
-from pcbknowledge.git_native.workspace import initialize_workspace
+from pcbknowledge.workspace import initialize_workspace
 from pcbknowledge.serialization import canonical_json
 from pcbknowledge.v2.catalog import record_path
 from pcbknowledge.v2.server import create_server
@@ -28,8 +28,9 @@ class ServerTests(unittest.TestCase):
         ).validation.root
         self.pdf=b'%PDF-1.4\nsynthetic fixture\n'
         records=fixtures();self.source=records['source']
-        self.source.update(license_class='PUBLIC_REFERENCE',sha256=hashlib.sha256(self.pdf).hexdigest(),bytes=len(self.pdf))
+        self.source.update(media_type='application/pdf',license_class='PUBLIC_REFERENCE',sha256=hashlib.sha256(self.pdf).hexdigest(),bytes=len(self.pdf))
         records['part']['mpn']='<script>unsafe</script>'
+        records['package']['scope']['mpns'].append(records['part']['mpn'])
         for kind in ('source','part','package','block'):
             doc=records[kind];path=record_path(self.root,doc['id']);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(canonical_json(doc), encoding='utf-8', newline='\n')
         digest=self.source['sha256'];self.cache=self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest+'.pdf')
@@ -110,3 +111,58 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(row['evidence']['page'],2)
         status,_,body=self.request('/blocks/block%3Asynthetic')
         self.assertEqual(status,200);self.assertIn(b'data-page="2"',body)
+
+    def make_html_source(self):
+        payload = b'<!doctype html><html><script>window.untrustedExecuted=true</script></html>'
+        path = record_path(self.root, 'source:synthetic')
+        source = json.loads(path.read_bytes())
+        source.update(media_type='text/html', sha256=hashlib.sha256(payload).hexdigest(), bytes=len(payload))
+        source['url'] = 'https://example.invalid/doc?x="onmouseover="unsafe&y=<script>'
+        path.write_text(canonical_json(source), encoding='utf-8')
+        digest = source['sha256']
+        cache = self.root / '.pcbknowledge/evidence/sha256' / digest[:2] / (digest + '.html')
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_bytes(payload)
+        return source, payload
+
+    def test_html_citations_are_external_escaped_links_never_active_local_html(self):
+        source, payload = self.make_html_source()
+        status, headers, body = self.request('/parts/part%3Asynthetic')
+        self.assertEqual(status, 200)
+        self.assertIn(b'Open external HTML source', body)
+        self.assertIn(b'&quot;onmouseover=&quot;unsafe&amp;y=&lt;script&gt;', body)
+        self.assertIn(source['sha256'].encode(), body)
+        self.assertIn(source['accessed_on'].encode(), body)
+        self.assertIn(b'rel="noopener noreferrer"', body)
+        self.assertNotIn(b'class="evidence"', body)
+        self.assertNotIn(b'window.untrustedExecuted', body)
+        self.assertIn("default-src 'none'", headers['Content-Security-Policy'])
+        status, headers, body = self.request('/sources/source%3Asynthetic/content')
+        self.assertEqual(status, 400)
+        self.assertNotIn(payload, body)
+        self.assertNotIn(b'window.untrustedExecuted', body)
+        self.assertEqual(headers['X-Content-Type-Options'], 'nosniff')
+        for headers in ({'Host': 'evil.invalid'}, {'Origin': 'https://evil.invalid'}):
+            self.assertEqual(self.request('/parts/part%3Asynthetic', headers=headers)[0], 403)
+
+    def test_html_license_block_prevents_link_and_content(self):
+        self.make_html_source()
+        path = record_path(self.root, 'source:synthetic')
+        source = json.loads(path.read_bytes())
+        source['license_class'] = 'RESTRICTED'
+        path.write_text(canonical_json(source), encoding='utf-8')
+        status, _, body = self.request('/parts/part%3Asynthetic')
+        self.assertEqual(status, 400)
+        self.assertIn(b'License blocks source processing', body)
+        self.assertNotIn(b'Open external HTML source', body)
+        self.assertEqual(self.request('/sources/source%3Asynthetic/content')[0], 400)
+
+    def test_engineering_default_identity_needs_no_source_or_page(self):
+        for kind in ('part', 'package'):
+            identity = kind + ':mounting-hole-m3-3v2'
+            original = record_path(ROOT, identity)
+            path = record_path(self.root, identity)
+            path.write_bytes(original.read_bytes())
+        status, _, body = self.request('/parts/part%3Amounting-hole-m3-3v2')
+        self.assertEqual(status, 200)
+        self.assertIn(b'No citation (engineering default or unspecified)', body)

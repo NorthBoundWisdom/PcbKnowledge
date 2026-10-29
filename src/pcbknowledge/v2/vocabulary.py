@@ -26,11 +26,13 @@ class Vocabulary:
     def load(cls, directory: Path, schema_dir: Path):
         documents = []
         for path in (directory, directory.parent):
-            if path.is_symlink():raise ValueError('Registry directory symlinks are forbidden')
+            if path.is_symlink():
+                raise ValueError('Registry directory symlinks are forbidden')
         for path in sorted(directory.glob('*.json')):
             if path.is_symlink():
                 raise ValueError('Registry symlinks are forbidden')
-            if path.stat().st_size > 1_000_000:raise ValueError('Oversized registry')
+            if path.stat().st_size > 1_000_000:
+                raise ValueError('Oversized registry')
             document = read_json(path.read_bytes())
             validate(document, 'registry.schema.json', schema_dir)
             if path.stem != document['id'].removeprefix('registry:'):

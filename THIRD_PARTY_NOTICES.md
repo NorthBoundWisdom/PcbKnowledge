@@ -16,11 +16,11 @@ PcbKnowledge vendors narrowly scoped third-party runtime assets only when they a
 
 PcbKnowledge vendors only the legacy display-layer module, its worker, and the upstream license. It does not vendor the generic PDF.js viewer UI, CMaps, WASM modules, or standard-font assets in P0.3b.
 
-The exact committed file SHA-256 values are recorded in `src/pcbknowledge/git_native/static/vendor/pdfjs/6.2.108/vendor-manifest.json` and independently pinned by `src/pcbknowledge/git_native/pdfjs_vendor.py`. CI runs `python configs/check_pdfjs_vendor.py`; runtime server startup also validates the same bytes before exposing the evidence viewer.
+The exact committed file SHA-256 values are recorded in `src/pcbknowledge/static/vendor/pdfjs/6.2.108/vendor-manifest.json` and independently pinned by `src/pcbknowledge/pdfjs_vendor.py`. CI runs `python configs/check_pdfjs_vendor.py`; runtime server startup also validates the same bytes before exposing the evidence viewer.
 
 Upstream references:
 
 - https://github.com/mozilla/pdf.js/releases/tag/v6.2.108
 - https://www.npmjs.com/package/pdfjs-dist/v/6.2.108
 
-The full Apache-2.0 license text distributed with PDF.js is retained at `src/pcbknowledge/git_native/static/vendor/pdfjs/6.2.108/LICENSE`.
+The full Apache-2.0 license text distributed with PDF.js is retained at `src/pcbknowledge/static/vendor/pdfjs/6.2.108/LICENSE`.

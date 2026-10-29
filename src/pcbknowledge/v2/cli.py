@@ -7,8 +7,10 @@ import json
 import subprocess
 from pathlib import Path
 
-from pcbknowledge.git_native.workspace import validate_workspace
+from pcbknowledge.workspace import validate_workspace
 from pcbknowledge.serialization import canonical_json, read_json
+from .audit import audit_catalog, require_audit
+from .evidence import add_evidence, fetch_evidence
 from .bundle import Bundle, build_bundle
 from .catalog import Catalog, MAX_RECORD_BYTES
 from .coverage import coverage
@@ -22,6 +24,12 @@ def parser():
     groups = result.add_subparsers(dest='group', required=True)
     v2 = groups.add_parser('v2').add_subparsers(dest='action', required=True)
     v2.add_parser('validate')
+    v2.add_parser('audit')
+    evidence = groups.add_parser('evidence').add_subparsers(dest='action', required=True)
+    fetch = evidence.add_parser('fetch')
+    fetch.add_argument('--source')
+    add = evidence.add_parser('add')
+    add.add_argument('file', type=Path)
     check = v2.add_parser('coverage')
     check.add_argument('graph', type=Path)
     check.add_argument('--bundle', type=Path)
@@ -97,66 +105,93 @@ def change_scope(root):
     return {'scope': scope, 'valid_for_single_commit': scope != 'MIXED'}
 
 
+def write_result(root, requested, result):
+    if requested:
+        output = derived_path(root, requested)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(canonical_json(result), encoding='utf-8', newline='\n')
+
+
+def catalog_command(arguments, root, catalog, snapshot):
+    group = arguments.group
+    if group == 'eval-synthesis':
+        from .synthesis import evaluate
+        result = evaluate(snapshot, load_document(arguments.reference),
+                          [load_document(path) for path in arguments.attempt])
+        write_result(root, arguments.output, result)
+        return result
+    if group == 'export':
+        output = derived_path(root, arguments.output)
+        path = export_design(load_document(arguments.intent), snapshot, load_document(arguments.graph), output)
+        return {'status': 'EXPORTED', 'directory': str(path), 'commit': snapshot.commit}
+    if group == 'footprint':
+        from .footprints import export_library
+        files = export_library(catalog.search('package'), derived_path(root, arguments.output))
+        return {'status': 'EXPORTED', 'files': [str(path) for path in files]}
+    if group == 'v2':
+        return validation_command(arguments, catalog)
+    if group == 'evidence':
+        if arguments.action == 'fetch':
+            return fetch_evidence(catalog, arguments.source)
+        return add_evidence(catalog, arguments.file)
+    if group == 'registry':
+        name = arguments.id.removeprefix('registry:')
+        if name not in catalog.vocabulary.entries:
+            raise ValueError('Unknown registry')
+        return {'id': 'registry:' + name, 'entries': catalog.vocabulary.entries[name]}
+    if group == 'source' and arguments.action == 'authorize-read':
+        return {'status': 'AUTHORIZED', 'source': arguments.id, 'path': str(catalog.authorize_read(arguments.id))}
+    if arguments.action == 'show':
+        return catalog.get(arguments.id, 'fab_profile' if group == 'fab' else group)
+    return catalog.search(group, arguments.text, getattr(arguments, 'role', None))
+
+
+def validation_command(arguments, catalog):
+    if arguments.action == 'coverage':
+        return coverage(catalog, load_document(arguments.graph))
+    if arguments.action == 'audit':
+        return audit_catalog(catalog)
+    audit = require_audit(catalog)
+    return {
+        'status': 'VALID', 'records': len(catalog.records), 'audit': audit,
+        'evidence': {r['id']: catalog.evidence_status(r) for r in catalog.search('source')},
+    }
+
+
+def dispatch(arguments, root):
+    if arguments.group == 'change-scope':
+        return change_scope(root)
+    if arguments.group == 'bundle':
+        path = build_bundle(root, derived_path(root, arguments.output))
+        return {'status': 'BUILT', 'bundle': str(path), 'commit': path.stem}
+    if arguments.group == 'expand':
+        # Validate the destination before expansion, preserving no-work-on-unsafe-output behavior.
+        output = derived_path(root, arguments.output) if arguments.output else None
+        result = expand_bundle(arguments.bundle, load_document(arguments.graph))
+        write_result(root, output, result)
+        return result
+    with ExitStack() as stack:
+        snapshot = stack.enter_context(Bundle(arguments.bundle)) if getattr(arguments, 'bundle', None) else None
+        catalog = snapshot.catalog if snapshot else Catalog(root, root / 'schemas')
+        return catalog_command(arguments, root, catalog, snapshot)
+
+
+def result_exit_code(result):
+    if not isinstance(result, dict):
+        return 0
+    failures = {'REFUSED', 'INCOMPLETE', 'FAIL', 'FAILED', 'DIFFERENT_BYTES', 'INVALID', 'ERROR'}
+    if result.get('status') in failures or result.get('valid_for_single_commit') is False:
+        return 2
+    return 0
+
+
 def main(argv=None):
     arguments = parser().parse_args(argv)
     try:
         root = validate_workspace(arguments.repo).root.resolve()
-        group = arguments.group
-        with ExitStack() as stack:
-            if group == 'change-scope':
-                result = change_scope(root)
-            elif group == 'bundle':
-                path = build_bundle(root, derived_path(root, arguments.output))
-                result = {'status': 'BUILT', 'bundle': str(path), 'commit': path.stem}
-            elif group == 'expand':
-                output = derived_path(root, arguments.output) if arguments.output else None
-                result = expand_bundle(arguments.bundle, load_document(arguments.graph))
-                if output:
-                    output.parent.mkdir(parents=True, exist_ok=True)
-                    output.write_text(canonical_json(result), encoding='utf-8', newline='\n')
-            else:
-                snapshot = (stack.enter_context(Bundle(arguments.bundle))
-                            if getattr(arguments, 'bundle', None) else None)
-                catalog = snapshot.catalog if snapshot else Catalog(root, root / 'schemas')
-                if group == 'eval-synthesis':
-                    from .synthesis import evaluate
-                    result = evaluate(snapshot, load_document(arguments.reference),
-                                      [load_document(path) for path in arguments.attempt])
-                    if arguments.output:
-                        output = derived_path(root, arguments.output)
-                        output.parent.mkdir(parents=True, exist_ok=True)
-                        output.write_text(canonical_json(result), encoding='utf-8', newline='\n')
-                elif group == 'export':
-                    output = derived_path(root, arguments.output)
-                    path = export_design(load_document(arguments.intent), snapshot,
-                                         load_document(arguments.graph), output)
-                    result = {'status': 'EXPORTED', 'directory': str(path), 'commit': snapshot.commit}
-                elif group == 'footprint':
-                    from .footprints import export_library
-                    files = export_library(catalog.search('package'), derived_path(root, arguments.output))
-                    result = {'status': 'EXPORTED', 'files': [str(path) for path in files]}
-                elif group == 'v2' and arguments.action == 'coverage':
-                    result = coverage(catalog, load_document(arguments.graph))
-                elif group == 'v2':
-                    result = {'status': 'VALID', 'records': len(catalog.records), 'evidence': {
-                        r['id']: catalog.evidence_status(r) for r in catalog.search('source')}}
-                elif group == 'registry':
-                    name = arguments.id.removeprefix('registry:')
-                    if name not in catalog.vocabulary.entries:
-                        raise ValueError('Unknown registry')
-                    result = {'id': 'registry:' + name, 'entries': catalog.vocabulary.entries[name]}
-                elif group == 'source' and arguments.action == 'authorize-read':
-                    result = {'status': 'AUTHORIZED', 'source': arguments.id,
-                              'path': str(catalog.authorize_read(arguments.id))}
-                elif arguments.action == 'show':
-                    result = catalog.get(arguments.id, 'fab_profile' if group == 'fab' else group)
-                else:
-                    result = catalog.search(group, arguments.text, getattr(arguments, 'role', None))
-            print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
-            if isinstance(result, dict) and (result.get('status') in ('REFUSED', 'INCOMPLETE', 'FAIL')
-                                            or result.get('valid_for_single_commit') is False):
-                return 2
-            return 0
+        result = dispatch(arguments, root)
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
+        return result_exit_code(result)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, subprocess.SubprocessError) as error:
         print(json.dumps({'status': 'ERROR', 'message': str(error)}, sort_keys=True))
         return 2

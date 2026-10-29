@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 
 from pcbknowledge.serialization import canonical_json, read_json
-from pcbknowledge.git_native.workspace import validate_workspace
+from pcbknowledge.workspace import validate_workspace
 from .schema import ContractSchemas
 from .vocabulary import Vocabulary
 from .footprints import derive_footprint
@@ -94,7 +94,9 @@ class Catalog:
             self.vocabulary.member('roles', role)
         return [r for key,r in sorted(self.records.items()) if key.startswith(kind+':')
                 and (not role or role in r.get('roles', []))
-                and text.casefold() in ' '.join(str(r.get(k,'')) for k in ('id','mpn','manufacturer','category')).casefold()]
+                and text.casefold() in ' '.join(
+                    str(r.get(k,'')) for k in ('id','mpn','manufacturer','category')
+                ).casefold()]
 
     def evidence(self, anchor):
         source = self.get(anchor['source'], 'source')
@@ -106,17 +108,24 @@ class Catalog:
     def authorize_read(self, identity):
         source=self.get(identity, 'source')
         status=self.evidence_status(source)
-        if status=='LICENSE_BLOCKED':raise PermissionError('Source license blocks processing')
-        if status!='LOCALLY_VERIFIED':raise FileNotFoundError('NOT_LOCALLY_VERIFIED')
+        if status == 'LICENSE_BLOCKED':
+            raise PermissionError('Source license blocks processing')
+        if status != 'LOCALLY_VERIFIED':
+            raise FileNotFoundError('NOT_LOCALLY_VERIFIED')
         digest=source['sha256']
-        return self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest + ('.html' if source.get('media_type') == 'text/html' else '.pdf'))
+        return self._evidence_path(source)
+
+    def _evidence_path(self, source):
+        digest = source['sha256']
+        suffix = '.html' if source.get('media_type') == 'text/html' else '.pdf'
+        return self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest + suffix)
 
     def evidence_status(self, source):
         """Hash only eligible local originals. Absence is an explicit result."""
         if source['license_class'] not in ELIGIBLE:
             return 'LICENSE_BLOCKED'
         digest = source['sha256']
-        path = self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest + ('.html' if source.get('media_type') == 'text/html' else '.pdf'))
+        path = self._evidence_path(source)
         if not path.exists():
             return 'NOT_LOCALLY_VERIFIED'
         for parent in (path, *path.parents):
@@ -127,7 +136,10 @@ class Catalog:
         if not path.is_file() or path.stat().st_size != source['bytes']:
             raise ValueError('Evidence byte size mismatch')
         payload = path.read_bytes()
-        signature_valid = (b'<html' in payload[:4096].lower() or b'<!doctype html' in payload[:4096].lower()) if source.get('media_type') == 'text/html' else payload.startswith(b'%PDF-')
+        signature_valid = (
+            (b'<html' in payload[:4096].lower() or b'<!doctype html' in payload[:4096].lower())
+            if source.get('media_type') == 'text/html' else payload.startswith(b'%PDF-')
+        )
         if hashlib.sha256(payload).hexdigest() != digest or not signature_valid:
             raise ValueError('Evidence digest or media signature mismatch')
         return 'LOCALLY_VERIFIED'
@@ -170,7 +182,10 @@ class Catalog:
                 from .calculators import calculate
                 outputs = calculate(value['calculator'], value['inputs'])
                 expected = {k:value[k] for k in ('value','min','typ','max','unit') if k in value}
-                if not any(expected == {k:q[k] for k in ('value','min','typ','max','unit') if k in q} for q in outputs.values()):
+                if not any(
+                    expected == {k:q[k] for k in ('value','min','typ','max','unit') if k in q}
+                    for q in outputs.values()
+                ):
                     raise ValueError('Calculated quantity does not match executable output')
             if 'source' in value and 'page' in value:
                 self.evidence(value)
@@ -182,6 +197,15 @@ class Catalog:
 
     def _part(self, part):
         package = self.get(part['package'], 'package')
+        if part['mpn'] not in package['scope']['mpns']:
+            raise ValueError(f'Part MPN is outside package drawing scope: {part["id"]}')
+        if package['scope']['basis'] == 'ENGINEERING_DEFAULT':
+            if 'mechanical.mounting-hole' not in part['roles']:
+                raise ValueError('Engineering-default package scope is mechanical-only')
+        elif part['identity_evidence'].get('source') not in {
+            anchor['source'] for anchor in package['scope']['evidence']
+        }:
+            raise ValueError('Package scope does not cite the part identity source')
         pins = unique(part['pins'], 'number', 'part pin number')
         if part['pin_evidence']['basis'] == 'STANDARD_CONVENTION' and len(pins) != 2:
             raise ValueError('Standard terminal convention requires exactly two electrical pins')
@@ -218,7 +242,10 @@ class Catalog:
                     return False
                 if ('value' in limit and nominal != limit['value']) or ('typ' in limit and nominal != limit['typ']):
                     return False
-                if any(value.get('conditions', {}).get(key) != condition for key, condition in limit.get('conditions', {}).items()):
+                if any(
+                    value.get('conditions', {}).get(key) != condition
+                    for key, condition in limit.get('conditions', {}).items()
+                ):
                     return False
                 if 'min' in limit and (low is None or low < limit['min']):
                     return False
@@ -263,7 +290,9 @@ class Catalog:
                 if set(value) == {'parameter'} and value['parameter'] not in block['parameters']:
                     raise ValueError('Dangling calculator block parameter')
                 if set(value) in ({'component', 'parameter'}, {'component', 'parameter', 'bound'}):
-                    if value['component'] not in candidates or any(value['parameter'] not in p['parameters'] for p in candidates[value['component']]):
+                    if value['component'] not in candidates or any(
+                        value['parameter'] not in p['parameters'] for p in candidates[value['component']]
+                    ):
                         raise ValueError('Dangling calculator component parameter')
         for constraint in block['layout']:
             self._layout_references(constraint, candidates, set(n['name'] for n in block['nets']))
