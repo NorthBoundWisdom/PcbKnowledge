@@ -47,6 +47,9 @@ CONFIG_INPUTS = (
     WORKSPACE_MANIFEST_PATH,
 )
 BUILD_INPUT_FILES = (
+    Path("configs/check_commits.py"),
+    Path("configs/check_code_style.py"),
+    Path("configs/code_style_allowlist.json"),
     Path("configs/pcbknowledge_agent.py"),
     Path("configs/pcbknowledge_workspace.py"),
     Path("configs/pcbknowledge_workflow.py"),
@@ -252,6 +255,8 @@ def _validate_knowledge(root: Path) -> int:
 
 
 def _run_checks(root: Path = REPO_ROOT) -> None:
+    _run([sys.executable, "configs/check_commits.py"], root=root)
+    _run([sys.executable, "configs/check_code_style.py"], root=root)
     compile_targets = [
         "src/pcbknowledge",
         "configs/pcbknowledge_workflow.py",
