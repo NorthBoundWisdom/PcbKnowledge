@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `G1_A2_COMPLETE_STAGE_6_PENDING`
+> Status: `CONTINUOUS_MODE_STAGE_6_ACTIVE` (G1 at A2)
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -19,6 +19,14 @@
 - Progress is measured by golden-design acceptance level (A1 to A6), not by record
   counts.
 - Work that does not serve the current stage or a golden design waits.
+- **Continuous mode** (from Stage 6): an implementing agent works the queue
+  without a per-round brief. Take the first unchecked item of the lowest open
+  stage, finish it, and continue. At every stage exit run the full gate and an
+  independent review per [`docs/review-checklist.md`](docs/review-checklist.md),
+  fix what it finds, record the receipt, push, and start the next stage. The
+  standing task prompt is [`docs/implementer-brief.md`](docs/implementer-brief.md).
+- Items marked **(owner-only)** never block the queue: skip them and continue with
+  the next item. Items marked **(escalate)** stop work until the owner answers.
 
 ## Owner decisions
 
@@ -41,7 +49,15 @@ answer here.
 | D12 | Fab profile for G1 (refines D2) | JLCPCB standard two-layer, 1.6 mm FR-4, 1 oz outer copper, single-side SMT assembly. Values are cited from its public capability pages with access date; the owner may replace the fab |
 | D13 | G1 evaluation temperature | Implementer-selected under brief delegation, not owner-specified: evaluate G1 at 23 degC, matching Eaton PTC resistance evidence; retain the full 0.5 A USB budget in headroom. This is not all-temperature qualification. |
 | D14 | Evidence-driven G1 substitutions | Implementer-selected under D10 delegation: Yageo resistors, Eaton PTS120615V050 PTC and ST SM6T6V8A TVS replace inaccessible/restricted sources; ST LDL1117S33R replaces failed-headroom LD1117; 25 V input capacitance covers the selected TVS clamp. |
-| D15 | Board and oscillator compatibility | Implementer-selected under brief delegation: use Wurth 632723300011 explicitly supporting 1.6 mm boards instead of the 0.8 mm Amphenol; use ABLS-8.000MHZ-18 and 22 pF loads after source-based startup/conditional drive screening. Physical oscillator measurement remains Stage 6. |
+| D15 | Board and oscillator compatibility | Implementer-selected under brief delegation: use Wurth 632723300011 explicitly supporting 1.6 mm boards instead of the 0.8 mm Amphenol; use ABLS-8.000MHZ-18 and 22 pF loads after source-based startup/conditional drive screening. Physical oscillator measurement is part of G1 bring-up (Stage 7, owner-only). |
+| D16 | Layout handoff files | Decided by the reviewing agent under owner delegation: besides design intent JSON (authority), derive a KiCad 9 board project: `.kicad_pcb` with outline, mounting holes at their constrained positions, every footprint with nets assigned (unplaced footprints parked outside the outline), net classes, and a `.kicad_dru` rule file from the fab profile and layout constraints. Recorded in ADR-025 (Stage 7) |
+| D17 | Who checks A3 and A4 | PcbKnowledge ships a read-only conformance checker over an exported `.kicad_pcb` file (layout constraints, A3) and runs `kicad-cli pcb drc` with the generated rules when available (A4). An exported file is not a live board; PcbKnowledge still never places, routes or mutates board state |
+| D18 | Through-hole parts in G1 | Keep the THT headers and switch. Each package states its mount type (`SMT`, `THT`, `MECHANICAL`); design intent and BOM list THT parts as hand-solder or THT-assembly items; the fab profile states which mount types it assembles. Not a refusal |
+| D19 | Commit types | Add `data` to the allowed types. `[data]:` commits touch only `knowledge/` (change-scope `DATA_ONLY`); other types never touch `knowledge/`. CI enforces both |
+| D20 | Web-page sources (fab capability pages) | Store the saved page bytes (HTML or printed PDF) in the local SHA-256 cache with access date; the record states `media_type`. Pages change: a later fetch with different bytes is a new source revision, not a mismatch error |
+| D21 | Generalization corpus | Synthetic competition-style briefs beyond G1-G3: two G1 variants (G1V1, G1V2) and three negative briefs (N1-N3) that the closed world must refuse (Stage 8). Later briefs are added only when the previous ones reach A2 |
+| D22 | Evaluation independence | An attempt's author, its equivalence reviewer and the orchestrating agent are three different agent identities. The orchestrator may run commands but never judges equivalence |
+| D23 | Next fab profile | None until G2 needs one. G2 and G3 use the D12 profile unless a check fails against it |
 
 ## Stage 0 — Course correction (complete)
 
@@ -176,12 +192,6 @@ two-terminal parts were blocked for lacking numbered tables, packages stored
 placeholder pad arrays as authority (SOT-223 without its tab), and selection
 matching ignored min/typ/max ranges. LD1117S33TR also needs the parameters that
 `ldo_headroom` and `ldo_dissipation` read.
-
-## Round 3 scope
-
-Round 3 runs Stages 3, 4 and 5 in one long task and ends with G1 at A2 from an
-AI-produced block graph. This round is complete; Stage 6 is outside this repository task. Each stage exit is a checkpoint: run the full gate, record
-the receipt, push (when the brief authorizes it) and continue.
 
 ## Stage 3 — Packages and footprints (complete)
 
@@ -335,38 +345,222 @@ attempts, and the reference graph reaches A2 deterministically.
 Stage receipt: full gate passed; Build/Test each 139 tests, no skips. G1 coverage 15/15 (100%); cross-platform temporary-path failures repaired.
 Reference plus 3/3 fresh-context AI graphs reach A2 on `ad7b843`: 46 components, 25 nets, 89 passing checks; preserved independent receipts in `evals/synthesis/g1/`.
 KiCad 9 XML reader links all 46 components/23 library parts without warnings; CLI has no PCB netlist-import command.
+Review (2026-10-29, `2902b13`): rerun confirms the gate, CI and G1 reference
+expansion (`EXPANDED`, 46 components, 25 nets, 89/89 checks, `AGENT_VERIFIED`).
+Spot checks of ABLS, RL1206 and B3F values against downloaded sources match.
+Findings, all scheduled in Stage 6: four unused parts with their packages and
+sources; LDL1117S33R uses a package drawn from the LD1117 datasheet; the brief's
+copper and assembly fields are prose matched by `startswith`; commit subjects
+dropped the `[type]` brackets and used an unlisted `data` type; `expand` is one
+311-line function and 19 lines exceed 140 characters; the synthesis evaluation
+cannot fail meaningfully because the catalog holds exactly the G1 blocks, and the
+orchestrator judged equivalence; THT parts are not distinguished under a
+single-side SMT profile; most sources are not in the owner's local cache.
 
-## Stage 6 — G1 end to end with PcbAtlas (cross-repository)
+## Stage 6 — Review fixes and mechanical audit
 
-Work in PcbAtlas is tracked there; this list records what PcbKnowledge needs back.
+Goal: turn the review above into code so later stages need no manual audit.
+Work in order; each item is one coherent commit or a small group.
 
-- [ ] PcbAtlas imports the G1 design intent (or KiCad export per D3).
-- [ ] PcbAtlas checks layout constraints from the design intent (A3).
-- [ ] DRC against the fab profile (A4) and fabrication outputs (A5).
-- [ ] (owner-only) Owner orders G1 boards; bring-up: rails, programmer connects, LED and I2C
-  test (A6).
-- [ ] Every knowledge gap found here becomes a fix in PcbKnowledge with a test.
+### 6a Mechanical guards (code, CI)
 
-Exit: G1 at A6.
+- [ ] `configs/check_commits.py <range>`: subject format `[type]: description`
+  with the AGENTS types plus `data` (D19); `[data]` commits are `DATA_ONLY`,
+  others touch no `knowledge/` path; no `MIXED` commit. Run it in CI over the
+  pushed range (AGENTS section 1 already lists `data`). Existing history is not
+  rewritten.
+- [ ] `configs/check_code_style.py` (standard library only): maximum line length
+  120, one statement per line, no function longer than 80 lines in
+  `src/pcbknowledge/`. Add to the full gate and CI. Fix existing violations in
+  6c; until then the checker may carry an explicit allowlist that 6c empties.
+- [ ] `v2 audit` (part of `v2 validate`): every part, package and source must be
+  reachable from the expansion of at least one golden or corpus block graph, or
+  from a block selection that some graph uses. Unreachable records fail
+  validation with their IDs. Delete the four unused parts
+  (`abracon-abm8-8-18`, `amphenol-10155435-00011lf`, `kemet-c0603c270j5gactu`,
+  `st-ld1117s33tr`) and whatever packages and sources become unreachable, in a
+  `[data]` commit.
+- [ ] Package scope: a package record lists the MPNs or series its cited drawing
+  covers, with page evidence; the validator rejects a part whose MPN is not
+  covered by its package. Re-record LDL1117S33R's SOT-223 from the LDL1117
+  datasheet's own package page (do not reuse the LD1117 drawing).
+- [ ] Golden regression: the G1 reference expansion's canonical bytes are pinned by
+  a SHA-256 in a test. An intended change updates the hash in the same commit and
+  states why in the body.
 
-## Stage 7 — G2 and G3
+### 6b Contract corrections
 
-- [ ] G2: buck converter block with hot-loop and thermal constraints, low-side
-  switch and ULN2003A blocks, Kelvin current sense; parts migrated from the
-  `intake-final` tag where available.
-- [ ] G3: analog front-end blocks, reference, ADC, RS-485 with termination and bias,
-  analog/digital return-path constraints.
-- [ ] Calculators as needed (`buck_inductor_ripple`, `rc_time`,
-  `trace_impedance_microstrip`).
+- [ ] Brief `manufacturing.copper` and `manufacturing.assembly` become controlled
+  values (registry or enum, for example `ONE_OZ`, `SINGLE_SIDE_TOP`), prose moves
+  to `note`. Remove the string matching in `expansion.py`. Contract-only commit,
+  re-pinned digest.
+- [ ] Mount type per D18: packages state `SMT`, `THT` or `MECHANICAL`; the fab
+  profile states assembled mount types; design intent and BOM mark THT items.
+  Expansion reports the THT count as a check, not a refusal.
+- [ ] Web-page sources per D20: `media_type` on sources, cache accepts the saved
+  bytes, the viewer shows non-PDF sources as a link plus hash.
 
-Exit: G2 and G3 at A5, then A6.
+### 6c Code readability (behavior unchanged)
+
+- [ ] Split `expand` into named phases (resolve instances, unite nets, apply
+  rules, run checks, assemble intent) and split `_drawing_pads` per family.
+  Golden hash from 6a must not change. Empty the style allowlist.
+- [ ] Move the workspace and policy helpers the v2 code imports from
+  `pcbknowledge.git_native` into a neutral module; delete the old name.
+
+### 6d Evidence for the owner
+
+- [ ] `evidence fetch [--source <id>]`: download missing sources from their recorded
+  URL into the cache, verify SHA-256, report `MATCH`, `DIFFERENT_BYTES` (kept
+  aside, never replaces the cache) or `FAILED` with the HTTP status. Never retry
+  around bot checks or access controls.
+- [ ] `evidence add <file>`: import a manually downloaded file and accept it only
+  when its SHA-256 equals a recorded source. Document both in
+  `docs/local-workflow.md`, including which publishers block scripted downloads
+  (ST and Wurth did on 2026-10-29) and that some spec-sheet generators stamp the
+  date into each download.
+
+### 6e Review procedure
+
+- [ ] Use `docs/review-checklist.md` at this stage exit and keep it current: each
+  check that 6a or a later stage automates moves to its "Automated" list.
+
+Exit: CI runs the commit, style, audit and golden-hash guards; zero unreachable
+records; LDL1117 package re-recorded; G1 still `EXPANDED` with all checks passing.
+
+## Stage 7 — Layout handoff and board-level checks for G1
+
+Goal: everything a layout tool (PcbAtlas, or the owner in KiCad) needs to start
+G1, plus an automatic judge for the finished layout. PcbKnowledge still never
+places or routes.
+
+- [ ] ADR-025 (accepted under delegation, D16-D17): derived KiCad board project and
+  a read-only checker over exported board files. Update ADR-022's boundary text by
+  link, not by copy.
+- [ ] Rules export: `.kicad_dru` and net classes from the fab profile and the
+  intent's net constraints (`NET_WIDTH_MIN`, clearance, drill, annular ring,
+  hole-to-edge). Deterministic; unit tests per rule kind.
+- [ ] Board skeleton export: `.kicad_pcb` with the brief's outline, mounting holes
+  at their `EDGE_DISTANCE` positions, all footprints from the Stage 3 library with
+  nets assigned and parked outside the outline, and the rules above. If
+  `kicad-cli` exists, run `pcb drc` on it and confirm only unrouted and placement
+  findings appear; record the result.
+- [ ] `layout check <intent> <board.kicad_pcb>`: parse the exported board (an
+  original minimal S-expression reader) and judge every constraint kind the G1
+  intent uses: `PLACE_NEAR`, `GROUP`, `EDGE_PLACEMENT`, `EDGE_DISTANCE`,
+  `KEEPOUT`, `NET_WIDTH_MIN`, `KELVIN`, `MINIMIZE_LOOP` (bounding polygon
+  estimate). Each result is `PASS`, `FAIL` with measured values, or
+  `NOT_CHECKABLE` with a reason. Also confirm every intent net and pad matches the
+  board.
+- [ ] Synthetic fixture boards for the checker: one hand-built small board that
+  passes and mutations that fail each kind. Fixtures are original files under
+  `tests/`.
+- [ ] `drc` wrapper: run `kicad-cli pcb drc` with the generated rules when
+  available and fold the result into one A4 report; `NOT_RUN` when KiCad is absent
+  (not a pass).
+- [ ] Assembly BOM export (CSV) from the intent: references, MPN, manufacturer,
+  footprint, mount type, quantity. Distributor numbers only as identifiers (D6).
+  Placement files (CPL) need a placed board and belong to the layout tool.
+- [ ] `docs/local-workflow.md`: how the owner or PcbAtlas takes the G1 handoff
+  project, lays it out, and runs `layout check` and `drc`.
+- [ ] (owner-only) Lay out G1 in PcbAtlas or KiCad from the handoff project and
+  run `layout check` and `drc` (A3, A4).
+- [ ] (owner-only) Generate fabrication outputs, order boards, bring up: rails,
+  SWD connects, LED and I2C test (A5, A6).
+
+Exit: the G1 handoff project opens in KiCad 9; DRC with generated rules reports
+only unrouted/placement findings; `layout check` passes the fixture board and
+fails every mutation with the expected kind.
+
+## Stage 8 — Generalization and honest synthesis evaluation
+
+Goal: prove the catalog and the synthesis skill work beyond the one design they
+were built for, and that the closed world refuses instead of inventing.
+
+- [ ] Write corpus briefs (D21) under `evals/golden-designs/`:
+  - G1V1: G1 with a different I2C sensor in place of the current monitor (needs
+    one new part and block).
+  - G1V2: G1 plus a USB-to-UART bridge replacing the UART header (needs one new
+    part and block, USB D+/D- routing constraints).
+  - N1: requires a 12 V input; N2: requires a Wi-Fi module; N3: requires a BGA
+    MCU. Each states the typed refusal it must produce.
+- [ ] Extend `eval-synthesis`: per brief, three attempts by fresh agents with no
+  access to references, tests or other attempts; automatic structural comparison
+  where a reference exists; refusal matching for negative briefs; equivalence
+  review per D22. Results in `evals/synthesis/<brief>/` with the receipt format
+  used for G1.
+- [ ] Add the parts and blocks G1V1 and G1V2 need (independently verified), then
+  run the evaluation. The orphan audit from 6a applies.
+- [ ] `v2 coverage --all` prints one line per brief (blocks ready, refusals) for
+  stage receipts.
+
+Exit: G1V1 and G1V2 reach A2 in at least two of three attempts each; N1-N3 refuse
+with the expected typed reason in three of three attempts and no invented part or
+block.
+
+## Stage 9 — G2 to A2
+
+- [ ] Concrete G2 design inputs as `ENGINEERING_DEFAULT` decisions (next D-numbers).
+- [ ] Reference block graph for G2.
+- [ ] Parts: buck regulator, inductor, Schottky (SS14 per D9), low-side MOSFET with
+  numbered pin map, ULN2003A, Kelvin shunt, input bulk capacitors; migrate from
+  the `intake-final` tag where the source is accessible.
+- [ ] Calculators: `buck_inductor_ripple`, `buck_output_ripple`,
+  `mosfet_conduction_loss`, `rc_time`.
+- [ ] Blocks with hot-loop, thermal, Kelvin and edge constraints; new constraint
+  kinds are registry additions with `layout check` support from Stage 7.
+- [ ] Expansion checks for switching converters (inductor current within rating,
+  input/output capacitor ripple rating).
+- [ ] Synthesis evaluation as in Stage 8.
+
+Exit: G2 reference and two of three AI attempts reach A2; Stage 7 exports and
+`layout check` cover every G2 constraint kind.
+
+## Stage 10 — G3 to A2
+
+- [ ] Concrete G3 inputs, reference graph.
+- [ ] Parts and blocks: op-amp front end, voltage reference, ADC, RS-485
+  transceiver with termination and bias, analog/digital return-path constraints.
+- [ ] Calculators: `opamp_gain`, `rc_filter`, `reference_load`,
+  `rs485_termination`, `trace_impedance_microstrip` (published closed-form
+  approximation, implemented from first principles).
+- [ ] Synthesis evaluation as in Stage 8.
+
+Exit: G3 reference and two of three AI attempts reach A2.
+
+## Stage 11 — Corpus growth loop
+
+Repeat until the owner changes direction: add two new synthetic competition-style
+briefs per cycle (power, sensing, motor, communication, display themes), each
+needing at most a few new blocks; reach A2 for both, with refusals tested for one
+new negative brief per cycle. Record one receipt line per cycle with the corpus
+pass rate. Stop adding briefs when a cycle's new briefs pass with no new blocks.
+
+## Owner-only and cross-repository items
+
+These never block the queue.
+
+- [ ] (owner-only) PcbAtlas import of the G1 handoff (tracked in PcbAtlas).
+- [ ] (owner-only) Optional spot checks: open the viewer, pick five cited values per
+  stage and confirm them; a confirmed record may then be set to `HUMAN_VERIFIED`
+  by the owner.
+- [ ] Every gap found in layout, fabrication or bring-up becomes a PcbKnowledge
+  fix with a test, ahead of the current queue.
+
+## Escalate to the owner (stop and ask)
+
+- Changing a permanent boundary below, the public-source boundary, or license
+  classes.
+- A new runtime dependency, network listener, hosted service or database.
+- Weakening, skipping or deleting a check, test or golden design to make a stage
+  pass, or changing the A1-A6 definitions.
+- Anything that would make PcbKnowledge place, route or mutate a board.
 
 ## Later (not started)
 
 - More fab profiles, four-layer stackups, controlled impedance.
 - Private workspace for non-public parts and internal rules.
 - Exact and full-text index over the bundle if catalog size makes linear search slow.
-- Catalog growth driven by new golden designs, not by device lists.
 
 ## Retired roadmap items
 

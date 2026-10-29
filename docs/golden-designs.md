@@ -106,4 +106,4 @@ choice enforced by expansion checks.
 Contract tests check shapes, reference closure and requirement coverage. G1
 operating and mechanical inputs use D7 engineering defaults. Header allocations are 5 mA SWD, 40 mA I2C expansion and 5 mA UART, totaling
 50 mA within the 150 mA logger budget. The component height is explicitly unconstrained.
-A1/A2 pass; A3-A6 require layout, DRC, fabrication and physical bring-up in Stage 6.
+A1/A2 pass; A3-A6 require layout, DRC, fabrication and physical bring-up (Stage 7).

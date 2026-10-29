@@ -11,7 +11,7 @@ The runtime uses one v2 model and shared structural/semantic validation, a
 read-only catalog, original footprint generators and commit-pinned deterministic
 design expansion. G1 has 100% catalog coverage and reaches A2 with its reference
 graph and all three independently authored AI graphs. Hardware fabrication and
-bring-up are not claimed; Stage 6 remains with PcbAtlas and the owner.
+bring-up are not claimed; layout handoff and board checks are Stage 7.
 [`TODO.md`](TODO.md) records the acceptance receipts and remaining work.
 
 ## Use

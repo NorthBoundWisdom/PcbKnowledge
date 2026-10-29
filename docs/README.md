@@ -14,6 +14,8 @@ The active roadmap is the root [`TODO.md`](../TODO.md). Agent rules are in the r
 | Public versus private content and source originals | [`open-source-boundary.md`](open-source-boundary.md) |
 | Local Config/Build/Open/Test/Package and workspaces | [`local-workflow.md`](local-workflow.md) |
 | Architecture decisions | [`adr/README.md`](adr/README.md) |
+| Standing task for an implementing agent | [`implementer-brief.md`](implementer-brief.md) |
+| Stage-exit review procedure | [`review-checklist.md`](review-checklist.md) |
 
 ## History
 

@@ -174,7 +174,7 @@ python3 configs/pcbknowledge_agent.py --repo . eval-synthesis --bundle build/bun
 
 The command re-expands every attempt and the reference from the same immutable
 bundle; a refusal is never A2. At least two of three must pass. Board oscillator
-startup, assembly and bring-up remain Stage 6 physical verification, not software
+startup, assembly and bring-up remain Stage 7 physical verification, not software
 claims of manufactured performance.
 
 Graph requirement labels are the IDs from the brief's functions, interfaces,
@@ -196,4 +196,4 @@ complete component/library links. `kicad-cli pcb` offers no netlist-import
 subcommand: full PCB import remains a manual KiCad step, not a claimed CLI pass.
 Import `design.net` in PCB Editor after adding the generated `pcbknowledge.pretty`
 footprint library, inspect all associations and unrouted nets, and perform the
-Stage 6 layout/DRC/hardware checks separately.
+Stage 7 layout/DRC/hardware checks separately.

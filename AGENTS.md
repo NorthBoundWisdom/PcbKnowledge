@@ -21,7 +21,7 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 - Commit and push only when the user explicitly authorizes repository writes. When authorized, use the existing primary branch and keep commits focused.
 - Batch coherent implementation into substantial stage commits. Never pad or mix unrelated changes to reach a size.
 - CI follow-up fixes, focused test repairs and documentation belong in the stage that introduced them. Squash them into that stage before final delivery. A genuinely urgent security or correctness fix may remain smaller.
-- Commit messages use `[type]: description`, where type is one of `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`, `perf`, `ci`, or `build`. Put verification receipts (commands, exit codes, test counts) in the commit body, not in new documents.
+- Commit messages use `[type]: description`, where type is one of `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`, `perf`, `ci`, `build`, or `data`. A `[data]` commit touches only `knowledge/` and no other type touches it. Put verification receipts (commands, exit codes, test counts) in the commit body, not in new documents.
 
 ## 2. Engineering preferences
 
@@ -51,6 +51,8 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 - Delegation covers decisions, not observations. Never write that the owner personally reviewed, tested or verified something they did not; `HUMAN_VERIFIED` (section 7) still requires a person to have checked the values.
 - **Long rounds.** A task brief may span several stages. When a stage exit passes, record its receipt and continue with the next stage in the same round. Stop only for an owner-only item, a blocker that no listed default or documented alternative resolves, or a gate failure you cannot fix; report it and stop there. When a required source is inaccessible (for example HTTP 403), select an equivalent part with an accessible official source, record the substitution as a decision, and continue.
 - Keep a round moving with the smallest implementation that serves the golden design. Do not gold-plate one sub-item while later items in the round are untouched.
+- **Continuous mode.** From Stage 6 the queue in `TODO.md` replaces per-round briefs; the standing task is [`docs/implementer-brief.md`](docs/implementer-brief.md). Take the first unchecked item of the lowest open stage. Skip `(owner-only)` items. At each stage exit an independent reviewer agent runs [`docs/review-checklist.md`](docs/review-checklist.md) before the push.
+- Stop and ask the owner only for the escalation list in `TODO.md`: a permanent boundary, a new runtime dependency or service, weakening or deleting a check, test or golden design, or PcbKnowledge placing, routing or mutating a board. Never relax a check to make a design pass.
 
 ## 4. Public source boundary
 
