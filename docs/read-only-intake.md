@@ -9,13 +9,16 @@ python3 configs/pcbknowledge_agent.py --repo <workspace> intake search --device 
 python3 configs/pcbknowledge_agent.py --repo <workspace> intake issues --device SYNTH-A
 python3 configs/pcbknowledge_agent.py --repo <workspace> intake coverage
 python3 configs/pcbknowledge_agent.py --repo <workspace> intake report --device SYNTH-A
+python3 configs/pcbknowledge_agent.py --repo <workspace> intake bundle --device SYNTH-A
 ```
 
 `SYNTH-A` is an invented filter example, not component knowledge. `list` returns
 intake metadata batches; `search` returns noncanonical fact candidates; `issues`
 returns source warnings and any validated handling receipts. `report` renders
 a [scoped Markdown inspection aid](intake-report.md) with full recorded conditions
-and warnings; at least an exact source ID or device is required. See the
+and warnings; at least an exact source ID or device is required. `bundle` captures
+a [machine-readable scoped handoff](intake-bundle.md) with complete source context
+and per-record metadata pins, also requiring an exact source ID or device. See the
 [coverage inventory](intake-coverage.md) for the aggregate view and the
 [lightweight contract](lightweight-knowledge.md) for authority boundaries.
 

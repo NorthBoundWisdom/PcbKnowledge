@@ -1042,6 +1042,19 @@ def _intake_reference(repository: KnowledgeRepository, arguments: argparse.Names
     return 0
 
 
+def _intake_bundle(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
+    from pcbknowledge.git_native.intake_bundle import intake_bundle
+    filters = {}
+    for key in ("source_id", "manufacturer", "device", "package", "revision"):
+        values = getattr(arguments, key)
+        if values is not None:
+            if len(values) != 1:
+                raise ValueError("intake bundle requires one value per source filter")
+            filters[key] = values[0]
+    _print(intake_bundle(repository.root, **filters))
+    return 0
+
+
 def _intake_coverage(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
     from pcbknowledge.git_native.intake_coverage import intake_coverage
     _print(intake_coverage(repository.root))
@@ -1674,6 +1687,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             command.add_argument("--" + key, required=True, action="append",
                                  help="one exact value; duplicate selectors are rejected")
         command.set_defaults(handler=_intake_reference)
+    intake_bundle = intake_actions.add_parser(
+        "bundle", allow_abbrev=False,
+        help="capture complete scoped metadata and item pins; requires --source-id or --device")
+    for field in ("source-id", "manufacturer", "device", "package", "revision"):
+        intake_bundle.add_argument("--" + field, action="append",
+                                   help="one exact structured string; duplicate filters are rejected")
+    intake_bundle.set_defaults(handler=_intake_bundle)
     intake_coverage = intake_actions.add_parser(
         "coverage", allow_abbrev=False,
         help="inventory recorded scope, evidence metadata and gaps; not completeness or readiness")
@@ -1749,7 +1769,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         # Intake reads must not create canonical/cache directories even in a
         # fresh Git workspace. Other commands keep their existing layout contract.
-        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report, _intake_evidence_audit, _intake_reference):
+        if arguments.handler in (_intake_list, _intake_search, _intake_issues, _intake_coverage, _intake_report, _intake_evidence_audit, _intake_reference, _intake_bundle):
             repository = KnowledgeRepository(Path(arguments.repo))
         else:
             repository = _repository(arguments.repo)

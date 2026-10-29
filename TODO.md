@@ -13,6 +13,23 @@ inventory; snapshot counts are not per-item human review counts. Prior receipts,
 intake fields, warnings, source restrictions and CI verification remain separate.
 Future work is not accepted in advance.
 
+## Scoped machine-readable intake handoff
+
+- [x] Add a [read-only scoped bundle](docs/intake-bundle.md) with complete source,
+  batch, candidate, warning and handling context and individually resolvable pins
+  from one validated load. No lexical/fact-only filter can omit source warnings.
+- Synthetic checks cover exact scope, empty sources, batch-local identity, full
+  candidate parity, item resolution, byte/context drift, complete fingerprint,
+  invalid queue/selector refusal and selected-workspace readonly CLI behavior.
+  This is not an atomic snapshot, canonical export, original-byte verification,
+  renewed owner approval or formal pilot completion.
+- Local receipt (2026-10-29): 13 focused tests; final Build and Test each 474
+  tests without skips; English/public/vendor, workspace, Config, Agent validate
+  and Package gates pass. All 801 existing aggregate/disposition cases and 49
+  source-scope bundle replays with 428 individual item resolutions pass, retaining
+  37 batches / 329 facts. Independent Agent review found no blocking issue.
+  Exact published-commit CI is checked separately after publication.
+
 ## Fixed synthetic INA219 register interpretation
 
 The [register example](docs/worked-examples/ina219-register-scale.md) separates
