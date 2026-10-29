@@ -39,9 +39,9 @@ answer here.
 | D10 | Substitution when an official source is inaccessible | Select an equivalent part whose manufacturer drawing or datasheet downloads without bypass; record the substitution and the failed URL in the commit body. Example: Wurth 61300211121 (HTTP 403) is replaced by another manufacturer's 2.54 mm header |
 | D11 | G1 passive parts | One series per passive type so one cited source covers every value: KEMET C0603C ceramic capacitors (and the same family in 0805 where 10 uF needs it) and Vishay CRCW0603 thick-film resistors. Each value is its own orderable `part` record citing the series datasheet |
 | D12 | Fab profile for G1 (refines D2) | JLCPCB standard two-layer, 1.6 mm FR-4, 1 oz outer copper, single-side SMT assembly. Values are cited from its public capability pages with access date; the owner may replace the fab |
-| D13 | G1 evaluation temperature | Delegated: evaluate G1 at 23 degC, matching Eaton PTC resistance evidence; retain the full 0.5 A USB budget in headroom. This is not all-temperature qualification. |
-| D14 | Evidence-driven G1 substitutions | Delegated under D10: Yageo resistors, Eaton PTS120615V050 PTC and ST SM6T6V8A TVS replace inaccessible/restricted sources; ST LDL1117S33R replaces failed-headroom LD1117; 25 V input capacitance covers the selected TVS clamp. |
-| D15 | Board and oscillator compatibility | Delegated: use Wurth 632723300011 explicitly supporting 1.6 mm boards instead of the 0.8 mm Amphenol; use ABLS-8.000MHZ-18-R75 and 22 pF loads after source-based startup/conditional drive screening. Physical oscillator measurement remains Stage 6. |
+| D13 | G1 evaluation temperature | Implementer-selected under brief delegation, not owner-specified: evaluate G1 at 23 degC, matching Eaton PTC resistance evidence; retain the full 0.5 A USB budget in headroom. This is not all-temperature qualification. |
+| D14 | Evidence-driven G1 substitutions | Implementer-selected under D10 delegation: Yageo resistors, Eaton PTS120615V050 PTC and ST SM6T6V8A TVS replace inaccessible/restricted sources; ST LDL1117S33R replaces failed-headroom LD1117; 25 V input capacitance covers the selected TVS clamp. |
+| D15 | Board and oscillator compatibility | Implementer-selected under brief delegation: use Wurth 632723300011 explicitly supporting 1.6 mm boards instead of the 0.8 mm Amphenol; use ABLS-8.000MHZ-18 and 22 pF loads after source-based startup/conditional drive screening. Physical oscillator measurement remains Stage 6. |
 
 ## Stage 0 — Course correction (complete)
 
