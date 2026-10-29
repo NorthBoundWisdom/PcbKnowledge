@@ -1,5 +1,12 @@
 {
   "entries": {
+    "BGA": {
+      "queries": [
+        "Q1",
+        "Q2",
+        "Q11"
+      ]
+    },
     "CHIP_0402": {
       "queries": [
         "Q3"
@@ -75,6 +82,11 @@
         "Q3"
       ]
     },
+    "SOP-16": {
+      "queries": [
+        "Q3"
+      ]
+    },
     "SOT-223": {
       "queries": [
         "Q3"
@@ -88,5 +100,5 @@
   },
   "id": "registry:package-families",
   "schema": "pcbknowledge.registry.v2",
-  "scope": "G1"
+  "scope": "BOARD_GENERATION"
 }

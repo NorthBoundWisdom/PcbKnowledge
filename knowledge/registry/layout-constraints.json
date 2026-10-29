@@ -20,6 +20,18 @@
         "Q7"
       ]
     },
+    "DIFFERENTIAL_PAIR": {
+      "fields": [
+        "nets",
+        "min_width",
+        "gap",
+        "max_skew"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
     "EDGE_DISTANCE": {
       "fields": [
         "subject",
@@ -125,5 +137,5 @@
   },
   "id": "registry:layout-constraints",
   "schema": "pcbknowledge.registry.v2",
-  "scope": "G1"
+  "scope": "BOARD_GENERATION"
 }

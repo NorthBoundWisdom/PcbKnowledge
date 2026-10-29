@@ -1,0 +1,163 @@
+{
+  "category": "sensor.temperature",
+  "checks": [],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:nxp-pct2075d-118"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 5,
+      "source": "source:nxp-pct2075"
+    },
+    {
+      "page": 8,
+      "source": "source:nxp-pct2075"
+    },
+    {
+      "page": 18,
+      "source": "source:nxp-pct2075"
+    },
+    {
+      "page": 13,
+      "source": "source:nxp-pct2075"
+    },
+    {
+      "page": 20,
+      "source": "source:nxp-pct2075"
+    }
+  ],
+  "id": "block:i2c-temperature-sensor",
+  "layout": [
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "U1",
+        "C1",
+        "R1"
+      ]
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Place the supply decoupler near the sensor supply pin.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "U1"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:PWR",
+        "U1.pin:8",
+        "C1.pin:1",
+        "R1.pin:1"
+      ],
+      "name": "PWR"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:4",
+        "U1.pin:5",
+        "U1.pin:6",
+        "U1.pin:7",
+        "C1.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:SDA",
+        "U1.pin:1"
+      ],
+      "name": "SDA"
+    },
+    {
+      "connect": [
+        "port:SCL",
+        "U1.pin:2"
+      ],
+      "name": "SCL"
+    },
+    {
+      "connect": [
+        "U1.pin:3",
+        "R1.pin:2"
+      ],
+      "name": "OS_ALERT"
+    }
+  ],
+  "parameters": {
+    "input_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D28 reserves 7 mA: maximum IC supply current 0.4 mA plus OS pull-up current at the full 5.5 V sensor operating limit / 990 ohm totals less than 6 mA.",
+        "unit": "A",
+        "value": 0.007
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "input_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D28 selects the nominal 3.3 V logger rail, within the sensor 2.7–5.5 V operating range.",
+        "unit": "V",
+        "value": 3.3
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "PWR"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SDA"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SCL"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
+    "notes": "Grounded address pins select 0x48. OS has a 1 kohm local pull-up and is unused externally. Shared I2C bus supplies SDA/SCL pull-ups; C1 is the documented 0.1 uF supply decoupler.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

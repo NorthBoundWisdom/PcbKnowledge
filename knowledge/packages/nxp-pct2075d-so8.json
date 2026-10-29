@@ -1,0 +1,503 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 24,
+        "source": "source:nxp-pct2075"
+      },
+      "max": 1.75,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 24,
+        "source": "source:nxp-pct2075"
+      },
+      "max": 5.0,
+      "min": 4.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 24,
+        "source": "source:nxp-pct2075"
+      },
+      "max": 4.0,
+      "min": 3.8,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Engineering courtyard margin around maximum body and pads; exceeds the recommended 7.00 by 5.50 mm occupied area.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 24,
+      "source": "source:nxp-pct2075"
+    },
+    {
+      "page": 30,
+      "source": "source:nxp-pct2075"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -1.905
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -0.635
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.635
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.905
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.905
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.635
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -0.635
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "kind": "SMD",
+      "number": "8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Manufacturer reflow pattern rotated to pin 1 upper left; board top view.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 1.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": 2.65
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 30,
+          "source": "source:nxp-pct2075"
+        },
+        "unit": "mm",
+        "value": -1.905
+      }
+    }
+  ],
+  "family": "EXPLICIT",
+  "id": "package:nxp-pct2075d-so8",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 3,
+        "source": "source:nxp-pct2075"
+      },
+      {
+        "page": 24,
+        "source": "source:nxp-pct2075"
+      },
+      {
+        "page": 30,
+        "source": "source:nxp-pct2075"
+      }
+    ],
+    "mpns": [
+      "PCT2075D,118"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

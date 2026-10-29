@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 325640,
+  "id": "source:wch-ch340-v3d",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 17,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_guards",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+    ]
+  },
+  "publisher": "Nanjing Qinheng Microelectronics Co., Ltd.",
+  "revision": "3D",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "4d7b150edfda88e44eb8f499c22693318666968125ff17f652ca9983d9929e5e",
+  "title": "CH340 USB to serial port chip datasheet",
+  "url": "https://www.wch-ic.com/download/file?id=79",
+  "verification": "AGENT_VERIFIED"
+}

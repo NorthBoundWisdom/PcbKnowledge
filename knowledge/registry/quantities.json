@@ -45,5 +45,5 @@
   },
   "id": "registry:quantities",
   "schema": "pcbknowledge.registry.v2",
-  "scope": "G1"
+  "scope": "BOARD_GENERATION"
 }

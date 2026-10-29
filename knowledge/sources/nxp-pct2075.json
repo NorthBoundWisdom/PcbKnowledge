@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-29",
+  "bytes": 511371,
+  "id": "source:nxp-pct2075",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 38,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
+    "notes": "Public manufacturer reference; factual extraction only. NXP copyright retained; no redistribution permission claimed. Original PDF remains in ignored cache.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+    ]
+  },
+  "publisher": "NXP Semiconductors",
+  "revision": "Rev. 10.1 — 15 September 2021",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "d4273d732ecb1240a35c7b548ecfdaaaffa9d9cf902ecf92185bcc11d30079b0",
+  "title": "PCT2075 I2C temperature sensor product data sheet",
+  "url": "https://www.nxp.com/docs/en/data-sheet/PCT2075.pdf",
+  "verification": "AGENT_VERIFIED"
+}
