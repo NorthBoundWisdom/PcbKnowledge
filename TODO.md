@@ -13,6 +13,23 @@ inventory; snapshot counts are not per-item human review counts. Prior receipts,
 intake fields, warnings, source restrictions and CI verification remain separate.
 Future work is not accepted in advance.
 
+## Complete intake selection drift check
+
+- [x] Add explicit [bundle verification](docs/intake-bundle.md#verify-complete-current-selection)
+  against the caller's expected digest and identical exact source filters. A new
+  matching batch is detected even when all old individual item pins still verify.
+- Preserve one validated load, whole-queue validation, complete payload equality,
+  no partial stdout or silent refresh on mismatch, and unchanged authority/source
+  restrictions. A match is neither an atomic snapshot nor provenance authentication.
+- Synthetic coverage includes matching additions/removals, empty-to-nonempty scope,
+  filter binding, byte/context/receipt drift and actual readonly CLI behavior.
+- Local receipt (2026-10-29): 25 focused bundle checks; Build and Test each
+  486 tests without skips; all 801 existing retrieval/disposition cases and 49
+  source-scope match plus 49 stale-digest checks pass. English/public/vendor,
+  workspace, Config, Agent validate and Package gates pass; metadata package
+  bytes remain unchanged. Independent Agent review passed 70 focused tests and
+  found no blocking issue. Remote publication and CI are not claimed.
+
 ## Scoped machine-readable intake handoff
 
 - [x] Add a [read-only scoped bundle](docs/intake-bundle.md) with complete source,

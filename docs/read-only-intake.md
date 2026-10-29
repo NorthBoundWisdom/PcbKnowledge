@@ -18,7 +18,10 @@ returns source warnings and any validated handling receipts. `report` renders
 a [scoped Markdown inspection aid](intake-report.md) with full recorded conditions
 and warnings; at least an exact source ID or device is required. `bundle` captures
 a [machine-readable scoped handoff](intake-bundle.md) with complete source context
-and per-record metadata pins, also requiring an exact source ID or device. See the
+and per-record metadata pins, also requiring an exact source ID or device.
+`intake verify-bundle --sha256 <captured-digest>` with those same filters checks
+the entire current selection, including new matching records, without refreshing
+a stale expected digest. See the
 [coverage inventory](intake-coverage.md) for the aggregate view and the
 [lightweight contract](lightweight-knowledge.md) for authority boundaries.
 

@@ -1043,7 +1043,7 @@ def _intake_reference(repository: KnowledgeRepository, arguments: argparse.Names
 
 
 def _intake_bundle(repository: KnowledgeRepository, arguments: argparse.Namespace) -> int:
-    from pcbknowledge.git_native.intake_bundle import intake_bundle
+    from pcbknowledge.git_native.intake_bundle import intake_bundle, verify_intake_bundle
     filters = {}
     for key in ("source_id", "manufacturer", "device", "package", "revision"):
         values = getattr(arguments, key)
@@ -1051,7 +1051,13 @@ def _intake_bundle(repository: KnowledgeRepository, arguments: argparse.Namespac
             if len(values) != 1:
                 raise ValueError("intake bundle requires one value per source filter")
             filters[key] = values[0]
-    _print(intake_bundle(repository.root, **filters))
+    if arguments.intake_action == "verify-bundle":
+        if len(arguments.sha256) != 1:
+            raise ValueError("intake verify-bundle requires one expected digest")
+        result = verify_intake_bundle(repository.root, expected_sha256=arguments.sha256[0], **filters)
+    else:
+        result = intake_bundle(repository.root, **filters)
+    _print(result)
     return 0
 
 
@@ -1687,13 +1693,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             command.add_argument("--" + key, required=True, action="append",
                                  help="one exact value; duplicate selectors are rejected")
         command.set_defaults(handler=_intake_reference)
-    intake_bundle = intake_actions.add_parser(
-        "bundle", allow_abbrev=False,
-        help="capture complete scoped metadata and item pins; requires --source-id or --device")
-    for field in ("source-id", "manufacturer", "device", "package", "revision"):
-        intake_bundle.add_argument("--" + field, action="append",
-                                   help="one exact structured string; duplicate filters are rejected")
-    intake_bundle.set_defaults(handler=_intake_bundle)
+    for action, help_text in (
+        ("bundle", "capture complete scoped metadata and item pins; requires --source-id or --device"),
+        ("verify-bundle", "verify the complete current selection against an explicit bundle digest"),
+    ):
+        command = intake_actions.add_parser(action, allow_abbrev=False, help=help_text)
+        for field in ("source-id", "manufacturer", "device", "package", "revision"):
+            command.add_argument("--" + field, action="append",
+                                 help="one exact structured string; duplicate filters are rejected")
+        if action == "verify-bundle":
+            command.add_argument("--sha256", required=True, action="append",
+                                 help="one expected complete bundle digest; never automatically refreshed")
+        command.set_defaults(handler=_intake_bundle)
     intake_coverage = intake_actions.add_parser(
         "coverage", allow_abbrev=False,
         help="inventory recorded scope, evidence metadata and gaps; not completeness or readiness")
@@ -1744,6 +1755,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def _error_code(error: BaseException) -> str:
+    from pcbknowledge.git_native.intake_bundle import StaleIntakeBundle
+    if isinstance(error, StaleIntakeBundle):
+        return "STALE_INTAKE_BUNDLE"
     from pcbknowledge.git_native.intake_reference import IntakeItemNotFound, StaleIntakeItem
     if isinstance(error, StaleIntakeItem):
         return "STALE_INTAKE_REFERENCE"

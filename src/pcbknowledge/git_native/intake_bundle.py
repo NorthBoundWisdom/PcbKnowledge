@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 
 from .intake import (
     IntakeError, _filters, _matches, _search_loaded_facts, _search_loaded_issues,
@@ -78,3 +79,35 @@ def intake_bundle(
     # Fingerprint the complete projection except this field. This is an integrity
     # aid, not a signature, authenticity claim or new verification operation.
     return {**result, "bundle_sha256": candidate_digest(result)}
+
+
+class StaleIntakeBundle(IntakeError):
+    """The complete current selection differs from the explicitly expected digest."""
+
+
+def verify_intake_bundle(
+    root: Path, *, expected_sha256: str, source_id: str | None = None,
+    manufacturer: str | None = None, device: str | None = None,
+    package: str | None = None, revision: str | None = None,
+) -> dict:
+    """Verify current complete scoped metadata without importing a saved artifact.
+
+    The expected digest binds filters as well as the complete bundle. Success
+    does not establish original bytes, an atomic snapshot or authenticity of
+    the caller's expected digest. A mismatch never silently returns a new pin.
+    """
+    if (not isinstance(expected_sha256, str)
+            or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None):
+        raise IntakeError("Expected bundle digest must be 64 lowercase hexadecimal digits.")
+    bundle = intake_bundle(root, source_id=source_id, manufacturer=manufacturer,
+                           device=device, package=package, revision=revision)
+    if bundle["bundle_sha256"] != expected_sha256:
+        raise StaleIntakeBundle(
+            "Stale intake bundle: complete selected metadata or exact filters changed. "
+            "Review current scope before explicitly capturing a new bundle.")
+    return {
+        "format": "pcbknowledge-intake-bundle-verification-v1",
+        "operation": "VERIFY_CURRENT_METADATA_SELECTION", "canonical": False,
+        "evidence_verification": "NOT_LOCALLY_VERIFIED",
+        "expected_sha256": expected_sha256, "bundle": bundle,
+    }

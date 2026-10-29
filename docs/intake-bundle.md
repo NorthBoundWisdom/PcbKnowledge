@@ -80,6 +80,54 @@ no fallback workspace is used. Python interpreter cache creation is separately
 suppressed with `-B`. Historical evidence and owner acknowledgements remain
 recorded provenance; neither is renewed by capture or item verification.
 
+## Verify complete current selection
+
+After explicitly capturing a bundle, pass its `bundle_sha256` and the **same
+exact source filters** to the read-only verification command:
+
+```bash
+python3 -B configs/pcbknowledge_agent.py --repo <workspace> intake verify-bundle \
+  --device SYNTH-A --sha256 <captured-bundle-sha256>
+```
+
+The digest must be exactly 64 lowercase hexadecimal characters. Each filter and
+the digest may occur only once. There is no saved-file input, automatic lookup
+of an expected digest, fallback workspace or implicit refresh. The caller owns
+the provenance of the expected digest; a match does not authenticate it.
+**The digest is not a signature. This command does not authenticate a saved
+bundle file, verify manufacturer originals, or create an atomic snapshot.**
+
+Success returns `pcbknowledge-intake-bundle-verification-v1`, operation
+`VERIFY_CURRENT_METADATA_SELECTION`, the expected digest, and the complete
+unchanged captured-format bundle under `bundle`. Both layers remain noncanonical
+and `NOT_LOCALLY_VERIFIED`. The inner capture operation is deliberately not
+relabelled, which would change its fingerprint. Verification performs one
+validated load and compares its whole selected projection to the expected hash.
+It does not reread or lock metadata after hashing and makes no atomic snapshot
+or later-state guarantee.
+
+A mismatch returns status 2, `STALE_INTAKE_BUNDLE`, and no stdout or replacement
+digest. Review the current scope before separately running `intake bundle` to
+capture new metadata. Invalid workspace, malformed metadata and invalid digest
+syntax fail through their existing validation paths, not a misleading success
+or drift conclusion. No output or receipt file is written automatically.
+
+Unlike checking old `intake item` references one by one, this operation detects
+new matching batches, sources, facts and warnings, removed selected records,
+changed batch bytes/context and changed handling receipts. It also detects an
+empty selection becoming nonempty. Exact filter arguments themselves are hashed:
+replacing `--device` with a `--source-id` that currently returns the same records
+is not the same expected bundle. Missing/null/non-string structured fields never
+match through fallback. Unmatched new batches do not change the selected bundle,
+but whole-queue validation still rejects an invalid unselected batch.
+
+The source batch's full byte hash and batch context are deliberately retained,
+so even an edit to an unselected record **inside a selected batch** invalidates
+the bundle. This conservative behavior is not a semantic electrical comparison.
+A matching digest proves only equality of the current validated projection with
+the supplied fingerprint. It does not prove that the selection is sufficient,
+that no gaps exist, or that source originals or the circuit have been verified.
+
 ## Regression coverage
 
 `tests/git_native/test_intake_bundle.py` covers full candidate parity and item
@@ -90,3 +138,10 @@ pins, disposition-only changes, unusable selector refusal, invalid unselected
 batches, parser failures and actual public-wrapper selected-workspace reads.
 Successful and failed wrapper calls leave the selected workspace tree unchanged.
 These software checks are not source-original review or engineering validation.
+
+`tests/git_native/test_intake_bundle_verification.py` adds complete selection
+addition/removal, filter binding, empty-to-nonempty selection, unchanged old item
+pins despite new matching batches, byte/context/receipt-only drift, unselected
+batch validation, one-load behavior, malformed/duplicate digest and filter
+refusal, explicit stale errors without refresh, and real public-wrapper success
+and failure with unchanged selected-workspace file bytes and directory layout.
