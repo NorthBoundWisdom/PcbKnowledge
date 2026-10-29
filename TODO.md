@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_7_ACTIVE` (G1 at A2)
+> Status: `CONTINUOUS_MODE_STAGE_8_ACTIVE` (G1 at A2)
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -442,34 +442,34 @@ Goal: everything a layout tool (PcbAtlas, or the owner in KiCad) needs to start
 G1, plus an automatic judge for the finished layout. PcbKnowledge still never
 places or routes.
 
-- [ ] ADR-025 (accepted under delegation, D16-D17): derived KiCad board project and
+- [x] ADR-025 (accepted under delegation, D16-D17): derived KiCad board project and
   a read-only checker over exported board files. Update ADR-022's boundary text by
   link, not by copy.
-- [ ] Rules export: `.kicad_dru` and net classes from the fab profile and the
+- [x] Rules export: `.kicad_dru` and net classes from the fab profile and the
   intent's net constraints (`NET_WIDTH_MIN`, clearance, drill, annular ring,
   hole-to-edge). Deterministic; unit tests per rule kind.
-- [ ] Board skeleton export: `.kicad_pcb` with the brief's outline, mounting holes
+- [x] Board skeleton export: `.kicad_pcb` with the brief's outline, mounting holes
   at their `EDGE_DISTANCE` positions, all footprints from the Stage 3 library with
   nets assigned and parked outside the outline, and the rules above. If
   `kicad-cli` exists, run `pcb drc` on it and confirm only unrouted and placement
   findings appear; record the result.
-- [ ] `layout check <intent> <board.kicad_pcb>`: parse the exported board (an
+- [x] `layout check <intent> <board.kicad_pcb>`: parse the exported board (an
   original minimal S-expression reader) and judge every constraint kind the G1
   intent uses: `PLACE_NEAR`, `GROUP`, `EDGE_PLACEMENT`, `EDGE_DISTANCE`,
   `KEEPOUT`, `NET_WIDTH_MIN`, `KELVIN`, `MINIMIZE_LOOP` (bounding polygon
   estimate). Each result is `PASS`, `FAIL` with measured values, or
   `NOT_CHECKABLE` with a reason. Also confirm every intent net and pad matches the
   board.
-- [ ] Synthetic fixture boards for the checker: one hand-built small board that
+- [x] Synthetic fixture boards for the checker: one hand-built small board that
   passes and mutations that fail each kind. Fixtures are original files under
   `tests/`.
-- [ ] `drc` wrapper: run `kicad-cli pcb drc` with the generated rules when
+- [x] `drc` wrapper: run `kicad-cli pcb drc` with the generated rules when
   available and fold the result into one A4 report; `NOT_RUN` when KiCad is absent
   (not a pass).
-- [ ] Assembly BOM export (CSV) from the intent: references, MPN, manufacturer,
+- [x] Assembly BOM export (CSV) from the intent: references, MPN, manufacturer,
   footprint, mount type, quantity. Distributor numbers only as identifiers (D6).
   Placement files (CPL) need a placed board and belong to the layout tool.
-- [ ] `docs/local-workflow.md`: how the owner or PcbAtlas takes the G1 handoff
+- [x] `docs/local-workflow.md`: how the owner or PcbAtlas takes the G1 handoff
   project, lays it out, and runs `layout check` and `drc`.
 - [ ] (owner-only) Lay out G1 in PcbAtlas or KiCad from the handoff project and
   run `layout check` and `drc` (A3, A4).
@@ -479,6 +479,10 @@ places or routes.
 Exit: the G1 handoff project opens in KiCad 9; DRC with generated rules reports
 only unrouted/placement findings; `layout check` passes the fixture board and
 fails every mutation with the expected kind.
+
+Receipt (2026-10-29): data `e91e2f9`, implementation `9cc21c5`; full gate PASS, 226 tests/no skips, 85 records and 67/67 audited authority reachable; G1 remains A2 with 88 checks.
+Native KiCad 9.0.2 on authenticated bundle: zero rule violations and 119 unconnected items; parked layout correctly reports FAIL (24 placement findings, eight NOT_CHECKABLE), not A3/A4 acceptance. D24-D27 record measurement, fillet and compatible USB/courtyard decisions.
+Review: 13 checks; pad-geometry forgery and two source-claim findings fixed, board/courtyard checks strengthened, independent actual-source and generated-footprint visual review passed. Next: Stage 8 corpus and honest query-isolated synthesis.
 
 ## Stage 8 — Generalization and honest synthesis evaluation
 
