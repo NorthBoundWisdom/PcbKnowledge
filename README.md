@@ -35,6 +35,9 @@ The owner gave [batch-level content acceptance on 2026-10-28](docs/owner-accepta
 for the original pinned 100-annotation snapshot, not the later application batches.
 This does not claim per-annotation human
 evidence checks, canonical approval, or completion of the formal pilot.
+A later [overall owner acknowledgement](docs/owner-acknowledgement-2026-10-29.md)
+is anchored to the observed published snapshot, without an itemized human audit
+claim, authority upgrade or automatic acceptance of future work.
 
 ```bash
 python3 configs/pcbknowledge_agent.py --repo . intake list

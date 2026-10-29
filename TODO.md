@@ -4,6 +4,15 @@
 > Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Owner acknowledgement recorded without authority promotion
+
+The [2026-10-29 record](docs/owner-acknowledgement-2026-10-29.md) captures the
+owner's overall acceptance and continuation instruction against observed main
+`c02a34081f2d2003f3ce7839d7d4922fef9a899e`. The owner supplied no itemized audit
+inventory; snapshot counts are not per-item human review counts. Prior receipts,
+intake fields, warnings, source restrictions and CI verification remain separate.
+Future work is not accepted in advance.
+
 ## Fixed synthetic INA219 register interpretation
 
 The [register example](docs/worked-examples/ina219-register-scale.md) separates
