@@ -86,6 +86,20 @@ class FootprintTests(unittest.TestCase):
         self.assertEqual((pads[0]['x'],pads[0]['y'],pads[0]['width'],pads[0]['height']),(-2.75,-2.3,2.4,.95))
         self.assertEqual((pads[3]['x'],pads[3]['y'],pads[3]['width'],pads[3]['height']),(2.75,0,2.4,3.25))
 
+    def test_g1_lqfp_nominal_side_extension_and_clearance(self):
+        original = json.loads((ROOT / 'knowledge/packages/lqfp-48-stm32.json').read_text())
+        geometry = derive_footprint(original)
+        self.assertEqual(len(geometry['pads']), 48)
+        self.assertEqual(geometry['pads'][0]['height'], .35)
+        self.assertAlmostEqual(.5 - geometry['pads'][0]['height'], .15)
+        self.assertGreater(geometry['pads'][0]['height'], original['drawing']['lead_width']['max'])
+        compact = copy.deepcopy(original)
+        compact['density'] = 'COMPACT'
+        robust = copy.deepcopy(original)
+        robust['density'] = 'ROBUST'
+        self.assertEqual(derive_footprint(compact)['pads'][0]['height'], .32)
+        self.assertEqual(derive_footprint(robust)['pads'][0]['height'], .42)
+
     def test_gullwing_variants_and_four_sides(self):
         # Synthetic drawing tables exercise topology, not invented source claims.
         for count in (4,6,8,10,16):
@@ -103,7 +117,7 @@ class FootprintTests(unittest.TestCase):
         self.assertEqual((pads[12]['x'],pads[12]['y']),(-2.75,4.3))
         self.assertEqual((pads[24]['x'],pads[24]['y']),(4.3,2.75))
         self.assertEqual((pads[36]['x'],pads[36]['y']),(2.75,-4.3))
-        self.assertEqual((pads[0]['width'],pads[0]['height']),(1,.37))
+        self.assertEqual((pads[0]['width'],pads[0]['height']),(1,.35))
 
     def test_crystal_header_and_mechanical_table(self):
         crystal=package('crystal_four_pad',count=4,length=2.5,width=3.2,pitch=2.2,row_pitch=1.6,pad_width=1.0,pad_height=.8)

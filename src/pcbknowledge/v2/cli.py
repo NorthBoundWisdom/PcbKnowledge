@@ -14,7 +14,10 @@ from .evidence import add_evidence, fetch_evidence
 from .bundle import Bundle, build_bundle
 from .catalog import Catalog, MAX_RECORD_BYTES
 from .coverage import coverage
-from .expansion import expand_bundle
+from .expansion import expand_bundle, validate_expansion
+from .layout import check_board
+from .handoff import export_handoff
+from .drc import run_drc
 from .netlist import export_design
 
 
@@ -54,6 +57,7 @@ def parser():
     evaluation.add_argument('--reference', type=Path, required=True)
     evaluation.add_argument('--attempt', type=Path, action='append', required=True)
     evaluation.add_argument('--output', type=Path)
+    layout_parsers(groups)
     groups.add_parser('change-scope')
     for name in ('source', 'part', 'package', 'block', 'fab', 'registry'):
         actions = groups.add_parser(name).add_subparsers(dest='action', required=True)
@@ -72,18 +76,43 @@ def parser():
     return result
 
 
+def layout_parsers(groups):
+    actions = groups.add_parser('layout').add_subparsers(dest='action', required=True)
+    export = actions.add_parser('export')
+    export.add_argument('--bundle', type=Path, required=True)
+    export.add_argument('--graph', type=Path, required=True)
+    export.add_argument('--intent', type=Path, required=True)
+    export.add_argument('--output', type=Path, default=Path('build/handoff'))
+    check = actions.add_parser('check')
+    check.add_argument('intent', type=Path)
+    check.add_argument('board', type=Path)
+    check.add_argument('--bundle', type=Path, required=True)
+    check.add_argument('--graph', type=Path, required=True)
+    check.add_argument('--output', type=Path, default=Path('build/layout-report.json'))
+    drc = groups.add_parser('drc')
+    drc.add_argument('board', type=Path)
+    drc.add_argument('--output', type=Path, default=Path('build/drc-report.json'))
+    for name in ('intent', 'bundle', 'graph'):
+        drc.add_argument('--' + name, type=Path)
+
+
 def derived_path(root, requested):
     """Resolve against the selected workspace and reject symlink/path escapes."""
     build = root / 'build'
     if build.resolve() != build:
         raise ValueError('Derived output build/ must not be a symlink')
-    output = (requested if requested.is_absolute() else root / requested).resolve()
+    candidate = requested if requested.is_absolute() else root / requested
+    if any(path.is_symlink() for path in (candidate, *candidate.parents)):
+        raise ValueError('Derived output paths must not contain symlinks')
+    output = candidate.resolve()
     if not output.is_relative_to(build) or output == build:
         raise ValueError('Derived output must be written below build/')
     return output
 
 
 def load_document(path):
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('Input document must be a regular non-symlink file')
     if path.stat().st_size > MAX_RECORD_BYTES:
         raise ValueError('Oversized input document')
     document = read_json(path.read_bytes())
@@ -114,6 +143,8 @@ def write_result(root, requested, result):
 
 def catalog_command(arguments, root, catalog, snapshot):
     group = arguments.group
+    if group == 'layout':
+        return layout_command(arguments, root, snapshot)
     if group == 'eval-synthesis':
         from .synthesis import evaluate
         result = evaluate(snapshot, load_document(arguments.reference),
@@ -146,6 +177,36 @@ def catalog_command(arguments, root, catalog, snapshot):
     return catalog.search(group, arguments.text, getattr(arguments, 'role', None))
 
 
+def checked_layout(arguments, snapshot):
+    intent = load_document(arguments.intent)
+    graph = load_document(arguments.graph)
+    validate_expansion(snapshot, intent, graph)
+    result = check_board(arguments.board, intent, snapshot.catalog)
+    return {**result, 'status': result['result']}
+
+
+def layout_command(arguments, root, snapshot):
+    output = derived_path(root, arguments.output)
+    if arguments.action == 'export':
+        path = export_handoff(load_document(arguments.intent), snapshot, load_document(arguments.graph), output)
+        return {'status': 'EXPORTED', 'directory': str(path), 'commit': snapshot.commit}
+    result = checked_layout(arguments, snapshot)
+    write_result(root, output, result)
+    return result
+
+
+def drc_command(arguments, root):
+    context = [arguments.intent, arguments.bundle, arguments.graph]
+    if any(context) and not all(context):
+        raise ValueError('DRC layout context requires --intent, --bundle and --graph together')
+    output = derived_path(root, arguments.output)
+    report = None
+    if all(context):
+        with Bundle(arguments.bundle) as snapshot:
+            report = checked_layout(arguments, snapshot)
+    return run_drc(arguments.board, output, root=root, layout_report=report)
+
+
 def validation_command(arguments, catalog):
     if arguments.action == 'coverage':
         return coverage(catalog, load_document(arguments.graph))
@@ -159,6 +220,8 @@ def validation_command(arguments, catalog):
 
 
 def dispatch(arguments, root):
+    if arguments.group == 'drc':
+        return drc_command(arguments, root)
     if arguments.group == 'change-scope':
         return change_scope(root)
     if arguments.group == 'bundle':
@@ -179,7 +242,9 @@ def dispatch(arguments, root):
 def result_exit_code(result):
     if not isinstance(result, dict):
         return 0
-    failures = {'REFUSED', 'INCOMPLETE', 'FAIL', 'FAILED', 'DIFFERENT_BYTES', 'INVALID', 'ERROR'}
+    failures = {
+        'REFUSED', 'INCOMPLETE', 'FAIL', 'FAILED', 'DIFFERENT_BYTES', 'INVALID', 'ERROR', 'NOT_CHECKABLE', 'NOT_RUN',
+    }
     if result.get('status') in failures or result.get('valid_for_single_commit') is False:
         return 2
     return 0

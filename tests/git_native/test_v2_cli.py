@@ -172,6 +172,42 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertEqual(result['status'], 'ERROR')
 
+    def test_layout_export_and_check_require_snapshot_replay(self):
+        bundle = self.bundle()
+        graph = self.document('graph.json', {'id': 'synthetic'})
+        intent = self.document('intent.json', {'status': 'EXPANDED'})
+        board = self.root / 'build/board.kicad_pcb'
+        with patch('pcbknowledge.v2.cli.export_handoff', return_value=self.root / 'build/handoff') as export:
+            code, result = self.run_cli('layout', 'export', '--bundle', bundle, '--graph', graph, '--intent', intent)
+            self.assertEqual((code, result['status']), (0, 'EXPORTED'))
+            self.assertEqual(export.call_args.args[0], {'status': 'EXPANDED'})
+        report = {'result': 'NOT_CHECKABLE', 'checks': []}
+        with patch('pcbknowledge.v2.cli.validate_expansion') as replay:
+            with patch('pcbknowledge.v2.cli.check_board', return_value=report) as check:
+                code, result = self.run_cli('layout', 'check', intent, board, '--bundle', bundle, '--graph', graph)
+                self.assertEqual((code, result['status']), (2, 'NOT_CHECKABLE'))
+                replay.assert_called_once()
+                check.assert_called_once()
+        with patch('pcbknowledge.v2.cli.validate_expansion', side_effect=ValueError('Replay mismatch')):
+            with patch('pcbknowledge.v2.cli.check_board') as check:
+                code, result = self.run_cli('layout', 'check', intent, board, '--bundle', bundle, '--graph', graph)
+                self.assertEqual(code, 2)
+                check.assert_not_called()
+
+    def test_drc_context_all_or_none_and_missing_layout_not_accepted(self):
+        board = self.root / 'build/board.kicad_pcb'
+        with patch('pcbknowledge.v2.cli.run_drc', return_value={'status': 'NOT_CHECKABLE', 'a4': 'PASS'}) as drc:
+            code, result = self.run_cli('drc', board)
+            self.assertEqual((code, result['status']), (2, 'NOT_CHECKABLE'))
+            self.assertIsNone(drc.call_args.kwargs['layout_report'])
+        with patch('pcbknowledge.v2.cli.run_drc') as drc:
+            code, result = self.run_cli('drc', board, '--intent', 'intent.json')
+            self.assertEqual(code, 2)
+            self.assertIn('together', result['message'])
+            drc.assert_not_called()
+        with patch('pcbknowledge.v2.cli.run_drc', return_value={'status': 'NOT_RUN'}):
+            self.assertEqual(self.run_cli('drc', board)[0], 2)
+
 
 if __name__ == '__main__':
     unittest.main()

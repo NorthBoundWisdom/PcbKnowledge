@@ -11,7 +11,7 @@ from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
 # Intentional Stage 6 package identity and assembly-contract migration baseline.
-G1_CANONICAL_SHA256 = '8e0bcac4c6e1f78424d36617a30378f71e297bac02ce3993c1f9a675d29900e9'
+G1_CANONICAL_SHA256 = '10fbd1fad48855e011e58c0043176306ba3877666a861633e7c1cb095cfc6b9f'
 
 
 class GoldenAcceptanceTests(unittest.TestCase):

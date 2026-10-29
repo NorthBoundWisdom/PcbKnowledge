@@ -95,6 +95,10 @@ def _gullwing_pads(context):
     drawing, dim, count = context.record, context.dimension, context.count
     package, generator = context.package, context.generator
     toe, heel, side = context.fillets
+    # D25: four-sided nominal gull-wing pads use a 0.04 mm side extension.
+    # This remains above the cited maximum lead width; other families are unchanged.
+    if generator == 'gullwing_four_side' and context.density == 'NOMINAL':
+        side = 0.04
     span, width, pitch = dim('lead_span'), dim('lead_width'), dim('pitch')
     if 'lead_length' in drawing:
         length = dim('lead_length')

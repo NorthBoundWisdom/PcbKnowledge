@@ -25,6 +25,9 @@ One v2 record model lives in `schemas/` and `src/pcbknowledge/v2/`:
 | Expansion, rules and interchange | `v2/expansion.py`, `rules.py`, `netlist.py` |
 | Coverage and independent synthesis evaluation | `v2/coverage.py`, `synthesis.py` |
 | Query CLI, explicit evidence cache commands and change scope | `v2/cli.py` |
+| Derived KiCad project, rules and assembly BOM | `v2/handoff.py`, `handoff_rules.py` |
+| Exported-board parser and measured checks | `v2/sexpr.py`, `boardview.py`, `layout.py` |
+| Isolated native DRC and combined reports | `v2/drc.py` |
 | Loopback transport, view models, HTML | `v2/server.py`, `application.py`, `views.py` |
 
 The catalog covers all 15 G1 block instances with independently verified parts,
@@ -97,8 +100,11 @@ commit-pinned consumer bundles and pure deterministic expansion:
 brief -> block graph -> expand(pinned bundle, graph) -> design intent -> PcbAtlas
 ```
 
-PcbAtlas owns synthesis orchestration, board state, placement, routing, DRC and
-fabrication output. PcbKnowledge never reads or mutates live board state and has
+PcbAtlas owns synthesis orchestration, board state, placement, routing and
+fabrication output. Under D16-D17, PcbKnowledge additionally derives a parked
+KiCad 9 handoff and checks exported files without mutating them. Native DRC is
+optional and runs on isolated copies; unsupported geometry and absent tools are
+not passes. [ADR-025](adr/ADR-025-derived-board-handoff.md) defines this boundary. PcbKnowledge never reads or mutates live board state and has
 no PcbCore runtime dependency. [ADR-023](adr/ADR-023-design-intent-handoff.md) owns
 the JSON handoff and derived KiCad interchange contract.
 

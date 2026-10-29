@@ -65,6 +65,9 @@ The repository as of `58c6614` does not serve that goal:
    contract. PcbAtlas owns design synthesis orchestration, board state, placement,
    routing, DRC and fabrication output. PcbKnowledge never reads or mutates a live
    board; its expansion is a pure function over a pinned bundle.
+   [ADR-025](ADR-025-derived-board-handoff.md) permits derived parked handoff
+   projects and read-only checks over exported files, without transferring
+   placement, routing or live-board ownership.
 
 ## Consequences
 

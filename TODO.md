@@ -58,6 +58,10 @@ answer here.
 | D21 | Generalization corpus | Synthetic competition-style briefs beyond G1-G3: two G1 variants (G1V1, G1V2) and three negative briefs (N1-N3) that the closed world must refuse (Stage 8). Later briefs are added only when the previous ones reach A2 |
 | D22 | Evaluation independence | An attempt's author, its equivalence reviewer and the orchestrating agent are three different agent identities. The orchestrator may run commands but never judges equivalence |
 | D23 | Next fab profile | None until G2 needs one. G2 and G3 use the D12 profile unless a check fails against it |
+| D24 | Exported-board measurement policy | Implementer-selected under D16-D17: GROUP defaults to a 10 mm maximum pairwise origin distance; exact edge distances allow 0.01 mm serialization tolerance; loop area is a pad-center convex-hull estimate, not routed-loop certification. Ambiguous Kelvin branches and unsupported/unfilled copper geometry are NOT_CHECKABLE, never silently passed. |
+| D25 | Fine-pitch generated land allowance | Implementer-selected after real KiCad DRC: cap the nominal LQFP side fillet at 0.04 mm per side for the 0.50 mm pitch / 0.27 mm maximum STM32 lead width, giving a 0.35 mm pad and 0.15 mm inter-pad gap. Preserve cited dimensions and fab clearance; this is a derived engineering land-pattern decision, not a manufacturer recommendation. |
+| D26 | G1 USB land-pattern compatibility | Implementer-selected under D10: replace Wurth 632723300011, whose exact recommended annular rings fail the unchanged 0.25 mm fab floor, with Hirose CX90B2-24P using its exact drawing and handling guide. Keep 5 V sink, 1.6 mm PCB and fab limits; no enlargement of the original pattern or DRC waiver. |
+| D27 | Irregular connector courtyard datum | Keep CX90B2-24P manufacturer pad coordinates and cited physical body dimensions. A conservative 4.4 mm courtyard margin bounds the uncertain body-center offset about that drawing datum; it is an implementer envelope, not a manufacturer land recommendation or measured body size. |
 
 ## Stage 0 — Course correction (complete)
 

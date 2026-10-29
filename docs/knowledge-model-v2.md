@@ -134,3 +134,13 @@ The intake queue is frozen at local tag `intake-final` (owner publishes the tag)
 Only golden-design parts are rechecked and migrated. V2 schema/workspace policy
 changes and knowledge data use separate commits. Stage 2 removed the v1 records, review flows and intake toolchain. Later migration
 reads the frozen history rather than restoring the queue.
+
+## Exported-board conformance
+
+[ADR-025](adr/ADR-025-derived-board-handoff.md) permits deterministic parked
+KiCad projects derived from revalidated intent, not generated electrical layout.
+Rules and net classes preserve fab floors and intent minimum widths. Assembly
+CSV includes mount types and orderable identities; no placement file is emitted.
+A read-only bounded board parser checks identity and supported layout geometry.
+Unresolved Kelvin branches, unsupported shapes and absent filled copper remain
+`NOT_CHECKABLE`; native DRC absence is `NOT_RUN`. Neither state is success.

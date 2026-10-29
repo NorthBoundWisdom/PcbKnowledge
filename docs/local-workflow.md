@@ -234,3 +234,45 @@ The live page can differ from the cached snapshot. Saved HTML is never served as
 active content from the local application's origin, and its `/content` endpoint
 is rejected rather than passed to PDF.js. Engineering-default mechanical records
 without source/page citations display an explicit no-citation label.
+
+## Derived KiCad handoff and read-only board checks
+
+Build a clean commit-pinned bundle and expand the original graph first. Keep the
+bundle, graph and intent together; neither a saved `PASS` label nor an edited
+intent replaces revalidation against those inputs.
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . layout export \
+  --bundle build/bundle/<commit>.json --graph evals/golden-designs/g1.block-graph.json \
+  --intent build/g1-intent.json --output build/g1-handoff
+python3 configs/pcbknowledge_agent.py --repo . layout check \
+  build/g1-handoff/design-intent.json build/g1-handoff/design.kicad_pcb \
+  --bundle build/bundle/<commit>.json --graph evals/golden-designs/g1.block-graph.json \
+  --output build/g1-layout-report.json
+python3 configs/pcbknowledge_agent.py --repo . drc build/g1-handoff/design.kicad_pcb \
+  --intent build/g1-handoff/design-intent.json --bundle build/bundle/<commit>.json \
+  --graph evals/golden-designs/g1.block-graph.json --output build/g1-drc-report.json
+```
+
+Open `design.kicad_pro` in KiCad 9, retaining the adjacent `.kicad_dru`, local
+footprint library and `fp-lib-table`. Mounting holes follow the intent, while
+all electrical footprints are parked outside the outline. The owner or PcbAtlas
+must place and route them. Do not fabricate this skeleton. `assembly.csv` lists
+orderable identities, references and mount/assembly classification; it is not a
+placement/CPL file.
+
+Save an exported board after editing, then rerun both checks against the same
+pinned authority. The checker reads files only; the DRC wrapper uses temporary
+copies and isolated settings. Reports are derived JSON below `build/`, never
+edits to the board. A DRC-only invocation without intent/bundle/graph reports the
+native result but cannot claim complete layout conformance.
+
+Results distinguish `FAIL`, `NOT_CHECKABLE` and `NOT_RUN`. Missing KiCad is not a
+pass. Unrouted or out-of-outline findings are expected for a parked skeleton,
+not acceptable waivers for a finished board. Unsupported outline/courtyard/fill
+geometry and ambiguous Kelvin sense branches remain explicit. Loop-area checks
+are pad-center bounding-polygon estimates, not proof of a routed return path;
+keepout checks are conservative courtyard-envelope comparisons. See
+[ADR-025](adr/ADR-025-derived-board-handoff.md) for measurement scope. A3/A4 require
+review of the completed layout and all remaining findings; ordering and physical
+bring-up remain owner-only A5/A6 work.
