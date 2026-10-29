@@ -93,13 +93,26 @@
   "family": "CHIP_0805",
   "generator": "chip",
   "id": "package:chip-0805-kemet-x5r-25v",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:kemet-c0805c106k3pactu"
+      }
+    ],
+    "mpns": [
+      "C0805C106K3PACTU"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

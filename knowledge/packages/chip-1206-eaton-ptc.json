@@ -98,13 +98,26 @@
   "family": "CHIP_1206",
   "generator": "chip",
   "id": "package:chip-1206-eaton-ptc",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/build_g1_blocks"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 2,
+        "source": "source:eaton-pts1206"
+      }
+    ],
+    "mpns": [
+      "PTS120615V050"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

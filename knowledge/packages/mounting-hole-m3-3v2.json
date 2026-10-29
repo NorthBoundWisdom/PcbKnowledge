@@ -44,13 +44,21 @@
   "family": "MOUNTING_HOLE",
   "generator": "mechanical_hole",
   "id": "package:mounting-hole-m3-3v2",
+  "mount_type": "MECHANICAL",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "ENGINEERING_DEFAULT",
+    "mpns": [
+      "M3-NPTH-3.2"
+    ],
+    "note": "D7 mechanical mounting feature, not a manufacturer component."
+  },
   "verification": "AGENT_VERIFIED"
 }

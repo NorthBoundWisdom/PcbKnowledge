@@ -3,11 +3,12 @@
   "bytes": 236652,
   "id": "source:kemet-c0603c220j5gactu",
   "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
   "pages": 4,
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "publisher": "KEMET / Yageo Group",

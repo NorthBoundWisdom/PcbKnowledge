@@ -3,11 +3,12 @@
   "bytes": 3207867,
   "id": "source:st-an2867",
   "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
   "pages": 60,
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "publisher": "STMicroelectronics",

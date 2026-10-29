@@ -3,11 +3,12 @@
   "bytes": 2747031,
   "id": "source:st-ldl1117",
   "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
   "pages": 23,
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "publisher": "STMicroelectronics",

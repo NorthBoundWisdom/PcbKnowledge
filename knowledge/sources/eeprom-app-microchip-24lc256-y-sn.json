@@ -3,11 +3,12 @@
   "bytes": 727562,
   "id": "source:eeprom-app-microchip-24lc256-y-sn",
   "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
   "pages": 48,
   "provenance": {
-    "created_by": "agent:/root",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/verify_g1_source_access"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "publisher": "Microchip Technology",

@@ -3,11 +3,12 @@
   "bytes": 892731,
   "id": "source:ti-ina219",
   "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
   "pages": 38,
   "provenance": {
-    "created_by": "agent:/root",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/verify_g1_source_access"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "publisher": "Texas Instruments",

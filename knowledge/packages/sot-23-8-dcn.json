@@ -97,13 +97,30 @@
   "family": "SOT-23-8",
   "generator": "gullwing_two_side",
   "id": "package:sot-23-8-dcn",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      {
+        "page": 29,
+        "source": "source:ti-ina219"
+      }
+    ],
+    "mpns": [
+      "INA219AIDCNR"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

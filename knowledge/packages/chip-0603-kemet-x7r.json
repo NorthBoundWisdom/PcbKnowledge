@@ -93,13 +93,26 @@
   "family": "CHIP_0603",
   "generator": "chip",
   "id": "package:chip-0603-kemet-x7r",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:kemet-c0603c104k5ractu"
+      }
+    ],
+    "mpns": [
+      "C0603C104K5RACTU"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

@@ -93,13 +93,30 @@
   "family": "SOIC-8",
   "generator": "gullwing_two_side",
   "id": "package:soic-8-sn",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 29,
+        "source": "source:eeprom-app-microchip-24lc256-y-sn"
+      },
+      {
+        "page": 45,
+        "source": "source:eeprom-app-microchip-24lc256-y-sn"
+      }
+    ],
+    "mpns": [
+      "24LC256-I/SN"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

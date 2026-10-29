@@ -6,6 +6,9 @@
     "unit": "mm",
     "value": 0.25
   },
+  "assembled_mount_types": [
+    "SMT"
+  ],
   "assembly_side": "TOP",
   "clearance_min": {
     "basis": "ENGINEERING_DEFAULT",
@@ -38,9 +41,9 @@
   "layer_count": 2,
   "owner_decision": "D12",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.fab_profile.v2",

@@ -92,13 +92,30 @@
   "family": "HC49_US_SMD",
   "generator": "chip",
   "id": "package:hc49-us-smd-abls",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 3,
+        "source": "source:abracon-abls"
+      },
+      {
+        "page": 2,
+        "source": "source:abracon-abls"
+      }
+    ],
+    "mpns": [
+      "ABLS-8.000MHZ-18"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

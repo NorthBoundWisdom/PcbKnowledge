@@ -1963,13 +1963,26 @@
   ],
   "family": "EXPLICIT",
   "id": "package:wurth-632723300011",
+  "mount_type": "THT",
   "pin1": "A1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:wurth-632723300011"
+      }
+    ],
+    "mpns": [
+      "632723300011"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

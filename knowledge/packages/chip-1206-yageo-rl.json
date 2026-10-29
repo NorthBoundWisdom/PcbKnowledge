@@ -93,13 +93,26 @@
   "family": "CHIP_1206",
   "generator": "chip",
   "id": "package:chip-1206-yageo-rl",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:yageo-rl1206fr-070r1l"
+      }
+    ],
+    "mpns": [
+      "RL1206FR-070R1L"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

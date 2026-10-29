@@ -4,8 +4,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 29,
-        "source": "source:ldo-app-st-ld1117-r38"
+        "page": 15,
+        "source": "source:st-ldl1117"
       },
       "max": 1.8,
       "unit": "mm"
@@ -14,8 +14,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 29,
-        "source": "source:ldo-app-st-ld1117-r38"
+        "page": 15,
+        "source": "source:st-ldl1117"
       },
       "max": 6.7,
       "min": 6.3,
@@ -26,8 +26,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 29,
-        "source": "source:ldo-app-st-ld1117-r38"
+        "page": 15,
+        "source": "source:st-ldl1117"
       },
       "max": 3.7,
       "min": 3.3,
@@ -48,8 +48,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 29,
-        "source": "source:ldo-app-st-ld1117-r38"
+        "page": 15,
+        "source": "source:st-ldl1117"
       },
       "max": 7.3,
       "min": 6.7,
@@ -60,8 +60,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 29,
-        "source": "source:ldo-app-st-ld1117-r38"
+        "page": 15,
+        "source": "source:st-ldl1117"
       },
       "max": 0.85,
       "min": 0.6,
@@ -73,8 +73,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 29,
-        "source": "source:ldo-app-st-ld1117-r38"
+        "page": 15,
+        "source": "source:st-ldl1117"
       },
       "unit": "mm",
       "value": 2.3
@@ -85,8 +85,8 @@
         "basis": "DATASHEET",
         "conditions": {},
         "evidence": {
-          "page": 29,
-          "source": "source:ldo-app-st-ld1117-r38"
+          "page": 15,
+          "source": "source:st-ldl1117"
         },
         "max": 3.15,
         "min": 2.9,
@@ -97,24 +97,53 @@
   },
   "evidence": [
     {
-      "page": 29,
-      "source": "source:ldo-app-st-ld1117-r38"
+      "page": 3,
+      "source": "source:st-ldl1117"
     },
     {
-      "page": 6,
-      "source": "source:ldo-app-st-ld1117-r38"
+      "page": 14,
+      "source": "source:st-ldl1117"
+    },
+    {
+      "page": 15,
+      "source": "source:st-ldl1117"
     }
   ],
   "family": "SOT-223",
   "generator": "gullwing_two_side",
-  "id": "package:sot-223-ld1117",
+  "id": "package:sot-223-ldl1117",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 3,
+        "source": "source:st-ldl1117"
+      },
+      {
+        "page": 14,
+        "source": "source:st-ldl1117"
+      },
+      {
+        "page": 15,
+        "source": "source:st-ldl1117"
+      },
+      {
+        "page": 18,
+        "source": "source:st-ldl1117"
+      }
+    ],
+    "mpns": [
+      "LDL1117S33R"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }

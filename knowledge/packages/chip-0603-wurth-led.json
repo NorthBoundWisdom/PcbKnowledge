@@ -92,13 +92,26 @@
   "family": "CHIP_0603",
   "generator": "chip",
   "id": "package:chip-0603-wurth-led",
+  "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:wurth-150060rs75000"
+      }
+    ],
+    "mpns": [
+      "150060RS75000"
+    ]
+  },
   "verification": "AGENT_VERIFIED"
 }
