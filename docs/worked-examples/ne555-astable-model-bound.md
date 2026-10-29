@@ -11,8 +11,8 @@ labeled fractions are **high time / period = 2/3** (about 66.67%) and
 means the latter, not the high fraction. These are nominal steady-state model results, not
 guaranteed timing, a selected working capacitor, or a qualified oscillator.
 
-This documentation example adds no source records, canonical facts, solver,
-evaluation cases, or hardware evidence. It does not revise the frozen
+This fixed synthetic example adds no source records, canonical facts, generic
+solver, or hardware evidence. Its separate executable regression does not revise the frozen
 [practical task evaluation](../practical-task-evaluation-2026-10-28.md).
 
 ## Supplied model inputs and scope
@@ -206,3 +206,30 @@ print("Model high fraction:", high, "; low/driver fraction:", low)
 print("Reciprocal of rounded model period (Hz):", float(1 / period))
 print("Hardware timing accuracy: UNKNOWN; circuit qualified: False")
 ```
+
+## Executable fixed-example regression
+
+Run from the software checkout with an explicit intake workspace:
+
+```sh
+PYTHONPATH=src:. python3 configs/pcbknowledge_ne555_astable_eval.py --repo .
+PYTHONPATH=src:. python3 -m unittest tests.git_native.test_ne555_astable_eval -v
+```
+
+The standard-library evaluator pins the four accepted JSON files above and
+returns full source/fact/condition/evidence payloads plus all source-local
+warnings. The mixed timer pilot contributes NE555 records only, not TL431 or
+ULN2003A claims. It retains `canonical: false`, `human_reviewed: false` and
+`NOT_LOCALLY_VERIFIED`; inspecting committed metadata is not rechecking PDFs.
+It neither mutates intake nor closes its unresolved application warnings.
+
+Ten fixed regression cases comprise this nominal calculation and nine scope
+refusals (CMOS substitution, diode topology, startup, altered control, unknown
+reset, initial-tolerance substitution, missing C, hot operation and an invented
+maximum error). No user circuit input is accepted. Changed or extra inputs are
+outside this example, not a judgment that those circuits are impossible.
+Semantic mutation tests detect swapped duty fractions, conflated rounded
+formulas and promotions to hardware guarantees. The CLI exits 0 for regression
+PASS, 1 for a result mismatch and 2 for missing/changed evidence or invalid
+invocation. PASS never means a timing accuracy or component qualification.
+Historical retrieval manifests and practical-task evaluation remain unchanged.

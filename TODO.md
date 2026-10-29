@@ -4,6 +4,16 @@
 > Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Fixed synthetic NE555 model regression
+
+The existing nominal astable worked example now has a fixed-input evaluator,
+not a general circuit calculator. It binds four unchanged metadata batches and
+preserves complete conditions and unresolved warnings. Rational checks separate
+480 Hz from the reciprocal rounded period and label high versus low duty;
+initial tolerance and typical sensitivities never establish hardware accuracy.
+See the [worked example](docs/worked-examples/ne555-astable-model-bound.md).
+Independent review, full gates and exact published-commit CI are separate receipts.
+
 ## Reviewed ferrite bead integration
 
 The collection now contains 36 batches / 48 source scopes / 323 annotations.
