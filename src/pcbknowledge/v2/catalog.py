@@ -9,6 +9,7 @@ from pcbknowledge.serialization import canonical_json, read_json
 from pcbknowledge.git_native.workspace import validate_workspace
 from .schema import ContractSchemas
 from .vocabulary import Vocabulary
+from .footprints import derive_footprint
 
 DIRECTORIES = {'source':'sources', 'part':'parts', 'package':'packages', 'block':'blocks',
                'rule':'rules', 'fab_profile':'fab-profiles'}
@@ -152,16 +153,7 @@ class Catalog:
                 identities.add(identity)
                 self._part(record)
             elif kind == 'package':
-                pads = record['footprint']['pads']
-                numbers = {pad['number'] for pad in pads}
-                positions = []
-                for pad in pads:
-                    if all('value' in pad[k] for k in ('x','y')):
-                        position=(pad['x']['value'],pad['y']['value'])
-                        if position in positions:raise ValueError('Overlapping pad centers')
-                        positions.append(position)
-                if record['pin1'] not in numbers:
-                    raise ValueError('Package pin1 has no pad')
+                derive_footprint(record)
             elif kind == 'block':
                 self._block(record)
             elif kind == 'rule':
@@ -184,7 +176,7 @@ class Catalog:
     def _part(self, part):
         package = self.get(part['package'], 'package')
         pins = unique(part['pins'], 'number', 'part pin number')
-        pads = {p['number'] for p in package['footprint']['pads']}
+        pads = {p['number'] for p in derive_footprint(package)['pads']}
         if set(pins) != pads:
             raise ValueError(f'Pin/pad coverage mismatch: {part["id"]}')
         for pin in pins.values():
@@ -202,9 +194,12 @@ class Catalog:
                 value = part['parameters'].get(name, {})
                 if value.get('status') == 'UNKNOWN' or not value or limit.get('status') == 'UNKNOWN':
                     return False
-                low = value.get('value',value.get('min'))
-                high = value.get('value',value.get('max'))
-                if 'value' in limit and (low != limit['value'] or high != limit['value']):
+                low = value.get('min', value.get('value'))
+                high = value.get('max', value.get('value'))
+                nominal = value.get('value', value.get('typ'))
+                if value.get('unit') != limit.get('unit'):
+                    return False
+                if 'value' in limit and nominal != limit['value']:
                     return False
                 if 'min' in limit and (low is None or low < limit['min']):
                     return False

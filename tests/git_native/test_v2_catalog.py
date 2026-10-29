@@ -77,10 +77,10 @@ class CatalogTests(unittest.TestCase):
             with self.assertRaises(ValueError):self.load()
 
     def test_separate_physical_pads_can_share_one_electrical_number(self):
-        pad=self.documents['package']['footprint']['pads'][0]
+        pad=self.documents['package']['explicit_pads'][0]
         pad['x']=quantity(0,'mm');pad['y']=quantity(0,'mm')
         tab=copy.deepcopy(pad);tab['x']=quantity(2,'mm')
-        self.documents['package']['footprint']['pads'].append(tab);self.save();self.load()
+        self.documents['package']['explicit_pads'].append(tab);self.save();self.load()
         tab['x']=quantity(0,'mm');self.save()
         with self.assertRaisesRegex(ValueError,'Overlapping'):self.load()
 
@@ -166,6 +166,7 @@ class CatalogTests(unittest.TestCase):
 
     def intent_fixture(self):
         self.documents.pop('block')
+        self.documents['part']['roles']=['connector.header']
         mount=copy.deepcopy(self.documents['part']);mount.update(id='part:mount',mpn='SYNTH-MOUNT',roles=['mechanical.mounting-hole'])
         self.documents['mount']=mount
         fab=fixtures()['fab-profile'];self.documents['fab']=fab

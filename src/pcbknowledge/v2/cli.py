@@ -17,6 +17,9 @@ def parser():
     groups=result.add_subparsers(dest='group',required=True)
     v2=groups.add_parser('v2').add_subparsers(dest='action',required=True)
     v2.add_parser('validate')
+    footprint = groups.add_parser('footprint').add_subparsers(dest='action', required=True)
+    export = footprint.add_parser('export')
+    export.add_argument('--output', type=Path, default=Path('build/footprints/pcbknowledge.pretty'))
     groups.add_parser('change-scope')
     for name in ('source','part','package','block','fab','registry'):
         actions=groups.add_parser(name).add_subparsers(dest='action',required=True)
@@ -46,7 +49,15 @@ def main(argv=None):
             return 2 if scope=='MIXED' else 0
         catalog=Catalog(root, root/'schemas')
         group=arguments.group
-        if group=='v2':
+        if group == 'footprint':
+            from .footprints import export_library
+            output = arguments.output.resolve()
+            build = (root / 'build').resolve()
+            if not output.is_relative_to(build):
+                raise ValueError('Derived footprints must be written under build/')
+            files = export_library(catalog.search('package'), output)
+            result = {'status': 'EXPORTED', 'files': [str(path) for path in files]}
+        elif group=='v2':
             result={'status':'VALID','records':len(catalog.records),'evidence':{
                 r['id']:catalog.evidence_status(r) for r in catalog.search('source')}}
         elif group=='registry':

@@ -43,10 +43,11 @@ def fixtures():
                     revision='A', url='https://example.invalid/source', accessed_on='2026-10-29',
                     sha256='a'*64, bytes=1, pages=1, license_class='UNKNOWN')
     package = record('package', family='EXPLICIT',
-        body={key: unknown('Q3') for key in ('length','width','height')},
-        footprint={'mode':'EXPLICIT','pads':[{'number':'1','kind':'SMD','shape':'RECT',
-            **{key:unknown('Q3') for key in ('x','y','width','height','rotation')}}]},
-        pin1='1', courtyard_margin=unknown('Q3'), evidence=[evidence])
+        body={key: quantity(1,'mm') for key in ('length','width','height')},
+        explicit_pads=[{'number':'1','kind':'SMD','shape':'RECT',
+            'x':quantity(0,'mm'),'y':quantity(0,'mm'),
+            'width':quantity(1,'mm'),'height':quantity(1,'mm'),'rotation':quantity(0,'deg')}],
+        pin1='1', courtyard_margin=quantity(0.25,'mm'), evidence=[evidence])
     part = record('part', manufacturer='Synthetic maker',mpn='SYNTH-1',package='package:synthetic',
         roles=['led'],pins=[{'number':'1','name':'ANODE','type':'PASSIVE'}],
         parameters={'voltage_rating':quantity()},identity_evidence=evidence,pin_evidence={'basis':'DATASHEET',**evidence},sourcing={'lifecycle':'UNKNOWN'})
