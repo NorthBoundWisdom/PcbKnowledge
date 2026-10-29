@@ -4,6 +4,17 @@
 > Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Fixed synthetic INA219 register interpretation
+
+The [register example](docs/worked-examples/ina219-register-scale.md) separates
+signed shunt/current interpretation, bus status bits, unsigned power and
+calibration-word quantization. It scales independently supplied synthetic codes,
+not predicted chip arithmetic. Full existing source facts and warnings stay
+pinned; CNVR wording remains unresolved and no fresh/coherent sample, analog
+validity or total accuracy is certified. README now links the bounded practical
+examples so their reproducible commands and limits are discoverable.
+Independent review, full gates and exact-commit CI remain separate receipts.
+
 ## Fixed synthetic EEPROM transaction geometry
 
 A [24LC256 page-write example](docs/worked-examples/24lc256-page-write-plan.md)

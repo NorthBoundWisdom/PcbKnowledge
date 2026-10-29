@@ -71,6 +71,21 @@ they require the same relevant metadata in the selected workspace. Changed batch
 bytes or candidate/disposition context explicitly expire an old link. Browsing
 never converts an intake candidate into an approved canonical Fact.
 
+### Reproduce bounded engineering examples
+
+These fixed synthetic regressions show what the existing annotations can and
+cannot answer. Each page provides its supported CLI command, evidence pins and
+explicit unknowns; none executes hardware or certifies a circuit.
+
+- [Resistor DC bounds](docs/worked-examples/resistor-dc-bound.md): supplied operating intervals, not initial-tolerance assumptions.
+- [ADS1115 pin boundaries](docs/worked-examples/ads1115-pin-boundary-eval.md): differential range is not independent pin-voltage permission.
+- [NE555 nominal timing](docs/worked-examples/ne555-astable-model-bound.md): rounded coefficients and explicitly labeled high/low fractions.
+- [24LC256 page planning](docs/worked-examples/24lc256-page-write-plan.md): complete synthetic split plans, not successful programming or persistence.
+- [INA219 register scaling](docs/worked-examples/ina219-register-scale.md): supplied register words and scales, not chip arithmetic, sample freshness or analog accuracy.
+
+A regression PASS means its fixed numerical and refusal cases matched their
+reviewed expectations. It does not close the retained application warnings.
+
 ## Core authority
 
 ```text
