@@ -11,6 +11,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping
+from pcbknowledge.serialization import canonical_json
 
 
 WORKSPACE_MANIFEST_PATH = Path("pcbknowledge.workspace.json")
@@ -74,9 +75,7 @@ class WorkspaceManifest:
         }
 
     def canonical_json(self) -> str:
-        return json.dumps(
-            self.to_dict(), ensure_ascii=False, indent=2, sort_keys=True
-        ) + "\n"
+        return canonical_json(self.to_dict())
 
     @classmethod
     def from_json(cls, payload: str) -> "WorkspaceManifest":
@@ -149,6 +148,8 @@ def _read_regular_file(path: Path, *, label: str, maximum_bytes: int) -> bytes:
 
 
 def schema_payloads(root: Path) -> dict[str, bytes]:
+    if (root/'schemas').is_symlink() or not (root/'schemas').is_dir():
+        raise WorkspaceError('workspace schema directory is unsafe')
     actual = {p.relative_to(root) for p in (root/'schemas').glob('*')}
     if actual != set(SCHEMA_PATHS):
         raise WorkspaceError('workspace schema set differs from the v2 contract')
@@ -236,6 +237,9 @@ def validate_workspace(root: Path) -> WorkspaceValidation:
             "workspace schema digest does not match the pinned schema snapshot"
         )
 
+    validate_workspace_gitignore(resolved)
+    if (resolved/"knowledge").is_symlink():
+        raise WorkspaceError("workspace knowledge directory is unsafe")
     for relative in AUTHORITY_DIRECTORIES:
         path = resolved / relative
         if path.is_symlink() or not path.is_dir():

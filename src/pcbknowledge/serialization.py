@@ -4,8 +4,8 @@ from __future__ import annotations
 import json
 
 
-def canonical_json(value: object, *, sort_keys: bool = True) -> str:
-    return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=sort_keys, allow_nan=False) + '\n'
+def canonical_json(value: object) -> str:
+    return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True, allow_nan=False) + '\n'
 
 
 def read_json(payload: bytes):

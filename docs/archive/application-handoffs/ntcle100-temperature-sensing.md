@@ -8,8 +8,8 @@ accuracy, response, lifetime or circuit safety.
 
 Exact identity: **Vishay BCcomponents NTCLE100E3103JB0**, 10 kohm at 25 C,
 J 5% R25 tolerance, B0 bulk, **no A suffix**, radial bead with 2.54-mm lead spacing.
-The [source JSON](../../../knowledge/intake/ntcle100-thermistor-constraints.json)
-and [historical review](../../../knowledge/intake/ntcle100-thermistor-constraints-review.md)
+The source JSON (`git show intake-final:knowledge/intake/ntcle100-thermistor-constraints.json`)
+and historical review (`git show intake-final:knowledge/intake/ntcle100-thermistor-constraints-review.md`)
 are pinned at `67e02cef0edc6c67a8e2445c567afff8febe0ddd`.
 Source ID: `ntcle100-vishay-29049-20250507-10k5pct`.
 JSON SHA-256: `085793b239cb1a67f455f327c7214fa87b5ffbb3df0161eaee72e34d8d514a5a`.

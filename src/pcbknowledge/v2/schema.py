@@ -1,7 +1,7 @@
 """Offline structural validator for the workspace JSON Schema subset."""
 from __future__ import annotations
 
-import json
+from pcbknowledge.serialization import read_json
 import math
 from pathlib import Path
 import re
@@ -42,7 +42,7 @@ class ContractSchemas:
             path = self.directory / name
             if path.is_symlink():
                 raise ValueError('Schema symlinks are forbidden')
-            self.documents[name] = json.loads(path.read_text(encoding='utf-8'))
+            self.documents[name] = read_json(path.read_bytes())
         return self.documents[name]
 
     def resolve(self, reference, current):
@@ -54,8 +54,11 @@ class ContractSchemas:
         if pointer:
             if not pointer.startswith('/'):
                 raise ValueError('Only JSON pointer fragments are supported')
-            for token in pointer[1:].split('/'):
-                target = target[token.replace('~1', '/').replace('~0', '~')]
+            try:
+                for token in pointer[1:].split('/'):
+                    target = target[token.replace('~1', '/').replace('~0', '~')]
+            except (KeyError,TypeError) as error:
+                raise ValueError('Unresolved schema pointer') from error
         return target, filename
 
     def check(self, schema, current, visited=None):
@@ -63,6 +66,27 @@ class ContractSchemas:
             return
         if not isinstance(schema, dict) or set(schema) - KEYWORDS:
             raise ValueError('Unsupported schema keyword or malformed schema')
+        if 'type' in schema and schema['type'] not in ('object','array','string','boolean','integer','number','null'):
+            raise ValueError('Unsupported schema type')
+        for keyword in ('properties','$defs'):
+            if keyword in schema and not isinstance(schema[keyword],dict):raise ValueError('Malformed schema map')
+        for keyword in ('oneOf','anyOf','allOf','enum'):
+            if keyword in schema and (not isinstance(schema[keyword],list) or not schema[keyword]):
+                raise ValueError('Malformed schema alternatives')
+        if 'required' in schema and (not isinstance(schema['required'],list)
+                or not all(isinstance(k,str) for k in schema['required'])
+                or len(set(schema['required']))!=len(schema['required'])):
+            raise ValueError('Malformed required properties')
+        for keyword in ('minItems','maxItems','minProperties','maxProperties','minLength','maxLength'):
+            if keyword in schema and (type(schema[keyword]) is not int or schema[keyword]<0):
+                raise ValueError('Malformed schema bound')
+        for keyword in ('minimum','maximum','exclusiveMinimum'):
+            if keyword in schema and not _number(schema[keyword]):raise ValueError('Malformed numeric bound')
+        if 'uniqueItems' in schema and type(schema['uniqueItems']) is not bool:
+            raise ValueError('Malformed uniqueItems')
+        if 'pattern' in schema:
+            try:re.compile(schema['pattern'])
+            except (TypeError,re.error) as error:raise ValueError('Malformed schema pattern') from error
         visited = set() if visited is None else visited
         if '$ref' in schema:
             key = (current, schema['$ref'])

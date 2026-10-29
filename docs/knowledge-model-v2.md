@@ -25,7 +25,7 @@ product direction; [`TODO.md`](../TODO.md) owns implementation order.
 
 ## Contracts and registries
 
-The staged JSON Schemas are the structural authority for `source`, `package`,
+The pinned JSON Schemas are the structural authority for `source`, `package`,
 `part`, `block`, `rule`, `fab_profile`, the common envelope, quantities, explicit
 unknowns, design briefs, block graphs and design intent. Initial controlled
 vocabularies live in [`knowledge/registry/`](../knowledge/registry/). Their scope
@@ -82,7 +82,8 @@ independence are machine checked; the Git reviewer checks that the named actor
 actually performed the observation.
 
 Calculators are unavailable until their executable implementations arrive in
-Stage 4. A block containing a calculator check is refused now. These owner-facing
+Stage 4. A block calculator check or a `CALCULATED` quantity is refused until its executable
+implementation is registered. These owner-facing
 working-tree queries precede the commit-pinned consumer bundle in Stage 5.
 The G1 reference graph still names planned blocks rather than collected records.
 
@@ -101,12 +102,11 @@ Later stages implement read-only bundle queries for parts, packages, blocks and
 fab profiles; generic calculators only when a G1 block needs them; bundle
 compilation from one validated Git commit; and expansion with typed refusals.
 Design intent JSON is the handoff authority, with derived KiCad netlist and
-footprint-library exports. None of those runtime v2 operations ships in Stage 1.
+footprint-library exports. Bundle compilation and expansion start in Stage 5.
 
 ## Migration
 
 The intake queue is frozen at local tag `intake-final` (owner publishes the tag).
 Only golden-design parts are rechecked and migrated. V2 schema/workspace policy
-changes and knowledge data use separate commits. Stage 2 removes v1 records,
-review flows and the intake toolchain in a hard cut; later migration reads the
-frozen history rather than reviving the queue.
+changes and knowledge data use separate commits. Stage 2 removed the v1 records, review flows and intake toolchain. Later migration
+reads the frozen history rather than restoring the queue.

@@ -62,9 +62,9 @@ does not exist. SN74HC00 full orderable identity remains unresolved.
 
 ## Evidence and regression boundary
 
-The [MCP6002 receipt](../../../knowledge/intake/mcp6002-signal-chain-constraints-review.md)
+The MCP6002 receipt (`git show intake-final:knowledge/intake/mcp6002-signal-chain-constraints-review.md`)
 records independently verified cached source bytes and six rendered pages. The
-[SN74HC00 receipt](../../../knowledge/intake/sn74hc00-input-output-constraints-review.md)
+SN74HC00 receipt (`git show intake-final:knowledge/intake/sn74hc00-input-output-constraints-review.md`)
 records independently verified cached source bytes and nine rendered pages,
 including the source-figure mismatch. Those are prior review observations, not
 new verification by the retrieval command. No precise bbox, newest-revision

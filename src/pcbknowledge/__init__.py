@@ -1,4 +1,4 @@
-"""PcbKnowledge Git-native local editor."""
+"""PcbKnowledge Git-native local catalog."""
 
 __all__ = ["__version__"]
 

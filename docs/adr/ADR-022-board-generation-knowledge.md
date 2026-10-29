@@ -70,8 +70,8 @@ The repository as of `58c6614` does not serve that goal:
 
 - The pilot harness, the per-device worked-example evaluators, the intake
   toolchain and the v1 approve/reject review closure are removed in stages listed
-  in [`TODO.md`](../../TODO.md). Their documents moved to `docs/legacy/` until the
-  code is gone, and historical receipts moved to `docs/archive/`.
+  in [`TODO.md`](../../TODO.md). Their retiring documentation was removed with the code; historical receipts
+  remain in `docs/archive/` and Git.
 - Reusable infrastructure stays: canonical JSON, deterministic IDs, the SHA-256
   evidence cache, workspace manifest and schema pinning, change-scope checks,
   repository locking, packaging, English and public-source guards, the loopback

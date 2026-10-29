@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lightweight FreeCM workflow for the Git-native local editor."""
+"""Lightweight FreeCM workflow for the Git-native local viewer."""
 
 from __future__ import annotations
 
@@ -24,15 +24,16 @@ SOURCE_ROOT = REPO_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from pcbknowledge.git_native.server import DEFAULT_PORT  # noqa: E402
-from pcbknowledge.git_native.store import KnowledgeRepository, RepositoryError  # noqa: E402
+from pcbknowledge.v2.server import DEFAULT_PORT  # noqa: E402
+from pcbknowledge.v2.catalog import Catalog, record_path  # noqa: E402
 from pcbknowledge.git_native.workspace import (  # noqa: E402
     SCHEMA_PATHS,
+    REGISTRY_PATHS,
     WORKSPACE_MANIFEST_PATH,
     WorkspaceError,
     validate_workspace,
 )
-from pcbknowledge.git_native.workspace_server import create_server  # noqa: E402
+from pcbknowledge.v2.server import create_server  # noqa: E402
 
 
 CONFIGURATION_ID = "git-native-local"
@@ -56,15 +57,14 @@ BUILD_INPUT_FILES = (
 )
 BUILD_INPUT_ROOTS = (
     Path(".codex/skills"),
-    Path("src/pcbknowledge/git_native"),
-    Path("src/pcbknowledge/v2"),
+    Path("src/pcbknowledge"),
     Path("tests/git_native"),
     Path("evals/golden-designs"),
     Path("knowledge/registry"),
 )
 IGNORED_SOURCE_NAMES = frozenset({"__pycache__", ".DS_Store"})
 PACKAGE_DIRECTORY = Path("build/package")
-PACKAGE_FORMAT = "pcbknowledge-workspace-snapshot-v1"
+PACKAGE_FORMAT = "pcbknowledge-workspace-snapshot-v2"
 MINIMUM_PYTHON = (3, 11)
 
 
@@ -246,35 +246,22 @@ def _workspace_root(raw: str | Path | None) -> Path:
 
 
 def _validate_knowledge(root: Path) -> int:
-    validation = validate_workspace(root)
-    repository = KnowledgeRepository(validation.root)
-    repository.ensure_layout()
-    snapshot = repository.validate_all(require_canonical=True)
-    from pcbknowledge.git_native.intake import load_intake
-    batches = load_intake(validation.root)
-    print(f"[pcbknowledge] curated intake: {len(batches)} non-canonical batches", flush=True)
-    print(f"[pcbknowledge] workspace: {validation.root}", flush=True)
-    print(
-        "[pcbknowledge] validated "
-        f"{len(snapshot.sources)} sources, "
-        f"{len(snapshot.entities)} entities, "
-        f"{len(snapshot.facts)} facts",
-        flush=True,
-    )
-    return len(snapshot)
+    catalog=Catalog(validate_workspace(root).root, root/'schemas')
+    print(f'[pcbknowledge] validated {len(catalog.records)} v2 records in {root}',flush=True)
+    return len(catalog.records)
 
 
 def _run_checks(root: Path = REPO_ROOT) -> None:
     compile_targets = [
-        "src/pcbknowledge/git_native",
+        "src/pcbknowledge",
         "configs/pcbknowledge_workflow.py",
         "configs/pcbknowledge_agent.py",
         "configs/pcbknowledge_workspace.py",
         "tests/git_native",
     ]
-    print("[pcbknowledge] compile local editor", flush=True)
+    print("[pcbknowledge] compile local viewer", flush=True)
     if not compileall.compile_dir(
-        str(root / "src/pcbknowledge/git_native"), quiet=1, force=True
+        str(root / "src/pcbknowledge"), quiet=1, force=True
     ):
         raise WorkflowError("Python compilation failed")
     for relative in compile_targets[1:4]:
@@ -344,17 +331,14 @@ def cmd_run(*, port: int, no_browser: bool, workspace: Path = REPO_ROOT) -> int:
         server = create_server(validation.root, port)
     except OSError as error:
         raise WorkflowError(
-            f"cannot start the editor on 127.0.0.1:{port}; close the program using that port"
+            f"cannot start the viewer on 127.0.0.1:{port}; close the program using that port"
         ) from error
     url = f"http://127.0.0.1:{server.server_port}"
-    print("[pcbknowledge] local editor ready", flush=True)
-    from pcbknowledge.git_native.intake import load_intake
-    batches = load_intake(validation.root)
-    print(f"[pcbknowledge] curated intake: {len(batches)} non-canonical batches", flush=True)
+    print("[pcbknowledge] local viewer ready", flush=True)
     print(f"[pcbknowledge] workspace: {validation.root}", flush=True)
     print(f"[pcbknowledge] open: {url}", flush=True)
     print("[pcbknowledge] no login or password", flush=True)
-    print("[pcbknowledge] Ctrl+C closes the editor; saved files stay in the selected Git worktree", flush=True)
+    print("[pcbknowledge] Ctrl+C closes the viewer; records remain in the selected Git workspace", flush=True)
     if not no_browser and not _open_editor(url):
         print("[pcbknowledge] the browser did not open automatically; use the URL above", flush=True)
     try:
@@ -381,21 +365,11 @@ def cmd_open(*, port: int, no_browser: bool, workspace: Path = REPO_ROOT) -> int
 
 
 def package_files(root: Path = REPO_ROOT) -> tuple[Path, ...]:
-    validation = validate_workspace(root)
-    repository = KnowledgeRepository(validation.root)
-    snapshot = repository.validate_all(require_canonical=True)
-    from pcbknowledge.git_native.intake import load_intake
-    paths = {WORKSPACE_MANIFEST_PATH, *SCHEMA_PATHS}
-    for batch in load_intake(repository.root):
-        paths.add(Path(batch["path"]))
-        paths.update(Path(receipt["path"]) for receipt in batch.get("source_issue_dispositions", []))
-    for source in snapshot.sources:
-        paths.add(repository.source_path(source.id).relative_to(repository.root))
-    for entity in snapshot.entities:
-        paths.add(repository.entity_path(entity.id).relative_to(repository.root))
-    for fact in snapshot.facts:
-        paths.add(repository.fact_path(fact.id).relative_to(repository.root))
-    return tuple(sorted(paths, key=lambda item: item.as_posix()))
+    root=validate_workspace(root).root
+    catalog=Catalog(root,root/'schemas')
+    paths={WORKSPACE_MANIFEST_PATH,*SCHEMA_PATHS,*REGISTRY_PATHS}
+    paths.update(record_path(root,identity).relative_to(root) for identity in catalog.records)
+    return tuple(sorted(paths,key=lambda p:p.as_posix()))
 
 
 def _snapshot_manifest(files: Sequence[Path], root: Path) -> dict[str, object]:
@@ -464,9 +438,6 @@ def cmd_package(*, workspace: Path = REPO_ROOT) -> int:
     _require_prerequisites()
     validation = validate_workspace(workspace)
     output = create_package(validation.root, software_root=REPO_ROOT)
-    from pcbknowledge.git_native.intake import load_intake
-    batches = load_intake(validation.root)
-    print(f"[pcbknowledge] curated intake: {len(batches)} non-canonical batches", flush=True)
     print(f"[pcbknowledge] workspace: {validation.root}", flush=True)
     print(f"[pcbknowledge] data snapshot: {output.relative_to(REPO_ROOT)}", flush=True)
     print(f"[pcbknowledge] sha256: {_sha256(output)}", flush=True)
@@ -516,7 +487,7 @@ def main(argv: list[str] | None = None) -> int:
             no_browser=arguments.no_browser,
             workspace=workspace,
         )
-    except (WorkflowError, WorkspaceError, RepositoryError) as error:
+    except (WorkflowError, WorkspaceError, ValueError) as error:
         print(f"pcbknowledge: {error}", file=sys.stderr)
         return 2
     except subprocess.CalledProcessError as error:

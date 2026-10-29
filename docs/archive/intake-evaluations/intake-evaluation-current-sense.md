@@ -3,7 +3,7 @@
 This increment adds six original WSLP2512R0100FEA annotations, not a qualified
 current-sensing circuit. The exact 10-milliohm, 1% part uses the Vishay Dale
 30122 electrical source dated 09-Sep-2024; the legal appendix date is distinct.
-The [independent source-review receipt](../../../knowledge/intake/wslp2512-current-sense-constraints-review.md)
+The independent source-review receipt (`git show intake-final:knowledge/intake/wslp2512-current-sense-constraints-review.md`)
 records actual PDF bytes, rendered pages and the separately hashed official
 identity HTML. Neither ordinary retrieval nor this integration re-audits the PDF.
 

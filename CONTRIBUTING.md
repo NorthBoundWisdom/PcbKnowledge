@@ -12,7 +12,7 @@ The following content is not accepted in the public upstream by default:
 - credentials, tokens, private keys, production URLs, or identifiable internal infrastructure details;
 - test fixtures you do not have the right to publish or redistribute.
 
-Small original summaries, structured values with citations and metadata are permitted under [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md) and ADR-022. `knowledge/intake/` is frozen and noncanonical; do not add to it. `python3 configs/check_public_repo.py` checks tracked and staged content; no raw documents or oversized knowledge payloads are allowed.
+Small original summaries, structured values with citations and metadata are permitted under [ADR-021](docs/adr/ADR-021-lightweight-curation-local-evidence.md) and ADR-022. The retired intake is available only in Git history. `python3 configs/check_public_repo.py` checks tracked and staged content; no raw documents or oversized knowledge payloads are allowed.
 
 Prefer synthetic fixtures for tests. If third-party material genuinely needs to be public, document its source, license, redistribution basis, exact version, and integrity information in the pull request and obtain explicit maintainer review.
 
@@ -40,7 +40,7 @@ python3 configs/check_pdfjs_vendor.py
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_workflow.py test
-python3 configs/pcbknowledge_agent.py validate
+python3 configs/pcbknowledge_agent.py --repo . v2 validate
 ```
 
 For changes that affect package contracts, also run:
@@ -49,7 +49,7 @@ For changes that affect package contracts, also run:
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-For GUI changes, perform a real loopback smoke test. For visual evidence changes, open a representative Fact in a desktop browser and verify the exact Source page and bbox placement; HTTP/view-model tests alone do not prove pixel placement. A skipped, truncated, interrupted, or unexecuted check is not a pass.
+For GUI changes, perform a real loopback smoke test. For visual evidence changes, open a representative part in a desktop browser and verify the exact cited source page; HTTP/view-model tests alone do not prove pixel placement. A skipped, truncated, interrupted, or unexecuted check is not a pass.
 
 ## 4. Pull requests
 

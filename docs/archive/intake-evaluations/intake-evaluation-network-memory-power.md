@@ -67,9 +67,9 @@ not a circuit-analysis engine: zero matches never establish electrical permissio
 The collection receipts record actual byte identities, revision/orderable checks,
 rendered page evidence, corrections and real Agent provenance:
 
-- [CAN](../../../knowledge/intake/sn65hvd230-network-constraints-review.md)
-- [EEPROM](../../../knowledge/intake/24lc256-write-transaction-constraints-review.md)
-- [Buck](../../../knowledge/intake/tps62160-component-layout-constraints-review.md)
+- CAN (`git show intake-final:knowledge/intake/sn65hvd230-network-constraints-review.md`)
+- EEPROM (`git show intake-final:knowledge/intake/24lc256-write-transaction-constraints-review.md`)
+- Buck (`git show intake-final:knowledge/intake/tps62160-component-layout-constraints-review.md`)
 
 `test_network_memory_power_replay.py` uses invented synthetic records to detect
 unchanged-ID semantic corruption: stress promoted to operation, wrong receiver

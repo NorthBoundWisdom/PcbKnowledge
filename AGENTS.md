@@ -7,7 +7,7 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 - The product goal is that a design package (for example a simple hardware-competition brief) becomes a manufacturable board. PcbKnowledge supplies parts, footprints, blocks, rules, fab profiles, calculators and block expansion; PcbAtlas does placement, routing, DRC and fabrication output. Read [ADR-022](docs/adr/ADR-022-board-generation-knowledge.md), [`docs/knowledge-model-v2.md`](docs/knowledge-model-v2.md) and [`docs/golden-designs.md`](docs/golden-designs.md) before planning work.
 - Work only on the active stage in [`TODO.md`](TODO.md) unless the user explicitly asks otherwise. Every record type, field, tool and collection task must serve a consumer query in the v2 model or a golden-design requirement. If it serves neither, do not build it.
 - Progress is measured by golden-design acceptance levels (A1 to A6), not by record, test or document counts.
-- The intake queue (`knowledge/intake/`) is frozen. Do not add batches, annotations, handoff cards, evaluation manifests, worked examples or per-device evaluators. Do not extend the v1 Source/Entity/Fact model, the pilot harness or the v1 review UI; they are scheduled for removal.
+- The intake queue, v1 model and review UI are removed. Migrate later golden-design parts from the frozen `intake-final` Git tag; never restore an intake authority or toolchain.
 - Prefer deleting obsolete code and documents over preserving them. Git history is the record.
 - Write plainly. State what a record or tool does and what is unknown, once. Do not add repeated disclaimers ("not a certification", "bounded", "no claim of ...") to commit messages, documents, test names or data. A typed `UNKNOWN` value or a refusal reason carries that meaning.
 
@@ -72,7 +72,7 @@ This upstream publishes software and small original curated knowledge under [ADR
 
 ## 6. Git-native authority
 
-- Knowledge records are deterministic UTF-8 JSON files inside the selected workspace. Until the Stage 2 hard cut, the executable contract is the v1 model in `src/pcbknowledge/git_native/model.py` with the three JSON Schemas; after it, the v2 model and schemas replace it entirely.
+- Knowledge records are deterministic UTF-8 JSON files inside the selected workspace. The executable v2 contract is `schemas/` and `src/pcbknowledge/v2/`; registries are the vocabulary authority. Use the shared canonical serializer and whole-catalog validator for every authoring path.
 - Source originals are ignored local cache files under `.pcbknowledge/evidence/sha256/<prefix>/<digest>.pdf`, never committed or packaged. Derive path, digest, and byte count from actual bytes. Missing cache means `NOT_LOCALLY_VERIFIED`, not success.
 - `.pcbknowledge/`, indexes, bundles, exports, previews, and packages are derived state and must be rebuildable.
 - Do not introduce a mutable database as authority, hidden sidecar state, or a second write path.
@@ -86,14 +86,14 @@ This upstream publishes software and small original curated knowledge under [ADR
 - `UNKNOWN`, `RESTRICTED`, and `LICENSED_BLOCKED_FOR_AI` all block Agent/model source processing. IPC material is blocked by default.
 - Every datasheet-based value cites a source and page. Each value states its basis (`DATASHEET`, `STANDARD_CONVENTION`, `ENGINEERING_DEFAULT`, `CALCULATED`). Never fill a value from a similar part, package, family name or model prior.
 - v2 verification levels: `DRAFT`, `AGENT_VERIFIED` (an independent agent rechecked every cited value), `HUMAN_VERIFIED` (a person actually checked the values against the source). Record the actual actor. Delegated decisions (section 3) never produce `HUMAN_VERIFIED`. Generated designs report the weakest level used.
-- While the v1 model exists, its rules still hold: a committed v1 `APPROVED` record is immutable, `review_history` is append-only, and canonical human-decision APIs remain human-only.
+- Records are versioned by Git commits. Corrections preserve truthful creator/verifier provenance; there is no per-record approval state or decision API.
 - The owner authorizes focused main-branch publication. Fetch and reconcile remote changes before pushing; never force-push.
 
 ## 8. Local runtime and UI architecture
 
 - The product is one loopback-only local Python process. Do not add login, network listeners, hosted services, Docker, databases, object stores, or background workers without a new accepted ADR and explicit user authorization.
 - Local OS filesystem permissions and Git repository access are the trust boundary.
-- Mutation routes require loopback Host/Origin validation, CSRF protection, and optimistic revision tokens. The GUI never executes Git write commands.
+- The current GUI is read-only and refuses all mutation methods. Any future mutation routes require loopback Host/Origin validation, CSRF protection and optimistic revision tokens. The GUI never executes Git write commands.
 - Runtime and tests use the Python standard library. A new third-party runtime dependency requires explicit approval and a lockfile decision.
 - Maintain `HTTP handler -> application/view-model -> repository/domain`. HTML rendering consumes view models; route handlers stay thin.
 - Keep UI state derived from the selected workspace. Do not cache authority in process-global mutable objects.

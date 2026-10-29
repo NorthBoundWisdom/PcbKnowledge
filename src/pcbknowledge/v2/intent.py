@@ -54,6 +54,13 @@ def validate_intent(catalog, intent, *, bundle_commit):
             raise ValueError('Manufacturing layer count differs from fab profile')
         if intent['manufacturing']['assembly_side'] != fab['assembly_side']:
             raise ValueError('Manufacturing assembly side differs from fab profile')
+    if intent['status']=='EXPANDED':
+        requested=intent['manufacturing']['thickness'].get('value')
+        allowed=fab['thickness']
+        low=allowed.get('value',allowed.get('min'))
+        high=allowed.get('value',allowed.get('max'))
+        if requested is None or low is None or high is None or not low<=requested<=high:
+            raise ValueError('Manufacturing thickness differs from fab profile')
     checks = unique(intent['checks'], 'id', 'intent check id')
     if intent['status'] == 'EXPANDED':
         def concrete(value):

@@ -25,8 +25,7 @@ are implemented in later stages.
 Expansion consumes one validated, Git-commit-pinned knowledge bundle and one
 block graph. It performs no network access, source-original fetch, board mutation,
 Git write or catalog change. Identical inputs produce identical design intent.
-PcbKnowledge owns the structural contracts under `schemas/`; Stage 2
-moves the accepted contracts into the active pinned workspace schema set.
+PcbKnowledge owns the active pinned structural contracts under `schemas/`.
 
 ### Authoritative output (D3)
 

@@ -5,7 +5,7 @@ a new-design recommendation, a one-shot fuse replacement or protection-system
 certification. The electrical source revision BE, 09/26 is separate from its
 08/26R legal appendix. The page-1 graphical warning marks the base model as not
 recommended for new designs; text-only extraction did not preserve that symbol.
-See the [source review](../../../knowledge/intake/bourns-mf-msmf050-ptc-constraints-review.md)
+See the source review (`git show intake-final:knowledge/intake/bourns-mf-msmf050-ptc-constraints-review.md`)
 for actual-byte identity, rendered-page inspection and independent review.
 
 ## Reproduce

@@ -4,7 +4,7 @@ This batch covers Vishay BCcomponents MAL214636471E3, 146 RTI, 470 uF / 25 V,
 Form TFA, nominal 10 x 16 mm radial aluminum electrolytic. The 22-Mar-17
 electrical revision is separate from the 2026 legal appendix. An explicit source
 ordering example and separately hashed official identity listing support the
-orderable; neither proves inventory or future supply. See the [source review](../../../knowledge/intake/146rti-bulk-capacitor-constraints-review.md)
+orderable; neither proves inventory or future supply. See the source review (`git show intake-final:knowledge/intake/146rti-bulk-capacitor-constraints-review.md`)
 for actual-byte identity and independent rendered-page review.
 
 ## Reproduce

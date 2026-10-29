@@ -12,7 +12,7 @@
         "default": true,
         "defaults": {
           "build": "local-checks",
-          "run": "local-editor",
+          "run": "local-viewer",
           "test": "local-tests",
           "package": "data-snapshot"
         },
@@ -30,7 +30,7 @@
     "build": [
       {
         "id": "local-checks",
-        "label": "Check Local Editor",
+        "label": "Check Local Catalog",
         "description": "Compile, test and validate the Git-native software checkout without containers or downloads",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "build"],
@@ -39,8 +39,8 @@
     ],
     "run": [
       {
-        "id": "local-editor",
-        "label": "Open Knowledge Editor",
+        "id": "local-viewer",
+        "label": "Open Knowledge Viewer",
         "description": "Open the no-login local GUI; terminal users can pass --workspace for external knowledge data",
         "command": "python3",
         "args": ["configs/pcbknowledge_workflow.py", "run"],

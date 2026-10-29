@@ -102,6 +102,14 @@ class Catalog:
         if not 1 <= anchor['page'] <= source['pages']:
             raise ValueError(f'Evidence page outside source: {anchor}')
 
+    def authorize_read(self, identity):
+        source=self.get(identity, 'source')
+        status=self.evidence_status(source)
+        if status=='LICENSE_BLOCKED':raise PermissionError('Source license blocks processing')
+        if status!='LOCALLY_VERIFIED':raise FileNotFoundError('NOT_LOCALLY_VERIFIED')
+        digest=source['sha256']
+        return self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest+'.pdf')
+
     def evidence_status(self, source):
         """Hash only eligible local originals. Absence is an explicit result."""
         if source['license_class'] not in ELIGIBLE:
@@ -145,7 +153,13 @@ class Catalog:
                 self._part(record)
             elif kind == 'package':
                 pads = record['footprint']['pads']
-                numbers = unique(pads, 'number', 'package pad number')
+                numbers = {pad['number'] for pad in pads}
+                positions = []
+                for pad in pads:
+                    if all('value' in pad[k] for k in ('x','y')):
+                        position=(pad['x']['value'],pad['y']['value'])
+                        if position in positions:raise ValueError('Overlapping pad centers')
+                        positions.append(position)
                 if record['pin1'] not in numbers:
                     raise ValueError('Package pin1 has no pad')
             elif kind == 'block':
@@ -157,6 +171,8 @@ class Catalog:
 
     def _anchors(self, value):
         if isinstance(value, dict):
+            if value.get('basis')=='CALCULATED':
+                raise ValueError('No executable quantity calculators are registered yet')
             if 'source' in value and 'page' in value:
                 self.evidence(value)
             for child in value.values():

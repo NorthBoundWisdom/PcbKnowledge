@@ -93,5 +93,5 @@ this Markdown receipt is not a machine-authority upgrade.
 Preserve this receipt and its accepted snapshot. A correction, withdrawal, or
 later acceptance should add a dated, explicitly linked successor receipt rather
 than silently edit the original decision or extend it to new records. Continued
-curation remains subject to [the lightweight contract](../../legacy/intake/lightweight-knowledge.md)
+curation remains subject to the lightweight contract (`git show 758b5cb:docs/legacy/intake/lightweight-knowledge.md`)
 and [the active application-question milestones](../../../TODO.md#next-application-question-milestones).

@@ -8,8 +8,8 @@ metadata, application inputs, assumptions and engineering work still required.
 
 Pinned technical snapshot: `8d9e5b211e565067234e642d8f52309ac9bd07fb`.
 Separately replayed drafting base: `cfc4737c8a5be6a1a83903807adbd80d9286146f`.
-Use the [source JSON](../../../knowledge/intake/mh2029-ferrite-constraints.json)
-and [historical review](../../../knowledge/intake/mh2029-ferrite-constraints-review.md).
+Use the source JSON (`git show intake-final:knowledge/intake/mh2029-ferrite-constraints.json`)
+and historical review (`git show intake-final:knowledge/intake/mh2029-ferrite-constraints-review.md`).
 Exact identity is Bourns MH2029-601T, not MH2029-601Y; SMD chip,
 2.00 x 1.25 x 0.85 mm nominal. Each body dimension has +/-0.2 mm tolerance;
 these are not a complete footprint or assembly acceptance. Extra suffix and

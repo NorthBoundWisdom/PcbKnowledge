@@ -9,8 +9,8 @@ completing a card is not thermal, measurement, pulse or circuit certification.
 Use only **Vishay Dale WSLP2512R0100FEA**, nominal 10 milliohm, F initial
 1% tolerance, EA lead-free tape/reel, no extra special suffix, two-terminal
 2512 surface-mount metal-strip resistor. No alternate part or footprint is selected.
-The [source JSON](../../../knowledge/intake/wslp2512-current-sense-constraints.json)
-and [historical source review](../../../knowledge/intake/wslp2512-current-sense-constraints-review.md)
+The source JSON (`git show intake-final:knowledge/intake/wslp2512-current-sense-constraints.json`)
+and historical source review (`git show intake-final:knowledge/intake/wslp2512-current-sense-constraints-review.md`)
 are pinned at `5cb96b866a941ad0ad905e6ce7f0d130477f5852`.
 Source `wslp2512-vishay-30122-20240909-10mohm` is document 30122,
 electrical revision **09-Sep-2024**, not the 01-Jan-2026 legal appendix or

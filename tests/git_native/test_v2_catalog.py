@@ -36,7 +36,7 @@ class CatalogTests(unittest.TestCase):
     def save(self):
         for doc in self.documents.values():
             path=record_path(self.root,doc['id']);path.parent.mkdir(parents=True,exist_ok=True)
-            path.write_text(canonical_json(doc))
+            path.write_text(canonical_json(doc), encoding='utf-8', newline='\n')
 
     def load(self):
         return Catalog(self.root,self.root/'schemas')
@@ -75,6 +75,14 @@ class CatalogTests(unittest.TestCase):
         for mutation in mutations:
             self.documents=copy.deepcopy(original);mutation();self.save()
             with self.assertRaises(ValueError):self.load()
+
+    def test_separate_physical_pads_can_share_one_electrical_number(self):
+        pad=self.documents['package']['footprint']['pads'][0]
+        pad['x']=quantity(0,'mm');pad['y']=quantity(0,'mm')
+        tab=copy.deepcopy(pad);tab['x']=quantity(2,'mm')
+        self.documents['package']['footprint']['pads'].append(tab);self.save();self.load()
+        tab['x']=quantity(0,'mm');self.save()
+        with self.assertRaisesRegex(ValueError,'Overlapping'):self.load()
 
     def test_independent_agent_and_fabricated_human_verifier(self):
         part=self.documents['part'];part['verification']='AGENT_VERIFIED'
@@ -126,6 +134,11 @@ class CatalogTests(unittest.TestCase):
         self.save()
         with self.assertRaisesRegex(ValueError,'calculators'):self.load()
         self.documents['block']['checks']=[]
+        self.documents['part']['parameters']['voltage_rating']={**quantity(), 'basis':'CALCULATED',
+            'calculator':'led_resistor','inputs':{'supply':quantity()}}
+        self.save()
+        with self.assertRaisesRegex(ValueError,'quantity calculators'):self.load()
+        self.documents['part']['parameters']['voltage_rating']=quantity()
         self.documents['block']['layout']=[{'kind':'INVENTED','subject':'D'}];self.save()
         with self.assertRaises(ValueError):self.load()
         self.documents['block']['layout']=[{'kind':'PLACE_NEAR','subject':'D','target':'MISSING','max_distance':quantity(1,'mm')}];self.save()
@@ -134,7 +147,7 @@ class CatalogTests(unittest.TestCase):
     def test_manifest_and_schema_tamper_fail_in_loader(self):
         manifest=self.root/'pcbknowledge.workspace.json';original=manifest.read_bytes()
         value=json.loads(original);value['schema_digest']='0'*64
-        manifest.write_text(canonical_json(value))
+        manifest.write_text(canonical_json(value), encoding='utf-8', newline='\n')
         with self.assertRaises(WorkspaceError):self.load()
         manifest.write_bytes(original)
         path=next((self.root/'schemas').glob('*.json'));path.write_bytes(path.read_bytes()+b'\n')
@@ -143,7 +156,7 @@ class CatalogTests(unittest.TestCase):
     def test_v1_workspace_is_rejected_without_rewrite(self):
         path=self.root/'pcbknowledge.workspace.json';data=json.loads(path.read_bytes())
         data['format']='pcbknowledge-workspace-v1';original=canonical_json(data)
-        path.write_text(original)
+        path.write_text(original, encoding='utf-8', newline='\n')
         with self.assertRaisesRegex(WorkspaceError,'create a v2 workspace'):self.load()
         self.assertEqual(path.read_text(),original)
 
@@ -165,6 +178,7 @@ class CatalogTests(unittest.TestCase):
             if isinstance(value,list):return [resolve(v) for v in value]
             return value
         self.documents={k:resolve(v) for k,v in self.documents.items()}
+        self.documents['fab']['thickness']=quantity(1.6,'mm')
         self.save();record_path(self.root,'block:synthetic').unlink()
         intent=fixtures()['design-intent']
         intent['components'][0]['footprint']='pcbknowledge:synthetic'

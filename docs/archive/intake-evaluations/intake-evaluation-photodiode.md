@@ -3,7 +3,7 @@
 This batch covers the exact Vishay BPW34 bulk non-automotive orderable, not
 BPW34S tube packaging or a different supplier. Electrical revision 2.1,
 23-Aug-2011, is separate from the 2026 legal appendix. The
-[source review](../../../knowledge/intake/bpw34-photodiode-constraints-review.md)
+source review (`git show intake-final:knowledge/intake/bpw34-photodiode-constraints-review.md`)
 records actual bytes, official identity evidence and independent rendered-page
 review. Identity does not establish availability, current compliance or system
 qualification.

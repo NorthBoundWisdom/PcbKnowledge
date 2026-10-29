@@ -4,7 +4,7 @@
 
 The recorded source conflict is **handled by a conservative subset**, not declared
 manufacturer-resolved. The original issue remains `UNRESOLVED_SOURCE_WORDING`.
-The [separate machine-readable receipt](../../../knowledge/intake-dispositions/mcp23017-supply-temperature-2026-10-28.json)
+The separate machine-readable receipt (`git show intake-final:knowledge/intake-dispositions/mcp23017-supply-temperature-2026-10-28.json`)
 records `CONTAINED_BY_CONSERVATIVE_SUBSET`, `manufacturer_confirmed: false`, and
 an Agent-derived preliminary supply/ambient screen for **MCP23017-E/SO only**:
 

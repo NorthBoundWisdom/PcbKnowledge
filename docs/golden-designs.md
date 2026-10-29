@@ -56,7 +56,7 @@ Digital, low power, two layers. This is the minimal end-to-end target.
 - Manufacturing: generic two-layer 1.6 mm profile, single-side assembly,
   0603 passives.
 
-Existing intake devices that G1 can migrate: LD1117/LM1117, SMBJ5.0A, SS14,
+Candidate devices for the remaining G1 catalog: LD1117/LM1117, SMBJ5.0A, SS14,
 MF-MSMF050-2 or SF-1206S050-2, C0603C104K5RACTU, CRCW060310K0FKEA, INA219,
 24LC256, Wurth 2.54 mm header. New knowledge needed: the MCU, crystal, USB-C
 receptacle, tactile switch, LEDs and their footprints.

@@ -243,6 +243,15 @@ class RecordContractTests(unittest.TestCase):
         data['checks'][0]['require']='__import__("os").system("echo unsafe")'
         with self.assertRaises(ValueError):validate(data,'block.schema.json')
 
+    def test_evaluator_rejects_malformed_supported_keywords(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'synthetic.schema.json'
+            for schema in ({'type':'invented'}, {'type':'object','required':'id'},
+                           {'oneOf':[]}, {'minItems':True}, {'pattern':'['},
+                           {'$ref':'#/$defs/missing'}):
+                path.write_text(json.dumps(schema))
+                with self.assertRaises(ValueError):validate({},path.name,Path(temp))
+
     def test_evaluator_numeric_equality_does_not_confuse_booleans(self):
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)/'synthetic.schema.json'

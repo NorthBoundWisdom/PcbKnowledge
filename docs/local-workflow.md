@@ -1,110 +1,72 @@
 # Local workflow
 
-## Prepare the software checkout
+Git and Python 3.11+ are required. Config and Build operate on the software checkout:
 
 ```bash
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 ```
 
-Config and Build are software-checkout operations. They validate the repository's pinned workspace contract, compile the local editor, run the standard-library test suite, and write local receipts. No account, Docker service, network download, or database is created.
-
-## Create a knowledge workspace
-
-Private knowledge belongs in a separate Git repository; public curated intake may live with the software. See [the current contract](legacy/intake/lightweight-knowledge.md).
+Create an explicitly selected external workspace with:
 
 ```bash
-mkdir ../PcbKnowledgeData
-git -C ../PcbKnowledgeData init
-python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData
+python3 configs/pcbknowledge_workspace.py init <workspace> --init-git
+python3 configs/pcbknowledge_workspace.py validate <workspace>
 ```
 
-Or initialize Git only for a missing/empty target:
+Initialization copies pinned v2 schemas and initial registries and creates empty
+collections. It never stages, commits or pushes. Existing v1 manifests are rejected;
+re-extract selected records into a new v2 workspace. `pin-contract` is an explicit
+software-authoring operation for the checkout's schema contract.
+
+## Query and inspect
 
 ```bash
-python3 configs/pcbknowledge_workspace.py init ../PcbKnowledgeData --init-git
+python3 configs/pcbknowledge_agent.py --repo <workspace> v2 validate
+python3 configs/pcbknowledge_agent.py --repo <workspace> part search --role monitor.current
+python3 configs/pcbknowledge_agent.py --repo <workspace> part show part:ti-ina219aidcnr
+python3 configs/pcbknowledge_agent.py --repo <workspace> source authorize-read source:ti-ina219
+python3 configs/pcbknowledge_workflow.py open --workspace <workspace>
 ```
 
-The initializer copies the three current schemas, writes `pcbknowledge.workspace.json`, and creates empty authority/evidence directories. It never stages, commits, or pushes. Review the generated files and commit the workspace contract with your normal Git workflow before publishing data.
+The browser displays parts and blocks read-only. Select a citation beside a value
+or pin to render the exact PDF page with pinned PDF.js. Evidence is read only
+from the selected workspace; missing local cache files are reported explicitly.
+The default URL is `http://127.0.0.1:18080/`. Keep the terminal open; Ctrl+C stops it.
+`run` requires a current Build; `open` prepares software if necessary.
 
-Validate the working contract or a committed ref:
+Author canonical JSON records with the repository's v2 skills and shared
+serializer, then validate the complete workspace. No approval state or GUI write
+path exists. A correction is a new Git commit, preserving actual verification
+provenance. Before an authorized data commit run:
 
 ```bash
-python3 configs/pcbknowledge_workspace.py validate ../PcbKnowledgeData
-python3 configs/pcbknowledge_workspace.py validate-ref ../PcbKnowledgeData --ref HEAD
+python3 configs/pcbknowledge_agent.py --repo <workspace> change-scope
 ```
 
-## Open and close the editor
+`MIXED` is invalid. Never mix knowledge data with schema, workspace-contract or
+policy changes. Source originals remain ignored and cannot enter packages.
 
-```bash
-python3 configs/pcbknowledge_workflow.py run --workspace ../PcbKnowledgeData
-```
-
-For first use, `open` prepares the software checkout if necessary and then launches the workspace:
-
-```bash
-python3 configs/pcbknowledge_workflow.py open --workspace ../PcbKnowledgeData
-```
-
-The browser opens the loopback URL printed by the terminal. Every rendered page displays the exact selected workspace root. Press `Ctrl+C` to stop the editor.
-
-The GUI reads/writes Source authority, PDF evidence, review state, and Git diffs only from the selected workspace. Static application assets continue to come from the PcbKnowledge software checkout. The GUI never stages, commits, or pushes.
-
-## Agent ingestion
-
-Use the same explicit workspace for the entire task:
-
-```bash
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData validate
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData source list
-python3 configs/pcbknowledge_agent.py --repo ../PcbKnowledgeData fact conflicts
-```
-
-The repository-local skills validate `<workspace>` before ingestion and keep `--repo '<workspace>'` on all Agent commands. `INVALID_WORKSPACE` is a stop condition, not a reason to retry against the public source checkout.
-
-## Review a Source batch
-
-The typed Source/Entity/Fact workbench supports the canonical review flow. For a Source:
-
-1. Create or open a draft; leave unknown values empty.
-2. Select a PDF and save the draft.
-3. Submit the record for review when required information is complete.
-4. An engineer verifies the source and approves it, or rejects it with a specific reason.
-5. Open the repository-change view and inspect the workspace JSON diff plus local evidence verification receipt (originals are not staged).
-6. Use the team's normal Git GUI or command-line workflow to stage, commit, and push accepted data.
-
-Fact review additionally checks exact entity/package scope, typed closure, and evidence anchors. Delegated intake follows the separate lightweight contract.
-
-## Test and package an external workspace
-
-```bash
-python3 configs/pcbknowledge_workflow.py test --workspace ../PcbKnowledgeData
-python3 configs/pcbknowledge_workflow.py package --workspace ../PcbKnowledgeData
-```
-
-`test` runs the full software test suite and additionally validates the selected external workspace. `package` reads the selected workspace manifest, pinned schemas, canonical authority, curated intake, and evidence metadata only. Original cache bytes are never packaged. The ZIP and SHA-256 sidecar are written under the software checkout's ignored `build/package/` directory, not into the knowledge authority repository.
-
-## Collaboration guidance
-
-- Keep each knowledge batch in a focused data commit.
-- Keep workspace manifest/schema upgrades in separate contract commits.
-- Pull before ingestion to reduce concurrent edits to the same authority object.
-- Never rename content-addressed evidence manually; its path is derived from the digest.
-- Correct a committed approved record by creating a new record and linking the prior ID through `supersedes`.
-- Never move private data or source originals into the public checkout. Only small original curated metadata belongs in public Git.
-
-## Local gates
-
-For software changes:
+## Gates and packages
 
 ```bash
 python3 configs/check_english_repo.py
 python3 configs/check_public_repo.py
+python3 configs/check_pdfjs_vendor.py
+python3 configs/pcbknowledge_workspace.py validate .
 python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_workflow.py test
-python3 configs/pcbknowledge_agent.py validate
+python3 configs/pcbknowledge_agent.py --repo . v2 validate
 python3 configs/pcbknowledge_workflow.py package
 ```
 
-For production data, run the equivalent Agent/workflow validation against the selected private workspace. All applicable commands must exit 0 with no required checks skipped. Unexecuted, interrupted, or truncated checks are not passes.
+Test and Package also accept `--workspace <workspace>`. Packages contain the
+validated manifest, schema snapshot, registries and records, with output under
+the software checkout's ignored `build/package/`. They are owner-facing metadata
+snapshots; Stage 5 implements commit-pinned consumer bundles.
+
+Manual acceptance: open a part, inspect an identity, a pin and a parameter citation,
+and compare their numbered pages to the PDF. Open a block page when blocks exist;
+check nets and constraints. Repeat with an external workspace and confirm its path
+is displayed. Mutation requests must receive HTTP 405 and write no records.

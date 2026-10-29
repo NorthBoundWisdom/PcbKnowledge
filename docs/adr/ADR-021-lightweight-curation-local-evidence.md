@@ -13,7 +13,7 @@ visual-review pilot before retaining any useful summary prevents incremental lea
 
 ## Decision
 
-Adopt the [lightweight knowledge contract](../legacy/intake/lightweight-knowledge.md). Keep typed
+Adopt the lightweight knowledge contract (`git show 758b5cb:docs/legacy/intake/lightweight-knowledge.md`). Keep typed
 canonical authority and a clearly noncanonical intake queue distinct. Agent review
 under owner delegation is truthful curation acceptance, not a fabricated human
 canonical approval. Commit metadata and small original annotations. Store original

@@ -91,8 +91,8 @@ remain frozen at `b04fed50dff7853d5ad2663784eb0305bb02f331`. The technical repla
 uses clean immutable commit `0373a341d5e12d50778f899848a078621dfa4790`, tree
 `8c83b2cd3cc3a2443ab584ccd16768455c49dda0`, not the report-publication commit.
 
-Reuse the [source JSON](../../../knowledge/intake/vishay-ss14-rectifier-constraints.json)
-and its [historical review](../../../knowledge/intake/vishay-ss14-rectifier-constraints-review.md).
+Reuse the source JSON (`git show intake-final:knowledge/intake/vishay-ss14-rectifier-constraints.json`)
+and its historical review (`git show intake-final:knowledge/intake/vishay-ss14-rectifier-constraints-review.md`).
 Source JSON SHA-256: `6537e3323bd556482167c9a268c799f1d8527e8f4d23d610ccfc88b0f2654407`.
 The recorded original PDF hash is `b32a2d93d2d2cf9f48d6cf678ab03713956b7501029c0424c6a554425df562da`
 (1,174,123 bytes); this task does **not** retrieve or freshly verify that PDF.

@@ -99,8 +99,8 @@ The [practical report, case 7](https://github.com/NorthBoundWisdom/PcbKnowledge/
 and [JSON receipt](https://github.com/NorthBoundWisdom/PcbKnowledge/blob/b04fed50dff7853d5ad2663784eb0305bb02f331/docs/practical-task-evaluation-2026-10-28.json)
 remain frozen. The clean immutable technical replay snapshot is
 `0373a341d5e12d50778f899848a078621dfa4790`, not report publication `b04fed50`.
-Reuse the [source JSON](../../../knowledge/intake/sn65hvd75-rs485-interface-constraints.json)
-and [historical review](../../../knowledge/intake/sn65hvd75-rs485-interface-constraints-review.md).
+Reuse the source JSON (`git show intake-final:knowledge/intake/sn65hvd75-rs485-interface-constraints.json`)
+and historical review (`git show intake-final:knowledge/intake/sn65hvd75-rs485-interface-constraints-review.md`).
 JSON SHA-256: `e1aa5c7e7e42abddb165b8268b767a9573ebb72e210384f9d1a75493fa43c549`.
 Recorded original PDF SHA-256:
 `b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6`

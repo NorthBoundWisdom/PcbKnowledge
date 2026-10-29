@@ -3,7 +3,7 @@
 This successor adds six original annotations for Vishay Siliconix
 Si2342DS-T1-GE3, SOT-23 (TO-236), electrical revision S11-1388-Rev. A
 (11-Jul-2011). The separate legal appendix date is not an electrical revision.
-The distinct [source reviewer](../../../knowledge/intake/si2342ds-low-voltage-drive-constraints-review.md)
+The distinct source reviewer (`git show intake-final:knowledge/intake/si2342ds-low-voltage-drive-constraints-review.md`)
 verified the unchanged original hash and independently rendered cited pages 1/2.
 Acceptance is Agent review under owner delegation, not human review, canonical
 approval, electrical qualification or assurance of the latest revision.

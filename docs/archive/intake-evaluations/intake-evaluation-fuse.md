@@ -3,7 +3,7 @@
 This slice concerns the exact Bourns SF-1206S050-2 once-only slow-blow fuse,
 not a resettable PTC. This evidence does not establish interchangeability with
 a fast-acting variant. The
-[source review](../../../knowledge/intake/sf1206s-fuse-constraints-review.md) is the
+source review (`git show intake-final:knowledge/intake/sf1206s-fuse-constraints-review.md`) is the
 authority for byte identity, revision and independent source inspection.
 This evaluation tests metadata preservation, not protection coordination.
 

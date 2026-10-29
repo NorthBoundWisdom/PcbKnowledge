@@ -8,8 +8,8 @@ analysis and validation; it does not resolve any existing warning.
 
 Technical baseline: `98d7ca5eba5865967afca2a1fd379307acdd0d41`.
 Separate current-head replay base: `f3200aa2e4822c80208b3a7e591976477c86b3ae`.
-Existing [source annotations](../../../knowledge/intake/bpw34-photodiode-constraints.json)
-and [historical review](../../../knowledge/intake/bpw34-photodiode-constraints-review.md)
+Existing source annotations (`git show intake-final:knowledge/intake/bpw34-photodiode-constraints.json`)
+and historical review (`git show intake-final:knowledge/intake/bpw34-photodiode-constraints-review.md`)
 are the only engineering evidence used. Source ID is
 `bpw34-vishay-81521-r2p1-bulk`; source JSON SHA-256 is
 `f495129cc4068f6519883de8b3c81d962ee6e727e5476d30efc7efc463dbe6bb`.

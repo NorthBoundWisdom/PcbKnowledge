@@ -85,9 +85,9 @@ Existing evaluator/disposition suites additionally cover lost warnings/provenanc
 wrong sources, tampered byte pins and omitted disposition metadata.
 
 The source-content reviews remain the authority for the new annotations:
-[LDO](../../../knowledge/intake/ldo-application-constraints-review.md),
-[ADS1115](../../../knowledge/intake/ads1115-input-interface-constraints-review.md), and
-[ULN2003A](../../../knowledge/intake/uln2003a-load-protection-constraints-review.md).
+LDO (`git show intake-final:knowledge/intake/ldo-application-constraints-review.md`),
+ADS1115 (`git show intake-final:knowledge/intake/ads1115-input-interface-constraints-review.md`), and
+ULN2003A (`git show intake-final:knowledge/intake/uln2003a-load-protection-constraints-review.md`).
 Replay does not newly verify original bytes, page images, human acceptance or
 canonical authority. All original PDFs, extracted text and renders stay outside
 Git and packages. Full integrated gates, package member inspection and exact-commit

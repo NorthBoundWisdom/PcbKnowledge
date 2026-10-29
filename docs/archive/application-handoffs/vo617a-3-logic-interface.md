@@ -10,8 +10,8 @@ of adequate logic margin, timing, lifetime or isolation safety.
 Reuse only **Vishay Semiconductors VO617A-3, CTR bin 3, standard DIP-4 without
 an option suffix**, source `vo617a-3-vishay-83430-2-8-dip4`, document 83430,
 **Rev. 2.8, 2025-01-22**. The separate 2026 legal appendix does not revise the
-electrical specifications. The [source JSON](../../../knowledge/intake/vo617a-3-optocoupler-logic-constraints.json)
-and [source review](../../../knowledge/intake/vo617a-3-optocoupler-logic-constraints-review.md)
+electrical specifications. The source JSON (`git show intake-final:knowledge/intake/vo617a-3-optocoupler-logic-constraints.json`)
+and source review (`git show intake-final:knowledge/intake/vo617a-3-optocoupler-logic-constraints-review.md`)
 are reused, not recollected. Pinned technical snapshot:
 `f97bb140134de4463284287bb13b6aa6b58eb7c3`.
 

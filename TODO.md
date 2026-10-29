@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `STAGE_2_ACTIVE`
+> Status: `STAGE_3_ACTIVE`
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -34,6 +34,7 @@ answer here.
 | D5 | Keep a GUI after v2 | Stage 2 deletes all v1 pages, decision flows and intake pages. Keep the loopback server shell, pinned PDF.js and the evidence endpoint, and add minimal read-only v2 part and block pages that show each value beside its cited PDF page, for owner spot checks |
 | D6 | Distributor part numbers in public records | Allowed as identifiers only (no copied catalog data) |
 | D7 | G1 design inputs (these are design decisions, not missing evidence) | USB-C sink input budget 500 mA (5.1 kOhm Rd on CC1/CC2, default USB power); 3.3 V rail load budget 150 mA including 50 mA for expansion headers; MCU external crystal 8 MHz; I2C standard mode 100 kHz with a 100 pF bus-capacitance budget; four 3.2 mm non-plated M3 holes with 6.0 mm keepout, centers 3.5 mm from the board edges; no component height limit for G1. Agent allocation of the 50 mA header budget: SWD 5 mA, I2C 40 mA, UART 5 mA |
+| D8 | Package courtyard allowance for Stage 3 | 0.25 mm, selected by the agent as an engineering default; check against generated geometry and the selected fab profile |
 
 ## Stage 0 — Course correction (complete)
 
@@ -80,7 +81,7 @@ vocabulary duplicated between schemas and registries, a test-only validator that
 would become a second validator, and contract size (about 4.2k lines of schema for
 one design). The local `intake-final` tag is not yet on the remote.
 
-## Stage 2 — Contract corrections, v2 core and hard cut (active)
+## Stage 2 — Contract corrections, v2 core and hard cut (complete)
 
 Work in the order 2a to 2e; each step is a
 coherent commit or a small group of commits. Data and contract commits stay separate.
@@ -128,37 +129,40 @@ coherent commit or a small group of commits. Data and contract commits stay sepa
 
 ### 2d G1 sources and parts (data-only commits)
 
-- [ ] The local evidence cache in this checkout is empty. Re-download each G1
+- [x] The local evidence cache in this checkout is empty. Re-download each G1
   source PDF from its recorded official URL into `.pcbknowledge/evidence/sha256/`
   and confirm the recorded SHA-256. A mismatch is a new source revision recorded as
   such, never an override.
-- [ ] Write v2 `source` and `part` records for the G1 devices present in intake:
+- [x] Write v2 `source` and `part` records for the G1 devices present in intake:
   LD1117S33TR (fixed 3.3 V), INA219AIDCNR and 24LC256-I/SN. The owner removed
   SMBJ5.0A, SS14, MF-MSMF050-2, C0603C104K5RACTU and CRCW060310K0FKEA
   from this migration on 2026-10-29 because their cited PDFs have no numbered
-  terminal map; Stage 4 may add them after obtaining that evidence. Wurth 61300211121 was removed from this migration by the owner on 2026-10-29 after its official PDF remained unavailable (HTTP 403); connector selection stays in Stage 4. Intake holds
-  pin facts only for LD1117, INA219 and 24LC256; every other numbered pin map is
-  new extraction from the cited page.
-- [ ] An independent agent re-checks every cited value and pin, then sets
+  terminal map; Stage 4 may add them after obtaining that evidence or select
+  alternatives. The owner also removed Wurth 61300211121 after its official PDF
+  remained unavailable (HTTP 403); connector selection stays in Stage 4.
+- [x] An independent agent re-checks every cited value and pin, then sets
   `AGENT_VERIFIED` with its actual identity.
 
 ### 2e Hard cut
 
-- [ ] Delete v1 Source/Entity/Fact families, the approve/reject review closure, all
+- [x] Delete v1 Source/Entity/Fact families, the approve/reject review closure, all
   v1 and intake GUI pages, the intake queue and its whole toolchain (`intake*.py`,
   intake CLI commands, replay tests, `evals/intake-*.json`, the CI replay step,
   `docs/legacy/`). Later migrations read intake from the `intake-final` tag.
-- [ ] Per D5, keep the server shell, PDF.js and the evidence endpoint, and add
+- [x] Per D5, keep the server shell, PDF.js and the evidence endpoint, and add
   read-only v2 part and block pages that show each value beside its cited page.
-- [ ] Rewrite `.codex/skills/` for v2: register source, extract part, verify part,
+- [x] Rewrite `.codex/skills/` for v2: register source, extract part, verify part,
   write block.
-- [ ] Update `AGENTS.md` sections 6 and 7, `architecture.md` and `README.md` to
+- [x] Update `AGENTS.md` sections 6 and 7, `architecture.md` and `README.md` to
   describe only v2; delete `docs/course-correction-prompt.md`.
 
 Exit: one model and one validator; G1 parts from 2d validate as `AGENT_VERIFIED`;
 full gate passes; record the test count and lines removed.
+Stage receipt (2026-10-29): all gate commands exit 0; Build/Test each 81 tests, no skips; 19 pins across three independently verified parts and sources.
+One v2 model/validator, read-only HTTP/PDF smoke and deterministic public/external metadata packages passed; +4356 / -97806 lines overall. Exact commands and first failures are in commit bodies.
+Browser canvas visual acceptance remains manual because no browser surface was available; steps are in `docs/local-workflow.md`. G1 acceptance levels remain NOT_RUN.
 
-## Stage 3 — Packages and footprints
+## Stage 3 — Packages and footprints (active)
 
 - [ ] Parametric land-pattern generators (original code) for the G1 package
   families: chip 0402/0603/0805, SOD-123, SMA/SMB, SOT-23-3/5, SOT-223, SOIC-8,
@@ -166,6 +170,8 @@ full gate passes; record the test count and lines removed.
 - [ ] Explicit-pad packages for irregular G1 parts: USB-C receptacle, tactile
   switch, connectors.
 - [ ] Tests against hand-checked dimension tables; pad-to-pin closure for every part.
+  Include the LD1117 tab as a separate physical VOUT pad sharing the evidenced
+  electrical pin number, and check that no extra electrical pin is invented.
 - [ ] Derived KiCad `.kicad_mod` export.
 - [ ] Manual acceptance: open the exported footprints in KiCad or PcbAtlas and
   compare against the manufacturer drawings.
@@ -279,5 +285,5 @@ Run the narrowest affected tests while editing, then the full gate at the stage
 exit: `python3 configs/check_english_repo.py`, `python3 configs/check_public_repo.py`,
 `python3 configs/check_pdfjs_vendor.py`, `python3 configs/pcbknowledge_workspace.py
 validate .`, and `python3 configs/pcbknowledge_workflow.py config|build|test|package`
-plus `python3 configs/pcbknowledge_agent.py validate`. Record commands, exit codes,
+plus `python3 configs/pcbknowledge_agent.py --repo . v2 validate`. Record commands, exit codes,
 test counts and skips. Skipped, interrupted or truncated runs are not passes.

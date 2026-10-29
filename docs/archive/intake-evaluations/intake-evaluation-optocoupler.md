@@ -4,7 +4,7 @@ This successor is scoped to the eight original VO617A-3 standard DIP-4
 annotations. It is not a safety certification, circuit design, complete component
 model or canonical/human approval. The selected electrical source is Vishay
 Semiconductors document 83430, Rev. 2.8, 22-Jan-2025; the separate legal appendix
-date is not an electrical revision. The exact accepted pair and [source-review receipt](../../../knowledge/intake/vo617a-3-optocoupler-logic-constraints-review.md)
+date is not an electrical revision. The exact accepted pair and source-review receipt (`git show intake-final:knowledge/intake/vo617a-3-optocoupler-logic-constraints-review.md`)
 are pinned following distinct independent review, not inferred from retrieval.
 
 ## Reproduce

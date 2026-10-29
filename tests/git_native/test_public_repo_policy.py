@@ -22,10 +22,10 @@ class PublicRepositoryPolicyTests(unittest.TestCase):
         self.assertEqual(public_distribution_violations([
             *ALLOWED_AUTHORITY_PLACEHOLDERS,
             "knowledge/sources/source-1.json",
-            "knowledge/entities/component-1.json",
-            "knowledge/facts/fact-1.json",
-            "knowledge/intake/pilot/summary.md",
-            "knowledge/intake/pilot/candidates.json",
+            "knowledge/parts/component-1.json",
+            "knowledge/packages/package-1.json",
+            "knowledge/blocks/summary.json",
+            "knowledge/rules/candidates.json",
         ]), ())
 
     def test_only_initial_registry_json_paths_are_allowed(self) -> None:
@@ -39,22 +39,23 @@ class PublicRepositoryPolicyTests(unittest.TestCase):
         paths = [
             "evidence/sha256/ab/abcdef.pdf", "knowledge/records/.gitkeep",
             ".pcbknowledge/evidence/sha256/ab/abcdef.pdf",
-            "knowledge/intake/original.pdf", "knowledge/intake/original.zip",
+            "knowledge/parts/original.pdf", "knowledge/parts/original.zip",
+            "knowledge/intake/retired.json", "knowledge/entities/retired.json", "knowledge/facts/retired.json",
             "knowledge/sources/nested/source.json",
         ]
         self.assertEqual(public_distribution_violations(paths), tuple(sorted(paths)))
 
     def test_software_paths_are_allowed_subject_to_content_checks(self) -> None:
         self.assertEqual(public_distribution_violations([
-            "src/pcbknowledge/git_native/model.py",
+            "src/pcbknowledge/v2/catalog.py",
             "tests/git_native/fixtures/synthetic-source.json",
             "docs/architecture.md", "vendor/pdfjs/pdf.mjs",
         ]), ())
 
     def test_windows_and_dot_prefixes_are_normalized(self) -> None:
         self.assertEqual(public_distribution_violations([
-            r".\knowledge\intake\original.pdf"
-        ]), ("knowledge/intake/original.pdf",))
+            r".\knowledge\parts\original.pdf"
+        ]), ("knowledge/parts/original.pdf",))
 
 
 class IndexedMetadataBoundaryTests(unittest.TestCase):
@@ -76,8 +77,8 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         return target
 
     def test_small_paraphrased_metadata_is_allowed(self) -> None:
-        self.stage("knowledge/intake/pilot.json", b'{"status":"DRAFT"}\n')
-        self.stage("knowledge/intake/pilot.md", "# Review draft\n\u5f85\u9a8c\u6536\n".encode())
+        self.stage("knowledge/parts/pilot.json", b'{"status":"DRAFT"}\n')
+        self.stage("knowledge/parts/pilot-note.json", "# Review draft\n\u5f85\u9a8c\u6536\n".encode())
         self.stage("knowledge/sources/source-1.json", b"{}\n")
         self.assertEqual(check_public_distribution(self.root), ())
 
@@ -92,19 +93,19 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         self.assertEqual(check_public_distribution(self.root), (path,))
 
     def test_index_bytes_cannot_be_hidden_by_clean_worktree(self) -> None:
-        path = "knowledge/intake/disguised.json"
+        path = "knowledge/parts/disguised.json"
         target = self.stage(path, b"%PDF-1.4\noriginal bytes")
         target.write_text('{}\n', encoding="utf-8")
         self.assertEqual(check_public_distribution(self.root), (path,))
 
     def test_worktree_tamper_is_also_rejected(self) -> None:
-        path = "knowledge/intake/pilot.md"
+        path = "knowledge/parts/pilot-note.json"
         target = self.stage(path, b"summary\n")
         target.write_bytes(b"summary\0binary\xff")
         self.assertEqual(check_public_distribution(self.root), (path,))
 
     def test_binary_large_and_nonempty_placeholder_rejected(self) -> None:
-        paths = ["knowledge/intake/binary.json", "knowledge/intake/large.md",
+        paths = ["knowledge/parts/binary.json", "knowledge/parts/large.json",
                  "knowledge/sources/.gitkeep"]
         self.stage(paths[0], b"\xff\xfe\x00")
         self.stage(paths[1], b"a" * (MAX_METADATA_BYTES + 1))
@@ -192,10 +193,10 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
                 self.assertEqual(check_public_distribution(self.root), (".grok/skills",))
 
     def test_symlink_index_mode_is_rejected_without_following_target(self) -> None:
-        self.stage("knowledge/intake/safe.md", b"summary\n")
-        object_id = self.git("rev-parse", ":knowledge/intake/safe.md").decode().strip()
-        self.git("update-index", "--add", "--cacheinfo", f"120000,{object_id},knowledge/intake/link.md")
-        self.assertEqual(check_public_distribution(self.root), ("knowledge/intake/link.md",))
+        self.stage("knowledge/parts/safe.json", b"summary\n")
+        object_id = self.git("rev-parse", ":knowledge/parts/safe.json").decode().strip()
+        self.git("update-index", "--add", "--cacheinfo", f"120000,{object_id},knowledge/parts/link.json")
+        self.assertEqual(check_public_distribution(self.root), ("knowledge/parts/link.json",))
 
 
 if __name__ == "__main__":

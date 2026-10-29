@@ -20,15 +20,7 @@ from .pdfjs_vendor import PDFJS_RUNTIME_FILES, PDFJS_STATIC_RELATIVE
 
 MAX_METADATA_BYTES = 1_000_000
 ALLOWED_AUTHORITY_PLACEHOLDERS = frozenset(
-    {
-        "knowledge/sources/.gitkeep",
-        "knowledge/entities/.gitkeep",
-        "knowledge/facts/.gitkeep",
-        *{f"knowledge/{name}/.gitkeep" for name in ("parts","packages","blocks","rules","fab-profiles","registry")},
-        "knowledge/intake/.gitkeep",
-        "evidence/sha256/.gitkeep",
-    }
-)
+    f'knowledge/{name}/.gitkeep' for name in ('sources','parts','packages','blocks','rules','fab-profiles','registry'))
 ALLOWED_REGISTRY_PATHS = frozenset(
     f"knowledge/registry/{name}.json" for name in (
         "quantities", "parameters", "pin-types", "layout-constraints", "package-families", "roles"
@@ -67,9 +59,9 @@ def _allowed_metadata_path(path: str) -> bool:
         return False
     if parts[1] == "registry":
         return path in ALLOWED_REGISTRY_PATHS
-    if parts[1] in {"sources", "entities", "facts", "parts", "packages", "blocks", "rules", "fab-profiles"}:
+    if parts[1] in {"sources", "parts", "packages", "blocks", "rules", "fab-profiles"}:
         return len(parts) == 3 and path.endswith(".json")
-    return parts[1] in {"intake", "intake-dispositions"} and PurePosixPath(path).suffix in {".json", ".md"}
+    return False
 
 
 def public_distribution_violations(tracked_paths: Iterable[str]) -> tuple[str, ...]:

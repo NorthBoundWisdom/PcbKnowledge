@@ -1,7 +1,7 @@
 # Ferrite bead condition evaluation
 
 This slice covers the exact Bourns MH2029-601T high-current chip bead. The
-[source review](../../../knowledge/intake/mh2029-ferrite-constraints-review.md) records
+source review (`git show intake-final:knowledge/intake/mh2029-ferrite-constraints-review.md`) records
 actual PDF bytes, electrical revision 09/23 separately from the legal appendix,
 and independent rendered-page review. It does not establish lifecycle status,
 certification, filter selection or an installed circuit's performance.

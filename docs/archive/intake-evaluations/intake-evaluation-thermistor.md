@@ -5,7 +5,7 @@ This batch covers Vishay BCcomponents NTCLE100E3103JB0, the exact no-A,
 revision is separate from the 2026 legal appendix. The source ordering table
 and an exact official identity listing identify this part without establishing
 inventory, current regulatory compliance or suitability for a new design.
-See the [source review](../../../knowledge/intake/ntcle100-thermistor-constraints-review.md)
+See the source review (`git show intake-final:knowledge/intake/ntcle100-thermistor-constraints-review.md`)
 for byte identity and independently inspected rendered-page evidence.
 
 ## Reproduce

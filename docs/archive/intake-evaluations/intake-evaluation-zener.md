@@ -3,7 +3,7 @@
 This batch covers the exact commercial Vishay BZX84C5V1-E3-08 in SOT-23.
 The C tolerance, commercial E3 grade and -08 reel identity are not interchangeable
 with B, HE3_A or -18 orderables. Electrical revision 1.1, 24-Jan-2024, is separate
-from the 2026 legal appendix. See the [source review](../../../knowledge/intake/bzx84c5v1-zener-constraints-review.md)
+from the 2026 legal appendix. See the source review (`git show intake-final:knowledge/intake/bzx84c5v1-zener-constraints-review.md`)
 for actual-byte identity, exact official ordering evidence and independent
 rendered-page review. Current stock, future supply and installed qualification
 are not established by that identity evidence.
