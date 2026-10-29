@@ -386,14 +386,20 @@
           ]
         },
         "copper": {
-          "type": "string",
-          "minLength": 1
+          "enum": [
+            "ONE_OZ"
+          ]
         },
         "assembly": {
+          "enum": [
+            "SINGLE_SIDE_TOP"
+          ]
+        },
+        "preferred_passives": {
           "type": "string",
           "minLength": 1
         },
-        "preferred_passives": {
+        "note": {
           "type": "string",
           "minLength": 1
         }

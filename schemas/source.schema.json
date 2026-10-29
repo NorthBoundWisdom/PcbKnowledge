@@ -89,7 +89,8 @@
     "sha256",
     "bytes",
     "pages",
-    "license_class"
+    "license_class",
+    "media_type"
   ],
   "additionalProperties": false,
   "allOf": [

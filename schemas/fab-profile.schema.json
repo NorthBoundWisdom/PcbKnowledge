@@ -152,6 +152,16 @@
         "$ref": "evidence.schema.json"
       },
       "minItems": 1
+    },
+    "assembled_mount_types": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "SMT",
+          "THT"
+        ]
+      },
+      "uniqueItems": true
     }
   },
   "required": [
@@ -171,7 +181,8 @@
     "solder_mask_web_min",
     "via_types",
     "stackup",
-    "evidence"
+    "evidence",
+    "assembled_mount_types"
   ],
   "additionalProperties": false,
   "allOf": [

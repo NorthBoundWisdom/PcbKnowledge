@@ -238,6 +238,78 @@
         "pin_count"
       ],
       "additionalProperties": false
+    },
+    "scope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "mpns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "basis": {
+              "const": "DATASHEET"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "evidence.schema.json"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "mpns",
+            "basis",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "mpns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "basis": {
+              "const": "ENGINEERING_DEFAULT"
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "mpns",
+            "basis",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "mount_type": {
+      "enum": [
+        "SMT",
+        "THT",
+        "MECHANICAL"
+      ]
     }
   },
   "required": [
@@ -249,7 +321,9 @@
     "body",
     "pin1",
     "courtyard_margin",
-    "evidence"
+    "evidence",
+    "scope",
+    "mount_type"
   ],
   "additionalProperties": false,
   "allOf": [

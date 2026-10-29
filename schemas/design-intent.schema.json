@@ -3,28 +3,95 @@
   "$id": "design-intent.schema.json",
   "type": "object",
   "properties": {
-    "schema": {"const": "pcbknowledge.design_intent.v2"},
-    "id": {"type": "string", "minLength": 1, "maxLength": 256},
-    "brief_id": {"type": "string", "minLength": 1, "maxLength": 256},
-    "bundle_commit": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[0-9a-f]{40}$"},
-    "block_graph_sha256": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[0-9a-f]{64}$"},
+    "schema": {
+      "const": "pcbknowledge.design_intent.v2"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "brief_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "bundle_commit": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "block_graph_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[0-9a-f]{64}$"
+    },
     "dependencies": {
       "type": "array",
-      "items": {"type": "string", "pattern": "^(source|part|package|block|rule|fab_profile):[a-z0-9][a-z0-9/_-]*$", "maxLength": 256},
+      "items": {
+        "type": "string",
+        "pattern": "^(source|part|package|block|rule|fab_profile):[a-z0-9][a-z0-9/_-]*$",
+        "maxLength": 256
+      },
       "uniqueItems": true
     },
-    "status": {"enum": ["EXPANDED", "REFUSED"]},
+    "status": {
+      "enum": [
+        "EXPANDED",
+        "REFUSED"
+      ]
+    },
     "components": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "ref": {"type": "string", "minLength": 1, "maxLength": 256},
-          "part": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^part:[a-z0-9][a-z0-9/_-]*$"},
-          "package": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^package:[a-z0-9][a-z0-9/_-]*$"},
-          "footprint": {"type": "string", "minLength": 1, "maxLength": 256}
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "part": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^part:[a-z0-9][a-z0-9/_-]*$"
+          },
+          "package": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^package:[a-z0-9][a-z0-9/_-]*$"
+          },
+          "footprint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "mount_type": {
+            "enum": [
+              "SMT",
+              "THT",
+              "MECHANICAL"
+            ]
+          },
+          "assembly_method": {
+            "enum": [
+              "SMT_ASSEMBLY",
+              "THT_ASSEMBLY",
+              "HAND_SOLDER",
+              "MECHANICAL"
+            ]
+          }
         },
-        "required": ["ref", "part", "package", "footprint"],
+        "required": [
+          "ref",
+          "part",
+          "package",
+          "footprint"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
@@ -34,23 +101,46 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {"type": "string", "minLength": 1, "maxLength": 256},
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
           "pins": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "ref": {"type": "string", "minLength": 1, "maxLength": 256},
-                "pin": {"type": "string", "minLength": 1, "maxLength": 256}
+                "ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "pin": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
               },
-              "required": ["ref", "pin"],
+              "required": [
+                "ref",
+                "pin"
+              ],
               "additionalProperties": false
             },
             "minItems": 1
           },
-          "class": {"type": "string", "minLength": 1, "maxLength": 256}
+          "class": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
         },
-        "required": ["name", "pins", "class"],
+        "required": [
+          "name",
+          "pins",
+          "class"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
@@ -60,36 +150,96 @@
       "items": {
         "type": "object",
         "properties": {
-          "part": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^part:[a-z0-9][a-z0-9/_-]*$"},
+          "part": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^part:[a-z0-9][a-z0-9/_-]*$"
+          },
           "refs": {
             "type": "array",
-            "items": {"type": "string", "minLength": 1, "maxLength": 256},
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
             "minItems": 1,
             "uniqueItems": true
           },
-          "quantity": {"type": "integer", "minimum": 1}
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "mount_type": {
+            "enum": [
+              "SMT",
+              "THT",
+              "MECHANICAL"
+            ]
+          },
+          "assembly_method": {
+            "enum": [
+              "SMT_ASSEMBLY",
+              "THT_ASSEMBLY",
+              "HAND_SOLDER",
+              "MECHANICAL"
+            ]
+          }
         },
-        "required": ["part", "refs", "quantity"],
+        "required": [
+          "part",
+          "refs",
+          "quantity"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
     },
-    "layout": {"type": "array", "items": {"$ref": "layout-constraint.schema.json"}, "minItems": 0},
+    "layout": {
+      "type": "array",
+      "items": {
+        "$ref": "layout-constraint.schema.json"
+      },
+      "minItems": 0
+    },
     "checks": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "minLength": 1, "maxLength": 256},
-          "result": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
-          "reason": {"type": "string", "minLength": 1, "maxLength": 256}
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "result": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "UNKNOWN"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
         },
-        "required": ["id", "result"],
+        "required": [
+          "id",
+          "result"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
     },
-    "verification": {"enum": ["DRAFT", "AGENT_VERIFIED", "HUMAN_VERIFIED"]},
+    "verification": {
+      "enum": [
+        "DRAFT",
+        "AGENT_VERIFIED",
+        "HUMAN_VERIFIED"
+      ]
+    },
     "refusals": {
       "type": "array",
       "items": {
@@ -106,25 +256,65 @@
               "INVALID_REFERENCE"
             ]
           },
-          "path": {"type": "string", "minLength": 1, "maxLength": 256},
-          "reason": {"type": "string", "minLength": 1, "maxLength": 256},
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
           "queries": {
             "type": "array",
-            "items": {"enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]},
+            "items": {
+              "enum": [
+                "Q1",
+                "Q2",
+                "Q3",
+                "Q4",
+                "Q5",
+                "Q6",
+                "Q7",
+                "Q8",
+                "Q9",
+                "Q10",
+                "Q11",
+                "Q12"
+              ]
+            },
             "minItems": 1,
             "uniqueItems": true
           }
         },
-        "required": ["code", "path", "reason", "queries"],
+        "required": [
+          "code",
+          "path",
+          "reason",
+          "queries"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
     },
-    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "minItems": 0},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence.schema.json"
+      },
+      "minItems": 0
+    },
     "fab_profile": {
       "oneOf": [
-        {"type": "string", "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$", "maxLength": 256},
-        {"$ref": "unknown.schema.json"}
+        {
+          "type": "string",
+          "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$",
+          "maxLength": 256
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
       ]
     },
     "mechanical": {
@@ -133,44 +323,140 @@
         "outline_envelope": {
           "type": "object",
           "properties": {
-            "shape": {"const": "RECTANGLE"},
-            "max_length": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-            "max_width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
+            "shape": {
+              "const": "RECTANGLE"
+            },
+            "max_length": {
+              "oneOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "$ref": "unknown.schema.json"
+                }
+              ]
+            },
+            "max_width": {
+              "oneOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "$ref": "unknown.schema.json"
+                }
+              ]
+            }
           },
-          "required": ["shape", "max_length", "max_width"],
+          "required": [
+            "shape",
+            "max_length",
+            "max_width"
+          ],
           "additionalProperties": false
         },
         "height_limit": {
           "oneOf": [
-            {"$ref": "quantity.schema.json"},
-            {"$ref": "unknown.schema.json"},
-            {"$ref": "quantity.schema.json#/$defs/unconstrained"}
+            {
+              "$ref": "quantity.schema.json"
+            },
+            {
+              "$ref": "unknown.schema.json"
+            },
+            {
+              "$ref": "quantity.schema.json#/$defs/unconstrained"
+            }
           ]
         },
         "mounting": {
           "type": "array",
           "items": {
             "type": "object",
-            "properties": {"ref": {"type": "string", "minLength": 1, "maxLength": 256}, "fastener": {"const": "M3"}},
-            "required": ["ref", "fastener"],
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "fastener": {
+                "const": "M3"
+              }
+            },
+            "required": [
+              "ref",
+              "fastener"
+            ],
             "additionalProperties": false
           },
           "uniqueItems": true
         },
-        "edge_interfaces": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 256}, "uniqueItems": true}
+        "edge_interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "uniqueItems": true
+        }
       },
-      "required": ["outline_envelope", "height_limit", "mounting", "edge_interfaces"],
+      "required": [
+        "outline_envelope",
+        "height_limit",
+        "mounting",
+        "edge_interfaces"
+      ],
       "additionalProperties": false
     },
     "manufacturing": {
       "type": "object",
       "properties": {
-        "layers": {"oneOf": [{"const": 2}, {"$ref": "unknown.schema.json"}]},
-        "thickness": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-        "copper_requirement": {"oneOf": [{"const": "ONE_OZ_NOMINAL"}, {"$ref": "unknown.schema.json"}]},
-        "assembly_side": {"oneOf": [{"const": "TOP"}, {"$ref": "unknown.schema.json"}]}
+        "layers": {
+          "oneOf": [
+            {
+              "const": 2
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "thickness": {
+          "oneOf": [
+            {
+              "$ref": "quantity.schema.json"
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "copper_requirement": {
+          "oneOf": [
+            {
+              "const": "ONE_OZ_NOMINAL"
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        },
+        "assembly_side": {
+          "oneOf": [
+            {
+              "const": "TOP"
+            },
+            {
+              "$ref": "unknown.schema.json"
+            }
+          ]
+        }
       },
-      "required": ["layers", "thickness", "copper_requirement", "assembly_side"],
+      "required": [
+        "layers",
+        "thickness",
+        "copper_requirement",
+        "assembly_side"
+      ],
       "additionalProperties": false
     }
   },
@@ -198,35 +484,107 @@
   "oneOf": [
     {
       "properties": {
-        "status": {"const": "EXPANDED"},
-        "components": {"minItems": 1},
-        "nets": {"minItems": 1},
-        "bom": {"minItems": 1},
-        "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
-        "refusals": {"maxItems": 0},
-        "checks": {"items": {"properties": {"result": {"const": "PASS"}}}},
-        "fab_profile": {"type": "string", "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$", "maxLength": 256},
+        "status": {
+          "const": "EXPANDED"
+        },
+        "components": {
+          "minItems": 1,
+          "items": {
+            "required": [
+              "mount_type",
+              "assembly_method"
+            ]
+          }
+        },
+        "nets": {
+          "minItems": 1
+        },
+        "bom": {
+          "minItems": 1,
+          "items": {
+            "required": [
+              "mount_type",
+              "assembly_method"
+            ]
+          }
+        },
+        "verification": {
+          "enum": [
+            "AGENT_VERIFIED",
+            "HUMAN_VERIFIED"
+          ]
+        },
+        "refusals": {
+          "maxItems": 0
+        },
+        "checks": {
+          "items": {
+            "properties": {
+              "result": {
+                "const": "PASS"
+              }
+            }
+          }
+        },
+        "fab_profile": {
+          "type": "string",
+          "pattern": "^fab_profile:[a-z0-9][a-z0-9/_-]*$",
+          "maxLength": 256
+        },
         "mechanical": {
           "properties": {
             "outline_envelope": {
-              "properties": {"max_length": {"$ref": "quantity.schema.json"}, "max_width": {"$ref": "quantity.schema.json"}}
+              "properties": {
+                "max_length": {
+                  "$ref": "quantity.schema.json"
+                },
+                "max_width": {
+                  "$ref": "quantity.schema.json"
+                }
+              }
             },
             "height_limit": {
-              "oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "quantity.schema.json#/$defs/unconstrained"}]
+              "oneOf": [
+                {
+                  "$ref": "quantity.schema.json"
+                },
+                {
+                  "$ref": "quantity.schema.json#/$defs/unconstrained"
+                }
+              ]
             },
-            "mounting": {"minItems": 1}
+            "mounting": {
+              "minItems": 1
+            }
           }
         },
         "manufacturing": {
           "properties": {
-            "layers": {"const": 2},
-            "thickness": {"$ref": "quantity.schema.json"},
-            "copper_requirement": {"const": "ONE_OZ_NOMINAL"},
-            "assembly_side": {"const": "TOP"}
+            "layers": {
+              "const": 2
+            },
+            "thickness": {
+              "$ref": "quantity.schema.json"
+            },
+            "copper_requirement": {
+              "const": "ONE_OZ_NOMINAL"
+            },
+            "assembly_side": {
+              "const": "TOP"
+            }
           }
         }
       }
     },
-    {"properties": {"status": {"const": "REFUSED"}, "refusals": {"minItems": 1}}}
+    {
+      "properties": {
+        "status": {
+          "const": "REFUSED"
+        },
+        "refusals": {
+          "minItems": 1
+        }
+      }
+    }
   ]
 }
