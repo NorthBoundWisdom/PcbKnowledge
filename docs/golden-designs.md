@@ -91,17 +91,19 @@ For each golden design, report:
 
 A design counts as done only at A6. Lower levels are progress, not completion.
 
-## Stage 1 reference inputs
+## Reference inputs and G1 acceptance
 
 `g1.brief.json`, `g2.brief.json` and `g3.brief.json` are original synthetic briefs.
 `g1.block-graph.json` is the hand-made reference answer, with declared planning
-interfaces and requirement links. Its catalog block identifiers are targets, not
-existing verified records. All acceptance levels are `NOT_RUN`.
+interfaces and requirement links. Its catalog block identifiers now resolve to verified records. Brief acceptance
+fields describe the requested gates, not execution receipts. G1 reaches A2 on
+`ad7b84352f27cff6a65ec24e43eb474a42506ec2`; three preserved independently authored
+graphs and their actual input/review receipts live in `evals/synthesis/g1/`.
 
 G1 places the monitor shunt between the regulator output and logger rail, with
 the monitor itself supplied upstream. This is an explicit synthetic design
-choice for later expansion checks, not a claim about a collected component.
+choice enforced by expansion checks.
 Contract tests check shapes, reference closure and requirement coverage. G1
 operating and mechanical inputs use D7 engineering defaults. Header allocations are 5 mA SWD, 40 mA I2C expansion and 5 mA UART, totaling
 50 mA within the 150 mA logger budget. The component height is explicitly unconstrained.
-A1/A2 require the catalog and expansion stages.
+A1/A2 pass; A3-A6 require layout, DRC, fabrication and physical bring-up in Stage 6.

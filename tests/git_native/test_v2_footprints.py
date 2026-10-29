@@ -159,14 +159,14 @@ class FootprintTests(unittest.TestCase):
         b=copy.deepcopy(a);a['id']='package:a/b';b['id']='package:a_b'
         self.assertEqual(footprint_name(a),'a_b')
         with tempfile.TemporaryDirectory() as tmp:
-            output=Path(tmp)/'test.pretty'
+            output=Path(tmp).resolve()/'test.pretty'
             with self.assertRaisesRegex(ValueError,'collision'):export_library([a,b],output)
             self.assertFalse(output.exists())
 
     def test_library_rejects_output_symlinks(self):
         p=package('chip',lead_span=1.6,lead_length=.3,lead_width=.8)
         with tempfile.TemporaryDirectory() as tmp:
-            root=Path(tmp); outside=root/'authority';outside.write_text('unchanged')
+            root=Path(tmp).resolve(); outside=root/'authority';outside.write_text('unchanged')
             folder=root/'test.pretty';folder.mkdir()
             (folder/'synthetic.kicad_mod').symlink_to(outside)
             with self.assertRaisesRegex(ValueError,'Unsafe'):export_library([p],folder)
@@ -183,5 +183,5 @@ class FootprintTests(unittest.TestCase):
         self.assertIn('(at -2.75 -2.3 0)',text)
         self.assertIn('(layer "F.CrtYd")',text)
         with tempfile.TemporaryDirectory() as directory:
-            paths=export_library([p],directory)
+            paths=export_library([p],Path(directory).resolve())
             self.assertEqual(paths[0].read_text(),text)

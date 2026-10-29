@@ -113,7 +113,7 @@ def main(argv=None):
                 result = expand_bundle(arguments.bundle, load_document(arguments.graph))
                 if output:
                     output.parent.mkdir(parents=True, exist_ok=True)
-                    output.write_text(canonical_json(result), encoding='utf-8')
+                    output.write_text(canonical_json(result), encoding='utf-8', newline='\n')
             else:
                 snapshot = (stack.enter_context(Bundle(arguments.bundle))
                             if getattr(arguments, 'bundle', None) else None)
@@ -125,7 +125,7 @@ def main(argv=None):
                     if arguments.output:
                         output = derived_path(root, arguments.output)
                         output.parent.mkdir(parents=True, exist_ok=True)
-                        output.write_text(canonical_json(result), encoding='utf-8')
+                        output.write_text(canonical_json(result), encoding='utf-8', newline='\n')
                 elif group == 'export':
                     output = derived_path(root, arguments.output)
                     path = export_design(load_document(arguments.intent), snapshot,

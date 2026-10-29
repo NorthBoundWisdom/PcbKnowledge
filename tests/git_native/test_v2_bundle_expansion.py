@@ -25,7 +25,8 @@ class BundleTests(unittest.TestCase):
 
     def test_commit_pinning_cleanliness_and_tampering(self):
         with tempfile.TemporaryDirectory() as temp, tempfile.TemporaryDirectory() as output:
-            root=Path(temp)/'workspace'
+            root=Path(temp).resolve()/'workspace'
+            output=Path(output).resolve()
             initialize_workspace(root, schema_source_root=ROOT, init_git=True)
             def git(*args):
                 return subprocess.check_output(['git','-C',str(root),*args],stderr=subprocess.STDOUT)
@@ -150,6 +151,14 @@ class ExpansionTests(unittest.TestCase):
         root=ET.fromstring(export_netlist(intent,catalog))
         self.assertEqual(len(root.findall('./components/comp')),4)
         self.assertEqual(len(root.findall('./nets/net')),2)
+        definitions = {(p.attrib['lib'],p.attrib['part']):p for p in root.findall('./libparts/libpart')}
+        self.assertEqual(len(definitions),2)
+        for component in root.findall('./components/comp'):
+            source = component.find('libsource')
+            self.assertIsNotNone(source)
+            definition = definitions[source.attrib['lib'],source.attrib['part']]
+            self.assertEqual([p.attrib for p in definition.findall('./pins/pin')],
+                             [{'num':str(i),'name':str(i),'type':'passive'} for i in (1,2)])
         altered=copy.deepcopy(intent);altered['dependencies'].remove('block:synthetic')
         with self.assertRaisesRegex(ValueError,'deterministic'):
             validate_expansion(bundle,altered,graph)
@@ -240,13 +249,15 @@ class ExpansionTests(unittest.TestCase):
         bundle=SimpleNamespace(catalog=catalog,briefs={'G1':brief},commit='a'*40)
         intent=expand(catalog,graph,brief,bundle_commit=bundle.commit)
         with tempfile.TemporaryDirectory() as directory:
-            output=Path(directory)/'export'
+            output=Path(directory).resolve()/'export'
             changed=copy.deepcopy(intent);changed['layout'].append({'kind':'ORIENTATION','subject':'first_R1','angle':{'value':0,'unit':'deg','conditions':{},'basis':'ENGINEERING_DEFAULT','note':'Synthetic'}})
             with self.assertRaisesRegex(ValueError,'deterministic'):
                 export_design(changed,bundle,graph,output)
             self.assertFalse(output.exists())
             export_design(intent,bundle,graph,output)
             self.assertEqual(json.loads((output/'graph.json').read_text()),graph)
+            for name in ('graph.json','design-intent.json','design.net'):
+                self.assertNotIn(b'\r', (output/name).read_bytes())
             self.assertEqual(json.loads((output/'design-intent.json').read_text()),intent)
             self.assertTrue((output/'pcbknowledge.pretty/synthetic.kicad_mod').is_file())
             self.assertTrue((output/'design.net').is_file())
@@ -286,8 +297,8 @@ class ExpansionTests(unittest.TestCase):
         bundle=SimpleNamespace(catalog=catalog,briefs={'G1':brief},commit='a'*40)
         intent=expand(catalog,graph,brief,bundle_commit=bundle.commit)
         with tempfile.TemporaryDirectory() as directory:
-            output=Path(directory)/'export';output.mkdir()
-            authority=Path(directory)/'authority';authority.write_text('keep')
+            output=Path(directory).resolve()/'export';output.mkdir()
+            authority=Path(directory).resolve()/'authority';authority.write_text('keep')
             (output/'design.net').symlink_to(authority)
             with self.assertRaisesRegex(ValueError,'symlink'):
                 export_design(intent,bundle,graph,output)

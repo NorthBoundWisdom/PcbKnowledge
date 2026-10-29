@@ -176,3 +176,24 @@ The command re-expands every attempt and the reference from the same immutable
 bundle; a refusal is never A2. At least two of three must pass. Board oscillator
 startup, assembly and bring-up remain Stage 6 physical verification, not software
 claims of manufactured performance.
+
+Graph requirement labels are the IDs from the brief's functions, interfaces,
+constraints and mechanical mounting items, never prose descriptions. Their
+union across the graph and instances must match that complete set. A function
+ID appears on exactly its requested number of implementing instances.
+
+The preserved G1 attempts in `evals/synthesis/g1/` target catalog commit
+`ad7b84352f27cff6a65ec24e43eb474a42506ec2`. Rebuild its bundle from a clean detached
+worktree at that commit to reproduce their original input, then run the current
+evaluation command against the preserved attempt files. Their author receipts
+retain the actual input hashes and iterative public-contract clarification.
+All three graphs were authored in distinct fresh contexts without reference
+access and independently reviewed; moving `monitor_scope` to the graph level
+is documented as electrically equivalent.
+
+KiCad 9's official `kicad_netlist_reader` accepts the exported XML, including
+complete component/library links. `kicad-cli pcb` offers no netlist-import
+subcommand: full PCB import remains a manual KiCad step, not a claimed CLI pass.
+Import `design.net` in PCB Editor after adding the generated `pcbknowledge.pretty`
+footprint library, inspect all associations and unrouted nets, and perform the
+Stage 6 layout/DRC/hardware checks separately.

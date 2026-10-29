@@ -7,11 +7,12 @@ design brief to a manufacturable PCB. PcbAtlas owns synthesis orchestration,
 placement, routing, DRC and fabrication output. The product direction is
 [ADR-022](docs/adr/ADR-022-board-generation-knowledge.md).
 
-The runtime uses the v2 model, a shared structural/semantic validator, a read-only
-JSON CLI and loopback part/block pages with cited PDF evidence. Three G1 ICs have
-independently verified numbered pin maps. Footprint generation, full G1 content
-and commit-pinned expansion follow in Stages 3-5. No golden acceptance level has
-passed yet. [`TODO.md`](TODO.md) records the current stage.
+The runtime uses one v2 model and shared structural/semantic validation, a
+read-only catalog, original footprint generators and commit-pinned deterministic
+design expansion. G1 has 100% catalog coverage and reaches A2 with its reference
+graph and all three independently authored AI graphs. Hardware fabrication and
+bring-up are not claimed; Stage 6 remains with PcbAtlas and the owner.
+[`TODO.md`](TODO.md) records the acceptance receipts and remaining work.
 
 ## Use
 
@@ -22,6 +23,8 @@ python3 configs/pcbknowledge_workflow.py config
 python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_agent.py --repo . v2 validate
 python3 configs/pcbknowledge_agent.py --repo . part search --role monitor.current
+python3 configs/pcbknowledge_agent.py --repo . v2 coverage evals/golden-designs/g1.block-graph.json
+python3 configs/pcbknowledge_agent.py --repo . bundle build
 python3 configs/pcbknowledge_workflow.py open --workspace .
 ```
 

@@ -27,6 +27,14 @@ start in a separate agent context containing the brief and catalog, not previous
 solutions. Record the actual agent identity, input hashes, choices and output
 path so another agent can review independence and reproducibility.
 
+Requirement strings are brief IDs, not descriptions. The union of graph-level
+`requirements` and every instance's `requirements` must equal the IDs in brief
+`functions`, `interfaces`, `constraints` and `mechanical.mounting`. Each function
+ID must be claimed by exactly its declared `count` of instances. Instances claim
+the functions and interfaces they implement; graph-level requirements can hold
+global constraints. Function categories and parameters, source/rail function
+bindings and budgets are enforced by expansion.
+
 Run `v2 coverage <graph> --bundle <bundle>` and
 `expand --bundle <bundle> <graph> --output build/<attempt>/intent.json`. Inspect—not merely count—selected components, resolved pin nets, budgets,
 calculator results, applied rules, layout constraints and unresolved gaps. Fix

@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `STAGE_5_ACTIVE`
+> Status: `G1_A2_COMPLETE_STAGE_6_PENDING`
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -180,7 +180,7 @@ matching ignored min/typ/max ranges. LD1117S33TR also needs the parameters that
 ## Round 3 scope
 
 Round 3 runs Stages 3, 4 and 5 in one long task and ends with G1 at A2 from an
-AI-produced block graph. Each stage exit is a checkpoint: run the full gate, record
+AI-produced block graph. This round is complete; Stage 6 is outside this repository task. Each stage exit is a checkpoint: run the full gate, record
 the receipt, push (when the brief authorizes it) and continue.
 
 ## Stage 3 — Packages and footprints (complete)
@@ -291,46 +291,50 @@ Exit: `v2 coverage` reports 100% for the hand-made G1 block graph (A1 reachable)
 Stage receipt: full gate passed; Build/Test each 135 tests, no skips; 94 records, 28 local source hashes verified.
 G1 coverage 15/15 (100%); all 21 package exports parsed by KiCad 9. D13-D15 record source/compatibility substitutions.
 
-## Stage 5 — Bundle, expansion and AI synthesis
+## Stage 5 — Bundle, expansion and AI synthesis (complete)
 
 ### 5a Bundle and queries
 
-- [ ] `bundle build` from one validated commit (refuse a dirty or unvalidated
+- [x] `bundle build` from one validated commit (refuse a dirty or unvalidated
   tree), deterministic bytes, written under `build/bundle/`; query commands accept
   `--bundle` as well as `--repo`.
 
 ### 5b Expansion
 
-- [ ] `expand --bundle <bundle> <block-graph>`: design intent per ADR-023 and
+- [x] `expand --bundle <bundle> <block-graph>`: design intent per ADR-023 and
   `schemas/design-intent.schema.json` (components with parts, packages and
   footprints; nets with physical pin numbers; BOM; complete layout and net
   constraints; fab profile and mechanical inputs; check results; weakest
   verification level; typed refusals). Deterministic and pure; identical inputs
   give identical bytes.
-- [ ] A2 checks inside `expand`: every IC power and ground pin connected; decoupling
+- [x] A2 checks inside `expand`: every IC power and ground pin connected; decoupling
   per rule; no required input floating (BOOT0, NRST, WP, address pins); every block
   calculator check passes; I2C pull-ups present once per bus; LED currents and
   LDO headroom and dissipation within limits.
-- [ ] Tests: the G1 reference graph expands to `EXPANDED` with all A2 checks
+- [x] Tests: the G1 reference graph expands to `EXPANDED` with all A2 checks
   passing; mutated graphs (missing decoupling, floating BOOT0, LDO over budget,
   unknown part) produce the expected typed refusals.
 
 ### 5c KiCad interchange
 
-- [ ] Derived KiCad netlist and footprint library from a design intent, written
+- [x] Derived KiCad netlist and footprint library from a design intent, written
   under `build/`. If `kicad-cli` is available, import-check them and record the
   result.
 
 ### 5d AI synthesis
 
-- [ ] Skill `.codex/skills/synthesize-block-graph/`: brief to block graph using only
+- [x] Skill `.codex/skills/synthesize-block-graph/`: brief to block graph using only
   the read-only query CLI over a bundle; never invent blocks or parts.
-- [ ] Evaluation command: run synthesis on G1, expand the result, and compare it
+- [x] Evaluation command: run synthesis on G1, expand the result, and compare it
   with the reference graph (same blocks and connections, or a documented
   equivalent). Run at least three independent attempts and record pass counts.
 
 Exit: G1 reaches A2 from an AI-produced block graph in at least two of three
 attempts, and the reference graph reaches A2 deterministically.
+
+Stage receipt: full gate passed; Build/Test each 139 tests, no skips. G1 coverage 15/15 (100%); cross-platform temporary-path failures repaired.
+Reference plus 3/3 fresh-context AI graphs reach A2 on `ad7b843`: 46 components, 25 nets, 89 passing checks; preserved independent receipts in `evals/synthesis/g1/`.
+KiCad 9 XML reader links all 46 components/23 library parts without warnings; CLI has no PCB netlist-import command.
 
 ## Stage 6 — G1 end to end with PcbAtlas (cross-repository)
 

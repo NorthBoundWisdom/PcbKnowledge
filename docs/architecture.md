@@ -17,13 +17,18 @@ One v2 record model lives in `schemas/` and `src/pcbknowledge/v2/`:
 | Registry and quantity semantics | `v2/vocabulary.py` |
 | Record loading and cross-record closure | `v2/catalog.py` |
 | ADR-023 handoff validation | `v2/intent.py` |
+| Original footprints and calculators | `v2/footprints/`, `v2/calculators.py` |
+| Commit-authenticated snapshots | `v2/bundle.py` |
+| Expansion, rules and interchange | `v2/expansion.py`, `rules.py`, `netlist.py` |
+| Coverage and independent synthesis evaluation | `v2/coverage.py`, `synthesis.py` |
 | Read-only JSON CLI and change scope | `v2/cli.py` |
 | Loopback transport, view models, HTML | `v2/server.py`, `application.py`, `views.py` |
 
-The catalog contains verified source/part records for LD1117S33TR,
-INA219AIDCNR and 24LC256-I/SN. Package identities have explicit missing geometry
-for Stage 3. G1's brief and reference graph use concrete D7 engineering defaults.
-No golden acceptance level has passed yet.
+The catalog covers all 15 G1 block instances with independently verified parts,
+packages, rules and manufacturing evidence. Standard footprints derive from cited
+drawing dimensions; irregular connectors retain explicit manufacturer patterns.
+The G1 reference and three independent AI-produced graphs reach A2 on a pinned
+bundle. Electrical screening is not a physical fabrication or bring-up claim.
 
 The retired record families, intake toolchain and approval UI are removed. Frozen
 migration input is available with `git show intake-final:knowledge/intake/<file>`.
@@ -37,7 +42,7 @@ pinned schema snapshot, registries and canonical UTF-8 JSON records:
 ```text
 knowledge/registry/      controlled names, quantities and conditions
 knowledge/sources/       exact document revisions and processing policy
-knowledge/packages/      pad identities and land-pattern geometry
+knowledge/packages/      drawing dimensions or explicit manufacturer pads
 knowledge/parts/         exact orderable parts, pin maps and parameters
 knowledge/blocks/        reusable circuit definitions
 knowledge/rules/         class-level layout defaults
@@ -71,9 +76,8 @@ workspace. Package writes a deterministic metadata-only ZIP under software
 
 ## Next stages and PcbAtlas boundary
 
-Stage 3 generates and checks footprints. Stage 4 completes G1 parts, blocks,
-rules, calculators and fab limits. Stage 5 builds commit-pinned consumer bundles
-and pure deterministic expansion:
+Stages 3-5 provide footprints, G1 catalog closure, engineering calculators,
+commit-pinned consumer bundles and pure deterministic expansion:
 
 ```text
 brief -> block graph -> expand(pinned bundle, graph) -> design intent -> PcbAtlas

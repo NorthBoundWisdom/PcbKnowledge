@@ -18,7 +18,7 @@ class CliTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
-        self.root = Path(self.temporary.name) / 'workspace'
+        self.root = Path(self.temporary.name).resolve() / 'workspace'
         initialize_workspace(self.root, schema_source_root=ROOT, init_git=True)
         for args in [('config', 'user.name', 'Synthetic'),
                      ('config', 'user.email', 'synthetic@example.invalid'),
@@ -70,7 +70,7 @@ class CliTests(unittest.TestCase):
                 code, result = self.run_cli('bundle', 'build', '--output', output)
                 self.assertEqual(code, 2)
                 self.assertIn('below build', result['message'])
-        outside = Path(self.temporary.name) / 'outside'
+        outside = Path(self.temporary.name).resolve() / 'outside'
         outside.mkdir()
         (self.root / 'build').symlink_to(outside, target_is_directory=True)
         code, result = self.run_cli('bundle', 'build')
@@ -87,6 +87,7 @@ class CliTests(unittest.TestCase):
             self.assertEqual((code, result), (2, refusal))
             expand.assert_called_once_with(Path('snapshot.json'), {'id': 'synthetic'})
         self.assertEqual(json.loads((self.root / 'build/refused.json').read_text()), refusal)
+        self.assertNotIn(b'\r', (self.root / 'build/refused.json').read_bytes())
         with patch('pcbknowledge.v2.cli.expand_bundle') as expand:
             code, result = self.run_cli('expand', graph, '--bundle', 'snapshot.json',
                                         '--output', 'knowledge/not-derived.json')
@@ -94,7 +95,7 @@ class CliTests(unittest.TestCase):
             expand.assert_not_called()
 
     def test_nested_symlink_escape_and_invalid_json_write_nothing(self):
-        outside = Path(self.temporary.name) / 'outside'
+        outside = Path(self.temporary.name).resolve() / 'outside'
         outside.mkdir()
         (self.root / 'build').mkdir()
         (self.root / 'build/link').symlink_to(outside, target_is_directory=True)
