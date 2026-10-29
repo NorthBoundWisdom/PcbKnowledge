@@ -4,6 +4,15 @@
 > Updated: 2026-10-29
 > Goal: expand reviewable knowledge around device-selection and setup-condition questions, preserving evidence limitations and the separate formal PDF/typed-authority pilot.
 
+## Source-access prerequisites recorded
+
+A bounded [source-access investigation](docs/source-investigations/source-access-observations-2026-10-29.md)
+records why the proposed Vishay LED, Littelfuse fuse and TI application-resource
+paths did not proceed. Observed website/use restrictions remain prerequisites,
+not permission inferred from public availability or a product disclaimer.
+No new facts from those candidates were accepted; historical batches stay intact.
+Do not repeat these collection attempts without applicable authorization.
+
 ## Reviewed once-only fuse integration
 
 The collection now contains 37 batches / 49 source scopes / 329 annotations.
