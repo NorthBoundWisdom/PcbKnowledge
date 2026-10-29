@@ -1,25 +1,37 @@
 {
   "body": {
     "height": {
-      "blocks": [
-        "Q3"
-      ],
-      "reason": "Manufacturer geometry is collected in Stage 3.",
-      "status": "UNKNOWN"
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "max": 1.45,
+      "min": 0.9,
+      "unit": "mm"
     },
     "length": {
-      "blocks": [
-        "Q3"
-      ],
-      "reason": "Manufacturer geometry is collected in Stage 3.",
-      "status": "UNKNOWN"
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "max": 3,
+      "min": 2.8,
+      "unit": "mm"
     },
     "width": {
-      "blocks": [
-        "Q3"
-      ],
-      "reason": "Manufacturer geometry is collected in Stage 3.",
-      "status": "UNKNOWN"
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "max": 1.75,
+      "min": 1.45,
+      "unit": "mm"
     }
   },
   "courtyard_margin": {
@@ -29,344 +41,69 @@
     "unit": "mm",
     "value": 0.25
   },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "max": 0.6,
+      "min": 0.3,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "max": 3,
+      "min": 2.6,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "max": 0.38,
+      "min": 0.22,
+      "unit": "mm"
+    },
+    "pin_count": 8,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 36,
+        "source": "source:ti-ina219"
+      },
+      "unit": "mm",
+      "value": 0.65
+    }
+  },
   "evidence": [
     {
-      "page": 3,
+      "page": 36,
       "source": "source:ti-ina219"
     }
   ],
   "family": "SOT-23-8",
-  "footprint": {
-    "mode": "EXPLICIT",
-    "pads": [
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "1",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "2",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "3",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "4",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "5",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "6",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "7",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      },
-      {
-        "height": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "kind": "SMD",
-        "number": "8",
-        "rotation": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Initial pad-axis orientation for the Stage 3 generator.",
-          "unit": "deg",
-          "value": 0
-        },
-        "shape": "RECT",
-        "width": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "x": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        },
-        "y": {
-          "blocks": [
-            "Q3"
-          ],
-          "reason": "Land-pattern dimensions are generated and checked in Stage 3.",
-          "status": "UNKNOWN"
-        }
-      }
-    ]
-  },
+  "generator": "gullwing_two_side",
   "id": "package:sot-23-8-dcn",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root",
-    "verified_by": []
+    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+    ]
   },
   "schema": "pcbknowledge.package.v2",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }
