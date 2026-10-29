@@ -43,7 +43,7 @@ class CatalogTests(unittest.TestCase):
         }
         path = self.root / 'evals/corpus/synthetic.json'
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(canonical_json(graph), encoding='utf-8')
+        path.write_bytes(canonical_json(graph).encode('utf-8'))
 
     def save(self):
         for doc in self.documents.values():

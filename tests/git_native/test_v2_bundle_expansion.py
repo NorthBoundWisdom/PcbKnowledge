@@ -70,7 +70,7 @@ class BundleTests(unittest.TestCase):
             for kind in ('source', 'package', 'part', 'block'):
                 record = records[kind]
                 destination = record_path(root, record['id'])
-                destination.write_text(canonical_json(record), encoding='utf-8')
+                destination.write_bytes(canonical_json(record).encode('utf-8'))
             graph = {
                 'schema': 'pcbknowledge.block-graph.v2', 'id': 'synthetic', 'brief': 'G1',
                 'status': 'DRAFT', 'interface_status': 'PLANNED_BLOCK_CONTRACTS', 'requirements': ['test'],
@@ -83,7 +83,7 @@ class BundleTests(unittest.TestCase):
             }
             path = root / 'evals/corpus/synthetic/input.json'
             path.parent.mkdir(parents=True)
-            path.write_text(canonical_json(graph), encoding='utf-8')
+            path.write_bytes(canonical_json(graph).encode('utf-8'))
             git('add', '.')
             git('commit', '-m', 'Synthetic original graph')
             result = build_bundle(root, Path(output).resolve())

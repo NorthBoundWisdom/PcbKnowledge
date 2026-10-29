@@ -118,7 +118,7 @@ class ServerTests(unittest.TestCase):
         source = json.loads(path.read_bytes())
         source.update(media_type='text/html', sha256=hashlib.sha256(payload).hexdigest(), bytes=len(payload))
         source['url'] = 'https://example.invalid/doc?x="onmouseover="unsafe&y=<script>'
-        path.write_text(canonical_json(source), encoding='utf-8')
+        path.write_bytes(canonical_json(source).encode('utf-8'))
         digest = source['sha256']
         cache = self.root / '.pcbknowledge/evidence/sha256' / digest[:2] / (digest + '.html')
         cache.parent.mkdir(parents=True, exist_ok=True)
@@ -150,7 +150,7 @@ class ServerTests(unittest.TestCase):
         path = record_path(self.root, 'source:synthetic')
         source = json.loads(path.read_bytes())
         source['license_class'] = 'RESTRICTED'
-        path.write_text(canonical_json(source), encoding='utf-8')
+        path.write_bytes(canonical_json(source).encode('utf-8'))
         status, _, body = self.request('/parts/part%3Asynthetic')
         self.assertEqual(status, 400)
         self.assertIn(b'License blocks source processing', body)
