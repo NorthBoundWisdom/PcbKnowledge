@@ -16,6 +16,7 @@ if str(SOURCE_ROOT) not in sys.path:
 
 from pcbknowledge.git_native.workspace import (  # noqa: E402
     WorkspaceError,
+    pin_contract,
     initialize_workspace,
     validate_workspace,
     validate_workspace_ref,
@@ -58,6 +59,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     validate_ref.add_argument("target")
     validate_ref.add_argument("--ref", default="HEAD")
+    pin = actions.add_parser("pin-contract", help="explicitly pin the software checkout schema contract")
+    pin.add_argument("target")
     return parser.parse_args(argv)
 
 
@@ -79,7 +82,11 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
             return 0
-        if arguments.command == "validate-ref":
+        if arguments.command == "pin-contract":
+            if Path(arguments.target).resolve() != REPO_ROOT:
+                raise WorkspaceError("pin-contract is a software-checkout operation")
+            validation = pin_contract(REPO_ROOT)
+        elif arguments.command == "validate-ref":
             validation = validate_workspace_ref(Path(arguments.target), arguments.ref)
         else:
             validation = validate_workspace(Path(arguments.target))

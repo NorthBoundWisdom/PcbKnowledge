@@ -33,7 +33,7 @@ answer here.
 | D4 | Where brief-to-block-graph synthesis runs | PcbAtlas AI runtime calling the PcbKnowledge query API; PcbKnowledge ships the agent skill and golden evaluations |
 | D5 | Keep a GUI after v2 | Stage 2 deletes all v1 pages, decision flows and intake pages. Keep the loopback server shell, pinned PDF.js and the evidence endpoint, and add minimal read-only v2 part and block pages that show each value beside its cited PDF page, for owner spot checks |
 | D6 | Distributor part numbers in public records | Allowed as identifiers only (no copied catalog data) |
-| D7 | G1 design inputs (these are design decisions, not missing evidence) | USB-C sink input budget 500 mA (5.1 kOhm Rd on CC1/CC2, default USB power); 3.3 V rail load budget 150 mA including 50 mA for expansion headers; MCU external crystal 8 MHz; I2C standard mode 100 kHz with a 100 pF bus-capacitance budget; four 3.2 mm non-plated M3 holes with 6.0 mm keepout, centers 3.5 mm from the board edges; no component height limit for G1 |
+| D7 | G1 design inputs (these are design decisions, not missing evidence) | USB-C sink input budget 500 mA (5.1 kOhm Rd on CC1/CC2, default USB power); 3.3 V rail load budget 150 mA including 50 mA for expansion headers; MCU external crystal 8 MHz; I2C standard mode 100 kHz with a 100 pF bus-capacitance budget; four 3.2 mm non-plated M3 holes with 6.0 mm keepout, centers 3.5 mm from the board edges; no component height limit for G1. Agent allocation of the 50 mA header budget: SWD 5 mA, I2C 40 mA, UART 5 mA |
 
 ## Stage 0 — Course correction (complete)
 
@@ -122,7 +122,7 @@ coherent commit or a small group of commits. Data and contract commits stay sepa
 
 ### 2c Workspace contract v2 (contract-only commit)
 
-- [ ] Move the corrected schemas from `docs/contracts/v2/` into `schemas/`, bump the
+- [x] Move the corrected schemas from `docs/contracts/v2/` into `schemas/`, bump the
   workspace format, pin the new digest, and update `workspace init|validate`.
   Existing v1 workspaces fail with a clear upgrade message; no silent rewrite.
 
@@ -133,10 +133,10 @@ coherent commit or a small group of commits. Data and contract commits stay sepa
   and confirm the recorded SHA-256. A mismatch is a new source revision recorded as
   such, never an override.
 - [ ] Write v2 `source` and `part` records for the G1 devices present in intake:
-  LD1117 (G1 needs a fixed 3.3 V orderable such as LD1117S33TR; intake covers the
-  adjustable LD1117STR, so confirm the fixed variant in the same document),
-  SMBJ5.0A, SS14, MF-MSMF050-2 or SF-1206S050-2, C0603C104K5RACTU,
-  CRCW060310K0FKEA, INA219AIDCNR, 24LC256-I/SN, Wurth 61300211121. Intake holds
+  LD1117S33TR (fixed 3.3 V), INA219AIDCNR and 24LC256-I/SN. The owner removed
+  SMBJ5.0A, SS14, MF-MSMF050-2, C0603C104K5RACTU and CRCW060310K0FKEA
+  from this migration on 2026-10-29 because their cited PDFs have no numbered
+  terminal map; Stage 4 may add them after obtaining that evidence. Wurth 61300211121 was removed from this migration by the owner on 2026-10-29 after its official PDF remained unavailable (HTTP 403); connector selection stays in Stage 4. Intake holds
   pin facts only for LD1117, INA219 and 24LC256; every other numbered pin map is
   new extraction from the cited page.
 - [ ] An independent agent re-checks every cited value and pin, then sets

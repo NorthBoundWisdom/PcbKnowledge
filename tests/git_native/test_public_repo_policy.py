@@ -32,7 +32,7 @@ class PublicRepositoryPolicyTests(unittest.TestCase):
         self.assertEqual(public_distribution_violations(ALLOWED_REGISTRY_PATHS), ())
         forbidden = ["knowledge/registry/extra.json", "knowledge/registry/roles.md",
                      "knowledge/registry/nested/roles.json", "knowledge/registry/roles.pdf",
-                     "knowledge/parts/part.json"]
+                     "knowledge/arbitrary/part.json"]
         self.assertEqual(public_distribution_violations(forbidden), tuple(sorted(forbidden)))
 
     def test_originals_caches_and_retired_authority_are_rejected(self) -> None:

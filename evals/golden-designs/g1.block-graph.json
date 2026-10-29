@@ -237,11 +237,11 @@
       ],
       "parameters": {
         "output_current": {
-          "value": 0.05,
+          "value": 0.005,
           "unit": "A",
           "conditions": {},
           "basis": "ENGINEERING_DEFAULT",
-          "note": "D7: headers share one 50 mA expansion budget."
+          "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA."
         }
       }
     },
@@ -411,11 +411,11 @@
       ],
       "parameters": {
         "output_current": {
-          "value": 0.05,
+          "value": 0.04,
           "unit": "A",
           "conditions": {},
           "basis": "ENGINEERING_DEFAULT",
-          "note": "D7: headers share one 50 mA expansion budget."
+          "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA."
         }
       }
     },
@@ -446,11 +446,11 @@
       ],
       "parameters": {
         "output_current": {
-          "value": 0.05,
+          "value": 0.005,
           "unit": "A",
           "conditions": {},
           "basis": "ENGINEERING_DEFAULT",
-          "note": "D7: headers share one 50 mA expansion budget."
+          "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA."
         }
       }
     },

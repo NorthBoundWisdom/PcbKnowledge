@@ -1,8 +1,6 @@
 # Knowledge model v2
 
-> Stage 1 contracts are staged under [`contracts/v2/`](contracts/v2/).
-> They define target document shapes, not an active v2 workspace or catalog.
-> The running application remains v1 until the Stage 2 hard cut.
+> The v2 workspace contract is pinned under [`schemas/`](../schemas/).
 
 ## Consumer queries
 
@@ -50,10 +48,10 @@ is G1; later designs do not justify adding unused types now.
   creator and verifier are recorded. Generation computes the weakest level used.
   Git history, rather than per-record supersedes chains, versions v2 records.
 
-The initial schemas are outside the active `schemas/` set deliberately: Stage 2
-must explicitly replace the model, bump the workspace contract and pin the new
-schema set. No current workspace is silently upgraded and no second runtime
-record authority is introduced by these contract files.
+Workspaces use `pcbknowledge-workspace-v2` and the `board-generation-v2`
+contract. Initialization copies the schema snapshot and initial registries.
+A v1 manifest fails with a re-extraction instruction; schemas are never silently
+rewritten. `pin-contract` explicitly updates the software checkout manifest.
 
 ## Validation boundary
 

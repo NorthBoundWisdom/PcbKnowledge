@@ -16,23 +16,23 @@ from typing import Mapping
 WORKSPACE_MANIFEST_PATH = Path("pcbknowledge.workspace.json")
 WORKSPACE_GITIGNORE_PATH = Path(".gitignore")
 WORKSPACE_GITIGNORE_RULE = "/.pcbknowledge/"
-WORKSPACE_FORMAT = "pcbknowledge-workspace-v1"
-SCHEMA_CONTRACT = "typed-v2-local-cache"
+WORKSPACE_FORMAT = "pcbknowledge-workspace-v2"
+SCHEMA_CONTRACT = "board-generation-v2"
 CREATED_WITH = "PcbKnowledge"
 MAX_MANIFEST_BYTES = 64 * 1024
 MAX_SCHEMA_BYTES = 1_000_000
 MAX_GITIGNORE_BYTES = 64 * 1024
-SCHEMA_PATHS = (
-    Path("schemas/source-record.schema.json"),
-    Path("schemas/entity-record.schema.json"),
-    Path("schemas/fact-record.schema.json"),
-)
-AUTHORITY_DIRECTORIES = (
-    Path("knowledge/sources"),
-    Path("knowledge/entities"),
-    Path("knowledge/facts"),
-    Path("evidence/sha256"),
-)
+SCHEMA_PATHS = tuple(Path('schemas') / name for name in (
+    'block-graph.schema.json', 'block.schema.json', 'design-brief.schema.json',
+    'design-intent.schema.json', 'envelope.schema.json', 'evidence.schema.json',
+    'fab-profile.schema.json', 'layout-constraint.schema.json', 'package.schema.json',
+    'parameters.schema.json', 'part.schema.json', 'quantity.schema.json',
+    'registry.schema.json', 'rule.schema.json', 'source.schema.json', 'unknown.schema.json',
+))
+REGISTRY_PATHS = tuple(Path('knowledge/registry') / (name+'.json') for name in (
+    'quantities', 'parameters', 'roles', 'pin-types', 'package-families', 'layout-constraints'))
+AUTHORITY_DIRECTORIES = tuple(Path('knowledge') / name for name in (
+    'sources', 'parts', 'packages', 'blocks', 'rules', 'fab-profiles', 'registry'))
 PLACEHOLDER_PATHS = tuple(path / ".gitkeep" for path in AUTHORITY_DIRECTORIES)
 
 
@@ -49,7 +49,7 @@ class WorkspaceManifest:
 
     def validate(self) -> "WorkspaceManifest":
         if self.format != WORKSPACE_FORMAT:
-            raise WorkspaceError(f"unsupported workspace format: {self.format!r}")
+            raise WorkspaceError(f"unsupported workspace format: {self.format!r}; create a v2 workspace and explicitly re-extract its data")
         if self.schema_contract != SCHEMA_CONTRACT:
             raise WorkspaceError(
                 f"unsupported workspace schema contract: {self.schema_contract!r}"
@@ -149,6 +149,9 @@ def _read_regular_file(path: Path, *, label: str, maximum_bytes: int) -> bytes:
 
 
 def schema_payloads(root: Path) -> dict[str, bytes]:
+    actual = {p.relative_to(root) for p in (root/'schemas').glob('*')}
+    if actual != set(SCHEMA_PATHS):
+        raise WorkspaceError('workspace schema set differs from the v2 contract')
     return {
         relative.as_posix(): _read_regular_file(
             root / relative,
@@ -348,6 +351,8 @@ def initialize_workspace(
         resolved = _git_root(target)
 
     source_payloads = schema_payloads(schema_source_root.resolve())
+    registry_payloads = {p: _read_regular_file(schema_source_root/p,
+        label='registry', maximum_bytes=MAX_SCHEMA_BYTES) for p in REGISTRY_PATHS}
     desired_digest = schema_digest_from_payloads(source_payloads)
     manifest_path = resolved / WORKSPACE_MANIFEST_PATH
 
@@ -413,6 +418,11 @@ def initialize_workspace(
             _atomic_write(destination, source_payloads[relative.as_posix()])
             created.append(destination)
 
+        for relative, payload in registry_payloads.items():
+            destination = resolved / relative
+            _atomic_write(destination, payload)
+            created.append(destination)
+
         for relative in PLACEHOLDER_PATHS:
             destination = resolved / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -435,3 +445,17 @@ def initialize_workspace(
         raise
 
     return WorkspaceInitialization(validation=validation, replayed=False)
+
+
+def pin_contract(root: Path) -> WorkspaceValidation:
+    """Explicit software-authoring operation; never rewrites v1 knowledge data."""
+    root = _git_root(root)
+    for directory in ('sources', 'entities', 'facts'):
+        for path in (root/'knowledge'/directory).glob('*.json'):
+            if directory != 'sources' or json.loads(path.read_text()).get('schema') != 'pcbknowledge.source.v2':
+                raise WorkspaceError('v1 data must be re-extracted into a new v2 workspace')
+    for relative in AUTHORITY_DIRECTORIES:
+        (root/relative).mkdir(parents=True, exist_ok=True)
+    manifest = WorkspaceManifest(WORKSPACE_FORMAT, SCHEMA_CONTRACT, schema_digest(root), CREATED_WITH)
+    _atomic_write(root/WORKSPACE_MANIFEST_PATH, manifest.canonical_json().encode('utf-8'))
+    return validate_workspace(root)

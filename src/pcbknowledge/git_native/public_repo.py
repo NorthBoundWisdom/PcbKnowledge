@@ -24,6 +24,7 @@ ALLOWED_AUTHORITY_PLACEHOLDERS = frozenset(
         "knowledge/sources/.gitkeep",
         "knowledge/entities/.gitkeep",
         "knowledge/facts/.gitkeep",
+        *{f"knowledge/{name}/.gitkeep" for name in ("parts","packages","blocks","rules","fab-profiles","registry")},
         "knowledge/intake/.gitkeep",
         "evidence/sha256/.gitkeep",
     }
@@ -66,7 +67,7 @@ def _allowed_metadata_path(path: str) -> bool:
         return False
     if parts[1] == "registry":
         return path in ALLOWED_REGISTRY_PATHS
-    if parts[1] in {"sources", "entities", "facts"}:
+    if parts[1] in {"sources", "entities", "facts", "parts", "packages", "blocks", "rules", "fab-profiles"}:
         return len(parts) == 3 and path.endswith(".json")
     return parts[1] in {"intake", "intake-dispositions"} and PurePosixPath(path).suffix in {".json", ".md"}
 

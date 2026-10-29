@@ -29,7 +29,7 @@ def main(argv=None):
     arguments=parser().parse_args(argv)
     try:
         root=validate_workspace(arguments.repo).root
-        catalog=Catalog(root, SCHEMA_DIR)
+        catalog=Catalog(root, root/'schemas')
         group=arguments.group
         if group=='v2':
             result={'status':'VALID','records':len(catalog.records),'evidence':{

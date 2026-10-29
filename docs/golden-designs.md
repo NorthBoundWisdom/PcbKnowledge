@@ -2,7 +2,7 @@
 
 > Status: target accepted by [ADR-022](adr/ADR-022-board-generation-knowledge.md).
 > Machine-readable briefs live in [`evals/golden-designs/`](../evals/golden-designs/).
-> The [brief](contracts/v2/design-brief.schema.json) and [block-graph](contracts/v2/block-graph.schema.json)
+> The [brief](../schemas/design-brief.schema.json) and [block-graph](../schemas/block-graph.schema.json)
 > schemas define their structure; this page explains their purpose and acceptance levels.
 
 Golden designs are original, synthetic design packages in the style of a simple
@@ -102,7 +102,6 @@ G1 places the monitor shunt between the regulator output and logger rail, with
 the monitor itself supplied upstream. This is an explicit synthetic design
 choice for later expansion checks, not a claim about a collected component.
 Contract tests check shapes, reference closure and requirement coverage. G1
-operating and mechanical inputs use D7 engineering defaults. Header allowances
-share one 50 mA expansion budget within the 150 mA logger budget; expansion must
-check that aggregate. The component height is explicitly unconstrained.
+operating and mechanical inputs use D7 engineering defaults. Header allocations are 5 mA SWD, 40 mA I2C expansion and 5 mA UART, totaling
+50 mA within the 150 mA logger budget. The component height is explicitly unconstrained.
 A1/A2 require the catalog and expansion stages.

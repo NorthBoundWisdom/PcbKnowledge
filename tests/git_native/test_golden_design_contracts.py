@@ -148,6 +148,7 @@ class GoldenDesignContractTests(unittest.TestCase):
         self.assertEqual(parameters['i2c']['bus_frequency']['value'], 100000)
         self.assertEqual(parameters['i2c']['capacitance']['value'], 1e-10)
         self.assertEqual(parameters['mounting']['drill']['value'], 3.2)
+        self.assertAlmostEqual(sum(parameters[k]['output_current']['value'] for k in ('swd','i2c_header','uart')), .05)
 
 
 if __name__ == '__main__':

@@ -49,7 +49,7 @@ def fixtures():
         pin1='1', courtyard_margin=unknown('Q3'), evidence=[evidence])
     part = record('part', manufacturer='Synthetic maker',mpn='SYNTH-1',package='package:synthetic',
         roles=['led'],pins=[{'number':'1','name':'ANODE','type':'PASSIVE'}],
-        parameters={'voltage_rating':quantity()},pin_evidence={'basis':'DATASHEET',**evidence},sourcing={'lifecycle':'UNKNOWN'})
+        parameters={'voltage_rating':quantity()},identity_evidence=evidence,pin_evidence={'basis':'DATASHEET',**evidence},sourcing={'lifecycle':'UNKNOWN'})
     block = record('block',category='ui.indicator',parameters={'input_voltage':{'quantity':'voltage','required':True}},
         ports=[{'name':'VIN','kind':'POWER_IN'}],components=[{'ref':'D','select':{'role':'led','match':{}}}],
         nets=[{'name':'VIN','connect':['port:VIN','D.pin:ANODE']}],checks=[],layout=[],evidence=[])

@@ -28,7 +28,6 @@ class CatalogTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name)/'workspace'
         initialize_workspace(self.root,schema_source_root=ROOT,init_git=True)
-        shutil.copytree(ROOT/'knowledge/registry',self.root/'knowledge/registry')
         self.documents=fixtures()
         self.documents.pop('rule');self.documents.pop('design-intent');self.documents.pop('fab-profile')
         self.documents['source']['license_class']='PUBLIC_REFERENCE'
@@ -40,7 +39,7 @@ class CatalogTests(unittest.TestCase):
             path.write_text(canonical_json(doc))
 
     def load(self):
-        return Catalog(self.root,SCHEMA_DIR)
+        return Catalog(self.root,self.root/'schemas')
 
     def test_external_workspace_closure_and_read_only_queries(self):
         self.assertEqual(len(self.load().records),4)
@@ -140,6 +139,13 @@ class CatalogTests(unittest.TestCase):
         manifest.write_bytes(original)
         path=next((self.root/'schemas').glob('*.json'));path.write_bytes(path.read_bytes()+b'\n')
         with self.assertRaisesRegex(RuntimeError,'digest'):self.load()
+
+    def test_v1_workspace_is_rejected_without_rewrite(self):
+        path=self.root/'pcbknowledge.workspace.json';data=json.loads(path.read_bytes())
+        data['format']='pcbknowledge-workspace-v1';original=canonical_json(data)
+        path.write_text(original)
+        with self.assertRaisesRegex(WorkspaceError,'create a v2 workspace'):self.load()
+        self.assertEqual(path.read_text(),original)
 
     def test_selection_must_have_a_satisfying_part(self):
         self.documents['block']['components'][0]['select']={'role':'resistor','match':{}};self.save()

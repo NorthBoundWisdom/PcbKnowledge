@@ -1,6 +1,6 @@
 {
   "created_with": "PcbKnowledge",
-  "format": "pcbknowledge-workspace-v1",
-  "schema_contract": "typed-v2-local-cache",
-  "schema_digest": "6f32b617c9cd33b22dc96e30ea36cbefdbb762ec654e3a1a4caf65517c81bee9"
+  "format": "pcbknowledge-workspace-v2",
+  "schema_contract": "board-generation-v2",
+  "schema_digest": "06446c3cf8bf4f7974e9c859777c4a38bb65ae4dabfba192fdbd79b89ce9ea83"
 }

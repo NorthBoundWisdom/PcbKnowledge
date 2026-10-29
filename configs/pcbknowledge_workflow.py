@@ -59,7 +59,6 @@ BUILD_INPUT_ROOTS = (
     Path("src/pcbknowledge/git_native"),
     Path("src/pcbknowledge/v2"),
     Path("tests/git_native"),
-    Path("docs/contracts/v2"),
     Path("evals/golden-designs"),
     Path("knowledge/registry"),
 )

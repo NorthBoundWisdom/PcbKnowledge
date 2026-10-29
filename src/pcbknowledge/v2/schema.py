@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 import re
 
-SCHEMA_DIR = Path(__file__).resolve().parents[3] / 'docs/contracts/v2'
+SCHEMA_DIR = Path(__file__).resolve().parents[3] / 'schemas'
 KEYWORDS = frozenset({'$schema', '$id', '$ref', '$defs', 'title', 'description',
     'type', 'const', 'enum', 'properties', 'required', 'additionalProperties',
     'propertyNames', 'items', 'minItems', 'maxItems', 'uniqueItems', 'minProperties', 'maxProperties',
