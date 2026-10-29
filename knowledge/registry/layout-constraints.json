@@ -1,0 +1,51 @@
+{
+  "schema": "pcbknowledge.registry.v2",
+  "id": "registry:layout-constraints",
+  "scope": "G1",
+  "entries": {
+    "PLACE_NEAR": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["subject", "target", "max_distance"]
+    },
+    "GROUP": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["subjects"]
+    },
+    "MINIMIZE_LOOP": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["path", "max_area"]
+    },
+    "KELVIN": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["sense_nets", "target"]
+    },
+    "NET_WIDTH_MIN": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["net", "min_width"]
+    },
+    "CLEARANCE_MIN": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["subjects", "min_clearance"]
+    },
+    "KEEPOUT": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["subject", "margin"]
+    },
+    "COPPER_AREA": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["target", "min_area"]
+    },
+    "EDGE_PLACEMENT": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["subject", "edge", "max_distance"]
+    },
+    "ORIENTATION": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["subject", "angle"]
+    },
+    "TEST_POINT": {
+      "queries": ["Q6", "Q7"],
+      "fields": ["net", "subject"]
+    }
+  }
+}

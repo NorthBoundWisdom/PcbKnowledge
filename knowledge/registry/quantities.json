@@ -1,0 +1,19 @@
+{
+  "schema": "pcbknowledge.registry.v2",
+  "id": "registry:quantities",
+  "scope": "G1",
+  "entries": {
+    "voltage": {"unit": "V"},
+    "current": {"unit": "A"},
+    "power": {"unit": "W"},
+    "resistance": {"unit": "ohm"},
+    "capacitance": {"unit": "F"},
+    "frequency": {"unit": "Hz"},
+    "time": {"unit": "s"},
+    "temperature": {"unit": "degC"},
+    "length": {"unit": "mm"},
+    "area": {"unit": "mm2"},
+    "angle": {"unit": "deg"},
+    "ratio": {"unit": "1"}
+  }
+}

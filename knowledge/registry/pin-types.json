@@ -1,0 +1,37 @@
+{
+  "schema": "pcbknowledge.registry.v2",
+  "id": "registry:pin-types",
+  "scope": "G1",
+  "entries": {
+    "POWER_IN": {
+      "queries": ["Q2", "Q8"]
+    },
+    "POWER_OUT": {
+      "queries": ["Q2", "Q8"]
+    },
+    "GROUND": {
+      "queries": ["Q2", "Q8"]
+    },
+    "INPUT": {
+      "queries": ["Q2", "Q8"]
+    },
+    "OUTPUT": {
+      "queries": ["Q2", "Q8"]
+    },
+    "BIDIRECTIONAL": {
+      "queries": ["Q2", "Q8"]
+    },
+    "OPEN_DRAIN": {
+      "queries": ["Q2", "Q8"]
+    },
+    "ANALOG": {
+      "queries": ["Q2", "Q8"]
+    },
+    "PASSIVE": {
+      "queries": ["Q2", "Q8"]
+    },
+    "NO_CONNECT": {
+      "queries": ["Q2", "Q8"]
+    }
+  }
+}
