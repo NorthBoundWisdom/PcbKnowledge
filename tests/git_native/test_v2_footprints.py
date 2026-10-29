@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from pcbknowledge.v2.footprints import derive_footprint, export_kicad, export_library
+from pcbknowledge.v2.footprints import derive_footprint, export_kicad, export_library, footprint_name
 from pcbknowledge.v2.schema import validate
 from tests.git_native.test_v2_record_contracts import quantity, record, fixtures
 
@@ -39,6 +39,12 @@ class FootprintTests(unittest.TestCase):
                 self.assertEqual((pads[1]['x'], pads[1]['width'], pads[1]['height']), expected)
                 self.assertEqual(pads[0]['x'], -pads[1]['x'])
                 self.assertEqual(pads[0]['number'], '1')
+
+    def test_asymmetric_chip_terminals(self):
+        p=package('chip',lead_span=3.2,lead_length=.5,opposite_lead_length=.45,lead_width=1.6)
+        pads=derive_footprint(p)['pads']
+        self.assertEqual((pads[0]['x'],pads[0]['width']),(-1.425,.75))
+        self.assertEqual((pads[1]['x'],pads[1]['width']),(1.45,.7))
 
     def test_molded_diode_family_table(self):
         for span, term, lead_width, expected in [
@@ -147,6 +153,26 @@ class FootprintTests(unittest.TestCase):
         with self.assertRaises(ValueError):derive_footprint(p)
         pad['drill_height']=quantity(2.1,'mm')
         with self.assertRaises(ValueError):derive_footprint(p)
+
+    def test_library_name_collision_fails_before_writing(self):
+        a=package('chip',lead_span=1.6,lead_length=.3,lead_width=.8)
+        b=copy.deepcopy(a);a['id']='package:a/b';b['id']='package:a_b'
+        self.assertEqual(footprint_name(a),'a_b')
+        with tempfile.TemporaryDirectory() as tmp:
+            output=Path(tmp)/'test.pretty'
+            with self.assertRaisesRegex(ValueError,'collision'):export_library([a,b],output)
+            self.assertFalse(output.exists())
+
+    def test_library_rejects_output_symlinks(self):
+        p=package('chip',lead_span=1.6,lead_length=.3,lead_width=.8)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); outside=root/'authority';outside.write_text('unchanged')
+            folder=root/'test.pretty';folder.mkdir()
+            (folder/'synthetic.kicad_mod').symlink_to(outside)
+            with self.assertRaisesRegex(ValueError,'Unsafe'):export_library([p],folder)
+            self.assertEqual(outside.read_text(),'unchanged')
+            (root/'linked.pretty').symlink_to(folder,target_is_directory=True)
+            with self.assertRaisesRegex(ValueError,'symlinks'):export_library([p],root/'linked.pretty')
 
     def test_export_is_deterministic_structure_coordinates_and_nonmutating(self):
         p=json.loads((ROOT/'knowledge/packages/sot-223-ld1117.json').read_text())

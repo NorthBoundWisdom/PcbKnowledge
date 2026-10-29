@@ -74,8 +74,11 @@ def _drawing_pads(package):
         outer = span / 2 + toe
         inner = dim('lead_span', bound='min') / 2 - length - heel
         center = (outer + inner) / 2
+        other_length = dim('opposite_lead_length') if 'opposite_lead_length' in drawing else length
+        other_inner = dim('lead_span', bound='min') / 2 - other_length - heel
+        other_center = (outer + other_inner) / 2
         return [_pad(1, -center, 0, outer - inner, width + 2 * side),
-                _pad(2, center, 0, outer - inner, width + 2 * side)]
+                _pad(2, other_center, 0, outer - other_inner, width + 2 * side)]
     if generator in ('gullwing_two_side', 'gullwing_four_side'):
         span, width, pitch = dim('lead_span'), dim('lead_width'), dim('pitch')
         if 'lead_length' in drawing:
@@ -223,10 +226,21 @@ def derive_footprint(package):
     return {'pads': pads, 'courtyard': courtyard, 'pin1': package['pin1']}
 
 
+def footprint_name(package_or_id):
+    """Canonical library item name; export_library rejects normalization collisions."""
+    identity = package_or_id['id'] if isinstance(package_or_id, dict) else package_or_id
+    if not isinstance(identity, str) or not identity.startswith('package:'):
+        raise ValueError('Footprint requires a package identity')
+    suffix = identity.split(':', 1)[1]
+    if not suffix or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789/_-' for c in suffix):
+        raise ValueError('Unsafe footprint identity')
+    return suffix.replace('/', '_')
+
+
 def export_kicad(package):
     """Return deterministic KiCad footprint text; no third-party library copied."""
     derived = derive_footprint(package)
-    name = package['id'].split(':', 1)[1].replace('/', '_')
+    name = footprint_name(package)
     quote = lambda value: json.dumps(str(value), ensure_ascii=True)
     number = lambda value: format(value, '.6f').rstrip('0').rstrip('.') or '0'
     lines = [f'(footprint {quote(name)}', '  (version 20240108)', '  (generator "pcbknowledge")', '  (layer "F.Cu")']
@@ -250,12 +264,23 @@ def export_kicad(package):
 
 
 def export_library(packages, directory):
-    directory = Path(directory)
+    packages = list(packages)
+    names = [footprint_name(package) for package in packages]
+    if len(names) != len(set(names)):
+        raise ValueError('Footprint library name collision')
+    rendered = {package['id']: export_kicad(package) for package in packages}
+    directory = Path(directory).absolute()
+    if any(path.is_symlink() for path in (directory, *directory.parents)):
+        raise ValueError('Footprint output directory cannot traverse symlinks')
+    for name in names:
+        destination = directory / (name + '.kicad_mod')
+        if destination.is_symlink() or (destination.exists() and not destination.is_file()):
+            raise ValueError('Unsafe footprint output file')
     directory.mkdir(parents=True, exist_ok=True)
     paths = []
     for package in sorted(packages, key=lambda p: p['id']):
-        name = package['id'].split(':', 1)[1].replace('/', '_') + '.kicad_mod'
+        name = footprint_name(package) + '.kicad_mod'
         path = directory / name
-        path.write_text(export_kicad(package), encoding='utf-8', newline='\n')
+        path.write_text(rendered[package['id']], encoding='utf-8', newline='\n')
         paths.append(path)
     return paths

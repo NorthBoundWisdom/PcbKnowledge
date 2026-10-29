@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `STAGE_3_ACTIVE`
+> Status: `STAGE_5_ACTIVE`
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -39,6 +39,9 @@ answer here.
 | D10 | Substitution when an official source is inaccessible | Select an equivalent part whose manufacturer drawing or datasheet downloads without bypass; record the substitution and the failed URL in the commit body. Example: Wurth 61300211121 (HTTP 403) is replaced by another manufacturer's 2.54 mm header |
 | D11 | G1 passive parts | One series per passive type so one cited source covers every value: KEMET C0603C ceramic capacitors (and the same family in 0805 where 10 uF needs it) and Vishay CRCW0603 thick-film resistors. Each value is its own orderable `part` record citing the series datasheet |
 | D12 | Fab profile for G1 (refines D2) | JLCPCB standard two-layer, 1.6 mm FR-4, 1 oz outer copper, single-side SMT assembly. Values are cited from its public capability pages with access date; the owner may replace the fab |
+| D13 | G1 evaluation temperature | Delegated: evaluate G1 at 23 degC, matching Eaton PTC resistance evidence; retain the full 0.5 A USB budget in headroom. This is not all-temperature qualification. |
+| D14 | Evidence-driven G1 substitutions | Delegated under D10: Yageo resistors, Eaton PTS120615V050 PTC and ST SM6T6V8A TVS replace inaccessible/restricted sources; ST LDL1117S33R replaces failed-headroom LD1117; 25 V input capacitance covers the selected TVS clamp. |
+| D15 | Board and oscillator compatibility | Delegated: use Wurth 632723300011 explicitly supporting 1.6 mm boards instead of the 0.8 mm Amphenol; use ABLS-8.000MHZ-18-R75 and 22 pF loads after source-based startup/conditional drive screening. Physical oscillator measurement remains Stage 6. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -180,107 +183,113 @@ Round 3 runs Stages 3, 4 and 5 in one long task and ends with G1 at A2 from an
 AI-produced block graph. Each stage exit is a checkpoint: run the full gate, record
 the receipt, push (when the brief authorizes it) and continue.
 
-## Stage 3 — Packages and footprints (active)
+## Stage 3 — Packages and footprints (complete)
 
 ### 3a Package contract per ADR-024 (contract-only commit)
 
-- [ ] Change `schemas/package.schema.json` so a package holds exactly one of:
+- [x] Change `schemas/package.schema.json` so a package holds exactly one of:
   `drawing` (cited body and lead dimensions, pitch, pin count, tab or exposed pad)
   plus `generator` and `density`, or `explicit_pads` (irregular parts, cited land
   pattern). Remove stored pads from standard families. Re-pin the contract digest.
-- [ ] Validator: derive pads for both forms before pin/pad coverage; reject records
+- [x] Validator: derive pads for both forms before pin/pad coverage; reject records
   with both forms or neither; keep `pin1`, courtyard and the D8 margin.
 
 ### 3b Generators (code)
 
-- [ ] Original-code generators in `src/pcbknowledge/v2/footprints/`: two-terminal
+- [x] Original-code generators in `src/pcbknowledge/v2/footprints/`: two-terminal
   chip (0402, 0603, 0805, 1206 and the 1812 PTC body), molded diode (SOD-123,
   SMA, SMB), gull-wing two-side (SOT-23-3/5/6/8, SOT-223 with tab, SOIC-8,
   TSSOP/VSSOP), gull-wing four-side (LQFP-48), four-pad crystal (3225), and
   through-hole pin header (2.54 mm, 1 to 2 rows).
-- [ ] Pad sizes follow one documented, original rule set per family (toe, heel and
+- [x] Pad sizes follow one documented, original rule set per family (toe, heel and
   side fillets by density level), written as code with named constants; do not
   read IPC documents (ADR-015).
-- [ ] Tests: for every family, a hand-checked table of expected pad centers and
+- [x] Tests: for every family, a hand-checked table of expected pad centers and
   sizes for at least one real G1 package; symmetry, pitch, pin-1 position, no
   overlapping copper, courtyard encloses pads and body.
 
 ### 3c Re-record the existing packages (data-only commit)
 
-- [ ] Replace the three placeholder records (SOIC-8 for 24LC256, SOT-23-8 for
+- [x] Replace the three placeholder records (SOIC-8 for 24LC256, SOT-23-8 for
   INA219, SOT-223 for LD1117) with cited drawing dimensions. The SOT-223 tab is a
   separate physical pad sharing the evidenced VOUT number; no extra electrical
   pin is invented. Independent agent verification to `AGENT_VERIFIED`.
 
 ### 3d KiCad footprint export and manual check
 
-- [ ] Derived `.kicad_mod` export for every package, deterministic bytes, written
+- [x] Derived `.kicad_mod` export for every package, deterministic bytes, written
   under `build/`. Tests check structure, pad count, numbers and coordinates.
-- [ ] If `kicad-cli` is available locally, load each exported footprint with it and
+- [x] If `kicad-cli` is available locally, load each exported footprint with it and
   record the result; otherwise say so in the receipt (not a failure).
-- [ ] Add owner manual-acceptance steps to `docs/local-workflow.md`: open the
+- [x] Add owner manual-acceptance steps to `docs/local-workflow.md`: open the
   exported library in KiCad and compare against the cited drawing pages.
 
 Exit: every current package validates from drawing dimensions or explicit pads,
 exports to KiCad, and passes generator tests.
 
-## Stage 4 — G1 knowledge content
+Stage receipt: `42409c3`, `8befe85`, `ba923d8`; full gate passed, Build/Test each 92 tests, no skips.
+Native KiCad 9 parsed all three footprints; exact pushed CI passed. G1 coverage: 0/15 (0%), before Stage 4 data.
+
+## Stage 4 — G1 knowledge content (complete)
 
 ### 4a Selection semantics and coverage tool (code)
 
-- [ ] Implement ADR-024 selection matching in `catalog.py` with tests for nominal,
+- [x] Implement ADR-024 selection matching in `catalog.py` with tests for nominal,
   `typ`-only, min/max range and `UNKNOWN` cases.
-- [ ] `v2 coverage <block-graph>`: for each block instance, report whether the
+- [x] `v2 coverage <block-graph>`: for each block instance, report whether the
   block exists, its selections resolve, every referenced part and package is
   `AGENT_VERIFIED` or better, and which items remain. Use it to drive the rest of
   the round; record its output summary at each checkpoint.
 
 ### 4b Parts (data-only commits, independently verified)
 
-Use D9 to D11. Every part has a cited source, a package from Stage 3 and the
+Use D9 to D15; D14-D15 supersede the originally named alternatives below. Every part has a cited source, a package from Stage 3 and the
 parameters its blocks and calculators read.
 
-- [ ] Power path: USB-C 16-pin USB 2.0 receptacle (explicit pads), MF-MSMF050-2
+- [x] Power path: USB-C 16-pin USB 2.0 receptacle (explicit pads), MF-MSMF050-2
   PTC, SMBJ5.0A TVS (convention numbering, cited cathode band), LD1117S33TR with
   the parameters `ldo_headroom` and `ldo_dissipation` need (dropout versus output
   current, maximum input voltage, output current, output-voltage range, thermal
   resistance for SOT-223).
-- [ ] MCU per D1: STM32F103C8T6 (LQFP-48) with its full numbered pin map, power
+- [x] MCU per D1: STM32F103C8T6 (LQFP-48) with its full numbered pin map, power
   pin groups, BOOT0, NRST, HSE pins and SWD pins; an 8 MHz 3225 crystal with load
   capacitance and ESR.
-- [ ] Monitor and memory: INA219AIDCNR and 24LC256-I/SN parameters for supply range
+- [x] Monitor and memory: INA219AIDCNR and 24LC256-I/SN parameters for supply range
   and I2C; a shunt resistor sized by a calculator for the G1 current budget.
-- [ ] Passives per D11: the capacitor and resistor values the blocks need
+- [x] Passives per D11: the capacitor and resistor values the blocks need
   (decoupling, bulk, LDO input and output, crystal load, CC 5.1 kOhm, I2C
   pull-ups, LED series, reset and BOOT0 networks).
-- [ ] Indicators and input: one 0603 LED color with cited polarity, one tactile
+- [x] Indicators and input: one 0603 LED color with cited polarity, one tactile
   switch with a numbered terminal drawing.
-- [ ] Headers: 2.54 mm single-row headers for SWD, I2C and UART per D10; M3
+- [x] Headers: 2.54 mm single-row headers for SWD, I2C and UART per D10; M3
   mounting hole as a mechanical package.
 
 ### 4c Blocks, rules, fab profile and calculators
 
-- [ ] Calculators (pure, unit tested, refusing on missing inputs):
+- [x] Calculators (pure, unit tested, refusing on missing inputs):
   `ldo_headroom`, `ldo_dissipation`, `led_resistor`, `i2c_pullup`,
   `shunt_resistor`, `trace_width`. `trace_width` uses the widely published
   IPC-2221 external-layer equation implemented from first principles; do not read
   IPC documents (ADR-015).
-- [ ] Register calculators so block `checks` and `CALCULATED` values validate;
+- [x] Register calculators so block `checks` and `CALCULATED` values validate;
   remove the fail-closed placeholders in `catalog.py`.
-- [ ] Blocks: USB-C 5 V sink input (CC resistors), input protection (D9), fixed LDO,
+- [x] Blocks: USB-C 5 V sink input (CC resistors), input protection (D9), fixed LDO,
   MCU core (per-pin decoupling, bulk, crystal with load caps, NRST, BOOT0
   pull-down, VDDA filtering), SWD header, LED indicator, button input, I2C bus with
   pull-ups, INA219 monitor with shunt, I2C EEPROM (address and WP strapping),
   I2C header, UART header, mounting holes. Each block has layout constraints
   (`PLACE_NEAR`, `GROUP`, `EDGE_PLACEMENT`, `NET_WIDTH_MIN` and others the block needs).
-- [ ] Rules: default IC decoupling, edge-connector placement, power net class.
-- [ ] Fab profile per D12 with cited values.
-- [ ] Design risk: with D9 (no series Schottky), `ldo_headroom` must still pass at
+- [x] Rules: default IC decoupling, edge-connector placement, power net class.
+- [x] Fab profile per D12 with cited values.
+- [x] Design risk: with D9 (no series Schottky), `ldo_headroom` must still pass at
   VBUS 4.75 V minus the PTC drop at the G1 current budget. If it fails, record the
   failure and switch the LDO block to a lower-dropout part rather than relaxing
   the check.
 
 Exit: `v2 coverage` reports 100% for the hand-made G1 block graph (A1 reachable).
+
+Stage receipt: full gate passed; Build/Test each 135 tests, no skips; 94 records, 28 local source hashes verified.
+G1 coverage 15/15 (100%); all 21 package exports parsed by KiCad 9. D13-D15 record source/compatibility substitutions.
 
 ## Stage 5 — Bundle, expansion and AI synthesis
 

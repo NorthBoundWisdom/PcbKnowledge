@@ -91,7 +91,7 @@ class Vocabulary:
                     'max_length':'length', 'max_width':'length', 'height_limit':'length',
                     'x':'length', 'y':'length', 'rotation':'angle', 'angle':'angle',
                     'courtyard_margin':'length', 'keepout_diameter':'length', 'edge_offset':'length',
-                    'max_distance':'length', 'max_area':'area', 'min_area':'area',
+                    'distance':'length', 'max_distance':'length', 'max_area':'area', 'min_area':'area',
                     'min_width':'length', 'min_clearance':'length', 'margin':'length',
                     'trace_width_min':'length', 'clearance_min':'length', 'drill_min':'length',
                     'annular_ring_min':'length', 'solder_mask_web_min':'length'}

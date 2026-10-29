@@ -109,14 +109,14 @@ class Catalog:
         if status=='LICENSE_BLOCKED':raise PermissionError('Source license blocks processing')
         if status!='LOCALLY_VERIFIED':raise FileNotFoundError('NOT_LOCALLY_VERIFIED')
         digest=source['sha256']
-        return self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest+'.pdf')
+        return self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest + ('.html' if source.get('media_type') == 'text/html' else '.pdf'))
 
     def evidence_status(self, source):
         """Hash only eligible local originals. Absence is an explicit result."""
         if source['license_class'] not in ELIGIBLE:
             return 'LICENSE_BLOCKED'
         digest = source['sha256']
-        path = self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest+'.pdf')
+        path = self.root/'.pcbknowledge/evidence/sha256'/digest[:2]/(digest + ('.html' if source.get('media_type') == 'text/html' else '.pdf'))
         if not path.exists():
             return 'NOT_LOCALLY_VERIFIED'
         for parent in (path, *path.parents):
@@ -127,8 +127,9 @@ class Catalog:
         if not path.is_file() or path.stat().st_size != source['bytes']:
             raise ValueError('Evidence byte size mismatch')
         payload = path.read_bytes()
-        if hashlib.sha256(payload).hexdigest() != digest or not payload.startswith(b'%PDF-'):
-            raise ValueError('Evidence digest or PDF signature mismatch')
+        signature_valid = (b'<html' in payload[:4096].lower() or b'<!doctype html' in payload[:4096].lower()) if source.get('media_type') == 'text/html' else payload.startswith(b'%PDF-')
+        if hashlib.sha256(payload).hexdigest() != digest or not signature_valid:
+            raise ValueError('Evidence digest or media signature mismatch')
         return 'LOCALLY_VERIFIED'
 
     def validate(self):
@@ -153,6 +154,8 @@ class Catalog:
                 identities.add(identity)
                 self._part(record)
             elif kind == 'package':
+                if not record['evidence'] and record.get('generator') != 'mechanical_hole':
+                    raise ValueError('Electrical packages require source evidence')
                 derive_footprint(record)
             elif kind == 'block':
                 self._block(record)
@@ -164,7 +167,11 @@ class Catalog:
     def _anchors(self, value):
         if isinstance(value, dict):
             if value.get('basis')=='CALCULATED':
-                raise ValueError('No executable quantity calculators are registered yet')
+                from .calculators import calculate
+                outputs = calculate(value['calculator'], value['inputs'])
+                expected = {k:value[k] for k in ('value','min','typ','max','unit') if k in value}
+                if not any(expected == {k:q[k] for k in ('value','min','typ','max','unit') if k in q} for q in outputs.values()):
+                    raise ValueError('Calculated quantity does not match executable output')
             if 'source' in value and 'page' in value:
                 self.evidence(value)
             for child in value.values():
@@ -176,7 +183,17 @@ class Catalog:
     def _part(self, part):
         package = self.get(part['package'], 'package')
         pins = unique(part['pins'], 'number', 'part pin number')
+        if part['pin_evidence']['basis'] == 'STANDARD_CONVENTION' and len(pins) != 2:
+            raise ValueError('Standard terminal convention requires exactly two electrical pins')
         pads = {p['number'] for p in derive_footprint(package)['pads']}
+        mechanical = 'mechanical.mounting-hole' in part['roles']
+        for field in ('pin_evidence', 'identity_evidence'):
+            if part[field].get('basis') == 'ENGINEERING_DEFAULT' and not mechanical:
+                raise ValueError('Engineering-default identity is mechanical-only')
+        if not pins and not mechanical:
+            raise ValueError('Electrical parts require pins')
+        if mechanical:
+            pads = {p['number'] for p in derive_footprint(package)['pads'] if p['kind'] != 'MECHANICAL'}
         if set(pins) != pads:
             raise ValueError(f'Pin/pad coverage mismatch: {part["id"]}')
         for pin in pins.values():
@@ -199,7 +216,9 @@ class Catalog:
                 nominal = value.get('value', value.get('typ'))
                 if value.get('unit') != limit.get('unit'):
                     return False
-                if 'value' in limit and nominal != limit['value']:
+                if ('value' in limit and nominal != limit['value']) or ('typ' in limit and nominal != limit['typ']):
+                    return False
+                if any(value.get('conditions', {}).get(key) != condition for key, condition in limit.get('conditions', {}).items()):
                     return False
                 if 'min' in limit and (low is None or low < limit['min']):
                     return False
@@ -237,9 +256,15 @@ class Catalog:
                             raise ValueError('Dangling block pin')
         if any('port:'+name not in connected for name in ports):
             raise ValueError('Unconnected block port')
-        # Calculators arrive with their executable implementations in Stage 4.
-        if block['checks']:
-            raise ValueError('No executable block calculators are registered yet')
+        from .calculators import validate_inputs
+        for check in block['checks']:
+            validate_inputs(check['calculator'], check['inputs'], allow_parameters=True)
+            for value in check['inputs'].values():
+                if set(value) == {'parameter'} and value['parameter'] not in block['parameters']:
+                    raise ValueError('Dangling calculator block parameter')
+                if set(value) in ({'component', 'parameter'}, {'component', 'parameter', 'bound'}):
+                    if value['component'] not in candidates or any(value['parameter'] not in p['parameters'] for p in candidates[value['component']]):
+                        raise ValueError('Dangling calculator component parameter')
         for constraint in block['layout']:
             self._layout_references(constraint, candidates, set(n['name'] for n in block['nets']))
 

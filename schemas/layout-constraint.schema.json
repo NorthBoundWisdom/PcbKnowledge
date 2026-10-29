@@ -3,32 +3,139 @@
   "$id": "layout-constraint.schema.json",
   "type": "object",
   "properties": {
-    "kind": {"type": "string", "minLength": 1, "maxLength": 256},
-    "subject": {"type": "string", "minLength": 1, "maxLength": 256},
-    "target": {"type": "string", "minLength": 1, "maxLength": 256},
-    "max_distance": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "target": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "max_distance": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
     "subjects": {
       "type": "array",
-      "items": {"type": "string", "minLength": 1, "maxLength": 256},
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
       "minItems": 2,
       "uniqueItems": true
     },
-    "path": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 256}, "minItems": 3},
-    "max_area": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+    "path": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
+      "minItems": 3
+    },
+    "max_area": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
     "sense_nets": {
       "type": "array",
-      "items": {"type": "string", "minLength": 1, "maxLength": 256},
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
       "minItems": 2,
       "uniqueItems": true
     },
-    "net": {"type": "string", "minLength": 1, "maxLength": 256},
-    "min_width": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-    "min_clearance": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-    "margin": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-    "min_area": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
-    "edge": {"enum": ["TOP", "BOTTOM", "LEFT", "RIGHT"]},
-    "angle": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
+    "net": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "min_width": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "min_clearance": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "margin": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "min_area": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "edge": {
+      "enum": [
+        "TOP",
+        "BOTTOM",
+        "LEFT",
+        "RIGHT"
+      ]
+    },
+    "angle": {
+      "oneOf": [
+        {
+          "$ref": "quantity.schema.json"
+        },
+        {
+          "$ref": "unknown.schema.json"
+        }
+      ]
+    },
+    "distance": {
+      "$ref": "quantity.schema.json"
+    }
   },
-  "required": ["kind"],
+  "required": [
+    "kind"
+  ],
   "additionalProperties": false
 }

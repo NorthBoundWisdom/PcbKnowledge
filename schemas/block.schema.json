@@ -3,10 +3,21 @@
   "$id": "block.schema.json",
   "type": "object",
   "properties": {
-    "schema": {"const": "pcbknowledge.block.v2"},
-    "id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^block:[a-z0-9][a-z0-9/_-]*$"},
-    "verification": {"$ref": "envelope.schema.json#/$defs/verification"},
-    "provenance": {"$ref": "envelope.schema.json#/$defs/provenance"},
+    "schema": {
+      "const": "pcbknowledge.block.v2"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^block:[a-z0-9][a-z0-9/_-]*$"
+    },
+    "verification": {
+      "$ref": "envelope.schema.json#/$defs/verification"
+    },
+    "provenance": {
+      "$ref": "envelope.schema.json#/$defs/provenance"
+    },
     "category": {
       "enum": [
         "power.input",
@@ -25,11 +36,30 @@
     },
     "parameters": {
       "type": "object",
-      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 256},
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
       "additionalProperties": {
         "type": "object",
-        "properties": {"quantity": {"type": "string", "minLength": 1, "maxLength": 256}, "required": {"type": "boolean"}},
-        "required": ["quantity", "required"],
+        "properties": {
+          "quantity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "fixed": {
+            "$ref": "quantity.schema.json"
+          }
+        },
+        "required": [
+          "quantity",
+          "required"
+        ],
         "additionalProperties": false
       }
     },
@@ -38,10 +68,21 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {"type": "string", "minLength": 1, "maxLength": 256},
-          "kind": {"type": "string", "minLength": 1, "maxLength": 256}
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
         },
-        "required": ["name", "kind"],
+        "required": [
+          "name",
+          "kind"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
@@ -51,7 +92,11 @@
       "items": {
         "type": "object",
         "properties": {
-          "ref": {"type": "string", "minLength": 1, "maxLength": 256},
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
           "select": {
             "oneOf": [
               {
@@ -64,22 +109,36 @@
                     "pattern": "^part:[a-z0-9][a-z0-9/_-]*$"
                   }
                 },
-                "required": ["part"],
+                "required": [
+                  "part"
+                ],
                 "additionalProperties": false
               },
               {
                 "type": "object",
                 "properties": {
-                  "role": {"type": "string", "minLength": 1, "maxLength": 256},
-                  "match": {"$ref": "parameters.schema.json"}
+                  "role": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "match": {
+                    "$ref": "parameters.schema.json"
+                  }
                 },
-                "required": ["role", "match"],
+                "required": [
+                  "role",
+                  "match"
+                ],
                 "additionalProperties": false
               }
             ]
           }
         },
-        "required": ["ref", "select"],
+        "required": [
+          "ref",
+          "select"
+        ],
         "additionalProperties": false
       },
       "minItems": 1
@@ -89,15 +148,26 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {"type": "string", "minLength": 1, "maxLength": 256},
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
           "connect": {
             "type": "array",
-            "items": {"type": "string", "minLength": 1, "maxLength": 256},
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
             "minItems": 2,
             "uniqueItems": true
           }
         },
-        "required": ["name", "connect"],
+        "required": [
+          "name",
+          "connect"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
@@ -107,16 +177,68 @@
       "items": {
         "type": "object",
         "properties": {
-          "calculator": {"enum": ["ldo_dissipation", "led_resistor", "i2c_pullup", "ipc2152_width"]},
+          "calculator": {
+            "enum": [
+              "ldo_headroom",
+              "ldo_dissipation",
+              "led_resistor",
+              "i2c_pullup",
+              "shunt_resistor",
+              "trace_width",
+              "oscillator_startup"
+            ]
+          },
           "inputs": {
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]},
+                {
+                  "oneOf": [
+                    {
+                      "$ref": "quantity.schema.json"
+                    },
+                    {
+                      "$ref": "unknown.schema.json"
+                    }
+                  ]
+                },
                 {
                   "type": "object",
-                  "properties": {"parameter": {"type": "string", "minLength": 1, "maxLength": 256}},
-                  "required": ["parameter"],
+                  "properties": {
+                    "parameter": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    }
+                  },
+                  "required": [
+                    "parameter"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "component": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "parameter": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "bound": {
+                      "enum": [
+                        "min",
+                        "max",
+                        "value"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "component",
+                    "parameter"
+                  ],
                   "additionalProperties": false
                 }
               ]
@@ -125,21 +247,59 @@
           "require": {
             "type": "object",
             "properties": {
-              "output": {"type": "string", "minLength": 1, "maxLength": 256},
-              "operator": {"enum": ["LE", "GE"]},
-              "limit": {"oneOf": [{"$ref": "quantity.schema.json"}, {"$ref": "unknown.schema.json"}]}
+              "output": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "operator": {
+                "enum": [
+                  "LE",
+                  "GE"
+                ]
+              },
+              "limit": {
+                "oneOf": [
+                  {
+                    "$ref": "quantity.schema.json"
+                  },
+                  {
+                    "$ref": "unknown.schema.json"
+                  }
+                ]
+              }
             },
-            "required": ["output", "operator", "limit"],
+            "required": [
+              "output",
+              "operator",
+              "limit"
+            ],
             "additionalProperties": false
           }
         },
-        "required": ["calculator", "inputs", "require"],
+        "required": [
+          "calculator",
+          "inputs",
+          "require"
+        ],
         "additionalProperties": false
       },
       "minItems": 0
     },
-    "layout": {"type": "array", "items": {"$ref": "layout-constraint.schema.json"}, "minItems": 0},
-    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "minItems": 0}
+    "layout": {
+      "type": "array",
+      "items": {
+        "$ref": "layout-constraint.schema.json"
+      },
+      "minItems": 0
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence.schema.json"
+      },
+      "minItems": 0
+    }
   },
   "required": [
     "schema",
@@ -159,11 +319,28 @@
   "allOf": [
     {
       "oneOf": [
-        {"properties": {"verification": {"const": "DRAFT"}}},
         {
           "properties": {
-            "verification": {"enum": ["AGENT_VERIFIED", "HUMAN_VERIFIED"]},
-            "provenance": {"properties": {"verified_by": {"minItems": 1}}}
+            "verification": {
+              "const": "DRAFT"
+            }
+          }
+        },
+        {
+          "properties": {
+            "verification": {
+              "enum": [
+                "AGENT_VERIFIED",
+                "HUMAN_VERIFIED"
+              ]
+            },
+            "provenance": {
+              "properties": {
+                "verified_by": {
+                  "minItems": 1
+                }
+              }
+            }
           }
         }
       ]
@@ -171,13 +348,31 @@
     {
       "oneOf": [
         {
-          "properties": {"category": {"const": "mechanical.mounting"}, "ports": {"maxItems": 0}, "nets": {"maxItems": 0}}
+          "properties": {
+            "category": {
+              "const": "mechanical.mounting"
+            },
+            "ports": {
+              "maxItems": 0
+            },
+            "nets": {
+              "maxItems": 0
+            }
+          }
         },
         {
           "properties": {
-            "category": {"not": {"const": "mechanical.mounting"}},
-            "ports": {"minItems": 1},
-            "nets": {"minItems": 1}
+            "category": {
+              "not": {
+                "const": "mechanical.mounting"
+              }
+            },
+            "ports": {
+              "minItems": 1
+            },
+            "nets": {
+              "minItems": 1
+            }
           }
         }
       ]

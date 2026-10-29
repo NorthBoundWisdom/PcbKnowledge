@@ -3,49 +3,191 @@
   "$id": "quantity.schema.json",
   "type": "object",
   "properties": {
-    "value": {"type": "number"},
-    "min": {"type": "number"},
-    "typ": {"type": "number"},
-    "max": {"type": "number"},
-    "unit": {"type": "string", "minLength": 1, "maxLength": 256},
+    "value": {
+      "type": "number"
+    },
+    "min": {
+      "type": "number"
+    },
+    "typ": {
+      "type": "number"
+    },
+    "max": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
     "conditions": {
       "type": "object",
-      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 256},
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      },
       "additionalProperties": {
         "type": "object",
-        "properties": {"value": {"type": "number"}, "unit": {"type": "string", "minLength": 1, "maxLength": 256}},
-        "required": ["value", "unit"],
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ],
         "additionalProperties": false
       }
     },
-    "basis": {"enum": ["DATASHEET", "STANDARD_CONVENTION", "ENGINEERING_DEFAULT", "CALCULATED"]},
-    "evidence": {"$ref": "evidence.schema.json"},
-    "convention": {"type": "string", "minLength": 1, "maxLength": 256},
-    "note": {"type": "string", "minLength": 1, "maxLength": 256},
-    "calculator": {"enum": ["ldo_dissipation", "led_resistor", "i2c_pullup", "ipc2152_width"]},
-    "inputs": {"type": "object", "additionalProperties": {"$ref": "quantity.schema.json"}, "minProperties": 1}
+    "basis": {
+      "enum": [
+        "DATASHEET",
+        "STANDARD_CONVENTION",
+        "ENGINEERING_DEFAULT",
+        "CALCULATED"
+      ]
+    },
+    "evidence": {
+      "$ref": "evidence.schema.json"
+    },
+    "convention": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "calculator": {
+      "enum": [
+        "ldo_headroom",
+        "ldo_dissipation",
+        "led_resistor",
+        "i2c_pullup",
+        "shunt_resistor",
+        "trace_width",
+        "oscillator_startup"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "quantity.schema.json"
+      },
+      "minProperties": 1
+    }
   },
-  "required": ["unit", "conditions", "basis"],
+  "required": [
+    "unit",
+    "conditions",
+    "basis"
+  ],
   "additionalProperties": false,
   "allOf": [
     {
       "oneOf": [
         {
-          "required": ["value"],
-          "not": {"anyOf": [{"required": ["min"]}, {"required": ["typ"]}, {"required": ["max"]}]}
+          "required": [
+            "value"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "min"
+                ]
+              },
+              {
+                "required": [
+                  "typ"
+                ]
+              },
+              {
+                "required": [
+                  "max"
+                ]
+              }
+            ]
+          }
         },
         {
-          "anyOf": [{"required": ["min"]}, {"required": ["typ"]}, {"required": ["max"]}],
-          "not": {"required": ["value"]}
+          "anyOf": [
+            {
+              "required": [
+                "min"
+              ]
+            },
+            {
+              "required": [
+                "typ"
+              ]
+            },
+            {
+              "required": [
+                "max"
+              ]
+            }
+          ],
+          "not": {
+            "required": [
+              "value"
+            ]
+          }
         }
       ]
     },
     {
       "oneOf": [
-        {"properties": {"basis": {"const": "DATASHEET"}}, "required": ["evidence"]},
-        {"properties": {"basis": {"const": "STANDARD_CONVENTION"}}, "required": ["convention"]},
-        {"properties": {"basis": {"const": "ENGINEERING_DEFAULT"}}, "required": ["note"]},
-        {"properties": {"basis": {"const": "CALCULATED"}}, "required": ["calculator", "inputs"]}
+        {
+          "properties": {
+            "basis": {
+              "const": "DATASHEET"
+            }
+          },
+          "required": [
+            "evidence"
+          ]
+        },
+        {
+          "properties": {
+            "basis": {
+              "const": "STANDARD_CONVENTION"
+            }
+          },
+          "required": [
+            "convention"
+          ]
+        },
+        {
+          "properties": {
+            "basis": {
+              "const": "ENGINEERING_DEFAULT"
+            }
+          },
+          "required": [
+            "note"
+          ]
+        },
+        {
+          "properties": {
+            "basis": {
+              "const": "CALCULATED"
+            }
+          },
+          "required": [
+            "calculator",
+            "inputs"
+          ]
+        }
       ]
     }
   ],
@@ -53,11 +195,23 @@
     "unconstrained": {
       "type": "object",
       "properties": {
-        "status": {"const": "UNCONSTRAINED"},
-        "basis": {"const": "ENGINEERING_DEFAULT"},
-        "note": {"type": "string", "minLength": 1, "maxLength": 256}
+        "status": {
+          "const": "UNCONSTRAINED"
+        },
+        "basis": {
+          "const": "ENGINEERING_DEFAULT"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
       },
-      "required": ["status", "basis", "note"],
+      "required": [
+        "status",
+        "basis",
+        "note"
+      ],
       "additionalProperties": false
     }
   }

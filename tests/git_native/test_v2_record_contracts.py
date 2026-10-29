@@ -67,7 +67,7 @@ def fixtures():
         'components':[{'ref':'D1','part':'part:synthetic','package':'package:synthetic','footprint':'synthetic.pretty:D1'}],
         'nets':[{'name':'N1','pins':[{'ref':'D1','pin':'1'}],'class':'signal'}],
         'bom':[{'part':'part:synthetic','refs':['D1'],'quantity':1}], 'layout':[],
-        'checks':[{'id':'synthetic-check','result':'PASS'}], 'verification':'AGENT_VERIFIED','refusals':[], 'evidence':[]}
+        'dependencies':[], 'checks':[{'id':'synthetic-check','result':'PASS'}], 'verification':'AGENT_VERIFIED','refusals':[], 'evidence':[]}
     intent.update(fab_profile='fab_profile:synthetic',
         mechanical={'outline_envelope':{'shape':'RECTANGLE','max_length':quantity(50,'mm'),'max_width':quantity(50,'mm')},
             'height_limit':quantity(10,'mm'),'mounting':[{'ref':f'H{i}','fastener':'M3'} for i in range(1,5)],

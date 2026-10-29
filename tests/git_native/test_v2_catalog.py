@@ -132,12 +132,12 @@ class CatalogTests(unittest.TestCase):
         self.documents['block']['checks']=[{'calculator':'led_resistor','inputs':{'supply':quantity()},
             'require':{'output':'resistance','operator':'GE','limit':quantity(1,'ohm')}}]
         self.save()
-        with self.assertRaisesRegex(ValueError,'calculators'):self.load()
+        with self.assertRaisesRegex(ValueError,'inputs must be exactly'):self.load()
         self.documents['block']['checks']=[]
         self.documents['part']['parameters']['voltage_rating']={**quantity(), 'basis':'CALCULATED',
             'calculator':'led_resistor','inputs':{'supply':quantity()}}
         self.save()
-        with self.assertRaisesRegex(ValueError,'quantity calculators'):self.load()
+        with self.assertRaisesRegex(ValueError,'inputs must be exactly'):self.load()
         self.documents['part']['parameters']['voltage_rating']=quantity()
         self.documents['block']['layout']=[{'kind':'INVENTED','subject':'D'}];self.save()
         with self.assertRaises(ValueError):self.load()

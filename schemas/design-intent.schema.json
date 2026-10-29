@@ -8,6 +8,11 @@
     "brief_id": {"type": "string", "minLength": 1, "maxLength": 256},
     "bundle_commit": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[0-9a-f]{40}$"},
     "block_graph_sha256": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[0-9a-f]{64}$"},
+    "dependencies": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^(source|part|package|block|rule|fab_profile):[a-z0-9][a-z0-9/_-]*$", "maxLength": 256},
+      "uniqueItems": true
+    },
     "status": {"enum": ["EXPANDED", "REFUSED"]},
     "components": {
       "type": "array",
@@ -176,6 +181,7 @@
     "bundle_commit",
     "block_graph_sha256",
     "status",
+    "dependencies",
     "components",
     "nets",
     "bom",

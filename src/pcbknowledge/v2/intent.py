@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from .catalog import LEVELS, unique
+from .footprints import footprint_name
 
 
 def validate_intent(catalog, intent, *, bundle_commit):
@@ -10,13 +11,13 @@ def validate_intent(catalog, intent, *, bundle_commit):
         raise ValueError('Design intent does not match selected bundle commit')
     catalog._anchors(intent)
     components = unique(intent['components'], 'ref', 'intent component ref')
-    used = set()
+    used = set(intent.get('dependencies', []))
     parts = {}
     for ref, component in components.items():
         part = catalog.get(component['part'], 'part')
         if component['package'] != part['package']:
             raise ValueError('Intent component package disagrees with selected part')
-        if component['footprint'] != 'pcbknowledge:'+part['package'].split(':',1)[1]:
+        if component['footprint'] != 'pcbknowledge:' + footprint_name(part['package']):
             raise ValueError('Footprint identity disagrees with selected package')
         parts[ref] = part
         used.update((part['id'], part['package']))
@@ -32,7 +33,7 @@ def validate_intent(catalog, intent, *, bundle_commit):
             connections[ref,number] = name
     bom = {}
     for item in intent['bom']:
-        if item['part'] in bom or item['quantity'] != len(item['refs']):
+        if item['part'] in bom or item['quantity'] != len(item['refs']) or len(set(item['refs'])) != len(item['refs']):
             raise ValueError('Invalid BOM quantity or duplicate part')
         bom[item['part']] = set(item['refs'])
     expected = {}
@@ -55,6 +56,8 @@ def validate_intent(catalog, intent, *, bundle_commit):
         if intent['manufacturing']['assembly_side'] != fab['assembly_side']:
             raise ValueError('Manufacturing assembly side differs from fab profile')
     if intent['status']=='EXPANDED':
+        if not isinstance(fab_id, str):
+            raise ValueError('Expanded intent requires a resolved fab profile')
         requested=intent['manufacturing']['thickness'].get('value')
         allowed=fab['thickness']
         low=allowed.get('value',allowed.get('min'))
@@ -70,27 +73,12 @@ def validate_intent(catalog, intent, *, bundle_commit):
             elif isinstance(value,list):
                 for child in value:concrete(child)
         concrete(intent)
-        required = set()
-        for ref, part in parts.items():
-            for pin in part['pins']:
-                key = ref,pin['number']
-                if pin['type'] in ('POWER_IN','GROUND','INPUT'):
-                    if key not in connections:raise ValueError('Required electrical pin is unconnected')
-                    required.add('connection:'+ref+':'+pin['number'])
-                alias=pin.get('same_net_as')
-                if alias and connections.get(key) != connections.get((ref,alias)):
-                    raise ValueError('Aliased pins must share one net')
-                if pin['type'] == 'POWER_IN':
-                    required.add('decoupling:'+ref+':'+pin['number'])
-                    rail = connections[key]
-                    grounds = {connections[ref,p['number']] for p in part['pins']
-                               if p['type']=='GROUND' and (ref,p['number']) in connections}
-                    caps = [c for c,p in parts.items() if 'capacitor.ceramic' in p['roles']]
-                    if not any(rail in {connections.get((c,p['number'])) for p in parts[c]['pins']}
-                               and grounds & {connections.get((c,p['number'])) for p in parts[c]['pins']}
-                               for c in caps):
-                        raise ValueError('IC power pin has no connected decoupling capacitor')
-        if not required <= checks.keys() or any(c['result'] != 'PASS' for c in checks.values()):
+        actual_checks = electrical_checks(parts, intent['nets'])
+        for actual in actual_checks:
+            if actual['result'] != 'PASS':
+                raise ValueError('Electrical check failed: ' + actual['id'])
+        if (any(checks.get(actual['id'], {}).get('result') != 'PASS' for actual in actual_checks)
+                or any(check['result'] != 'PASS' for check in checks.values())):
             raise ValueError('Electrical checks are incomplete or failed')
     def closure(identity):
         record=catalog.get(identity)
@@ -112,3 +100,63 @@ def validate_intent(catalog, intent, *, bundle_commit):
     if intent['verification'] != weakest:
         raise ValueError(f'Intent verification must be computed from all dependencies: {weakest}')
     return intent
+
+
+def electrical_checks(parts, nets):
+    """Recompute electrical topology checks, never trust supplied PASS labels."""
+    connections = {(p['ref'],p['pin']): net['name'] for net in nets for p in net['pins']}
+    checks = []
+    def add(identity, passed, reason):
+        checks.append({'id':identity,'result':'PASS' if passed else 'FAIL','reason':reason})
+    def component_nets(ref):
+        return {connections.get((ref,p['number'])) for p in parts[ref]['pins']} - {None}
+    for net in nets:
+        drivers = set()
+        for endpoint in net['pins']:
+            part = parts.get(endpoint['ref'])
+            if not part:
+                continue
+            pin = next((p for p in part['pins'] if p['number'] == endpoint['pin']), None)
+            if pin and pin['type'] in ('OUTPUT','POWER_OUT'):
+                drivers.add((endpoint['ref'], pin.get('same_net_as', pin['number'])))
+        if drivers:
+            add('drivers:'+net['name'], len(drivers) <= 1, 'No conflicting output drivers on one net')
+    for ref, part in sorted(parts.items()):
+        ground = {connections.get((ref,p['number'])) for p in part['pins'] if p['type']=='GROUND'} - {None}
+        for pin in part['pins']:
+            key = ref,pin['number']
+            if pin['type'] in ('POWER_IN','GROUND','INPUT'):
+                add('connection:'+ref+':'+pin['number'], key in connections, 'Required electrical pin connection')
+            if pin.get('same_net_as'):
+                add('alias:'+ref+':'+pin['number'], key in connections and connections[key] == connections.get((ref,pin['same_net_as'])), 'Aliased physical terminals share a net')
+            if pin['type']=='POWER_IN':
+                rail = connections.get(key)
+                caps = [c for c,p in parts.items() if 'capacitor.ceramic' in p['roles']]
+                passed = rail is not None and rail not in ground and any(rail in component_nets(c) and ground & component_nets(c) and len(component_nets(c)) == 2 for c in caps)
+                add('decoupling:'+ref+':'+pin['number'], passed, 'Power pin has a capacitor to its local ground')
+            if pin['type']=='OPEN_DRAIN' or pin.get('name') in ('SDA','SCL'):
+                signal = connections.get(key)
+                rails = {connections.get((ref,p['number'])) for p in part['pins'] if p['type']=='POWER_IN'} - {None,signal}
+                # A current-sense shunt does not create a different logic domain.
+                changed = True
+                while changed:
+                    before = set(rails)
+                    for resistor_ref, resistor in parts.items():
+                        resistance = resistor.get('parameters', {}).get('resistance', {})
+                        high = resistance.get('max', resistance.get('value'))
+                        if ('resistor' in resistor['roles'] and resistance.get('unit') == 'ohm'
+                                and isinstance(high, (int,float)) and high <= 1
+                                and component_nets(resistor_ref) & rails):
+                            rails.update(component_nets(resistor_ref))
+                    changed = before != rails
+                resistors = [r for r,p in parts.items() if 'resistor' in p['roles']]
+                passed = signal is not None and any(signal in component_nets(r) and rails & component_nets(r) and len(component_nets(r)) == 2 for r in resistors)
+                add('pullup:'+ref+':'+pin['number'], passed, 'Open-drain signal has a resistive pull-up to a power rail')
+        if 'led' in part['roles']:
+            resistors = [r for r,p in parts.items() if 'resistor' in p['roles']]
+            own = component_nets(ref)
+            series_nodes = {net['name'] for net in nets if len(net['pins']) == 2 and
+                            any(p['ref'] == ref for p in net['pins'])}
+            passed = any(series_nodes & component_nets(r) and len(component_nets(r)) == 2 for r in resistors)
+            add('led_resistor:'+ref, passed, 'LED has a connected current-limiting resistor')
+    return checks

@@ -84,7 +84,7 @@
       "items": {
         "$ref": "evidence.schema.json"
       },
-      "minItems": 1
+      "minItems": 0
     },
     "explicit_pads": {
       "type": "array",
@@ -229,6 +229,9 @@
             "width"
           ],
           "additionalProperties": false
+        },
+        "opposite_lead_length": {
+          "$ref": "quantity.schema.json"
         }
       },
       "required": [

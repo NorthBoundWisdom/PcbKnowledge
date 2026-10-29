@@ -111,3 +111,68 @@ annular ring and, absent a cited drill, square-pin diagonal plus 0.20 mm clearan
 Courtyards enclose both maximum body and derived pads plus the recorded margin.
 Manufacturing suitability still requires review against the actual assembly
 process; density labels are not certification or guaranteed solderability.
+
+## Coverage, commit-pinned bundles and design expansion
+
+Inspect the selected workspace before committing its completed data:
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . v2 coverage evals/golden-designs/g1.block-graph.json
+```
+
+Use the actual reference-graph filename in the selected checkout. Coverage reports
+remaining selections and inputs per block; it does not invent missing records.
+`INCOMPLETE` returns exit code 2.
+
+After committing all authority changes, build a snapshot from the clean workspace:
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . bundle build
+BUNDLE="build/bundle/$(git rev-parse HEAD).json"
+python3 configs/pcbknowledge_agent.py --repo . part search --role regulator.linear.fixed --bundle "$BUNDLE"
+python3 configs/pcbknowledge_agent.py --repo . block search --bundle "$BUNDLE"
+python3 configs/pcbknowledge_agent.py --repo . registry show registry:roles --bundle "$BUNDLE"
+```
+
+Bundle queries use the validated snapshot, not uncommitted catalog edits. A bundle
+contains commit-authenticated records and schemas, not cached source originals.
+`source authorize-read` remains a workspace-only operation. A dirty workspace
+cannot produce a bundle.
+
+Expand an agent-authored graph and export only after successful expansion:
+
+```bash
+GRAPH=build/g1/graph.json
+python3 configs/pcbknowledge_agent.py --repo . expand "$GRAPH" --bundle "$BUNDLE" --output build/g1/design-intent.json
+python3 configs/pcbknowledge_agent.py --repo . export --bundle "$BUNDLE" --graph "$GRAPH" --intent build/g1/design-intent.json --output build/g1/export
+```
+
+Expansion prints the complete intent, including typed `REFUSED` reasons, and
+returns exit code 2 for a refusal. When `--output` is supplied, the refused intent
+is also saved for diagnosis; it is not an exportable design. Export independently
+replays the graph against the pinned bundle and rejects changed or forged intents
+before writing a netlist or footprint library. The export directory contains
+`design-intent.json`, `graph.json`, `design.net` and `pcbknowledge.pretty`.
+All output paths are resolved against `--repo` and must remain below its `build/`
+directory, including after symlink resolution. Input graph, intent and bundle
+paths are ordinary explicit input paths relative to the calling directory.
+
+### Independent AI synthesis evaluation
+
+Run three genuinely separate agents with only the brief, skill and pinned query
+CLI. Do not expose the reference graph or other attempts. Preserve each original
+graph and a receipt containing `agent`, independent `reviewer`, `bundle_commit`,
+`brief_sha256`, `graph_sha256` and `reference_accessed: false`. Hashes use the
+repository canonical JSON encoding. Put each graph and receipt together under
+`graph` and `receipt` in an attempt JSON. Receipts attest the actual orchestration;
+JSON alone cannot prove model independence. A non-identical but electrically
+equivalent topology requires a substantive independent `equivalence_review`.
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . eval-synthesis --bundle build/bundle/<commit>.json --reference evals/golden-designs/g1.block-graph.json --attempt build/synthesis/one.json --attempt build/synthesis/two.json --attempt build/synthesis/three.json --output build/synthesis/result.json
+```
+
+The command re-expands every attempt and the reference from the same immutable
+bundle; a refusal is never A2. At least two of three must pass. Board oscillator
+startup, assembly and bring-up remain Stage 6 physical verification, not software
+claims of manufactured performance.
