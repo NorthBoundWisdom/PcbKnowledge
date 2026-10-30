@@ -104,6 +104,8 @@ answer here.
 | D58 | G3 reference bias | Three parallel1 kohm resistors bias TL431;0.5 mA maximum reference load and no cathode capacitor. Source test conditions remain distinct from the selected operating model. |
 | D59 | G3 land density | Use the original COMPACT pad-fillets for ADS1115 VSSOP and MH2029 chip packages after source-contact review. This preserves the selected fab clearance and all manufacturer dimensions; NOMINAL fillets left insufficient pad clearance. |
 | D60 | G3 functional wiring | Bind functional supply, reference, sensor-channel and common-return endpoints to the actual expanded nets. Each named group shares one physical net and different groups remain distinct. Fixed parameter values alone do not establish physical wiring. |
+| D61 | First corpus growth cycle | G4 is a slow optical alignment-score acquisition peripheral; G5 is a dual-temperature agreement telemetry peripheral. Reuse the G3 bench envelopes and verified blocks, with an external host responsible for sequential ADC acquisition, scoring/comparison and communication. Distinct functional channel bindings define each composition. |
+| D62 | Reused ADC channels and receiver counterexample | G4 grounds unused ADC AIN0. G5 maps temperature A/B to physical AIN0/AIN1, although the existing second port is named AIN_TIA; AIN2 measures the shared reference. N4 requests a generic +0.2 V idle receiver threshold, which the existing SN65-specific weak-bias block does not support. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -639,6 +641,8 @@ briefs per cycle (power, sensing, motor, communication, display themes), each
 needing at most a few new blocks; reach A2 for both, with refusals tested for one
 new negative brief per cycle. Record one receipt line per cycle with the corpus
 pass rate. Stop adding briefs when a cycle's new briefs pass with no new blocks.
+
+Cycle 1 input: G4 optical acquisition reaches A2 (42 checks), G5 dual-temperature telemetry reaches A2 (50 checks); N4 returns the expected typed receiver-threshold refusal. No new blocks; full gate 464 tests/no skips, independent net/budget review passed. Fresh synthesis awaits published inputs.
 
 ## Owner-only and cross-repository items
 

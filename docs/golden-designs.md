@@ -173,3 +173,19 @@ Three fresh query-mediated G3 attempts on published `5b16185` are preserved in
 submissions. All three expand with 62 passing checks. Independent graph review
 compares complete selected parameters and physical net partitions; replay resolves
 the published input bundle rather than substituting the current catalog.
+
+## First corpus growth cycle
+
+G4 is a slow optical alignment-score acquisition peripheral using the verified
+photodiode, reference, ADC and filtered supply blocks. It omits temperature and
+RS-485 functions and grounds the unused ADC AIN0 input. G5 instead uses two
+independent thermistor channels and RS-485 telemetry, without the photodiode
+front end. Its second temperature output connects to physical ADC AIN1, whose
+reused block port is named AIN_TIA; AIN2 measures the common reference.
+
+The external host performs sequential acquisition, comparison/scoring and
+communication. The briefs retain the declared bench envelopes and model inputs;
+they do not require calibrated irradiance or a guaranteed temperature-agreement
+accuracy. Functional bindings distinguish supplies, reference and each signal.
+N4 is the typed counterexample requiring a generic +0.2 V idle receiver threshold
+instead of the selected SN65HVD75-compatible negative threshold.

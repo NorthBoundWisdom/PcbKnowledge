@@ -1,0 +1,636 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "Continuous common-ground references for the optical output and supply loops; no split-ground or segregated-corridor claim.",
+      "id": "return_paths"
+    },
+    {
+      "description": "Driven mid-bias guard around the photodiode summing node; preserve the block guard geometry.",
+      "id": "guard_keepout"
+    },
+    {
+      "description": "Preserve numerical proximity and feedback-loop area constraints of the optical front end.",
+      "id": "sensitive_nets"
+    }
+  ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "input_terminal",
+          "port": "VIN"
+        },
+        {
+          "function": "rail_filter",
+          "port": "VIN"
+        }
+      ],
+      "id": "input_power"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "rail_filter",
+          "port": "VOUT"
+        },
+        {
+          "function": "reference",
+          "port": "VIN"
+        },
+        {
+          "function": "photodiode",
+          "port": "VDD"
+        },
+        {
+          "function": "adc",
+          "port": "VDD"
+        }
+      ],
+      "id": "analog_supply"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "reference",
+          "port": "VREF"
+        },
+        {
+          "function": "photodiode",
+          "port": "VREF"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_REF"
+        }
+      ],
+      "id": "reference_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "photodiode",
+          "port": "OUT"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_TIA"
+        }
+      ],
+      "id": "optical_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "input_terminal",
+          "port": "GND"
+        },
+        {
+          "function": "rail_filter",
+          "port": "GND"
+        },
+        {
+          "function": "reference",
+          "port": "GND"
+        },
+        {
+          "function": "photodiode",
+          "port": "GND"
+        },
+        {
+          "function": "adc",
+          "port": "GND"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_NTC"
+        }
+      ],
+      "id": "common_return"
+    }
+  ],
+  "functions": [
+    {
+      "category": "sensor.photodiode",
+      "count": 1,
+      "description": "940 nm alignment-beacon acquisition with a buffered-bias transimpedance stage.",
+      "id": "photodiode",
+      "parameters": {
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 reserved dual-op-amp and output-load budget; not a datasheet maximum.",
+          "unit": "A",
+          "value": 0.002
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "photocurrent": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-05,
+          "min": 0,
+          "note": "D55 imposed optical photocurrent budget at 940 nm; not an irradiance-transfer guarantee.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [
+        "BPW34",
+        "MCP6002"
+      ],
+      "requirements": [
+        "D61: acquire a DC-1 Hz optical alignment signal with imposed 0-50 uA photocurrent. External optics set this budget; no guaranteed irradiance conversion, calibration accuracy or closed-loop alignment controller."
+      ]
+    },
+    {
+      "category": "power.reference",
+      "count": 1,
+      "description": "TL431 reference.",
+      "id": "reference",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "Engineering operating envelope for nonprecision bench reference; not a guaranteed TL431 accuracy interval.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [
+        "TL431"
+      ],
+      "requirements": [
+        "TL431 reference."
+      ]
+    },
+    {
+      "category": "sensor.adc",
+      "count": 1,
+      "description": "ADS1115 ADC on I2C.",
+      "id": "adc",
+      "parameters": {
+        "analog_input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum host+board I2C capacitance model.",
+          "unit": "F",
+          "value": 5e-11
+        },
+        "full_scale_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "V",
+          "value": 4.096
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering total supply budget: up to2.2mA for three pullups plus0.8mA IC allowance; not a datasheet guaranteed current.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering maximum reference-input loading scenario; source differential input impedance is typical only, not a guaranteed loading bound.",
+          "unit": "A",
+          "value": 1e-05
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 8
+        }
+      },
+      "part_preferences": [
+        "ADS1115"
+      ],
+      "requirements": [
+        "External host selects the optical AIN1 channel and reference AIN2 channel, configures +/-4.096 V range and 8 nominal SPS, polls conversion completion, and computes a score. Unused AIN0 is grounded."
+      ]
+    },
+    {
+      "category": "power.filter",
+      "count": 1,
+      "description": "MH2029 ferrite rail filter.",
+      "id": "rail_filter",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [
+        "MH2029"
+      ],
+      "requirements": [
+        "MH2029 ferrite rail filter."
+      ]
+    },
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "External regulated 3.2-3.4 V,150 mA bench power header.",
+      "id": "input_terminal",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External source declared available continuous current budget.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Required external source rail range.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "External regulated 3.2-3.4 V,150 mA bench power header."
+      ]
+    },
+    {
+      "category": "mechanical.mounting",
+      "count": 1,
+      "description": "Four M3 mounting holes.",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Four M3 mounting holes."
+      ]
+    }
+  ],
+  "id": "G4",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 5e-05
+      },
+      "description": "940 nm bench optical stimulus; electrical budget is imposed photocurrent, not a radiometric calibration.",
+      "id": "optical",
+      "signals": [
+        "LIGHT"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.003
+      },
+      "description": "External scoring host: 100 kHz I2C, 50 pF total bus limit, 8 nominal SPS single-shot with OS polling. Host owns channel selection and score computation; no firmware is supplied.",
+      "id": "i2c",
+      "signals": [
+        "SDA",
+        "SCL",
+        "ALERT",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.15
+      },
+      "description": "Regulated bench power input.",
+      "id": "input_terminal",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.2,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "D55 two-layer mixed SMT/through-hole bench assembly.",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "input_terminal",
+      "i2c"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 20
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 100
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 80
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D38",
+    "D55",
+    "D56",
+    "D57",
+    "D58",
+    "D59",
+    "D60",
+    "D61"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "function": "rail_filter",
+        "id": "analog",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 delegated G3 bench design input.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "description": "External regulated bench source.",
+        "function": "input_terminal",
+        "id": "input_power",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 delegated G3 bench design input.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Competition alignment peripheral acquiring a slowly varying 940 nm beacon signal; an external I2C host computes the alignment score. No onboard controller, temperature channel or RS-485 link.",
+  "title": "Slow optical alignment score sensor"
+}

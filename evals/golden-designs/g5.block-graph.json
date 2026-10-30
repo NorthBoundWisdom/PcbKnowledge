@@ -1,0 +1,565 @@
+{
+  "brief": "G5",
+  "connections": [
+    {
+      "endpoints": [
+        {
+          "instance": "input",
+          "port": "VIN"
+        },
+        {
+          "instance": "filter",
+          "port": "VIN"
+        },
+        {
+          "instance": "rs485",
+          "port": "VDD"
+        }
+      ],
+      "net": "INPUT_3V3"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "filter",
+          "port": "VOUT"
+        },
+        {
+          "instance": "reference",
+          "port": "VIN"
+        },
+        {
+          "instance": "adc",
+          "port": "VDD"
+        }
+      ],
+      "net": "ANALOG_3V3"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "reference",
+          "port": "VREF"
+        },
+        {
+          "instance": "thermistor_a",
+          "port": "VREF"
+        },
+        {
+          "instance": "adc",
+          "port": "AIN_REF"
+        },
+        {
+          "instance": "thermistor_b",
+          "port": "VREF"
+        }
+      ],
+      "net": "VREF"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "thermistor_a",
+          "port": "OUT"
+        },
+        {
+          "instance": "adc",
+          "port": "AIN_NTC"
+        }
+      ],
+      "net": "FIRST_TEMPERATURE"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "input",
+          "port": "GND"
+        },
+        {
+          "instance": "filter",
+          "port": "GND"
+        },
+        {
+          "instance": "reference",
+          "port": "GND"
+        },
+        {
+          "instance": "thermistor_a",
+          "port": "GND"
+        },
+        {
+          "instance": "adc",
+          "port": "GND"
+        },
+        {
+          "instance": "rs485",
+          "port": "GND"
+        },
+        {
+          "instance": "thermistor_b",
+          "port": "GND"
+        }
+      ],
+      "net": "GND"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "thermistor_b",
+          "port": "OUT"
+        },
+        {
+          "instance": "adc",
+          "port": "AIN_TIA"
+        }
+      ],
+      "net": "SECOND_TEMPERATURE"
+    }
+  ],
+  "id": "g5-reference",
+  "instances": [
+    {
+      "block": "block:g3-power-input-header",
+      "id": "input",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External source declared available continuous current budget.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Required external source rail range.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "input_terminal"
+      ]
+    },
+    {
+      "block": "block:g3-rail-filter",
+      "id": "filter",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VOUT",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "rail_filter"
+      ]
+    },
+    {
+      "block": "block:g3-reference",
+      "id": "reference",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "Engineering operating envelope for nonprecision bench reference; not a guaranteed TL431 accuracy interval.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "VREF",
+          "type": "POWER_OUT"
+        }
+      ],
+      "requirements": [
+        "reference"
+      ]
+    },
+    {
+      "block": "block:g3-thermistor",
+      "id": "thermistor_a",
+      "parameters": {
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "D55 bench operating envelope.",
+          "unit": "degC"
+        }
+      },
+      "ports": [
+        {
+          "name": "VREF",
+          "type": "INPUT"
+        },
+        {
+          "name": "OUT",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "thermistor_a",
+        "thermistor_a_input"
+      ]
+    },
+    {
+      "block": "block:g3-adc",
+      "id": "adc",
+      "parameters": {
+        "analog_input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum host+board I2C capacitance model.",
+          "unit": "F",
+          "value": 5e-11
+        },
+        "full_scale_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "V",
+          "value": 4.096
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering total supply budget: up to2.2mA for three pullups plus0.8mA IC allowance; not a datasheet guaranteed current.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering maximum reference-input loading scenario; source differential input impedance is typical only, not a guaranteed loading bound.",
+          "unit": "A",
+          "value": 1e-05
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 8
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "AIN_NTC",
+          "type": "ANALOG"
+        },
+        {
+          "name": "AIN_TIA",
+          "type": "ANALOG"
+        },
+        {
+          "name": "AIN_REF",
+          "type": "ANALOG"
+        }
+      ],
+      "requirements": [
+        "adc",
+        "i2c"
+      ]
+    },
+    {
+      "block": "block:g3-rs485",
+      "id": "rs485",
+      "parameters": {
+        "data_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 115200
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "receiver_load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0006,
+          "min": 0,
+          "note": "Adverse aggregate two-receiver differential load model, not a guaranteed device leakage bound.",
+          "unit": "A"
+        },
+        "receiver_positive_threshold": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Both nodes use SN65HVD75-compatible positive-going threshold <=-20mV; remote node has120ohm1% termination and no additional bias pair.",
+          "unit": "V",
+          "value": -0.02
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "rs485",
+        "host_uart"
+      ]
+    },
+    {
+      "block": "block:mounting-holes",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "ports": [],
+      "requirements": [
+        "mounting"
+      ]
+    },
+    {
+      "block": "block:g3-thermistor",
+      "id": "thermistor_b",
+      "parameters": {
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "D55 bench operating envelope.",
+          "unit": "degC"
+        }
+      },
+      "ports": [
+        {
+          "name": "VREF",
+          "type": "INPUT"
+        },
+        {
+          "name": "OUT",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "thermistor_b",
+        "thermistor_b_input"
+      ]
+    }
+  ],
+  "interface_status": "PLANNED_BLOCK_CONTRACTS",
+  "requirements": [
+    "return_paths",
+    "thermal_keepouts",
+    "sensitive_nets"
+  ],
+  "schema": "pcbknowledge.block-graph.v2",
+  "status": "DRAFT"
+}

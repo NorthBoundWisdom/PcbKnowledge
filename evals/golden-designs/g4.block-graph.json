@@ -1,0 +1,445 @@
+{
+  "brief": "G4",
+  "connections": [
+    {
+      "endpoints": [
+        {
+          "instance": "input",
+          "port": "VIN"
+        },
+        {
+          "instance": "filter",
+          "port": "VIN"
+        }
+      ],
+      "net": "INPUT_3V3"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "filter",
+          "port": "VOUT"
+        },
+        {
+          "instance": "reference",
+          "port": "VIN"
+        },
+        {
+          "instance": "photodiode",
+          "port": "VDD"
+        },
+        {
+          "instance": "adc",
+          "port": "VDD"
+        }
+      ],
+      "net": "ANALOG_3V3"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "reference",
+          "port": "VREF"
+        },
+        {
+          "instance": "photodiode",
+          "port": "VREF"
+        },
+        {
+          "instance": "adc",
+          "port": "AIN_REF"
+        }
+      ],
+      "net": "VREF"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "photodiode",
+          "port": "OUT"
+        },
+        {
+          "instance": "adc",
+          "port": "AIN_TIA"
+        }
+      ],
+      "net": "OPTICAL"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "input",
+          "port": "GND"
+        },
+        {
+          "instance": "filter",
+          "port": "GND"
+        },
+        {
+          "instance": "reference",
+          "port": "GND"
+        },
+        {
+          "instance": "photodiode",
+          "port": "GND"
+        },
+        {
+          "instance": "adc",
+          "port": "GND"
+        },
+        {
+          "instance": "adc",
+          "port": "AIN_NTC"
+        }
+      ],
+      "net": "GND"
+    }
+  ],
+  "id": "g4-reference",
+  "instances": [
+    {
+      "block": "block:g3-power-input-header",
+      "id": "input",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External source declared available continuous current budget.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Required external source rail range.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "input_terminal"
+      ]
+    },
+    {
+      "block": "block:g3-rail-filter",
+      "id": "filter",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VOUT",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "rail_filter"
+      ]
+    },
+    {
+      "block": "block:g3-reference",
+      "id": "reference",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "Engineering operating envelope for nonprecision bench reference; not a guaranteed TL431 accuracy interval.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "VREF",
+          "type": "POWER_OUT"
+        }
+      ],
+      "requirements": [
+        "reference"
+      ]
+    },
+    {
+      "block": "block:g3-photodiode",
+      "id": "photodiode",
+      "parameters": {
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 reserved dual-op-amp and output-load budget; not a datasheet maximum.",
+          "unit": "A",
+          "value": 0.002
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "photocurrent": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-05,
+          "min": 0,
+          "note": "D55 imposed optical photocurrent budget at 940 nm; not an irradiance-transfer guarantee.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VREF",
+          "type": "INPUT"
+        },
+        {
+          "name": "OUT",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "photodiode",
+        "optical"
+      ]
+    },
+    {
+      "block": "block:g3-adc",
+      "id": "adc",
+      "parameters": {
+        "analog_input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum host+board I2C capacitance model.",
+          "unit": "F",
+          "value": 5e-11
+        },
+        "full_scale_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "V",
+          "value": 4.096
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering total supply budget: up to2.2mA for three pullups plus0.8mA IC allowance; not a datasheet guaranteed current.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering maximum reference-input loading scenario; source differential input impedance is typical only, not a guaranteed loading bound.",
+          "unit": "A",
+          "value": 1e-05
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 8
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "AIN_NTC",
+          "type": "ANALOG"
+        },
+        {
+          "name": "AIN_TIA",
+          "type": "ANALOG"
+        },
+        {
+          "name": "AIN_REF",
+          "type": "ANALOG"
+        }
+      ],
+      "requirements": [
+        "adc",
+        "i2c"
+      ]
+    },
+    {
+      "block": "block:mounting-holes",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "ports": [],
+      "requirements": [
+        "mounting"
+      ]
+    }
+  ],
+  "interface_status": "PLANNED_BLOCK_CONTRACTS",
+  "requirements": [
+    "return_paths",
+    "guard_keepout",
+    "sensitive_nets"
+  ],
+  "schema": "pcbknowledge.block-graph.v2",
+  "status": "DRAFT"
+}

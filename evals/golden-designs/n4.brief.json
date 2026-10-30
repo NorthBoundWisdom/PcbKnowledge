@@ -1,0 +1,823 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "Continuous common-ground reference paths for both temperature outputs and the communication interface.",
+      "id": "return_paths"
+    },
+    {
+      "description": "Preserve each thermistor component keepout to reduce local thermal coupling; this does not specify measurement accuracy.",
+      "id": "thermal_keepouts"
+    },
+    {
+      "description": "Preserve each NTC filter proximity and local return constraints; route the two acquisition channels independently.",
+      "id": "sensitive_nets"
+    }
+  ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "input_terminal",
+          "port": "VIN"
+        },
+        {
+          "function": "rail_filter",
+          "port": "VIN"
+        },
+        {
+          "function": "rs485",
+          "port": "VDD"
+        }
+      ],
+      "id": "input_power"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "rail_filter",
+          "port": "VOUT"
+        },
+        {
+          "function": "reference",
+          "port": "VIN"
+        },
+        {
+          "function": "adc",
+          "port": "VDD"
+        }
+      ],
+      "id": "analog_supply"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "reference",
+          "port": "VREF"
+        },
+        {
+          "function": "thermistor_a",
+          "port": "VREF"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_REF"
+        },
+        {
+          "function": "thermistor_b",
+          "port": "VREF"
+        }
+      ],
+      "id": "reference_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "thermistor_a",
+          "port": "OUT"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_NTC"
+        }
+      ],
+      "id": "first_temperature_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "input_terminal",
+          "port": "GND"
+        },
+        {
+          "function": "rail_filter",
+          "port": "GND"
+        },
+        {
+          "function": "reference",
+          "port": "GND"
+        },
+        {
+          "function": "thermistor_a",
+          "port": "GND"
+        },
+        {
+          "function": "adc",
+          "port": "GND"
+        },
+        {
+          "function": "rs485",
+          "port": "GND"
+        },
+        {
+          "function": "thermistor_b",
+          "port": "GND"
+        }
+      ],
+      "id": "common_return"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "thermistor_b",
+          "port": "OUT"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_TIA"
+        }
+      ],
+      "id": "second_temperature_signal"
+    }
+  ],
+  "expected_refusal": {
+    "code": "CHECK_FAILED",
+    "requirement": "rs485"
+  },
+  "functions": [
+    {
+      "category": "sensor.temperature",
+      "count": 1,
+      "description": "First local NTC sensing site for host-side agreement evaluation.",
+      "id": "thermistor_a",
+      "parameters": {
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "D55 bench operating envelope.",
+          "unit": "degC"
+        }
+      },
+      "part_preferences": [
+        "NTCLE100"
+      ],
+      "requirements": [
+        "D61: first independently wired 15-35 degC NTC channel, using the stated Beta approximation and modeled filter. No absolute or inter-channel temperature-accuracy guarantee."
+      ]
+    },
+    {
+      "category": "power.reference",
+      "count": 1,
+      "description": "TL431 reference.",
+      "id": "reference",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "Engineering operating envelope for nonprecision bench reference; not a guaranteed TL431 accuracy interval.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [
+        "TL431"
+      ],
+      "requirements": [
+        "TL431 reference."
+      ]
+    },
+    {
+      "category": "sensor.adc",
+      "count": 1,
+      "description": "ADS1115 ADC on I2C.",
+      "id": "adc",
+      "parameters": {
+        "analog_input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum host+board I2C capacitance model.",
+          "unit": "F",
+          "value": 5e-11
+        },
+        "full_scale_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "V",
+          "value": 4.096
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering total supply budget: up to2.2mA for three pullups plus0.8mA IC allowance; not a datasheet guaranteed current.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering maximum reference-input loading scenario; source differential input impedance is typical only, not a guaranteed loading bound.",
+          "unit": "A",
+          "value": 1e-05
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 8
+        }
+      },
+      "part_preferences": [
+        "ADS1115"
+      ],
+      "requirements": [
+        "D61: physical AIN0 reads site A, AIN1 reads site B, and AIN2 reads the reference. Reused port AIN_TIA is the AIN1 label only, not a photodiode requirement. External host selects channels, polls OS and handles sequential 8 nominal SPS conversions."
+      ]
+    },
+    {
+      "category": "power.filter",
+      "count": 1,
+      "description": "MH2029 ferrite rail filter.",
+      "id": "rail_filter",
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [
+        "MH2029"
+      ],
+      "requirements": [
+        "MH2029 ferrite rail filter."
+      ]
+    },
+    {
+      "category": "interface.rs485",
+      "count": 1,
+      "description": "Two-node RS-485 link with a generic remote receiver requiring +0.2 V idle differential voltage.",
+      "id": "rs485",
+      "parameters": {
+        "data_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 115200
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "receiver_load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0006,
+          "min": 0,
+          "note": "Adverse aggregate two-receiver differential load model, not a guaranteed device leakage bound.",
+          "unit": "A"
+        },
+        "receiver_positive_threshold": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D62 generic remote receiver requires an idle positive-going differential threshold of +0.2 V; the existing negative-threshold fail-safe contract is not acceptable.",
+          "unit": "V",
+          "value": 0.2
+        }
+      },
+      "part_preferences": [
+        "SN65HVD75"
+      ],
+      "requirements": [
+        "D62: retain the two 120 ohm terminations and stated operating budgets, but require the idle bus to meet a generic remote receiver +0.2 V threshold. A catalog block with a different fixed threshold cannot satisfy this requirement."
+      ]
+    },
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "External regulated 3.2-3.4 V,150 mA bench power header.",
+      "id": "input_terminal",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External source declared available continuous current budget.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Required external source rail range.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "External regulated 3.2-3.4 V,150 mA bench power header."
+      ]
+    },
+    {
+      "category": "mechanical.mounting",
+      "count": 1,
+      "description": "Four M3 mounting holes.",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Four M3 mounting holes."
+      ]
+    },
+    {
+      "category": "sensor.temperature",
+      "count": 1,
+      "description": "Second local NTC sensing site for host-side agreement evaluation.",
+      "id": "thermistor_b",
+      "parameters": {
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "D55 bench operating envelope.",
+          "unit": "degC"
+        }
+      },
+      "part_preferences": [
+        "NTCLE100"
+      ],
+      "requirements": [
+        "D61: second independently wired 15-35 degC NTC channel. External host performs agreement comparison after sequential conversions; measurements are not simultaneous."
+      ]
+    }
+  ],
+  "id": "N4",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.0003
+      },
+      "description": "First on-board NTC sensing site, 15-35 degC Beta-model acquisition; ADC physical AIN0.",
+      "id": "thermistor_a_input",
+      "signals": [
+        "SENSE",
+        "RETURN"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.003
+      },
+      "description": "External comparison host: 100 kHz I2C, 50 pF total bus limit, 8 nominal SPS single-shot with OS polling. Host owns channel sequencing and comparison; no simultaneous sampling or guaranteed disagreement threshold.",
+      "id": "i2c",
+      "signals": [
+        "SDA",
+        "SCL",
+        "ALERT",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.06
+      },
+      "description": "Local transceiver and a generic remote RS-485 receiver requiring +0.2 V idle differential voltage; two 120 ohm terminations, one bias pair, common ground.",
+      "id": "rs485",
+      "signals": [
+        "A",
+        "B",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.008
+      },
+      "description": "Separate external-host UART/control header. Host supplies DI and DIR and receives RO, default receive; comparison results are transmitted by host software, not by an onboard MCU.",
+      "id": "host_uart",
+      "signals": [
+        "DI",
+        "RO",
+        "DIR",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.15
+      },
+      "description": "Regulated bench power input.",
+      "id": "input_terminal",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.2,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.0003
+      },
+      "description": "Second on-board NTC sensing site, 15-35 degC Beta-model acquisition; ADC physical AIN1, exposed by the reused block as AIN_TIA.",
+      "id": "thermistor_b_input",
+      "signals": [
+        "SENSE",
+        "RETURN"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "D55 two-layer mixed SMT/through-hole bench assembly.",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "input_terminal",
+      "i2c",
+      "rs485",
+      "host_uart"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 20
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 100
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 80
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D38",
+    "D55",
+    "D56",
+    "D57",
+    "D58",
+    "D59",
+    "D60",
+    "D61",
+    "D62"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "function": "rail_filter",
+        "id": "analog",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 delegated G3 bench design input.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "description": "External regulated bench source.",
+        "function": "input_terminal",
+        "id": "input_power",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 delegated G3 bench design input.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "The dual-temperature telemetry peripheral must support a generic remote receiver requiring at least +0.2 V idle differential voltage. The catalog fixed weak-bias network supports the stated fail-safe receiver contract instead.",
+  "title": "Negative corpus: generic RS-485 idle receiver threshold"
+}
