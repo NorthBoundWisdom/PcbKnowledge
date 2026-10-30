@@ -5,6 +5,7 @@ from pathlib import Path
 import uuid
 
 from pcbknowledge.serialization import canonical_json
+from .edge_constraints import validate_edge_constraints
 from .footprints import derive_footprint, export_kicad
 from .handoff_rules import export_rules, millimeters, project_settings
 from .netlist import export_design
@@ -64,6 +65,8 @@ def _footprint(intent, component, catalog, position, connections):
 
 def board_tree(intent, catalog):
     width, height = _outline(intent)
+    validate_edge_constraints(intent['layout'], intent['mechanical']['outline_envelope'],
+                              dimensions={'width': width, 'length': height})
     positions = _mount_positions(intent, width, height)
     nets = sorted(intent['nets'], key=lambda item: item['name'])
     connections = {(p['ref'], p['pin']): (i, net['name'])

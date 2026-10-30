@@ -55,6 +55,8 @@ def validate_intent(catalog, intent, *, bundle_commit):
         if intent['manufacturing']['assembly_side'] != fab['assembly_side']:
             raise ValueError('Manufacturing assembly side differs from fab profile')
     if intent['status'] == 'EXPANDED':
+        from .edge_constraints import validate_edge_constraints
+        validate_edge_constraints(intent['layout'], intent['mechanical']['outline_envelope'])
         if not isinstance(fab_id, str):
             raise ValueError('Expanded intent requires a resolved fab profile')
         requested = intent['manufacturing']['thickness'].get('value')

@@ -96,6 +96,7 @@ answer here.
 | D50 | G2 application models | Use 56 uH minimum operating inductance and the manufacturer's 0.81 A overall rating; capacitor ESR maximum times two and ripple rating times one-half; two local 10 uF ceramics with 0.5 bias-retention model; TPS switch resistance times two and 90 degC/W board model; fuse 0.75 continuous and 0.9 temperature factors with twice nominal resistance; SS14 0.6 V and 176 degC/W model; FET gate allocation 100 uA. Source test conditions remain recorded separately. |
 | D51 | G2 feedback and damping | Use 10 kOhm upper feedback and 10 kOhm parallel with (10 kOhm + 4.7 kOhm) lower feedback; two parallel 0.1 Ohm resistors provide the output capacitor's series damping floor. |
 | D52 | Buck enable connection | Leave TPS5430 ENA unconnected as explicitly permitted by its internal pull-up; the part records the source-backed ENABLED default and the input checker retains it. |
+| D53 | G2 input edge | Place the power input header at the RIGHT edge within 5 mm, matching the existing header rule; the brief requires edge access but no particular side. This removes opposed defaults on the exported 80 by 100 mm outline. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -594,7 +595,7 @@ Independent review found one decision-attribution wording issue, corrected; sour
   COM pin; low-side MOSFET channel with VGS-specified RDS(on) and D41 loss check;
   INA219 reused as the input monitor. Delete records left unreachable.
 - [x] External load connectors for every relay and low-side channel.
-- [ ] Blocks with hot-loop, thermal, Kelvin and edge constraints; new constraint
+- [x] Blocks with hot-loop, thermal, Kelvin and edge constraints; new constraint
   kinds are registry additions with `layout check` support from Stage 7.
 - [x] Expansion checks for switching converters: inductor saturation and RMS
   current within rating, input and output capacitor ripple-current rating,
@@ -605,8 +606,9 @@ Independent review found one decision-attribution wording issue, corrected; sour
 Exit: G2 reference and two of three AI attempts reach A2; Stage 7 exports and
 `layout check` cover every G2 constraint kind.
 
-Partial receipt (before review): contracts `f3c6aae`, data `8e93bcb`; 298 tests,
-no skips, 112 records, 88/88 reachable. G2 graph `REFUSED` pending 9b.
+Input receipt: reference published at `a2166bd`, boundary repair `3375fc8`; 381 tests/no skips and exact CI PASS.
+Original three query-mediated attempts are preserved in `evals/synthesis/g2-round1` with 101 PASS checks each.
+They exposed opposed edge defaults on the derived outline; D53 corrects the input edge before final synthesis.
 
 ## Stage 10 — G3 to A2
 

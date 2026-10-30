@@ -108,6 +108,11 @@ not passes. [ADR-025](adr/ADR-025-derived-board-handoff.md) defines this boundar
 no PcbCore runtime dependency. [ADR-023](adr/ADR-023-design-intent-handoff.md) owns
 the JSON handoff and derived KiCad interchange contract.
 
+Expansion rejects mutually incompatible directional edge intervals across the
+shared maximum outline envelope. An envelope is not a fixed board size. The
+derived KiCad handoff additionally checks feasibility against its actual chosen
+rectangle before export; LEFT/RIGHT use width and TOP/BOTTOM use length.
+
 ## Reproducing historical receipts
 
 Strict contract and audit upgrades are not compatibility shims. Reproduce an older

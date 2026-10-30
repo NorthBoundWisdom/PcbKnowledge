@@ -143,7 +143,7 @@ class HandoffTests(unittest.TestCase):
         item = copy.deepcopy(next(c for c in changed['layout'] if c['kind'] == 'EDGE_DISTANCE'))
         item['distance']['value'] += 1
         changed['layout'].append(item)
-        with self.assertRaisesRegex(ValueError, 'Conflicting'):
+        with self.assertRaisesRegex(ValueError, 'Incompatible edge constraints for mounting_H1 on width'):
             board_tree(changed, self.catalog)
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary).resolve()
