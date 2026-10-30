@@ -5,6 +5,39 @@ from .catalog import LEVELS
 from .expansion import dependency_closure
 
 
+def coverage_all(catalog):
+    """Summarize every brief, including those with no preserved graph yet.
+
+    Graph readiness is not electrical acceptance. All preserved graphs are
+    reported, rather than choosing the best attempt and hiding the others.
+    """
+    from .audit import design_inputs, require_audit
+    from .expansion import expand
+
+    require_audit(catalog)
+    graphs, briefs = design_inputs(catalog.root)
+    if any(graph['brief'] not in briefs for graph in graphs):
+        raise ValueError('Preserved graph refers to a missing brief')
+    rows = []
+    for identity, brief in sorted(briefs.items()):
+        results = []
+        for graph in graphs:
+            if graph['brief'] != identity:
+                continue
+            readiness = coverage(catalog, graph)
+            intent = expand(catalog, graph, brief, bundle_commit='0' * 40)
+            results.append({'graph': graph['id'], 'ready': readiness['ready'],
+                            'total': readiness['total'], 'status': intent['status'],
+                            'refusals': intent['refusals']})
+        status = ('NOT_RUN' if not results else
+                  'READY' if all(item['status'] == 'EXPANDED' for item in results) else 'INCOMPLETE')
+        rows.append({'brief': identity, 'status': status, 'graphs': results,
+                     'expected_refusal': brief.get('expected_refusal'),
+                     'remaining': [] if results else ['No preserved block graph']})
+    return {'status': 'READY' if rows and all(row['status'] == 'READY' for row in rows) else 'INCOMPLETE',
+            'briefs': rows}
+
+
 def coverage(catalog, graph):
     catalog.structure(graph, 'block-graph.schema.json')
     results = []

@@ -11,7 +11,12 @@
       "enum": [
         "G1",
         "G2",
-        "G3"
+        "G3",
+        "G1V1",
+        "G1V2",
+        "N1",
+        "N2",
+        "N3"
       ]
     },
     "title": {
@@ -475,6 +480,23 @@
         "additionalProperties": false
       },
       "minItems": 6
+    },
+    "expected_refusal": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "const": "UNSATISFIED_SELECTION"
+        },
+        "requirement": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        }
+      },
+      "required": [
+        "code",
+        "requirement"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [

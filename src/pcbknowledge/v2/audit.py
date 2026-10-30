@@ -56,6 +56,11 @@ def audit_catalog(catalog, graphs=None, briefs=None):
         graphs, loaded_briefs = design_inputs(catalog.root)
         briefs = loaded_briefs if briefs is None else briefs
     briefs = briefs or {}
+    for brief in briefs.values():
+        catalog.structure(brief, 'design-brief.schema.json')
+        expected = brief.get('expected_refusal')
+        if expected and expected['requirement'] not in {item['id'] for item in brief['functions']}:
+            raise ValueError('Expected refusal must name a required function')
     reachable = set()
     for graph in graphs:
         catalog.structure(graph, 'block-graph.schema.json')

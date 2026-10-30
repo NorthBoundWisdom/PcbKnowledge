@@ -62,6 +62,9 @@ answer here.
 | D25 | Fine-pitch generated land allowance | Implementer-selected after real KiCad DRC: cap the nominal LQFP side fillet at 0.04 mm per side for the 0.50 mm pitch / 0.27 mm maximum STM32 lead width, giving a 0.35 mm pad and 0.15 mm inter-pad gap. Preserve cited dimensions and fab clearance; this is a derived engineering land-pattern decision, not a manufacturer recommendation. |
 | D26 | G1 USB land-pattern compatibility | Implementer-selected under D10: replace Wurth 632723300011, whose exact recommended annular rings fail the unchanged 0.25 mm fab floor, with Hirose CX90B2-24P using its exact drawing and handling guide. Keep 5 V sink, 1.6 mm PCB and fab limits; no enlargement of the original pattern or DRC waiver. |
 | D27 | Irregular connector courtyard datum | Keep CX90B2-24P manufacturer pad coordinates and cited physical body dimensions. A conservative 4.4 mm courtyard margin bounds the uncertain body-center offset about that drawing datum; it is an implementer envelope, not a manufacturer land recommendation or measured body size. |
+| D28 | G1V1 sensor preference | TMP102AIDRLT is the initial I2C temperature-sensor candidate; keep the G1 3.3 V / 150 mA rail budget and replace current monitoring, not add another function. Catalog capability and evidence remain to be verified. |
+| D29 | G1V2 bridge preference | CP2102N-A02-GQFN28 is the initial USB-to-UART candidate; reuse the USB connector data pair and replace the UART header without increasing the 150 mA rail budget. Evidence and differential-pair constraints remain to be verified. |
+| D30 | Negative corpus inputs | N1 replaces USB input with 12 V DC; N2 requires Wi-Fi; N3 replaces the LQFP MCU requirement with BGA. Distinct function categories prevent satisfying these requirements with unchanged G1 blocks. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -489,7 +492,7 @@ Review: 13 checks; pad-geometry forgery and two source-claim findings fixed, boa
 Goal: prove the catalog and the synthesis skill work beyond the one design they
 were built for, and that the closed world refuses instead of inventing.
 
-- [ ] Write corpus briefs (D21) under `evals/golden-designs/`:
+- [x] Write corpus briefs (D21) under `evals/golden-designs/`:
   - G1V1: G1 with a different I2C sensor in place of the current monitor (needs
     one new part and block).
   - G1V2: G1 plus a USB-to-UART bridge replacing the UART header (needs one new
@@ -503,8 +506,11 @@ were built for, and that the closed world refuses instead of inventing.
   used for G1.
 - [ ] Add the parts and blocks G1V1 and G1V2 need (independently verified), then
   run the evaluation. The orphan audit from 6a applies.
-- [ ] `v2 coverage --all` prints one line per brief (blocks ready, refusals) for
+- [x] `v2 coverage --all` prints one line per brief (blocks ready, refusals) for
   stage receipts.
+
+Corpus-input slice: five briefs and `coverage --all` are implemented; independent
+review fixed missing-brief graph omission. New synthesis evaluations remain NOT_RUN.
 
 Exit: G1V1 and G1V2 reach A2 in at least two of three attempts each; N1-N3 refuse
 with the expected typed reason in three of three attempts and no invented part or

@@ -26,9 +26,14 @@ python3 configs/pcbknowledge_workflow.py build
 python3 configs/pcbknowledge_agent.py --repo . v2 validate
 python3 configs/pcbknowledge_agent.py --repo . part search --role monitor.current
 python3 configs/pcbknowledge_agent.py --repo . v2 coverage evals/golden-designs/g1.block-graph.json
+python3 configs/pcbknowledge_agent.py --repo . v2 coverage --all
 python3 configs/pcbknowledge_agent.py --repo . bundle build
 python3 configs/pcbknowledge_workflow.py open --workspace .
 ```
+
+`v2 coverage --all` emits one JSON line per brief, including all preserved graphs.
+A brief without a graph is `NOT_RUN`; incomplete corpus coverage exits 2. This
+working-tree diagnostic is not a commit-pinned synthesis acceptance receipt.
 
 The viewer runs at `http://127.0.0.1:18080/`; keep the terminal open and use Ctrl+C
 to stop. Select a citation to inspect its source evidence. The GUI and query CLI are

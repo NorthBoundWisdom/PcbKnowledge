@@ -107,3 +107,14 @@ Contract tests check shapes, reference closure and requirement coverage. G1
 operating and mechanical inputs use D7 engineering defaults. Header allocations are 5 mA SWD, 40 mA I2C expansion and 5 mA UART, totaling
 50 mA within the 150 mA logger budget. The component height is explicitly unconstrained.
 A1/A2 pass; A3-A6 require layout, DRC, fabrication and physical bring-up (Stage 7).
+
+## Stage 8 corpus inputs
+
+G1V1 replaces current monitoring with I2C temperature sensing; G1V2 replaces the
+UART header with a USB-to-UART bridge. D28 and D29 select initial part preferences,
+not verified catalog capabilities. Both preserve G1's rail and board budgets.
+N1 requires 12 V DC input, N2 Wi-Fi, and N3 a BGA MCU (D30). Each negative brief
+binds an `expected_refusal` code to its required function; this is an evaluation
+expectation, not an observed refusal or permission to invent a missing block.
+The new briefs have no preserved synthesis graphs yet. `v2 coverage --all`
+reports them as `NOT_RUN`; Stage 8 acceptance awaits real independent attempts.

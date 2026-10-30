@@ -13,7 +13,7 @@ from .audit import audit_catalog, require_audit
 from .evidence import add_evidence, fetch_evidence
 from .bundle import Bundle, build_bundle
 from .catalog import Catalog, MAX_RECORD_BYTES
-from .coverage import coverage
+from .coverage import coverage, coverage_all
 from .expansion import expand_bundle, validate_expansion
 from .layout import check_board
 from .handoff import export_handoff
@@ -34,7 +34,8 @@ def parser():
     add = evidence.add_parser('add')
     add.add_argument('file', type=Path)
     check = v2.add_parser('coverage')
-    check.add_argument('graph', type=Path)
+    check.add_argument('graph', type=Path, nargs='?')
+    check.add_argument('--all', action='store_true')
     check.add_argument('--bundle', type=Path)
     footprint = groups.add_parser('footprint').add_subparsers(dest='action', required=True)
     footprint_export = footprint.add_parser('export')
@@ -209,6 +210,10 @@ def drc_command(arguments, root):
 
 def validation_command(arguments, catalog):
     if arguments.action == 'coverage':
+        if arguments.all == (arguments.graph is not None):
+            raise ValueError('Select a graph or --all, exclusively')
+        if arguments.all:
+            return coverage_all(catalog)
         return coverage(catalog, load_document(arguments.graph))
     if arguments.action == 'audit':
         return audit_catalog(catalog)
@@ -255,7 +260,11 @@ def main(argv=None):
     try:
         root = validate_workspace(arguments.repo).root.resolve()
         result = dispatch(arguments, root)
-        print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
+        if arguments.group == 'v2' and arguments.action == 'coverage' and arguments.all:
+            for row in result['briefs']:
+                print(json.dumps(row, ensure_ascii=False, sort_keys=True, allow_nan=False))
+        else:
+            print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
         return result_exit_code(result)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, subprocess.SubprocessError) as error:
         print(json.dumps({'status': 'ERROR', 'message': str(error)}, sort_keys=True))
