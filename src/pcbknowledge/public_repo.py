@@ -23,7 +23,8 @@ ALLOWED_AUTHORITY_PLACEHOLDERS = frozenset(
     f'knowledge/{name}/.gitkeep' for name in ('sources','parts','packages','blocks','rules','fab-profiles','registry'))
 ALLOWED_REGISTRY_PATHS = frozenset(
     f"knowledge/registry/{name}.json" for name in (
-        "quantities", "parameters", "pin-types", "layout-constraints", "package-families", "roles"
+        "quantities", "parameters", "pin-types", "layout-constraints", "package-families", "roles",
+        "pin-functions", "pin-states", "unconnected-states"
     )
 )
 PROTECTED_AUTHORITY_PREFIXES = ("knowledge/", "evidence/", ".pcbknowledge/")

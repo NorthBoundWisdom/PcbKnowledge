@@ -28,12 +28,18 @@ class PublicRepositoryPolicyTests(unittest.TestCase):
             "knowledge/rules/candidates.json",
         ]), ())
 
-    def test_only_initial_registry_json_paths_are_allowed(self) -> None:
+    def test_only_declared_registry_json_paths_are_allowed(self) -> None:
         self.assertEqual(public_distribution_violations(ALLOWED_REGISTRY_PATHS), ())
         forbidden = ["knowledge/registry/extra.json", "knowledge/registry/roles.md",
                      "knowledge/registry/nested/roles.json", "knowledge/registry/roles.pdf",
                      "knowledge/arbitrary/part.json"]
         self.assertEqual(public_distribution_violations(forbidden), tuple(sorted(forbidden)))
+
+    def test_every_repository_registry_has_an_explicit_public_path(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        paths = [p.relative_to(root).as_posix() for p in (root / 'knowledge/registry').glob('*.json')]
+        self.assertTrue(paths)
+        self.assertEqual(public_distribution_violations(paths), ())
 
     def test_originals_caches_and_retired_authority_are_rejected(self) -> None:
         paths = [
@@ -91,6 +97,18 @@ class IndexedMetadataBoundaryTests(unittest.TestCase):
         self.git("add", "--", path)
         target.write_bytes(b"{}\n")
         self.assertEqual(check_public_distribution(self.root), (path,))
+
+    def test_pin_registry_names_keep_binary_and_unknown_path_guards(self) -> None:
+        paths = [f'knowledge/registry/{name}.json'
+                 for name in ('pin-functions', 'pin-states', 'unconnected-states')]
+        for path in paths:
+            self.stage(path, b'{"schema":"pcbknowledge.registry.v2"}\n')
+        self.assertEqual(check_public_distribution(self.root), ())
+        for path in paths:
+            self.stage(path, b'\x00\xff')
+        unknown = 'knowledge/registry/unknown-pin-states.json'
+        self.stage(unknown, b'{}\n')
+        self.assertEqual(check_public_distribution(self.root), tuple(sorted([*paths, unknown])))
 
     def test_index_bytes_cannot_be_hidden_by_clean_worktree(self) -> None:
         path = "knowledge/parts/disguised.json"
