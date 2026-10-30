@@ -44,7 +44,7 @@
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D29 decoupling placement allowance; validate actual board layout.",
+        "note": "D32 decoupling placement allowance; validate actual board layout.",
         "unit": "mm",
         "value": 3
       },
@@ -109,7 +109,7 @@
       "fixed": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D29 design budget allocation, not a manufacturer over-temperature guarantee.",
+        "note": "D32 design budget allocation, not a manufacturer over-temperature guarantee.",
         "unit": "A",
         "value": 0.02
       },
@@ -120,7 +120,7 @@
       "fixed": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D29: fixed external 3.3 V mode; V3 tied to VCC per datasheet p5.",
+        "note": "D32: fixed external 3.3 V mode; V3 tied to VCC per datasheet p5.",
         "unit": "V",
         "value": 3.3
       },

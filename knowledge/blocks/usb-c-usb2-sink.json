@@ -140,7 +140,7 @@
       "gap": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D30 routing gap; actual stackup/impedance requires layout validation.",
+        "note": "D33 routing gap; actual stackup/impedance requires layout validation.",
         "unit": "mm",
         "value": 0.15
       },
@@ -148,14 +148,14 @@
       "max_skew": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D30 engineering skew budget; not a USB compliance certificate.",
+        "note": "D33 engineering skew budget; not a USB compliance certificate.",
         "unit": "mm",
         "value": 0.5
       },
       "min_width": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D30 routing floor, not 90 ohm impedance certification.",
+        "note": "D33 routing floor, not 90 ohm impedance certification.",
         "unit": "mm",
         "value": 0.15
       },
