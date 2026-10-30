@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_9_BLOCKED` (G1 at A2)
+> Status: `CONTINUOUS_MODE_STAGE_9_ACTIVE` (G1 at A2; Stage 9 unblocked by D38-D41)
 > Updated: 2026-10-30
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -27,6 +27,14 @@
   standing task prompt is [`docs/implementer-brief.md`](docs/implementer-brief.md).
 - Items marked **(owner-only)** never block the queue: skip them and continue with
   the next item. Items marked **(escalate)** stop work until the owner answers.
+- **A blocked stage parks; the queue moves on.** When a stage cannot finish
+  (missing evidence no listed default resolves), record the blocker under the
+  stage in two or three lines, mark the status `..._PARKED`, and start the next
+  stage. Stop the session only when every remaining stage is parked or an
+  escalation applies. Revisit parked stages at the start of each session.
+- **One implementing session at a time.** Do not run two implementing agents on
+  `main` in parallel; it produced duplicate rebased commits and an ancestry merge
+  in Stage 8. Reviewer and synthesis sub-agents inside one session are fine.
 
 ## Owner decisions
 
@@ -68,12 +76,14 @@ answer here.
 | D31 | G1V1 temperature branch | Implementer-selected under D21/D10: NXP PCT2075D,118 replaces the current-monitor function, not the G1 reference. Ground address pins for 0x48, retain 0.1 uF decoupling and an existing 1 kOhm OS pull-up; reserve 7 mA, exceeding 5.5 V / 990 Ohm + 0.4 mA. The 150 mA rail budget is unchanged. New Microchip/TI source processing was stopped at explicit extraction restrictions. |
 | D32 | G1V2 UART bridge | Implementer-selected under D21/D10: WCH CH340C in external 3.3 V mode, V3 tied to VCC, internal clock, CTS/DSR/RI/DCD inactive-high and R232 low. Reserve 20 mA within the existing 150 mA rail; this is a design allowance, not a guarantee extrapolated from the 25 degC current test. Replace the UART header; retain SWD 5 mA and I2C expansion 40 mA allowances. |
 | D33 | USB data-pair transport | Implementer-selected layout defaults: USB_DP/USB_DN pair with 0.15 mm minimum width, 0.15 mm gap and 0.5 mm maximum skew; direct CH340C data connection follows its source. These are explicit routing constraints, not a certified 90 Ohm impedance result. Use a distinct USB2 sink block so existing G1 behavior is unchanged. |
-
 | D34 | G2 electrical and manufacturing defaults | Implementer-selected: retain 7-12 V connector input with 500 mA total input and 3.3 V / 150 mA logic budgets; reuse D12 fab and 8 MHz G1 core, with 100 by 80 mm board, 20 mm height limit and existing four M3 mounting requirements. Conversion losses must fit the input budget, not be assumed away. |
 | D35 | G2 actuation and monitoring scope | Implementer-selected: two independent external relay coils plus one separate low-side channel, each at most 100 mA and 100 mH and switched at most 10 Hz; loads must tolerate the protected supply range. Monitor the entire protected input before branch division, not only the logic rail. |
-
-| D36 | G2 discrete relay substitution | Implementer-selected under D10: two independent RQ5E025TNTL + SS14 relay sinks replace the unavailable integrated ULN2003A function, not its pinout; a third channel remains separate. Required 2.5-3.3 V gate drive and operating-temperature resistance remain UNKNOWN until supported upstream/source facts exist. |
-| D37 | G2 input monitor substitution | Implementer-selected under D10: BD14210G-LATR plus BD79124MUF-CE2 I2C ADC retains full protected-input measurement using the existing 0.1 Ohm shunt. Use a 10 Ohm/100 nF input filter with a 2 us RC time-constant budget and 10 uF plus 100 nF local supply capacitors; these are engineering choices, not copied source values. Transfer limits at 3.3 V remain UNKNOWN. |
+| D36 | G2 discrete relay substitution (superseded by D40) | Implementer-selected under D10: two independent RQ5E025TNTL + SS14 relay sinks replace the unavailable integrated ULN2003A function, not its pinout; a third channel remains separate. Required 2.5-3.3 V gate drive and operating-temperature resistance remain UNKNOWN until supported upstream/source facts exist. |
+| D37 | G2 input monitor substitution (superseded by D40) | Implementer-selected under D10: BD14210G-LATR plus BD79124MUF-CE2 I2C ADC retains full protected-input measurement using the existing 0.1 Ohm shunt. Use a 10 Ohm/100 nF input filter with a 2 us RC time-constant budget and 10 uF plus 100 nF local supply capacitors; these are engineering choices, not copied source values. Transfer limits at 3.3 V remain UNKNOWN. |
+| D38 | Source eligibility (owner decision, 2026-10-30, not delegated) | The owner accepts the risk of extracting factual parameters, pin maps and drawing dimensions from publicly downloadable manufacturer datasheets, including TI and Microchip, whose site terms limit commercial use and automated mining. Conditions: download each document individually by hand or with `evidence fetch` for one source at a time (no crawling or bulk scraping; publishers that block scripts are downloaded manually and imported with `evidence add`); originals stay in the ignored local cache; Git holds only small original structured facts with citations. Such sources are `PUBLIC_REFERENCE`. `RESTRICTED` is only for documents behind login or NDA, a document that itself prohibits AI processing, and paid standards (IPC). Site terms alone are not a reason to stop |
+| D39 | Evidence needed to select a switching regulator | Decided by the reviewing agent under owner delegation: a buck part is eligible when its datasheet gives guaranteed values over the operating range for input voltage, output voltage or feedback reference, output current, switching frequency, UVLO, enable threshold and current limit, and describes its light-load mode. The block's calculators then check the design inputs against those values. Do not require plots or proof for every input/load combination |
+| D40 | G2 topology after D38 | Decided by the reviewing agent under owner delegation: return to the brief's original topology. ULN2003A drives the relay coils; the existing INA219 (26 V bus range) monitors the protected input; the separate low-side channel uses a logic-level MOSFET whose datasheet specifies RDS(on) at VGS of 2.5 V or lower. D36 and D37 records that become unreachable are deleted by the audit |
+| D41 | MOSFET hot resistance when only typical curves exist | Engineering default: conduction-loss checks use the datasheet maximum RDS(on) at 25 degC times 1.5 for TJ up to 125 degC, unless the datasheet gives a guaranteed hot maximum, which then wins |
 
 ## Stage 0 — Course correction (complete)
 
@@ -528,40 +538,60 @@ Historical G1V1/G1V2 A2 3/3 and N1-N3 refusals 3/3 retain original input `2da952
 
 ## Stage 9 — G2 to A2
 
+Review (2026-10-30, `6816f39`): Stages 6-8 are complete and pushed with green CI;
+the code (about 5.2k lines in `src/pcbknowledge/v2/`) passes the new style,
+commit and reachability guards. Stage 7 exports a KiCad 9 board project that DRCs
+with zero rule violations; Stage 8 adds G1V1, G1V2 and N1-N3 with 3/3 results.
+Course corrections: the queue stopped at Stage 9 because TI and Microchip
+sources were treated as off-limits (resolved by owner decision D38), the buck
+evidence bar required proof for every input/load combination (D39), and the
+substitutions this forced (D36, D37) left `UNKNOWN` inputs that A2 can never pass
+(D40, D41). Two implementing sessions ran in parallel, causing duplicate commits
+and an ancestry merge. Commit subjects and decision notes drifted back into
+disclaimers ("bounded", "honestly refused", "not a ... guarantee").
+
+### 9a Course corrections
+
+- [ ] Apply D38 to the skills and docs that classify sources (already updated in
+  AGENTS section 7, `register-source`, `open-source-boundary.md`); re-screen the
+  sources stopped under site terms and record which are now eligible.
+- [ ] `check_commits.py` rejects subjects containing `honest`, `bounded` or
+  `not a` and subjects over 72 characters. Trim D13-D37 to the decision and its
+  reason (drop "not a certification/guarantee/recommendation" clauses); move any
+  real limitation into a typed `UNKNOWN` or a check instead.
+- [ ] Synthesis and evaluation receipts pin the bundle's content digest (Git tree
+  of the catalog), not only a commit hash, so a rebase does not invalidate them.
+  Remove the need for ancestry merges like `12c4ce0`; do not rewrite history.
+
+### 9b G2 content
+
 - [x] Concrete G2 design inputs as `ENGINEERING_DEFAULT` decisions (D34-D37).
-- [ ] Reference block graph for G2.
-- [ ] Parts: buck regulator, inductor, Schottky (SS14 per D9), low-side MOSFET with
-  numbered pin map, ULN2003A, Kelvin shunt, input bulk capacitors; migrate from
-  the `intake-final` tag where the source is accessible.
 - [x] Calculators: `buck_inductor_ripple`, `buck_output_ripple`,
   `mosfet_conduction_loss`, `rc_time`. The two buck calculators are limited to
-  fixed-frequency positive-current CCM; this restriction does not apply to RC or MOSFET calculations.
+  fixed-frequency positive-current CCM.
+- [ ] Buck regulator per D39: pick one part (any eligible vendor under D38) with
+  VIN covering the protected 7-12 V input after reverse-protection drop and a
+  3.3 V or 5 V output at the D34 budget; its inductor, input and output
+  capacitors and Schottky (SS14 per D9) if non-synchronous.
+- [ ] Input protection block: fuse, reverse-polarity protection and bulk
+  electrolytic capacitor with cited ratings.
+- [ ] Relay drive per D40: ULN2003A with numbered pin map and flyback through its
+  COM pin; low-side MOSFET channel with VGS-specified RDS(on) and D41 loss check;
+  INA219 reused as the input monitor. Delete records left unreachable.
+- [ ] External load connectors for every relay and low-side channel.
 - [ ] Blocks with hot-loop, thermal, Kelvin and edge constraints; new constraint
   kinds are registry additions with `layout check` support from Stage 7.
-- [ ] Expansion checks for switching converters (inductor current within rating,
-  input/output capacitor ripple rating).
+- [ ] Expansion checks for switching converters: inductor saturation and RMS
+  current within rating, input and output capacitor ripple-current rating,
+  regulator dissipation.
+- [ ] Reference block graph for G2 reaching A2.
 - [ ] Synthesis evaluation as in Stage 8.
 
 Exit: G2 reference and two of three AI attempts reach A2; Stage 7 exports and
 `layout check` cover every G2 constraint kind.
 
-Partial work is retained in an explicitly refused G2 graph; no synthesis attempts
-or A2 result are claimed. Input protection/bulk and buck blocks remain absent,
-the third control and external load connectors are unfinished, and actual VGS,
-operating-temperature RDS(on), and 3.3 V monitor transfer limits remain UNKNOWN.
-
-Blocker: an eligible official buck source must establish operation after reverse-
-protection drop over the 7-12 V input and 0-150 mA load envelope, including usable
-mode/frequency bounds and enable-startup conditions. Screened ROHM candidates do
-not establish this; other sources hit access or use restrictions. Do not replace
-missing evidence with nominal plots, fabricated minimum load or source-access workarounds.
-Resume Stage 9 when suitable permitted evidence or a verified alternative is available;
-Stage 10 is not started.
-
-Partial receipt: contracts `f3c6aae`, independently reviewed data `8e93bcb`;
-full Config/Build/Test/Package and guards pass, 298 tests with zero skips, 112 records and 88/88 reachable audited records.
-G2 remains REFUSED and Stage 9 is not complete; independent source/block review does not establish A2.
-
+Partial receipt (before review): contracts `f3c6aae`, data `8e93bcb`; 298 tests,
+no skips, 112 records, 88/88 reachable. G2 graph `REFUSED` pending 9b.
 
 ## Stage 10 — G3 to A2
 
@@ -588,6 +618,10 @@ pass rate. Stop adding briefs when a cycle's new briefs pass with no new blocks.
 These never block the queue.
 
 - [ ] (owner-only) PcbAtlas import of the G1 handoff (tracked in PcbAtlas).
+- [ ] (owner-only, recommended next) Lay out G1 by hand in KiCad 9 from the
+  Stage 7 handoff project, then run `layout check` and `drc`. This is the
+  fastest test of A3/A4 while PcbAtlas has no placement or routing plan, and it
+  turns real layout friction into PcbKnowledge fixes.
 - [ ] (owner-only) Optional spot checks: open the viewer, pick five cited values per
   stage and confirm them; a confirmed record may then be set to `HUMAN_VERIFIED`
   by the owner.

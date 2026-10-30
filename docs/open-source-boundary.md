@@ -8,7 +8,10 @@ Public availability is `PUBLIC_REFERENCE`, not `OPEN_LICENSE`.
 
 Source records classify processing rights before bytes are read. `UNKNOWN`,
 `RESTRICTED` and `LICENSED_BLOCKED_FOR_AI` block processing; IPC is blocked by
-default. Originals live only in ignored content-addressed local caches and are
+default. Owner decision D38 in [`TODO.md`](../TODO.md) classifies publicly
+downloadable manufacturer datasheets as `PUBLIC_REFERENCE` regardless of website
+terms; `RESTRICTED` covers login/NDA documents, documents that prohibit AI
+processing, and paid standards. Originals live only in ignored content-addressed local caches and are
 never packaged. A metadata-only clone reports `NOT_LOCALLY_VERIFIED`.
 
 `python3 configs/check_public_repo.py` checks both index blobs and working files

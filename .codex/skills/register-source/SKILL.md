@@ -20,6 +20,11 @@ commit. Respect the task's existing commit/push authorization.
 Classify rights from independently known metadata before opening source content.
 `UNKNOWN`, `RESTRICTED` and `LICENSED_BLOCKED_FOR_AI` block processing; IPC is blocked
 by default. Public availability is `PUBLIC_REFERENCE`, not `OPEN_LICENSE`.
+Apply owner decision D38 (`TODO.md`): a publicly downloadable manufacturer datasheet
+is `PUBLIC_REFERENCE` even when the publisher's website terms limit commercial use or
+automated mining. Use `RESTRICTED` only for login/NDA documents, documents that
+themselves prohibit AI processing, and paid standards. Fetch one source at a time;
+when a publisher blocks scripts, ask for a manual download and use `evidence add`.
 
 Write the source metadata using [the source schema](../../../schemas/source.schema.json).
 Download eligible bytes only into ignored `.pcbknowledge/evidence/sha256/<prefix>/<sha256>.pdf`.

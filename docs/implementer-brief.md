@@ -24,8 +24,16 @@ routes a board.
 ## How to work
 
 - Take the first unchecked item of the lowest open stage in `TODO.md` and keep
-  going through the stages. Skip `(owner-only)` items. Stop only at an
-  `(escalate)` condition listed in `TODO.md`, or a gate failure you cannot fix.
+  going through the stages. Skip `(owner-only)` items. If a stage blocks, record
+  the blocker, park it and start the next stage. Stop only when every remaining
+  stage is parked, at an `(escalate)` condition, or at a gate failure you cannot
+  fix.
+- Run as the only implementing session on `main`. Sub-agents for review and
+  synthesis are expected.
+- Sources: follow D38. A public manufacturer datasheet is usable whatever the
+  website terms say; download one at a time and never work around bot checks.
+  When an essential parameter is `UNKNOWN` in one part, select a part whose
+  datasheet states it rather than carrying the `UNKNOWN` into a design.
 - Make decisions yourself: use the D-number defaults; when you need a new one,
   choose a sensible default, add the next D-number with a one-line reason, and
   continue. Substitute parts whose sources are inaccessible (D10).

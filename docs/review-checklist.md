@@ -49,7 +49,11 @@ When a guard automates a check, delete the check here and name the guard in the
 10. New code has cohesive responsibilities and explicit dependencies; mechanical
     formatting is automated. No unapproved third-party runtime dependency.
 11. No string matching on prose fields; decisions use controlled values.
-12. `TODO.md`, `README.md`, `architecture.md` and `knowledge-model-v2.md` match the
+    Decision entries and notes state the decision and its reason once, without
+    "not a guarantee/certification/recommendation" clauses.
+12. No design carries an essential `UNKNOWN` that a different eligible part
+    would resolve (D38); no source was stopped for website terms alone.
+13. `TODO.md`, `README.md`, `architecture.md` and `knowledge-model-v2.md` match the
     code; completed temporary documents are deleted.
-13. Any new public file is original work or small cited metadata; no copied
+14. Any new public file is original work or small cited metadata; no copied
     third-party data.
