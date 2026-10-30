@@ -1,5 +1,6 @@
 """Synthesis content survives rebases, not changed catalog, audit or engine inputs."""
 import copy
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -46,8 +47,15 @@ class ContentIdentityTests(unittest.TestCase):
         rebased = _git(self.root, 'commit-tree', tree, '-m', 'Published replacement root').decode().strip()
         _git(self.root, 'update-ref', 'refs/heads/published', rebased)
         clone = Path(self.temp.name).resolve() / 'clone'
-        subprocess.run(['git', 'clone', '--no-local', '--single-branch', '--branch', 'published',
-                        str(self.root), str(clone)], check=True, capture_output=True)
+        global_config = Path(self.temp.name) / 'gitconfig'
+        global_config.write_text('[core]\n    autocrlf = true\n', encoding='utf-8')
+        environment = {**os.environ, 'GIT_CONFIG_GLOBAL': str(global_config)}
+        subprocess.run(['git', 'clone', '-c', 'core.autocrlf=false', '--no-local', '--single-branch',
+                        '--branch', 'published', str(self.root), str(clone)],
+                       check=True, capture_output=True, env=environment)
+        self.assertEqual(_git(clone, 'config', '--local', 'core.autocrlf').strip(), b'false')
+        self.assertEqual((clone / 'pcbknowledge.workspace.json').read_bytes(),
+                         _git(clone, 'show', 'HEAD:pcbknowledge.workspace.json'))
         absent = subprocess.run(['git', '-C', str(clone), 'cat-file', '-e', self.snapshot['bundle_commit']],
                                 capture_output=True)
         self.assertNotEqual(absent.returncode, 0)
