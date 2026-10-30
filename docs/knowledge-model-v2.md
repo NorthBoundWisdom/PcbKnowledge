@@ -29,7 +29,7 @@ The pinned JSON Schemas are the structural authority for `source`, `package`,
 `part`, `block`, `rule`, `fab_profile`, the common envelope, quantities, explicit
 unknowns, design briefs, block graphs and design intent. Initial controlled
 vocabularies live in [`knowledge/registry/`](../knowledge/registry/). Their scope
-is G1; later designs do not justify adding unused types now.
+is the active golden-design corpus; unneeded future types are not added speculatively.
 
 - Physical values use canonical units and structured conditions. Parameters use
   registry names. Missing values are typed `UNKNOWN` with a reason and affected
@@ -54,7 +54,9 @@ is G1; later designs do not justify adding unused types now.
   parameter references are data, not executable Python or shell expressions.
 - Brief function `category` and power-source/rail `function` bindings are explicit
   inputs to matching. Descriptions are display prose, never inferred requirements.
-  Missing bindings produce typed refusals.
+  Missing bindings produce typed refusals. A function's optional `package_family`
+  must be paired with `package_role`: the actual selected component must have both
+  that role and family, not merely share a block with a matching passive.
 - Sources retain SHA-256 document identity and license class. Original bytes stay
   only in the ignored local cache, as PDF or HTML with a checked media signature; public availability does not grant processing
   or redistribution permission.
@@ -122,7 +124,8 @@ the handoff (D3/D4).
 Commit-pinned bundles support read-only part, package, block and fab queries,
 generic calculators and deterministic expansion with typed refusals. Design intent
 JSON is the handoff authority; KiCad netlist and footprint-library exports are
-derived. Stage 7 layout handoff and board checks remain separate work.
+derived. Parked layout handoff and read-only board checks remain separate from
+A1/A2 expansion and do not claim physical acceptance.
 
 Historical receipts retain their original schema/software context. Use the
 recorded software checkout and pinned input commit to reproduce them; current
@@ -144,3 +147,22 @@ CSV includes mount types and orderable identities; no placement file is emitted.
 A read-only bounded board parser checks identity and supported layout geometry.
 Unresolved Kelvin branches, unsupported shapes and absent filled copper remain
 `NOT_CHECKABLE`; native DRC absence is `NOT_RUN`. Neither state is success.
+
+## Corpus query and evaluation contracts
+
+`v2 coverage --all` gives one human-readable line per brief; add `--json` for its
+structured report. Graph-specific coverage remains JSON. Counts describe verified
+reference-block closure, not successful independent synthesis; missing reference
+graphs report `NOT_PROVIDED`. Eligibility and graph refusals remain distinct.
+
+Fresh corpus authors receive only the target brief, synthesis skill and mediated
+catalog query results, not a raw bundle containing reference answers. Preserve the
+actual query transcript and exact bundle-file, skill, brief and graph/refusal hashes.
+A separate reviewer supplies a controlled `EQUIVALENT`/`NOT_EQUIVALENT` verdict
+for positive graphs and an explicit explanation. Negative cases carry a typed
+code/path and are reproduced by the evaluator. Actor independence and hashes are
+checked; honest access provenance still requires human/agent review.
+
+`DIFFERENTIAL_PAIR` constraints specify two nets, minimum width, gap and maximum
+skew. Derived KiCad rules retain these values and the fab floors. They neither
+establish 90-ohm impedance nor replace routing, signal-integrity or physical tests.

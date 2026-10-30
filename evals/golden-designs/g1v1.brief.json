@@ -43,8 +43,8 @@
       "id": "closed_world"
     },
     {
-      "description": "Measure board-local temperature; no remote probe or calibrated system accuracy requirement.",
-      "id": "temperature_scope"
+      "description": "The LDO directly supplies the logger rail; no current shunt is retained. Sensor budget is 7 mA within the unchanged 150 mA rail budget.",
+      "id": "temperature_rail"
     }
   ],
   "functions": [
@@ -192,16 +192,29 @@
     {
       "category": "sensor.temperature",
       "count": 1,
-      "description": "I2C temperature sensor supplied from the logger rail.",
+      "description": "I2C temperature sensor on the regulated logger rail.",
       "id": "temperature_sensor",
-      "parameters": {},
+      "parameters": {
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D28 budget includes full-range OS pull-up sink and sensor current.",
+          "unit": "A",
+          "value": 0.007
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D28 regulated sensor supply.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
       "part_preferences": [
-        "TMP102AIDRLT"
+        "PCT2075D,118"
       ],
       "requirements": [
-        "Sample board-local temperature over the existing 100 kHz I2C bus.",
-        "No current-sense shunt is required; connect the regulated supply directly to the logger rail.",
-        "Sensor and all other loads must fit the unchanged 150 mA regulated-load budget."
+        "Measure temperature through the shared I2C bus; address 0x48, local decoupling and defined OS bias."
       ]
     },
     {
@@ -466,6 +479,6 @@
   },
   "schema": "pcbknowledge.design-brief.v2",
   "status": "DRAFT",
-  "summary": "G1 variant: replace the current-monitor branch with a 3.3 V I2C temperature sensor; retain EEPROM and expansion interfaces.",
-  "title": "Temperature logger node"
+  "summary": "Original synthetic G1 variant replacing current monitoring with an I2C temperature sensor; no current-sense shunt.",
+  "title": "G1 variant: I2C temperature logger"
 }

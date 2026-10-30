@@ -47,20 +47,24 @@
       "id": "monitor_scope"
     }
   ],
-  "expected_refusal": {
-    "code": "UNSATISFIED_SELECTION",
-    "requirement": "dc_input"
-  },
   "functions": [
     {
-      "category": "power.input.dc",
+      "category": "power.input",
       "count": 1,
-      "description": "12 V DC power input.",
-      "id": "dc_input",
-      "parameters": {},
+      "description": "Mandatory 12 V power input.",
+      "id": "power_input",
+      "parameters": {
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D21 exact negative operating point.",
+          "unit": "V",
+          "value": 12
+        }
+      },
       "part_preferences": [],
       "requirements": [
-        "Accept a nominal 12 V input; do not substitute a 5 V USB source."
+        "Require 12 V input; do not replace it with the catalog 5 V USB sink."
       ]
     },
     {
@@ -71,7 +75,7 @@
       "parameters": {},
       "part_preferences": [],
       "requirements": [
-        "Protect the 12 V input with appropriately rated parts; never reuse a 5 V TVS without compatible evidence."
+        "PTC and unidirectional TVS; no series Schottky on the USB-C sink input (D9)."
       ]
     },
     {
@@ -241,12 +245,12 @@
       "current_limit": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D30: 500 mA input connector budget.",
+        "note": "D7: 500 mA USB input; other headers share one 50 mA expansion budget.",
         "unit": "A",
         "value": 0.5
       },
-      "description": "12 V DC input connector",
-      "id": "dc_connector",
+      "description": "Mandatory 12 V input",
+      "id": "input",
       "signals": [
         "VIN",
         "GND"
@@ -254,7 +258,7 @@
       "voltage": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D30: negative-corpus nominal input voltage.",
+        "note": "D21 exact negative input voltage.",
         "unit": "V",
         "value": 12
       }
@@ -350,7 +354,7 @@
   },
   "mechanical": {
     "edge_interfaces": [
-      "dc_connector",
+      "usb",
       "swd",
       "i2c_header",
       "uart_header"
@@ -411,8 +415,7 @@
     "D12",
     "D13",
     "D14",
-    "D21",
-    "D30"
+    "D21"
   ],
   "power": {
     "rails": [
@@ -440,17 +443,17 @@
         "current_budget": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D30: allow up to 500 mA from the 12 V input; preserve the 150 mA regulated logger budget.",
+          "note": "Owner decision D7.",
           "unit": "A",
           "value": 0.5
         },
-        "description": "Nominal 12 V DC input; engineering requirement rather than a catalog rating.",
-        "function": "dc_input",
-        "id": "dc_12v",
+        "description": "Mandatory 12 V external supply input; 5 V USB fallback is not acceptable.",
+        "function": "power_input",
+        "id": "input_12v",
         "voltage": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D30: negative-corpus nominal input voltage.",
+          "note": "D21 negative requires 12 V, not substituted 5 V.",
           "unit": "V",
           "value": 12
         }
@@ -459,6 +462,6 @@
   },
   "schema": "pcbknowledge.design-brief.v2",
   "status": "DRAFT",
-  "summary": "Negative corpus: require a 12 V DC input rather than USB-C power; the closed world must report the missing compatible input function.",
-  "title": "12 V input logger refusal"
+  "summary": "Original synthetic closed-world negative: demand a 12 V input unsupported by the current 5 V sink block.",
+  "title": "Negative corpus: 12 V input"
 }

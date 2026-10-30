@@ -47,15 +47,15 @@
       "id": "monitor_scope"
     },
     {
-      "description": "Route USB D+ and D- as the bridge block differential pair; do not replace the bridge with a UART header.",
-      "id": "usb_data_pair"
+      "description": "USB_DP/USB_DN connect only the USB2 sink and bridge; UART TX/RX cross between MCU and bridge. Differential width/gap/skew are explicit engineering constraints, not impedance certification.",
+      "id": "usb_uart_link"
     }
   ],
   "functions": [
     {
       "category": "power.input",
       "count": 1,
-      "description": "USB-C receptacle configured as a 5 V sink with USB data routed to the serial bridge.",
+      "description": "USB-C receptacle configured as a 5 V sink.",
       "id": "usb_sink",
       "parameters": {
         "resistance": {
@@ -68,8 +68,7 @@
       },
       "part_preferences": [],
       "requirements": [
-        "CC pull-down resistors; no source role.",
-        "Expose D+ and D- to the USB-to-UART bridge."
+        "CC pull-down resistors; no source role."
       ]
     },
     {
@@ -233,19 +232,31 @@
       ]
     },
     {
-      "category": "interface.usb_uart",
+      "category": "interface.usb-uart",
       "count": 1,
-      "description": "USB-to-UART bridge connecting the MCU UART to the USB-C host.",
+      "description": "USB full-speed to 3.3 V UART bridge, replacing the UART header.",
       "id": "usb_uart",
-      "parameters": {},
+      "parameters": {
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D29 bridge allocation within unchanged 150 mA rail budget.",
+          "unit": "A",
+          "value": 0.02
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D29 external 3.3 V bridge mode.",
+          "unit": "V",
+          "value": 3.3
+        }
+      },
       "part_preferences": [
-        "CP2102N-A02-GQFN28"
+        "CH340C"
       ],
       "requirements": [
-        "Use 3.3 V logic between the bridge and MCU UART.",
-        "Connect the existing USB-C receptacle D+ and D- to the bridge; retain the 5 V sink CC configuration.",
-        "Provide USB differential-pair layout constraints and source-backed decoupling, reset and USB protection requirements.",
-        "Bridge power is included in the unchanged 150 mA regulated-load budget; no UART header remains."
+        "Connect bridge TX to MCU RX and MCU TX to bridge RX; retain USB-C sink CC termination and add USB data pair."
       ]
     }
   ],
@@ -259,15 +270,15 @@
         "unit": "A",
         "value": 0.5
       },
-      "description": "USB-C power entry and serial data",
+      "description": "USB-C sink power and USB 2.0 full-speed data entry",
       "id": "usb",
       "signals": [
         "VBUS",
         "GND",
         "CC1",
         "CC2",
-        "D+",
-        "D-"
+        "USB_DP",
+        "USB_DN"
       ],
       "voltage": {
         "basis": "ENGINEERING_DEFAULT",
@@ -281,7 +292,7 @@
       "current_limit": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D29: SWD 5 mA and I2C expansion 40 mA; the removed UART allocation is not reassigned.",
+        "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA.",
         "unit": "A",
         "value": 0.005
       },
@@ -306,7 +317,7 @@
       "current_limit": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D29: SWD 5 mA and I2C expansion 40 mA; the removed UART allocation is not reassigned.",
+        "note": "D7 allocation: SWD 5 mA, I2C expansion 40 mA, UART 5 mA; total 50 mA.",
         "unit": "A",
         "value": 0.04
       },
@@ -346,7 +357,8 @@
     "edge_interfaces": [
       "usb",
       "swd",
-      "i2c_header"
+      "i2c_header",
+      "uart_header"
     ],
     "height": {
       "basis": "ENGINEERING_DEFAULT",
@@ -405,7 +417,8 @@
     "D13",
     "D14",
     "D21",
-    "D29"
+    "D29",
+    "D30"
   ],
   "power": {
     "rails": [
@@ -437,7 +450,7 @@
           "unit": "A",
           "value": 0.5
         },
-        "description": "USB-C 5 V sink with USB serial data; no USB power delivery required.",
+        "description": "USB-C 5 V sink with USB 2.0 full-speed data; no power delivery.",
         "function": "usb_sink",
         "id": "usb_5v",
         "voltage": {
@@ -452,6 +465,6 @@
   },
   "schema": "pcbknowledge.design-brief.v2",
   "status": "DRAFT",
-  "summary": "G1 variant: replace the UART expansion header with a USB-to-UART bridge on the existing USB-C data pair; retain current monitoring and EEPROM.",
-  "title": "USB serial logger node"
+  "summary": "Original synthetic G1 variant retaining current monitoring and replacing the UART header with a USB-to-UART bridge.",
+  "title": "G1 variant: USB-to-UART logger"
 }

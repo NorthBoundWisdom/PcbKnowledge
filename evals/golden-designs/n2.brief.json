@@ -47,10 +47,6 @@
       "id": "monitor_scope"
     }
   ],
-  "expected_refusal": {
-    "code": "UNSATISFIED_SELECTION",
-    "requirement": "wifi_module"
-  },
   "functions": [
     {
       "category": "power.input",
@@ -243,15 +239,14 @@
       ]
     },
     {
-      "category": "communication.wifi",
+      "category": "wireless.wifi",
       "count": 1,
-      "description": "Wi-Fi radio module for wireless telemetry.",
-      "id": "wifi_module",
+      "description": "Mandatory Wi-Fi module.",
+      "id": "wifi",
       "parameters": {},
       "part_preferences": [],
       "requirements": [
-        "Provide Wi-Fi connectivity with a catalog module and its documented host interface.",
-        "Include the module in the unchanged 150 mA regulated-load budget; refuse if no compatible module exists."
+        "A Wi-Fi module is required; UART or another wired interface is not equivalent."
       ]
     }
   ],
@@ -433,8 +428,7 @@
     "D12",
     "D13",
     "D14",
-    "D21",
-    "D30"
+    "D21"
   ],
   "power": {
     "rails": [
@@ -481,6 +475,6 @@
   },
   "schema": "pcbknowledge.design-brief.v2",
   "status": "DRAFT",
-  "summary": "Negative corpus: add a Wi-Fi radio module to G1; no invented module or replacement wired-only function may satisfy the requirement.",
-  "title": "Wi-Fi logger refusal"
+  "summary": "Original synthetic closed-world negative: require a Wi-Fi module absent from this catalog.",
+  "title": "Negative corpus: Wi-Fi module"
 }

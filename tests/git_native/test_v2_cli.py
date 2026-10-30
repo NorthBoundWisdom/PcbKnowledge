@@ -208,6 +208,56 @@ class CliTests(unittest.TestCase):
         with patch('pcbknowledge.v2.cli.run_drc', return_value={'status': 'NOT_RUN'}):
             self.assertEqual(self.run_cli('drc', board)[0], 2)
 
+    def test_coverage_all_and_graph_mode_are_exclusive(self):
+        with patch('pcbknowledge.v2.cli.coverage_all', return_value={'briefs': []}) as coverage:
+            self.assertEqual(self.run_cli('v2', 'coverage', '--all', '--json')[0], 0)
+            coverage.assert_called_once()
+        for args in (('v2', 'coverage'), ('v2', 'coverage', 'graph.json', '--all')):
+            self.assertEqual(self.run_cli(*args)[0], 2)
+
+    def test_coverage_all_defaults_to_one_line_per_brief_and_retains_json(self):
+        rows = [
+            {'brief': 'G1', 'blocks_ready': 2, 'blocks_total': 3, 'screening': 'ELIGIBLE',
+             'graph_readiness': 'REFUSED', 'refusals': [],
+             'graph_refusals': [{'code': 'MISSING_PART', 'path': 'instances.u'}]},
+            {'brief': 'N1', 'screening': 'REFUSED', 'graph_readiness': 'NOT_PROVIDED',
+             'refusals': [{'code': 'CHECK_FAILED', 'path': 'power'}], 'graph_refusals': []},
+        ]
+        payload = {'briefs': rows}
+        with patch('pcbknowledge.v2.cli.corpus_coverage', return_value=payload):
+            output = io.StringIO()
+            with redirect_stdout(output):
+                code = main(['--repo', str(self.root), 'v2', 'coverage', '--all'])
+            self.assertEqual(code, 0)
+            self.assertEqual(output.getvalue().splitlines(), [
+                'G1: blocks ready=2/3; screening=ELIGIBLE; graph=REFUSED; '
+                'refusals=MISSING_PART@instances.u',
+                'N1: blocks ready=NOT_PROVIDED; screening=REFUSED; graph=NOT_PROVIDED; '
+                'refusals=CHECK_FAILED@power',
+            ])
+            self.assertEqual(self.run_cli('v2', 'coverage', '--all', '--json'), (0, payload))
+
+    def test_corpus_cli_hashes_actual_bundle_and_preserves_legacy_mode(self):
+        import hashlib
+        bundle = self.bundle()
+        attempt = self.document('attempt.json', {'receipt': {}})
+        reference = self.document('reference.json', {'id': 'reference'})
+        skill = self.root / 'skill.md'
+        skill.write_bytes(b'Exact skill\r\n')
+        expected = self.document('expected.json', {'code': 'CHECK_FAILED', 'path': 'functions.usb_sink'})
+        with patch('pcbknowledge.v2.synthesis.evaluate_corpus', return_value={'status': 'PASS'}) as evaluator:
+            code, _ = self.run_cli('eval-synthesis', '--bundle', bundle, '--brief', 'N1', '--attempt', attempt,
+                                   '--skill', skill, '--orchestrator', 'agent:coordinator',
+                                   '--expected-refusal', expected)
+            self.assertEqual(code, 0)
+            self.assertEqual(evaluator.call_args.kwargs['bundle_sha256'], hashlib.sha256(bundle.read_bytes()).hexdigest())
+            self.assertEqual(evaluator.call_args.kwargs['skill_text'], 'Exact skill\r\n')
+        with patch('pcbknowledge.v2.synthesis.evaluate', return_value={'status': 'PASS'}) as legacy:
+            self.assertEqual(self.run_cli('eval-synthesis', '--bundle', bundle, '--reference', reference,
+                                          '--attempt', attempt)[0], 0)
+            legacy.assert_called_once()
+        self.assertEqual(self.run_cli('eval-synthesis', '--bundle', bundle, '--brief', 'N1', '--attempt', attempt)[0], 2)
+
 
 if __name__ == '__main__':
     unittest.main()

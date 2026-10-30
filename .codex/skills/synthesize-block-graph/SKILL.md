@@ -48,3 +48,44 @@ physical intent. Run the repository golden evaluation; A2 requires real
 expansion and no blocking unknowns, not JSON shape alone. Never relabel copied
 reference graphs as independent AI syntheses, fabricate reviews, or promote an
 acceptance level manually. Do not deploy or purchase fabrication.
+
+## Query-mediated corpus benchmarks
+
+For a benchmark task explicitly marked `QUERY_MEDIATED`, the broker retains the
+bundle file: bundles contain audit graphs and are not safe author inputs. Do not
+read any repository files, raw bundle, reference graph, tests, prior attempts or
+other agents' conversations. Filesystem access is limited to exact broker-supplied standalone input/response
+packet paths outside the repository and the author's designated output directory.
+The initial packet contains only this skill, one brief, the graph schema,
+decisions and hashes. Query response packets contain only the requested allowlisted
+catalog projection. Authors may write their own original submissions, never
+inspect other paths, list directories or use network/direct repository tools.
+Ask the assigning broker for allowlisted `block`, `part`,
+`package` or `registry` search/show queries through collaboration messages.
+The broker answers from the exact pinned bundle and preserves every request and
+response. Source-original access is not needed and is not permitted in this mode.
+
+The initial context contains only this skill, one brief, the graph schema,
+applicable explicit decision defaults and input hashes. Construct the graph
+independently. Send each original revision to the broker for coverage/expansion
+feedback; fixes stay within this attempt and every submitted revision is retained.
+Never ask for a reference answer or another attempt. A shared filesystem is not a
+technical sandbox: receipts attest observed query discipline, not isolation that
+the environment does not enforce.
+
+A negative brief can terminate with a refusal object instead of an invented
+block graph: `brief`, `code`, `path`, `reason`. Use `CHECK_FAILED` for a required
+operating point incompatible with every eligible block's fixed contract, and
+`UNSATISFIED_SELECTION` when no eligible block/function or actually selected
+package family satisfies the requirement. Paths identify the function, for
+example `functions.<id>`. A refusal must follow actual catalog queries; missing
+JSON fields or fabricated component IDs are not successful negative outcomes.
+
+The broker freezes submitted graphs/refusals and their exact transcript before
+an independent reviewer receives references. The author, reviewer and broker
+orchestrator must be three different identities; a reviewer cannot be any author
+in the three-attempt set. Receipts include actual actor identities and hashes of
+the pinned bundle bytes, supplied brief, exact skill text, transcript and original
+output. Do not fabricate authorship, independence or reviews. Positive corpus
+acceptance needs at least two of three real expansions; negative acceptance needs
+all three independently authored refusals matching the catalog's typed result.

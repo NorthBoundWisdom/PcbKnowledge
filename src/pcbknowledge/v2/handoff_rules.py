@@ -23,11 +23,47 @@ def rule(name, constraint, minimum, condition=None):
     return '\n'.join(lines)
 
 
+def differential_pairs(intent):
+    nets = {net['name'] for net in intent['nets']}
+    used = set()
+    pairs = []
+    for item in intent['layout']:
+        if item['kind'] != 'DIFFERENTIAL_PAIR':
+            continue
+        pair = item['nets']
+        if (not isinstance(pair, list) or len(pair) != 2 or len(set(pair)) != 2
+                or not set(pair) <= nets or used.intersection(pair)):
+            raise ValueError('Differential pair requires two unique, non-overlapping known nets')
+        left, right = sorted(pair)
+        if left[:-1] != right[:-1] or {left[-1:], right[-1:]} not in ({'+', '-'}, {'P', 'N'}):
+            raise ValueError('KiCad differential net names require matching stems and P/N or +/- suffixes')
+        used.update(pair)
+        pairs.append({'nets': sorted(pair), 'width': millimeters(item['min_width']),
+                      'gap': millimeters(item['gap']), 'skew': millimeters(item['max_skew'])})
+    return sorted(pairs, key=lambda item: item['nets'])
+
+
+def differential_rules(intent):
+    lines = []
+    for index, pair in enumerate(differential_pairs(intent), 1):
+        escaped = [net.replace('\\', '\\\\').replace("'", "\\'") for net in pair['nets']]
+        condition = ' || '.join("A.NetName == '" + net + "'" for net in escaped)
+        prefix = f'(rule "differential-pair:{index}"\n  (condition {quote(condition)})\n'
+        gap, skew = pair['gap'], pair['skew']
+        lines.append(prefix + f'  (constraint diff_pair_gap (min {gap:.6f}mm) '
+                     f'(opt {gap:.6f}mm) (max {gap:.6f}mm))\n'
+                     f'  (constraint skew (max {skew:.6f}mm) (within_diff_pairs)))')
+    return lines
+
+
 def net_widths(intent, fab):
     widths = {net['name']: millimeters(fab['trace_width_min']) for net in intent['nets']}
     for item in intent['layout']:
         if item['kind'] == 'NET_WIDTH_MIN':
             widths[item['net']] = max(widths[item['net']], millimeters(item['min_width']))
+    for pair in differential_pairs(intent):
+        for net in pair['nets']:
+            widths[net] = max(widths[net], pair['width'])
     return widths
 
 
@@ -57,6 +93,7 @@ def export_rules(intent, catalog):
         escaped = ref.replace('\\', '\\\\').replace("'", "\\'")
         lines.append(rule('hole-edge:' + ref, 'edge_clearance', min(offsets) - radius,
                           f"A.Type == 'Pad' && A.FootprintReference == '{escaped}'"))
+    lines.extend(differential_rules(intent))
     return '\n\n'.join(lines) + '\n'
 
 
@@ -73,6 +110,13 @@ def project_settings(intent, catalog):
         name = f'Width_{index}'
         classes.append({**classes[0], 'name': name, 'track_width': width})
         patterns.extend({'netclass': name, 'pattern': net} for net in sorted(widths) if widths[net] == width)
+    for index, pair in enumerate(differential_pairs(intent), 1):
+        name = f'Differential_{index}'
+        width = max(widths[net] for net in pair['nets'])
+        classes.append({**classes[0], 'name': name, 'track_width': width,
+                        'diff_pair_width': width, 'diff_pair_gap': pair['gap']})
+        patterns = [pattern for pattern in patterns if pattern['pattern'] not in pair['nets']]
+        patterns.extend({'netclass': name, 'pattern': net} for net in pair['nets'])
     return {'meta': {'version': 1, 'filename': 'design.kicad_pro'},
             'net_settings': {'meta': {'version': 3}, 'classes': classes, 'netclass_patterns': patterns},
             'board': {'design_settings': {'rules': {'min_clearance': clearance,

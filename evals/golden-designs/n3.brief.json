@@ -47,10 +47,6 @@
       "id": "monitor_scope"
     }
   ],
-  "expected_refusal": {
-    "code": "UNSATISFIED_SELECTION",
-    "requirement": "mcu"
-  },
   "functions": [
     {
       "category": "power.input",
@@ -113,10 +109,11 @@
       ]
     },
     {
-      "category": "digital.mcu.bga",
+      "category": "digital.mcu",
       "count": 1,
       "description": "32-bit MCU in a BGA package.",
       "id": "mcu",
+      "package_family": "BGA",
       "parameters": {
         "clock_frequency": {
           "basis": "ENGINEERING_DEFAULT",
@@ -128,10 +125,9 @@
       },
       "part_preferences": [],
       "requirements": [
-        "Use a catalog MCU with a BGA package, numbered pin map and supported footprint.",
-        "Preserve MCU clock, debug, I2C, UART and user-I/O functions; no LQFP substitution.",
-        "Include required clock, reset, boot configuration and decoupling components."
-      ]
+        "BGA packaging is mandatory; do not substitute the existing LQFP MCU."
+      ],
+      "package_role": "mcu.32-bit"
     },
     {
       "category": "digital.debug",
@@ -413,14 +409,14 @@
   },
   "origin": "SYNTHETIC",
   "owner_decisions": [
+    "D1",
     "D2",
     "D7",
     "D9",
     "D12",
     "D13",
     "D14",
-    "D21",
-    "D30"
+    "D21"
   ],
   "power": {
     "rails": [
@@ -467,6 +463,6 @@
   },
   "schema": "pcbknowledge.design-brief.v2",
   "status": "DRAFT",
-  "summary": "Negative corpus: require a BGA-packaged MCU rather than the G1 LQFP MCU; the closed world must not substitute the available package.",
-  "title": "BGA MCU logger refusal"
+  "summary": "Original synthetic closed-world negative: require a BGA MCU rather than the catalog LQFP device.",
+  "title": "Negative corpus: BGA MCU"
 }

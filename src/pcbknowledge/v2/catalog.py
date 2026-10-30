@@ -308,7 +308,7 @@ class Catalog:
                 if marker and any(not any(p['number']==pin or p['name']==pin for p in part['pins'])
                                   for part in components[ref]):
                     raise ValueError(f'Dangling layout pin: {value}')
-        for field in ('net','sense_nets'):
+        for field in ('net','sense_nets','nets'):
             values = constraint.get(field, [])
             for value in [values] if isinstance(values,str) else values:
                 if value not in nets:

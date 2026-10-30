@@ -1,0 +1,32 @@
+{
+  "G1": {
+    "outcome": "SUPPORTED"
+  },
+  "G1V1": {
+    "outcome": "SUPPORTED"
+  },
+  "G1V2": {
+    "outcome": "SUPPORTED"
+  },
+  "N1": {
+    "outcome": "REFUSED",
+    "refusal": {
+      "code": "CHECK_FAILED",
+      "path": "functions.power_input"
+    }
+  },
+  "N2": {
+    "outcome": "REFUSED",
+    "refusal": {
+      "code": "UNSATISFIED_SELECTION",
+      "path": "functions.wifi"
+    }
+  },
+  "N3": {
+    "outcome": "REFUSED",
+    "refusal": {
+      "code": "UNSATISFIED_SELECTION",
+      "path": "functions.mcu"
+    }
+  }
+}

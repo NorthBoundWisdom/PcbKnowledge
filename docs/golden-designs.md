@@ -56,10 +56,9 @@ Digital, low power, two layers. This is the minimal end-to-end target.
 - Manufacturing: generic two-layer 1.6 mm profile, single-side assembly,
   0603 passives.
 
-Candidate devices for the remaining G1 catalog: LD1117/LM1117, SMBJ5.0A, SS14,
-MF-MSMF050-2 or SF-1206S050-2, C0603C104K5RACTU, CRCW060310K0FKEA, INA219,
-24LC256, Wurth 2.54 mm header. New knowledge needed: the MCU, crystal, USB-C
-receptacle, tactile switch, LEDs and their footprints.
+The G1 catalog now has independently verified records. Concrete selected parts
+and operating decisions are recorded in the reference graph and `TODO.md`;
+this overview is not a substitute for those versioned inputs.
 
 ## G2: motor and actuator controller
 
@@ -106,15 +105,28 @@ choice enforced by expansion checks.
 Contract tests check shapes, reference closure and requirement coverage. G1
 operating and mechanical inputs use D7 engineering defaults. Header allocations are 5 mA SWD, 40 mA I2C expansion and 5 mA UART, totaling
 50 mA within the 150 mA logger budget. The component height is explicitly unconstrained.
-A1/A2 pass; A3-A6 require layout, DRC, fabrication and physical bring-up (Stage 7).
+A1/A2 pass for the recorded G1 receipt; A3-A6 require actual layout, DRC,
+fabrication and physical bring-up, not the parked Stage 7 handoff.
 
-## Stage 8 corpus inputs
+## Variant and refusal corpus
 
-G1V1 replaces current monitoring with I2C temperature sensing; G1V2 replaces the
-UART header with a USB-to-UART bridge. D28 and D29 select initial part preferences,
-not verified catalog capabilities. Both preserve G1's rail and board budgets.
-N1 requires 12 V DC input, N2 Wi-Fi, and N3 a BGA MCU (D30). Each negative brief
-binds an `expected_refusal` code to its required function; this is an evaluation
-expectation, not an observed refusal or permission to invent a missing block.
-The new briefs have no preserved synthesis graphs yet. `v2 coverage --all`
-reports them as `NOT_RUN`; Stage 8 acceptance awaits real independent attempts.
+The active corpus extends G1 with G1V1 (a sourced I2C temperature sensor replacing
+the current monitor and its shunt) and G1V2 (a USB-UART bridge replacing the UART header and a
+USB2-capable sink block). These are distinct briefs, not changes to the original G1
+reference. N1-N3 intentionally request a 12 V input, an absent Wi-Fi module, and a BGA MCU,
+respectively and require typed refusals rather than fabricated catalog facts. Exact
+requirements and expected refusal code/path live in the corpus JSON inputs.
+
+`v2 coverage --all` reports every brief, ready reference blocks and refusals; its
+`--json` form is suitable for tooling. Eligibility or reference replay does not
+prove independent synthesis. Fresh evaluation requires exactly three distinct
+query-mediated attempts per brief, preserved actual transcripts and exact input
+hashes, with no reference-answer access. Raw bundles contain audit/reference inputs
+and are retained by the mediator rather than supplied to attempt authors.
+
+An independent reviewer must return a controlled positive verdict (`EQUIVALENT`
+or `NOT_EQUIVALENT`) with an explanation. At least two of three positive attempts
+must pass A2 and equivalence; all three negative attempts must reproduce the
+expected typed refusal. Historical G1 receipts remain unchanged. Corpus completion
+is reported only after real attempts and evaluator results are preserved in Git;
+this description of the protocol is not itself an execution receipt.

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 from contextlib import ExitStack
 import json
 import subprocess
@@ -9,7 +10,7 @@ from pathlib import Path
 
 from pcbknowledge.workspace import validate_workspace
 from pcbknowledge.serialization import canonical_json, read_json
-from .audit import audit_catalog, require_audit
+from .audit import audit_catalog, require_audit, design_inputs
 from .evidence import add_evidence, fetch_evidence
 from .bundle import Bundle, build_bundle
 from .catalog import Catalog, MAX_RECORD_BYTES
@@ -36,6 +37,7 @@ def parser():
     check = v2.add_parser('coverage')
     check.add_argument('graph', type=Path, nargs='?')
     check.add_argument('--all', action='store_true')
+    check.add_argument('--json', action='store_true', help='Emit machine-readable coverage JSON')
     check.add_argument('--bundle', type=Path)
     footprint = groups.add_parser('footprint').add_subparsers(dest='action', required=True)
     footprint_export = footprint.add_parser('export')
@@ -53,11 +55,7 @@ def parser():
     export.add_argument('--graph', type=Path, required=True)
     export.add_argument('--intent', type=Path, required=True)
     export.add_argument('--output', type=Path, default=Path('build/design'))
-    evaluation = groups.add_parser('eval-synthesis')
-    evaluation.add_argument('--bundle', type=Path, required=True)
-    evaluation.add_argument('--reference', type=Path, required=True)
-    evaluation.add_argument('--attempt', type=Path, action='append', required=True)
-    evaluation.add_argument('--output', type=Path)
+    synthesis_parser(groups)
     layout_parsers(groups)
     groups.add_parser('change-scope')
     for name in ('source', 'part', 'package', 'block', 'fab', 'registry'):
@@ -75,6 +73,18 @@ def parser():
             if name == 'part':
                 search.add_argument('--role')
     return result
+
+
+def synthesis_parser(groups):
+    evaluation = groups.add_parser('eval-synthesis')
+    evaluation.add_argument('--bundle', type=Path, required=True)
+    evaluation.add_argument('--reference', type=Path)
+    evaluation.add_argument('--attempt', type=Path, action='append', required=True)
+    evaluation.add_argument('--output', type=Path)
+    evaluation.add_argument('--brief')
+    evaluation.add_argument('--expected-refusal', type=Path, help='JSON object containing expected code and path')
+    evaluation.add_argument('--orchestrator')
+    evaluation.add_argument('--skill', type=Path)
 
 
 def layout_parsers(groups):
@@ -147,11 +157,7 @@ def catalog_command(arguments, root, catalog, snapshot):
     if group == 'layout':
         return layout_command(arguments, root, snapshot)
     if group == 'eval-synthesis':
-        from .synthesis import evaluate
-        result = evaluate(snapshot, load_document(arguments.reference),
-                          [load_document(path) for path in arguments.attempt])
-        write_result(root, arguments.output, result)
-        return result
+        return synthesis_command(arguments, root, snapshot)
     if group == 'export':
         output = derived_path(root, arguments.output)
         path = export_design(load_document(arguments.intent), snapshot, load_document(arguments.graph), output)
@@ -176,6 +182,50 @@ def catalog_command(arguments, root, catalog, snapshot):
     if arguments.action == 'show':
         return catalog.get(arguments.id, 'fab_profile' if group == 'fab' else group)
     return catalog.search(group, arguments.text, getattr(arguments, 'role', None))
+
+
+def synthesis_command(arguments, root, snapshot):
+    from .synthesis import evaluate, evaluate_corpus
+
+    attempts = [load_document(path) for path in arguments.attempt]
+    reference = load_document(arguments.reference) if arguments.reference else None
+    if arguments.brief:
+        if not arguments.orchestrator or not arguments.skill:
+            raise ValueError('Corpus evaluation requires --orchestrator and --skill')
+        skill = arguments.skill
+        if skill.is_symlink() or not skill.is_file() or skill.stat().st_size > MAX_RECORD_BYTES:
+            raise ValueError('Unsafe or oversized synthesis skill')
+        expected = load_document(arguments.expected_refusal) if arguments.expected_refusal else None
+        result = evaluate_corpus(snapshot, arguments.brief, attempts, reference, expected,
+                                 orchestrator=arguments.orchestrator, skill_text=skill.read_bytes().decode('utf-8'),
+                                 bundle_sha256=hashlib.sha256(arguments.bundle.read_bytes()).hexdigest())
+    else:
+        if reference is None or arguments.expected_refusal or arguments.orchestrator or arguments.skill:
+            raise ValueError('Legacy synthesis needs --reference; corpus options require --brief')
+        result = evaluate(snapshot, reference, attempts)
+    write_result(root, arguments.output, result)
+    return result
+
+
+def corpus_coverage(catalog):
+    _, briefs = design_inputs(catalog.root)
+    graphs = {}
+    for path in sorted((catalog.root / 'evals').rglob('*.block-graph.json')):
+        graph = load_document(path)
+        if graph.get('schema') == 'pcbknowledge.block-graph.v2':
+            if graph['brief'] in graphs:
+                raise ValueError('Multiple corpus reference graphs for one brief')
+            graphs[graph['brief']] = graph
+    path = catalog.root / 'evals/corpus-expectations.json'
+    expectations = load_document(path) if path.exists() else {}
+    result = coverage_all(catalog, briefs, graphs, expectations)
+    for row in result['briefs']:
+        graph = graphs.get(row['brief'])
+        if graph is not None:
+            readiness = coverage(catalog, graph)
+            row['blocks_ready'] = readiness['ready']
+            row['blocks_total'] = readiness['total']
+    return result
 
 
 def checked_layout(arguments, snapshot):
@@ -210,10 +260,10 @@ def drc_command(arguments, root):
 
 def validation_command(arguments, catalog):
     if arguments.action == 'coverage':
-        if arguments.all == (arguments.graph is not None):
-            raise ValueError('Select a graph or --all, exclusively')
+        if arguments.all == bool(arguments.graph):
+            raise ValueError('Coverage requires either a graph or --all, not both')
         if arguments.all:
-            return coverage_all(catalog)
+            return corpus_coverage(catalog)
         return coverage(catalog, load_document(arguments.graph))
     if arguments.action == 'audit':
         return audit_catalog(catalog)
@@ -255,14 +305,27 @@ def result_exit_code(result):
     return 0
 
 
+def coverage_lines(result):
+    """One compact line per brief; missing graphs never imply ready blocks."""
+    lines = []
+    for row in result['briefs']:
+        blocks = (f"{row['blocks_ready']}/{row['blocks_total']}"
+                  if 'blocks_ready' in row else 'NOT_PROVIDED')
+        refusals = row['refusals'] + row['graph_refusals']
+        reasons = ','.join(sorted({f"{item['code']}@{item['path']}" for item in refusals})) or 'none'
+        lines.append(f"{row['brief']}: blocks ready={blocks}; screening={row['screening']}; "
+                     f"graph={row['graph_readiness']}; refusals={reasons}")
+    return '\n'.join(lines)
+
+
 def main(argv=None):
     arguments = parser().parse_args(argv)
     try:
         root = validate_workspace(arguments.repo).root.resolve()
         result = dispatch(arguments, root)
-        if arguments.group == 'v2' and arguments.action == 'coverage' and arguments.all:
-            for row in result['briefs']:
-                print(json.dumps(row, ensure_ascii=False, sort_keys=True, allow_nan=False))
+        if (arguments.group == 'v2' and arguments.action == 'coverage'
+                and arguments.all and not arguments.json):
+            print(coverage_lines(result))
         else:
             print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
         return result_exit_code(result)
