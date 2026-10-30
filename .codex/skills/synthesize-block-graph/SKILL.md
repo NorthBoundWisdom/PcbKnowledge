@@ -84,8 +84,10 @@ JSON fields or fabricated component IDs are not successful negative outcomes.
 The broker freezes submitted graphs/refusals and their exact transcript before
 an independent reviewer receives references. The author, reviewer and broker
 orchestrator must be three different identities; a reviewer cannot be any author
-in the three-attempt set. Receipts include actual actor identities and hashes of
-the pinned bundle bytes, supplied brief, exact skill text, transcript and original
-output. Do not fabricate authorship, independence or reviews. Positive corpus
+in the three-attempt set. New receipts use `format: pcbknowledge.synthesis-receipt.v2` and include the
+broker-supplied `input_identity`: `catalog_tree`, `audit_sha256` and
+`engine_sha256`. Keep the original `bundle_commit` and `bundle_sha256` as
+provenance, plus hashes of the supplied brief, exact skill text, transcript and
+original output. Never rewrite these hashes after publication or rebase. Do not fabricate authorship, independence or reviews. Positive corpus
 acceptance needs at least two of three real expansions; negative acceptance needs
 all three independently authored refusals matching the catalog's typed result.

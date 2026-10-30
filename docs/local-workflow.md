@@ -159,6 +159,50 @@ paths are ordinary explicit input paths relative to the calling directory.
 
 ### Independent AI synthesis evaluation
 
+For new corpus attempts, freeze content identity before giving the author its
+input packet:
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . bundle identity --bundle "$BUNDLE"
+python3 configs/pcbknowledge_agent.py --repo . bundle snapshot --bundle "$BUNDLE" --brief G2 --skill .codex/skills/synthesize-block-graph/SKILL.md --output build/synthesis/g2-input.json
+```
+
+Preserve the snapshot with the attempts. Each new receipt has
+`format: pcbknowledge.synthesis-receipt.v2` and copies its `input_identity`
+(`catalog_tree`, `audit_sha256`, `engine_sha256`), alongside actual original
+`bundle_commit`/`bundle_sha256`, actor, reviewer, orchestrator, mode, brief, skill,
+transcript and output hashes. Positive reviews require a controlled
+`EQUIVALENT`/`NOT_EQUIVALENT` verdict. Use `eval-synthesis --brief <ID>` with
+`--orchestrator`, `--skill`, and the reference or expected refusal.
+
+After a rebase, build a candidate bundle from the published clean checkout.
+Recover the input identity without fetching the unpublished original commit:
+
+```python
+from pathlib import Path
+from pcbknowledge.serialization import read_json
+from pcbknowledge.v2.bundle import Bundle
+from pcbknowledge.v2.synthesis_inputs import resolve_inputs
+
+snapshot = read_json(Path("evals/synthesis/g2-input.json").read_bytes())
+candidate = Path("build/bundle/<published-commit>.json")
+with Bundle.from_document(resolve_inputs(snapshot, candidate)) as inputs:
+    assert inputs.catalog_tree == snapshot["input_identity"]["catalog_tree"]
+```
+
+A changed catalog, audit input, brief, skill or engine is not a rebase. Keep the
+matching input data commit reachable and use its bundle; a missing candidate
+fails explicitly. Never rewrite the author's original commit or file hash to the
+candidate's values. For preserved Stage 8 commit-only receipts only, add
+`--historical`; evaluation still validates their exact original inputs.
+For prior v2 receipts after an engine change, use `resolve_replay_inputs` and
+`eval-synthesis --replay`. The result separately identifies original and current
+engines; all content, skill, transcript and review checks still apply. Retain the
+original receipt and result rather than relabeling the new replay as its execution.
+
+The following legacy G1 procedure remains for its already preserved receipts:
+
+
 Run three genuinely separate agents with only the brief, skill and pinned query
 CLI. Do not expose the reference graph or other attempts. Preserve each original
 graph and a receipt containing `agent`, independent `reviewer`, `bundle_commit`,

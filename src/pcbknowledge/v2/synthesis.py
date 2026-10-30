@@ -5,6 +5,7 @@ import hashlib
 
 from pcbknowledge.serialization import canonical_json
 from .expansion import expand, validate_expansion
+from .synthesis_identity import engine_digest, input_identity, receipt_identity
 
 
 def digest(document):
@@ -29,7 +30,7 @@ def topology(graph):
     return {'blocks': blocks, 'nets': sorted(nets)}
 
 
-def evaluate(bundle, reference, attempts):
+def _evaluate_graphs(bundle, reference, attempts, *, content_identified, replay=False):
     """Consume actual agent outputs, never synthesize or relabel a reference copy.
 
     Independence receipts are attestations of the orchestration process, not a
@@ -43,6 +44,8 @@ def evaluate(bundle, reference, attempts):
                 or not isinstance(attempt.get('receipt'), dict)):
             raise ValueError('Attempt must contain graph and receipt objects')
         receipt = attempt['receipt']
+        if not content_identified and ('format' in receipt or 'input_identity' in receipt):
+            raise ValueError('Content-identified receipts require current corpus evaluation')
         if any(not isinstance(receipt.get(key), str)
                for key in ('agent','reviewer','bundle_commit','graph_sha256','brief_sha256')):
             raise ValueError('Synthesis receipt fields must be strings')
@@ -63,7 +66,10 @@ def evaluate(bundle, reference, attempts):
         if (not actor.startswith('agent:') or actor in actors or graph_hash in outputs
                 or graph_hash == digest(reference)):
             raise ValueError('Attempts require distinct actual agents and original graph outputs')
-        if (receipt['bundle_commit'] != bundle.commit or receipt['graph_sha256'] != graph_hash
+        if content_identified:
+            receipt_identity(bundle, receipt, replay=replay)
+        if ((not content_identified and receipt['bundle_commit'] != bundle.commit)
+                or receipt['graph_sha256'] != graph_hash
                 or receipt['brief_sha256'] != digest(brief)
                 or receipt.get('reference_accessed') is not False
                 or not receipt.get('reviewer', '').startswith('agent:')
@@ -87,6 +93,11 @@ def evaluate(bundle, reference, attempts):
             'passed': passed, 'total': len(results), 'required': 2}
 
 
+def evaluate(bundle, reference, attempts):
+    """Replay legacy G1 receipts; new synthesis uses evaluate_corpus."""
+    return _evaluate_graphs(bundle, reference, attempts, content_identified=False)
+
+
 def _text_digest(text):
     if not isinstance(text, str) or not text.strip():
         raise ValueError('Preserved skill and transcript text must be nonempty strings')
@@ -99,7 +110,7 @@ def _transcript_digest(transcript):
     return digest(transcript)
 
 
-def _corpus_receipts(bundle, brief, attempts, *, orchestrator, skill_text, bundle_sha256, negative):
+def _corpus_receipts(bundle, brief, attempts, *, orchestrator, skill_text, bundle_sha256, negative, historical, replay):
     if not isinstance(orchestrator, str) or not orchestrator.startswith('agent:'):
         raise ValueError('Corpus evaluation requires an explicit orchestrator identity')
     if not isinstance(attempts, list) or len(attempts) != 3:
@@ -116,11 +127,18 @@ def _corpus_receipts(bundle, brief, attempts, *, orchestrator, skill_text, bundl
             raise ValueError('Corpus authors must be distinct fresh agents, not the orchestrator')
         authors.add(actor)
     key = 'refusal' if negative else 'graph'
-    expected = {'bundle_commit': bundle.commit, 'bundle_sha256': bundle_sha256,
-                'brief_sha256': digest(brief), 'skill_sha256': _text_digest(skill_text),
+    expected = {'brief_sha256': digest(brief), 'skill_sha256': _text_digest(skill_text),
                 'orchestrator': orchestrator, 'reference_accessed': False, 'mode': 'QUERY_MEDIATED'}
+    if historical:
+        expected.update(bundle_commit=bundle.commit, bundle_sha256=bundle_sha256)
     for attempt in attempts:
         receipt = attempt['receipt']
+        if historical and ('format' in receipt or 'input_identity' in receipt):
+            raise ValueError('Historical mode accepts only preserved commit-only receipts')
+        if not historical:
+            receipt_identity(bundle, receipt, replay=replay)
+            if receipt['input_identity'] != attempts[0]['receipt']['input_identity']:
+                raise ValueError('Corpus attempts must share the same original input identity')
         reviewer = receipt.get('reviewer')
         if (not isinstance(reviewer, str) or not reviewer.startswith('agent:')
                 or reviewer in authors or reviewer == orchestrator):
@@ -170,14 +188,14 @@ def corpus_topology(graph):
             'requirements': sorted(graph.get('requirements', []), key=canonical_json)}
 
 
-def _positive_corpus(bundle, brief, attempts, reference):
+def _positive_corpus(bundle, brief, attempts, reference, *, historical, replay):
     if not isinstance(reference, dict) or reference.get('brief') != brief['id']:
         raise ValueError('Positive corpus reference must match the requested brief')
     if any(attempt['graph'].get('brief') != brief['id'] for attempt in attempts):
         raise ValueError('Corpus attempt brief differs from reference/benchmark brief')
     # Reuse replay and distinct graph checks without changing historical G1 receipts.
     reference_structure = corpus_topology(reference)
-    result = evaluate(bundle, reference, attempts)
+    result = _evaluate_graphs(bundle, reference, attempts, content_identified=not historical, replay=replay)
     for row, attempt in zip(result['attempts'], attempts):
         verdict = attempt['receipt']['reviewer_verdict']
         structure = corpus_topology(attempt['graph'])
@@ -219,8 +237,8 @@ def _negative_corpus(bundle, brief, attempts, expected):
             'replayed_refusals': refusals}
 
 
-def evaluate_corpus(bundle, brief_id, attempts, reference=None, expected_refusal=None, *,
-                    orchestrator, skill_text, bundle_sha256):
+def _evaluate_corpus(bundle, brief_id, attempts, reference, expected_refusal, *,
+                     orchestrator, skill_text, bundle_sha256, historical, replay):
     """Evaluate fresh benchmark receipts; provenance remains an attestation, not agent identity proof.
 
     Caller supplies the SHA-256 of the actual validated bundle bytes and actual
@@ -235,8 +253,41 @@ def evaluate_corpus(bundle, brief_id, attempts, reference=None, expected_refusal
         raise ValueError('Negative corpus evaluation must not receive a reference graph')
     brief = bundle.briefs[brief_id]
     _corpus_receipts(bundle, brief, attempts, orchestrator=orchestrator, skill_text=skill_text,
-                     bundle_sha256=bundle_sha256, negative=negative)
+                     bundle_sha256=bundle_sha256, negative=negative, historical=historical, replay=replay)
     result = (_negative_corpus(bundle, brief, attempts, expected_refusal) if negative
-              else _positive_corpus(bundle, brief, attempts, reference))
+              else _positive_corpus(bundle, brief, attempts, reference, historical=historical, replay=replay))
     return {**result, 'brief': brief_id, 'mode': 'negative' if negative else 'positive',
-            'orchestrator': orchestrator, 'bundle_sha256': bundle_sha256}
+            'orchestrator': orchestrator, 'bundle_sha256': bundle_sha256,
+            'evaluation_engine_sha256': engine_digest(),
+            'receipt_identity': ('HISTORICAL_COMMIT' if historical else
+                                 'CATALOG_CONTENT_REPLAY' if replay else 'CATALOG_CONTENT'),
+            'input_identity': None if historical else dict(attempts[0]['receipt']['input_identity']),
+            'evaluation_input_identity': input_identity(bundle) if not historical else None,
+            'reference_sha256': None if reference is None else digest(reference),
+            'original_bundles': [{'agent': item['receipt']['agent'],
+                                  'commit': item['receipt']['bundle_commit'],
+                                  'sha256': item['receipt']['bundle_sha256']} for item in attempts]}
+
+
+def evaluate_corpus(bundle, brief_id, attempts, reference=None, expected_refusal=None, *,
+                    orchestrator, skill_text, bundle_sha256):
+    """Evaluate current content-identified receipts; commit changes alone do not invalidate them."""
+    return _evaluate_corpus(bundle, brief_id, attempts, reference, expected_refusal,
+                            orchestrator=orchestrator, skill_text=skill_text,
+                            bundle_sha256=bundle_sha256, historical=False, replay=False)
+
+
+def evaluate_historical_corpus(bundle, brief_id, attempts, reference=None, expected_refusal=None, *,
+                               orchestrator, skill_text, bundle_sha256):
+    """Replay preserved commit-only receipts explicitly, reporting the current evaluator identity."""
+    return _evaluate_corpus(bundle, brief_id, attempts, reference, expected_refusal,
+                            orchestrator=orchestrator, skill_text=skill_text,
+                            bundle_sha256=bundle_sha256, historical=True, replay=False)
+
+
+def replay_corpus(bundle, brief_id, attempts, reference=None, expected_refusal=None, *,
+                  orchestrator, skill_text, bundle_sha256):
+    """Re-evaluate prior v2 receipts with current code, retaining both engine identities."""
+    return _evaluate_corpus(bundle, brief_id, attempts, reference, expected_refusal,
+                            orchestrator=orchestrator, skill_text=skill_text,
+                            bundle_sha256=bundle_sha256, historical=False, replay=True)

@@ -5,13 +5,14 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
-from pcbknowledge.v2.synthesis import digest, evaluate_corpus
+from pcbknowledge.v2.synthesis import digest, evaluate_corpus, evaluate_historical_corpus, replay_corpus
+from pcbknowledge.v2.synthesis_identity import RECEIPT_FORMAT, input_identity
 from tests.git_native.test_v2_synthesis import graph
 
 
 class CorpusSynthesisTests(unittest.TestCase):
     def setUp(self):
-        self.bundle = SimpleNamespace(commit='a' * 40, catalog=Mock(), briefs={'G1': {'id': 'G1'}})
+        self.bundle = SimpleNamespace(commit='a' * 40, catalog_tree='c' * 40, audit_sha256='d' * 64, catalog=Mock(), briefs={'G1': {'id': 'G1'}})
         self.options = {'orchestrator': 'agent:orchestrator', 'skill_text': 'Exact skill', 'bundle_sha256': 'b' * 64}
 
     def attempts(self, negative=False):
@@ -21,7 +22,7 @@ class CorpusSynthesisTests(unittest.TestCase):
             output = ({'brief': 'G1', 'code': 'CHECK_FAILED', 'path': 'functions.usb_sink',
                        'reason': 'Required voltage is unsupported.'} if negative else graph('fresh-' + str(index)))
             transcript = [{'query': {'kind': 'Q6'}, 'response': {'records': []}}]
-            receipt = {'agent': 'agent:author-' + str(index), 'reviewer': 'agent:reviewer',
+            receipt = {'format': RECEIPT_FORMAT, 'input_identity': input_identity(self.bundle), 'agent': 'agent:author-' + str(index), 'reviewer': 'agent:reviewer',
                        'orchestrator': self.options['orchestrator'], 'mode': 'QUERY_MEDIATED',
                        'bundle_commit': self.bundle.commit, 'bundle_sha256': self.options['bundle_sha256'],
                        'brief_sha256': digest({'id': 'G1'}), key + '_sha256': digest(output),
@@ -40,7 +41,8 @@ class CorpusSynthesisTests(unittest.TestCase):
         attempts = self.attempts()
         self.assertEqual(self.evaluate(attempts, reference=graph())['passed'], 3)
         changes = {'agent': 'agent:author-1', 'reviewer': 'agent:author-1', 'orchestrator': 'agent:other',
-                   'bundle_commit': 'wrong', 'bundle_sha256': 'c' * 64, 'brief_sha256': 'c' * 64,
+                   'bundle_commit': 'wrong', 'bundle_sha256': 'wrong', 'brief_sha256': 'c' * 64,
+                   'input_identity': {'catalog_tree': 'd' * 40, 'engine_sha256': 'd' * 64},
                    'skill_sha256': 'c' * 64, 'transcript_sha256': 'c' * 64, 'graph_sha256': 'c' * 64,
                    'reference_accessed': True, 'equivalence_review': '', 'mode': 'SANDBOXED',
                    'reviewer_verdict': 'APPROVED'}
@@ -153,3 +155,53 @@ class CorpusSynthesisTests(unittest.TestCase):
         for attempt in attempts:
             attempt['receipt']['reviewer_verdict'] = 'NOT_EQUIVALENT'
         self.assertEqual(self.evaluate(attempts, reference=reference)['passed'], 0)
+
+    @patch('pcbknowledge.v2.synthesis.validate_expansion')
+    @patch('pcbknowledge.v2.synthesis.expand', return_value={'status': 'EXPANDED', 'checks': [], 'refusals': []})
+    def test_content_receipts_survive_rebased_bundle_provenance_but_not_engine_drift(self, *_):
+        attempts = self.attempts()
+        self.bundle.commit = 'e' * 40
+        self.options['bundle_sha256'] = 'f' * 64
+        result = self.evaluate(attempts, reference=graph())
+        self.assertEqual(result['passed'], 3)
+        self.assertEqual(result['bundle_commit'], 'e' * 40)
+        self.assertEqual(result['original_bundles'][0]['commit'], 'a' * 40)
+        self.assertEqual(result['input_identity'], input_identity(self.bundle))
+        attempts[0]['receipt']['input_identity']['engine_sha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'engine identity'):
+            self.evaluate(attempts, reference=graph())
+
+    def test_current_receipts_cannot_fall_back_to_historical_mode(self):
+        attempts = self.attempts()
+        with self.assertRaisesRegex(ValueError, 'commit-only'):
+            evaluate_historical_corpus(self.bundle, 'G1', attempts, reference=graph(), **self.options)
+        del attempts[0]['receipt']['format']
+        with self.assertRaisesRegex(ValueError, 'content-identified'):
+            self.evaluate(attempts, reference=graph())
+
+    @patch('pcbknowledge.v2.synthesis.validate_expansion')
+    @patch('pcbknowledge.v2.synthesis.expand', return_value={'status': 'EXPANDED', 'checks': [], 'refusals': []})
+    def test_explicit_current_engine_replay_preserves_original_identity_and_all_other_checks(self, *_):
+        attempts = self.attempts()
+        originals = copy.deepcopy(attempts)
+        original_identity = copy.deepcopy(attempts[0]['receipt']['input_identity'])
+        with patch('pcbknowledge.v2.synthesis_identity.engine_digest', return_value='0' * 64), \
+                patch('pcbknowledge.v2.synthesis.engine_digest', return_value='0' * 64):
+            with self.assertRaisesRegex(ValueError, 'engine identity'):
+                self.evaluate(attempts, reference=graph())
+            result = replay_corpus(self.bundle, 'G1', attempts, reference=graph(), **self.options)
+            self.assertEqual(result['status'], 'PASS')
+            self.assertEqual(result['receipt_identity'], 'CATALOG_CONTENT_REPLAY')
+            self.assertEqual(result['input_identity'], original_identity)
+            self.assertEqual(result['evaluation_engine_sha256'], '0' * 64)
+            self.assertEqual(result['evaluation_input_identity']['engine_sha256'], '0' * 64)
+            self.assertEqual(attempts, originals)
+            for key in ('catalog_tree', 'audit_sha256'):
+                bad = copy.deepcopy(attempts)
+                bad[0]['receipt']['input_identity'][key] = 'e' * len(original_identity[key])
+                with self.subTest(key=key), self.assertRaises(ValueError):
+                    replay_corpus(self.bundle, 'G1', bad, reference=graph(), **self.options)
+            bad = copy.deepcopy(attempts)
+            bad[0]['receipt']['input_identity']['engine_sha256'] = 'f' * 64
+            with self.assertRaisesRegex(ValueError, 'same original'):
+                replay_corpus(self.bundle, 'G1', bad, reference=graph(), **self.options)

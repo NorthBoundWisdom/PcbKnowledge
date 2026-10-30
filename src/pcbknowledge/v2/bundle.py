@@ -32,6 +32,10 @@ def _selected(path):
             or (path.startswith('evals/') and path.endswith('.json')))
 
 
+def _catalog_authority(path):
+    return path == 'pcbknowledge.workspace.json' or path.startswith(('knowledge/', 'schemas/'))
+
+
 def _tree_oid(entries):
     """Reconstruct Git trees, anchoring every selected byte to the claimed commit."""
     tree = {}
@@ -140,6 +144,8 @@ class Bundle:
             first = document['commit_object'].splitlines()[0]
             if first != 'tree ' + _tree_oid(document['tree']):
                 raise ValueError('Bundle tree does not belong to commit')
+            self.catalog_tree = _tree_oid([entry for entry in document['tree']
+                                           if _catalog_authority(entry['path'])])
             entries = {entry['path']: entry for entry in document['tree']}
             expected = {path for path in entries if _selected(path)}
             if set(document['files']) != expected:
@@ -149,7 +155,9 @@ class Bundle:
             self._materialize(root, document['files'], entries)
             self.catalog = self._catalog(root, document['files'])
             require_audit(self.catalog)
-            _, self.briefs = design_inputs(root)
+            graphs, self.briefs = design_inputs(root)
+            audit = {'graphs': sorted(graphs, key=canonical_json), 'briefs': self.briefs}
+            self.audit_sha256 = hashlib.sha256(canonical_json(audit).encode('utf-8')).hexdigest()
             for brief in self.briefs.values():
                 self.catalog.structure(brief, 'design-brief.schema.json')
         except (KeyError, TypeError, AttributeError, IndexError) as error:

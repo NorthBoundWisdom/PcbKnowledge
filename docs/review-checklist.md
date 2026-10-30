@@ -14,7 +14,7 @@ When a guard automates a check, delete the check here and name the guard in the
 - Full gate: commit range, code style, English, public source, PDF.js vendor, workspace, Config, Build, Test,
   `v2 validate`, Package (`AGENTS.md` section 10).
 - `test_v2_g1_acceptance` and synthesis evaluation tests: G1 reference and preserved attempts reach A2.
-- `check_commits.py`: subject type/format and knowledge-only data commits for the introduced range.
+- `check_commits.py`: subject type/format, 72-character limit, prohibited wording and knowledge-only data commits.
 - `check_code_style.py`: 120-character lines, one statement per line, functions at most 80 physical lines; no Stage 6c allowances.
 - `v2 audit` through `v2 validate` and bundle compilation: parts, packages and sources are reachable from design graphs. This does not establish electrical acceptance.
 

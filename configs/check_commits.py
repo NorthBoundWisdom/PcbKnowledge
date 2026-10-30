@@ -12,6 +12,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 TYPES = frozenset(('feat', 'fix', 'refactor', 'style', 'docs', 'test', 'chore',
                    'perf', 'ci', 'build', 'data'))
+DISALLOWED_SUBJECT_TEXT = ('honest', 'bounded', 'not a')
 SUBJECT = re.compile(r'^\[([a-z]+)\]: \S(?:.*\S)?$')
 
 
@@ -52,6 +53,10 @@ def check(root, revision_range):
         if not match or match.group(1) not in TYPES:
             violations.append(f'{commit}: subject must be [type]: description')
             continue
+        if len(subject) > 72:
+            violations.append(f'{commit}: subject exceeds 72 characters')
+        if any(text in subject.lower() for text in DISALLOWED_SUBJECT_TEXT):
+            violations.append(f'{commit}: subject contains prohibited wording')
         parents = git(root, 'rev-list', '--parents', '-n', '1', commit).split()[1:]
         if parents:
             changed = git(root, 'diff', '--name-only', '--no-renames', '-z', parents[0], commit, '--')

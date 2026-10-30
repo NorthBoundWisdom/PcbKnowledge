@@ -135,7 +135,8 @@ packet contains only the skill, target brief, schema, decisions and hashes;
 response packets contain only requested catalog projections. Other reads, path
 listing and direct repository/network access are forbidden. Exactly three distinct fresh authors and a reviewer
 independent of every author and the coordinator are required. Receipts bind the
-actual bundle file, brief, skill, output and transcript hashes. This is an auditable
+actual bundle file provenance, brief, skill, output and transcript hashes, plus
+the catalog/audit/engine content identity described below. This is an auditable
 workflow attestation, not an operating-system isolation or identity guarantee.
 Positive reviews use `EQUIVALENT` or `NOT_EQUIVALENT`, never prose truthiness;
 negative refusals are reproduced against the pinned catalog and expected code/path.
@@ -146,6 +147,47 @@ Matching P/N or +/- net suffixes are required. These engineering constraints are
 not controlled-impedance or USB compliance certification and do not route a board.
 
 ### Replaying preserved synthesis inputs
+
+Current receipts use `pcbknowledge.synthesis-receipt.v2`. Their `input_identity`
+has three fields computed by the runtime:
+
+- `catalog_tree`: a Git tree reconstructed from the authenticated `knowledge/`,
+  `schemas/` and workspace-manifest entries, preserving their paths and modes;
+- `audit_sha256`: canonical JSON digest of the same brief and graph projections
+  consumed by `design_inputs`, including preserved attempt graphs;
+- `engine_sha256`: digest of the installed `pcbknowledge` Python source files.
+
+Brief, skill, transcript and submitted-output hashes remain mandatory. Original
+bundle commit and file hashes are provenance; a published bundle can have another
+commit or unrelated file while supplying identical inputs. Missing catalog/schema
+files, changed audit graphs, changed executable sources and altered blob/tree
+proofs fail default evaluation. A result identifies both the candidate bundle used for
+replay and each author's original bundle. Its evaluator source digest is explicit.
+
+`bundle snapshot` creates a small `pcbknowledge.synthesis-input.v2` metadata
+record with these identities, the target brief hash and exact skill text. To
+recover, build a bundle from a published commit with matching inputs and call
+`resolve_inputs(snapshot, candidate_bundle_path)`. This validates the candidate
+through the normal `Bundle` loader and compares the complete input identity;
+it does not consult mutable worktree files or require the original commit object.
+The return value is the candidate document, not reconstructed original bytes.
+Keep the original snapshot and receipts unchanged. If no matching published
+catalog is available, recovery fails; publish the input data commit before later
+catalog changes. No provenance merge is needed merely to retain commit metadata.
+
+Historical commit-only receipts use the explicit `--historical` corpus mode
+(or `evaluate_historical_corpus`), which reports the current evaluator identity.
+It rejects v2 receipts rather than bypassing their content checks. New receipts
+must use current evaluation. For prior v2 receipts after an engine update,
+`--replay` / `replay_corpus` permits only engine drift and labels the result
+`CATALOG_CONTENT_REPLAY`. `input_identity` preserves the original source version;
+`evaluation_input_identity` and `evaluation_engine_sha256` record the actual new
+engine. All three authors must retain one original identity. Catalog, audit,
+brief, skill, transcript, output and independent-review checks remain enforced.
+`resolve_replay_inputs` is the corresponding explicit snapshot resolver.
+Replaying an old receipt with current code is a new replay result, not a
+replacement of its recorded original execution.
+
 
 `evals/synthesis/stage8-input.json` preserves the original input commit object,
 Git tree identity, bundle SHA-256 and exact skill text. A connector publication

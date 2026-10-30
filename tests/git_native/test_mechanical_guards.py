@@ -57,6 +57,20 @@ class CommitGuardTests(unittest.TestCase):
             errors = commits.check(self.root, previous + '..HEAD')[1]
             self.assertTrue(any(reason in item for item in errors), errors)
 
+    def test_subject_length_and_wording_apply_only_to_new_commits(self):
+        for subject in ('[feat]: honest result', '[fix]: BOUNDED result',
+                        '[docs]: not a guarantee', '[feat]: honestly report',
+                        '[feat]: unbounded model', '[feat]: ' + 'x' * 65):
+            with self.subTest(subject=subject):
+                previous = self.git('rev-parse', 'HEAD').strip()
+                self.commit(subject, {'code.py': subject})
+                errors = commits.check(self.root, previous + '..HEAD')[1]
+                self.assertTrue(any('subject' in item for item in errors), errors)
+        previous = self.git('rev-parse', 'HEAD').strip()
+        self.commit('[feat]: ' + 'x' * 64, {'code.py': 'at limit'})
+        self.assertEqual(commits.check(self.root, previous + '..HEAD')[1], [])
+        self.assertEqual(commits.check(self.root, 'HEAD..HEAD'), ([], []))
+
     def test_rename_cannot_hide_mixed_scope(self):
         old = self.git('rev-parse', 'HEAD').strip()
         (self.root / 'knowledge').mkdir()

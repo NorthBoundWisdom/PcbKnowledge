@@ -48,6 +48,13 @@ def parser():
     bundle = groups.add_parser('bundle').add_subparsers(dest='action', required=True)
     build = bundle.add_parser('build')
     build.add_argument('--output', type=Path, default=Path('build/bundle'))
+    identity = bundle.add_parser('identity')
+    identity.add_argument('--bundle', type=Path, required=True)
+    capture = bundle.add_parser('snapshot')
+    capture.add_argument('--bundle', type=Path, required=True)
+    capture.add_argument('--brief', required=True)
+    capture.add_argument('--skill', type=Path, required=True)
+    capture.add_argument('--output', type=Path, required=True)
     expand = groups.add_parser('expand')
     expand.add_argument('graph', type=Path)
     expand.add_argument('--bundle', type=Path, required=True)
@@ -87,6 +94,9 @@ def synthesis_parser(groups):
     evaluation.add_argument('--expected-refusal', type=Path, help='JSON object containing expected code and path')
     evaluation.add_argument('--orchestrator')
     evaluation.add_argument('--skill', type=Path)
+    mode = evaluation.add_mutually_exclusive_group()
+    mode.add_argument('--historical', action='store_true', help='Replay preserved commit-only corpus receipts')
+    mode.add_argument('--replay', action='store_true', help='Replay prior v2 receipts with the current engine')
 
 
 def layout_parsers(groups):
@@ -187,7 +197,7 @@ def catalog_command(arguments, root, catalog, snapshot):
 
 
 def synthesis_command(arguments, root, snapshot):
-    from .synthesis import evaluate, evaluate_corpus
+    from .synthesis import evaluate, evaluate_corpus, evaluate_historical_corpus, replay_corpus
 
     attempts = [load_document(path) for path in arguments.attempt]
     reference = load_document(arguments.reference) if arguments.reference else None
@@ -198,11 +208,14 @@ def synthesis_command(arguments, root, snapshot):
         if skill.is_symlink() or not skill.is_file() or skill.stat().st_size > MAX_RECORD_BYTES:
             raise ValueError('Unsafe or oversized synthesis skill')
         expected = load_document(arguments.expected_refusal) if arguments.expected_refusal else None
-        result = evaluate_corpus(snapshot, arguments.brief, attempts, reference, expected,
+        evaluator = (evaluate_historical_corpus if arguments.historical else
+                     replay_corpus if arguments.replay else evaluate_corpus)
+        result = evaluator(snapshot, arguments.brief, attempts, reference, expected,
                                  orchestrator=arguments.orchestrator, skill_text=skill.read_bytes().decode('utf-8'),
                                  bundle_sha256=hashlib.sha256(arguments.bundle.read_bytes()).hexdigest())
     else:
-        if reference is None or arguments.expected_refusal or arguments.orchestrator or arguments.skill:
+        if (reference is None or arguments.expected_refusal or arguments.orchestrator
+                or arguments.skill or arguments.historical or arguments.replay):
             raise ValueError('Legacy synthesis needs --reference; corpus options require --brief')
         result = evaluate(snapshot, reference, attempts)
     write_result(root, arguments.output, result)
@@ -259,14 +272,32 @@ def validation_command(arguments, catalog):
     }
 
 
+def bundle_command(arguments, root):
+    from .synthesis_identity import input_identity
+    from .synthesis_inputs import capture_inputs
+
+    if arguments.action == 'build':
+        path = build_bundle(root, derived_path(root, arguments.output))
+        return {'status': 'BUILT', 'bundle': str(path), 'commit': path.stem}
+    if arguments.action == 'identity':
+        with Bundle(arguments.bundle) as snapshot:
+            return {'commit': snapshot.commit, 'input_identity': input_identity(snapshot)}
+    output = derived_path(root, arguments.output)
+    skill = arguments.skill
+    if skill.is_symlink() or not skill.is_file() or skill.stat().st_size > MAX_RECORD_BYTES:
+        raise ValueError('Unsafe or oversized synthesis skill')
+    snapshot = capture_inputs(arguments.bundle, arguments.brief, skill.read_bytes().decode('utf-8'))
+    write_result(root, output, snapshot)
+    return {'status': 'CAPTURED', 'snapshot': str(output), 'input_identity': snapshot['input_identity']}
+
+
 def dispatch(arguments, root):
     if arguments.group == 'drc':
         return drc_command(arguments, root)
     if arguments.group == 'change-scope':
         return change_scope(root)
     if arguments.group == 'bundle':
-        path = build_bundle(root, derived_path(root, arguments.output))
-        return {'status': 'BUILT', 'bundle': str(path), 'commit': path.stem}
+        return bundle_command(arguments, root)
     if arguments.group == 'expand':
         # Validate the destination before expansion, preserving no-work-on-unsafe-output behavior.
         output = derived_path(root, arguments.output) if arguments.output else None

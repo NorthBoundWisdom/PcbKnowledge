@@ -5,7 +5,7 @@ import unittest
 
 from pcbknowledge.serialization import read_json
 from pcbknowledge.v2.bundle import Bundle
-from pcbknowledge.v2.synthesis import digest, evaluate_corpus
+from pcbknowledge.v2.synthesis import digest, evaluate_historical_corpus
 from pcbknowledge.v2.synthesis_inputs import reconstruct_bundle
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -40,7 +40,7 @@ class PreservedCorpusTests(unittest.TestCase):
                 else:
                     self.assertEqual(expected['outcome'], 'REFUSED')
                     refusal = expected['refusal']
-                result = evaluate_corpus(
+                result = evaluate_historical_corpus(
                     self.bundle, brief, attempts, reference, refusal,
                     orchestrator=attempts[0]['receipt']['orchestrator'],
                     skill_text=self.snapshot['skill_text'], bundle_sha256=self.snapshot['bundle_sha256'],

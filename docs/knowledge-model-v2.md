@@ -160,6 +160,9 @@ current brief and bind a controlled refusal code to a required function.
 Fresh corpus authors receive only the target brief, synthesis skill and mediated
 catalog query results, not a raw bundle containing reference answers. Preserve the
 actual query transcript and exact bundle-file, skill, brief and graph/refusal hashes.
+Current receipts also pin the authenticated catalog tree, semantic audit-input
+digest and executing Python source digest; commit metadata changes alone do not
+change this identity. See [input recovery](architecture.md#replaying-preserved-synthesis-inputs).
 A separate reviewer supplies a controlled `EQUIVALENT`/`NOT_EQUIVALENT` verdict
 for positive graphs and an explicit explanation. Negative cases carry a typed
 code/path and are reproduced by the evaluator. Actor independence and hashes are

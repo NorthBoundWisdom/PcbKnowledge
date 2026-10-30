@@ -14,6 +14,24 @@ terms; `RESTRICTED` covers login/NDA documents, documents that prohibit AI
 processing, and paid standards. Originals live only in ignored content-addressed local caches and are
 never packaged. A metadata-only clone reports `NOT_LOCALLY_VERIFIED`.
 
+
+## D38 re-screen decisions
+
+On 2026-10-30, the owner reopened individually downloadable TI and Microchip
+datasheets for factual curation. Earlier website-only exclusions for ADI,
+Diodes, Nexperia, Nisshinbo, Richtek, AOS and Toshiba no longer determine source
+eligibility. Each selected document still gets its own source record and rights
+inspection before engineering extraction.
+
+Earlier HTTP 403 responses remain access failures for those exact URLs, including
+the selected ST/Wurth, Coilcraft LPS4018 and ROHM candidate URLs. Do not bypass
+bot checks or retry through a mirror. A blocked terms page does not classify a
+different datasheet. Login/NDA, paid standards and document-local AI restrictions
+remain blocking; earlier GCT, Samtec, Silabs and Diotec document observations must
+be assessed for the actual selected document rather than generalized to a vendor.
+These are policy re-screen decisions from the prior observations, not fresh
+downloads or source-value verification.
+
 `python3 configs/check_public_repo.py` checks both index blobs and working files
 for allowed metadata paths, binary payloads, source originals and size limits.
 Only the exact pinned PDF.js runtime files have a software vendor exception.

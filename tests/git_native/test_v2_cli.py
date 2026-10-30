@@ -251,6 +251,53 @@ class CliTests(unittest.TestCase):
             legacy.assert_called_once()
         self.assertEqual(self.run_cli('eval-synthesis', '--bundle', bundle, '--brief', 'N1', '--attempt', attempt)[0], 2)
 
+    def test_content_identity_and_snapshot_commands_preserve_actual_inputs(self):
+        from pcbknowledge.serialization import read_json
+        from pcbknowledge.v2.synthesis_inputs import resolve_inputs
+        target = self.root / 'evals/golden-designs/g2.brief.json'
+        target.parent.mkdir(parents=True)
+        target.write_bytes((ROOT / 'evals/golden-designs/g2.brief.json').read_bytes())
+        for args in [('add', '.'), ('commit', '-m', 'Synthetic brief')]:
+            subprocess.run(['git', '-C', str(self.root), *args], check=True, capture_output=True)
+        bundle = self.bundle()
+        code, identity = self.run_cli('bundle', 'identity', '--bundle', bundle)
+        self.assertEqual(code, 0)
+        self.assertEqual(set(identity['input_identity']), {'catalog_tree', 'audit_sha256', 'engine_sha256'})
+        skill = self.root / 'build/skill.md'
+        skill.write_bytes(b'Exact synthetic skill\r\n')
+        code, captured = self.run_cli('bundle', 'snapshot', '--bundle', bundle, '--brief', 'G2',
+                                     '--skill', skill, '--output', 'build/input.json')
+        self.assertEqual(code, 0, captured)
+        snapshot = read_json(Path(captured['snapshot']).read_bytes())
+        self.assertEqual(snapshot['input_identity'], identity['input_identity'])
+        self.assertEqual(snapshot['skill_text'], 'Exact synthetic skill\r\n')
+        self.assertEqual(resolve_inputs(snapshot, bundle)['commit'], identity['commit'])
+        code, _ = self.run_cli('bundle', 'snapshot', '--bundle', bundle, '--brief', 'G2',
+                               '--skill', skill, '--output', 'knowledge/input.json')
+        self.assertEqual(code, 2)
+
+    def test_historical_corpus_cli_is_explicit(self):
+        bundle = self.bundle()
+        attempt = self.document('attempt.json', {'receipt': {}})
+        skill = self.root / 'build/skill.md'
+        skill.write_bytes(b'Original skill')
+        with patch('pcbknowledge.v2.synthesis.evaluate_historical_corpus', return_value={'status': 'PASS'}) as replay:
+            code, _ = self.run_cli('eval-synthesis', '--bundle', bundle, '--brief', 'N1', '--attempt', attempt,
+                                   '--skill', skill, '--orchestrator', 'agent:coordinator', '--historical')
+            self.assertEqual(code, 0)
+            replay.assert_called_once()
+
+    def test_current_engine_replay_cli_uses_distinct_entrypoint(self):
+        bundle = self.bundle()
+        attempt = self.document('attempt.json', {'receipt': {}})
+        skill = self.root / 'build/skill.md'
+        skill.write_bytes(b'Original skill')
+        with patch('pcbknowledge.v2.synthesis.replay_corpus', return_value={'status': 'PASS'}) as replay:
+            code, _ = self.run_cli('eval-synthesis', '--bundle', bundle, '--brief', 'N1', '--attempt', attempt,
+                                   '--skill', skill, '--orchestrator', 'agent:coordinator', '--replay')
+            self.assertEqual(code, 0)
+            replay.assert_called_once()
+
 
 if __name__ == '__main__':
     unittest.main()

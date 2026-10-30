@@ -82,3 +82,70 @@ def reconstruct_bundle(root, snapshot):
     with Bundle.from_document(document):
         pass
     return document
+
+
+def capture_inputs(bundle_path, brief_id, skill_text):
+    """Record portable content identity; retain the actual author's commit/file provenance."""
+    from .synthesis import digest
+    from .synthesis_identity import input_identity
+    from pcbknowledge.serialization import read_json
+
+    path = Path(bundle_path)
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_BUNDLE_BYTES:
+        raise ValueError('Unsafe or oversized input bundle')
+    payload = path.read_bytes()
+    with Bundle.from_document(read_json(payload)) as bundle:
+        if brief_id not in bundle.briefs or not isinstance(skill_text, str) or not skill_text.strip():
+            raise ValueError('Snapshot requires an existing brief and exact nonempty skill text')
+        return {'format': 'pcbknowledge.synthesis-input.v2', 'input_identity': input_identity(bundle),
+                'bundle_commit': bundle.commit, 'bundle_sha256': hashlib.sha256(payload).hexdigest(),
+                'brief': brief_id, 'brief_sha256': digest(bundle.briefs[brief_id]),
+                'skill_text': skill_text, 'skill_sha256': hashlib.sha256(skill_text.encode('utf-8')).hexdigest()}
+
+
+def _resolve_inputs(snapshot, candidate_bundle, *, replay):
+    """Validate a published content-equivalent bundle without needing the original commit object.
+
+    Returns the candidate's authenticated document, not falsely reconstructed
+    original bytes. The snapshot and attempt receipts keep their original hashes.
+    """
+    from .synthesis import digest
+    from .synthesis_identity import match_identity, validate_identity
+    from pcbknowledge.serialization import read_json
+
+    fields = {'format', 'input_identity', 'bundle_commit', 'bundle_sha256', 'brief',
+              'brief_sha256', 'skill_text', 'skill_sha256'}
+    if not isinstance(snapshot, dict) or set(snapshot) != fields:
+        raise ValueError('Malformed content-identified synthesis snapshot')
+    if snapshot['format'] != 'pcbknowledge.synthesis-input.v2':
+        raise ValueError('Unsupported synthesis snapshot format')
+    validate_identity(snapshot['input_identity'])
+    if not isinstance(snapshot['brief'], str) or not snapshot['brief']:
+        raise ValueError('Snapshot requires a brief identity')
+    if (not _hash(snapshot['bundle_commit'], 40)
+            or any(not _hash(snapshot[key], 64) for key in ('bundle_sha256', 'brief_sha256', 'skill_sha256'))):
+        raise ValueError('Invalid snapshot provenance hash')
+    skill = snapshot['skill_text']
+    if (not isinstance(skill, str) or not skill.strip()
+            or hashlib.sha256(skill.encode('utf-8')).hexdigest() != snapshot['skill_sha256']):
+        raise ValueError('Snapshot skill identity mismatch')
+    path = Path(candidate_bundle)
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_BUNDLE_BYTES:
+        raise ValueError('Unsafe or oversized candidate bundle')
+    document = read_json(path.read_bytes())
+    with Bundle.from_document(document) as bundle:
+        match_identity(bundle, snapshot['input_identity'], replay=replay)
+        brief = bundle.briefs.get(snapshot['brief'])
+        if brief is None or digest(brief) != snapshot['brief_sha256']:
+            raise ValueError('Candidate brief differs from synthesis input')
+    return document
+
+
+def resolve_inputs(snapshot, candidate_bundle):
+    """Resolve a published bundle matching the exact original content and engine."""
+    return _resolve_inputs(snapshot, candidate_bundle, replay=False)
+
+
+def resolve_replay_inputs(snapshot, candidate_bundle):
+    """Resolve original content for an explicitly labeled replay with the current engine."""
+    return _resolve_inputs(snapshot, candidate_bundle, replay=True)
