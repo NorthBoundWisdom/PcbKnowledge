@@ -22,12 +22,12 @@
   "id": "block:g2-power-input-header",
   "layout": [
     {
-      "edge": "LEFT",
+      "edge": "RIGHT",
       "kind": "EDGE_PLACEMENT",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D47 connector edge access allowance.",
+        "note": "D47 connector edge access allowance; D53 selects RIGHT to agree with the generic header rule.",
         "unit": "mm",
         "value": 5
       },
@@ -65,9 +65,9 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
-    "notes": "D47 external supply: pin1 VIN, pins2/3/4 ground. Existing curated contact rating3 A exceeds500 mA budget; working voltage250 V AC; DC use is D47 engineering selection, not a sourced DC rating.",
+    "notes": "D53 RIGHT correction by agent:/root/implement_pcbknowledge_brief/g2_edge_author under owner delegation. Prior verifier: agent:/root/implement_pcbknowledge_brief/g2_source_review. D47 electrical selection unchanged.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+      "agent:/root/implement_pcbknowledge_brief/g2_attempt_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",
