@@ -75,7 +75,11 @@
         "i2c_pullup",
         "shunt_resistor",
         "trace_width",
-        "oscillator_startup"
+        "oscillator_startup",
+        "buck_inductor_ripple",
+        "buck_output_ripple",
+        "mosfet_conduction_loss",
+        "rc_time"
       ]
     },
     "inputs": {
