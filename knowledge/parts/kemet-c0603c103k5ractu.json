@@ -1,0 +1,72 @@
+{
+  "id": "part:kemet-c0603c103k5ractu",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:kemet-c0603c103k5ractu"
+  },
+  "manufacturer": "KEMET",
+  "mpn": "C0603C103K5RACTU",
+  "package": "package:chip-0603-kemet-bootstrap",
+  "parameters": {
+    "capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "frequency": {
+          "unit": "Hz",
+          "value": 1000
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 1.1e-08,
+      "min": 9e-09,
+      "note": "Measured at 1 kHz, 1.0 Vrms; nominal capacitance is not a guaranteed DC-biased capacitance.",
+      "typ": 1e-08,
+      "unit": "F"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 50,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 1,
+    "source": "source:kemet-c0603c103k5ractu"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "capacitor.ceramic"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

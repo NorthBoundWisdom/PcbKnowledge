@@ -1,0 +1,121 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 6.0,
+      "min": 5.5,
+      "typ": 5.9,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 6.8,
+      "min": 6.3999999999999995,
+      "typ": 6.6,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 6.8,
+      "min": 6.3999999999999995,
+      "typ": 6.6,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 7.5,
+      "min": 7.1,
+      "typ": 7.3,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 0.8,
+      "min": 0.6,
+      "unit": "mm"
+    },
+    "pin_count": 2,
+    "terminal_gap": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "note": "Dimension P is a reference nominal; original land derivation uses this reference without assigning an unstated tolerance.",
+      "typ": 2.1,
+      "unit": "mm"
+    }
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:panasonic-svpf"
+    },
+    {
+      "page": 2,
+      "source": "source:panasonic-svpf"
+    }
+  ],
+  "family": "CAP_CAN_SMD",
+  "generator": "chip",
+  "id": "package:panasonic-svpf-c6",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "notes": "Own footprint rotates the source terminal axis clockwise: positive terminal is pad 1 at left; negative terminal is pad 2 at right.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 2,
+        "source": "source:panasonic-svpf"
+      }
+    ],
+    "mpns": [
+      "25SVPF47M"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

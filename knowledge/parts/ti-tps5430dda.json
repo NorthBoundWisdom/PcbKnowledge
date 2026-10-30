@@ -1,0 +1,265 @@
+{
+  "id": "part:ti-tps5430dda",
+  "identity_evidence": {
+    "page": 28,
+    "source": "source:ti-tps5430"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "TPS5430DDA",
+  "package": "package:ti-tps5430dda",
+  "parameters": {
+    "current_limit": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 6,
+      "min": 4,
+      "note": "High-side peak current limit. Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "typ": 5,
+      "unit": "A"
+    },
+    "duty_cycle": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "frequency": {
+          "unit": "Hz",
+          "value": 500000
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "min": 0.87,
+      "note": "Maximum achievable duty cycle; stated at 500 kHz.",
+      "typ": 0.89,
+      "unit": "1"
+    },
+    "enable_falling_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "min": 0.5,
+      "note": "Falling ENA threshold. Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "unit": "V"
+    },
+    "enable_rising_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 1.3,
+      "note": "Rising ENA threshold. Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "unit": "V"
+    },
+    "frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 600000,
+      "min": 400000,
+      "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "typ": 500000,
+      "unit": "Hz"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps5430"
+      },
+      "max": 36,
+      "min": 5.5,
+      "unit": "V"
+    },
+    "junction_temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps5430"
+      },
+      "max": 125,
+      "min": -40,
+      "unit": "degC"
+    },
+    "minimum_on_time": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 2e-07,
+      "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "typ": 1.5e-07,
+      "unit": "s"
+    },
+    "on_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "gate_voltage": {
+          "unit": "V",
+          "value": 4.5
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 12
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 0.23,
+      "note": "VBOOT-PH = 4.5 V, TJ -40 to 125 degC.",
+      "typ": 0.1,
+      "unit": "ohm"
+    },
+    "output_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 8,
+        "source": "source:ti-tps5430"
+      },
+      "max": 3,
+      "note": "Continuous output capability; component and thermal checks apply.",
+      "unit": "A"
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "sense_voltage": {
+          "unit": "V",
+          "value": 2
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 0.0044,
+      "note": "Non-switching, VSENSE=2 V, PH open; Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "typ": 0.002,
+      "unit": "A"
+    },
+    "reference_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 1.245,
+      "min": 1.196,
+      "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "typ": 1.221,
+      "unit": "V"
+    },
+    "uvlo_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps5430"
+      },
+      "max": 5.5,
+      "note": "Rising VIN startup threshold. Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+      "typ": 5.3,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-tps5430"
+  },
+  "pins": [
+    {
+      "name": "BOOT",
+      "number": "1",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "NC",
+      "number": "2",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "NC",
+      "number": "3",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "VSENSE",
+      "number": "4",
+      "type": "ANALOG"
+    },
+    {
+      "name": "ENA",
+      "number": "5",
+      "type": "INPUT",
+      "unconnected_state": {
+        "evidence": [
+          {
+            "page": 3,
+            "source": "source:ti-tps5430"
+          },
+          {
+            "page": 9,
+            "source": "source:ti-tps5430"
+          }
+        ],
+        "state": "ENABLED"
+      }
+    },
+    {
+      "name": "GND",
+      "number": "6",
+      "type": "GROUND"
+    },
+    {
+      "name": "VIN",
+      "number": "7",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "PH",
+      "number": "8",
+      "type": "POWER_OUT"
+    },
+    {
+      "name": "DAP",
+      "number": "DAP",
+      "type": "GROUND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage9a_source_rescreen",
+    "notes": "PH power-output function follows p3/p9 despite table label; DAP is thermal pad name. DCM p14; thermal model CCM p17. D52 ENA default annotation by agent:/root/implement_pcbknowledge_brief/g2_passive_author; p3/p9 permit floating.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "regulator.switching.buck"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

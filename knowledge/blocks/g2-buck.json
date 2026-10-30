@@ -1,0 +1,1700 @@
+{
+  "category": "power.switching",
+  "checks": [
+    {
+      "calculator": "feedback_parallel_divider",
+      "inputs": {
+        "lower_resistance": {
+          "component": "RF2",
+          "parameter": "resistance"
+        },
+        "reference_voltage": {
+          "component": "U1",
+          "parameter": "reference_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RF3",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RF4",
+          "parameter": "resistance"
+        },
+        "upper_resistance": {
+          "component": "RF1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G2 3.3V rail lower5% design limit.",
+          "unit": "V",
+          "value": 3.135
+        },
+        "operator": "GE",
+        "output": "output_voltage"
+      }
+    },
+    {
+      "calculator": "feedback_parallel_divider",
+      "inputs": {
+        "lower_resistance": {
+          "component": "RF2",
+          "parameter": "resistance"
+        },
+        "reference_voltage": {
+          "component": "U1",
+          "parameter": "reference_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RF3",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RF4",
+          "parameter": "resistance"
+        },
+        "upper_resistance": {
+          "component": "RF1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G2 3.3V rail upper5% design limit.",
+          "unit": "V",
+          "value": 3.465
+        },
+        "operator": "LE",
+        "output": "output_voltage"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Positive regulator headroom.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "output_headroom"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:tdk-clf7045ni-d"
+          },
+          "note": "TDK rated saturation current ceiling0.81A at30% inductance drop; not typical1.10A.",
+          "unit": "A",
+          "value": 0.81
+        },
+        "operator": "LE",
+        "output": "peak_current"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:ti-tps5430"
+          },
+          "unit": "A",
+          "value": 4
+        },
+        "operator": "LE",
+        "output": "peak_current"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 4,
+            "source": "source:ti-tps5430"
+          },
+          "unit": "degC",
+          "value": 125
+        },
+        "operator": "LE",
+        "output": "junction_temperature"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 design allocation half cited2.8A ripple rating; source100kHz105degC, application frequency extrapolation explicitly modeled.",
+          "unit": "A",
+          "value": 1.4
+        },
+        "operator": "LE",
+        "output": "input_capacitor_rms_current"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 design allocation half cited4.65A ripple rating; source100kHz105degC, application frequency extrapolation explicitly modeled.",
+          "unit": "A",
+          "value": 2.325
+        },
+        "operator": "LE",
+        "output": "output_capacitor_rms_current"
+      }
+    },
+    {
+      "calculator": "tps5430_filter",
+      "inputs": {
+        "capacitance": {
+          "component": "C4",
+          "parameter": "capacitance"
+        },
+        "capacitor_esr_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 application ESR model factor2 on cited20degC100-300kHz maximum; not an invented32mohm manufacturer guarantee.",
+          "unit": "1",
+          "value": 2
+        },
+        "capacitor_esr_max": {
+          "bound": "max",
+          "component": "C4",
+          "parameter": "equivalent_series_resistance"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RE1",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RE2",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "TI internal-compensation ESR zero must lie above crossover; domain requires strictgreaterthan1.",
+          "unit": "1",
+          "value": 1
+        },
+        "operator": "GE",
+        "output": "zero_to_crossover_ratio"
+      }
+    },
+    {
+      "calculator": "tps5430_filter",
+      "inputs": {
+        "capacitance": {
+          "component": "C4",
+          "parameter": "capacitance"
+        },
+        "capacitor_esr_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 application ESR model factor2 on cited20degC100-300kHz maximum; not an invented32mohm manufacturer guarantee.",
+          "unit": "1",
+          "value": 2
+        },
+        "capacitor_esr_max": {
+          "bound": "max",
+          "component": "C4",
+          "parameter": "equivalent_series_resistance"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RE1",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RE2",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 screening ceiling from source design guidance.",
+          "unit": "Hz",
+          "value": 24000
+        },
+        "operator": "LE",
+        "output": "esr_zero_frequency"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Positive margin to source design equation87% maximum-duty model.",
+          "unit": "1",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "duty_margin"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 half1.05A typical40degC-rise characterization as explicit application allocation, not guaranteed manufacturer thermal rating.",
+          "unit": "A",
+          "value": 0.525
+        },
+        "operator": "LE",
+        "output": "inductor_rms_current"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "VIN must exceed source rising UVLO maximum.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "input_min_margin"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:ti-tps5430"
+          },
+          "note": "Maximum specified minimum on-time.",
+          "unit": "s",
+          "value": 2e-07
+        },
+        "operator": "GE",
+        "output": "on_time"
+      }
+    },
+    {
+      "calculator": "tps5430_output_ripple",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "capacitance": {
+          "component": "C4",
+          "parameter": "capacitance"
+        },
+        "capacitor_esr_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 application ESR model factor2 on cited20degC100-300kHz maximum; not an invented32mohm manufacturer guarantee.",
+          "unit": "1",
+          "value": 2
+        },
+        "capacitor_esr_max": {
+          "bound": "max",
+          "component": "C4",
+          "parameter": "equivalent_series_resistance"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RE1",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RE2",
+          "parameter": "resistance"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D39 steady CCM design-point ripple allocation; not transient or all-load DCM guarantee.",
+          "unit": "V",
+          "value": 0.05
+        },
+        "operator": "LE",
+        "output": "output_ripple"
+      }
+    },
+    {
+      "calculator": "feedback_parallel_divider",
+      "inputs": {
+        "lower_resistance": {
+          "component": "RF2",
+          "parameter": "resistance"
+        },
+        "reference_voltage": {
+          "component": "U1",
+          "parameter": "reference_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RF3",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RF4",
+          "parameter": "resistance"
+        },
+        "upper_resistance": {
+          "component": "RF1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Declared exact G2 rail interface bound; actual selected feedback network must remain enclosed by the rail consumed by downstream GPIO checks.",
+          "unit": "V",
+          "value": 3.1658112750050518
+        },
+        "operator": "GE",
+        "output": "output_voltage"
+      }
+    },
+    {
+      "calculator": "feedback_parallel_divider",
+      "inputs": {
+        "lower_resistance": {
+          "component": "RF2",
+          "parameter": "resistance"
+        },
+        "reference_voltage": {
+          "component": "U1",
+          "parameter": "reference_voltage"
+        },
+        "series_resistance_a": {
+          "component": "RF3",
+          "parameter": "resistance"
+        },
+        "series_resistance_b": {
+          "component": "RF4",
+          "parameter": "resistance"
+        },
+        "upper_resistance": {
+          "component": "RF1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Declared exact G2 rail interface bound; actual selected feedback network must remain enclosed by the rail consumed by downstream GPIO checks.",
+          "unit": "V",
+          "value": 3.379200164914451
+        },
+        "operator": "LE",
+        "output": "output_voltage"
+      }
+    },
+    {
+      "calculator": "tps5430_ccm_design",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 G2 ambient design point.",
+          "unit": "degC",
+          "value": 40
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.2,
+          "min": 0,
+          "note": "D50 catch-diode application model0..1.2V based on cited SS14 maximum test voltage; not all-condition manufacturer guarantee.",
+          "unit": "V"
+        },
+        "frequency": {
+          "component": "U1",
+          "parameter": "frequency"
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.00012,
+          "min": 5.6e-05,
+          "note": "D50 operating model: source 80 uH tolerance minimum times0.7 saturation criterion gives56uH; maximum120uH. Not a new manufacturer all-current guarantee.",
+          "unit": "H"
+        },
+        "inductor_resistance": {
+          "component": "L1",
+          "parameter": "resistance"
+        },
+        "input_voltage": {
+          "parameter": "input_voltage"
+        },
+        "on_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.46,
+          "min": 0,
+          "note": "D50 application model0..2x source0.23ohm maximum atVIN12/VBOOT-PH4.5V for widerinput; zero lowerbound avoids treating sourceMAX asminimum. Hardware validation required.",
+          "unit": "ohm"
+        },
+        "output_current": {
+          "parameter": "output_current"
+        },
+        "output_voltage": {
+          "parameter": "output_voltage"
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 provisional application thermal model2x TPS5430EVM45degC/W. Does not use prohibited JEDEC42.3 design estimate; actual PCB validation required.",
+          "unit": "degC/W",
+          "value": 90
+        },
+        "uvlo_voltage": {
+          "bound": "max",
+          "component": "U1",
+          "parameter": "uvlo_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D34 total0.5A input budget less three0.1A external loads leaves0.2A for the buck, including the stated source design switching/bias-current model.",
+          "unit": "A",
+          "value": 0.2
+        },
+        "operator": "LE",
+        "output": "input_current"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-tps5430dda"
+      }
+    },
+    {
+      "ref": "L1",
+      "select": {
+        "part": "part:tdk-clf7045nit-101m-d"
+      }
+    },
+    {
+      "ref": "D1",
+      "select": {
+        "part": "part:taiwansemi-ss14"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:panasonic-25svpf47m"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C3",
+      "select": {
+        "part": "part:kemet-c0603c103k5ractu"
+      }
+    },
+    {
+      "ref": "C4",
+      "select": {
+        "part": "part:panasonic-25svpf180m"
+      }
+    },
+    {
+      "ref": "RE1",
+      "select": {
+        "part": "part:yageo-rl1206fr-070r1l"
+      }
+    },
+    {
+      "ref": "RE2",
+      "select": {
+        "part": "part:yageo-rl1206fr-070r1l"
+      }
+    },
+    {
+      "ref": "RF1",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RF2",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RF3",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RF4",
+      "select": {
+        "part": "part:yageo-rc0603fr-074k7l"
+      }
+    },
+    {
+      "ref": "C5",
+      "select": {
+        "part": "part:kemet-c0805c106k8pactu"
+      }
+    },
+    {
+      "ref": "C6",
+      "select": {
+        "part": "part:kemet-c0805c106k8pactu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 4,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 5,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 9,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 10,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 14,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 15,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 16,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 17,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 23,
+      "source": "source:ti-tps5430"
+    }
+  ],
+  "id": "block:g2-buck",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D42 compact buck current paths; VIN ceramic <=1mm from sourcep3.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "C2",
+      "target": "U1.pin:7"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D42 compact buck current paths; VIN ceramic <=1mm from sourcep3.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "C3",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D42 compact buck current paths; VIN ceramic <=1mm from sourcep3.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "D1",
+      "target": "U1.pin:8"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D42 compact buck current paths; VIN ceramic <=1mm from sourcep3.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C4",
+      "target": "L1.pin:2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D42 compact buck current paths; VIN ceramic <=1mm from sourcep3.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "RF1",
+      "target": "U1.pin:4"
+    },
+    {
+      "kind": "MINIMIZE_LOOP",
+      "max_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D42 minimize high di/dt switching loop; original layout target.",
+        "unit": "mm2",
+        "value": 25
+      },
+      "path": [
+        "C2.pin:1",
+        "U1.pin:7",
+        "U1.pin:8",
+        "D1.pin:1",
+        "D1.pin:2",
+        "C2.pin:2"
+      ]
+    },
+    {
+      "kind": "COPPER_AREA",
+      "min_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D44 grounded thermal pad copper target; does not certify modeled thetaJA.",
+        "unit": "mm2",
+        "value": 100
+      },
+      "target": "U1.pin:DAP"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original G2 power-net minimum; fabrication check still required.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VOUT"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "TI p23 local ceramic bypass. D50 two10uF parts C5/C6, tolerance-min9uF each times0.5 DC-bias retention gives modeled9uF bank; not manufacturer bias guarantee.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "C5",
+      "target": "U1.pin:7"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "TI p23 local ceramic bypass. D50 two10uF parts C5/C6, tolerance-min9uF each times0.5 DC-bias retention gives modeled9uF bank; not manufacturer bias guarantee.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "C6",
+      "target": "U1.pin:7"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "TI p3: local VIN bypass within1mm of both VIN7 andGND6.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "C2",
+      "target": "U1.pin:6"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "TI p3: local VIN bypass within1mm of both VIN7 andGND6.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "C5",
+      "target": "U1.pin:6"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "TI p3: local VIN bypass within1mm of both VIN7 andGND6.",
+        "unit": "mm",
+        "value": 1
+      },
+      "subject": "C6",
+      "target": "U1.pin:6"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "U1.pin:7",
+        "C1.pin:1",
+        "C2.pin:1",
+        "C5.pin:1",
+        "C6.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:6",
+        "U1.pin:DAP",
+        "C1.pin:2",
+        "C2.pin:2",
+        "D1.pin:2",
+        "C4.pin:2",
+        "RF2.pin:2",
+        "RF4.pin:2",
+        "C5.pin:2",
+        "C6.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "U1.pin:8",
+        "D1.pin:1",
+        "L1.pin:1",
+        "C3.pin:2"
+      ],
+      "name": "SW"
+    },
+    {
+      "connect": [
+        "U1.pin:1",
+        "C3.pin:1"
+      ],
+      "name": "BOOT"
+    },
+    {
+      "connect": [
+        "port:VOUT",
+        "L1.pin:2",
+        "RF1.pin:1",
+        "RE1.pin:1",
+        "RE2.pin:1"
+      ],
+      "name": "VOUT"
+    },
+    {
+      "connect": [
+        "RE1.pin:2",
+        "RE2.pin:2",
+        "C4.pin:1"
+      ],
+      "name": "CAP_OUT"
+    },
+    {
+      "connect": [
+        "U1.pin:4",
+        "RF1.pin:2",
+        "RF2.pin:1",
+        "RF3.pin:1"
+      ],
+      "name": "FB"
+    },
+    {
+      "connect": [
+        "RF3.pin:2",
+        "RF4.pin:1"
+      ],
+      "name": "FB_SERIES"
+    }
+  ],
+  "parameters": {
+    "input_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 12,
+        "min": 6.2715,
+        "note": "D50 input7V minus modeled SS14.6V, fuse.5A*.156ohm and INA219 shunt.5A*.101ohm; upper12V. The upstream input-monitor shunt is included.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D39 full-load analytical working point, not a minimum-load requirement. Lower loads enter documented DCM.",
+        "unit": "A",
+        "value": 0.15
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "CALCULATED",
+        "calculator": "feedback_parallel_divider",
+        "conditions": {},
+        "inputs": {
+          "lower_resistance": {
+            "basis": "DATASHEET",
+            "conditions": {},
+            "evidence": {
+              "page": 1,
+              "source": "source:yageo-rc0603fr-0710kl"
+            },
+            "max": 10100.0,
+            "min": 9900.0,
+            "typ": 10000,
+            "unit": "ohm"
+          },
+          "reference_voltage": {
+            "basis": "DATASHEET",
+            "conditions": {},
+            "evidence": {
+              "page": 5,
+              "source": "source:ti-tps5430"
+            },
+            "max": 1.245,
+            "min": 1.196,
+            "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+            "typ": 1.221,
+            "unit": "V"
+          },
+          "series_resistance_a": {
+            "basis": "DATASHEET",
+            "conditions": {},
+            "evidence": {
+              "page": 1,
+              "source": "source:yageo-rc0603fr-0710kl"
+            },
+            "max": 10100.0,
+            "min": 9900.0,
+            "typ": 10000,
+            "unit": "ohm"
+          },
+          "series_resistance_b": {
+            "basis": "DATASHEET",
+            "conditions": {},
+            "evidence": {
+              "page": 1,
+              "source": "source:yageo-rc0603fr-074k7l"
+            },
+            "max": 4747.0,
+            "min": 4653.0,
+            "typ": 4700,
+            "unit": "ohm"
+          },
+          "upper_resistance": {
+            "basis": "DATASHEET",
+            "conditions": {},
+            "evidence": {
+              "page": 1,
+              "source": "source:yageo-rc0603fr-0710kl"
+            },
+            "max": 10100.0,
+            "min": 9900.0,
+            "typ": 10000,
+            "unit": "ohm"
+          }
+        },
+        "max": 3.379200164914451,
+        "min": 3.1658112750050518,
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VOUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "notes": "D42 buck; D44 DAP; D49 passives; D50 explicit application models; D51 four-resistor feedback/two parallel ESR resistors. NC2/3 open; D52 ENA floats per p3/p9. Checks are150mA CCM only; p14 DCM remains valid at light load, not an all-load CCM claim.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

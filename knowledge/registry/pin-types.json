@@ -59,6 +59,13 @@
         "Q2",
         "Q8"
       ]
+    },
+    "POWER_SINK": {
+      "queries": [
+        "Q2",
+        "Q4",
+        "Q8"
+      ]
     }
   },
   "id": "registry:pin-types",

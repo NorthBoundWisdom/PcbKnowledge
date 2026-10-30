@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 13119424,
+  "id": "source:st-rm0008",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 1136,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "STMicroelectronics",
+  "revision": "RM0008 Rev21",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "4c1b8ac2729cc1f45a4685eea9e91e6139e24e58804fba21e27201dfcc2ad149",
+  "title": "STM32F10xxx reference manual RM0008",
+  "url": "https://www.st.com/resource/en/reference_manual/cd00171190-stm32f101-103-105-107-stm32f100-series-armbased-32bit-mcus-stmicroelectronics.pdf",
+  "verification": "AGENT_VERIFIED"
+}

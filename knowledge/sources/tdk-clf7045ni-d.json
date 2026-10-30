@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 218664,
+  "id": "source:tdk-clf7045ni-d",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 5,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "TDK",
+  "revision": "20200706",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "a3711d0db3a4083f33b53df576ba66aa48271731a6ffbebc941d284867796a51",
+  "title": "CLF7045NI-D Inductors for power circuits",
+  "url": "https://product.tdk.com/en/system/files/dam/doc/product/inductor/inductor/smd/catalog/inductor_automotive_power_clf7045ni-d_en.pdf",
+  "verification": "AGENT_VERIFIED"
+}

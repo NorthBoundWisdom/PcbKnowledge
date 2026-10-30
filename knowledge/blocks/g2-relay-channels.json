@@ -2,139 +2,254 @@
   "category": "driver.relay",
   "checks": [
     {
-      "calculator": "mosfet_conduction_loss",
+      "calculator": "darlington_driver",
       "inputs": {
-        "on_resistance": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "channels": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D35 two simultaneously active relay channels.",
+          "unit": "1",
+          "value": 2
+        },
+        "coil_inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D35 maximum external coil inductance.",
+          "unit": "H",
+          "value": 0.1
+        },
+        "collector_current": {
+          "parameter": "output_current"
+        },
+        "collector_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D43 use VCE2V from VIon test at200mA and assume monotonic drop for the100mA design load.",
+          "unit": "V",
+          "value": 2
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D43 allocate1.35mA per input below3.6V using the source maximum tested at3.85V as a monotonic input-load model.",
+          "unit": "A",
+          "value": 0.00135
+        },
+        "logic_voltage": {
+          "parameter": "input_voltage"
+        },
+        "switching_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D35 maximum external coil switching rate.",
+          "unit": "Hz",
+          "value": 10
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 PW reference-board thermal model uses114.1degC/W; emitter copper constraint is100mm2.",
+          "unit": "degC/W",
+          "value": 114.1
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 junction-temperature ceiling.",
+          "unit": "degC",
+          "value": 125
+        },
+        "operator": "LE",
+        "output": "junction_temperature"
+      }
+    },
+    {
+      "calculator": "gpio_drive",
+      "inputs": {
+        "high_drop": {
+          "basis": "DATASHEET",
+          "conditions": {
+            "TA_max": {
+              "unit": "degC",
+              "value": 85
+            },
+            "TA_min": {
+              "unit": "degC",
+              "value": -40
+            },
+            "VDD_max": {
+              "unit": "V",
+              "value": 3.6
+            },
+            "VDD_min": {
+              "unit": "V",
+              "value": 2.7
+            },
+            "output_current": {
+              "unit": "A",
+              "value": 0.008
+            }
+          },
+          "evidence": {
+            "page": 64,
+            "source": "source:st-stm32f103"
+          },
+          "note": "CMOS GPIO VOH >= VDD-0.4V, up to eight sourcing outputs; strict 2.7<VDD<3.6V. C6 normal operating TA from Table9 p38.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "high_threshold": {
           "bound": "max",
-          "component": "Q1",
+          "component": "U1",
+          "parameter": "input_high_voltage"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D43 allocate1.35mA per input below3.6V using the source maximum tested at3.85V as a monotonic input-load model.",
+          "unit": "A",
+          "value": 0.00135
+        },
+        "pulldown_resistance": {
+          "component": "RP1",
           "parameter": "resistance"
         },
-        "rms_current": {
-          "parameter": "output_current"
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D43 direct GPIO connection.",
+          "unit": "ohm",
+          "value": 0
+        },
+        "source_current_rating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 64,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Current condition for cited CMOS GPIO VOH bound.",
+          "unit": "A",
+          "value": 0.008
+        },
+        "supply": {
+          "parameter": "input_voltage"
         }
       },
       "require": {
         "limit": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "Source-condition diagnostic at TA25, VGS2.5 and pulsed ID2.5A resistance; not a hot bound.",
-          "unit": "W",
-          "value": 0.002
+          "note": "D43 positive input-high margin.",
+          "unit": "V",
+          "value": 0
         },
-        "operator": "LE",
-        "output": "power"
+        "operator": "GE",
+        "output": "high_margin"
       }
     },
     {
-      "calculator": "mosfet_conduction_loss",
+      "calculator": "gpio_drive",
       "inputs": {
-        "on_resistance": {
-          "parameter": "on_resistance"
+        "high_drop": {
+          "basis": "DATASHEET",
+          "conditions": {
+            "TA_max": {
+              "unit": "degC",
+              "value": 85
+            },
+            "TA_min": {
+              "unit": "degC",
+              "value": -40
+            },
+            "VDD_max": {
+              "unit": "V",
+              "value": 3.6
+            },
+            "VDD_min": {
+              "unit": "V",
+              "value": 2.7
+            },
+            "output_current": {
+              "unit": "A",
+              "value": 0.008
+            }
+          },
+          "evidence": {
+            "page": 64,
+            "source": "source:st-stm32f103"
+          },
+          "note": "CMOS GPIO VOH >= VDD-0.4V, up to eight sourcing outputs; strict 2.7<VDD<3.6V. C6 normal operating TA from Table9 p38.",
+          "unit": "V",
+          "value": 0.4
         },
-        "rms_current": {
-          "parameter": "output_current"
-        }
-      },
-      "require": {
-        "limit": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "D36 operating conduction budget per MOSFET; source-backed resistance with actual temperature conditions is required.",
-          "unit": "W",
-          "value": 0.002
-        },
-        "operator": "LE",
-        "output": "power"
-      }
-    },
-    {
-      "calculator": "mosfet_conduction_loss",
-      "inputs": {
-        "on_resistance": {
+        "high_threshold": {
           "bound": "max",
-          "component": "Q2",
+          "component": "U1",
+          "parameter": "input_high_voltage"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D43 allocate1.35mA per input below3.6V using the source maximum tested at3.85V as a monotonic input-load model.",
+          "unit": "A",
+          "value": 0.00135
+        },
+        "pulldown_resistance": {
+          "component": "RP2",
           "parameter": "resistance"
         },
-        "rms_current": {
-          "parameter": "output_current"
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D43 direct GPIO connection.",
+          "unit": "ohm",
+          "value": 0
+        },
+        "source_current_rating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 64,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Current condition for cited CMOS GPIO VOH bound.",
+          "unit": "A",
+          "value": 0.008
+        },
+        "supply": {
+          "parameter": "input_voltage"
         }
       },
       "require": {
         "limit": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "Source-condition diagnostic at TA25, VGS2.5 and pulsed ID2.5A resistance; not a hot bound.",
-          "unit": "W",
-          "value": 0.002
+          "note": "D43 positive input-high margin.",
+          "unit": "V",
+          "value": 0
         },
-        "operator": "LE",
-        "output": "power"
-      }
-    },
-    {
-      "calculator": "mosfet_conduction_loss",
-      "inputs": {
-        "on_resistance": {
-          "parameter": "on_resistance"
-        },
-        "rms_current": {
-          "parameter": "output_current"
-        }
-      },
-      "require": {
-        "limit": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "D36 operating conduction budget per MOSFET; source-backed resistance with actual temperature conditions is required.",
-          "unit": "W",
-          "value": 0.002
-        },
-        "operator": "LE",
-        "output": "power"
+        "operator": "GE",
+        "output": "high_margin"
       }
     }
   ],
   "components": [
     {
-      "ref": "Q1",
+      "ref": "U1",
       "select": {
-        "part": "part:rohm-rq5e025tntl"
-      }
-    },
-    {
-      "ref": "D1",
-      "select": {
-        "part": "part:taiwansemi-ss14"
-      }
-    },
-    {
-      "ref": "RG1",
-      "select": {
-        "part": "part:yageo-rc0603fr-0710rl"
+        "part": "part:ti-uln2003aipwr"
       }
     },
     {
       "ref": "RP1",
       "select": {
         "part": "part:yageo-rc0603fr-0710kl"
-      }
-    },
-    {
-      "ref": "Q2",
-      "select": {
-        "part": "part:rohm-rq5e025tntl"
-      }
-    },
-    {
-      "ref": "D2",
-      "select": {
-        "part": "part:taiwansemi-ss14"
-      }
-    },
-    {
-      "ref": "RG2",
-      "select": {
-        "part": "part:yageo-rc0603fr-0710rl"
       }
     },
     {
@@ -146,187 +261,204 @@
   ],
   "evidence": [
     {
-      "page": 1,
-      "source": "source:rohm-rq5e025tntl"
+      "page": 3,
+      "source": "source:ti-uln2003a"
     },
     {
-      "page": 2,
-      "source": "source:rohm-rq5e025tntl"
+      "page": 4,
+      "source": "source:ti-uln2003a"
+    },
+    {
+      "page": 6,
+      "source": "source:ti-uln2003a"
     },
     {
       "page": 7,
-      "source": "source:taiwansemi-ss14"
+      "source": "source:ti-uln2003a"
+    },
+    {
+      "page": 17,
+      "source": "source:ti-uln2003a"
+    },
+    {
+      "page": 19,
+      "source": "source:ti-uln2003a"
+    },
+    {
+      "page": 64,
+      "source": "source:st-stm32f103"
     }
   ],
   "id": "block:g2-relay-channels",
   "layout": [
     {
-      "kind": "GROUP",
-      "subjects": [
-        "Q1",
-        "D1",
-        "RG1",
-        "RP1"
-      ]
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D35 aggregate relay-return copper design floor.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "GND"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D35 shared clamp supply copper design floor.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VLOAD"
+    },
+    {
+      "kind": "COPPER_AREA",
+      "min_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D45 emitter ground copper for heat spreading.",
+        "unit": "mm2",
+        "value": 100
+      },
+      "target": "U1.pin:8"
     },
     {
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D36 place flyback clamp near the switch; external load wiring remains a separate system constraint.",
+        "note": "D43 keep startup-off bias near driver input.",
         "unit": "mm",
         "value": 3
       },
-      "subject": "D1",
-      "target": "Q1"
-    },
-    {
-      "kind": "GROUP",
-      "subjects": [
-        "Q2",
-        "D2",
-        "RG2",
-        "RP2"
-      ]
+      "subject": "RP1",
+      "target": "U1"
     },
     {
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D36 place flyback clamp near the switch; external load wiring remains a separate system constraint.",
+        "note": "D43 keep startup-off bias near driver input.",
         "unit": "mm",
         "value": 3
       },
-      "subject": "D2",
-      "target": "Q2"
+      "subject": "RP2",
+      "target": "U1"
     }
   ],
   "nets": [
     {
       "connect": [
-        "port:GATE1",
-        "RG1.pin:1"
+        "port:GND",
+        "U1.pin:8",
+        "U1.pin:3",
+        "U1.pin:4",
+        "U1.pin:5",
+        "U1.pin:6",
+        "U1.pin:7",
+        "RP1.pin:2",
+        "RP2.pin:2"
       ],
-      "name": "GATE1"
-    },
-    {
-      "connect": [
-        "RG1.pin:2",
-        "RP1.pin:1",
-        "Q1.pin:1"
-      ],
-      "name": "GATE_BIASED1"
-    },
-    {
-      "connect": [
-        "port:RETURN1",
-        "Q1.pin:3",
-        "D1.pin:2"
-      ],
-      "name": "RETURN1"
-    },
-    {
-      "connect": [
-        "port:GATE2",
-        "RG2.pin:1"
-      ],
-      "name": "GATE2"
-    },
-    {
-      "connect": [
-        "RG2.pin:2",
-        "RP2.pin:1",
-        "Q2.pin:1"
-      ],
-      "name": "GATE_BIASED2"
-    },
-    {
-      "connect": [
-        "port:RETURN2",
-        "Q2.pin:3",
-        "D2.pin:2"
-      ],
-      "name": "RETURN2"
+      "name": "GND"
     },
     {
       "connect": [
         "port:VLOAD",
-        "D1.pin:1",
-        "D2.pin:1"
+        "U1.pin:9"
       ],
       "name": "VLOAD"
     },
     {
       "connect": [
-        "port:GND",
-        "Q1.pin:2",
-        "RP1.pin:2",
-        "Q2.pin:2",
-        "RP2.pin:2"
+        "port:GATE1",
+        "U1.pin:1",
+        "RP1.pin:1"
       ],
-      "name": "GND"
+      "name": "GATE1"
+    },
+    {
+      "connect": [
+        "port:GATE2",
+        "U1.pin:2",
+        "RP2.pin:1"
+      ],
+      "name": "GATE2"
+    },
+    {
+      "connect": [
+        "port:RETURN1",
+        "U1.pin:16"
+      ],
+      "name": "RETURN1"
+    },
+    {
+      "connect": [
+        "port:RETURN2",
+        "U1.pin:15"
+      ],
+      "name": "RETURN2"
     }
   ],
   "parameters": {
-    "gate_voltage": {
-      "fixed": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "max": 3.3,
-        "min": 2.5,
-        "note": "D36 required actual MOSFET gate-to-source envelope after series resistor, pulldown divider and leakage. Upstream drive evidence must establish this, not nominal supply.",
-        "unit": "V"
-      },
+    "input_voltage": {
       "quantity": "voltage",
-      "required": true
-    },
-    "on_resistance": {
-      "quantity": "resistance",
       "required": true
     },
     "output_current": {
       "fixed": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D35 maximum current PER CHANNEL, including continuous conduction.",
+        "note": "D35 current per active channel.",
         "unit": "A",
         "value": 0.1
       },
       "quantity": "current",
       "required": true
+    },
+    "temperature": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D45 ambient evaluation point.",
+        "unit": "degC",
+        "value": 40
+      },
+      "quantity": "temperature",
+      "required": true
     }
   },
   "ports": [
     {
-      "kind": "POWER_IN",
-      "name": "VLOAD"
-    },
-    {
       "kind": "GROUND",
       "name": "GND"
+    },
+    {
+      "kind": "POWER_IN",
+      "name": "VLOAD"
     },
     {
       "kind": "INPUT",
       "name": "GATE1"
     },
     {
-      "kind": "OPEN_DRAIN",
-      "name": "RETURN1"
-    },
-    {
       "kind": "INPUT",
       "name": "GATE2"
     },
     {
-      "kind": "OPEN_DRAIN",
+      "kind": "POWER_SINK",
+      "name": "RETURN1"
+    },
+    {
+      "kind": "POWER_SINK",
       "name": "RETURN2"
     }
   ],
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_partial_blocks",
-    "notes": "D36 discrete load sinks, not an ULN2003A pinout substitute. Gate-drive and operating Rds bounds need upstream evidence. Source-condition conduction diagnostics do not establish hot resistance or switching loss.",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40",
+    "notes": "D40/D43 two ULN2003AIPWR channels with10k startup-off pulldowns; unused inputs low and collectors open. D45 reference thermal model and100mm2 emitter copper. Actual MCU rail is required and bounds gate input-power allocation.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]

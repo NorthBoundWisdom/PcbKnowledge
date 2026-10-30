@@ -17,7 +17,7 @@
         "limit": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "Source-condition diagnostic at TA25, VGS2.5 and pulsed ID2.5A resistance; not a hot bound.",
+          "note": "Source-condition conduction diagnostic atTA25,VGS2.5V.",
           "unit": "W",
           "value": 0.002
         },
@@ -29,7 +29,24 @@
       "calculator": "mosfet_conduction_loss",
       "inputs": {
         "on_resistance": {
-          "parameter": "on_resistance"
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TJ": {
+              "unit": "degC",
+              "value": 125
+            },
+            "gate_voltage": {
+              "unit": "V",
+              "value": 2.5
+            }
+          },
+          "evidence": {
+            "page": 2,
+            "source": "source:rohm-rq5e025tntl"
+          },
+          "note": "D41 uses1.5 times the0.133ohm source maximum at25degC,VGS2.5V for the design up toTJ125degC.",
+          "unit": "ohm",
+          "value": 0.1995
         },
         "rms_current": {
           "parameter": "output_current"
@@ -39,12 +56,96 @@
         "limit": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D36 operating conduction budget per MOSFET; source-backed resistance with actual temperature conditions is required.",
+          "note": "D41 operating conduction budget per MOSFET.",
           "unit": "W",
           "value": 0.002
         },
         "operator": "LE",
         "output": "power"
+      }
+    },
+    {
+      "calculator": "gpio_drive",
+      "inputs": {
+        "high_drop": {
+          "basis": "DATASHEET",
+          "conditions": {
+            "TA_max": {
+              "unit": "degC",
+              "value": 85
+            },
+            "TA_min": {
+              "unit": "degC",
+              "value": -40
+            },
+            "VDD_max": {
+              "unit": "V",
+              "value": 3.6
+            },
+            "VDD_min": {
+              "unit": "V",
+              "value": 2.7
+            },
+            "output_current": {
+              "unit": "A",
+              "value": 0.008
+            }
+          },
+          "evidence": {
+            "page": 64,
+            "source": "source:st-stm32f103"
+          },
+          "note": "CMOS GPIO VOH >= VDD-0.4V, up to eight sourcing outputs; strict 2.7<VDD<3.6V. C6 normal operating TA from Table9 p38.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "high_threshold": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D41 source RDS(on) gate-voltage condition.",
+          "unit": "V",
+          "value": 2.5
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 gate-load model allocates100uA,10times the10uA source leakage tested atVGS12V andTA25degC.",
+          "unit": "A",
+          "value": 0.0001
+        },
+        "pulldown_resistance": {
+          "component": "RP1",
+          "parameter": "resistance"
+        },
+        "series_resistance": {
+          "component": "RG1",
+          "parameter": "resistance"
+        },
+        "source_current_rating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 64,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Current condition for cited CMOS GPIO VOH bound.",
+          "unit": "A",
+          "value": 0.008
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D41 gate margin after series resistor, pulldown and leakage allocation.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "high_margin"
       }
     }
   ],
@@ -86,6 +187,10 @@
     {
       "page": 7,
       "source": "source:taiwansemi-ss14"
+    },
+    {
+      "page": 64,
+      "source": "source:st-stm32f103"
     }
   ],
   "id": "block:g2-low-side-switch",
@@ -104,7 +209,7 @@
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D36 place flyback clamp near the switch; external load wiring remains a separate system constraint.",
+        "note": "D40 place flyback diode near the switched load return.",
         "unit": "mm",
         "value": 3
       },
@@ -153,20 +258,8 @@
     }
   ],
   "parameters": {
-    "gate_voltage": {
-      "fixed": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "max": 3.3,
-        "min": 2.5,
-        "note": "D36 required actual MOSFET gate-to-source envelope after series resistor, pulldown divider and leakage. Upstream drive evidence must establish this, not nominal supply.",
-        "unit": "V"
-      },
+    "input_voltage": {
       "quantity": "voltage",
-      "required": true
-    },
-    "on_resistance": {
-      "quantity": "resistance",
       "required": true
     },
     "output_current": {
@@ -195,13 +288,13 @@
       "name": "GATE"
     },
     {
-      "kind": "OPEN_DRAIN",
+      "kind": "POWER_SINK",
       "name": "RETURN"
     }
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/g2_partial_blocks",
-    "notes": "D36 discrete load sinks, not an ULN2003A pinout substitute. Gate-drive and operating Rds bounds need upstream evidence. Source-condition conduction diagnostics do not establish hot resistance or switching loss.",
+    "notes": "Updated by agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40: D40 separate low-side load sink; D41 hot-resistance model and actual-rail GPIO drive check replace caller-supplied resistance and gate floors.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]

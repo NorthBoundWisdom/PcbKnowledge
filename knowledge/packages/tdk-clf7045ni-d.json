@@ -1,0 +1,125 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      "max": 4.8,
+      "min": 4.2,
+      "typ": 4.5,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      "max": 7.2,
+      "min": 6.8,
+      "typ": 7,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      "max": 7.6,
+      "min": 7.2,
+      "typ": 7.4,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G2 courtyard allowance; derived geometry must pass fabrication checks.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "pad_height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      "unit": "mm",
+      "value": 2.2
+    },
+    "pad_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      "unit": "mm",
+      "value": 2.4
+    },
+    "pin_count": 2,
+    "pitch": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Unused single-pad-per-side generator spacing.",
+      "unit": "mm",
+      "value": 1
+    },
+    "row_pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      "note": "Recommended innergap3.3mm pluspadwidth2.4mm.",
+      "unit": "mm",
+      "value": 5.7
+    }
+  },
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:tdk-clf7045ni-d"
+    }
+  ],
+  "family": "INDUCTOR_SMD",
+  "generator": "manufacturer_two_side_land",
+  "id": "package:tdk-clf7045ni-d",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "notes": "Own generator repeats cited manufacturer recommended two-terminal lands; terminal numbers1/2 are unpolarized repository convention.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:tdk-clf7045ni-d"
+      },
+      {
+        "page": 4,
+        "source": "source:tdk-clf7045ni-d"
+      }
+    ],
+    "mpns": [
+      "CLF7045NIT-101M-D"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

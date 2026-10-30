@@ -1,0 +1,125 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 1.2,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 5.1,
+      "min": 4.9,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 4.5,
+      "min": 4.3,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 0.75,
+      "min": 0.5,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 6.6,
+      "min": 6.2,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 0.3,
+      "min": 0.17,
+      "unit": "mm"
+    },
+    "pin_count": 16,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      },
+      "unit": "mm",
+      "value": 0.65
+    }
+  },
+  "evidence": [
+    {
+      "page": 38,
+      "source": "source:ti-uln2003a"
+    }
+  ],
+  "family": "TSSOP-16",
+  "generator": "gullwing_two_side",
+  "id": "package:ti-pw0016a-uln2003ai",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 23,
+        "source": "source:ti-uln2003a"
+      },
+      {
+        "page": 38,
+        "source": "source:ti-uln2003a"
+      }
+    ],
+    "mpns": [
+      "ULN2003AIPWR"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,131 @@
+{
+  "id": "part:panasonic-25svpf180m",
+  "identity_evidence": {
+    "page": 2,
+    "source": "source:panasonic-svpf"
+  },
+  "manufacturer": "Panasonic",
+  "mpn": "25SVPF180M",
+  "package": "package:panasonic-svpf-e12",
+  "parameters": {
+    "capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 20
+        },
+        "frequency": {
+          "unit": "Hz",
+          "value": 120
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 0.00021600000000000002,
+      "min": 0.000144,
+      "typ": 0.00018,
+      "unit": "F"
+    },
+    "equivalent_series_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 20
+        },
+        "frequency_max": {
+          "unit": "Hz",
+          "value": 300000
+        },
+        "frequency_min": {
+          "unit": "Hz",
+          "value": 100000
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 0.016,
+      "note": "Maximum ESR over cited 100-300 kHz test band at 20 degC.",
+      "unit": "ohm"
+    },
+    "ripple_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 105
+        },
+        "frequency": {
+          "unit": "Hz",
+          "value": 100000
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 4.65,
+      "note": "RMS rating. Frequency factor 1 is specified for 100 kHz <= f < 500 kHz; higher-frequency factor is not supplied.",
+      "unit": "A"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 105,
+      "min": -55,
+      "note": "Category temperature range.",
+      "unit": "degC"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:panasonic-svpf"
+      },
+      "max": 25,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Polarized capacitor: terminal 1 positive, terminal 2 negative; negative marking and terminal polarity shown.",
+    "page": 1,
+    "source": "source:panasonic-svpf"
+  },
+  "pins": [
+    {
+      "name": "+",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "-",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "capacitor.bulk"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

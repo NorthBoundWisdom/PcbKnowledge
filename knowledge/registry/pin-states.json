@@ -1,0 +1,13 @@
+{
+  "entries": {
+    "LOW": {
+      "queries": [
+        "Q10",
+        "Q2"
+      ]
+    }
+  },
+  "id": "registry:pin-states",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "BOARD_GENERATION"
+}

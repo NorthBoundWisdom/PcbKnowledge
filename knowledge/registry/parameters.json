@@ -1,5 +1,17 @@
 {
   "entries": {
+    "ac_voltage_rating": {
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q5",
+        "Q10"
+      ]
+    },
     "analog_input_voltage": {
       "conditions": {
         "TA": "temperature",
@@ -9,8 +21,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "annular_ring": {
@@ -23,8 +35,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "bus_frequency": {
@@ -35,6 +47,18 @@
         "output_current": "current"
       },
       "quantity": "frequency",
+      "queries": [
+        "Q1",
+        "Q10",
+        "Q5"
+      ]
+    },
+    "bus_voltage": {
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage": "voltage"
+      },
+      "quantity": "voltage",
       "queries": [
         "Q1",
         "Q5",
@@ -51,8 +75,19 @@
       "quantity": "capacitance",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
+      ]
+    },
+    "clamp_current": {
+      "conditions": {
+        "TA": "temperature"
+      },
+      "quantity": "current",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "clamping_voltage": {
@@ -65,8 +100,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "clearance": {
@@ -79,8 +114,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "clock_frequency": {
@@ -93,8 +128,8 @@
       "quantity": "frequency",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "common_mode_voltage": {
@@ -128,8 +163,19 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
+      ]
+    },
+    "current_limit": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "current",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "current_rating": {
@@ -143,8 +189,8 @@
       "quantity": "current",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "drill": {
@@ -157,8 +203,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "drive_current": {
@@ -191,27 +237,64 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
+      ]
+    },
+    "duty_cycle": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "ratio",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "enable_falling_voltage": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "enable_rising_voltage": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "equivalent_series_resistance": {
       "conditions": {
         "TA": "temperature",
         "frequency": "frequency",
+        "frequency_max": "frequency",
+        "frequency_min": "frequency",
         "input_voltage": "voltage",
         "output_current": "current"
       },
       "quantity": "resistance",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "forward_voltage": {
       "conditions": {
         "TA": "temperature",
+        "TA_max": "temperature",
+        "TA_min": "temperature",
         "TJ": "temperature",
         "forward_current": "current",
         "source_test_forward_current": "current"
@@ -232,8 +315,8 @@
       "quantity": "frequency",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "gain": {
@@ -299,6 +382,21 @@
         "Q5"
       ]
     },
+    "gpio_high_drop": {
+      "conditions": {
+        "TA_max": "temperature",
+        "TA_min": "temperature",
+        "VDD_max": "voltage",
+        "VDD_min": "voltage",
+        "output_current": "current"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q10",
+        "Q4"
+      ]
+    },
     "height": {
       "conditions": {
         "TA": "temperature",
@@ -309,8 +407,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "hold_current": {
@@ -323,8 +421,8 @@
       "quantity": "current",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "inductance": {
@@ -351,6 +449,8 @@
     "input_current": {
       "conditions": {
         "TA": "temperature",
+        "TA_max": "temperature",
+        "TA_min": "temperature",
         "TJ": "temperature",
         "frequency": "frequency",
         "gate_voltage": "voltage",
@@ -361,8 +461,8 @@
       "quantity": "current",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "input_high_ratio": {
@@ -374,8 +474,22 @@
       "quantity": "ratio",
       "queries": [
         "Q1",
+        "Q10",
+        "Q4"
+      ]
+    },
+    "input_high_voltage": {
+      "conditions": {
+        "TA_max": "temperature",
+        "TA_min": "temperature",
+        "output_current": "current",
+        "output_voltage": "voltage"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
         "Q4",
-        "Q10"
+        "Q5"
       ]
     },
     "input_low_ratio": {
@@ -387,8 +501,8 @@
       "quantity": "ratio",
       "queries": [
         "Q1",
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "input_offset_voltage": {
@@ -422,8 +536,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "io_voltage": {
@@ -435,8 +549,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "junction_temperature": {
@@ -449,8 +563,8 @@
       "quantity": "temperature",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "length": {
@@ -463,8 +577,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "load_capacitance": {
@@ -477,8 +591,19 @@
       "quantity": "capacitance",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
+      ]
+    },
+    "minimum_on_time": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "on_resistance": {
@@ -512,8 +637,8 @@
       "quantity": "current",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "output_high_voltage": {
@@ -568,8 +693,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "pitch": {
@@ -582,8 +707,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "power_rating": {
@@ -597,8 +722,8 @@
       "quantity": "power",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "quiescent_current": {
@@ -618,8 +743,19 @@
       "quantity": "current",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
+      ]
+    },
+    "reference_voltage": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "resistance": {
@@ -639,8 +775,8 @@
       "quantity": "resistance",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "resolution": {
@@ -652,8 +788,8 @@
       "quantity": "ratio",
       "queries": [
         "Q1",
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "ripple_current": {
@@ -686,8 +822,8 @@
       "quantity": "frequency",
       "queries": [
         "Q1",
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "saturation_current": {
@@ -711,6 +847,20 @@
         "Q5"
       ]
     },
+    "saturation_voltage": {
+      "conditions": {
+        "TA_max": "temperature",
+        "TA_min": "temperature",
+        "input_current": "current",
+        "output_current": "current"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "sense_limit": {
       "conditions": {
         "TA": "temperature",
@@ -718,8 +868,8 @@
       },
       "quantity": "voltage",
       "queries": [
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "shunt_capacitance": {
@@ -742,8 +892,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "standoff_voltage": {
@@ -756,8 +906,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "temperature": {
@@ -770,8 +920,8 @@
       "quantity": "temperature",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "thermal_resistance": {
@@ -785,8 +935,8 @@
       "quantity": "thermal_resistance",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "thickness": {
@@ -799,8 +949,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "time": {
@@ -813,8 +963,8 @@
       "quantity": "time",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "trace_width": {
@@ -827,8 +977,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "transconductance": {
@@ -851,8 +1001,19 @@
       "quantity": "current",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
+      ]
+    },
+    "uvlo_voltage": {
+      "conditions": {
+        "frequency": "frequency"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "voltage_rating": {
@@ -865,8 +1026,8 @@
       "quantity": "voltage",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     },
     "width": {
@@ -879,8 +1040,8 @@
       "quantity": "length",
       "queries": [
         "Q1",
-        "Q5",
-        "Q10"
+        "Q10",
+        "Q5"
       ]
     }
   },

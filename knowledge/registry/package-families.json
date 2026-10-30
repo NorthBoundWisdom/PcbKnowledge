@@ -3,8 +3,13 @@
     "BGA": {
       "queries": [
         "Q1",
-        "Q2",
-        "Q11"
+        "Q11",
+        "Q2"
+      ]
+    },
+    "CAP_CAN_SMD": {
+      "queries": [
+        "Q3"
       ]
     },
     "CHIP_0402": {
@@ -42,12 +47,22 @@
         "Q3"
       ]
     },
+    "FUSE_2410": {
+      "queries": [
+        "Q3"
+      ]
+    },
     "HC49_US_SMD": {
       "queries": [
         "Q3"
       ]
     },
     "HEADER_2P54": {
+      "queries": [
+        "Q3"
+      ]
+    },
+    "INDUCTOR_SMD": {
       "queries": [
         "Q3"
       ]
@@ -107,6 +122,12 @@
       "queries": [
         "Q2",
         "Q3"
+      ]
+    },
+    "TSSOP-16": {
+      "queries": [
+        "Q3",
+        "Q5"
       ]
     },
     "VQFN16FV3030": {

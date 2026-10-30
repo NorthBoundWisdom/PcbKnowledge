@@ -18,6 +18,38 @@
       "max": 72000000.0,
       "unit": "Hz"
     },
+    "gpio_high_drop": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA_max": {
+          "unit": "degC",
+          "value": 85
+        },
+        "TA_min": {
+          "unit": "degC",
+          "value": -40
+        },
+        "VDD_max": {
+          "unit": "V",
+          "value": 3.6
+        },
+        "VDD_min": {
+          "unit": "V",
+          "value": 2.7
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 0.008
+        }
+      },
+      "evidence": {
+        "page": 64,
+        "source": "source:st-stm32f103"
+      },
+      "max": 0.4,
+      "note": "CMOS GPIO VOH >= VDD-0.4V, up to eight sourcing outputs; strict 2.7<VDD<3.6V. C6 normal operating TA from Table9 p38.",
+      "unit": "V"
+    },
     "input_voltage": {
       "basis": "DATASHEET",
       "conditions": {},
@@ -82,11 +114,41 @@
       "type": "POWER_IN"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 29,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 161,
+              "source": "source:st-rm0008"
+            }
+          ],
+          "name": "GPIO_PUSH_PULL"
+        }
+      ],
       "name": "PA0-WKUP",
       "number": "10",
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 29,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 161,
+              "source": "source:st-rm0008"
+            }
+          ],
+          "name": "GPIO_PUSH_PULL"
+        }
+      ],
       "name": "PA1",
       "number": "11",
       "type": "BIDIRECTIONAL"
@@ -182,6 +244,30 @@
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 31,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 161,
+              "source": "source:st-rm0008"
+            }
+          ],
+          "name": "GPIO_PUSH_PULL"
+        },
+        {
+          "evidence": [
+            {
+              "page": 31,
+              "source": "source:st-stm32f103"
+            }
+          ],
+          "name": "UART_TX"
+        }
+      ],
       "name": "PA9",
       "number": "30",
       "type": "BIDIRECTIONAL"
@@ -279,8 +365,9 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "notes": "GPIO capability update by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author; original creator retained.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]
   },
   "roles": [

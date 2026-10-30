@@ -151,13 +151,15 @@
     },
     {
       "kind": "INPUT",
-      "name": "UART_RX"
+      "name": "UART_RX",
+      "required_function": "UART_TX"
     }
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_guards",
+    "notes": "Typed UART transmit requirement added by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",

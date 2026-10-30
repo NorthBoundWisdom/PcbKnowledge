@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 2200710,
+  "id": "source:ti-tps5430",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 41,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage9a_source_rescreen",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "Texas Instruments",
+  "revision": "SLVS632L",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "88c98e6e51851285fbbfc17837d002b29af7cd3fe30442fa7e4612c5179985da",
+  "title": "TPS543x step-down converter datasheet",
+  "url": "https://www.ti.com/lit/ds/symlink/tps5430.pdf",
+  "verification": "AGENT_VERIFIED"
+}

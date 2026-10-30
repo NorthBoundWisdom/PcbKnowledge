@@ -8,6 +8,17 @@
   "mpn": "61300411121",
   "package": "package:header-2p54-4",
   "parameters": {
+    "ac_voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:wurth-61300411121"
+      },
+      "note": "Working voltage explicitly V(AC); not a DC rating. Separate500 V(AC)/1 min withstand test is not a working-voltage limit.",
+      "unit": "V",
+      "value": 250
+    },
     "current_rating": {
       "basis": "DATASHEET",
       "conditions": {},
@@ -48,8 +59,9 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "notes": "Original creator retained. AC working-voltage fact added under D38 by agent:/root/implement_pcbknowledge_brief/g2_monitor_author from legitimate prior cached document; no blocked-URL refetch.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]
   },
   "roles": [

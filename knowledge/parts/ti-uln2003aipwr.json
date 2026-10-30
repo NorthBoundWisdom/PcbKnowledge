@@ -1,0 +1,287 @@
+{
+  "id": "part:ti-uln2003aipwr",
+  "identity_evidence": {
+    "page": 23,
+    "source": "source:ti-uln2003a"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "ULN2003AIPWR",
+  "package": "package:ti-pw0016a-uln2003ai",
+  "parameters": {
+    "clamp_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 0.5,
+      "note": "Absolute output clamp current.",
+      "unit": "A"
+    },
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 0.5,
+      "note": "Absolute peak collector current per channel; simultaneous loading is thermally limited.",
+      "unit": "A"
+    },
+    "forward_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA_max": {
+          "unit": "degC",
+          "value": 105
+        },
+        "TA_min": {
+          "unit": "degC",
+          "value": -40
+        },
+        "forward_current": {
+          "unit": "A",
+          "value": 0.35
+        }
+      },
+      "evidence": {
+        "page": 7,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 2.2,
+      "note": "Internal clamp diode forward voltage.",
+      "typ": 1.7,
+      "unit": "V"
+    },
+    "input_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA_max": {
+          "unit": "degC",
+          "value": 105
+        },
+        "TA_min": {
+          "unit": "degC",
+          "value": -40
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 3.85
+        }
+      },
+      "evidence": {
+        "page": 7,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 0.00135,
+      "typ": 0.00093,
+      "unit": "A"
+    },
+    "input_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA_max": {
+          "unit": "degC",
+          "value": 105
+        },
+        "TA_min": {
+          "unit": "degC",
+          "value": -40
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 0.2
+        },
+        "output_voltage": {
+          "unit": "V",
+          "value": 2
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 2.7,
+      "note": "Maximum input required for 200mA collector current at VCE2V over -40 to105degC.",
+      "unit": "V"
+    },
+    "junction_temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 125,
+      "min": -40,
+      "note": "Recommended junction-temperature range.",
+      "unit": "degC"
+    },
+    "saturation_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA_max": {
+          "unit": "degC",
+          "value": 105
+        },
+        "TA_min": {
+          "unit": "degC",
+          "value": -40
+        },
+        "input_current": {
+          "unit": "A",
+          "value": 0.00025
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 0.1
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 1.2,
+      "note": "Collector-emitter saturation with250uA input and100mA collector current.",
+      "typ": 0.9,
+      "unit": "V"
+    },
+    "thermal_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-uln2003a"
+      },
+      "note": "PW16 junction-to-ambient thermal metric; board implementation determines actual thermal behavior.",
+      "unit": "degC/W",
+      "value": 114.1
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-uln2003a"
+      },
+      "max": 50,
+      "min": 0,
+      "note": "Recommended collector-emitter range.",
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-uln2003a"
+  },
+  "pins": [
+    {
+      "name": "1B",
+      "number": "1",
+      "type": "INPUT"
+    },
+    {
+      "name": "2B",
+      "number": "2",
+      "type": "INPUT"
+    },
+    {
+      "name": "3B",
+      "number": "3",
+      "type": "INPUT"
+    },
+    {
+      "name": "4B",
+      "number": "4",
+      "type": "INPUT"
+    },
+    {
+      "name": "5B",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "6B",
+      "number": "6",
+      "type": "INPUT"
+    },
+    {
+      "name": "7B",
+      "number": "7",
+      "type": "INPUT"
+    },
+    {
+      "name": "E",
+      "number": "8",
+      "type": "GROUND"
+    },
+    {
+      "name": "COM",
+      "number": "9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "7C",
+      "number": "10",
+      "type": "POWER_SINK"
+    },
+    {
+      "name": "6C",
+      "number": "11",
+      "type": "POWER_SINK"
+    },
+    {
+      "name": "5C",
+      "number": "12",
+      "type": "POWER_SINK"
+    },
+    {
+      "name": "4C",
+      "number": "13",
+      "type": "POWER_SINK"
+    },
+    {
+      "name": "3C",
+      "number": "14",
+      "type": "POWER_SINK"
+    },
+    {
+      "name": "2C",
+      "number": "15",
+      "type": "POWER_SINK"
+    },
+    {
+      "name": "1C",
+      "number": "16",
+      "type": "POWER_SINK"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40",
+    "notes": "Updated by agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40: collectors are switched load returns per p3 common-emitter topology; COM remains shared flyback cathode.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "driver.darlington-array"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

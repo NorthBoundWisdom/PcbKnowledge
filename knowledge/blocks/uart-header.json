@@ -106,7 +106,8 @@
     },
     {
       "kind": "INPUT",
-      "name": "TX"
+      "name": "TX",
+      "required_function": "UART_TX"
     },
     {
       "kind": "OUTPUT",
@@ -115,8 +116,9 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "notes": "Typed UART transmit requirement added by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author.",
     "verified_by": [
-      "agent:/root"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",

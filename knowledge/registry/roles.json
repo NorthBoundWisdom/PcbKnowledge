@@ -3,8 +3,8 @@
     "adc.i2c": {
       "queries": [
         "Q1",
-        "Q4",
-        "Q10"
+        "Q10",
+        "Q4"
       ]
     },
     "capacitor.bulk": {
@@ -43,6 +43,13 @@
         "Q4"
       ]
     },
+    "driver.darlington-array": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "interface.usb-uart": {
       "queries": [
         "Q1",
@@ -77,6 +84,13 @@
       "queries": [
         "Q1",
         "Q4"
+      ]
+    },
+    "passive.inductor": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "protection.fuse": {

@@ -8,6 +8,18 @@
   "mpn": "INA219AIDCNR",
   "package": "package:sot-23-8-dcn",
   "parameters": {
+    "bus_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 10,
+        "source": "source:ti-ina219"
+      },
+      "max": 26,
+      "min": 0,
+      "note": "Sensed bus operating range independent of 3 to 5.5 V supply; bus is measured at IN- to ground. ADC 32 V scaling is not permission to exceed 26 V.",
+      "unit": "V"
+    },
     "input_voltage": {
       "basis": "DATASHEET",
       "conditions": {},
@@ -69,8 +81,9 @@
   ],
   "provenance": {
     "created_by": "agent:/root",
+    "notes": "Existing creator retained. G2 D48 bus-voltage range added by agent:/root/implement_pcbknowledge_brief/g2_monitor_author under owner D38 from authorized cached SBOS448G; pin map rechecked on page 3.",
     "verified_by": [
-      "agent:/root/verify_g1_source_access"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]
   },
   "roles": [

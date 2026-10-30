@@ -1,0 +1,162 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "max": 1.7,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "max": 5.0,
+      "min": 4.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "max": 4.0,
+      "min": 3.8,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "exposed_pad": {
+      "length": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D44 common land covers maximum physical EP lengths on p35 and p38.",
+        "unit": "mm",
+        "value": 3.4
+      },
+      "number": "DAP",
+      "paste_margin": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D44: own 2.41 x 3.10 mm aperture on 2.71 x 3.40 mm copper, 0.125 mm stencil. Added by agent:/root/implement_pcbknowledge_brief/stage9a_content_identity.",
+        "unit": "mm",
+        "value": -0.15
+      },
+      "width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D44 common land covers maximum physical EP widths on p35 and p38.",
+        "unit": "mm",
+        "value": 2.71
+      }
+    },
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "max": 1.27,
+      "min": 0.4,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "max": 6.2,
+      "min": 5.8,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "max": 0.51,
+      "min": 0.31,
+      "unit": "mm"
+    },
+    "pin_count": 8,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      "unit": "mm",
+      "value": 1.27
+    }
+  },
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 35,
+      "source": "source:ti-tps5430"
+    },
+    {
+      "page": 38,
+      "source": "source:ti-tps5430"
+    }
+  ],
+  "family": "SOIC-8",
+  "generator": "gullwing_two_side",
+  "id": "package:ti-tps5430dda",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage9a_source_rescreen",
+    "notes": "DDA0008J/B share outer geometry. Physical EP: J 2.0-2.6 x 2.5-3.1 mm (p35); B 2.11-2.71 x 2.8-3.4 mm (p38). D44 chooses a common DAP land; mask/vias remain separate board decisions. Functional DAP corresponds to drawing B pad 9.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 28,
+        "source": "source:ti-tps5430"
+      },
+      {
+        "page": 35,
+        "source": "source:ti-tps5430"
+      },
+      {
+        "page": 38,
+        "source": "source:ti-tps5430"
+      }
+    ],
+    "mpns": [
+      "TPS5430DDA"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,982 @@
+{
+  "category": "power.protection",
+  "checks": [
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 require nonnegative design margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "headroom"
+      }
+    },
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 require nonnegative design margin.",
+          "unit": "A",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "fuse_current_margin"
+      }
+    },
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 require nonnegative design margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "capacitor_voltage_margin"
+      }
+    },
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 require nonnegative design margin.",
+          "unit": "A",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "diode_current_margin"
+      }
+    },
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 require nonnegative design margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "diode_reverse_margin"
+      }
+    },
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 require nonnegative design margin.",
+          "unit": "degC",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "diode_derating_margin"
+      }
+    },
+    {
+      "calculator": "input_protection",
+      "inputs": {
+        "ambient": {
+          "parameter": "temperature"
+        },
+        "capacitor_voltage_rating": {
+          "bound": "max",
+          "component": "C1",
+          "parameter": "voltage_rating"
+        },
+        "diode_current_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "current_rating"
+        },
+        "diode_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.6,
+          "min": 0,
+          "note": "D50 forward-drop allocation1.2times0.5V source maximum tested at1A,TJ25degC; zero is the ideal lower loss bound.",
+          "unit": "V"
+        },
+        "diode_rating_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative lead-temperature ceiling inside the1A plateau on sourcep4; modeledTJ bounds lead temperature.",
+          "unit": "degC",
+          "value": 100
+        },
+        "diode_reverse_rating": {
+          "bound": "max",
+          "component": "D1",
+          "parameter": "voltage_rating"
+        },
+        "diode_thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 board thermal model uses2times88degC/W typical source thetaJA.",
+          "unit": "degC/W",
+          "value": 176
+        },
+        "fuse_current_rating": {
+          "bound": "value",
+          "component": "F1",
+          "parameter": "current_rating"
+        },
+        "fuse_derating": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          },
+          "note": "Manufacturer25% continuous-current derating.",
+          "unit": "1",
+          "value": 0.75
+        },
+        "fuse_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.156,
+          "min": 0,
+          "note": "D50 resistance allocation2times the0.078ohm nominal cold value; zero is the ideal lower loss bound.",
+          "unit": "ohm"
+        },
+        "input_current": {
+          "parameter": "output_current"
+        },
+        "input_voltage": {
+          "parameter": "output_voltage"
+        },
+        "minimum_output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 TPS5430 minimum5.5V plus0.0505V reserved for the0.5A/0.101ohm input-monitor shunt.",
+          "unit": "V",
+          "value": 5.5505
+        },
+        "temperature_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 conservative40degC re-rating factor below the source curve.",
+          "unit": "1",
+          "value": 0.9
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D50 SS14 junction limit.",
+          "unit": "degC",
+          "value": 125
+        },
+        "operator": "LE",
+        "output": "diode_junction_temperature"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "F1",
+      "select": {
+        "part": "part:littelfuse-0451001-mrl"
+      }
+    },
+    {
+      "ref": "D1",
+      "select": {
+        "part": "part:taiwansemi-ss14"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:panasonic-25svpf47m"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 2,
+      "source": "source:littelfuse-451-453"
+    },
+    {
+      "page": 3,
+      "source": "source:littelfuse-451-453"
+    },
+    {
+      "page": 4,
+      "source": "source:littelfuse-451-453"
+    },
+    {
+      "page": 1,
+      "source": "source:taiwansemi-ss14"
+    },
+    {
+      "page": 2,
+      "source": "source:taiwansemi-ss14"
+    },
+    {
+      "page": 4,
+      "source": "source:taiwansemi-ss14"
+    },
+    {
+      "page": 7,
+      "source": "source:taiwansemi-ss14"
+    },
+    {
+      "page": 1,
+      "source": "source:panasonic-svpf"
+    },
+    {
+      "page": 2,
+      "source": "source:panasonic-svpf"
+    }
+  ],
+  "id": "block:g2-protected-input",
+  "layout": [
+    {
+      "edge": "LEFT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 input fuse near the adapter entry edge.",
+        "unit": "mm",
+        "value": 8
+      },
+      "subject": "F1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 short input protection series path.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "D1",
+      "target": "F1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 local bulk after reverse protection.",
+        "unit": "mm",
+        "value": 8
+      },
+      "subject": "C1",
+      "target": "D1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 local high-frequency bypass.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C2",
+      "target": "C1"
+    },
+    {
+      "kind": "MINIMIZE_LOOP",
+      "max_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 compact protected-input supply/return group.",
+        "unit": "mm2",
+        "value": 100
+      },
+      "path": [
+        "D1.pin:1",
+        "C1.pin:1",
+        "C1.pin:2"
+      ]
+    },
+    {
+      "kind": "COPPER_AREA",
+      "min_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 cathode copper for the diode board thermal model.",
+        "unit": "mm2",
+        "value": 100
+      },
+      "target": "D1.pin:1"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 half-ampere input-path copper design floor.",
+        "unit": "mm",
+        "value": 0.5
+      },
+      "net": "VIN"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 half-ampere input-path copper design floor.",
+        "unit": "mm",
+        "value": 0.5
+      },
+      "net": "FUSED"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 half-ampere input-path copper design floor.",
+        "unit": "mm",
+        "value": 0.5
+      },
+      "net": "VOUT"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D50 half-ampere input-path copper design floor.",
+        "unit": "mm",
+        "value": 0.5
+      },
+      "net": "GND"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "F1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "F1.pin:2",
+        "D1.pin:2"
+      ],
+      "name": "FUSED"
+    },
+    {
+      "connect": [
+        "D1.pin:1",
+        "C1.pin:1",
+        "C2.pin:1",
+        "port:VOUT"
+      ],
+      "name": "VOUT"
+    },
+    {
+      "connect": [
+        "C1.pin:2",
+        "C2.pin:2",
+        "port:GND"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D34 source-declared adapter output current budget feeding protection.",
+        "unit": "A",
+        "value": 0.5
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 12,
+        "min": 7,
+        "note": "D34 source-declared adapter output envelope feeding protection, not the computed protected rail.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "temperature": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D45 indoor bench-controller ambient.",
+        "unit": "degC",
+        "value": 40
+      },
+      "quantity": "temperature",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VOUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40",
+    "notes": "D50 steady-state engineering model; fault/inrush separate. output_* parameters bind declared adapter, not protected VOUT: minimum 6.322V before shunt, 6.2715V at buck after 0.0505V drop. Source nominal facts remain unchanged.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

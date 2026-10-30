@@ -1,0 +1,14 @@
+{
+  "entries": {
+    "ENABLED": {
+      "queries": [
+        "Q2",
+        "Q7",
+        "Q8"
+      ]
+    }
+  },
+  "id": "registry:unconnected-states",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "BOARD_GENERATION"
+}

@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 603079,
+  "id": "source:panasonic-svpf",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 6,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "Panasonic",
+  "revision": "Specifications 2019-06-28; notices 2025-08-20",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "d9884e348623832afb8cbb12bbe979e4972fe4463f332ccbd3c0d173e2b03861",
+  "title": "SVPF series catalog",
+  "url": "https://industrial.panasonic.com/cdbs/www-data/pdf/AAB8000/AAB8000C177.pdf",
+  "verification": "AGENT_VERIFIED"
+}

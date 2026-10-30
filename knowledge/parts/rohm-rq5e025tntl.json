@@ -163,12 +163,12 @@
     {
       "name": "DRAIN",
       "number": "3",
-      "type": "OPEN_DRAIN"
+      "type": "POWER_SINK"
     }
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
-    "notes": "Page1 type RQ5E025TN plus TL taping code establishes order code. Gate drive must exceed the cited Rds test voltage at actual MCU VOH and pulldown/leakage load; Vth is not an on-resistance guarantee.",
+    "notes": "Updated by agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40: drain3 is a switched load return in the low-side MOSFET circuit; gate1 and source2 retain their source pin map.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]

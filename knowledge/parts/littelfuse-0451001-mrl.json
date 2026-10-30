@@ -1,0 +1,87 @@
+{
+  "id": "part:littelfuse-0451001-mrl",
+  "identity_evidence": {
+    "page": 4,
+    "source": "source:littelfuse-451-453"
+  },
+  "manufacturer": "Littelfuse",
+  "mpn": "0451001.MRL",
+  "package": "package:littelfuse-451",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:littelfuse-451-453"
+      },
+      "note": "Ampere rating; page3 requires25% continuous derating plus temperature re-rating. Not a0.5A current limiter.",
+      "unit": "A",
+      "value": 1
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:littelfuse-451-453"
+      },
+      "note": "Nominal cold resistance, not a guaranteed maximum.",
+      "typ": 0.078,
+      "unit": "ohm"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:littelfuse-451-453"
+      },
+      "max": 125,
+      "min": -55,
+      "unit": "degC"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:littelfuse-451-453"
+      },
+      "max": 125,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 4,
+    "source": "source:littelfuse-451-453"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "protection.fuse"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

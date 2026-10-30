@@ -1,0 +1,118 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 0.9,
+      "min": 0.7,
+      "typ": 0.8,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 0.95,
+      "min": 0.65,
+      "typ": 0.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 1.75,
+      "min": 1.45,
+      "typ": 1.6,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "ADR-024 D8 courtyard margin.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 0.5,
+      "min": 0.2,
+      "typ": 0.35,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 1.75,
+      "min": 1.45,
+      "typ": 1.6,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      },
+      "max": 0.95,
+      "min": 0.65,
+      "typ": 0.8,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:kemet-c0603c103k5ractu"
+    }
+  ],
+  "family": "CHIP_0603",
+  "generator": "chip",
+  "id": "package:chip-0603-kemet-bootstrap",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:kemet-c0603c103k5ractu"
+      }
+    ],
+    "mpns": [
+      "C0603C103K5RACTU"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

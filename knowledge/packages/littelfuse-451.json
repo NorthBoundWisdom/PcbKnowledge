@@ -4,32 +4,36 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 15,
-        "source": "source:rohm-bd14210g-la"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       },
-      "max": 1.25,
+      "max": 2.94,
+      "min": 2.44,
+      "typ": 2.69,
       "unit": "mm"
     },
     "length": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 15,
-        "source": "source:rohm-bd14210g-la"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       },
-      "max": 3.1,
-      "min": 2.7,
+      "max": 2.94,
+      "min": 2.44,
+      "typ": 2.69,
       "unit": "mm"
     },
     "width": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 15,
-        "source": "source:rohm-bd14210g-la"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       },
-      "max": 1.7,
-      "min": 1.5,
+      "max": 6.3,
+      "min": 5.9,
+      "typ": 6.1,
       "unit": "mm"
     }
   },
@@ -46,63 +50,56 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 6,
-        "source": "source:rohm-ssop6-package"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       },
       "unit": "mm",
-      "value": 0.6
+      "value": 3.15
     },
     "pad_width": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 6,
-        "source": "source:rohm-ssop6-package"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       },
       "unit": "mm",
-      "value": 1.0
+      "value": 1.96
     },
-    "pin_count": 6,
+    "pin_count": 2,
     "pitch": {
-      "basis": "DATASHEET",
+      "basis": "ENGINEERING_DEFAULT",
       "conditions": {},
-      "evidence": {
-        "page": 6,
-        "source": "source:rohm-ssop6-package"
-      },
+      "note": "Unused single-pad-per-side generator spacing.",
       "unit": "mm",
-      "value": 0.95
+      "value": 1
     },
     "row_pitch": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 6,
-        "source": "source:rohm-ssop6-package"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       },
-      "note": "Pad center separation: 1.4 mm inner gap plus 1.0 mm pad length.",
+      "note": "Derived from recommended innergap2.95 pluspadwidth1.96; total6.87 versusrounded6.86 printedoverall.",
       "unit": "mm",
-      "value": 2.4
+      "value": 4.91
     }
   },
   "evidence": [
     {
-      "page": 15,
-      "source": "source:rohm-bd14210g-la"
-    },
-    {
-      "page": 6,
-      "source": "source:rohm-ssop6-package"
+      "page": 4,
+      "source": "source:littelfuse-451-453"
     }
   ],
-  "family": "SSOP6",
+  "family": "FUSE_2410",
   "generator": "manufacturer_two_side_land",
-  "id": "package:rohm-ssop6",
+  "id": "package:littelfuse-451",
   "mount_type": "SMT",
   "pin1": "1",
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
-    "notes": "ROHM SSOP6 manufacturer land dimensions, rotated to two-side generator orientation; pin numbers follow top view. No inferred maximum from datasheet minimum-only lead length.",
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_passive_author",
+    "notes": "Own generator repeats manufacturer recommended two-terminal land dimensions. Single pad per side: pitch placeholder is not used by generator.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]
@@ -112,16 +109,12 @@
     "basis": "DATASHEET",
     "evidence": [
       {
-        "page": 14,
-        "source": "source:rohm-bd14210g-la"
-      },
-      {
-        "page": 15,
-        "source": "source:rohm-bd14210g-la"
+        "page": 4,
+        "source": "source:littelfuse-451-453"
       }
     ],
     "mpns": [
-      "BD14210G-LATR"
+      "0451001.MRL"
     ]
   },
   "verification": "AGENT_VERIFIED"

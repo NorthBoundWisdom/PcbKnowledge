@@ -1,0 +1,19 @@
+{
+  "entries": {
+    "GPIO_PUSH_PULL": {
+      "queries": [
+        "Q10",
+        "Q2"
+      ]
+    },
+    "UART_TX": {
+      "queries": [
+        "Q10",
+        "Q2"
+      ]
+    }
+  },
+  "id": "registry:pin-functions",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "BOARD_GENERATION"
+}
