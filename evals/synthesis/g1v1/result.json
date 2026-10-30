@@ -1,0 +1,53 @@
+{
+  "attempts": [
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g1v1_one",
+      "checks": 88,
+      "equivalence_review": "Renamed usb_entry/controller/regulator and USER_LED_A/B preserve the complete 46-component reference net partition. Direct LDO-to-logger supply includes temperature VCC, decoupler and OS bias, no shunt; shared I2C, headers, LED/button and mechanical functions and 500/150/7/5/40/5 mA budgets match.",
+      "graph_sha256": "cb14c5ed0e2299720f87836e508d01c771830d2127dfacbd3bdf2630d17f80c5",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g1v1_two",
+      "checks": 88,
+      "equivalence_review": "Renamed entry/rail/thermometer and USB_SUPPLY/PROTECTED_SUPPLY/SERIAL nets are labels only: all expanded pin-to-net partitions and 46 selected components match reference. Sensor address pins ground, OS bias powered, no monitor/shunt, and the complete power/header/clock/mechanical budgets are unchanged.",
+      "graph_sha256": "3cf7141813aa2caa8230741237c9df74ff83abf9974177198cfa1e08c53eb349",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g1v1_three",
+      "checks": 88,
+      "equivalence_review": "Renamed processor/pullups/indicator instances and SDA/SCL/LED/BUTTON net aliases preserve every expanded electrical endpoint. Direct regulated sensor/logger path with grounded address pins and local OS bias, common ground, shared EEPROM/I2C, debug/UART and mounting functions match reference with unchanged numeric allocations.",
+      "graph_sha256": "3f525e063964843660bc9ec68db30afd417f7268c09ba7452e2ddc2416baacd5",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    }
+  ],
+  "brief": "G1V1",
+  "bundle_commit": "2da9522da4d1a9b17feb3ab8e074d1c8fcd7f3d2",
+  "bundle_sha256": "d5553e147efbead6f5af1f9862d63c282cc3210465c605b6d790be1ada0ae5ef",
+  "mode": "positive",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "passed": 3,
+  "reference_status": "EXPANDED",
+  "required": 2,
+  "status": "PASS",
+  "total": 3
+}

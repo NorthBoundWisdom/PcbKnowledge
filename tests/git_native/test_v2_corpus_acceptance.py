@@ -78,3 +78,12 @@ class VariantAcceptanceTests(unittest.TestCase):
         self.assertEqual(intent['status'], 'REFUSED')
         self.assertTrue(any(check['id'] == 'connection:bridge_U1:9' and check['result'] == 'FAIL'
                             for check in intent['checks']), intent['checks'])
+
+
+class CorpusBriefReferenceTests(unittest.TestCase):
+    def test_edge_interfaces_name_present_interfaces(self):
+        for path in (ROOT / 'evals/golden-designs').glob('*.brief.json'):
+            brief = read_json(path.read_bytes())
+            with self.subTest(brief=brief['id']):
+                declared = {item['id'] for item in brief['interfaces']}
+                self.assertLessEqual(set(brief['mechanical']['edge_interfaces']), declared)

@@ -122,3 +122,42 @@ class CorpusTests(unittest.TestCase):
                             ('UNVERIFIED_RECORD', 'Q11'), ('UNKNOWN_INPUT', 'Q11')):
             with self.subTest(code=code):
                 self.assertEqual(refusal(code, 'test', 'test')['queries'], [query])
+
+    def test_edge_interface_unknown_and_duplicate_references_are_typed(self):
+        for mutation in ('unknown', 'duplicate'):
+            with self.subTest(mutation=mutation):
+                brief = copy.deepcopy(self.brief)
+                edges = brief['mechanical']['edge_interfaces']
+                edges.append('missing_interface' if mutation == 'unknown' else edges[0])
+                refusals = assess_brief(self.catalog, brief)
+                self.assertTrue(any(item['code'] == 'INVALID_REFERENCE'
+                                    and item['path'] == 'mechanical.edge_interfaces' for item in refusals), refusals)
+                row = coverage_all(self.catalog, {'G1': brief})['briefs'][0]
+                self.assertEqual(row['screening'], 'REFUSED')
+                self.assertEqual(row['refusals'], refusals)
+
+    def test_coverage_all_cli_reports_unknown_edge_label_refusal(self):
+        import contextlib
+        import io
+        import json
+        from unittest.mock import patch
+        from pcbknowledge.v2.cli import main
+        brief = copy.deepcopy(self.brief)
+        brief['mechanical']['edge_interfaces'].append('stale_uart_label')
+        output = io.StringIO()
+        with patch('pcbknowledge.v2.cli.design_inputs', return_value=(None, {'G1': brief})):
+            with contextlib.redirect_stdout(output):
+                main(['--repo', str(ROOT), 'v2', 'coverage', '--all', '--json'])
+        row = json.loads(output.getvalue())['briefs'][0]
+        self.assertEqual(row['screening'], 'REFUSED')
+        self.assertTrue(any(item['code'] == 'INVALID_REFERENCE' and item['path'] == 'mechanical.edge_interfaces'
+                            for item in row['refusals']))
+
+    def test_additional_bad_edge_does_not_replace_negative_voltage_refusal(self):
+        brief = copy.deepcopy(self.brief)
+        brief['id'] = 'N1'
+        brief['power']['sources'][0]['voltage']['value'] = 12
+        brief['mechanical']['edge_interfaces'].append('old_interface_label')
+        identities = {(item['code'], item['path']) for item in assess_brief(self.catalog, brief)}
+        self.assertIn(('CHECK_FAILED', 'functions.usb_sink'), identities)
+        self.assertIn(('INVALID_REFERENCE', 'mechanical.edge_interfaces'), identities)

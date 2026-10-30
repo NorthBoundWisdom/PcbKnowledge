@@ -1,0 +1,49 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n1_one",
+      "correct_refusal": true,
+      "refusal_sha256": "65802a8183d28e235be5b98cfd3de64a6691e57d37165db15aaf177fb0422896",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n1_two",
+      "correct_refusal": true,
+      "refusal_sha256": "720528267affdd7fe3552d5438fdc082cf6b860bff2cc102c4e6ba9cfc1b5aa6",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n1_three",
+      "correct_refusal": true,
+      "refusal_sha256": "10eaaaa3f6dadbaf7523649fc9c4870fd879358451c65a337433d38a6c09a566",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N1",
+  "bundle_commit": "2da9522da4d1a9b17feb3ab8e074d1c8fcd7f3d2",
+  "bundle_sha256": "d5553e147efbead6f5af1f9862d63c282cc3210465c605b6d790be1ada0ae5ef",
+  "mode": "negative",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "passed": 3,
+  "replayed_refusals": [
+    {
+      "code": "INVALID_REFERENCE",
+      "path": "mechanical.edge_interfaces",
+      "queries": [
+        "Q11"
+      ],
+      "reason": "Edge interface is not declared in brief.interfaces: usb"
+    },
+    {
+      "code": "CHECK_FAILED",
+      "path": "functions.power_input",
+      "queries": [
+        "Q4"
+      ],
+      "reason": "No eligible block: Fixed operating parameter differs: output_voltage"
+    }
+  ],
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}

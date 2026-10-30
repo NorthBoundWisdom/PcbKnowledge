@@ -354,7 +354,7 @@
   },
   "mechanical": {
     "edge_interfaces": [
-      "usb",
+      "input",
       "swd",
       "i2c_header",
       "uart_header"

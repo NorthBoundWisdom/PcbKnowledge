@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_8_ACTIVE` (G1 at A2)
+> Status: `CONTINUOUS_MODE_STAGE_8_CI_PENDING` (G1 at A2)
 > Updated: 2026-10-29
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -492,26 +492,30 @@ Review: 13 checks; pad-geometry forgery and two source-claim findings fixed, boa
 Goal: prove the catalog and the synthesis skill work beyond the one design they
 were built for, and that the closed world refuses instead of inventing.
 
-- [ ] Write corpus briefs (D21) under `evals/golden-designs/`:
+- [x] Write corpus briefs (D21) under `evals/golden-designs/`:
   - G1V1: G1 with a different I2C sensor in place of the current monitor (needs
     one new part and block).
   - G1V2: G1 plus a USB-to-UART bridge replacing the UART header (needs one new
     part and block, USB D+/D- routing constraints).
   - N1: requires a 12 V input; N2: requires a Wi-Fi module; N3: requires a BGA
     MCU. Each states the typed refusal it must produce.
-- [ ] Extend `eval-synthesis`: per brief, three attempts by fresh agents with no
+- [x] Extend `eval-synthesis`: per brief, three attempts by fresh agents with no
   access to references, tests or other attempts; automatic structural comparison
   where a reference exists; refusal matching for negative briefs; equivalence
   review per D22. Results in `evals/synthesis/<brief>/` with the receipt format
   used for G1.
-- [ ] Add the parts and blocks G1V1 and G1V2 need (independently verified), then
+- [x] Add the parts and blocks G1V1 and G1V2 need (independently verified), then
   run the evaluation. The orphan audit from 6a applies.
-- [ ] `v2 coverage --all` prints one line per brief (blocks ready, refusals) for
+- [x] `v2 coverage --all` prints one line per brief (blocks ready, refusals) for
   stage receipts.
 
 Exit: G1V1 and G1V2 reach A2 in at least two of three attempts each; N1-N3 refuse
 with the expected typed reason in three of three attempts and no invented part or
 block.
+
+Receipt: contract `5bec75a`, data `9d9ef7e`, original synthesis input `2da9522` (tree-equivalent remote `7c1cf3f`); full gate 262 tests, no skips; G1V1/G1V2 A2 3/3 each and N1-N3 typed refusals 3/3 each.
+Review: 13-check parent review passed on `97b9e5b`, plus independent source and all fifteen attempt reviews; evaluator verdict/duplicate-instance findings and stale current edge-interface labels fixed.
+Publication mapping preserves original input hashes; Stage 9 execution waits for the exact published CI result.
 
 ## Stage 9 — G2 to A2
 

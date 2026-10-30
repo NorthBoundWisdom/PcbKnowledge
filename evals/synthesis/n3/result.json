@@ -1,0 +1,41 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n3_one",
+      "correct_refusal": true,
+      "refusal_sha256": "7d0c53c7927d89a6adb40aa32d6b74bf077830e9d13506b0540a932ed0f75f68",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n3_two",
+      "correct_refusal": true,
+      "refusal_sha256": "ae29ed0216d5eb73edd2bf15e62a8a45652544a5a98f68061ef1ee3cf7a94663",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n3_three",
+      "correct_refusal": true,
+      "refusal_sha256": "b00563a601618d6c7369a82e651c9e61b43738869eff9151e0792508b34031ad",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N3",
+  "bundle_commit": "2da9522da4d1a9b17feb3ab8e074d1c8fcd7f3d2",
+  "bundle_sha256": "d5553e147efbead6f5af1f9862d63c282cc3210465c605b6d790be1ada0ae5ef",
+  "mode": "negative",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "passed": 3,
+  "replayed_refusals": [
+    {
+      "code": "UNSATISFIED_SELECTION",
+      "path": "functions.mcu",
+      "queries": [
+        "Q1"
+      ],
+      "reason": "No eligible block: Selected role component does not satisfy package family: BGA"
+    }
+  ],
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}

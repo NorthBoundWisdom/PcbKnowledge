@@ -357,8 +357,7 @@
     "edge_interfaces": [
       "usb",
       "swd",
-      "i2c_header",
-      "uart_header"
+      "i2c_header"
     ],
     "height": {
       "basis": "ENGINEERING_DEFAULT",

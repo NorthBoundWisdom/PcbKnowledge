@@ -142,3 +142,31 @@ Historical G1 evaluation remains a separate mode and is not rewritten.
 USB differential constraints derive KiCad width, gap, skew and netclass rules.
 Matching P/N or +/- net suffixes are required. These engineering constraints are
 not controlled-impedance or USB compliance certification and do not route a board.
+
+### Replaying preserved synthesis inputs
+
+`evals/synthesis/stage8-input.json` preserves the original input commit object,
+Git tree identity, bundle SHA-256 and exact skill text. A connector publication
+may create a different commit identity for the same tree because author or
+committer metadata differs. Its publication mapping records that relationship;
+it never relabels an author's actual input commit, hashes or initial packet.
+
+To reconstruct the original bundle without checkout, network access or Git writes:
+
+```python
+from pcbknowledge.serialization import read_json
+from pcbknowledge.v2.bundle import Bundle
+from pcbknowledge.v2.synthesis_inputs import reconstruct_bundle
+
+snapshot = read_json((root / "evals/synthesis/stage8-input.json").read_bytes())
+with Bundle.from_document(reconstruct_bundle(root, snapshot)) as original:
+    original_briefs = original.briefs
+```
+
+The local Git object database must contain the pinned tree and selected blobs;
+CI fetches full history. Reconstruction authenticates the preserved commit bytes,
+tree, blobs and exact canonical bundle hash before validating the snapshot.
+`tests/git_native/test_v2_preserved_corpus.py` replays all five benchmarks against
+that original catalog and its original expectations, and checks raw submissions,
+initial packets and fifteen distinct author identities. Later brief corrections
+or catalog additions must not retroactively rewrite historical refusal outcomes.

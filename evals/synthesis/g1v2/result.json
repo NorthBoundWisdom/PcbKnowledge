@@ -1,0 +1,53 @@
+{
+  "attempts": [
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g1v2_one",
+      "checks": 102,
+      "equivalence_review": "Renamed protect/regulator/processor and MCU_UART_TX/RX preserve all 47 selected components and complete expanded net partitions. INA219 supply remains upstream, every logger load including CH340C is downstream; USB A6/B6 and A7/B7 reach bridge 5/6 and MCU TX/RX cross to bridge RX/TX. All current, clock, shared-bus, header, LED/button and mechanical allocations match.",
+      "graph_sha256": "eb24ce25459788b2a9f518bc49e7fd7e5fffe3708a179874324e2aac4cce15da",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g1v2_two",
+      "checks": 102,
+      "equivalence_review": "Typec/guard/controller aliases and MCU_TO_BRIDGE/BRIDGE_TO_MCU labels retain identical electrical connectivity: USB polarity is correct, UART directions cross, CH340 V3/VCC and inactive handshake inputs are downstream, R232 is grounded, and INA219 supply is upstream of the shunt. All 47 component choices and numeric budgets equal the reference.",
+      "graph_sha256": "78de5a9e707a4c55ef8817fee223a2d8c18f4c27b1a89e002ae2cbb205994346",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g1v2_three",
+      "checks": 102,
+      "equivalence_review": "UPSTREAM_3V3 and sense/supply/processor aliases change labels only. All 47 components and expanded pin partitions match reference, including upstream monitor supply, downstream bridge/logger, USB DP/DN and crossed MCU UART pins. Source 500 mA, rail 150 mA, bridge 20 mA, headers 5/40 mA and all clock/mechanical settings are preserved.",
+      "graph_sha256": "de5bc2164f8e9e0209e2690666c74df976057392ef04a5a0695b1e565c6b0c8c",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    }
+  ],
+  "brief": "G1V2",
+  "bundle_commit": "2da9522da4d1a9b17feb3ab8e074d1c8fcd7f3d2",
+  "bundle_sha256": "d5553e147efbead6f5af1f9862d63c282cc3210465c605b6d790be1ada0ae5ef",
+  "mode": "positive",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "passed": 3,
+  "reference_status": "EXPANDED",
+  "required": 2,
+  "status": "PASS",
+  "total": 3
+}

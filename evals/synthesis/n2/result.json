@@ -1,0 +1,41 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n2_one",
+      "correct_refusal": true,
+      "refusal_sha256": "c477e09f9b16bd79c6929f8776552d63e66c550f442be8c21a614b997fd9df3f",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n2_two",
+      "correct_refusal": true,
+      "refusal_sha256": "242687293d271ad2c429da1de81114f93632d8c06f940f4339580822c7dd9ed1",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n2_three",
+      "correct_refusal": true,
+      "refusal_sha256": "f153bb3a489bc12251b4be20a249a32e87e6efde1cfb218683a3a8135b112379",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N2",
+  "bundle_commit": "2da9522da4d1a9b17feb3ab8e074d1c8fcd7f3d2",
+  "bundle_sha256": "d5553e147efbead6f5af1f9862d63c282cc3210465c605b6d790be1ada0ae5ef",
+  "mode": "negative",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "passed": 3,
+  "replayed_refusals": [
+    {
+      "code": "UNSATISFIED_SELECTION",
+      "path": "functions.wifi",
+      "queries": [
+        "Q1"
+      ],
+      "reason": "No block provides declared category: wireless.wifi"
+    }
+  ],
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}

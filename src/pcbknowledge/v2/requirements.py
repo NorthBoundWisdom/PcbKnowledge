@@ -93,10 +93,26 @@ def assess_function(catalog, brief, function):
     return refusal(code, path, 'No eligible block: ' + reason)
 
 
+def edge_interface_refusals(brief):
+    interfaces = [item['id'] for item in brief['interfaces']]
+    edges = brief['mechanical']['edge_interfaces']
+    results = []
+    if len(set(interfaces)) != len(interfaces):
+        results.append(refusal('INVALID_REFERENCE', 'interfaces', 'Duplicate interface identities'))
+    unknown = sorted(set(edges) - set(interfaces))
+    if unknown:
+        results.append(refusal('INVALID_REFERENCE', 'mechanical.edge_interfaces',
+                               'Edge interface is not declared in brief.interfaces: ' + ', '.join(unknown)))
+    if len(set(edges)) != len(edges):
+        results.append(refusal('INVALID_REFERENCE', 'mechanical.edge_interfaces',
+                               'Duplicate edge interface references'))
+    return results
+
+
 def assess_brief(catalog, brief):
     """Return typed refusals; an empty list means screening passed, not A2 proof."""
     catalog.structure(brief, 'design-brief.schema.json')
-    results = []
+    results = edge_interface_refusals(brief)
     function_ids = [function['id'] for function in brief['functions']]
     if len(set(function_ids)) != len(function_ids):
         results.append(refusal('CHECK_FAILED', 'functions', 'Duplicate function identities'))
