@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_10_ACTIVE` (G1 and G2 at A2; G3 next)
+> Status: `CONTINUOUS_MODE_STAGE_11_ACTIVE` (G1, G2 and G3 at A2)
 > Updated: 2026-10-30
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -625,9 +625,10 @@ KiCad 9.0.2 parked export: identity PASS, 0 DRC violations, 128 unconnected; A3/
 - [x] Calculators: `opamp_gain`, `rc_filter`, `reference_load`,
   `rs485_termination`, `trace_impedance_microstrip` (published closed-form
   approximation, implemented from first principles).
-- [ ] Synthesis evaluation as in Stage 8.
+- [x] Synthesis evaluation as in Stage 8.
 
-Input receipt: reference42 components/62 checks;453 tests/no skips. Fresh synthesis and exact remote CI remain pending.
+Receipt: published input `5b16185`; reference and three fresh query-mediated attempts reach A2, 62 checks each.
+Full gate: 455 tests/no skips; 162 records/125 reachable/23 graphs. Review: complete-graph equivalence and preserved input/submission hashes; A3-A6 remain open.
 
 Exit: G3 reference and two of three AI attempts reach A2.
 

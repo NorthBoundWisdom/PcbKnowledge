@@ -167,3 +167,9 @@ guarantees. Both RS-485 nodes use SN65HVD75 receivers; only one bias pair is fit
 The hand-authored `g3.block-graph.json` carries common-ground return references
 and buffered-bias guard geometry. Their actual copper realization remains an A3
 check; the parked handoff does not establish it.
+
+Three fresh query-mediated G3 attempts on published `5b16185` are preserved in
+`evals/synthesis/g3/`, including complete input packets, queries and original
+submissions. All three expand with 62 passing checks. Independent graph review
+compares complete selected parameters and physical net partitions; replay resolves
+the published input bundle rather than substituting the current catalog.
