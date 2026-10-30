@@ -1,0 +1,416 @@
+{
+  "attempts": [
+    {
+      "added_dependencies": [
+        "rule:fuse-connector-proximity"
+      ],
+      "added_layout": [
+        {
+          "edge": "RIGHT",
+          "kind": "EDGE_PLACEMENT",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D54 aligns the input fuse with the adapter entry edge; D50 8 mm allowance retained.",
+            "unit": "mm",
+            "value": 8
+          },
+          "subject": "protect_F1"
+        },
+        {
+          "kind": "PLACE_NEAR",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D54 bounds the directly connected adapter connector pin to fuse pin distance.",
+            "unit": "mm",
+            "value": 5
+          },
+          "subject": "protect_F1.pin:1",
+          "target": "entry_J1.pin:1"
+        }
+      ],
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_one",
+      "checks": 101,
+      "electrical_projection_sha256": "e37eb9746d3839252b6098dc87c5dc7ef215ed9bd8ab1c59175508a3599023ce",
+      "graph_sha256": "6442d1a447023e0b50f81ef3a87f87f285c723c539e370a6725de73ee24a59cd",
+      "original_electrical_projection_sha256": "e37eb9746d3839252b6098dc87c5dc7ef215ed9bd8ab1c59175508a3599023ce",
+      "refusals": [],
+      "removed_layout": [
+        {
+          "edge": "LEFT",
+          "kind": "EDGE_PLACEMENT",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D50 input fuse near the adapter entry edge.",
+            "unit": "mm",
+            "value": 8
+          },
+          "subject": "protect_F1"
+        }
+      ],
+      "status": "EXPANDED"
+    },
+    {
+      "added_dependencies": [
+        "rule:fuse-connector-proximity"
+      ],
+      "added_layout": [
+        {
+          "edge": "RIGHT",
+          "kind": "EDGE_PLACEMENT",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D54 aligns the input fuse with the adapter entry edge; D50 8 mm allowance retained.",
+            "unit": "mm",
+            "value": 8
+          },
+          "subject": "protection_F1"
+        },
+        {
+          "kind": "PLACE_NEAR",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D54 bounds the directly connected adapter connector pin to fuse pin distance.",
+            "unit": "mm",
+            "value": 5
+          },
+          "subject": "protection_F1.pin:1",
+          "target": "entry_J1.pin:1"
+        }
+      ],
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_two",
+      "checks": 101,
+      "electrical_projection_sha256": "d92575979241b112b6ddc95bcc2a0d34e3d7dd1b2605cf75c00a0fa341a594ef",
+      "graph_sha256": "30cf237cc6584ed2d4ab5f4b563a41ff30b579d104398f966d567e4e59592a45",
+      "original_electrical_projection_sha256": "d92575979241b112b6ddc95bcc2a0d34e3d7dd1b2605cf75c00a0fa341a594ef",
+      "refusals": [],
+      "removed_layout": [
+        {
+          "edge": "LEFT",
+          "kind": "EDGE_PLACEMENT",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D50 input fuse near the adapter entry edge.",
+            "unit": "mm",
+            "value": 8
+          },
+          "subject": "protection_F1"
+        }
+      ],
+      "status": "EXPANDED"
+    },
+    {
+      "added_dependencies": [
+        "rule:fuse-connector-proximity"
+      ],
+      "added_layout": [
+        {
+          "edge": "RIGHT",
+          "kind": "EDGE_PLACEMENT",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D54 aligns the input fuse with the adapter entry edge; D50 8 mm allowance retained.",
+            "unit": "mm",
+            "value": 8
+          },
+          "subject": "protection_F1"
+        },
+        {
+          "kind": "PLACE_NEAR",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D54 bounds the directly connected adapter connector pin to fuse pin distance.",
+            "unit": "mm",
+            "value": 5
+          },
+          "subject": "protection_F1.pin:1",
+          "target": "entry_J1.pin:1"
+        }
+      ],
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_three",
+      "checks": 101,
+      "electrical_projection_sha256": "fd5074d3f542ac093ad4f7962218d2a0c104abe73e375e2a51aa90764d9260d4",
+      "graph_sha256": "8b6512c9e1fc83ceea8b0ca3937245f7c005876e5aee70ef6aca40cf0c4f45f6",
+      "original_electrical_projection_sha256": "fd5074d3f542ac093ad4f7962218d2a0c104abe73e375e2a51aa90764d9260d4",
+      "refusals": [],
+      "removed_layout": [
+        {
+          "edge": "LEFT",
+          "kind": "EDGE_PLACEMENT",
+          "max_distance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "D50 input fuse near the adapter entry edge.",
+            "unit": "mm",
+            "value": 8
+          },
+          "subject": "protection_F1"
+        }
+      ],
+      "status": "EXPANDED"
+    }
+  ],
+  "evaluation_bundle_commit": "639df7ef95577158b7b00fba9e5f8b2bd2018478",
+  "evaluation_bundle_sha256": "d6477bddd53e86b258a7f7fcba37d9f7fb2bd9139179aa2901363eb5950e7c49",
+  "evaluation_input_identity": {
+    "audit_sha256": "6acce88f8e4a9da50c4a04cf68a73f7f26e0a5bdaa024d9f8a79f8577bf70d3f",
+    "catalog_tree": "8ecc873c68bfca3eb258c83c20ce538134f5fc60",
+    "engine_sha256": "c4b53028cf07c462552cf0418979d0cf2e81ebe67dd59b74ab9fdb3bf223327f"
+  },
+  "format": "pcbknowledge.graph-regression.v1",
+  "fresh_synthesis": false,
+  "independent_review": {
+    "additional_test_observations": [
+      {
+        "command": "PYTHONPATH=src python3 -m unittest discover -s tests/git_native -p test_v2_g1_acceptance.py -v",
+        "result": "PASS",
+        "skips": 0,
+        "tests": 7
+      },
+      {
+        "command": "PYTHONPATH=src python3 -m unittest discover -s tests/git_native -p test_v2_fuse_rules.py -v",
+        "failures": 1,
+        "reason": "test_part_selector_structure_and_catalog_reference_are_checked expected Missing record but actual correctly refusing exception was Missing part: part:nonexistent-fuse. Reported to coordinator for assertion repair; not a bypassed failure.",
+        "result": "FAIL",
+        "skips": 0,
+        "tests": 8
+      }
+    ],
+    "attempts": [
+      {
+        "added_dependencies": [
+          "rule:fuse-connector-proximity"
+        ],
+        "added_layout": [
+          {
+            "edge": "RIGHT",
+            "kind": "EDGE_PLACEMENT",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D54 aligns the input fuse with the adapter entry edge; D50 8 mm allowance retained.",
+              "unit": "mm",
+              "value": 8
+            },
+            "subject": "protect_F1"
+          },
+          {
+            "kind": "PLACE_NEAR",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D54 bounds the directly connected adapter connector pin to fuse pin distance.",
+              "unit": "mm",
+              "value": 5
+            },
+            "subject": "protect_F1.pin:1",
+            "target": "entry_J1.pin:1"
+          }
+        ],
+        "attempt": "one",
+        "checks_pass": 101,
+        "current_intent_sha256": "c43475fc75c645eb7b97db9ae15cd1a0b0236b12c262b469d4107544f2cbef40",
+        "graph_sha256": "6442d1a447023e0b50f81ef3a87f87f285c723c539e370a6725de73ee24a59cd",
+        "original_sha256": "60ce660816f146e4d12f7e3199473d5b92cd73b43aa9a87037059ba47c74e800",
+        "refusals": [],
+        "removed_dependencies": [],
+        "removed_layout": [
+          {
+            "edge": "LEFT",
+            "kind": "EDGE_PLACEMENT",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D50 input fuse near the adapter entry edge.",
+              "unit": "mm",
+              "value": 8
+            },
+            "subject": "protect_F1"
+          }
+        ],
+        "status": "EXPANDED",
+        "unchanged_intent_fields": [
+          "components",
+          "nets",
+          "checks",
+          "pin_configurations",
+          "external_loads",
+          "bom",
+          "mechanical",
+          "manufacturing",
+          "evidence"
+        ],
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "added_dependencies": [
+          "rule:fuse-connector-proximity"
+        ],
+        "added_layout": [
+          {
+            "edge": "RIGHT",
+            "kind": "EDGE_PLACEMENT",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D54 aligns the input fuse with the adapter entry edge; D50 8 mm allowance retained.",
+              "unit": "mm",
+              "value": 8
+            },
+            "subject": "protection_F1"
+          },
+          {
+            "kind": "PLACE_NEAR",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D54 bounds the directly connected adapter connector pin to fuse pin distance.",
+              "unit": "mm",
+              "value": 5
+            },
+            "subject": "protection_F1.pin:1",
+            "target": "entry_J1.pin:1"
+          }
+        ],
+        "attempt": "two",
+        "checks_pass": 101,
+        "current_intent_sha256": "65bdc1d58e066393ea6417c7ac7f8312c925418d52b848aedbd97a7ff6b77b26",
+        "graph_sha256": "30cf237cc6584ed2d4ab5f4b563a41ff30b579d104398f966d567e4e59592a45",
+        "original_sha256": "b0a866da1f3277a196fbca85df125ed533e1389213c8652ed5a459fdfcb4a24c",
+        "refusals": [],
+        "removed_dependencies": [],
+        "removed_layout": [
+          {
+            "edge": "LEFT",
+            "kind": "EDGE_PLACEMENT",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D50 input fuse near the adapter entry edge.",
+              "unit": "mm",
+              "value": 8
+            },
+            "subject": "protection_F1"
+          }
+        ],
+        "status": "EXPANDED",
+        "unchanged_intent_fields": [
+          "components",
+          "nets",
+          "checks",
+          "pin_configurations",
+          "external_loads",
+          "bom",
+          "mechanical",
+          "manufacturing",
+          "evidence"
+        ],
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "added_dependencies": [
+          "rule:fuse-connector-proximity"
+        ],
+        "added_layout": [
+          {
+            "edge": "RIGHT",
+            "kind": "EDGE_PLACEMENT",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D54 aligns the input fuse with the adapter entry edge; D50 8 mm allowance retained.",
+              "unit": "mm",
+              "value": 8
+            },
+            "subject": "protection_F1"
+          },
+          {
+            "kind": "PLACE_NEAR",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D54 bounds the directly connected adapter connector pin to fuse pin distance.",
+              "unit": "mm",
+              "value": 5
+            },
+            "subject": "protection_F1.pin:1",
+            "target": "entry_J1.pin:1"
+          }
+        ],
+        "attempt": "three",
+        "checks_pass": 101,
+        "current_intent_sha256": "b8b0bf47df3b25ddeae54b7ddd9a36728b927c76b212fd66d19f2eea32ba09d9",
+        "graph_sha256": "8b6512c9e1fc83ceea8b0ca3937245f7c005876e5aee70ef6aca40cf0c4f45f6",
+        "original_sha256": "9591524a83831e941cde13ad86f73c6be5235acba749b74e928ed7a8931056f1",
+        "refusals": [],
+        "removed_dependencies": [],
+        "removed_layout": [
+          {
+            "edge": "LEFT",
+            "kind": "EDGE_PLACEMENT",
+            "max_distance": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "D50 input fuse near the adapter entry edge.",
+              "unit": "mm",
+              "value": 8
+            },
+            "subject": "protection_F1"
+          }
+        ],
+        "status": "EXPANDED",
+        "unchanged_intent_fields": [
+          "components",
+          "nets",
+          "checks",
+          "pin_configurations",
+          "external_loads",
+          "bom",
+          "mechanical",
+          "manufacturing",
+          "evidence"
+        ],
+        "verdict": "EQUIVALENT"
+      }
+    ],
+    "current_worktree_base": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+    "findings": [
+      "Protected-input correction changes only F1 edge LEFT to RIGHT, note and provenance. All electrical/source/check fields and all other layout constraints equal original committed record. Original creator, actual D54 author and prior verifier preserved.",
+      "F1 RIGHT within8mm aligns with J1 RIGHT within5mm; plausible engineering defaults, not sourced dimensions. New5mm pin proximity adds short-entry geometry beyond edge origins. It does not measure routed copper length or guarantee fault/inrush behavior.",
+      "Final rule applies conjunctively to protection.fuse role and exact part:littelfuse-0451001-mrl, the actual G2 fuse. It does not apply to the G1 Eaton PTC. Schema restricts part syntax, catalog validates referenced part existence, and application uses exact ID plus role. No missing-binding fallback was introduced.",
+      "Rule is ENGINEERING_DEFAULT with no fabricated source evidence. Binding requires one unique directly connected non-GROUND net pair of PASSIVE fuse and connector.header physical pins; ambiguity or absence raises refusal. Actual G2 binds F1.pin:1 to entry_J1.pin:1 in all three graphs, not the diode side.",
+      "Both records independently verified with this reviewer identity, distinct from data author/coordinator. Final exact-part selector reviewed after concurrent author update; current catalog loaded successfully.",
+      "All three unchanged original author graphs remain A2-equivalent:101 checks PASS with no refusal. Components,28 nets, GPIO, external loads, BOM, checks, evidence and manufacturing/mechanical metadata identical. Only F1 edge replacement, new pin proximity and rule dependency differ. No A3/A4 or hardware claim."
+    ],
+    "original_bundle_commit": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+    "regression_identity": "Intent bundle_commit uses forty zeros as explicit local-test identity, not a real published commit.",
+    "reviewed_file_sha256": {
+      "knowledge/blocks/g2-protected-input.json": "a4f721d35169f948d184b34734850bd9a02edac4e430d1d62b07cc126c3022fb",
+      "knowledge/rules/fuse-connector-proximity.json": "ab75fa3590a652430e2ec2fdbbac047215afff4fcdd1eac8e5675bae8b609d0e",
+      "schemas/rule.schema.json": "624fc7eedc1eeea7d5ac09b23978c05b31463d24a9fb36415776a452f453d8b9",
+      "src/pcbknowledge/v2/catalog.py": "03e0108cff836a7b1eba2f6f194363166ae163d20ded2353004789e673bad262",
+      "src/pcbknowledge/v2/fuse_rules.py": "49db00134399eff417b461740c4f398d8674d10e1ade6a6578d155257513f298",
+      "src/pcbknowledge/v2/rules.py": "a81a350f047389a133b4fdc3070be868d77a4cafa722f7fde36bee622e8090cf"
+    },
+    "reviewer": "agent:/root/implement_pcbknowledge_brief/g2_attempt_review",
+    "scope": "Independent D54 data review plus current-working-catalog regression of unchanged final-round author graphs. Not fresh synthesis and not a published bundle receipt. Original 9b packets/transcripts/hashes/review remain untouched."
+  },
+  "mode": "UNCHANGED_GRAPH_CURRENT_CATALOG",
+  "original_bundle_commit": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+  "original_input_identity": {
+    "audit_sha256": "34778a39789cd14c33a64c4cbd574d6379d12923142f764181f39eafe231d010",
+    "catalog_tree": "30b548ed72497cff52e9f652b00b78d958cafba0",
+    "engine_sha256": "266527696208adda1fba19aa8c07cba2dd9db9c7814ab7fc09acad39ede55fd4"
+  },
+  "passed": 3,
+  "reference_status": "EXPANDED",
+  "status": "PASS",
+  "total": 3
+}

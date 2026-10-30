@@ -108,3 +108,18 @@ class FinalG2SynthesisTests(G2SynthesisTests):
                            and c['subject'] == next(iter(fuses)) + '.pin:1']
             self.assertEqual(len(constraints), 1)
             self.assertEqual(constraints[0]['max_distance']['value'], 5)
+
+    def test_current_regression_retains_distinct_original_and_evaluation_identities(self):
+        from pcbknowledge.v2.synthesis_identity import validate_identity
+        report = read_json((self.corpus / 'current-catalog-regression.json').read_bytes())
+        self.assertEqual(report['mode'], 'UNCHANGED_GRAPH_CURRENT_CATALOG')
+        self.assertFalse(report['fresh_synthesis'])
+        self.assertEqual((report['status'], report['passed']), ('PASS', 3))
+        self.assertEqual(report['original_input_identity'], self.snapshot['input_identity'])
+        validate_identity(report['evaluation_input_identity'])
+        self.assertNotEqual(report['original_input_identity']['catalog_tree'],
+                            report['evaluation_input_identity']['catalog_tree'])
+        for row, attempt in zip(report['attempts'], self.attempts):
+            self.assertEqual(row['graph_sha256'], digest(attempt['graph']))
+            self.assertEqual(row['electrical_projection_sha256'], row['original_electrical_projection_sha256'])
+            self.assertEqual((row['status'], row['checks'], row['refusals']), ('EXPANDED', 101, []))

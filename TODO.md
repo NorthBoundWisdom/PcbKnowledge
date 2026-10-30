@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_9_ACTIVE` (G1 at A2; Stage 9 unblocked by D38-D41)
+> Status: `CONTINUOUS_MODE_STAGE_10_ACTIVE` (G1 and G2 at A2; G3 next)
 > Updated: 2026-10-30
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -602,14 +602,14 @@ Independent review found one decision-attribution wording issue, corrected; sour
   current within rating, input and output capacitor ripple-current rating,
   regulator dissipation.
 - [x] Reference block graph for G2 reaching A2.
-- [ ] Synthesis evaluation as in Stage 8.
+- [x] Synthesis evaluation as in Stage 8.
 
 Exit: G2 reference and two of three AI attempts reach A2; Stage 7 exports and
 `layout check` cover every G2 constraint kind.
 
-Input receipt: reference published at `a2166bd`, boundary repair `3375fc8`; 381 tests/no skips and exact CI PASS.
-Original three query-mediated attempts are preserved in `evals/synthesis/g2-round1` with 101 PASS checks each.
-They exposed opposed edge defaults on the derived outline; D53 corrects the input edge before final synthesis.
+Stage 9b receipt: reference A2; fresh `9b4aa7d` attempts 3/3 and separate D54 unchanged-graph regression 3/3; 404 tests/no skips.
+Independent reviews fixed edge/fuse placement findings; original packets, submissions, transcripts and identities remain preserved.
+KiCad 9.0.2 parked export: identity PASS, 0 DRC violations, 128 unconnected; A3/A4 remain open.
 
 ## Stage 10 — G3 to A2
 
