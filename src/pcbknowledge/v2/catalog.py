@@ -172,6 +172,8 @@ class Catalog:
             elif kind == 'block':
                 self._block(record)
             elif kind == 'rule':
+                if 'part' in record['applies_to']:
+                    self.get(record['applies_to']['part'], 'part')
                 if 'pin_type' in record['applies_to']:
                     self.vocabulary.member('pin-types', record['applies_to']['pin_type'])
         return self

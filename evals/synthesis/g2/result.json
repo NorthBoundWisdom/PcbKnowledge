@@ -1,0 +1,83 @@
+{
+  "attempts": [
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_one",
+      "checks": 101,
+      "equivalence_review": "All 13 selected block contracts and all port declarations match reference. Every parameter matches reference after removing note prose only, retaining basis, units, bounds, calculator inputs and evidence. Added GPIO port requirements reinforce the same explicit initial-LOW configuration. Requirement placement differs but required functionality is retained. All 16 complete graph endpoint partitions match reference under the explicit mapping. Repeated load-header types were not matched by block ID alone: relay1_load is the connector on ULN RETURN1, relay2_load on RETURN2, and switch_load on the separate MOSFET RETURN. Each has downstream monitored supply on pin1, its own return on pin2 and ground on pins3/4; no return short or shunt bypass exists. Input pin1 feeds fuse then reverse diode. Protected side feeds INA219 shunt pin1; shunt pin2 feeds buck VIN, all three load supplies, ULN COM9 and MOSFET flyback cathode. INA219 sense pins1/2 straddle the same shunt. No actuator or buck branch bypasses full-input monitoring. TPS5430DDA retains switch/boot/feedback/capacitor-damping networks, TDK100uH, Panasonic47uF/180uF and local ceramics. Regulated rail powers MCU digital supply1/24/36/48, filtered analog9, monitor4, pullups and SWD VREF. Grounds include MCU8/23/35/47, buck6/DAP and all local bypasses. ENA5 is source-backed enabled while unconnected, not an unresolved floating input. PA0 pin10 and PA1 pin11 drive ULN inputs1/2 independently, with outputs16/15 on distinct relay returns. PA9 pin30 drives the separate MOSFET gate through RG1; drain3 and diode anode2 join only its load return. Pull-downs preserve inactive reset behavior; all three graph modes are GPIO_PUSH_PULL initial LOW. D46 firmware preloading/2MHz/no-UART obligations remain. I2C MCU43/42 reaches INA2196/5 and separate4.7kOhm pullups at the actual rail. Grounded INA2197/8 selects0x40; D48 firmware PG01/80mV remains required. SWD MCU34/37/7 reaches header2/4/5; unused MCU BUTTON12 and UART_RX31 are grounded. 8MHz crystal, boot pulldowns and four portless M3 holes are preserved. Budgets remain0.5A total input,0.3A aggregate external loads (three0.1A channels),0.15A regulated logic,5mA SWD,100kHz/100pF I2C,40degC ambient. Buck input minimum6.2715V includes diode/fuse/shunt loss; actual3.1658112750050518..3.379200164914451V feedback envelope is shared by GPIO and I2C checks. Buck check17 limits modeled input current to remaining0.2A including conversion loss. Explicit thermal/capacitor/inductor engineering models are unchanged. Inspected all28 expanded pin-net partitions and56 component selections; normalized pin partitions and selected part/package tuples are identical across all three independently mapped graphs. All101 actual checks PASS, covering required pins, source reachability, decoupling, protection, feedback/buck/filter/ripple/current budget, relay/FET GPIO and losses, shunt, oscillator, I2C and external sink returns. No numerical calculator output was invented from PASS-only responses. Initial packet brief exactly matches the current reference brief. Read all transcript entries and verified every embedded response equals its saved response file; catalog queries expose block/part/registry metadata, not reference graphs. Actual invalid registry discovery responses are preserved. Submission original UTF8 and raw hash match the final author graph; submission canonical hash matches returned intent. All three author notes were read and their exact input/raw graph identities checked. Authors and coordinator attest no reference/other-attempt access; this review does not claim operating-system isolation. D53 RIGHT input-header default agrees with the generic RIGHT header rule in the actual returned intent. Fuse LEFT and input RIGHT are different subjects and do not invalidate electrical equivalence; the outdated near-entry note and unfused routing span remain a physical-layout review item. Outline100x80mm is a maximum envelope, not a proof of fixed dimensions.71 layout constraints, fourM3 mounting holes,20mm height envelope,2-layer1.6mm one-ounce top assembly and five hand-solder headers are retained. No placed/routed, DRC, fabrication or hardware acceptance is inferred.",
+      "graph_sha256": "6442d1a447023e0b50f81ef3a87f87f285c723c539e370a6725de73ee24a59cd",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_two",
+      "checks": 101,
+      "equivalence_review": "All 13 selected block contracts and all port declarations match reference. Every parameter matches reference after removing note prose only, retaining basis, units, bounds, calculator inputs and evidence. Added GPIO port requirements reinforce the same explicit initial-LOW configuration. Requirement placement differs but required functionality is retained. All 16 complete graph endpoint partitions match reference under the explicit mapping. Repeated load-header types were not matched by block ID alone: relay1_load is the connector on ULN RETURN1, relay2_load on RETURN2, and switch_load on the separate MOSFET RETURN. Each has downstream monitored supply on pin1, its own return on pin2 and ground on pins3/4; no return short or shunt bypass exists. Input pin1 feeds fuse then reverse diode. Protected side feeds INA219 shunt pin1; shunt pin2 feeds buck VIN, all three load supplies, ULN COM9 and MOSFET flyback cathode. INA219 sense pins1/2 straddle the same shunt. No actuator or buck branch bypasses full-input monitoring. TPS5430DDA retains switch/boot/feedback/capacitor-damping networks, TDK100uH, Panasonic47uF/180uF and local ceramics. Regulated rail powers MCU digital supply1/24/36/48, filtered analog9, monitor4, pullups and SWD VREF. Grounds include MCU8/23/35/47, buck6/DAP and all local bypasses. ENA5 is source-backed enabled while unconnected, not an unresolved floating input. PA0 pin10 and PA1 pin11 drive ULN inputs1/2 independently, with outputs16/15 on distinct relay returns. PA9 pin30 drives the separate MOSFET gate through RG1; drain3 and diode anode2 join only its load return. Pull-downs preserve inactive reset behavior; all three graph modes are GPIO_PUSH_PULL initial LOW. D46 firmware preloading/2MHz/no-UART obligations remain. I2C MCU43/42 reaches INA2196/5 and separate4.7kOhm pullups at the actual rail. Grounded INA2197/8 selects0x40; D48 firmware PG01/80mV remains required. SWD MCU34/37/7 reaches header2/4/5; unused MCU BUTTON12 and UART_RX31 are grounded. 8MHz crystal, boot pulldowns and four portless M3 holes are preserved. Budgets remain0.5A total input,0.3A aggregate external loads (three0.1A channels),0.15A regulated logic,5mA SWD,100kHz/100pF I2C,40degC ambient. Buck input minimum6.2715V includes diode/fuse/shunt loss; actual3.1658112750050518..3.379200164914451V feedback envelope is shared by GPIO and I2C checks. Buck check17 limits modeled input current to remaining0.2A including conversion loss. Explicit thermal/capacitor/inductor engineering models are unchanged. Inspected all28 expanded pin-net partitions and56 component selections; normalized pin partitions and selected part/package tuples are identical across all three independently mapped graphs. All101 actual checks PASS, covering required pins, source reachability, decoupling, protection, feedback/buck/filter/ripple/current budget, relay/FET GPIO and losses, shunt, oscillator, I2C and external sink returns. No numerical calculator output was invented from PASS-only responses. Initial packet brief exactly matches the current reference brief. Read all transcript entries and verified every embedded response equals its saved response file; catalog queries expose block/part/registry metadata, not reference graphs. Actual invalid registry discovery responses are preserved. Submission original UTF8 and raw hash match the final author graph; submission canonical hash matches returned intent. All three author notes were read and their exact input/raw graph identities checked. Authors and coordinator attest no reference/other-attempt access; this review does not claim operating-system isolation. D53 RIGHT input-header default agrees with the generic RIGHT header rule in the actual returned intent. Fuse LEFT and input RIGHT are different subjects and do not invalidate electrical equivalence; the outdated near-entry note and unfused routing span remain a physical-layout review item. Outline100x80mm is a maximum envelope, not a proof of fixed dimensions.71 layout constraints, fourM3 mounting holes,20mm height envelope,2-layer1.6mm one-ounce top assembly and five hand-solder headers are retained. No placed/routed, DRC, fabrication or hardware acceptance is inferred.",
+      "graph_sha256": "30cf237cc6584ed2d4ab5f4b563a41ff30b579d104398f966d567e4e59592a45",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_three",
+      "checks": 101,
+      "equivalence_review": "All 13 selected block contracts and all port declarations match reference. Every parameter matches reference after removing note prose only, retaining basis, units, bounds, calculator inputs and evidence. Added GPIO port requirements reinforce the same explicit initial-LOW configuration. Requirement placement differs but required functionality is retained. All 16 complete graph endpoint partitions match reference under the explicit mapping. Repeated load-header types were not matched by block ID alone: relay1_load is the connector on ULN RETURN1, relay2_load on RETURN2, and switch_load on the separate MOSFET RETURN. Each has downstream monitored supply on pin1, its own return on pin2 and ground on pins3/4; no return short or shunt bypass exists. Input pin1 feeds fuse then reverse diode. Protected side feeds INA219 shunt pin1; shunt pin2 feeds buck VIN, all three load supplies, ULN COM9 and MOSFET flyback cathode. INA219 sense pins1/2 straddle the same shunt. No actuator or buck branch bypasses full-input monitoring. TPS5430DDA retains switch/boot/feedback/capacitor-damping networks, TDK100uH, Panasonic47uF/180uF and local ceramics. Regulated rail powers MCU digital supply1/24/36/48, filtered analog9, monitor4, pullups and SWD VREF. Grounds include MCU8/23/35/47, buck6/DAP and all local bypasses. ENA5 is source-backed enabled while unconnected, not an unresolved floating input. PA0 pin10 and PA1 pin11 drive ULN inputs1/2 independently, with outputs16/15 on distinct relay returns. PA9 pin30 drives the separate MOSFET gate through RG1; drain3 and diode anode2 join only its load return. Pull-downs preserve inactive reset behavior; all three graph modes are GPIO_PUSH_PULL initial LOW. D46 firmware preloading/2MHz/no-UART obligations remain. I2C MCU43/42 reaches INA2196/5 and separate4.7kOhm pullups at the actual rail. Grounded INA2197/8 selects0x40; D48 firmware PG01/80mV remains required. SWD MCU34/37/7 reaches header2/4/5; unused MCU BUTTON12 and UART_RX31 are grounded. 8MHz crystal, boot pulldowns and four portless M3 holes are preserved. Budgets remain0.5A total input,0.3A aggregate external loads (three0.1A channels),0.15A regulated logic,5mA SWD,100kHz/100pF I2C,40degC ambient. Buck input minimum6.2715V includes diode/fuse/shunt loss; actual3.1658112750050518..3.379200164914451V feedback envelope is shared by GPIO and I2C checks. Buck check17 limits modeled input current to remaining0.2A including conversion loss. Explicit thermal/capacitor/inductor engineering models are unchanged. Inspected all28 expanded pin-net partitions and56 component selections; normalized pin partitions and selected part/package tuples are identical across all three independently mapped graphs. All101 actual checks PASS, covering required pins, source reachability, decoupling, protection, feedback/buck/filter/ripple/current budget, relay/FET GPIO and losses, shunt, oscillator, I2C and external sink returns. No numerical calculator output was invented from PASS-only responses. Initial packet brief exactly matches the current reference brief. Read all transcript entries and verified every embedded response equals its saved response file; catalog queries expose block/part/registry metadata, not reference graphs. Actual invalid registry discovery responses are preserved. Submission original UTF8 and raw hash match the final author graph; submission canonical hash matches returned intent. All three author notes were read and their exact input/raw graph identities checked. Authors and coordinator attest no reference/other-attempt access; this review does not claim operating-system isolation. D53 RIGHT input-header default agrees with the generic RIGHT header rule in the actual returned intent. Fuse LEFT and input RIGHT are different subjects and do not invalidate electrical equivalence; the outdated near-entry note and unfused routing span remain a physical-layout review item. Outline100x80mm is a maximum envelope, not a proof of fixed dimensions.71 layout constraints, fourM3 mounting holes,20mm height envelope,2-layer1.6mm one-ounce top assembly and five hand-solder headers are retained. No placed/routed, DRC, fabrication or hardware acceptance is inferred.",
+      "graph_sha256": "8b6512c9e1fc83ceea8b0ca3937245f7c005876e5aee70ef6aca40cf0c4f45f6",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "AMBIGUOUS_REPEATED_SIGNATURE",
+      "structural_match": false
+    }
+  ],
+  "brief": "G2",
+  "bundle_commit": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+  "bundle_sha256": "eb588b0f2fd373e3f91e1370cc0185320861a7fea19da024910d91f8ef7f88b1",
+  "evaluation_engine_sha256": "266527696208adda1fba19aa8c07cba2dd9db9c7814ab7fc09acad39ede55fd4",
+  "evaluation_input_identity": {
+    "audit_sha256": "34778a39789cd14c33a64c4cbd574d6379d12923142f764181f39eafe231d010",
+    "catalog_tree": "30b548ed72497cff52e9f652b00b78d958cafba0",
+    "engine_sha256": "266527696208adda1fba19aa8c07cba2dd9db9c7814ab7fc09acad39ede55fd4"
+  },
+  "input_identity": {
+    "audit_sha256": "34778a39789cd14c33a64c4cbd574d6379d12923142f764181f39eafe231d010",
+    "catalog_tree": "30b548ed72497cff52e9f652b00b78d958cafba0",
+    "engine_sha256": "266527696208adda1fba19aa8c07cba2dd9db9c7814ab7fc09acad39ede55fd4"
+  },
+  "mode": "positive",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "original_bundles": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_one",
+      "commit": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+      "sha256": "eb588b0f2fd373e3f91e1370cc0185320861a7fea19da024910d91f8ef7f88b1"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_two",
+      "commit": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+      "sha256": "eb588b0f2fd373e3f91e1370cc0185320861a7fea19da024910d91f8ef7f88b1"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g2_final_three",
+      "commit": "9b4aa7d71c35dc8688fbe4d058be400a81f65b5d",
+      "sha256": "eb588b0f2fd373e3f91e1370cc0185320861a7fea19da024910d91f8ef7f88b1"
+    }
+  ],
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "reference_sha256": "3fc3dc4847381c5d0cd667edb7108193f52e882c8226f3adc3e77bfb762aabde",
+  "reference_status": "EXPANDED",
+  "required": 2,
+  "status": "PASS",
+  "total": 3
+}

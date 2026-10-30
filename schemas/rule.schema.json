@@ -10,6 +10,7 @@
     "applies_to": {
       "type": "object",
       "properties": {
+        "part": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^part:[a-z0-9][a-z0-9/_-]*$"},
         "role": {"type": "string", "minLength": 1, "maxLength": 256},
         "pin_type": {"type": "string", "minLength": 1, "maxLength": 256}
       },

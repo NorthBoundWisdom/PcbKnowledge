@@ -11,6 +11,8 @@ def apply_rules(catalog, parts, nets, block_layout=()):
         applies = rule['applies_to']
         assigned_caps = set()
         for ref, part in sorted(parts.items()):
+            if 'part' in applies and applies['part'] != part['id']:
+                continue
             if 'role' in applies and applies['role'] not in part['roles']:
                 continue
             pins = [p for p in part['pins'] if p['type']==applies['pin_type']] if 'pin_type' in applies else [None]
@@ -38,6 +40,9 @@ def apply_rules(catalog, parts, nets, block_layout=()):
                             raise ValueError('Rule override has no block-provided replacement: ' + ref)
                         used.add(rule['id'])
                         continue
+                    if raw.get('subject') == 'fuse_pin' or raw.get('target') == 'connected_connector_pin':
+                        from .fuse_rules import fuse_entry_bindings
+                        bindings.update(fuse_entry_bindings(ref, parts, nets))
                     options = [bindings]
                     if raw.get('subject') == 'decoupling_capacitor':
                         grounds = {

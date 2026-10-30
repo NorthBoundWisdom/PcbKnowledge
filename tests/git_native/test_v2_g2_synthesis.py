@@ -15,10 +15,12 @@ CORPUS = ROOT / 'evals/synthesis/g2-round1'
 
 
 class G2SynthesisTests(unittest.TestCase):
+    corpus = CORPUS
+
     @classmethod
     def setUpClass(cls):
-        cls.snapshot = read_json((CORPUS / 'input.json').read_bytes())
-        cls.attempts = [read_json((CORPUS / (name + '.json')).read_bytes())
+        cls.snapshot = read_json((cls.corpus / 'input.json').read_bytes())
+        cls.attempts = [read_json((cls.corpus / (name + '.json')).read_bytes())
                         for name in ('one', 'two', 'three')]
         cls.temp = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.temp.cleanup)
@@ -44,7 +46,7 @@ class G2SynthesisTests(unittest.TestCase):
         self.assertEqual((result['status'], result['passed']), ('PASS', 3))
         self.assertEqual(result['receipt_identity'], 'CATALOG_CONTENT_REPLAY')
         self.assertEqual(result['input_identity'], self.snapshot['input_identity'])
-        original = read_json((CORPUS / 'result.json').read_bytes())
+        original = read_json((self.corpus / 'result.json').read_bytes())
         self.assertEqual(original['receipt_identity'], 'CATALOG_CONTENT')
         self.assertEqual(original['evaluation_engine_sha256'], self.snapshot['input_identity']['engine_sha256'])
         self.assertEqual((original['status'], original['passed']), ('PASS', 3))
@@ -73,3 +75,36 @@ class G2SynthesisTests(unittest.TestCase):
             validations = [row['response'] for row in attempt['transcript'] if row['query']['op'] == 'validate']
             self.assertTrue(validations)
             self.assertEqual(attempt['independent_review']['verdict'], 'EQUIVALENT')
+
+
+class FinalG2SynthesisTests(G2SynthesisTests):
+    corpus = ROOT / 'evals/synthesis/g2'
+
+    def test_unchanged_graphs_against_current_catalog_are_separate_regressions(self):
+        import copy
+        from pcbknowledge.v2.catalog import Catalog
+        from pcbknowledge.v2.expansion import expand
+        catalog = Catalog(ROOT, ROOT / 'schemas')
+        brief = read_json((ROOT / 'evals/golden-designs/g2.brief.json').read_bytes())
+        for attempt in self.attempts:
+            graph = attempt['graph']
+            current = expand(catalog, graph, brief, bundle_commit='0' * 40)
+            self.assertEqual(current['status'], 'EXPANDED', current['refusals'])
+            original = [row['response']['intent'] for row in attempt['transcript']
+                        if row['query']['op'] == 'validate'][-1]
+            projections = []
+            for intent in (original, current):
+                projection = copy.deepcopy(intent)
+                for key in ('bundle_commit', 'layout', 'dependencies'):
+                    projection.pop(key)
+                projection['mechanical'].pop('edge_interfaces')
+                projections.append(projection)
+            self.assertEqual(*projections)
+            self.assertEqual(digest(graph), attempt['receipt']['graph_sha256'])
+            self.assertEqual(len(current['checks']), 101)
+            fuses = {c['ref'] for c in current['components'] if c['part'] == 'part:littelfuse-0451001-mrl'}
+            self.assertEqual(len(fuses), 1)
+            constraints = [c for c in current['layout'] if c['kind'] == 'PLACE_NEAR'
+                           and c['subject'] == next(iter(fuses)) + '.pin:1']
+            self.assertEqual(len(constraints), 1)
+            self.assertEqual(constraints[0]['max_distance']['value'], 5)

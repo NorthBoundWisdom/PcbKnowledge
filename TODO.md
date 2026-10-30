@@ -97,6 +97,7 @@ answer here.
 | D51 | G2 feedback and damping | Use 10 kOhm upper feedback and 10 kOhm parallel with (10 kOhm + 4.7 kOhm) lower feedback; two parallel 0.1 Ohm resistors provide the output capacitor's series damping floor. |
 | D52 | Buck enable connection | Leave TPS5430 ENA unconnected as explicitly permitted by its internal pull-up; the part records the source-backed ENABLED default and the input checker retains it. |
 | D53 | G2 input edge | Place the power input header at the RIGHT edge within 5 mm, matching the existing header rule; the brief requires edge access but no particular side. This removes opposed defaults on the exported 80 by 100 mm outline. |
+| D54 | G2 entry placement | Place the fuse on the RIGHT edge within 8 mm and its directly connected input-header pad within 5 mm of the fuse pad. Matching edge names alone does not constrain along-edge separation. |
 
 ## Stage 0 — Course correction (complete)
 

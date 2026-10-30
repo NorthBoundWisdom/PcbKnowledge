@@ -143,9 +143,13 @@ current briefs is a separate check, not a new independent synthesis attempt.
 
 ## G2 reference
 
-D38-D52 replace the earlier refused partial graph with source-backed protection,
+D38-D54 replace the earlier refused partial graph with source-backed protection,
 conversion and actuation blocks. The 7-12 V adapter and 500 mA total budget remain;
 three external 100 mA loads leave 200 mA for the regulated logic branch. The
 source-guided buck input model requires at most 161.5 mA at its 150 mA logic-load
 point. The exact feedback-derived rail feeds GPIO and I2C checks. See `TODO.md`
-for the current input publication and independent synthesis results.
+for the acceptance receipt. Three fresh attempts on published `9b4aa7d` are
+preserved in `evals/synthesis/g2/`; the earlier round remains in `g2-round1/`.
+D54 subsequently corrects only fuse placement and adds pin proximity. Unchanged
+author graphs are independently revalidated against that catalog as a separate
+regression, not relabeled as fresh synthesis on different inputs.

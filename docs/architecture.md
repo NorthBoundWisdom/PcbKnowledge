@@ -112,6 +112,10 @@ Expansion rejects mutually incompatible directional edge intervals across the
 shared maximum outline envelope. An envelope is not a fixed board size. The
 derived KiCad handoff additionally checks feasibility against its actual chosen
 rectangle before export; LEFT/RIGHT use width and TOP/BOTTOM use length.
+Rules may conjunctively select an exact part, role and pin type. The G2 fuse
+proximity rule resolves one directly connected non-ground physical fuse/header
+pin pair and refuses missing or ambiguous pairs. Its distance limits placement,
+not routed trace length.
 
 ## Reproducing historical receipts
 
