@@ -62,7 +62,30 @@ def net_name(node, nets):
     return nets[identity]
 
 
-def _pad(node, origin, angle, nets):
+def _paste_settings(node, inherited, *, board=False, legacy_ratio=False, zero_overrides=False):
+    names = (('pad_to_paste_clearance', 'pad_to_paste_clearance_ratio') if board else
+             ('solder_paste_margin', 'solder_paste_margin_ratio'))
+    result = dict(inherited)
+    for key, name in zip(('paste_margin', 'paste_ratio'), names):
+        value = field(node, name)
+        # Older footprint syntax names the same percentage without "margin".
+        legacy = field(node, 'solder_paste_ratio') if key == 'paste_ratio' and not board else None
+        if legacy is not None and not legacy_ratio:
+            raise ValueError('Unsupported pad paste ratio syntax')
+        if value is not None and legacy is not None:
+            raise ValueError('Conflicting solder paste ratio fields')
+        value = value if value is not None else legacy
+        if value is not None:
+            if len(value) != 1:
+                raise ValueError('Solder paste setting requires one scalar')
+            scalar = number(value[0])
+            if scalar == 0 and not board and not zero_overrides:
+                raise ValueError('Zero solder paste overrides require the KiCad 9 board format')
+            result[key] = scalar
+    return result
+
+
+def _pad(node, origin, angle, nets, paste, zero_overrides):
     if len(node) < 4:
         raise ValueError('Malformed board pad')
     at = field(node, 'at', ['0', '0'])
@@ -84,7 +107,8 @@ def _pad(node, origin, angle, nets):
             'size': size, 'shape': node[3], 'kind': node[2], 'net': net_name(node, nets),
             'layers': field(node, 'layers', []), 'rotation': number(at[2]) if len(at) > 2 else 0.0,
             'drill': min(drill_size) if drill_size else None, 'drill_size': drill_size,
-            'drill_offset': drill_offset, 'geometry_unsupported': bool(unsupported)}
+            'drill_offset': drill_offset, 'geometry_unsupported': bool(unsupported),
+            **_paste_settings(node, paste, zero_overrides=zero_overrides)}
 
 
 
@@ -103,7 +127,7 @@ def _graphic(node, origin, angle):
     return None
 
 
-def _footprint(node, nets, unsupported):
+def _footprint(node, nets, unsupported, paste, zero_overrides):
     refs = [item[2] for item in children(node, 'property') if len(item) > 2 and item[1] == 'Reference']
     refs += [item[2] for item in children(node, 'fp_text') if len(item) > 2 and item[1] == 'reference']
     if not refs or len(set(refs)) != 1 or not refs[0]:
@@ -112,9 +136,10 @@ def _footprint(node, nets, unsupported):
     at = field(node, 'at', ['0', '0'])
     origin = point(at)
     angle = number(at[2]) if len(at) > 2 else 0.0
+    paste = _paste_settings(node, paste, legacy_ratio=True, zero_overrides=zero_overrides)
     pads = {}
     for pad in children(node, 'pad'):
-        pads.setdefault(pad[1], []).append(_pad(pad, origin, angle, nets))
+        pads.setdefault(pad[1], []).append(_pad(pad, origin, angle, nets, paste, zero_overrides))
         if pad[3] not in ('rect', 'roundrect', 'circle', 'oval', 'trapezoid'):
             unsupported.append(f'{ref}: unsupported pad shape {pad[3]}')
     courtyard = []
@@ -238,6 +263,7 @@ def board_from_text(text):
         root = parse(text)
         if not root or root[0] != 'kicad_pcb':
             raise ValueError('Not a KiCad board')
+        zero_overrides = field(root, 'version') == ['20241229']
         nets = {'0': ''}
         names = set()
         for node in children(root, 'net'):
@@ -249,8 +275,10 @@ def board_from_text(text):
             names.add(node[2])
         unsupported = []
         footprints = {}
+        setup = ['setup', *field(root, 'setup', [])]
+        paste = _paste_settings(setup, {'paste_margin': 0.0, 'paste_ratio': 0.0}, board=True)
         for node in children(root, 'footprint'):
-            ref, footprint = _footprint(node, nets, unsupported)
+            ref, footprint = _footprint(node, nets, unsupported, paste, zero_overrides)
             if ref in footprints:
                 raise ValueError('Duplicate footprint reference')
             footprints[ref] = footprint

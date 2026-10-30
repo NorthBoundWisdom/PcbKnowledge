@@ -184,8 +184,17 @@ def corpus_topology(graph):
                 raise ValueError('Invalid corpus graph endpoint')
             endpoints.append((identities[endpoint['instance']], endpoint['port']))
         nets.append(sorted(endpoints))
+    configurations = {}
+    for field in ('pin_configurations', 'port_requirements'):
+        values = []
+        for item in graph.get(field, []):
+            if item['instance'] not in identities:
+                raise ValueError('Invalid configured graph instance')
+            values.append({**item, 'instance': identities[item['instance']]})
+        if values:
+            configurations[field] = sorted(values, key=canonical_json)
     return {'instances': sorted(identities.values()), 'nets': sorted(nets),
-            'requirements': sorted(graph.get('requirements', []), key=canonical_json)}
+            'requirements': sorted(graph.get('requirements', []), key=canonical_json), **configurations}
 
 
 def _positive_corpus(bundle, brief, attempts, reference, *, historical, replay):

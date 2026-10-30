@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 
-from . import calculators_power
+from . import calculators_drivers, calculators_power, calculators_protection
 
 
 class CalculationError(ValueError):
@@ -34,6 +34,8 @@ INPUT_UNITS = {
                            'drive_current': 'A', 'power_rating': 'W'},
     'trace_width': {'current': 'A', 'temperature_rise': 'degC', 'copper_thickness': 'mm'},
     **calculators_power.INPUT_UNITS,
+    **calculators_drivers.INPUT_UNITS,
+    **calculators_protection.INPUT_UNITS,
 }
 
 
@@ -92,6 +94,13 @@ def _calculate(name, inputs):
     for key, (low, _) in b.items():
         if key not in ('ambient',) and low < 0:
             raise CalculationError(f'{key} must be nonnegative')
+    if name in calculators_drivers.INPUT_UNITS:
+        return _calculate_drivers(name, inputs, b)
+    if name in calculators_protection.INPUT_UNITS:
+        try:
+            return _result(name, inputs, calculators_protection.calculate(name, b))
+        except ValueError as error:
+            raise CalculationError(str(error)) from error
     if name in calculators_power.INPUT_UNITS:
         return _calculate_power(name, inputs, b)
     if name == 'ldo_headroom':
@@ -158,6 +167,50 @@ def _calculate(name, inputs):
         result = {'trace_width': (width(current[0],rise[1],copper[1]),
                                   width(current[1],rise[0],copper[0]), 'mm')}
     return _result(name, inputs, result)
+
+
+def _gpio_source_conditions(inputs, b):
+    drop = inputs['high_drop']
+    conditions = drop.get('conditions', {})
+    if not isinstance(conditions, dict):
+        raise CalculationError('GPIO source conditions must be typed quantities')
+    keys = ('VDD_min', 'VDD_max', 'output_current')
+    if drop.get('basis') == 'DATASHEET' and any(key not in conditions for key in keys):
+        raise CalculationError('Datasheet GPIO high drop requires typed supply and output-current conditions')
+    if not any(key in conditions for key in keys):
+        return
+    if any(key not in conditions for key in keys):
+        raise CalculationError('GPIO source conditions must include both supply endpoints and current')
+    low = bounds(conditions['VDD_min'], 'V', 'GPIO supply lower endpoint')[1]
+    high = bounds(conditions['VDD_max'], 'V', 'GPIO supply upper endpoint')[0]
+    rating = bounds(conditions['output_current'], 'A', 'GPIO source-current condition')[0]
+    # GPIO VDD_min/VDD_max are strict endpoints, matching the cited CMOS domain.
+    if not low < b['supply'][0] <= b['supply'][1] < high:
+        raise CalculationError('GPIO supply is outside its strict source-voltage domain')
+    if b['source_current_rating'][1] > rating:
+        raise CalculationError('GPIO requested source-current rating exceeds its source condition')
+
+
+def _calculate_drivers(name, inputs, b):
+    if name == 'gpio_drive':
+        _gpio_source_conditions(inputs, b)
+    if name in ('tps5430_ccm_design', 'tps5430_output_ripple'):
+        resistance = inputs['on_resistance']
+        conditions = resistance.get('conditions', {})
+        if resistance.get('basis') == 'DATASHEET':
+            voltage = conditions.get('input_voltage')
+            if voltage is not None and bounds(voltage, 'V', 'RDS test voltage') != b['input_voltage']:
+                raise CalculationError('RDS test voltage differs from the requested operating interval')
+            if 'gate_voltage' in conditions:
+                raise CalculationError('RDS bootstrap test voltage needs a supported engineering model input')
+    try:
+        output = _result(name, inputs, calculators_drivers.calculate(name, b))
+    except ValueError as error:
+        raise CalculationError(str(error)) from error
+    if name in ('tps5430_ccm_design', 'tps5430_output_ripple'):
+        for value in output.values():
+            value['note'] = 'TPS5430 source design equations at the supplied CCM operating point.'
+    return output
 
 
 def _calculate_power(name, inputs, b):

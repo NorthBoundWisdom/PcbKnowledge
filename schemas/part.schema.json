@@ -68,6 +68,54 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256
+          },
+          "functions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "evidence.schema.json"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "name",
+                "evidence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "unconnected_state": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "evidence.schema.json"
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "state",
+              "evidence"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [

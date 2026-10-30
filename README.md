@@ -10,7 +10,8 @@ placement, routing, DRC and fabrication output. The product direction is
 The runtime uses one v2 model and shared structural/semantic validation, a
 read-only catalog, original footprint generators and commit-pinned deterministic
 design expansion. G1 has 100% catalog coverage and reaches A2 with its reference
-graph and all three independently authored AI graphs. Hardware fabrication and
+graph and all three independently authored AI graphs. G2 adds switching-power
+and external-load models with explicit source conditions. Hardware fabrication and
 bring-up are not claimed. Derived KiCad 9 handoff, read-only exported-board
 checks and an optional isolated DRC wrapper support the owner's layout work;
 parked skeletons and incomplete geometry checks are not A3/A4 acceptance.

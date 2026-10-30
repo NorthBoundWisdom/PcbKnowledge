@@ -11,7 +11,9 @@ class Vocabulary:
     def __init__(self, documents):
         self.entries = {d['id'].removeprefix('registry:'): d['entries'] for d in documents}
         expected = {'quantities', 'parameters', 'roles', 'pin-types', 'package-families', 'layout-constraints'}
-        if set(self.entries) != expected or len(documents) != len(expected):
+        optional = {'pin-functions', 'pin-states', 'unconnected-states'}
+        if (not expected <= set(self.entries) or set(self.entries) - expected - optional
+                or len(documents) != len(self.entries)):
             raise ValueError('Incomplete or duplicate registry set')
         quantities = self.entries['quantities']
         for name, definition in self.entries['parameters'].items():
@@ -41,7 +43,7 @@ class Vocabulary:
         return cls(documents)
 
     def member(self, registry, name):
-        if name not in self.entries[registry]:
+        if registry not in self.entries or name not in self.entries[registry]:
             raise ValueError(f'Unknown {registry} name: {name}')
         return self.entries[registry][name]
 
@@ -105,6 +107,8 @@ class Vocabulary:
                 if name in value:
                     for item in value[name] if isinstance(value[name], list) else [value[name]]:
                         self.member(registry, item)
+            if 'required_function' in value:
+                self.member('pin-functions', value['required_function'])
             if key == 'ports' and 'kind' in value:
                 self.member('pin-types', value['kind'])
             if 'pin_type' in value:

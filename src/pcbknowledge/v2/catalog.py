@@ -220,6 +220,10 @@ class Catalog:
             pads = {p['number'] for p in derive_footprint(package)['pads'] if p['kind'] != 'MECHANICAL'}
         if set(pins) != pads:
             raise ValueError(f'Pin/pad coverage mismatch: {part["id"]}')
+        from .gpio import validate_part_functions
+        validate_part_functions(self, part)
+        from .pin_defaults import validate_unconnected_states
+        validate_unconnected_states(self, part)
         for pin in pins.values():
             alias = pin.get('same_net_as')
             if alias and (alias not in pins or alias == pin['number'] or 'same_net_as' in pins[alias]):
@@ -283,6 +287,8 @@ class Catalog:
                             raise ValueError('Dangling block pin')
         if any('port:'+name not in connected for name in ports):
             raise ValueError('Unconnected block port')
+        from .power_sinks import validate_block_loads
+        validate_block_loads(self, block, candidates)
         from .calculators import validate_inputs
         for check in block['checks']:
             validate_inputs(check['calculator'], check['inputs'], allow_parameters=True)

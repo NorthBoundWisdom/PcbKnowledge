@@ -23,7 +23,7 @@ def expected_geometry(pad, footprint):
         layers = {'*.Cu', '*.Mask'}
     return {'at': transform(local, footprint['at'], footprint['rotation']),
             'size': [pad['width'], pad['height']], 'rotation': rotation, 'drill_size': drill,
-            'layers': layers,
+            'layers': layers, 'paste_margin': pad.get('paste_margin', 0.0),
             'kind': {'SMD': 'smd', 'THROUGH_HOLE': 'thru_hole', 'MECHANICAL': 'np_thru_hole'}[pad['kind']],
             'shape': {'RECT': 'rect', 'ROUND': 'circle', 'OVAL': 'oval'}[pad['shape']]}
 
@@ -33,6 +33,9 @@ def matches(actual, expected):
         return False
     if set(actual['layers']) != expected['layers']:
         return False
+    if expected['kind'] == 'smd':
+        if actual['paste_ratio'] != 0.0 or not close_vector([actual['paste_margin']], [expected['paste_margin']]):
+            return False
     if not close_vector(actual['at'], expected['at']) or not close_vector(actual['size'], expected['size']):
         return False
     angle = (actual['rotation'] - expected['rotation'] + 180) % 360 - 180

@@ -135,6 +135,72 @@
         "minLength": 1
       },
       "minItems": 1
+    },
+    "pin_configurations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "instance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "port": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "mode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "initial_state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "instance",
+          "port",
+          "mode",
+          "initial_state"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "port_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "instance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "port": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "function": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "instance",
+          "port",
+          "function"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
     }
   },
   "required": [

@@ -51,7 +51,7 @@
       "id": "power_routing"
     },
     {
-      "description": "D37 current monitor uses the existing 100 kHz I2C bus, address 0x10; transfer accuracy remains unresolved.",
+      "description": "D48 INA219 at address 0x40 on the existing 100 kHz I2C bus.",
       "id": "monitor_interface"
     },
     {
@@ -74,23 +74,89 @@
     {
       "category": "power.switching",
       "count": 1,
-      "description": "TPS62160 buck converter with SRP4020TA inductor.",
+      "description": "TPS5430 buck with source-rated TDK inductor and Panasonic polymer capacitors.",
       "id": "buck",
       "parameters": {
         "output_voltage": {
-          "basis": "ENGINEERING_DEFAULT",
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
           "conditions": {},
-          "note": "Original synthetic design requirement.",
-          "unit": "V",
-          "value": 3.3
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
         }
       },
       "part_preferences": [
-        "TPS62160",
-        "SRP4020TA"
+        "TPS5430DDA",
+        "CLF7045NIT-101M-D",
+        "25SVPF180M",
+        "25SVPF47M"
       ],
       "requirements": [
-        "TPS62160 buck converter with SRP4020TA inductor."
+        "3.3 V nominal rail within 5 percent over declared source and feedback tolerances."
       ]
     },
     {
@@ -115,12 +181,11 @@
     {
       "category": "driver.relay",
       "count": 1,
-      "description": "Two independent discrete relay sink channels under D36; not a pin-compatible ULN2003A replacement.",
+      "description": "Two independently controlled ULN2003AIPWR relay sinks with common flyback supply.",
       "id": "stepper_relays",
       "parameters": {},
       "part_preferences": [
-        "RQ5E025TNTL",
-        "SS14"
+        "ULN2003AIPWR"
       ],
       "requirements": [
         "D35: two external relay coils, each at most 100 mA and 100 mH, switched at most 10 Hz; retain independent control and flyback protection."
@@ -143,16 +208,112 @@
     {
       "category": "sensor.current",
       "count": 1,
-      "description": "D37 full-input analog current sensor with I2C ADC and Kelvin shunt.",
+      "description": "INA219 full-protected-input monitor with Kelvin shunt and 80 mV PGA range.",
       "id": "current_monitor",
       "parameters": {},
       "part_preferences": [
-        "BD14210G-LATR",
-        "BD79124MUF-CE2",
+        "INA219AIDCNR",
         "RL1206FR-070R1L"
       ],
       "requirements": [
         "D35: monitor the complete protected input load before its logic and actuator branches, using Kelvin sense connections; preserve the full 7-12 V connector envelope."
+      ]
+    },
+    {
+      "category": "bus.i2c",
+      "count": 1,
+      "description": "I2C pull-ups checked at the actual feedback-derived logic rail.",
+      "id": "i2c_bias",
+      "parameters": {
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D34 reused I2C standard mode.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D34 reused 100 pF bus budget.",
+          "unit": "F",
+          "value": 1e-10
+        },
+        "input_voltage": {
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
+          "conditions": {},
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Use actual rail tolerance for the pull-up sink-current check."
       ]
     }
   ],
@@ -166,7 +327,7 @@
         "unit": "A",
         "value": 0.5
       },
-      "description": "Power terminal block",
+      "description": "D47 four-pin power input header.",
       "id": "input_terminal",
       "signals": [
         "VIN",
@@ -284,8 +445,21 @@
     "D12",
     "D34",
     "D35",
-    "D36",
-    "D37"
+    "D38",
+    "D39",
+    "D40",
+    "D41",
+    "D42",
+    "D43",
+    "D44",
+    "D45",
+    "D46",
+    "D47",
+    "D48",
+    "D49",
+    "D50",
+    "D51",
+    "D52"
   ],
   "power": {
     "rails": [
@@ -300,11 +474,75 @@
         "function": "buck",
         "id": "logic_3v3",
         "voltage": {
-          "basis": "ENGINEERING_DEFAULT",
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
           "conditions": {},
-          "note": "Original synthetic design requirement.",
-          "unit": "V",
-          "value": 3.3
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
         }
       }
     ],
@@ -317,7 +555,7 @@
           "unit": "A",
           "value": 0.5
         },
-        "description": "Terminal-block power input.",
+        "description": "7-12 V adapter at the input header, before protection losses.",
         "function": "input_protection",
         "id": "terminal_input",
         "voltage": {

@@ -72,6 +72,28 @@ class _Drawing:
         return dimension(self.record[name], name, **kwargs)
 
 
+def _terminal_gap_inner(context, heel):
+    drawing = context.record
+    if context.generator != 'chip' or any(key in drawing for key in ('lead_length', 'opposite_lead_length')):
+        raise ValueError('Terminal gap requires a chip without competing lead-length dimensions')
+    intervals = {}
+    for name in ('terminal_gap', 'lead_span'):
+        quantity = drawing[name]
+        if 'value' in quantity and any(key in quantity for key in ('min', 'typ', 'max')):
+            raise ValueError('Ambiguous terminal geometry scalar and range')
+        low, high = (context.dimension(name, bound=bound) for bound in ('min', 'max'))
+        typical = context.dimension(name, bound='typ') if 'typ' in quantity else low
+        if not low <= typical <= high:
+            raise ValueError('Unordered terminal geometry range')
+        intervals[name] = low, high
+    gap, span = intervals['terminal_gap'], intervals['lead_span']
+    if gap[1] >= span[0]:
+        raise ValueError('Terminal gap must be smaller than the lead span throughout their ranges')
+    # Contact length is (span - gap) / 2. Its correlated inner edge is gap / 2;
+    # do not count the span tolerance twice when extending toe and heel.
+    return gap[0] / 2 - heel
+
+
 def _two_terminal_pads(context):
     drawing, dim, count = context.record, context.dimension, context.count
     generator, density = context.generator, context.density
@@ -80,12 +102,13 @@ def _two_terminal_pads(context):
         raise ValueError('Two-terminal generator requires two pins')
     if generator == 'chip':
         toe, heel, side = CHIP_FILLETS[density]
-    span, length, width = dim('lead_span'), dim('lead_length'), dim('lead_width')
+    span, width = dim('lead_span'), dim('lead_width')
     outer = span / 2 + toe
-    inner = dim('lead_span', bound='min') / 2 - length - heel
+    inner = (_terminal_gap_inner(context, heel) if 'terminal_gap' in drawing else
+             dim('lead_span', bound='min') / 2 - dim('lead_length') - heel)
     center = (outer + inner) / 2
-    other_length = dim('opposite_lead_length') if 'opposite_lead_length' in drawing else length
-    other_inner = dim('lead_span', bound='min') / 2 - other_length - heel
+    other_inner = (dim('lead_span', bound='min') / 2 - dim('opposite_lead_length') - heel
+                   if 'opposite_lead_length' in drawing else inner)
     other_center = (outer + other_inner) / 2
     return [_pad(1, -center, 0, outer - inner, width + 2 * side),
             _pad(2, other_center, 0, outer - other_inner, width + 2 * side)]
@@ -213,8 +236,25 @@ def _mechanical_pads(context):
     return [_pad('1', 0, 0, drill, drill, kind='MECHANICAL', shape='ROUND', drill=drill)]
 
 
+def _exposed_pad_margin(pad, drawing):
+    if 'paste_margin' not in drawing:
+        return pad
+    quantity = drawing['paste_margin']
+    if not isinstance(quantity, dict) or set(quantity) & {'value', 'min', 'typ', 'max'} != {'value'}:
+        raise ValueError('Exposed pad paste margin requires an exact scalar')
+    margin = dimension(quantity, 'exposed_pad.paste_margin', positive=False)
+    if margin > 0:
+        raise ValueError('Exposed pad paste margin must be nonpositive')
+    pad['paste_margin'] = _round(margin)
+    if min(pad['width'], pad['height']) + 2 * pad['paste_margin'] <= 0:
+        raise ValueError('Exposed pad paste margin collapses the aperture')
+    return pad
+
+
 def _drawing_pads(package):
     context = _Drawing(package)
+    if 'terminal_gap' in context.record and context.generator != 'chip':
+        raise ValueError('Terminal gap is supported only by the chip generator')
     generators = {
         'chip': _two_terminal_pads,
         'molded_diode': _two_terminal_pads,
@@ -240,7 +280,7 @@ def _drawing_pads(package):
         if (width > dimension(package['body']['width'], 'body.width')
                 or length > dimension(package['body']['length'], 'body.length')):
             raise ValueError('Exposed pad must fit within package body')
-        pads.append(_pad(exposed['number'], 0, 0, width, length))
+        pads.append(_exposed_pad_margin(_pad(exposed['number'], 0, 0, width, length), exposed))
     return pads
 
 
@@ -348,10 +388,11 @@ def export_kicad(package):
         drill = f' (drill {number(pad["drill"])})' if 'drill' in pad else ''
         if 'drill_width' in pad:
             drill = f' (drill oval {number(pad["drill_width"])} {number(pad["drill_height"])})'
+        paste = f' (solder_paste_margin {number(pad["paste_margin"])})' if 'paste_margin' in pad else ''
         lines.append(
             f'  (pad {quote(pad["number"])} {kind} {shape} '
             f'(at {number(pad["x"])} {number(pad["y"])} {number(pad["rotation"])}) '
-            f'(size {number(pad["width"])} {number(pad["height"])}){drill} (layers {layers}))'
+            f'(size {number(pad["width"])} {number(pad["height"])}){drill} (layers {layers}){paste})'
         )
     lines.append(')')
     return '\n'.join(lines) + '\n'

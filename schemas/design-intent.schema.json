@@ -223,6 +223,28 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256
+          },
+          "unconnected_state": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "evidence.schema.json"
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "state",
+              "evidence"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -458,6 +480,132 @@
         "assembly_side"
       ],
       "additionalProperties": false
+    },
+    "pin_configurations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "mode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "initial_state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "$ref": "evidence.schema.json"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "ref",
+          "pin",
+          "mode",
+          "initial_state",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "external_loads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "block": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "local_connector": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "connector": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "supply_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "return_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "provider": {
+            "type": "object",
+            "properties": {
+              "block": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "local_component": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "pin": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "port": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "block",
+              "local_component",
+              "ref",
+              "pin",
+              "port"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "block",
+          "local_connector",
+          "connector",
+          "supply_pin",
+          "return_pin",
+          "provider"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
     }
   },
   "required": [

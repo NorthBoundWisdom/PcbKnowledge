@@ -2,6 +2,7 @@
 from __future__ import annotations
 from .catalog import LEVELS, unique
 from .footprints import footprint_name
+from .pin_defaults import connection_check, validate_default_checks
 
 
 def validate_intent(catalog, intent, *, bundle_commit):
@@ -30,6 +31,11 @@ def validate_intent(catalog, intent, *, bundle_commit):
             if (ref, number) in connections:
                 raise ValueError('Intent pin connected more than once')
             connections[ref, number] = name
+    from .gpio import validate_configurations, validate_configured_drivers
+    validate_configurations(catalog, parts, intent.get('pin_configurations', []))
+    validate_configured_drivers(parts, intent.get('pin_configurations', []), connections)
+    from .power_sinks import validate_loads
+    validate_loads(catalog, parts, intent['nets'], intent.get('external_loads', []), used)
     _validate_bom(intent, parts)
     for mount in intent['mechanical']['mounting']:
         if mount['ref'] not in components or 'mechanical.mounting-hole' not in parts[mount['ref']]['roles']:
@@ -61,7 +67,7 @@ def validate_intent(catalog, intent, *, bundle_commit):
     return intent
 
 
-def electrical_checks(parts, nets):
+def electrical_checks(parts, nets, external_loads=()):
     """Recompute electrical topology checks, never trust supplied PASS labels."""
     connections = {(p['ref'], p['pin']): net['name'] for net in nets for p in net['pins']}
     checks = []
@@ -87,7 +93,7 @@ def electrical_checks(parts, nets):
         for pin in part['pins']:
             key = (ref, pin['number'])
             if pin['type'] in ('POWER_IN', 'GROUND', 'INPUT'):
-                add('connection:' + ref + ':' + pin['number'], key in connections, 'Required electrical pin connection')
+                checks.append(connection_check(ref, pin, key in connections))
             if pin.get('same_net_as'):
                 add(
                     'alias:' + ref + ':' + pin['number'],
@@ -104,6 +110,8 @@ def electrical_checks(parts, nets):
             }
             passed = any((series_nodes & component_nets(r) and len(component_nets(r)) == 2 for r in resistors))
             add('led_resistor:' + ref, passed, 'LED has a connected current-limiting resistor')
+    from .power_sinks import sink_checks
+    checks.extend(sink_checks(parts, nets, external_loads))
     return checks
 
 
@@ -122,6 +130,7 @@ def _validate_bom(intent, parts):
 
 def _validate_checks_and_closure(catalog, intent, parts, used):
     checks = unique(intent['checks'], 'id', 'intent check id')
+    validate_default_checks(parts, intent['nets'], checks)
     if intent['status'] == 'EXPANDED':
 
         def concrete(value):
@@ -134,7 +143,7 @@ def _validate_checks_and_closure(catalog, intent, parts, used):
                 for child in value:
                     concrete(child)
         concrete(intent)
-        actual_checks = electrical_checks(parts, intent['nets'])
+        actual_checks = electrical_checks(parts, intent['nets'], intent.get('external_loads', []))
         for actual in actual_checks:
             if actual['result'] != 'PASS':
                 raise ValueError('Electrical check failed: ' + actual['id'])

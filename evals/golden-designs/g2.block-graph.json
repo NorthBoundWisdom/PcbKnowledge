@@ -4,8 +4,38 @@
     {
       "endpoints": [
         {
+          "instance": "input",
+          "port": "VIN"
+        },
+        {
+          "instance": "protection",
+          "port": "VIN"
+        }
+      ],
+      "net": "ADAPTER_IN"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "protection",
+          "port": "VOUT"
+        },
+        {
+          "instance": "monitor",
+          "port": "SENSE_IN"
+        }
+      ],
+      "net": "PROTECTED_INPUT"
+    },
+    {
+      "endpoints": [
+        {
           "instance": "monitor",
           "port": "SENSE_OUT"
+        },
+        {
+          "instance": "buck",
+          "port": "VIN"
         },
         {
           "instance": "relay",
@@ -14,12 +44,28 @@
         {
           "instance": "switch",
           "port": "VLOAD"
+        },
+        {
+          "instance": "relay1_load",
+          "port": "VLOAD"
+        },
+        {
+          "instance": "relay2_load",
+          "port": "VLOAD"
+        },
+        {
+          "instance": "switch_load",
+          "port": "VLOAD"
         }
       ],
       "net": "MONITORED_LOAD"
     },
     {
       "endpoints": [
+        {
+          "instance": "buck",
+          "port": "VOUT"
+        },
         {
           "instance": "mcu",
           "port": "VDD"
@@ -46,10 +92,6 @@
           "port": "GND"
         },
         {
-          "instance": "monitor",
-          "port": "GND"
-        },
-        {
           "instance": "swd",
           "port": "GND"
         },
@@ -60,6 +102,42 @@
         {
           "instance": "switch",
           "port": "GND"
+        },
+        {
+          "instance": "monitor",
+          "port": "GND"
+        },
+        {
+          "instance": "protection",
+          "port": "GND"
+        },
+        {
+          "instance": "buck",
+          "port": "GND"
+        },
+        {
+          "instance": "input",
+          "port": "GND"
+        },
+        {
+          "instance": "relay1_load",
+          "port": "GND"
+        },
+        {
+          "instance": "relay2_load",
+          "port": "GND"
+        },
+        {
+          "instance": "switch_load",
+          "port": "GND"
+        },
+        {
+          "instance": "mcu",
+          "port": "BUTTON"
+        },
+        {
+          "instance": "mcu",
+          "port": "UART_RX"
         }
       ],
       "net": "GND"
@@ -71,11 +149,11 @@
           "port": "SDA"
         },
         {
-          "instance": "monitor",
+          "instance": "i2c",
           "port": "SDA"
         },
         {
-          "instance": "i2c",
+          "instance": "monitor",
           "port": "SDA"
         }
       ],
@@ -88,11 +166,11 @@
           "port": "SCL"
         },
         {
-          "instance": "monitor",
+          "instance": "i2c",
           "port": "SCL"
         },
         {
-          "instance": "i2c",
+          "instance": "monitor",
           "port": "SCL"
         }
       ],
@@ -109,7 +187,7 @@
           "port": "GATE1"
         }
       ],
-      "net": "RELAY1_GATE"
+      "net": "RELAY1_CONTROL"
     },
     {
       "endpoints": [
@@ -122,7 +200,59 @@
           "port": "GATE2"
         }
       ],
-      "net": "RELAY2_GATE"
+      "net": "RELAY2_CONTROL"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "mcu",
+          "port": "UART_TX"
+        },
+        {
+          "instance": "switch",
+          "port": "GATE"
+        }
+      ],
+      "net": "SWITCH_CONTROL"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "relay",
+          "port": "RETURN1"
+        },
+        {
+          "instance": "relay1_load",
+          "port": "RETURN"
+        }
+      ],
+      "net": "RELAY1_RETURN"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "relay",
+          "port": "RETURN2"
+        },
+        {
+          "instance": "relay2_load",
+          "port": "RETURN"
+        }
+      ],
+      "net": "RELAY2_RETURN"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "switch",
+          "port": "RETURN"
+        },
+        {
+          "instance": "switch_load",
+          "port": "RETURN"
+        }
+      ],
+      "net": "SWITCH_RETURN"
     },
     {
       "endpoints": [
@@ -164,7 +294,7 @@
       "net": "NRST"
     }
   ],
-  "id": "g2-partial-refused",
+  "id": "g2-reference",
   "instances": [
     {
       "block": "block:mcu-core",
@@ -230,43 +360,6 @@
       ],
       "requirements": [
         "mcu"
-      ]
-    },
-    {
-      "block": "block:i2c-pullups",
-      "id": "i2c",
-      "parameters": {
-        "bus_frequency": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Owner decision D7.",
-          "unit": "Hz",
-          "value": 100000
-        },
-        "capacitance": {
-          "basis": "ENGINEERING_DEFAULT",
-          "conditions": {},
-          "note": "Owner decision D7.",
-          "unit": "F",
-          "value": 1e-10
-        }
-      },
-      "ports": [
-        {
-          "name": "VDD",
-          "type": "POWER_IN"
-        },
-        {
-          "name": "SDA",
-          "type": "BIDIRECTIONAL"
-        },
-        {
-          "name": "SCL",
-          "type": "BIDIRECTIONAL"
-        }
-      ],
-      "requirements": [
-        "monitor_interface"
       ]
     },
     {
@@ -339,57 +432,228 @@
       ]
     },
     {
-      "block": "block:g2-relay-channels",
-      "id": "relay",
+      "block": "block:g2-i2c-pullups",
+      "id": "i2c",
       "parameters": {
-        "gate_voltage": {
-          "blocks": [
-            "Q4",
-            "Q10"
-          ],
-          "reason": "The curated MCU facts do not establish the required minimum high output voltage.",
-          "status": "UNKNOWN"
-        },
-        "on_resistance": {
-          "blocks": [
-            "Q4",
-            "Q10"
-          ],
-          "reason": "No guaranteed MOSFET resistance at the actual operating temperature has been established.",
-          "status": "UNKNOWN"
-        },
-        "output_current": {
+        "bus_frequency": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D35 maximum current PER CHANNEL, including continuous conduction.",
-          "unit": "A",
-          "value": 0.1
+          "note": "Owner decision D7.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "F",
+          "value": 1e-10
+        },
+        "input_voltage": {
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
+          "conditions": {},
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
         }
       },
       "ports": [
         {
-          "name": "VLOAD",
+          "name": "VDD",
           "type": "POWER_IN"
         },
         {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "BIDIRECTIONAL"
+        }
+      ],
+      "requirements": [
+        "monitor_interface",
+        "i2c_bias"
+      ]
+    },
+    {
+      "block": "block:g2-relay-channels",
+      "id": "relay",
+      "parameters": {
+        "input_voltage": {
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
+          "conditions": {},
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D35 current per active channel.",
+          "unit": "A",
+          "value": 0.1
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 ambient evaluation point.",
+          "unit": "degC",
+          "value": 40
+        }
+      },
+      "ports": [
+        {
           "name": "GND",
           "type": "GROUND"
+        },
+        {
+          "name": "VLOAD",
+          "type": "POWER_IN"
         },
         {
           "name": "GATE1",
           "type": "INPUT"
         },
         {
-          "name": "RETURN1",
-          "type": "OPEN_DRAIN"
-        },
-        {
           "name": "GATE2",
           "type": "INPUT"
         },
         {
+          "name": "RETURN1",
+          "type": "POWER_SINK"
+        },
+        {
           "name": "RETURN2",
-          "type": "OPEN_DRAIN"
+          "type": "POWER_SINK"
         }
       ],
       "requirements": [
@@ -400,21 +664,76 @@
       "block": "block:g2-low-side-switch",
       "id": "switch",
       "parameters": {
-        "gate_voltage": {
-          "blocks": [
-            "Q4",
-            "Q10"
-          ],
-          "reason": "The curated MCU facts do not establish the required minimum high output voltage.",
-          "status": "UNKNOWN"
-        },
-        "on_resistance": {
-          "blocks": [
-            "Q4",
-            "Q10"
-          ],
-          "reason": "No guaranteed MOSFET resistance at the actual operating temperature has been established.",
-          "status": "UNKNOWN"
+        "input_voltage": {
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
+          "conditions": {},
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
         },
         "output_current": {
           "basis": "ENGINEERING_DEFAULT",
@@ -439,7 +758,7 @@
         },
         {
           "name": "RETURN",
-          "type": "OPEN_DRAIN"
+          "type": "POWER_SINK"
         }
       ],
       "requirements": [
@@ -449,16 +768,7 @@
     {
       "block": "block:g2-input-monitor",
       "id": "monitor",
-      "parameters": {
-        "sense_limit": {
-          "blocks": [
-            "Q4",
-            "Q10"
-          ],
-          "reason": "The monitor transfer limits are characterized at 5 V, not the selected 3.3 V supply.",
-          "status": "UNKNOWN"
-        }
-      },
+      "parameters": {},
       "ports": [
         {
           "name": "VDD",
@@ -497,7 +807,7 @@
         "output_current": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D34 total connector budget including all loads and conversion losses.",
+          "note": "D34 source-declared adapter output current budget feeding protection.",
           "unit": "A",
           "value": 0.5
         },
@@ -506,8 +816,15 @@
           "conditions": {},
           "max": 12,
           "min": 7,
-          "note": "Original synthetic design requirement.",
+          "note": "D34 source-declared adapter output envelope feeding protection, not the computed protected rail.",
           "unit": "V"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D45 indoor bench-controller ambient.",
+          "unit": "degC",
+          "value": 40
         }
       },
       "ports": [
@@ -532,19 +849,91 @@
       "block": "block:g2-buck",
       "id": "buck",
       "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 12,
+          "min": 6.2715,
+          "note": "D50 input7V minus modeled SS14.6V, fuse.5A*.156ohm and INA219 shunt.5A*.101ohm; upper12V. The upstream input-monitor shunt is included.",
+          "unit": "V"
+        },
         "output_current": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D34 total regulated logic budget.",
+          "note": "D39 full-load analytical working point, not a minimum-load requirement. Lower loads enter documented DCM.",
           "unit": "A",
           "value": 0.15
         },
         "output_voltage": {
-          "basis": "ENGINEERING_DEFAULT",
+          "basis": "CALCULATED",
+          "calculator": "feedback_parallel_divider",
           "conditions": {},
-          "note": "Original synthetic design requirement.",
-          "unit": "V",
-          "value": 3.3
+          "inputs": {
+            "lower_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "reference_voltage": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 5,
+                "source": "source:ti-tps5430"
+              },
+              "max": 1.245,
+              "min": 1.196,
+              "note": "Electrical limits at TJ -40 to 125 degC and VIN 5.5 to 36 V; typical values at TJ 25 degC and VIN 12 V.",
+              "typ": 1.221,
+              "unit": "V"
+            },
+            "series_resistance_a": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            },
+            "series_resistance_b": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-074k7l"
+              },
+              "max": 4747.0,
+              "min": 4653.0,
+              "typ": 4700,
+              "unit": "ohm"
+            },
+            "upper_resistance": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:yageo-rc0603fr-0710kl"
+              },
+              "max": 10100.0,
+              "min": 9900.0,
+              "typ": 10000,
+              "unit": "ohm"
+            }
+          },
+          "max": 3.379200164914451,
+          "min": 3.1658112750050518,
+          "unit": "V"
         }
       },
       "ports": [
@@ -562,15 +951,117 @@
         }
       ],
       "requirements": [
-        "buck"
+        "buck",
+        "buck_loop"
+      ]
+    },
+    {
+      "block": "block:g2-power-input-header",
+      "id": "input",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "input_terminal"
+      ]
+    },
+    {
+      "block": "block:g2-load-output-header",
+      "id": "relay1_load",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VLOAD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "RETURN",
+          "type": "PASSIVE"
+        }
+      ],
+      "requirements": [
+        "actuator"
+      ]
+    },
+    {
+      "block": "block:g2-load-output-header",
+      "id": "relay2_load",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VLOAD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "RETURN",
+          "type": "PASSIVE"
+        }
+      ],
+      "requirements": [
+        "actuator"
+      ]
+    },
+    {
+      "block": "block:g2-load-output-header",
+      "id": "switch_load",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VLOAD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "RETURN",
+          "type": "PASSIVE"
+        }
+      ],
+      "requirements": [
+        "actuator"
       ]
     }
   ],
   "interface_status": "PLANNED_BLOCK_CONTRACTS",
+  "pin_configurations": [
+    {
+      "initial_state": "LOW",
+      "instance": "mcu",
+      "mode": "GPIO_PUSH_PULL",
+      "port": "LED1"
+    },
+    {
+      "initial_state": "LOW",
+      "instance": "mcu",
+      "mode": "GPIO_PUSH_PULL",
+      "port": "LED2"
+    },
+    {
+      "initial_state": "LOW",
+      "instance": "mcu",
+      "mode": "GPIO_PUSH_PULL",
+      "port": "UART_TX"
+    }
+  ],
   "requirements": [
-    "actuator",
-    "buck_loop",
-    "input_terminal",
     "power_routing"
   ],
   "schema": "pcbknowledge.block-graph.v2",

@@ -85,6 +85,18 @@ answer here.
 | D40 | G2 topology after D38 | Decided by the reviewing agent under owner delegation: return to the brief's original topology. ULN2003A drives the relay coils; the existing INA219 (26 V bus range) monitors the protected input; the separate low-side channel uses a logic-level MOSFET whose datasheet specifies RDS(on) at VGS of 2.5 V or lower. D36 and D37 records that become unreachable are deleted by the audit |
 | D41 | MOSFET hot resistance when only typical curves exist | Engineering default: conduction-loss checks use the datasheet maximum RDS(on) at 25 degC times 1.5 for TJ up to 125 degC, unless the datasheet gives a guaranteed hot maximum, which then wins |
 
+| D42 | G2 buck selection | TPS5430DDA replaces the original preference: its published operating-range limits and light-load description satisfy D39. |
+| D43 | Relay variant and startup | Select industrial ULN2003AIPWR and 10 kOhm pull-downs on both active inputs for inactive reset behavior. |
+| D44 | TPS5430 DAP variants | Use 2.71 by 3.4 mm copper covering both published DDA variants and a -0.15 mm paste margin, giving a 2.41 by 3.1 mm aperture with a 0.125 mm stencil; no order-code variant mapping is assumed. |
+| D45 | G2 thermal evaluation | Evaluate the indoor controller at 40 degC ambient, with explicit board thermal models and a 125 degC power-device ceiling; retain the MCU's lower published junction limit. |
+| D46 | G2 control pins | Use PA0, PA1 and PA9 for relay1, relay2 and the separate sink; firmware preloads LOW before selecting 2 MHz push-pull GPIO, with normal user-flash boot and no simultaneous UART function; unused BUTTON and UART_RX inputs connect to ground. |
+| D47 | G2 external connectors | Use the reviewed Wurth four-pin header for input and each load: supply, return, ground, ground; 12 V DC selection is an engineering decision, not a conversion of its 250 V AC rating. |
+| D48 | G2 full-input monitor | Reuse INA219 at address 0x40 with PG=01 (80 mV), a 0.1 Ohm shunt and 500 mA total budget; place all protected loads downstream. |
+| D49 | G2 passive selections | Use TDK CLF7045NIT-101M-D 100 uH, Panasonic 25SVPF180M output and 25SVPF47M input capacitors, Littelfuse 0451001.MRL fuse and KEMET C0603C103K5RACTU bootstrap capacitor. |
+| D50 | G2 application models | Use 56 uH minimum operating inductance and the manufacturer's 0.81 A overall rating; capacitor ESR maximum times two and ripple rating times one-half; two local 10 uF ceramics with 0.5 bias-retention model; TPS switch resistance times two and 90 degC/W board model; fuse 0.75 continuous and 0.9 temperature factors with twice nominal resistance; SS14 0.6 V and 176 degC/W model; FET gate allocation 100 uA. Source test conditions remain recorded separately. |
+| D51 | G2 feedback and damping | Use 10 kOhm upper feedback and 10 kOhm parallel with (10 kOhm + 4.7 kOhm) lower feedback; two parallel 0.1 Ohm resistors provide the output capacitor's series damping floor. |
+| D52 | Buck enable connection | Leave TPS5430 ENA unconnected as explicitly permitted by its internal pull-up; the part records the source-backed ENABLED default and the input checker retains it. |
+
 ## Stage 0 — Course correction (complete)
 
 Stop expanding the old design, remove dead weight, align instructions.
@@ -572,22 +584,22 @@ Independent review found one decision-attribution wording issue, corrected; sour
 - [x] Calculators: `buck_inductor_ripple`, `buck_output_ripple`,
   `mosfet_conduction_loss`, `rc_time`. The two buck calculators are limited to
   fixed-frequency positive-current CCM.
-- [ ] Buck regulator per D39: pick one part (any eligible vendor under D38) with
+- [x] Buck regulator per D39: pick one part (any eligible vendor under D38) with
   VIN covering the protected 7-12 V input after reverse-protection drop and a
   3.3 V or 5 V output at the D34 budget; its inductor, input and output
   capacitors and Schottky (SS14 per D9) if non-synchronous.
-- [ ] Input protection block: fuse, reverse-polarity protection and bulk
+- [x] Input protection block: fuse, reverse-polarity protection and bulk
   electrolytic capacitor with cited ratings.
-- [ ] Relay drive per D40: ULN2003A with numbered pin map and flyback through its
+- [x] Relay drive per D40: ULN2003A with numbered pin map and flyback through its
   COM pin; low-side MOSFET channel with VGS-specified RDS(on) and D41 loss check;
   INA219 reused as the input monitor. Delete records left unreachable.
-- [ ] External load connectors for every relay and low-side channel.
+- [x] External load connectors for every relay and low-side channel.
 - [ ] Blocks with hot-loop, thermal, Kelvin and edge constraints; new constraint
   kinds are registry additions with `layout check` support from Stage 7.
-- [ ] Expansion checks for switching converters: inductor saturation and RMS
+- [x] Expansion checks for switching converters: inductor saturation and RMS
   current within rating, input and output capacitor ripple-current rating,
   regulator dissipation.
-- [ ] Reference block graph for G2 reaching A2.
+- [x] Reference block graph for G2 reaching A2.
 - [ ] Synthesis evaluation as in Stage 8.
 
 Exit: G2 reference and two of three AI attempts reach A2; Stage 7 exports and

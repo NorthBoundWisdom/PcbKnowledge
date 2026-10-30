@@ -174,6 +174,34 @@
       },
       "required": ["schema", "id", "scope", "entries"],
       "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.registry.v2"},
+        "id": {"enum": ["registry:pin-functions", "registry:pin-states", "registry:unconnected-states"]},
+        "scope": {"const": "BOARD_GENERATION"},
+        "entries": {
+          "type": "object",
+          "propertyNames": {"type": "string", "minLength": 1, "maxLength": 256},
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "type": "array",
+                "items": {"enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]},
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": ["queries"],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["schema", "id", "scope", "entries"],
+      "additionalProperties": false
     }
   ]
 }

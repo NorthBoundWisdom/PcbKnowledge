@@ -220,19 +220,21 @@ ancestry. Current brief decisions and embedded refusal expectations are separate
 from the fifteen historical attempts: current-reference expansion and screening
 are regression replays, not newly authored synthesis attempts.
 
-## Partial G2 modeling
+## G2 power modeling
 
-G2 retains verified switching-device and current-monitor building blocks in a
-refused reference graph. Missing input-protection and buck contracts remain missing
-records; unknown drive, hot-resistance and transfer bounds are explicit inputs.
-This preserves catalog reachability without manufacturing a successful design.
+G2 connects protected adapter power through the INA219 shunt to the buck and
+three external loads. TPS5430 uses a source-guided nonideal CCM model at the
+150 mA design point, with separate feedback, filter, ripple and input-budget
+checks. Its documented DCM operation covers lower loads; the CCM calculation
+rejects nonpositive valley current. Application thermal and passive-component
+models are explicit engineering inputs alongside source test conditions.
 
-Buck calculators implement fixed-frequency, strictly positive-current CCM interval
-models, including capacitor RMS current and capacitive/ESR ripple. Unknown or
-typical-only frequency and nonpositive valley current are refused. They do not
-infer converter mode, model pulse-skipping, or establish compensation stability.
-MOSFET loss preserves the supplied resistance test conditions and excludes
-switching losses. RC time is a passive time constant, not ADC settling proof.
+Typed GPIO requirements bind the three control pins to their supported physical
+functions. Source-backed unconnected input states cover TPS5430 enable. Typed
+external-load declarations pair real connector supply/return terminals with a
+catalog supply provider; POWER_SINK checks reject shorts and missing load returns.
+The generic ideal buck, MOSFET conduction-loss and RC calculators retain their
+original domains. RC time remains a passive time constant rather than ADC settling.
 
 Manufacturer-land generators repeat cited pad size, pitch and row spacing for
 two- or four-sided packages without adding gull-wing fillets. A distinct exposed

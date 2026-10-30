@@ -79,7 +79,15 @@
         "buck_inductor_ripple",
         "buck_output_ripple",
         "mosfet_conduction_loss",
-        "rc_time"
+        "rc_time",
+        "darlington_driver",
+        "gpio_drive",
+        "feedback_divider",
+        "feedback_parallel_divider",
+        "tps5430_filter",
+        "tps5430_ccm_design",
+        "tps5430_output_ripple",
+        "input_protection"
       ]
     },
     "inputs": {

@@ -35,7 +35,8 @@
         "sensor.temperature",
         "interface.usb-uart",
         "power.switch",
-        "driver.relay"
+        "driver.relay",
+        "power.switching"
       ]
     },
     "parameters": {
@@ -78,6 +79,11 @@
             "maxLength": 256
           },
           "kind": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "required_function": {
             "type": "string",
             "minLength": 1,
             "maxLength": 256
@@ -193,7 +199,15 @@
               "buck_inductor_ripple",
               "buck_output_ripple",
               "mosfet_conduction_loss",
-              "rc_time"
+              "rc_time",
+              "darlington_driver",
+              "gpio_drive",
+              "feedback_divider",
+              "feedback_parallel_divider",
+              "tps5430_filter",
+              "tps5430_ccm_design",
+              "tps5430_output_ripple",
+              "input_protection"
             ]
           },
           "inputs": {
@@ -307,6 +321,37 @@
         "$ref": "evidence.schema.json"
       },
       "minItems": 0
+    },
+    "external_loads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "connector": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "supply_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "return_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "connector",
+          "supply_pin",
+          "return_pin"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
     }
   },
   "required": [

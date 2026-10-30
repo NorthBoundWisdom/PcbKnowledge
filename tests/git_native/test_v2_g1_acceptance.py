@@ -10,8 +10,8 @@ from pcbknowledge.v2.assembly import validate_assembly
 from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
-# Intentional Stage 6 package identity and assembly-contract migration baseline.
-G1_CANONICAL_SHA256 = '10fbd1fad48855e011e58c0043176306ba3877666a861633e7c1cb095cfc6b9f'
+# Stage 9 adds source-backed MCU GPIO and INA219 bus evidence; electrical projection is unchanged.
+G1_CANONICAL_SHA256 = 'a697c5bf8ed142c32fa584bd1c4316d74117e965aec08ce556c1c58e284615e8'
 
 
 class GoldenAcceptanceTests(unittest.TestCase):

@@ -64,12 +64,13 @@ this overview is not a substitute for those versioned inputs.
 
 Adds switching power and high current.
 
-- Power: 7 V to 12 V input on a terminal block, fuse, reverse protection, bulk
-  electrolytic capacitor, TPS62160 buck to 3.3 V with SRP4020TA inductor.
-- Actuation: ULN2003A for a unipolar stepper or relays; AO3400A or Si2342DS
-  low-side switch with flyback diode; WSLP2512 shunt with INA219 current monitor.
-- Layout: buck hot loop, Kelvin sense, high-current net widths, thermal copper.
-- Reuses the G1 MCU block.
+- Power: 7-12 V adapter input, fuse, SS14 reverse protection and polymer bulk
+  capacitance; TPS5430DDA supplies nominal 3.3 V through a TDK 100 uH inductor.
+- Actuation: two ULN2003AIPWR relay channels and a separate RQ5E025TNTL/SS14
+  low-side channel, each with its own external load connector.
+- INA219 measures all protected-input branches through a Kelvin 0.1 Ohm shunt.
+- Layout: buck hot loop, Kelvin sense, power-net widths and thermal copper.
+- Reuses the G1 MCU core with three explicit GPIO control requirements and SWD.
 
 ## G3: analog acquisition front end
 
@@ -140,12 +141,11 @@ The fifteen preserved Stage 8 attempts used the exact earlier input recorded in
 are unchanged by integration with `999c85d`. Replaying their outputs against the
 current briefs is a separate check, not a new independent synthesis attempt.
 
-## G2 retained partial graph
+## G2 reference
 
-D34-D37 keep the 7-12 V input envelope and select two relay channels plus a separate
-low-side load. The current monitor remains upstream of all downstream loads.
-`g2.block-graph.json` deliberately refuses: the input-protection and buck records
-do not exist, operating drive/resistance/transfer inputs are UNKNOWN, and load
-connectors and the third control remain unfinished. Its verified records and
-conditional calculations are reusable work, not an A2 result or a fresh synthesis
-attempt. The exact resume condition is recorded in `TODO.md`.
+D38-D52 replace the earlier refused partial graph with source-backed protection,
+conversion and actuation blocks. The 7-12 V adapter and 500 mA total budget remain;
+three external 100 mA loads leave 200 mA for the regulated logic branch. The
+source-guided buck input model requires at most 161.5 mA at its 150 mA logic-load
+point. The exact feedback-derived rail feeds GPIO and I2C checks. See `TODO.md`
+for the current input publication and independent synthesis results.

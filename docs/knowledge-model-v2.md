@@ -171,3 +171,33 @@ checked; honest access provenance still requires human/agent review.
 `DIFFERENTIAL_PAIR` constraints specify two nets, minimum width, gap and maximum
 skew. Derived KiCad rules retain these values and the fab floors. They neither
 establish 90-ohm impedance nor replace routing, signal-integrity or physical tests.
+
+### Firmware pin configuration
+
+A part pin may list source-cited `functions` from `registry:pin-functions`.
+Graph `pin_configurations` resolve an instance port to exactly one physical pin
+and carry its supported mode, initial state and evidence into design intent.
+`GPIO_PUSH_PULL` with initial `LOW` is the first supported configuration.
+These are requirements for the firmware consumer; expansion does not execute them.
+
+A block port's `required_function` checks the selected physical net, while graph
+`port_requirements` can declare an additional explicit function. A UART transmit
+requirement conflicts with configuring that same pin as GPIO. Names and prose do
+not determine pin functions. Missing capabilities, unsupported states, duplicate
+configuration and conflicting output drivers refuse expansion. Synthesis
+structural comparison includes both graph fields.
+
+### External load power returns
+
+`POWER_SINK` denotes a physical switched power return, exported as KiCad
+`open_collector` and routed with the `POWER` net class. It does not waive ordinary
+`OPEN_DRAIN` pull-up checks. A block's typed `external_loads` declaration pairs
+an actual connector supply pin (mapped to a `POWER_IN` port) with a distinct
+return pin (mapped to a `PASSIVE` port). Derived intent preserves that declaration
+and the catalog-backed physical `POWER_OUT` provider on the supply net. Validation
+rechecks selected parts, pin mappings, provider provenance and actual net membership;
+a mere header or a label is not proof of an external load. Every declared return
+requires a connected power sink, and every connected sink requires an approved
+return without ground, supply or competing active-output shorts. Unconnected spare
+collectors are allowed. This is a concrete topology contract, not general power-flow
+inference or proof of load ratings.

@@ -9,7 +9,7 @@ from .footprints import export_library
 KICAD_PIN_TYPES = {
     'POWER_IN': 'power_in', 'POWER_OUT': 'power_out', 'GROUND': 'power_in',
     'INPUT': 'input', 'OUTPUT': 'output', 'BIDIRECTIONAL': 'bidirectional',
-    'OPEN_DRAIN': 'open_collector', 'ANALOG': 'unspecified',
+    'OPEN_DRAIN': 'open_collector', 'POWER_SINK': 'open_collector', 'ANALOG': 'unspecified',
     'PASSIVE': 'passive', 'NO_CONNECT': 'no_connect',
 }
 

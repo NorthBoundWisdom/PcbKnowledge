@@ -248,6 +248,9 @@
             },
             "length": {
               "$ref": "quantity.schema.json"
+            },
+            "paste_margin": {
+              "$ref": "quantity.schema.json"
             }
           },
           "required": [
@@ -256,6 +259,9 @@
             "length"
           ],
           "additionalProperties": false
+        },
+        "terminal_gap": {
+          "$ref": "quantity.schema.json"
         }
       },
       "required": [

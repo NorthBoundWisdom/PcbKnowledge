@@ -305,7 +305,7 @@ class _Expansion:
                 types.add(next(
                     p['type'] for p in self.parts[endpoint['ref']]['pins'] if p['number'] == endpoint['pin']
                 ))
-            power = bool(types & {'POWER_IN','POWER_OUT'})
+            power = bool(types & {'POWER_IN','POWER_OUT','POWER_SINK'})
             ground = 'GROUND' in types
             if power and ground:
                 self.refuse('CHECK_FAILED', 'nets.' + name, 'Power and ground are shorted')
@@ -438,7 +438,12 @@ class _Expansion:
 
     def finalize(self):
         from .intent import electrical_checks
-        for check in electrical_checks(self.parts, self.intent['nets']):
+        from .power_sinks import derive_loads
+        try:
+            derive_loads(self)
+        except ValueError as error:
+            self.refuse('CHECK_FAILED', 'external_loads', error)
+        for check in electrical_checks(self.parts, self.intent['nets'], self.intent.get('external_loads', [])):
             self.intent['checks'].append(check)
             if check['result'] != 'PASS':
                 self.refuse('CHECK_FAILED', check['id'], check['reason'])
@@ -460,6 +465,8 @@ class _Expansion:
             self.check_power_requirements()
             self.resolve_instances()
             self.unite_nets()
+            from .gpio import configure_pins
+            configure_pins(self)
             self.assemble_nets()
             self.check_source_paths()
             self.apply_layout_rules()
