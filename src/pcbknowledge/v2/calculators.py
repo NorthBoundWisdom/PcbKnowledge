@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import math
 
+from . import calculators_power
+
 
 class CalculationError(ValueError):
     """An input is missing, unknown, inconsistent or outside the model domain."""
@@ -31,6 +33,7 @@ INPUT_UNITS = {
                            'shunt_capacitance': 'F', 'load_capacitance': 'F',
                            'drive_current': 'A', 'power_rating': 'W'},
     'trace_width': {'current': 'A', 'temperature_rise': 'degC', 'copper_thickness': 'mm'},
+    **calculators_power.INPUT_UNITS,
 }
 
 
@@ -89,6 +92,8 @@ def _calculate(name, inputs):
     for key, (low, _) in b.items():
         if key not in ('ambient',) and low < 0:
             raise CalculationError(f'{key} must be nonnegative')
+    if name in calculators_power.INPUT_UNITS:
+        return _calculate_power(name, inputs, b)
     if name == 'ldo_headroom':
         vi, vo, drop, current, resistance = (b[k] for k in INPUT_UNITS[name])
         result = {'headroom': (vi[0] - current[1]*resistance[1] - vo[1] - drop[1],
@@ -153,6 +158,36 @@ def _calculate(name, inputs):
         result = {'trace_width': (width(current[0],rise[1],copper[1]),
                                   width(current[1],rise[0],copper[0]), 'mm')}
     return _result(name, inputs, result)
+
+
+def _calculate_power(name, inputs, b):
+    conditions = {}
+    if name == 'mosfet_conduction_loss':
+        conditions = inputs['on_resistance'].get('conditions', {})
+        if not isinstance(conditions, dict):
+            raise CalculationError('RDS(on) conditions must be quantities')
+        for key, condition in conditions.items():
+            if (not isinstance(condition, dict) or not isinstance(condition.get('unit'), str)
+                    or not condition['unit']):
+                raise CalculationError('RDS(on) conditions require units and finite values')
+            bounds(condition, condition['unit'], key)
+        temperatures = [key for key in ('TJ', 'TA') if key in conditions]
+        if not temperatures:
+            raise CalculationError('RDS(on) requires an explicit temperature condition')
+        for key in temperatures:
+            bounds(conditions[key], 'degC', key)
+    try:
+        result = _result(name, inputs, calculators_power.calculate(name, b))
+    except ValueError as error:
+        raise CalculationError(str(error)) from error
+    for value in result.values():
+        value['conditions'] = dict(conditions)
+        if name.startswith('buck_'):
+            value['note'] = ('Ideal fixed-frequency CCM model; source and block evidence must establish '
+                             'this operating domain. PFM or unknown switching frequency is unsupported.')
+        elif name == 'mosfet_conduction_loss':
+            value['note'] = 'Conduction loss at the supplied RDS(on) conditions; excludes switching losses.'
+    return result
 
 
 def evaluate_check(check, parameters, components=None):

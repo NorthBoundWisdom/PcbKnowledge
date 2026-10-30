@@ -152,6 +152,27 @@ def _gullwing_pads(context):
     return sorted(pads, key=lambda p: int(p['number']))
 
 
+def _manufacturer_land(context):
+    """Repeat the manufacturer's cited land dimensions without adding fillets."""
+    sides = 4 if context.generator == 'manufacturer_four_side_land' else 2
+    if context.count % sides or context.density != 'NOMINAL':
+        raise ValueError('Manufacturer land requires equal side counts and nominal density')
+    pitch, rows = context.dimension('pitch'), context.dimension('row_pitch')
+    width, height = context.dimension('pad_width'), context.dimension('pad_height')
+    per_side = context.count // sides
+    pads = []
+    for i in range(per_side):
+        position = (i - (per_side - 1) / 2) * pitch
+        pads.append(_pad(i + 1, -rows / 2, position, width, height))
+        if sides == 2:
+            pads.append(_pad(context.count - i, rows / 2, position, width, height))
+        else:
+            pads.append(_pad(per_side + i + 1, position, rows / 2, height, width))
+            pads.append(_pad(3 * per_side - i, rows / 2, position, width, height))
+            pads.append(_pad(4 * per_side - i, position, -rows / 2, height, width))
+    return sorted(pads, key=lambda pad: int(pad['number']))
+
+
 def _crystal_pads(context):
     drawing, dim, count = context.record, context.dimension, context.count
     toe, heel, side = context.fillets
@@ -199,13 +220,28 @@ def _drawing_pads(package):
         'molded_diode': _two_terminal_pads,
         'gullwing_two_side': _gullwing_pads,
         'gullwing_four_side': _gullwing_pads,
+        'manufacturer_two_side_land': _manufacturer_land,
+        'manufacturer_four_side_land': _manufacturer_land,
         'crystal_four_pad': _crystal_pads,
         'pin_header': _header_pads,
         'mechanical_hole': _mechanical_pads,
     }
     if context.generator not in generators:
         raise ValueError(f'Unknown footprint generator: {context.generator}')
-    return generators[context.generator](context)
+    pads = generators[context.generator](context)
+    if 'exposed_pad' in context.record:
+        if context.generator not in ('gullwing_two_side', 'gullwing_four_side', 'manufacturer_four_side_land'):
+            raise ValueError('Exposed pad requires a supported perimeter-lead generator')
+        exposed = context.record['exposed_pad']
+        if exposed['number'] in {pad['number'] for pad in pads}:
+            raise ValueError('Exposed pad identity must be distinct from perimeter terminals')
+        width = dimension(exposed['width'], 'exposed_pad.width')
+        length = dimension(exposed['length'], 'exposed_pad.length')
+        if (width > dimension(package['body']['width'], 'body.width')
+                or length > dimension(package['body']['length'], 'body.length')):
+            raise ValueError('Exposed pad must fit within package body')
+        pads.append(_pad(exposed['number'], 0, 0, width, length))
+    return pads
 
 
 def _explicit_pads(package):

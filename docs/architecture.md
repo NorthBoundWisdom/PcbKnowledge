@@ -177,3 +177,22 @@ The Stage 8 reconciliation retains the original input tree through provenance
 ancestry. Current brief decisions and embedded refusal expectations are separate
 from the fifteen historical attempts: current-reference expansion and screening
 are regression replays, not newly authored synthesis attempts.
+
+## Partial G2 modeling
+
+G2 retains verified switching-device and current-monitor building blocks in a
+refused reference graph. Missing input-protection and buck contracts remain missing
+records; unknown drive, hot-resistance and transfer bounds are explicit inputs.
+This preserves catalog reachability without manufacturing a successful design.
+
+Buck calculators implement fixed-frequency, strictly positive-current CCM interval
+models, including capacitor RMS current and capacitive/ESR ripple. Unknown or
+typical-only frequency and nonpositive valley current are refused. They do not
+infer converter mode, model pulse-skipping, or establish compensation stability.
+MOSFET loss preserves the supplied resistance test conditions and excludes
+switching losses. RC time is a passive time constant, not ADC settling proof.
+
+Manufacturer-land generators repeat cited pad size, pitch and row spacing for
+two- or four-sided packages without adding gull-wing fillets. A distinct exposed
+pad is derived from its cited land dimensions; collision checks remain unchanged.
+Board-level thermal vias are not silently synthesized from a package illustration.

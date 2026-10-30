@@ -49,10 +49,19 @@
     {
       "description": "Size high-current net widths and thermal copper from selected loads and fab limits.",
       "id": "power_routing"
+    },
+    {
+      "description": "D37 current monitor uses the existing 100 kHz I2C bus, address 0x10; transfer accuracy remains unresolved.",
+      "id": "monitor_interface"
+    },
+    {
+      "description": "Retain G1 SWD programming access.",
+      "id": "debug_access"
     }
   ],
   "functions": [
     {
+      "category": "power.protection",
       "count": 1,
       "description": "Fuse, reverse protection and bulk electrolytic input capacitance.",
       "id": "input_protection",
@@ -63,6 +72,7 @@
       ]
     },
     {
+      "category": "power.switching",
       "count": 1,
       "description": "TPS62160 buck converter with SRP4020TA inductor.",
       "id": "buck",
@@ -84,51 +94,65 @@
       ]
     },
     {
+      "category": "digital.mcu",
       "count": 1,
       "description": "Reuse the G1 MCU core.",
       "id": "mcu",
-      "parameters": {},
+      "parameters": {
+        "clock_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D34 reuse G1 clock.",
+          "unit": "Hz",
+          "value": 8000000
+        }
+      },
       "part_preferences": [],
       "requirements": [
         "Reuse the G1 MCU core."
       ]
     },
     {
+      "category": "driver.relay",
       "count": 1,
-      "description": "ULN2003A actuation for a unipolar stepper or relays.",
+      "description": "Two independent discrete relay sink channels under D36; not a pin-compatible ULN2003A replacement.",
       "id": "stepper_relays",
       "parameters": {},
       "part_preferences": [
-        "ULN2003A"
+        "RQ5E025TNTL",
+        "SS14"
       ],
       "requirements": [
-        "Select the load and channel allocation before generation."
+        "D35: two external relay coils, each at most 100 mA and 100 mH, switched at most 10 Hz; retain independent control and flyback protection."
       ]
     },
     {
+      "category": "power.switch",
       "count": 1,
       "description": "Low-side MOSFET switch with flyback diode.",
       "id": "low_side",
       "parameters": {},
       "part_preferences": [
-        "AO3400A",
-        "Si2342DS"
+        "RQ5E025TNTL",
+        "SS14"
       ],
       "requirements": [
         "Choose one supported switch and a flyback diode for the selected load."
       ]
     },
     {
+      "category": "sensor.current",
       "count": 1,
-      "description": "WSLP2512 shunt with INA219 current monitor.",
+      "description": "D37 full-input analog current sensor with I2C ADC and Kelvin shunt.",
       "id": "current_monitor",
       "parameters": {},
       "part_preferences": [
-        "WSLP2512",
-        "INA219"
+        "BD14210G-LATR",
+        "BD79124MUF-CE2",
+        "RL1206FR-070R1L"
       ],
       "requirements": [
-        "WSLP2512 shunt with INA219 current monitor."
+        "D35: monitor the complete protected input load before its logic and actuator branches, using Kelvin sense connections; preserve the full 7-12 V connector envelope."
       ]
     }
   ],
@@ -136,11 +160,11 @@
   "interfaces": [
     {
       "current_limit": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "External load current limit is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D34 total input budget.",
+        "unit": "A",
+        "value": 0.5
       },
       "description": "Power terminal block",
       "id": "input_terminal",
@@ -159,91 +183,121 @@
     },
     {
       "current_limit": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "External load current limit is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D35 sum of three independent 100 mA external load channels.",
+        "unit": "A",
+        "value": 0.3
       },
-      "description": "Load connections; exact channel count and pinout to be selected.",
+      "description": "Two external relay coils and one separate low-side inductive load; 100 mA per channel.",
       "id": "actuator",
       "signals": [
-        "LOAD",
-        "RETURN"
+        "LOAD_SUPPLY",
+        "RELAY1_RETURN",
+        "RELAY2_RETURN",
+        "SWITCH_RETURN",
+        "GND"
       ],
       "voltage": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "Electrical voltage range is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 12,
+        "min": 7,
+        "note": "D35 external loads must support the protected supply over this connector range.",
+        "unit": "V"
       }
     }
   ],
   "manufacturing": {
     "assembly": "SINGLE_SIDE_TOP",
     "copper": "ONE_OZ",
-    "layers": {
-      "blocks": [
-        "Q9"
-      ],
-      "reason": "Layer count not specified.",
-      "status": "UNKNOWN"
-    },
-    "note": "Unspecified; Unspecified",
-    "preferred_passives": "Unspecified",
-    "profile": {
-      "blocks": [
-        "Q9"
-      ],
-      "reason": "Fab profile not selected.",
-      "status": "UNKNOWN"
-    },
+    "layers": 2,
+    "note": "D12 reused two-layer assembly profile; D34 G2 board envelope.",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
     "thickness": {
-      "blocks": [
-        "Q9"
-      ],
-      "reason": "Board thickness not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
     }
   },
   "mechanical": {
-    "edge_interfaces": [],
+    "edge_interfaces": [
+      "input_terminal",
+      "actuator"
+    ],
     "height": {
-      "blocks": [
-        "Q11"
-      ],
-      "reason": "Component height limit not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 20,
+      "note": "D34 selected G2 component-height envelope.",
+      "unit": "mm"
     },
     "length": {
-      "blocks": [
-        "Q11"
-      ],
-      "reason": "Board length not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D34 G2 board envelope.",
+      "unit": "mm",
+      "value": 100
     },
-    "mounting": [],
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
     "width": {
-      "blocks": [
-        "Q11"
-      ],
-      "reason": "Board width not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D34 G2 board envelope.",
+      "unit": "mm",
+      "value": 80
     }
   },
   "origin": "SYNTHETIC",
-  "owner_decisions": [],
+  "owner_decisions": [
+    "D9",
+    "D10",
+    "D12",
+    "D34",
+    "D35",
+    "D36",
+    "D37"
+  ],
   "power": {
     "rails": [
       {
         "current_budget": {
-          "blocks": [
-            "Q11"
-          ],
-          "reason": "Logic current budget not specified.",
-          "status": "UNKNOWN"
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D34 total regulated logic budget.",
+          "unit": "A",
+          "value": 0.15
         },
+        "function": "buck",
         "id": "logic_3v3",
         "voltage": {
           "basis": "ENGINEERING_DEFAULT",
@@ -257,13 +311,14 @@
     "sources": [
       {
         "current_budget": {
-          "blocks": [
-            "Q11"
-          ],
-          "reason": "Motor, relay and external-load current budgets are not specified.",
-          "status": "UNKNOWN"
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D34 total connector budget including all loads and conversion losses.",
+          "unit": "A",
+          "value": 0.5
         },
         "description": "Terminal-block power input.",
+        "function": "input_protection",
         "id": "terminal_input",
         "voltage": {
           "basis": "ENGINEERING_DEFAULT",

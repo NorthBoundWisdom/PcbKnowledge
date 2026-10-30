@@ -139,3 +139,13 @@ The fifteen preserved Stage 8 attempts used the exact earlier input recorded in
 `evals/synthesis/stage8-input.json`. Their original packets, transcripts and hashes
 are unchanged by integration with `999c85d`. Replaying their outputs against the
 current briefs is a separate check, not a new independent synthesis attempt.
+
+## G2 retained partial graph
+
+D34-D37 keep the 7-12 V input envelope and select two relay channels plus a separate
+low-side load. The current monitor remains upstream of all downstream loads.
+`g2.block-graph.json` deliberately refuses: the input-protection and buck records
+do not exist, operating drive/resistance/transfer inputs are UNKNOWN, and load
+connectors and the third control remain unfinished. Its verified records and
+conditional calculations are reusable work, not an A2 result or a fresh synthesis
+attempt. The exact resume condition is recorded in `TODO.md`.

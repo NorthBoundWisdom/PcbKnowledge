@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_8_CI_PENDING` (G1 at A2)
+> Status: `CONTINUOUS_MODE_STAGE_9_BLOCKED` (G1 at A2)
 > Updated: 2026-10-30
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -68,6 +68,12 @@ answer here.
 | D31 | G1V1 temperature branch | Implementer-selected under D21/D10: NXP PCT2075D,118 replaces the current-monitor function, not the G1 reference. Ground address pins for 0x48, retain 0.1 uF decoupling and an existing 1 kOhm OS pull-up; reserve 7 mA, exceeding 5.5 V / 990 Ohm + 0.4 mA. The 150 mA rail budget is unchanged. New Microchip/TI source processing was stopped at explicit extraction restrictions. |
 | D32 | G1V2 UART bridge | Implementer-selected under D21/D10: WCH CH340C in external 3.3 V mode, V3 tied to VCC, internal clock, CTS/DSR/RI/DCD inactive-high and R232 low. Reserve 20 mA within the existing 150 mA rail; this is a design allowance, not a guarantee extrapolated from the 25 degC current test. Replace the UART header; retain SWD 5 mA and I2C expansion 40 mA allowances. |
 | D33 | USB data-pair transport | Implementer-selected layout defaults: USB_DP/USB_DN pair with 0.15 mm minimum width, 0.15 mm gap and 0.5 mm maximum skew; direct CH340C data connection follows its source. These are explicit routing constraints, not a certified 90 Ohm impedance result. Use a distinct USB2 sink block so existing G1 behavior is unchanged. |
+
+| D34 | G2 electrical and manufacturing defaults | Implementer-selected: retain 7-12 V connector input with 500 mA total input and 3.3 V / 150 mA logic budgets; reuse D12 fab and 8 MHz G1 core, with 100 by 80 mm board, 20 mm height limit and existing four M3 mounting requirements. Conversion losses must fit the input budget, not be assumed away. |
+| D35 | G2 actuation and monitoring scope | Implementer-selected: two independent external relay coils plus one separate low-side channel, each at most 100 mA and 100 mH and switched at most 10 Hz; loads must tolerate the protected supply range. Monitor the entire protected input before branch division, not only the logic rail. |
+
+| D36 | G2 discrete relay substitution | Implementer-selected under D10: two independent RQ5E025TNTL + SS14 relay sinks replace the unavailable integrated ULN2003A function, not its pinout; a third channel remains separate. Required 2.5-3.3 V gate drive and operating-temperature resistance remain UNKNOWN until supported upstream/source facts exist. |
+| D37 | G2 input monitor substitution | Implementer-selected under D10: BD14210G-LATR plus BD79124MUF-CE2 I2C ADC retains full protected-input measurement using the existing 0.1 Ohm shunt. Use a 10 Ohm/100 nF input filter with a 2 us RC time-constant budget and 10 uF plus 100 nF local supply capacitors; these are engineering choices, not copied source values. Transfer limits at 3.3 V remain UNKNOWN. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -518,17 +524,18 @@ block.
 
 Receipt: integrated remote `999c85d`; full gate 277 tests, no skips, 95 records and 74/74 reachable. Current G1/G1V1/G1V2 graphs expand; N1-N3 screen with their required typed refusals.
 Review: preserved remote audit/multi-graph guards; registry-only vocabulary finding and synthetic-fixture omissions fixed. Independent note-only D31-D33 review preserves numeric/source/pin provenance.
-Historical G1V1/G1V2 A2 3/3 and N1-N3 refusals 3/3 retain original input `2da9522` (tree-equivalent `7c1cf3f`), not new-brief attempts; Stage 9 waits for publication and exact CI.
+Historical G1V1/G1V2 A2 3/3 and N1-N3 refusals 3/3 retain original input `2da9522` (tree-equivalent `7c1cf3f`), not new-brief attempts; Published `12c4ce0`; exact CI and CodeQL passed.
 
 ## Stage 9 — G2 to A2
 
-- [ ] Concrete G2 design inputs as `ENGINEERING_DEFAULT` decisions (next D-numbers).
+- [x] Concrete G2 design inputs as `ENGINEERING_DEFAULT` decisions (D34-D37).
 - [ ] Reference block graph for G2.
 - [ ] Parts: buck regulator, inductor, Schottky (SS14 per D9), low-side MOSFET with
   numbered pin map, ULN2003A, Kelvin shunt, input bulk capacitors; migrate from
   the `intake-final` tag where the source is accessible.
-- [ ] Calculators: `buck_inductor_ripple`, `buck_output_ripple`,
-  `mosfet_conduction_loss`, `rc_time`.
+- [x] Calculators: `buck_inductor_ripple`, `buck_output_ripple`,
+  `mosfet_conduction_loss`, `rc_time`. The two buck calculators are limited to
+  fixed-frequency positive-current CCM; this restriction does not apply to RC or MOSFET calculations.
 - [ ] Blocks with hot-loop, thermal, Kelvin and edge constraints; new constraint
   kinds are registry additions with `layout check` support from Stage 7.
 - [ ] Expansion checks for switching converters (inductor current within rating,
@@ -537,6 +544,24 @@ Historical G1V1/G1V2 A2 3/3 and N1-N3 refusals 3/3 retain original input `2da952
 
 Exit: G2 reference and two of three AI attempts reach A2; Stage 7 exports and
 `layout check` cover every G2 constraint kind.
+
+Partial work is retained in an explicitly refused G2 graph; no synthesis attempts
+or A2 result are claimed. Input protection/bulk and buck blocks remain absent,
+the third control and external load connectors are unfinished, and actual VGS,
+operating-temperature RDS(on), and 3.3 V monitor transfer limits remain UNKNOWN.
+
+Blocker: an eligible official buck source must establish operation after reverse-
+protection drop over the 7-12 V input and 0-150 mA load envelope, including usable
+mode/frequency bounds and enable-startup conditions. Screened ROHM candidates do
+not establish this; other sources hit access or use restrictions. Do not replace
+missing evidence with nominal plots, fabricated minimum load or source-access workarounds.
+Resume Stage 9 when suitable permitted evidence or a verified alternative is available;
+Stage 10 is not started.
+
+Partial receipt: contracts `f3c6aae`, independently reviewed data `8e93bcb`;
+full Config/Build/Test/Package and guards pass, 298 tests with zero skips, 112 records and 88/88 reachable audited records.
+G2 remains REFUSED and Stage 9 is not complete; independent source/block review does not establish A2.
+
 
 ## Stage 10 — G3 to A2
 
