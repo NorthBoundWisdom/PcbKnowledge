@@ -1,0 +1,72 @@
+{
+  "id": "part:yageo-rc0603fr-07120rl",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:yageo-rc0603fr-07120rl"
+  },
+  "manufacturer": "Yageo",
+  "mpn": "RC0603FR-07120RL",
+  "package": "package:yageo-rc0603fr-07120rl",
+  "parameters": {
+    "power_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 70
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rc0603fr-07120rl"
+      },
+      "max": 0.1,
+      "note": "Rated at 70 degC.",
+      "unit": "W"
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rc0603fr-07120rl"
+      },
+      "max": 121.2,
+      "min": 118.8,
+      "typ": 120,
+      "unit": "ohm"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 1,
+    "source": "source:yageo-rc0603fr-07120rl"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "resistor"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

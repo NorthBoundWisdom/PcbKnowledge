@@ -1,0 +1,275 @@
+{
+  "category": "power.filter",
+  "checks": [
+    {
+      "calculator": "ferrite_loss",
+      "inputs": {
+        "current": {
+          "parameter": "output_current"
+        },
+        "current_rating": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:bourns-mh2029-t"
+          },
+          "note": "D56 adopts the 25 C source current rating for the 15..35 C bench model; not a temperature-qualified guarantee.",
+          "unit": "A",
+          "value": 2.3
+        },
+        "resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:bourns-mh2029-t"
+          },
+          "note": "D56 adopts the 25 C source DC resistance maximum for the 15..35 C bench model; not a temperature-qualified guarantee.",
+          "unit": "ohm",
+          "value": 0.06
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 bench operating model.",
+          "unit": "A",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "current_margin"
+      }
+    },
+    {
+      "calculator": "ferrite_loss",
+      "inputs": {
+        "current": {
+          "parameter": "output_current"
+        },
+        "current_rating": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:bourns-mh2029-t"
+          },
+          "note": "D56 adopts the 25 C source current rating for the 15..35 C bench model; not a temperature-qualified guarantee.",
+          "unit": "A",
+          "value": 2.3
+        },
+        "resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:bourns-mh2029-t"
+          },
+          "note": "D56 adopts the 25 C source DC resistance maximum for the 15..35 C bench model; not a temperature-qualified guarantee.",
+          "unit": "ohm",
+          "value": 0.06
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 bench operating model.",
+          "unit": "V",
+          "value": 3.1994
+        },
+        "operator": "GE",
+        "output": "output_voltage"
+      }
+    },
+    {
+      "calculator": "ferrite_loss",
+      "inputs": {
+        "current": {
+          "parameter": "output_current"
+        },
+        "current_rating": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:bourns-mh2029-t"
+          },
+          "note": "D56 adopts the 25 C source current rating for the 15..35 C bench model; not a temperature-qualified guarantee.",
+          "unit": "A",
+          "value": 2.3
+        },
+        "resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 1,
+            "source": "source:bourns-mh2029-t"
+          },
+          "note": "D56 adopts the 25 C source DC resistance maximum for the 15..35 C bench model; not a temperature-qualified guarantee.",
+          "unit": "ohm",
+          "value": 0.06
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 modeled ferrite DC dissipation budget, not an added manufacturer power rating.",
+          "unit": "W",
+          "value": 1e-05
+        },
+        "operator": "LE",
+        "output": "power"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "FB1",
+      "select": {
+        "part": "part:bourns-mh2029-601t"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:bourns-mh2029-t"
+    }
+  ],
+  "id": "block:g3-rail-filter",
+  "layout": [
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "FB1",
+        "C1"
+      ]
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 compact analog signal and return paths.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "FB1.pin:2"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 analog supply width floor.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "VOUT"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "FB1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:VOUT",
+        "FB1.pin:2",
+        "C1.pin:1"
+      ],
+      "name": "VOUT"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "C1.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "input_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.2,
+        "note": "D55 bench operating envelope.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.01,
+        "min": 0,
+        "note": "D55 bench operating envelope.",
+        "unit": "A"
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.1994,
+        "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VOUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "notes": "D56: 10 mA analog budget. DCR and current rating at 25 C are adopted as explicit 15..35 C engineering models. Local 100 nF decoupling; bulk is in the photodiode block. No temperature-qualified impedance or EMI claim.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,290 @@
+{
+  "category": "power.reference",
+  "checks": [
+    {
+      "calculator": "reference_load",
+      "inputs": {
+        "load_current": {
+          "parameter": "load_current"
+        },
+        "reference_voltage": {
+          "parameter": "reference_voltage"
+        },
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 336.6666666666667,
+          "min": 330,
+          "note": "Three catalog1kohm1% resistors in parallel.",
+          "unit": "ohm"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:ti-tl431"
+          },
+          "note": "Recommended minimum cathode current.",
+          "unit": "A",
+          "value": 0.001
+        },
+        "operator": "GE",
+        "output": "cathode_current"
+      }
+    },
+    {
+      "calculator": "reference_load",
+      "inputs": {
+        "load_current": {
+          "parameter": "load_current"
+        },
+        "reference_voltage": {
+          "parameter": "reference_voltage"
+        },
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 336.6666666666667,
+          "min": 330,
+          "note": "Three catalog1kohm1% resistors in parallel.",
+          "unit": "ohm"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:ti-tl431"
+          },
+          "note": "Recommended maximum cathode current.",
+          "unit": "A",
+          "value": 0.1
+        },
+        "operator": "LE",
+        "output": "cathode_current"
+      }
+    },
+    {
+      "calculator": "reference_load",
+      "inputs": {
+        "load_current": {
+          "parameter": "load_current"
+        },
+        "reference_voltage": {
+          "parameter": "reference_voltage"
+        },
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 336.6666666666667,
+          "min": 330,
+          "note": "Three catalog1kohm1% resistors in parallel.",
+          "unit": "ohm"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative total parallel-bank power limit below one resistor rating.",
+          "unit": "W",
+          "value": 0.1
+        },
+        "operator": "LE",
+        "output": "resistor_power"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-tl431cdbzr"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "R3",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 5,
+      "source": "source:ti-tl431"
+    },
+    {
+      "page": 6,
+      "source": "source:ti-tl431"
+    },
+    {
+      "page": 22,
+      "source": "source:ti-tl431"
+    }
+  ],
+  "id": "block:g3-reference",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "R1",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "R2",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "R3",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "U1",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "R1.pin:1",
+        "R2.pin:1",
+        "R3.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:VREF",
+        "R1.pin:2",
+        "R2.pin:2",
+        "R3.pin:2",
+        "U1.pin:1",
+        "U1.pin:2"
+      ],
+      "name": "VREF"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:3"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "input_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.1994,
+        "note": "G3 delegated bench design default.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "load_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.0005,
+        "min": 0,
+        "note": "G3 delegated bench design default.",
+        "unit": "A"
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "reference_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 2.35,
+        "note": "Engineering operating envelope for nonprecision bench reference; not a guaranteed TL431 accuracy interval.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VREF"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "REF tied to cathode; no cathode-anode capacitor. Three1kohm resistors supply shunt current. The2.35..2.65V interval is an engineering model, not guaranteed precision.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

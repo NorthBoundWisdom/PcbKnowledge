@@ -1,0 +1,249 @@
+{
+  "id": "part:ti-ads1115idgsr",
+  "identity_evidence": {
+    "page": 42,
+    "source": "source:ti-ads1115"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "ADS1115IDGSR",
+  "package": "package:ti-ads1115idgsr",
+  "parameters": {
+    "analog_input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "input_voltage": {
+          "unit": "V",
+          "value": 3.2
+        }
+      },
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-ads1115"
+      },
+      "max": 3.2,
+      "min": 0,
+      "note": "Recommended AINx range GND..VDD; 3.2V upper value applies only at the stated supply.",
+      "unit": "V"
+    },
+    "bus_frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-ads1115"
+      },
+      "max": 400000,
+      "min": 10000,
+      "note": "Fast mode clock range; applies across VDD2..5.5V.",
+      "unit": "Hz"
+    },
+    "full_scale_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 26,
+        "source": "source:ti-ads1115"
+      },
+      "note": "Selected supported bipolar full-scale magnitude; PGA setting001 selects +/-4.096V, not the default. Analog pins still limited by VDD.",
+      "unit": "V",
+      "value": 4.096
+    },
+    "input_high_ratio": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-ads1115"
+      },
+      "min": 0.7,
+      "note": "VIH minimum relative to VDD; digital inputs maximum5.5V.",
+      "unit": "1"
+    },
+    "input_impedance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "frequency": {
+          "unit": "Hz",
+          "value": 8
+        },
+        "full_scale_voltage": {
+          "unit": "V",
+          "value": 4.096
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-ads1115"
+      },
+      "note": "Typical differential input impedance for FSR+/-4.096V,VDD3.3V,8SPS,TA25degC; no guaranteed minimum.",
+      "typ": 15000000,
+      "unit": "ohm"
+    },
+    "input_low_ratio": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-ads1115"
+      },
+      "max": 0.3,
+      "note": "VIL maximum relative to VDD.",
+      "unit": "1"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-ads1115"
+      },
+      "max": 5.5,
+      "min": 2,
+      "note": "Recommended VDD supply.",
+      "unit": "V"
+    },
+    "output_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "output_current": {
+          "unit": "A",
+          "value": 0.003
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-ads1115"
+      },
+      "max": 0.4,
+      "note": "Digital output at IOL=3mA.",
+      "unit": "V"
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "frequency": {
+          "unit": "Hz",
+          "value": 8
+        },
+        "full_scale_voltage": {
+          "unit": "V",
+          "value": 2.048
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-ads1115"
+      },
+      "max": 0.0003,
+      "note": "Operating current; VDD3.3V,8SPS,FSR+/-2.048V; max over -40..125degC,typ at25degC. Not a guaranteed bound at other supply/FSR.",
+      "typ": 0.00015,
+      "unit": "A"
+    },
+    "sample_rate": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 15,
+        "source": "source:ti-ads1115"
+      },
+      "max": 860,
+      "min": 8,
+      "note": "Configurable nominal rates8,16,32,64,128,250,475,860SPS; bounds describe available settings, not oscillator tolerance.",
+      "unit": "Hz"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-ads1115"
+      },
+      "max": 125,
+      "min": -40,
+      "unit": "degC"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-ads1115"
+  },
+  "pins": [
+    {
+      "name": "ADDR",
+      "number": "1",
+      "type": "INPUT"
+    },
+    {
+      "name": "ALERT/RDY",
+      "number": "2",
+      "type": "OPEN_DRAIN"
+    },
+    {
+      "name": "GND",
+      "number": "3",
+      "type": "GROUND"
+    },
+    {
+      "name": "AIN0",
+      "number": "4",
+      "type": "ANALOG"
+    },
+    {
+      "name": "AIN1",
+      "number": "5",
+      "type": "ANALOG"
+    },
+    {
+      "name": "AIN2",
+      "number": "6",
+      "type": "ANALOG"
+    },
+    {
+      "name": "AIN3",
+      "number": "7",
+      "type": "ANALOG"
+    },
+    {
+      "name": "VDD",
+      "number": "8",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "SDA",
+      "number": "9",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "SCL",
+      "number": "10",
+      "type": "INPUT"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "adc.i2c"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

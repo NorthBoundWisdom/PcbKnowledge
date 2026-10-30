@@ -1,0 +1,168 @@
+{
+  "id": "part:ti-tl431cdbzr",
+  "identity_evidence": {
+    "page": 41,
+    "source": "source:ti-tl431"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "TL431CDBZR",
+  "package": "package:ti-tl431cdbzr",
+  "parameters": {
+    "dynamic_impedance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "frequency_max": {
+          "unit": "Hz",
+          "value": 1000
+        },
+        "output_current_max": {
+          "unit": "A",
+          "value": 0.1
+        },
+        "output_current_min": {
+          "unit": "A",
+          "value": 0.001
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-tl431"
+      },
+      "max": 0.5,
+      "note": "VKA=Vref, f<=1kHz, IKA=1..100mA, TA=25 degC. Do not infer DC all-temperature accuracy from this alone.",
+      "typ": 0.2,
+      "unit": "ohm"
+    },
+    "minimum_cathode_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-tl431"
+      },
+      "max": 0.001,
+      "note": "Minimum current required for regulation at VKA=Vref, TA=25 degC; use maximum as required minimum bias.",
+      "typ": 0.0004,
+      "unit": "A"
+    },
+    "output_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tl431"
+      },
+      "max": 0.1,
+      "min": 0.001,
+      "note": "Recommended continuous cathode shunt current, subject to thermal limits.",
+      "unit": "A"
+    },
+    "reference_temperature_deviation": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "output_current": {
+          "unit": "A",
+          "value": 0.01
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-tl431"
+      },
+      "max": 0.016,
+      "note": "SOT-23-3 grade C: maximum minus minimum over rated 0..70 degC; VKA=Vref, IKA=10mA.",
+      "typ": 0.006,
+      "unit": "V"
+    },
+    "reference_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 0.01
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-tl431"
+      },
+      "max": 2.55,
+      "min": 2.44,
+      "note": "VKA=Vref, IKA=10 mA; only TA=25 degC.",
+      "typ": 2.495,
+      "unit": "V"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tl431"
+      },
+      "max": 70,
+      "min": 0,
+      "note": "Commercial C grade operating free-air range.",
+      "unit": "degC"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tl431"
+      },
+      "max": 36,
+      "note": "Recommended maximum cathode voltage; minimum is the actual Vref.",
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 4,
+    "source": "source:ti-tl431"
+  },
+  "pins": [
+    {
+      "name": "CATHODE",
+      "number": "1",
+      "type": "ANALOG"
+    },
+    {
+      "name": "REF",
+      "number": "2",
+      "type": "ANALOG"
+    },
+    {
+      "name": "ANODE",
+      "number": "3",
+      "type": "GROUND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "reference.shunt"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

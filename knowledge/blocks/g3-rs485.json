@@ -1,0 +1,793 @@
+{
+  "category": "interface.rs485",
+  "checks": [
+    {
+      "calculator": "rs485_termination",
+      "inputs": {
+        "bias_down": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RL1+RL2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "bias_up": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RU1+RU2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "driver_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 0,
+          "note": "Engineering maximum differential drive envelope equals maximum rail.",
+          "unit": "V"
+        },
+        "receiver_load_current": {
+          "parameter": "receiver_load_current"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "termination_a": {
+          "component": "RT",
+          "parameter": "resistance"
+        },
+        "termination_b": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 121.2,
+          "min": 118.8,
+          "note": "Required remote120ohm1% termination, rated at least0.1W.",
+          "unit": "ohm"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:ti-sn65hvd75"
+          },
+          "note": "Recommended minimum differential load.",
+          "unit": "ohm",
+          "value": 54
+        },
+        "operator": "GE",
+        "output": "equivalent_load"
+      }
+    },
+    {
+      "calculator": "rs485_termination",
+      "inputs": {
+        "bias_down": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RL1+RL2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "bias_up": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RU1+RU2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "driver_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 0,
+          "note": "Engineering maximum differential drive envelope equals maximum rail.",
+          "unit": "V"
+        },
+        "receiver_load_current": {
+          "parameter": "receiver_load_current"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "termination_a": {
+          "component": "RT",
+          "parameter": "resistance"
+        },
+        "termination_b": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 121.2,
+          "min": 118.8,
+          "note": "Required remote120ohm1% termination, rated at least0.1W.",
+          "unit": "ohm"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 5,
+            "source": "source:ti-sn65hvd75"
+          },
+          "note": "Recommended maximum driver current.",
+          "unit": "A",
+          "value": 0.06
+        },
+        "operator": "LE",
+        "output": "driver_current"
+      }
+    },
+    {
+      "calculator": "rs485_termination",
+      "inputs": {
+        "bias_down": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RL1+RL2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "bias_up": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RU1+RU2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "driver_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 0,
+          "note": "Engineering maximum differential drive envelope equals maximum rail.",
+          "unit": "V"
+        },
+        "receiver_load_current": {
+          "parameter": "receiver_load_current"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "termination_a": {
+          "component": "RT",
+          "parameter": "resistance"
+        },
+        "termination_b": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 121.2,
+          "min": 118.8,
+          "note": "Required remote120ohm1% termination, rated at least0.1W.",
+          "unit": "ohm"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 6,
+            "source": "source:ti-sn65hvd75"
+          },
+          "note": "Worst positive-going receiver threshold.",
+          "unit": "V",
+          "value": -0.02
+        },
+        "operator": "GE",
+        "output": "idle_differential"
+      }
+    },
+    {
+      "calculator": "rs485_termination",
+      "inputs": {
+        "bias_down": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RL1+RL2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "bias_up": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RU1+RU2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "driver_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 0,
+          "note": "Engineering maximum differential drive envelope equals maximum rail.",
+          "unit": "V"
+        },
+        "receiver_load_current": {
+          "parameter": "receiver_load_current"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "termination_a": {
+          "component": "RT",
+          "parameter": "resistance"
+        },
+        "termination_b": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 121.2,
+          "min": 118.8,
+          "note": "Required remote120ohm1% termination, rated at least0.1W.",
+          "unit": "ohm"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Two0.1W terminations combined; each120ohm part checked by symmetric1% model.",
+          "unit": "W",
+          "value": 0.2
+        },
+        "operator": "LE",
+        "output": "termination_power"
+      }
+    },
+    {
+      "calculator": "rs485_termination",
+      "inputs": {
+        "bias_down": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RL1+RL2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "bias_up": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2020,
+          "min": 1980,
+          "note": "RU1+RU2 catalog1kohm1% series pair.",
+          "unit": "ohm"
+        },
+        "driver_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 0,
+          "note": "Engineering maximum differential drive envelope equals maximum rail.",
+          "unit": "V"
+        },
+        "receiver_load_current": {
+          "parameter": "receiver_load_current"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "termination_a": {
+          "component": "RT",
+          "parameter": "resistance"
+        },
+        "termination_b": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 121.2,
+          "min": 118.8,
+          "note": "Required remote120ohm1% termination, rated at least0.1W.",
+          "unit": "ohm"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative total four-resistor bias-bank limit.",
+          "unit": "W",
+          "value": 0.1
+        },
+        "operator": "LE",
+        "output": "bias_power"
+      }
+    },
+    {
+      "calculator": "trace_impedance_microstrip",
+      "inputs": {
+        "copper_thickness": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "mm",
+          "value": 0.035
+        },
+        "dielectric_height": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "mm",
+          "value": 1.5
+        },
+        "model_relative_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "1",
+          "value": 0.1
+        },
+        "relative_permittivity": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "1",
+          "value": 4
+        },
+        "trace_width": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "mm",
+          "value": 1.5
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Planning estimate only: assumed stackup and exact1.5mm width, not differential or manufactured impedance.",
+          "unit": "ohm",
+          "value": 50
+        },
+        "operator": "GE",
+        "output": "impedance"
+      }
+    },
+    {
+      "calculator": "trace_impedance_microstrip",
+      "inputs": {
+        "copper_thickness": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "mm",
+          "value": 0.035
+        },
+        "dielectric_height": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "mm",
+          "value": 1.5
+        },
+        "model_relative_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "1",
+          "value": 0.1
+        },
+        "relative_permittivity": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "1",
+          "value": 4
+        },
+        "trace_width": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "mm",
+          "value": 1.5
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Planning estimate only: assumed stackup and exact1.5mm width, not differential or manufactured impedance.",
+          "unit": "ohm",
+          "value": 100
+        },
+        "operator": "LE",
+        "output": "impedance"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-sn65hvd75dr"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "J1",
+      "select": {
+        "part": "part:wurth-61300411121"
+      }
+    },
+    {
+      "ref": "J2",
+      "select": {
+        "part": "part:wurth-61300411121"
+      }
+    },
+    {
+      "ref": "RT",
+      "select": {
+        "part": "part:yageo-rc0603fr-07120rl"
+      }
+    },
+    {
+      "ref": "RD",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RU1",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "RU2",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "RL1",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "RL2",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:ti-sn65hvd75"
+    },
+    {
+      "page": 5,
+      "source": "source:ti-sn65hvd75"
+    },
+    {
+      "page": 6,
+      "source": "source:ti-sn65hvd75"
+    },
+    {
+      "page": 15,
+      "source": "source:ti-sn65hvd75"
+    },
+    {
+      "page": 16,
+      "source": "source:ti-sn65hvd75"
+    },
+    {
+      "page": 18,
+      "source": "source:ti-sn65hvd75"
+    }
+  ],
+  "id": "block:g3-rs485",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "C1",
+      "target": "U1.pin:8"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "RT",
+      "target": "J2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "RD",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "RU1",
+        "RU2",
+        "RL1",
+        "RL2",
+        "RT",
+        "U1"
+      ]
+    },
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "J1"
+    },
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "J2"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Minimum routing width only; microstrip estimate assumes exact1.5mm and declared engineering stackup.",
+        "unit": "mm",
+        "value": 1.5
+      },
+      "net": "A"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Minimum routing width only; microstrip estimate assumes exact1.5mm and declared engineering stackup.",
+        "unit": "mm",
+        "value": 1.5
+      },
+      "net": "B"
+    },
+    {
+      "kind": "RETURN_PATH",
+      "net": "A",
+      "return_net": "GND"
+    },
+    {
+      "kind": "RETURN_PATH",
+      "net": "B",
+      "return_net": "GND"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:8",
+        "C1.pin:1",
+        "RU1.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:5",
+        "C1.pin:2",
+        "RL2.pin:2",
+        "RD.pin:2",
+        "J1.pin:4",
+        "J2.pin:3",
+        "J2.pin:4"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "U1.pin:4",
+        "J1.pin:1"
+      ],
+      "name": "DI"
+    },
+    {
+      "connect": [
+        "U1.pin:1",
+        "J1.pin:2"
+      ],
+      "name": "RO"
+    },
+    {
+      "connect": [
+        "U1.pin:2",
+        "U1.pin:3",
+        "J1.pin:3",
+        "RD.pin:1"
+      ],
+      "name": "DIR"
+    },
+    {
+      "connect": [
+        "U1.pin:6",
+        "RT.pin:1",
+        "RU2.pin:2",
+        "J2.pin:1"
+      ],
+      "name": "A"
+    },
+    {
+      "connect": [
+        "U1.pin:7",
+        "RT.pin:2",
+        "RL1.pin:1",
+        "J2.pin:2"
+      ],
+      "name": "B"
+    },
+    {
+      "connect": [
+        "RU1.pin:2",
+        "RU2.pin:1"
+      ],
+      "name": "BIAS_UP"
+    },
+    {
+      "connect": [
+        "RL1.pin:2",
+        "RL2.pin:1"
+      ],
+      "name": "BIAS_DOWN"
+    }
+  ],
+  "parameters": {
+    "data_rate": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 delegated bench design default.",
+        "unit": "Hz",
+        "value": 115200
+      },
+      "quantity": "frequency",
+      "required": true
+    },
+    "input_high_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Required external host output HIGH minimum to device.",
+        "unit": "V",
+        "value": 2.4
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "input_low_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Required external host output LOW maximum to device.",
+        "unit": "V",
+        "value": 0.4
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "input_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.2,
+        "note": "G3 delegated bench design default.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "output_high_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Required external host input VIH threshold maximum.",
+        "unit": "V",
+        "value": 2
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "output_low_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Required external host input VIL threshold minimum.",
+        "unit": "V",
+        "value": 0.8
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "receiver_load_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.0006,
+        "min": 0,
+        "note": "Adverse aggregate two-receiver differential load model, not a guaranteed device leakage bound.",
+        "unit": "A"
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "receiver_positive_threshold": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Both nodes use SN65HVD75-compatible positive-going threshold <=-20mV; remote node has120ohm1% termination and no additional bias pair.",
+        "unit": "V",
+        "value": -0.02
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "J1=DI,RO,DIR,GND; J2=A,B,GND,GND. DIR ties DE and active-low RE with10kohm pulldown for receive-default. External host supplies UART and direction,115200baud; no I2C-to-UART conversion.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

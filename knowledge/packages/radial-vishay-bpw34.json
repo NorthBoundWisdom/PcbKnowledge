@@ -1,0 +1,116 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 2,
+      "min": 1.8,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 4.3,
+      "min": 3.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 4.65,
+      "min": 4.3,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Nominal courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "drill": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Round hole accommodates maximum rectangular lead 0.8 by 0.4 mm (0.8945 mm diagonal), with assembly clearance.",
+      "unit": "mm",
+      "value": 1.2
+    },
+    "pad_height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Round pad gives nominal 0.30 mm annular ring.",
+      "unit": "mm",
+      "value": 1.8
+    },
+    "pad_width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Round pad gives nominal 0.30 mm annular ring.",
+      "unit": "mm",
+      "value": 1.8
+    },
+    "pin_count": 2,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 5.3,
+      "min": 4.9,
+      "typ": 5.1,
+      "unit": "mm"
+    }
+  },
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:vishay-bpw34"
+    }
+  ],
+  "family": "RADIAL_TWO_LEAD",
+  "generator": "radial_two_lead",
+  "id": "package:radial-vishay-bpw34",
+  "mount_type": "THT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 4,
+        "source": "source:vishay-bpw34"
+      },
+      {
+        "page": 1,
+        "source": "source:vishay-bpw34"
+      }
+    ],
+    "mpns": [
+      "BPW34"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

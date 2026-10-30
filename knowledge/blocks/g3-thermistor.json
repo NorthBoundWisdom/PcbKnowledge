@@ -1,0 +1,322 @@
+{
+  "category": "sensor.temperature",
+  "checks": [
+    {
+      "calculator": "ntc_divider",
+      "inputs": {
+        "beta": {
+          "component": "RT1",
+          "parameter": "ntc_beta"
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.1e-07,
+          "min": 9e-08,
+          "note": "D55 effective-capacitance estimate adopts selected 100 nF tolerance; DC-bias behavior is not guaranteed by its test-condition rating.",
+          "unit": "F"
+        },
+        "resistance_25": {
+          "component": "RT1",
+          "parameter": "resistance"
+        },
+        "series_resistance": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "supply": {
+          "parameter": "reference_voltage"
+        },
+        "temperature": {
+          "parameter": "temperature"
+        },
+        "upper_resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 25
+            }
+          },
+          "evidence": {
+            "page": 2,
+            "source": "source:vishay-ntcle100e3"
+          },
+          "note": "D56 chosen 5 mW ceiling equals 1% measuring-power criterion (p2) times 500 mW rating (p1), applicable 0..55 C.",
+          "unit": "W",
+          "value": 0.005
+        },
+        "operator": "LE",
+        "output": "max_sensor_power"
+      }
+    },
+    {
+      "calculator": "ntc_divider",
+      "inputs": {
+        "beta": {
+          "component": "RT1",
+          "parameter": "ntc_beta"
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.1e-07,
+          "min": 9e-08,
+          "note": "D55 effective-capacitance estimate adopts selected 100 nF tolerance; DC-bias behavior is not guaranteed by its test-condition rating.",
+          "unit": "F"
+        },
+        "resistance_25": {
+          "component": "RT1",
+          "parameter": "resistance"
+        },
+        "series_resistance": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "supply": {
+          "parameter": "reference_voltage"
+        },
+        "temperature": {
+          "parameter": "temperature"
+        },
+        "upper_resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 1 Hz measurement band, with a higher antiglitch pole; estimated effective capacitance.",
+          "unit": "Hz",
+          "value": 10
+        },
+        "operator": "GE",
+        "output": "pole_frequency"
+      }
+    },
+    {
+      "calculator": "ntc_divider",
+      "inputs": {
+        "beta": {
+          "component": "RT1",
+          "parameter": "ntc_beta"
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.1e-07,
+          "min": 9e-08,
+          "note": "D55 effective-capacitance estimate adopts selected 100 nF tolerance; DC-bias behavior is not guaranteed by its test-condition rating.",
+          "unit": "F"
+        },
+        "resistance_25": {
+          "component": "RT1",
+          "parameter": "resistance"
+        },
+        "series_resistance": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "supply": {
+          "parameter": "reference_voltage"
+        },
+        "temperature": {
+          "parameter": "temperature"
+        },
+        "upper_resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 NTC channel voltage ceiling.",
+          "unit": "V",
+          "value": 2
+        },
+        "operator": "LE",
+        "output": "output_voltage"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RT1",
+      "select": {
+        "part": "part:vishay-ntcle100e3103jb0"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:vishay-ntcle100e3"
+    },
+    {
+      "page": 2,
+      "source": "source:vishay-ntcle100e3"
+    }
+  ],
+  "id": "block:g3-thermistor",
+  "layout": [
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "R1",
+        "RT1",
+        "R2",
+        "C1"
+      ]
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 compact analog signal and return paths.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "C1",
+      "target": "R2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 compact analog signal and return paths.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "R1",
+      "target": "RT1"
+    },
+    {
+      "kind": "KEEPOUT",
+      "margin": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 keep other component courtyards away from the sensing thermistor to reduce local thermal coupling.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "RT1"
+    },
+    {
+      "kind": "RETURN_PATH",
+      "net": "OUT",
+      "return_net": "GND"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VREF",
+        "R1.pin:1"
+      ],
+      "name": "VREF"
+    },
+    {
+      "connect": [
+        "R1.pin:2",
+        "RT1.pin:1",
+        "R2.pin:1"
+      ],
+      "name": "SENSE"
+    },
+    {
+      "connect": [
+        "R2.pin:2",
+        "C1.pin:1",
+        "port:OUT"
+      ],
+      "name": "OUT"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "RT1.pin:2",
+        "C1.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "reference_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 2.35,
+        "note": "D55 bench operating envelope.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    },
+    "temperature": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 35,
+        "min": 15,
+        "note": "D55 bench operating envelope.",
+        "unit": "degC"
+      },
+      "quantity": "temperature",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "INPUT",
+      "name": "VREF"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "OUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "notes": "D56: 10 kohm upper divider, NTC to ground, 10 kohm series and 100 nF shunt filter into high-impedance ADC. Beta and effective-C pole are models, not temperature accuracy or loaded-ADC guarantees; 7 mW/K self-heating factor is typical only.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

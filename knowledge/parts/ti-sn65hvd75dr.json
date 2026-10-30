@@ -1,0 +1,251 @@
+{
+  "id": "part:ti-sn65hvd75dr",
+  "identity_evidence": {
+    "page": 29,
+    "source": "source:ti-sn65hvd75"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "SN65HVD75DR",
+  "package": "package:ti-sn65hvd75dr",
+  "parameters": {
+    "common_mode_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 12,
+      "min": -7,
+      "note": "Recommended voltage at either bus terminal, individually or common-mode.",
+      "unit": "V"
+    },
+    "data_rate": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 20000000,
+      "note": "SN65HVD75 maximum signaling rate in bits/s.",
+      "unit": "Hz"
+    },
+    "differential_load_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "min": 54,
+      "note": "Recommended differential load; includes parallel termination and bias network loading.",
+      "typ": 60,
+      "unit": "ohm"
+    },
+    "differential_output_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 54
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-sn65hvd75"
+      },
+      "min": 1.5,
+      "note": "Driver magnitude at RL54ohm across recommended operating range.",
+      "typ": 2,
+      "unit": "V"
+    },
+    "input_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "min": 2,
+      "note": "D,DE,RE_N high input minimum.",
+      "unit": "V"
+    },
+    "input_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 0.8,
+      "note": "D,DE,RE_N low input maximum.",
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 3.6,
+      "min": 3,
+      "note": "Recommended VCC.",
+      "typ": 3.3,
+      "unit": "V"
+    },
+    "output_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 0.06,
+      "note": "Recommended driver output current magnitude.",
+      "unit": "A"
+    },
+    "output_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "output_current": {
+          "unit": "A",
+          "value": -0.008
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-sn65hvd75"
+      },
+      "min": 2.4,
+      "note": "Receiver R with IOH=-8mA.",
+      "unit": "V"
+    },
+    "output_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "output_current": {
+          "unit": "A",
+          "value": 0.008
+        }
+      },
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 0.4,
+      "note": "Receiver R with IOL=8mA.",
+      "unit": "V"
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 0.00095,
+      "note": "Both driver and receiver enabled, DE=VCC,RE_N=GND,no load; excludes bus-load and dynamic current.",
+      "typ": 0.00075,
+      "unit": "A"
+    },
+    "receiver_negative_threshold": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-sn65hvd75"
+      },
+      "min": -0.2,
+      "note": "Negative-going VA-VB threshold; guaranteed minimum.",
+      "typ": -0.15,
+      "unit": "V"
+    },
+    "receiver_positive_threshold": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": -0.02,
+      "note": "Positive-going VA-VB threshold; guaranteed maximum.",
+      "typ": -0.07,
+      "unit": "V"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 125,
+      "min": -40,
+      "note": "Free-air operating range; TJ<=150degC.",
+      "unit": "degC"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 4,
+    "source": "source:ti-sn65hvd75"
+  },
+  "pins": [
+    {
+      "name": "R",
+      "number": "1",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "RE_N",
+      "number": "2",
+      "type": "INPUT"
+    },
+    {
+      "name": "DE",
+      "number": "3",
+      "type": "INPUT"
+    },
+    {
+      "name": "D",
+      "number": "4",
+      "type": "INPUT"
+    },
+    {
+      "name": "GND",
+      "number": "5",
+      "type": "GROUND"
+    },
+    {
+      "name": "A",
+      "number": "6",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "B",
+      "number": "7",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "VCC",
+      "number": "8",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "interface.rs485"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

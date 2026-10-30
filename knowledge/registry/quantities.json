@@ -1,5 +1,8 @@
 {
   "entries": {
+    "absolute_temperature": {
+      "unit": "K"
+    },
     "angle": {
       "unit": "deg"
     },
@@ -21,8 +24,14 @@
     "inductance": {
       "unit": "H"
     },
+    "irradiance": {
+      "unit": "W/m2"
+    },
     "length": {
       "unit": "mm"
+    },
+    "logarithmic_gain": {
+      "unit": "dB"
     },
     "power": {
       "unit": "W"
@@ -35,6 +44,9 @@
     },
     "temperature": {
       "unit": "degC"
+    },
+    "thermal_dissipation": {
+      "unit": "W/K"
     },
     "thermal_resistance": {
       "unit": "degC/W"

@@ -1,0 +1,99 @@
+{
+  "category": "power.input",
+  "checks": [],
+  "components": [
+    {
+      "ref": "J1",
+      "select": {
+        "part": "part:wurth-61300411121"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-61300411121"
+    },
+    {
+      "page": 2,
+      "source": "source:wurth-61300411121"
+    }
+  ],
+  "id": "block:g3-power-input-header",
+  "layout": [
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G3 edge-access engineering allowance.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "J1"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "J1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "J1.pin:3",
+        "J1.pin:4",
+        "J1.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "External source declared available continuous current budget.",
+        "unit": "A",
+        "value": 0.15
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.2,
+        "note": "Required external source rail range.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_OUT",
+      "name": "VIN"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "J1pin1 external3.2..3.4V supply, remainingpins ground. Source provides150mA available budget. DC operating voltage is an engineering selection, not conversion of the AC connector rating.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

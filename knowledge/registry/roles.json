@@ -7,6 +7,12 @@
         "Q4"
       ]
     },
+    "analog.opamp": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
     "capacitor.bulk": {
       "queries": [
         "Q1",
@@ -48,6 +54,18 @@
         "Q1",
         "Q4",
         "Q5"
+      ]
+    },
+    "filter.ferrite": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "interface.rs485": {
+      "queries": [
+        "Q1",
+        "Q4"
       ]
     },
     "interface.usb-uart": {
@@ -105,6 +123,12 @@
         "Q4"
       ]
     },
+    "reference.shunt": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
     "regulator.linear.fixed": {
       "queries": [
         "Q1",
@@ -124,7 +148,19 @@
         "Q4"
       ]
     },
+    "sensor.photodiode": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
     "sensor.temperature": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "sensor.thermistor": {
       "queries": [
         "Q1",
         "Q4"

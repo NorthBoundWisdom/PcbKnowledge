@@ -1,0 +1,126 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 1.7526,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 5.0038,
+      "min": 4.8006,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 3.9878,
+      "min": 3.81,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Original nominal courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 1.27,
+      "min": 0.4064,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 6.1976,
+      "min": 5.7912,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "max": 0.508,
+      "min": 0.3048,
+      "unit": "mm"
+    },
+    "pin_count": 8,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      },
+      "unit": "mm",
+      "value": 1.27
+    }
+  },
+  "evidence": [
+    {
+      "page": 37,
+      "source": "source:ti-sn65hvd75"
+    }
+  ],
+  "family": "SOIC-8",
+  "generator": "gullwing_two_side",
+  "id": "package:ti-sn65hvd75dr",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "D0008A controlling inch dimensions converted exactly with25.4mm/in; millimeter bracket rounding is not the authority.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 29,
+        "source": "source:ti-sn65hvd75"
+      },
+      {
+        "page": 37,
+        "source": "source:ti-sn65hvd75"
+      }
+    ],
+    "mpns": [
+      "SN65HVD75DR"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

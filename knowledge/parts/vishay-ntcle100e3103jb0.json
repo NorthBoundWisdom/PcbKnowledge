@@ -1,0 +1,114 @@
+{
+  "id": "part:vishay-ntcle100e3103jb0",
+  "identity_evidence": {
+    "page": 2,
+    "source": "source:vishay-ntcle100e3"
+  },
+  "manufacturer": "Vishay BCcomponents",
+  "mpn": "NTCLE100E3103JB0",
+  "package": "package:radial-vishay-ntcle100e3",
+  "parameters": {
+    "dissipation_factor": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "note": "For information only; not a guaranteed self-heating bound.",
+      "typ": 0.007,
+      "unit": "W/K"
+    },
+    "ntc_beta": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 4006.8275,
+      "min": 3947.1725,
+      "note": "B25/85, tolerance +/-0.75%.",
+      "typ": 3977,
+      "unit": "K"
+    },
+    "power_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 55
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 0.5,
+      "note": "Derate below0 C and above55 C (p2); measuring power <=1% maximum for zero-power operation.",
+      "unit": "W"
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 10500,
+      "min": 9500,
+      "note": "R25; J tolerance code +/-5%.",
+      "typ": 10000,
+      "unit": "ohm"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 125,
+      "min": -40,
+      "note": "Continuous, zero-power dissipation.",
+      "unit": "degC"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 2,
+    "source": "source:vishay-ntcle100e3"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "sensor.thermistor"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -70,7 +70,8 @@
         "TA": "temperature",
         "frequency": "frequency",
         "input_voltage": "voltage",
-        "output_current": "current"
+        "output_current": "current",
+        "reverse_voltage": "voltage"
       },
       "quantity": "capacitance",
       "queries": [
@@ -193,6 +194,56 @@
         "Q5"
       ]
     },
+    "dark_current": {
+      "conditions": {
+        "TA": "temperature",
+        "reverse_voltage": "voltage"
+      },
+      "quantity": "current",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "data_rate": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "differential_load_resistance": {
+      "conditions": {},
+      "quantity": "resistance",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "differential_output_voltage": {
+      "conditions": {
+        "load_resistance": "resistance"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "dissipation_factor": {
+      "conditions": {},
+      "quantity": "thermal_dissipation",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "drill": {
       "conditions": {
         "TA": "temperature",
@@ -246,6 +297,20 @@
         "frequency": "frequency"
       },
       "quantity": "ratio",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "dynamic_impedance": {
+      "conditions": {
+        "TA": "temperature",
+        "frequency_max": "frequency",
+        "output_current_max": "current",
+        "output_current_min": "current"
+      },
+      "quantity": "resistance",
       "queries": [
         "Q1",
         "Q4",
@@ -319,6 +384,15 @@
         "Q5"
       ]
     },
+    "full_scale_voltage": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "gain": {
       "conditions": {
         "TA": "temperature",
@@ -334,6 +408,20 @@
         "sense_voltage": "voltage"
       },
       "quantity": "ratio",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "gain_bandwidth": {
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage_max": "voltage",
+        "input_voltage_min": "voltage",
+        "load_resistance": "resistance"
+      },
+      "quantity": "frequency",
       "queries": [
         "Q1",
         "Q4",
@@ -425,6 +513,19 @@
         "Q5"
       ]
     },
+    "impedance": {
+      "conditions": {
+        "TA": "temperature",
+        "frequency": "frequency",
+        "input_voltage": "voltage"
+      },
+      "quantity": "resistance",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "inductance": {
       "conditions": {
         "TA": "temperature",
@@ -440,6 +541,20 @@
         "sense_voltage": "voltage"
       },
       "quantity": "inductance",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "input_bias_current": {
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage_max": "voltage",
+        "input_voltage_min": "voltage",
+        "load_resistance": "resistance"
+      },
+      "quantity": "current",
       "queries": [
         "Q1",
         "Q4",
@@ -492,6 +607,20 @@
         "Q5"
       ]
     },
+    "input_impedance": {
+      "conditions": {
+        "TA": "temperature",
+        "frequency": "frequency",
+        "full_scale_voltage": "voltage",
+        "input_voltage": "voltage"
+      },
+      "quantity": "resistance",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "input_low_ratio": {
       "conditions": {
         "TA": "temperature",
@@ -505,6 +634,15 @@
         "Q4"
       ]
     },
+    "input_low_voltage": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "input_offset_voltage": {
       "conditions": {
         "TA": "temperature",
@@ -513,6 +651,8 @@
         "frequency": "frequency",
         "gate_voltage": "voltage",
         "input_voltage": "voltage",
+        "input_voltage_max": "voltage",
+        "input_voltage_min": "voltage",
         "load_resistance": "resistance",
         "output_current": "current",
         "output_voltage": "voltage",
@@ -595,11 +735,39 @@
         "Q5"
       ]
     },
+    "load_current": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q4",
+        "Q5"
+      ]
+    },
+    "minimum_cathode_current": {
+      "conditions": {
+        "TA": "temperature"
+      },
+      "quantity": "current",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "minimum_on_time": {
       "conditions": {
         "frequency": "frequency"
       },
       "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "ntc_beta": {
+      "conditions": {},
+      "quantity": "absolute_temperature",
       "queries": [
         "Q1",
         "Q4",
@@ -621,6 +789,21 @@
         "sense_voltage": "voltage"
       },
       "quantity": "resistance",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "open_loop_gain": {
+      "conditions": {
+        "TA": "temperature",
+        "common_mode_voltage": "voltage",
+        "input_voltage_max": "voltage",
+        "input_voltage_min": "voltage",
+        "load_resistance": "resistance"
+      },
+      "quantity": "logarithmic_gain",
       "queries": [
         "Q1",
         "Q4",
@@ -697,6 +880,34 @@
         "Q5"
       ]
     },
+    "phase_margin": {
+      "conditions": {
+        "TA": "temperature",
+        "input_voltage_max": "voltage",
+        "input_voltage_min": "voltage",
+        "load_resistance": "resistance"
+      },
+      "quantity": "angle",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "photocurrent": {
+      "conditions": {
+        "TA": "temperature",
+        "irradiance": "irradiance",
+        "reverse_voltage": "voltage",
+        "wavelength": "length"
+      },
+      "quantity": "current",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "pitch": {
       "conditions": {
         "TA": "temperature",
@@ -732,6 +943,7 @@
         "TJ": "temperature",
         "common_mode_voltage": "voltage",
         "frequency": "frequency",
+        "full_scale_voltage": "voltage",
         "gate_voltage": "voltage",
         "input_voltage": "voltage",
         "load_resistance": "resistance",
@@ -747,9 +959,48 @@
         "Q5"
       ]
     },
+    "receiver_load_current": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q4",
+        "Q5"
+      ]
+    },
+    "receiver_negative_threshold": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "receiver_positive_threshold": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
+    "reference_temperature_deviation": {
+      "conditions": {
+        "output_current": "current"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "reference_voltage": {
       "conditions": {
-        "frequency": "frequency"
+        "TA": "temperature",
+        "frequency": "frequency",
+        "output_current": "current"
       },
       "quantity": "voltage",
       "queries": [

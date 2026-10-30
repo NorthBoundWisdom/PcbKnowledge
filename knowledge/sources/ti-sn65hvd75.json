@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 1554999,
+  "id": "source:ti-sn65hvd75",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 47,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "D38 document-level screen: notice on PDF page 47 permits TI-product application development, restricts reproduction, and contains no AI-processing prohibition. Source originals remain in ignored cache.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Texas Instruments",
+  "revision": "SLLSE11H",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "b46f5803fa8302f98d7461799d078be59a41112191461519bcf4c464743e60a6",
+  "title": "SN65HVD7x 3.3 V RS-485 transceivers",
+  "url": "https://www.ti.com/lit/ds/symlink/sn65hvd75.pdf",
+  "verification": "AGENT_VERIFIED"
+}

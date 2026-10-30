@@ -1,0 +1,109 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 6,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 3,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "max": 3.8,
+      "min": 2.8,
+      "typ": 3.3,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Nominal courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "drill": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Round hole accommodates maximum 0.66 mm round lead, with 0.24 mm diametral assembly clearance.",
+      "unit": "mm",
+      "value": 0.9
+    },
+    "pad_height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Round pad gives nominal 0.30 mm annular ring.",
+      "unit": "mm",
+      "value": 1.5
+    },
+    "pad_width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Round pad gives nominal 0.30 mm annular ring.",
+      "unit": "mm",
+      "value": 1.5
+    },
+    "pin_count": 2,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      },
+      "unit": "mm",
+      "value": 2.54
+    }
+  },
+  "evidence": [
+    {
+      "page": 2,
+      "source": "source:vishay-ntcle100e3"
+    }
+  ],
+  "family": "RADIAL_TWO_LEAD",
+  "generator": "radial_two_lead",
+  "id": "package:radial-vishay-ntcle100e3",
+  "mount_type": "THT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 2,
+        "source": "source:vishay-ntcle100e3"
+      }
+    ],
+    "mpns": [
+      "NTCLE100E3103JB0"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

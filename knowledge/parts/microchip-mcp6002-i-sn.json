@@ -1,0 +1,318 @@
+{
+  "id": "part:microchip-mcp6002-i-sn",
+  "identity_evidence": {
+    "page": 47,
+    "source": "source:microchip-mcp6002"
+  },
+  "manufacturer": "Microchip Technology",
+  "mpn": "MCP6002-I/SN",
+  "package": "package:soic-8-mcp6002-sn",
+  "parameters": {
+    "common_mode_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        }
+      },
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 5.3,
+      "min": -0.3,
+      "note": "Range VSS-0.3 to VDD+0.3 V; absolute values here evaluated at VDD=5 V, VSS=0.",
+      "unit": "V"
+    },
+    "gain_bandwidth": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "input_voltage_max": {
+          "unit": "V",
+          "value": 5.5
+        },
+        "input_voltage_min": {
+          "unit": "V",
+          "value": 1.8
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        }
+      },
+      "evidence": {
+        "page": 4,
+        "source": "source:microchip-mcp6002"
+      },
+      "note": "VDD1.8..5.5 V; VCM=VL=VOUT~VDD/2; RL10 kohm, CL60 pF.",
+      "typ": 1000000.0,
+      "unit": "Hz"
+    },
+    "input_bias_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "input_voltage_max": {
+          "unit": "V",
+          "value": 5.5
+        },
+        "input_voltage_min": {
+          "unit": "V",
+          "value": 1.8
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        }
+      },
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "note": "Typical magnitude, either sign; VDD 1.8..5.5 V, VCM=VDD/2. No guaranteed maximum.",
+      "typ": 1e-12,
+      "unit": "A"
+    },
+    "input_offset_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 0
+        },
+        "input_voltage_max": {
+          "unit": "V",
+          "value": 5.5
+        },
+        "input_voltage_min": {
+          "unit": "V",
+          "value": 1.8
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        }
+      },
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 0.0045,
+      "min": -0.0045,
+      "note": "VDD 1.8..5.5 V; RL 10 kohm to VDD/2; post-December-2004 date codes.",
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 6,
+      "min": 1.8,
+      "note": "Other electrical minimum/maximum specifications measured at 1.8 V and 5.5 V; 6 V operation screened since November 2007.",
+      "unit": "V"
+    },
+    "open_loop_gain": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 0
+        },
+        "input_voltage_max": {
+          "unit": "V",
+          "value": 5.5
+        },
+        "input_voltage_min": {
+          "unit": "V",
+          "value": 1.8
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        }
+      },
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "min": 88,
+      "note": "VDD 1.8..5.5 V; VOUT 0.3..VDD-0.3 V; RL 10 kohm to VDD/2.",
+      "typ": 112,
+      "unit": "dB"
+    },
+    "output_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5.5
+        }
+      },
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 5.475,
+      "min": 0.025,
+      "note": "Maximum swing with 0.5 V input overdrive; RL 10 kohm to VDD/2. Not a 3.3 V swing guarantee.",
+      "unit": "V"
+    },
+    "phase_margin": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "input_voltage_max": {
+          "unit": "V",
+          "value": 5.5
+        },
+        "input_voltage_min": {
+          "unit": "V",
+          "value": 1.8
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        }
+      },
+      "evidence": {
+        "page": 4,
+        "source": "source:microchip-mcp6002"
+      },
+      "note": "Unity closed-loop gain; VDD1.8..5.5 V; RL10 kohm toVDD/2, CL60 pF.",
+      "typ": 90,
+      "unit": "deg"
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5.5
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 0
+        }
+      },
+      "evidence": {
+        "page": 3,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 0.00017,
+      "min": 5e-05,
+      "note": "Per amplifier; common-mode voltage 5 V.",
+      "typ": 0.0001,
+      "unit": "A"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 47,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 85,
+      "min": -40,
+      "unit": "degC"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 1,
+    "source": "source:microchip-mcp6002"
+  },
+  "pins": [
+    {
+      "name": "VOUTA",
+      "number": "1",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "VINA-",
+      "number": "2",
+      "type": "INPUT"
+    },
+    {
+      "name": "VINA+",
+      "number": "3",
+      "type": "INPUT"
+    },
+    {
+      "name": "VSS",
+      "number": "4",
+      "type": "GROUND"
+    },
+    {
+      "name": "VINB+",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "VINB-",
+      "number": "6",
+      "type": "INPUT"
+    },
+    {
+      "name": "VOUTB",
+      "number": "7",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "VDD",
+      "number": "8",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "analog.opamp"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

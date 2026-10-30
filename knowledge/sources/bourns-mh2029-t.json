@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 659479,
+  "id": "source:bourns-mh2029-t",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 4,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Bourns",
+  "revision": "09/23; disclaimer K2540 05/26R",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "359f5ab799d0f9d03b15a0b886e6b29818ee134304c104cebd79db1aeb5041c9",
+  "title": "MH2029-T high current chip ferrite beads",
+  "url": "https://www.bourns.com/docs/Product-Datasheets/MH2029-T.pdf",
+  "verification": "AGENT_VERIFIED"
+}

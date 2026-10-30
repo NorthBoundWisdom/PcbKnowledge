@@ -1,0 +1,126 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "max": 1.1,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "max": 3.1,
+      "min": 2.9,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "max": 3.1,
+      "min": 2.9,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Original nominal courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "COMPACT",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "max": 0.7,
+      "min": 0.4,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "max": 5.05,
+      "min": 4.75,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "max": 0.27,
+      "min": 0.17,
+      "unit": "mm"
+    },
+    "pin_count": 10,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      },
+      "unit": "mm",
+      "value": 0.5
+    }
+  },
+  "evidence": [
+    {
+      "page": 51,
+      "source": "source:ti-ads1115"
+    }
+  ],
+  "family": "VSSOP-10",
+  "generator": "gullwing_two_side",
+  "id": "package:ti-ads1115idgsr",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "D59 compact engineering fillets: toe0.15mm,heel0.05mm,side0.025mm. Derived pads1.05x0.32mm on0.5mm pitch leave0.18mm copper gap; source drawing dimensions unchanged.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 42,
+        "source": "source:ti-ads1115"
+      },
+      {
+        "page": 51,
+        "source": "source:ti-ads1115"
+      }
+    ],
+    "mpns": [
+      "ADS1115IDGSR"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

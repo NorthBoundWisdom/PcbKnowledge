@@ -1,0 +1,145 @@
+{
+  "id": "part:vishay-bpw34",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:vishay-bpw34"
+  },
+  "manufacturer": "Vishay Semiconductors",
+  "mpn": "BPW34",
+  "package": "package:radial-vishay-bpw34",
+  "parameters": {
+    "capacitance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "frequency": {
+          "unit": "Hz",
+          "value": 1000000.0
+        },
+        "reverse_voltage": {
+          "unit": "V",
+          "value": 0
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-bpw34"
+      },
+      "note": "Darkness E=0; typical only at zero reverse bias.",
+      "typ": 7e-11,
+      "unit": "F"
+    },
+    "dark_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "reverse_voltage": {
+          "unit": "V",
+          "value": 10
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 3e-08,
+      "note": "Darkness E=0; not a bound at other temperatures/biases.",
+      "typ": 2e-09,
+      "unit": "A"
+    },
+    "photocurrent": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "irradiance": {
+          "unit": "W/m2",
+          "value": 10
+        },
+        "reverse_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "wavelength": {
+          "unit": "mm",
+          "value": 0.00095
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:vishay-bpw34"
+      },
+      "min": 4e-05,
+      "note": "Irradiance1 mW/cm2 at950 nm. Not guaranteed940 nm transfer at G3 bias.",
+      "typ": 5e-05,
+      "unit": "A"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 100,
+      "min": -40,
+      "unit": "degC"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:vishay-bpw34"
+      },
+      "max": 60,
+      "note": "Absolute maximum reverse voltage.",
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Diode terminals: 1 cathode, 2 anode.",
+    "page": 4,
+    "source": "source:vishay-bpw34"
+  },
+  "pins": [
+    {
+      "name": "K",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "A",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "sensor.photodiode"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

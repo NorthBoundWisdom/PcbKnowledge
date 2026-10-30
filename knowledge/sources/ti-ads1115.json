@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 2654255,
+  "id": "source:ti-ads1115",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 57,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "D38 document-level screen: notice on PDF page 57 permits TI-product application development, restricts reproduction, and contains no AI-processing prohibition. Source originals remain in ignored cache.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Texas Instruments",
+  "revision": "SBAS444E",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "eefff4d412ce2dcd7e659f47238edc9b2fa02e5971f2625af730502033701834",
+  "title": "ADS111x I2C analog-to-digital converters",
+  "url": "https://www.ti.com/lit/ds/symlink/ads1115.pdf",
+  "verification": "AGENT_VERIFIED"
+}

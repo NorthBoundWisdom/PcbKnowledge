@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 3087819,
+  "id": "source:ti-tl431",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 85,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "D38 document-level screen: notice on PDF page 85 permits TI-product application development, restricts reproduction, and contains no AI-processing prohibition. Source originals remain in ignored cache.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Texas Instruments",
+  "revision": "SLVS543S",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "ed2e90697de4e2c553195514adf1ee59cda42863716b6ef702b8304a5b921d22",
+  "title": "TL431 and TL432 programmable shunt reference",
+  "url": "https://www.ti.com/lit/ds/symlink/tl431.pdf",
+  "verification": "AGENT_VERIFIED"
+}

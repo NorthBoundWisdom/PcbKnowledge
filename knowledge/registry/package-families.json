@@ -77,6 +77,12 @@
         "Q3"
       ]
     },
+    "RADIAL_TWO_LEAD": {
+      "queries": [
+        "Q2",
+        "Q3"
+      ]
+    },
     "SMA": {
       "queries": [
         "Q3"
@@ -107,6 +113,12 @@
         "Q3"
       ]
     },
+    "SOT-23-3": {
+      "queries": [
+        "Q2",
+        "Q3"
+      ]
+    },
     "SOT-23-8": {
       "queries": [
         "Q3"
@@ -131,6 +143,12 @@
       ]
     },
     "VQFN16FV3030": {
+      "queries": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    "VSSOP-10": {
       "queries": [
         "Q2",
         "Q3"

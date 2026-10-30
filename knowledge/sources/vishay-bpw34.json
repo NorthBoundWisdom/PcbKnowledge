@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 113384,
+  "id": "source:vishay-bpw34",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 5,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Vishay Semiconductors",
+  "revision": "2.1, 23-Aug-2011; disclaimer 01-Jan-2026",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "848a480a7dabad95338765a9d6646ca25223db77c4f426aa5218eb7778687c65",
+  "title": "BPW34 silicon PIN photodiode",
+  "url": "https://www.vishay.com/docs/81521/bpw34.pdf",
+  "verification": "AGENT_VERIFIED"
+}

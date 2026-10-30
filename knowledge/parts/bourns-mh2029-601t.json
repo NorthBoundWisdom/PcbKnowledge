@@ -1,0 +1,113 @@
+{
+  "id": "part:bourns-mh2029-601t",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:bourns-mh2029-t"
+  },
+  "manufacturer": "Bourns",
+  "mpn": "MH2029-601T",
+  "package": "package:chip-0805-bourns-mh2029",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:bourns-mh2029-t"
+      },
+      "max": 2.3,
+      "note": "Rated current based on maximum40 C temperature rise.",
+      "unit": "A"
+    },
+    "impedance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "frequency": {
+          "unit": "Hz",
+          "value": 100000000.0
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 0.06
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:bourns-mh2029-t"
+      },
+      "max": 750,
+      "min": 450,
+      "note": "Impedance +/-25%;100 MHz/60 mV measurement.",
+      "typ": 600,
+      "unit": "ohm"
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:bourns-mh2029-t"
+      },
+      "max": 0.06,
+      "note": "Maximum DC resistance.",
+      "unit": "ohm"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:bourns-mh2029-t"
+      },
+      "max": 125,
+      "min": -55,
+      "unit": "degC"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 1,
+    "source": "source:bourns-mh2029-t"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "roles": [
+    "filter.ferrite"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

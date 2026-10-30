@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 931340,
+  "id": "source:microchip-mcp6002",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 50,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Microchip Technology",
+  "revision": "DS20001733L",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "4f879ab31115ecfa149dfea62073c9efdbc4beccbdfc3a8d7e10281f3877f8fb",
+  "title": "MCP6001/1R/1U/2/4 low-power operational amplifier",
+  "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf",
+  "verification": "AGENT_VERIFIED"
+}

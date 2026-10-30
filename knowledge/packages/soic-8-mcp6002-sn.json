@@ -1,0 +1,122 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 1.75,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "unit": "mm",
+      "value": 4.9
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "unit": "mm",
+      "value": 3.9
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Nominal courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 1.27,
+      "min": 0.4,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "unit": "mm",
+      "value": 6
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "max": 0.51,
+      "min": 0.31,
+      "unit": "mm"
+    },
+    "pin_count": 8,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      "unit": "mm",
+      "value": 1.27
+    }
+  },
+  "evidence": [
+    {
+      "page": 32,
+      "source": "source:microchip-mcp6002"
+    }
+  ],
+  "family": "SOIC-8",
+  "generator": "gullwing_two_side",
+  "id": "package:soic-8-mcp6002-sn",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 32,
+        "source": "source:microchip-mcp6002"
+      },
+      {
+        "page": 47,
+        "source": "source:microchip-mcp6002"
+      }
+    ],
+    "mpns": [
+      "MCP6002-I/SN"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

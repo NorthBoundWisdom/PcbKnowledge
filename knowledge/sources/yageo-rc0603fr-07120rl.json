@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 56368,
+  "id": "source:yageo-rc0603fr-07120rl",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 1,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g3_ti_author",
+    "notes": "Normal browser PDF download by coordinator after shell network failure; D38 page1 document screen finds no AI-processing prohibition. Original remains ignored.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+    ]
+  },
+  "publisher": "Yageo",
+  "revision": "Generated 2026-10-30",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "67902282b45e09bcaf78a5ed36154e854b7b77f032d6ca1cd58b19b2eae4b992",
+  "title": "RC0603FR-07120RL component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-07120RL",
+  "verification": "AGENT_VERIFIED"
+}
