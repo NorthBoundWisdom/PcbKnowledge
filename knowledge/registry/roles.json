@@ -1,55 +1,115 @@
 {
-  "schema": "pcbknowledge.registry.v2",
-  "id": "registry:roles",
-  "scope": "G1",
   "entries": {
-    "connector.usb-c-sink": {
-      "queries": ["Q1", "Q4"]
-    },
-    "protection.fuse": {
-      "queries": ["Q1", "Q4"]
-    },
-    "protection.tvs": {
-      "queries": ["Q1", "Q4"]
-    },
-    "diode.schottky": {
-      "queries": ["Q1", "Q4"]
-    },
-    "regulator.linear.fixed": {
-      "queries": ["Q1", "Q4"]
+    "capacitor.bulk": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
     },
     "capacitor.ceramic": {
-      "queries": ["Q1", "Q4"]
-    },
-    "capacitor.bulk": {
-      "queries": ["Q1", "Q4"]
-    },
-    "resistor": {
-      "queries": ["Q1", "Q4"]
-    },
-    "mcu.32-bit": {
-      "queries": ["Q1", "Q4"]
-    },
-    "crystal": {
-      "queries": ["Q1", "Q4"]
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
     },
     "connector.header": {
-      "queries": ["Q1", "Q4"]
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "connector.usb-c-sink": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "crystal": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "diode.schottky": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "interface.usb-uart": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
     },
     "led": {
-      "queries": ["Q1", "Q4"]
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
     },
-    "switch.button": {
-      "queries": ["Q1", "Q4"]
-    },
-    "monitor.current": {
-      "queries": ["Q1", "Q4"]
-    },
-    "memory.eeprom": {
-      "queries": ["Q1", "Q4"]
+    "mcu.32-bit": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
     },
     "mechanical.mounting-hole": {
-      "queries": ["Q1", "Q4"]
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "memory.eeprom": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "monitor.current": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "protection.fuse": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "protection.tvs": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "regulator.linear.fixed": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "resistor": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "sensor.temperature": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    "switch.button": {
+      "queries": [
+        "Q1",
+        "Q4"
+      ]
     }
-  }
+  },
+  "id": "registry:roles",
+  "schema": "pcbknowledge.registry.v2",
+  "scope": "BOARD_GENERATION"
 }

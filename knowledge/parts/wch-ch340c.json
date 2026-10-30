@@ -1,0 +1,148 @@
+{
+  "id": "part:wch-ch340c",
+  "identity_evidence": {
+    "page": 2,
+    "source": "source:wch-ch340-v3d"
+  },
+  "manufacturer": "WCH",
+  "mpn": "CH340C",
+  "package": "package:sop-16-wch-ch340c",
+  "parameters": {
+    "input_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 3.3
+        }
+      },
+      "evidence": {
+        "page": 9,
+        "source": "source:wch-ch340-v3d"
+      },
+      "max": 0.012,
+      "note": "Section 6.3, VCC=V3=3.3 V, TA=25 C. Heading excludes USB-bus pins from table scope; not a current guarantee over temperature.",
+      "typ": 0.004,
+      "unit": "A"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 9,
+        "source": "source:wch-ch340-v3d"
+      },
+      "max": 3.6,
+      "min": 3.1,
+      "note": "External 3.3 V configuration: VCC and V3 joined; section 6.3.",
+      "typ": 3.3,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "note": "External 3.3 V mode only: V3 is a supply input tied to VCC (p5). OUT# pin8 behavior varies by batch; leave unused. Pin functions p3-4.",
+    "page": 2,
+    "source": "source:wch-ch340-v3d"
+  },
+  "pins": [
+    {
+      "name": "GND",
+      "number": "1",
+      "type": "GROUND"
+    },
+    {
+      "name": "TXD",
+      "number": "2",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "RXD",
+      "number": "3",
+      "type": "INPUT"
+    },
+    {
+      "name": "V3",
+      "number": "4",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "UD+",
+      "number": "5",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "UD-",
+      "number": "6",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "NC",
+      "number": "7",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "OUT#",
+      "number": "8",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "CTS#",
+      "number": "9",
+      "type": "INPUT"
+    },
+    {
+      "name": "DSR#",
+      "number": "10",
+      "type": "INPUT"
+    },
+    {
+      "name": "RI#",
+      "number": "11",
+      "type": "INPUT"
+    },
+    {
+      "name": "DCD#",
+      "number": "12",
+      "type": "INPUT"
+    },
+    {
+      "name": "DTR#",
+      "number": "13",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "RTS#",
+      "number": "14",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "R232",
+      "number": "15",
+      "type": "INPUT"
+    },
+    {
+      "name": "VCC",
+      "number": "16",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_guards",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+    ]
+  },
+  "roles": [
+    "interface.usb-uart"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}
