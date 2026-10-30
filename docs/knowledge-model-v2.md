@@ -150,10 +150,12 @@ Unresolved Kelvin branches, unsupported shapes and absent filled copper remain
 
 ## Corpus query and evaluation contracts
 
-`v2 coverage --all` gives one human-readable line per brief; add `--json` for its
-structured report. Graph-specific coverage remains JSON. Counts describe verified
-reference-block closure, not successful independent synthesis; missing reference
-graphs report `NOT_PROVIDED`. Eligibility and graph refusals remain distinct.
+`v2 coverage --all` gives one JSON line per brief; `--json` emits the aggregate
+report and `--human` emits readable summaries. Every preserved graph is retained.
+Graph-specific coverage remains JSON. Counts describe verified block closure, not
+independent synthesis; missing graphs are `NOT_RUN`, and incomplete coverage exits 2.
+Eligibility and graph refusals remain distinct. Negative expectations live in each
+current brief and bind a controlled refusal code to a required function.
 
 Fresh corpus authors receive only the target brief, synthesis skill and mediated
 catalog query results, not a raw bundle containing reference answers. Preserve the

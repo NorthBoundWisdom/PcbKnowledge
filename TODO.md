@@ -1,7 +1,7 @@
 # TODO — PcbKnowledge roadmap
 
 > Status: `CONTINUOUS_MODE_STAGE_8_CI_PENDING` (G1 at A2)
-> Updated: 2026-10-29
+> Updated: 2026-10-30
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
 > expansion; PcbAtlas does placement, routing, DRC and fabrication output.
@@ -62,9 +62,12 @@ answer here.
 | D25 | Fine-pitch generated land allowance | Implementer-selected after real KiCad DRC: cap the nominal LQFP side fillet at 0.04 mm per side for the 0.50 mm pitch / 0.27 mm maximum STM32 lead width, giving a 0.35 mm pad and 0.15 mm inter-pad gap. Preserve cited dimensions and fab clearance; this is a derived engineering land-pattern decision, not a manufacturer recommendation. |
 | D26 | G1 USB land-pattern compatibility | Implementer-selected under D10: replace Wurth 632723300011, whose exact recommended annular rings fail the unchanged 0.25 mm fab floor, with Hirose CX90B2-24P using its exact drawing and handling guide. Keep 5 V sink, 1.6 mm PCB and fab limits; no enlargement of the original pattern or DRC waiver. |
 | D27 | Irregular connector courtyard datum | Keep CX90B2-24P manufacturer pad coordinates and cited physical body dimensions. A conservative 4.4 mm courtyard margin bounds the uncertain body-center offset about that drawing datum; it is an implementer envelope, not a manufacturer land recommendation or measured body size. |
-| D28 | G1V1 temperature branch | Implementer-selected under D21/D10: NXP PCT2075D,118 replaces the current-monitor function, not the G1 reference. Ground address pins for 0x48, retain 0.1 uF decoupling and an existing 1 kOhm OS pull-up; reserve 7 mA, exceeding 5.5 V / 990 Ohm + 0.4 mA. The 150 mA rail budget is unchanged. New Microchip/TI source processing was stopped at explicit extraction restrictions. |
-| D29 | G1V2 UART bridge | Implementer-selected under D21/D10: WCH CH340C in external 3.3 V mode, V3 tied to VCC, internal clock, CTS/DSR/RI/DCD inactive-high and R232 low. Reserve 20 mA within the existing 150 mA rail; this is a design allowance, not a guarantee extrapolated from the 25 degC current test. Replace the UART header; retain SWD 5 mA and I2C expansion 40 mA allowances. |
-| D30 | USB data-pair transport | Implementer-selected layout defaults: USB_DP/USB_DN pair with 0.15 mm minimum width, 0.15 mm gap and 0.5 mm maximum skew; direct CH340C data connection follows its source. These are explicit routing constraints, not a certified 90 Ohm impedance result. Use a distinct USB2 sink block so existing G1 behavior is unchanged. |
+| D28 | G1V1 sensor preference | TMP102AIDRLT is the initial I2C temperature-sensor candidate; keep the G1 3.3 V / 150 mA rail budget and replace current monitoring, not add another function. Initial preference superseded by D31 after source-eligibility review. |
+| D29 | G1V2 bridge preference | CP2102N-A02-GQFN28 is the initial USB-to-UART candidate; reuse the USB connector data pair and replace the UART header without increasing the 150 mA rail budget. Initial preference superseded by D32-D33 after source-eligibility review. |
+| D30 | Negative corpus inputs | N1 replaces USB input with 12 V DC; N2 requires Wi-Fi; N3 replaces the LQFP MCU requirement with BGA. The integrated contract checks actual input-voltage capability and selected MCU role/package; expected refusals are bound to the required function in each brief. |
+| D31 | G1V1 temperature branch | Implementer-selected under D21/D10: NXP PCT2075D,118 replaces the current-monitor function, not the G1 reference. Ground address pins for 0x48, retain 0.1 uF decoupling and an existing 1 kOhm OS pull-up; reserve 7 mA, exceeding 5.5 V / 990 Ohm + 0.4 mA. The 150 mA rail budget is unchanged. New Microchip/TI source processing was stopped at explicit extraction restrictions. |
+| D32 | G1V2 UART bridge | Implementer-selected under D21/D10: WCH CH340C in external 3.3 V mode, V3 tied to VCC, internal clock, CTS/DSR/RI/DCD inactive-high and R232 low. Reserve 20 mA within the existing 150 mA rail; this is a design allowance, not a guarantee extrapolated from the 25 degC current test. Replace the UART header; retain SWD 5 mA and I2C expansion 40 mA allowances. |
+| D33 | USB data-pair transport | Implementer-selected layout defaults: USB_DP/USB_DN pair with 0.15 mm minimum width, 0.15 mm gap and 0.5 mm maximum skew; direct CH340C data connection follows its source. These are explicit routing constraints, not a certified 90 Ohm impedance result. Use a distinct USB2 sink block so existing G1 behavior is unchanged. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -513,9 +516,9 @@ Exit: G1V1 and G1V2 reach A2 in at least two of three attempts each; N1-N3 refus
 with the expected typed reason in three of three attempts and no invented part or
 block.
 
-Receipt: contract `5bec75a`, data `9d9ef7e`, original synthesis input `2da9522` (tree-equivalent remote `7c1cf3f`); full gate 262 tests, no skips; G1V1/G1V2 A2 3/3 each and N1-N3 typed refusals 3/3 each.
-Review: 13-check parent review passed on `97b9e5b`, plus independent source and all fifteen attempt reviews; evaluator verdict/duplicate-instance findings and stale current edge-interface labels fixed.
-Publication mapping preserves original input hashes; Stage 9 execution waits for the exact published CI result.
+Receipt: integrated remote `999c85d`; full gate 277 tests, no skips, 95 records and 74/74 reachable. Current G1/G1V1/G1V2 graphs expand; N1-N3 screen with their required typed refusals.
+Review: preserved remote audit/multi-graph guards; registry-only vocabulary finding and synthetic-fixture omissions fixed. Independent note-only D31-D33 review preserves numeric/source/pin provenance.
+Historical G1V1/G1V2 A2 3/3 and N1-N3 refusals 3/3 retain original input `2da9522` (tree-equivalent `7c1cf3f`), not new-brief attempts; Stage 9 waits for publication and exact CI.
 
 ## Stage 9 — G2 to A2
 

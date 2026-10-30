@@ -10,7 +10,7 @@ from pathlib import Path
 
 from pcbknowledge.workspace import validate_workspace
 from pcbknowledge.serialization import canonical_json, read_json
-from .audit import audit_catalog, require_audit, design_inputs
+from .audit import audit_catalog, require_audit
 from .evidence import add_evidence, fetch_evidence
 from .bundle import Bundle, build_bundle
 from .catalog import Catalog, MAX_RECORD_BYTES
@@ -37,7 +37,9 @@ def parser():
     check = v2.add_parser('coverage')
     check.add_argument('graph', type=Path, nargs='?')
     check.add_argument('--all', action='store_true')
-    check.add_argument('--json', action='store_true', help='Emit machine-readable coverage JSON')
+    output_format = check.add_mutually_exclusive_group()
+    output_format.add_argument('--json', action='store_true', help='Emit aggregate coverage JSON')
+    output_format.add_argument('--human', action='store_true', help='Emit readable coverage lines')
     check.add_argument('--bundle', type=Path)
     footprint = groups.add_parser('footprint').add_subparsers(dest='action', required=True)
     footprint_export = footprint.add_parser('export')
@@ -208,24 +210,7 @@ def synthesis_command(arguments, root, snapshot):
 
 
 def corpus_coverage(catalog):
-    _, briefs = design_inputs(catalog.root)
-    graphs = {}
-    for path in sorted((catalog.root / 'evals').rglob('*.block-graph.json')):
-        graph = load_document(path)
-        if graph.get('schema') == 'pcbknowledge.block-graph.v2':
-            if graph['brief'] in graphs:
-                raise ValueError('Multiple corpus reference graphs for one brief')
-            graphs[graph['brief']] = graph
-    path = catalog.root / 'evals/corpus-expectations.json'
-    expectations = load_document(path) if path.exists() else {}
-    result = coverage_all(catalog, briefs, graphs, expectations)
-    for row in result['briefs']:
-        graph = graphs.get(row['brief'])
-        if graph is not None:
-            readiness = coverage(catalog, graph)
-            row['blocks_ready'] = readiness['ready']
-            row['blocks_total'] = readiness['total']
-    return result
+    return coverage_all(catalog)
 
 
 def checked_layout(arguments, snapshot):
@@ -310,7 +295,7 @@ def coverage_lines(result):
     lines = []
     for row in result['briefs']:
         blocks = (f"{row['blocks_ready']}/{row['blocks_total']}"
-                  if 'blocks_ready' in row else 'NOT_PROVIDED')
+                  if row.get('graphs') else 'NOT_RUN')
         refusals = row['refusals'] + row['graph_refusals']
         reasons = ','.join(sorted({f"{item['code']}@{item['path']}" for item in refusals})) or 'none'
         lines.append(f"{row['brief']}: blocks ready={blocks}; screening={row['screening']}; "
@@ -323,9 +308,14 @@ def main(argv=None):
     try:
         root = validate_workspace(arguments.repo).root.resolve()
         result = dispatch(arguments, root)
-        if (arguments.group == 'v2' and arguments.action == 'coverage'
-                and arguments.all and not arguments.json):
-            print(coverage_lines(result))
+        if arguments.group == 'v2' and arguments.action == 'coverage' and arguments.all:
+            if arguments.human:
+                print(coverage_lines(result))
+            elif arguments.json:
+                print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
+            else:
+                for row in result['briefs']:
+                    print(json.dumps(row, ensure_ascii=False, sort_keys=True, allow_nan=False))
         else:
             print(json.dumps(result, ensure_ascii=False, sort_keys=True, allow_nan=False))
         return result_exit_code(result)

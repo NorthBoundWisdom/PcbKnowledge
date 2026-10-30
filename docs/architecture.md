@@ -122,7 +122,9 @@ Brief screening matches explicit function categories, fixed operating parameters
 and role-qualified package requirements. Expansion rechecks the actual selected
 part; an unrelated passive in the requested family cannot satisfy an IC package
 requirement. `coverage --all` separates eligibility from reference block readiness
-and graph replay. No screening result creates a new acceptance receipt.
+and graph replay for every preserved graph; it never selects only a successful
+attempt. Audit validates all briefs and rejects graphs without a matching brief.
+No screening result creates a new acceptance receipt.
 
 Corpus attempts use query-mediated access to a pinned bundle. Because bundles
 include reference/audit inputs, fresh authors must not receive raw bundles or
@@ -170,3 +172,8 @@ tree, blobs and exact canonical bundle hash before validating the snapshot.
 that original catalog and its original expectations, and checks raw submissions,
 initial packets and fifteen distinct author identities. Later brief corrections
 or catalog additions must not retroactively rewrite historical refusal outcomes.
+
+The Stage 8 reconciliation retains the original input tree through provenance
+ancestry. Current brief decisions and embedded refusal expectations are separate
+from the fifteen historical attempts: current-reference expansion and screening
+are regression replays, not newly authored synthesis attempts.

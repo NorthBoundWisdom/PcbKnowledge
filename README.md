@@ -36,9 +36,10 @@ The viewer runs at `http://127.0.0.1:18080/`; keep the terminal open and use Ctr
 to stop. Select a citation to inspect its source evidence. The GUI and query CLI are
 read-only. Missing facts stay explicit; generation refuses rather than guesses.
 
-`coverage --all` prints one line per brief: reference blocks ready, eligibility,
-graph replay and typed refusals. `--json` preserves the structured report; the
-single-graph command remains JSON. Coverage is not a fresh synthesis receipt.
+`coverage --all` prints one JSON line per brief, retaining every preserved graph,
+block readiness, eligibility and typed refusals. Missing graphs are `NOT_RUN` and
+incomplete coverage exits 2. Use `--json` for one aggregate report or `--human` for
+a readable summary. The single-graph command remains JSON. Coverage is not a fresh synthesis receipt.
 The [golden-design corpus](docs/golden-designs.md) defines positive variants and
 negative refusal cases, with query-mediated independent evaluation.
 

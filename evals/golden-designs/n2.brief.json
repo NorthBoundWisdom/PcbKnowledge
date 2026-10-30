@@ -47,6 +47,10 @@
       "id": "monitor_scope"
     }
   ],
+  "expected_refusal": {
+    "code": "UNSATISFIED_SELECTION",
+    "requirement": "wifi"
+  },
   "functions": [
     {
       "category": "power.input",
@@ -428,7 +432,8 @@
     "D12",
     "D13",
     "D14",
-    "D21"
+    "D21",
+    "D30"
   ],
   "power": {
     "rails": [

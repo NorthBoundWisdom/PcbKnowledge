@@ -5,39 +5,6 @@ from .catalog import LEVELS
 from .expansion import dependency_closure
 
 
-def coverage_all(catalog):
-    """Summarize every brief, including those with no preserved graph yet.
-
-    Graph readiness is not electrical acceptance. All preserved graphs are
-    reported, rather than choosing the best attempt and hiding the others.
-    """
-    from .audit import design_inputs, require_audit
-    from .expansion import expand
-
-    require_audit(catalog)
-    graphs, briefs = design_inputs(catalog.root)
-    if any(graph['brief'] not in briefs for graph in graphs):
-        raise ValueError('Preserved graph refers to a missing brief')
-    rows = []
-    for identity, brief in sorted(briefs.items()):
-        results = []
-        for graph in graphs:
-            if graph['brief'] != identity:
-                continue
-            readiness = coverage(catalog, graph)
-            intent = expand(catalog, graph, brief, bundle_commit='0' * 40)
-            results.append({'graph': graph['id'], 'ready': readiness['ready'],
-                            'total': readiness['total'], 'status': intent['status'],
-                            'refusals': intent['refusals']})
-        status = ('NOT_RUN' if not results else
-                  'READY' if all(item['status'] == 'EXPANDED' for item in results) else 'INCOMPLETE')
-        rows.append({'brief': identity, 'status': status, 'graphs': results,
-                     'expected_refusal': brief.get('expected_refusal'),
-                     'remaining': [] if results else ['No preserved block graph']})
-    return {'status': 'READY' if rows and all(row['status'] == 'READY' for row in rows) else 'INCOMPLETE',
-            'briefs': rows}
-
-
 def coverage(catalog, graph):
     catalog.structure(graph, 'block-graph.schema.json')
     results = []
@@ -98,28 +65,53 @@ def coverage(catalog, graph):
             'instances': results}
 
 
-def coverage_all(catalog, briefs, graphs=None, expectations=None):
-    """Per-brief feasibility and optional graph replay, never a synthesis/A2 receipt."""
+def graph_coverage(catalog, brief, graph):
+    """Replay one current-input graph without hiding its readiness or failures."""
     from .expansion import expand
+    instances = graph.get('instances', [])
+    readiness = {'ready': 0, 'total': len(instances) if isinstance(instances, list) else 0}
+    try:
+        readiness = coverage(catalog, graph)
+        intent = expand(catalog, graph, brief, bundle_commit='0' * 40)
+        status, refusals = intent['status'], intent['refusals']
+    except (ValueError, KeyError, TypeError) as error:
+        status = 'REFUSED'
+        refusals = [{'code': 'INVALID_REFERENCE', 'path': 'graph',
+                     'reason': str(error)[:256], 'queries': ['Q10']}]
+    return {'graph': graph['id'], 'ready': readiness['ready'], 'total': readiness['total'],
+            'status': status, 'refusals': refusals}
+
+
+def brief_coverage(catalog, identity, brief, graphs):
     from .requirements import assess_brief
-    graphs = graphs or {}
-    expectations = expectations or {}
-    rows = []
-    for identity, brief in sorted(briefs.items()):
-        refusals = assess_brief(catalog, brief)
-        graph = graphs.get(identity)
-        row = {'brief': identity, 'expected': expectations.get(identity, {'outcome': 'UNSPECIFIED'}),
-               'screening': 'REFUSED' if refusals else 'ELIGIBLE', 'refusals': refusals,
-               'graph_readiness': 'NOT_PROVIDED', 'graph_refusals': []}
-        if graph is not None:
-            try:
-                intent = expand(catalog, graph, brief, bundle_commit='a' * 40)
-                row['graph_readiness'] = intent['status']
-                row['graph_refusals'] = intent['refusals']
-            except (ValueError, KeyError, TypeError) as error:
-                row['graph_readiness'] = 'REFUSED'
-                row['graph_refusals'] = [{'code': 'INVALID_REFERENCE', 'path': 'graph',
-                                          'reason': str(error)[:256], 'queries': ['Q10']}]
-        rows.append(row)
-    return {'schema': 'pcbknowledge.corpus-coverage.v2', 'briefs': rows,
-            'scope': 'Eligibility screening and optional current-input graph replay only; no new A2 or synthesis proof'}
+    refusals = assess_brief(catalog, brief)
+    expected = brief.get('expected_refusal')
+    if expected and expected['requirement'] not in {item['id'] for item in brief['functions']}:
+        raise ValueError('Expected refusal must name a required function')
+    results = [graph_coverage(catalog, brief, graph) for graph in graphs if graph['brief'] == identity]
+    complete = bool(results) and all(item['status'] == 'EXPANDED' and item['ready'] == item['total']
+                                     for item in results)
+    status = 'NOT_RUN' if not results else 'READY' if complete and not refusals else 'INCOMPLETE'
+    return {'brief': identity, 'status': status, 'graphs': results, 'expected_refusal': expected,
+            'screening': 'REFUSED' if refusals else 'ELIGIBLE', 'refusals': refusals,
+            'graph_readiness': 'NOT_RUN' if not results else 'EXPANDED' if complete else 'REFUSED',
+            'graph_refusals': [refusal for item in results for refusal in item['refusals']],
+            'blocks_ready': sum(item['ready'] for item in results),
+            'blocks_total': sum(item['total'] for item in results),
+            'remaining': [] if results else ['No preserved block graph']}
+
+
+def coverage_all(catalog, briefs=None, graphs=None):
+    """Screen every brief and replay every graph; this is not a synthesis receipt."""
+    from .audit import design_inputs, require_audit
+    if briefs is None:
+        require_audit(catalog)
+        graphs, briefs = design_inputs(catalog.root)
+    graphs = [] if graphs is None else graphs
+    if any(graph['brief'] not in briefs for graph in graphs):
+        raise ValueError('Preserved graph refers to a missing brief')
+    rows = [brief_coverage(catalog, identity, brief, graphs) for identity, brief in sorted(briefs.items())]
+    return {'schema': 'pcbknowledge.corpus-coverage.v2',
+            'status': 'READY' if rows and all(row['status'] == 'READY' for row in rows) else 'INCOMPLETE',
+            'briefs': rows,
+            'scope': 'Eligibility screening and current-input graph replay only; no new A2 or synthesis proof'}

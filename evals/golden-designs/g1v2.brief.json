@@ -240,14 +240,14 @@
         "input_current": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D29 bridge allocation within unchanged 150 mA rail budget.",
+          "note": "D32 bridge allocation within unchanged 150 mA rail budget.",
           "unit": "A",
           "value": 0.02
         },
         "input_voltage": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D29 external 3.3 V bridge mode.",
+          "note": "D32 external 3.3 V bridge mode.",
           "unit": "V",
           "value": 3.3
         }
@@ -416,8 +416,8 @@
     "D13",
     "D14",
     "D21",
-    "D29",
-    "D30"
+    "D32",
+    "D33"
   ],
   "power": {
     "rails": [

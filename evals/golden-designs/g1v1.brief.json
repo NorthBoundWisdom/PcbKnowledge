@@ -198,14 +198,14 @@
         "input_current": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D28 budget includes full-range OS pull-up sink and sensor current.",
+          "note": "D31 budget includes full-range OS pull-up sink and sensor current.",
           "unit": "A",
           "value": 0.007
         },
         "input_voltage": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D28 regulated sensor supply.",
+          "note": "D31 regulated sensor supply.",
           "unit": "V",
           "value": 3.3
         }
@@ -432,7 +432,7 @@
     "D13",
     "D14",
     "D21",
-    "D28"
+    "D31"
   ],
   "power": {
     "rails": [

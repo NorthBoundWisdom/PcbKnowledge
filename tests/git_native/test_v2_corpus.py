@@ -20,9 +20,9 @@ class CorpusTests(unittest.TestCase):
 
     def test_g1_feasibility_is_not_an_a2_claim(self):
         self.assertEqual(assess_brief(self.catalog, self.brief), [])
-        report = coverage_all(self.catalog, {'G1': self.brief}, expectations={'G1': {'outcome': 'SUPPORTED'}})
+        report = coverage_all(self.catalog, {'G1': self.brief}, [])
         self.assertEqual(report['briefs'][0]['screening'], 'ELIGIBLE')
-        self.assertEqual(report['briefs'][0]['graph_readiness'], 'NOT_PROVIDED')
+        self.assertEqual(report['briefs'][0]['graph_readiness'], 'NOT_RUN')
         self.assertIn('no new A2', report['scope'])
 
     def test_negative_voltage_wifi_and_package_are_typed(self):
@@ -65,12 +65,12 @@ class CorpusTests(unittest.TestCase):
     def test_coverage_reports_graph_readiness_separately(self):
         bad = copy.deepcopy(self.graph)
         bad['connections'] = []
-        report = coverage_all(self.catalog, {'G1': self.brief}, {'G1': bad})
+        report = coverage_all(self.catalog, {'G1': self.brief}, [bad])
         row = report['briefs'][0]
         self.assertEqual(row['screening'], 'ELIGIBLE')
         self.assertEqual(row['graph_readiness'], 'REFUSED')
         self.assertTrue(row['graph_refusals'])
-        self.assertEqual(row['expected'], {'outcome': 'UNSPECIFIED'})
+        self.assertIsNone(row['expected_refusal'])
 
     def test_differential_pair_contract_and_dimension_checks(self):
         constraint = {'kind': 'DIFFERENTIAL_PAIR', 'nets': ['P', 'N'],
@@ -108,7 +108,8 @@ class CorpusTests(unittest.TestCase):
 
     def test_package_role_family_are_paired_and_role_is_typed(self):
         for fields in ({'package_family': 'BGA'}, {'package_role': 'mcu.32-bit'},
-                       {'package_family': 'BGA', 'package_role': 'unregistered.role'}):
+                       {'package_family': 'BGA', 'package_role': 'unregistered.role'},
+                       {'package_family': 'UNREGISTERED', 'package_role': 'mcu.32-bit'}):
             with self.subTest(fields=fields):
                 brief = copy.deepcopy(self.brief)
                 next(f for f in brief['functions'] if f['id'] == 'mcu').update(fields)
@@ -132,7 +133,7 @@ class CorpusTests(unittest.TestCase):
                 refusals = assess_brief(self.catalog, brief)
                 self.assertTrue(any(item['code'] == 'INVALID_REFERENCE'
                                     and item['path'] == 'mechanical.edge_interfaces' for item in refusals), refusals)
-                row = coverage_all(self.catalog, {'G1': brief})['briefs'][0]
+                row = coverage_all(self.catalog, {'G1': brief}, [])['briefs'][0]
                 self.assertEqual(row['screening'], 'REFUSED')
                 self.assertEqual(row['refusals'], refusals)
 
@@ -145,9 +146,10 @@ class CorpusTests(unittest.TestCase):
         brief = copy.deepcopy(self.brief)
         brief['mechanical']['edge_interfaces'].append('stale_uart_label')
         output = io.StringIO()
-        with patch('pcbknowledge.v2.cli.design_inputs', return_value=(None, {'G1': brief})):
-            with contextlib.redirect_stdout(output):
-                main(['--repo', str(ROOT), 'v2', 'coverage', '--all', '--json'])
+        with patch('pcbknowledge.v2.audit.require_audit'):
+            with patch('pcbknowledge.v2.audit.design_inputs', return_value=([], {'G1': brief})):
+                with contextlib.redirect_stdout(output):
+                    main(['--repo', str(ROOT), 'v2', 'coverage', '--all', '--json'])
         row = json.loads(output.getvalue())['briefs'][0]
         self.assertEqual(row['screening'], 'REFUSED')
         self.assertTrue(any(item['code'] == 'INVALID_REFERENCE' and item['path'] == 'mechanical.edge_interfaces'
@@ -161,3 +163,78 @@ class CorpusTests(unittest.TestCase):
         identities = {(item['code'], item['path']) for item in assess_brief(self.catalog, brief)}
         self.assertIn(('CHECK_FAILED', 'functions.usb_sink'), identities)
         self.assertIn(('INVALID_REFERENCE', 'mechanical.edge_interfaces'), identities)
+
+    def test_integrated_briefs_keep_required_functions_and_typed_refusals(self):
+        for name in ('g1v1', 'g1v2', 'n1', 'n2', 'n3'):
+            brief = read_json((ROOT / f'evals/golden-designs/{name}.brief.json').read_bytes())
+            with self.subTest(brief=name):
+                self.catalog.structure(brief, 'design-brief.schema.json')
+                self.assertTrue(all(row['status'] == 'NOT_RUN' for row in brief['acceptance']))
+                self.assertLessEqual(set(brief['mechanical']['edge_interfaces']),
+                                     {row['id'] for row in brief['interfaces']})
+                supplies = brief['power']['sources'] + brief['power']['rails']
+                self.assertEqual({row['function'] for row in supplies},
+                                 {'power_input' if name == 'n1' else 'usb_sink', 'regulation'})
+                expected = brief.get('expected_refusal')
+                refusals = assess_brief(self.catalog, brief)
+                if expected:
+                    self.assertIn(expected['requirement'], {row['id'] for row in brief['functions']})
+                    self.assertIn((expected['code'], 'functions.' + expected['requirement']),
+                                  {(row['code'], row['path']) for row in refusals})
+                else:
+                    self.assertEqual(refusals, [])
+
+    def test_expected_refusal_cannot_be_free_text_or_claim_acceptance(self):
+        brief = read_json((ROOT / 'evals/golden-designs/n1.brief.json').read_bytes())
+        for value in ('missing part', {'code': 'PASS', 'requirement': 'power_input'},
+                      {'code': 'UNSATISFIED_SELECTION'},
+                      {'code': 'CHECK_FAILED', 'requirement': 'power_input', 'status': 'PASS'}):
+            changed = copy.deepcopy(brief)
+            changed['expected_refusal'] = value
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                self.catalog.structure(changed, 'design-brief.schema.json')
+
+    def test_unknown_expected_requirement_fails_audit_without_a_graph(self):
+        from pcbknowledge.v2.audit import audit_catalog
+        brief = read_json((ROOT / 'evals/golden-designs/n1.brief.json').read_bytes())
+        brief['expected_refusal']['requirement'] = 'absent'
+        with self.assertRaisesRegex(ValueError, 'required function'):
+            audit_catalog(self.catalog, [], {'N1': brief})
+
+    def test_current_variant_decisions_do_not_reuse_remote_decision_numbers(self):
+        sensor = read_json((ROOT / 'evals/golden-designs/g1v1.brief.json').read_bytes())
+        bridge = read_json((ROOT / 'evals/golden-designs/g1v2.brief.json').read_bytes())
+        self.assertIn('D31', sensor['owner_decisions'])
+        self.assertTrue({'D32', 'D33'} <= set(bridge['owner_decisions']))
+        self.assertNotIn('power_monitor', {row['id'] for row in sensor['functions']})
+        self.assertNotIn('monitor_scope', {row['id'] for row in sensor['constraints']})
+        self.assertIn('sensor.temperature', {row['category'] for row in sensor['functions']})
+        self.assertNotIn('uart_header', {row['id'] for row in bridge['interfaces']})
+        self.assertIn('interface.usb-uart', {row['category'] for row in bridge['functions']})
+
+    def test_negative_inputs_do_not_keep_incompatible_original_preferences(self):
+        voltage = read_json((ROOT / 'evals/golden-designs/n1.brief.json').read_bytes())
+        package = read_json((ROOT / 'evals/golden-designs/n3.brief.json').read_bytes())
+        self.assertEqual(voltage['power']['sources'][0]['voltage']['value'], 12)
+        self.assertNotIn('D1', package['owner_decisions'])
+        mcu = next(row for row in package['functions'] if row['id'] == 'mcu')
+        self.assertEqual(mcu['part_preferences'], [])
+        self.assertEqual((mcu['package_family'], mcu['package_role']), ('BGA', 'mcu.32-bit'))
+
+    def test_package_vocabulary_is_validated_without_selected_graphs(self):
+        from pcbknowledge.v2.audit import audit_catalog
+        for family, role in (('UNREGISTERED', 'mcu.32-bit'), ('BGA', 'unregistered.role')):
+            brief = copy.deepcopy(self.brief)
+            next(row for row in brief['functions'] if row['id'] == 'mcu').update(
+                package_family=family, package_role=role)
+            self.catalog.structure(brief, 'design-brief.schema.json')
+            with self.subTest(family=family, role=role), self.assertRaises(ValueError):
+                audit_catalog(self.catalog, [], {'G1': brief})
+
+    def test_empty_package_selector_names_fail_schema(self):
+        for family, role in (('', 'mcu.32-bit'), ('BGA', '')):
+            brief = copy.deepcopy(self.brief)
+            next(row for row in brief['functions'] if row['id'] == 'mcu').update(
+                package_family=family, package_role=role)
+            with self.subTest(family=family, role=role), self.assertRaises(ValueError):
+                self.catalog.structure(brief, 'design-brief.schema.json')

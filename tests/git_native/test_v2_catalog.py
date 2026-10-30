@@ -44,6 +44,9 @@ class CatalogTests(unittest.TestCase):
         path = self.root / 'evals/corpus/synthetic.json'
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(canonical_json(graph).encode('utf-8'))
+        brief = self.root / 'evals/golden-designs/g1.brief.json'
+        brief.parent.mkdir(parents=True, exist_ok=True)
+        brief.write_bytes((ROOT / 'evals/golden-designs/g1.brief.json').read_bytes())
 
     def save(self):
         for doc in self.documents.values():

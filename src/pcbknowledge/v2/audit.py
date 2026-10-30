@@ -51,6 +51,7 @@ def _selection_roots(catalog, graph):
 def audit_catalog(catalog, graphs=None, briefs=None):
     """Report orphan IDs; refusal fixtures can still demonstrate used selections."""
     from .expansion import dependency_closure, expand
+    from .requirements import validate_package_requirements
 
     if graphs is None:
         graphs, loaded_briefs = design_inputs(catalog.root)
@@ -58,9 +59,12 @@ def audit_catalog(catalog, graphs=None, briefs=None):
     briefs = briefs or {}
     for brief in briefs.values():
         catalog.structure(brief, 'design-brief.schema.json')
+        validate_package_requirements(catalog, brief)
         expected = brief.get('expected_refusal')
         if expected and expected['requirement'] not in {item['id'] for item in brief['functions']}:
             raise ValueError('Expected refusal must name a required function')
+    if any(graph['brief'] not in briefs for graph in graphs):
+        raise ValueError('Preserved graph refers to a missing brief')
     reachable = set()
     for graph in graphs:
         catalog.structure(graph, 'block-graph.schema.json')

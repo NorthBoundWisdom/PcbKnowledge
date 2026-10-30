@@ -5,6 +5,7 @@ from pathlib import Path
 import tempfile
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 from pcbknowledge.v2.audit import audit_catalog, design_inputs
 from pcbknowledge.v2.catalog import Catalog
@@ -30,20 +31,28 @@ class AuditTests(unittest.TestCase):
         graph = {'brief': 'G1', 'instances': [{'block': 'block:used'}]}
         return catalog, graph
 
-    def test_role_selection_keeps_all_candidates_and_reports_orphan(self):
+    def brief(self):
+        path = Path(__file__).resolve().parents[2] / 'evals/golden-designs/g1.brief.json'
+        return json.loads(path.read_bytes())
+
+    @patch("pcbknowledge.v2.expansion.expand", return_value={"dependencies": []})
+    def test_role_selection_keeps_all_candidates_and_reports_orphan(self, expand):
         catalog, graph = self.fixture()
-        report = audit_catalog(catalog, [graph])
+        report = audit_catalog(catalog, [graph], {"G1": self.brief()})
         self.assertEqual(report['unreachable'], ['source:unused'])
         self.assertIn('part:second', report['reachable'])
+        expand.assert_called_once_with(catalog, graph, self.brief(), bundle_commit='0' * 40)
         del catalog.records['source:unused']
-        self.assertEqual(audit_catalog(catalog, [graph])['status'], 'VALID')
+        self.assertEqual(audit_catalog(catalog, [graph], {"G1": self.brief()})['status'], 'VALID')
 
-    def test_missing_negative_block_cannot_hide_orphans(self):
+    @patch("pcbknowledge.v2.expansion.expand", return_value={"dependencies": []})
+    def test_missing_negative_block_cannot_hide_orphans(self, expand):
         catalog, graph = self.fixture()
         graph['instances'][0]['block'] = 'block:missing'
-        report = audit_catalog(catalog, [graph])
+        report = audit_catalog(catalog, [graph], {"G1": self.brief()})
         self.assertEqual(report['reachable'], [])
         self.assertEqual(len(report['unreachable']), 5)
+        expand.assert_called_once_with(catalog, graph, self.brief(), bundle_commit='0' * 40)
 
     def test_graph_discovery_reads_references_corpus_and_preserved_attempts(self):
         with tempfile.TemporaryDirectory() as temporary:

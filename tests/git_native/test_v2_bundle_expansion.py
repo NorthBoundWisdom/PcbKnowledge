@@ -84,6 +84,9 @@ class BundleTests(unittest.TestCase):
             path = root / 'evals/corpus/synthetic/input.json'
             path.parent.mkdir(parents=True)
             path.write_bytes(canonical_json(graph).encode('utf-8'))
+            brief = root / 'evals/golden-designs/g1.brief.json'
+            brief.parent.mkdir(parents=True, exist_ok=True)
+            brief.write_bytes((ROOT / 'evals/golden-designs/g1.brief.json').read_bytes())
             git('add', '.')
             git('commit', '-m', 'Synthetic original graph')
             result = build_bundle(root, Path(output).resolve())

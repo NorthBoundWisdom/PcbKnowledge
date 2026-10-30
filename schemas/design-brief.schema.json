@@ -184,49 +184,14 @@
             "maxLength": 256
           },
           "package_family": {
-            "enum": [
-              "BGA",
-              "CHIP_0402",
-              "CHIP_0603",
-              "CHIP_0805",
-              "CHIP_1206",
-              "CHIP_1812",
-              "CRYSTAL_3225",
-              "EXPLICIT",
-              "HC49_US_SMD",
-              "HEADER_2P54",
-              "LQFP-48",
-              "MOUNTING_HOLE",
-              "SMA",
-              "SMB",
-              "SOD-123",
-              "SOP-16",
-              "SOIC-8",
-              "SOT-223",
-              "SOT-23-8"
-            ]
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
           },
           "package_role": {
-            "enum": [
-              "capacitor.bulk",
-              "capacitor.ceramic",
-              "connector.header",
-              "connector.usb-c-sink",
-              "crystal",
-              "diode.schottky",
-              "interface.usb-uart",
-              "led",
-              "mcu.32-bit",
-              "mechanical.mounting-hole",
-              "memory.eeprom",
-              "monitor.current",
-              "protection.fuse",
-              "protection.tvs",
-              "regulator.linear.fixed",
-              "resistor",
-              "sensor.temperature",
-              "switch.button"
-            ]
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
           }
         },
         "required": [
@@ -558,7 +523,7 @@
       "type": "object",
       "properties": {
         "code": {
-          "const": "UNSATISFIED_SELECTION"
+          "enum": ["UNSATISFIED_SELECTION", "CHECK_FAILED"]
         },
         "requirement": {
           "type": "string",

@@ -47,6 +47,10 @@
       "id": "monitor_scope"
     }
   ],
+  "expected_refusal": {
+    "code": "CHECK_FAILED",
+    "requirement": "power_input"
+  },
   "functions": [
     {
       "category": "power.input",
@@ -415,7 +419,8 @@
     "D12",
     "D13",
     "D14",
-    "D21"
+    "D21",
+    "D30"
   ],
   "power": {
     "rails": [

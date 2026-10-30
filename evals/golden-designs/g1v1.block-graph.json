@@ -393,14 +393,14 @@
         "input_current": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D28 reserves 7 mA: maximum IC supply current 0.4 mA plus OS pull-up current at the full 5.5 V sensor operating limit / 990 ohm totals less than 6 mA.",
+          "note": "D31 reserves 7 mA: maximum IC supply current 0.4 mA plus OS pull-up current at the full 5.5 V sensor operating limit / 990 ohm totals less than 6 mA.",
           "unit": "A",
           "value": 0.007
         },
         "input_voltage": {
           "basis": "ENGINEERING_DEFAULT",
           "conditions": {},
-          "note": "D28 selects the nominal 3.3 V logger rail, within the sensor 2.7–5.5 V operating range.",
+          "note": "D31 selects the nominal 3.3 V logger rail, within the sensor 2.7–5.5 V operating range.",
           "unit": "V",
           "value": 3.3
         }

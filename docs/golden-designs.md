@@ -115,7 +115,11 @@ the current monitor and its shunt) and G1V2 (a USB-UART bridge replacing the UAR
 USB2-capable sink block). These are distinct briefs, not changes to the original G1
 reference. N1-N3 intentionally request a 12 V input, an absent Wi-Fi module, and a BGA MCU,
 respectively and require typed refusals rather than fabricated catalog facts. Exact
-requirements and expected refusal code/path live in the corpus JSON inputs.
+requirements and expected refusal code/function binding live in each brief.
+N1 checks the available input block against 12 V; N3 checks the selected MCU
+role and BGA package together rather than inventing a BGA-specific category.
+D28-D30 preserve the initial corpus decisions from `999c85d`; D31-D33 record
+the verified sensor/bridge substitutions and pair defaults used by the integrated briefs.
 
 `v2 coverage --all` reports every brief, ready reference blocks and refusals; its
 `--json` form is suitable for tooling. Eligibility or reference replay does not
@@ -130,3 +134,8 @@ must pass A2 and equivalence; all three negative attempts must reproduce the
 expected typed refusal. Historical G1 receipts remain unchanged. Corpus completion
 is reported only after real attempts and evaluator results are preserved in Git;
 this description of the protocol is not itself an execution receipt.
+
+The fifteen preserved Stage 8 attempts used the exact earlier input recorded in
+`evals/synthesis/stage8-input.json`. Their original packets, transcripts and hashes
+are unchanged by integration with `999c85d`. Replaying their outputs against the
+current briefs is a separate check, not a new independent synthesis attempt.

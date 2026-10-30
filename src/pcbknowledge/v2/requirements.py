@@ -36,13 +36,26 @@ def selected_parts(catalog, block):
     return parts
 
 
-def package_selection_matches(catalog, function, parts):
+def validate_package_requirement(catalog, function):
     family, role = function.get('package_family'), function.get('package_role')
     if not family and not role:
         return True
     if not family or not role:
         raise ValueError('Package family and package role must be specified together')
     catalog.vocabulary.member('roles', role)
+    catalog.vocabulary.member('package-families', family)
+
+
+def validate_package_requirements(catalog, brief):
+    for function in brief['functions']:
+        validate_package_requirement(catalog, function)
+
+
+def package_selection_matches(catalog, function, parts):
+    validate_package_requirement(catalog, function)
+    family, role = function.get('package_family'), function.get('package_role')
+    if not family and not role:
+        return True
     return any(role in part['roles'] and catalog.get(part['package'], 'package')['family'] == family
                for part in parts)
 
@@ -112,6 +125,7 @@ def edge_interface_refusals(brief):
 def assess_brief(catalog, brief):
     """Return typed refusals; an empty list means screening passed, not A2 proof."""
     catalog.structure(brief, 'design-brief.schema.json')
+    validate_package_requirements(catalog, brief)
     results = edge_interface_refusals(brief)
     function_ids = [function['id'] for function in brief['functions']]
     if len(set(function_ids)) != len(function_ids):

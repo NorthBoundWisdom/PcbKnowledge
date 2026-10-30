@@ -215,27 +215,20 @@ class CliTests(unittest.TestCase):
         for args in (('v2', 'coverage'), ('v2', 'coverage', 'graph.json', '--all')):
             self.assertEqual(self.run_cli(*args)[0], 2)
 
-    def test_coverage_all_defaults_to_one_line_per_brief_and_retains_json(self):
+    def test_coverage_all_defaults_to_json_lines_and_retains_aggregate(self):
         rows = [
-            {'brief': 'G1', 'blocks_ready': 2, 'blocks_total': 3, 'screening': 'ELIGIBLE',
-             'graph_readiness': 'REFUSED', 'refusals': [],
-             'graph_refusals': [{'code': 'MISSING_PART', 'path': 'instances.u'}]},
-            {'brief': 'N1', 'screening': 'REFUSED', 'graph_readiness': 'NOT_PROVIDED',
-             'refusals': [{'code': 'CHECK_FAILED', 'path': 'power'}], 'graph_refusals': []},
+            {'brief': 'G1', 'status': 'READY', 'graphs': [], 'screening': 'ELIGIBLE', 'refusals': []},
+            {'brief': 'N1', 'status': 'NOT_RUN', 'graphs': [], 'screening': 'REFUSED',
+             'refusals': [{'code': 'CHECK_FAILED', 'path': 'functions.power_input'}]},
         ]
-        payload = {'briefs': rows}
+        payload = {'status': 'INCOMPLETE', 'briefs': rows}
         with patch('pcbknowledge.v2.cli.corpus_coverage', return_value=payload):
             output = io.StringIO()
             with redirect_stdout(output):
                 code = main(['--repo', str(self.root), 'v2', 'coverage', '--all'])
-            self.assertEqual(code, 0)
-            self.assertEqual(output.getvalue().splitlines(), [
-                'G1: blocks ready=2/3; screening=ELIGIBLE; graph=REFUSED; '
-                'refusals=MISSING_PART@instances.u',
-                'N1: blocks ready=NOT_PROVIDED; screening=REFUSED; graph=NOT_PROVIDED; '
-                'refusals=CHECK_FAILED@power',
-            ])
-            self.assertEqual(self.run_cli('v2', 'coverage', '--all', '--json'), (0, payload))
+            self.assertEqual(code, 2)
+            self.assertEqual([json.loads(line) for line in output.getvalue().splitlines()], rows)
+            self.assertEqual(self.run_cli('v2', 'coverage', '--all', '--json'), (2, payload))
 
     def test_corpus_cli_hashes_actual_bundle_and_preserves_legacy_mode(self):
         import hashlib
