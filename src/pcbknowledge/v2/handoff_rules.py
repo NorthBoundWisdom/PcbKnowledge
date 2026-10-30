@@ -1,6 +1,8 @@
 """Deterministic KiCad rules derived from validated manufacturing and net inputs."""
 import json
 
+from .reference_paths import validate_reference_paths
+
 
 def millimeters(quantity, *, bound='value'):
     if quantity.get('unit') != 'mm' or quantity.get('status'):
@@ -61,6 +63,9 @@ def net_widths(intent, fab):
     for item in intent['layout']:
         if item['kind'] == 'NET_WIDTH_MIN':
             widths[item['net']] = max(widths[item['net']], millimeters(item['min_width']))
+    for item in intent['layout']:
+        if item['kind'] == 'GUARD_RING':
+            widths[item['guard_net']] = max(widths[item['guard_net']], millimeters(item['min_width']))
     for pair in differential_pairs(intent):
         for net in pair['nets']:
             widths[net] = max(widths[net], pair['width'])
@@ -69,6 +74,7 @@ def net_widths(intent, fab):
 
 def export_rules(intent, catalog):
     fab = catalog.get(intent['fab_profile'], 'fab_profile')
+    validate_reference_paths(intent['layout'], {net['name'] for net in intent['nets']}, fab)
     lines = ['(version 1)']
     for key, constraint in (
         ('trace_width_min', 'track_width'), ('clearance_min', 'clearance'),
@@ -94,6 +100,7 @@ def export_rules(intent, catalog):
         lines.append(rule('hole-edge:' + ref, 'edge_clearance', min(offsets) - radius,
                           f"A.Type == 'Pad' && A.FootprintReference == '{escaped}'"))
     lines.extend(differential_rules(intent))
+    lines.extend(reference_path_rules(intent))
     return '\n\n'.join(lines) + '\n'
 
 
@@ -122,3 +129,20 @@ def project_settings(intent, catalog):
             'board': {'design_settings': {'rules': {'min_clearance': clearance,
                        'min_track_width': millimeters(fab['trace_width_min']),
                        'min_through_hole_diameter': drill, 'min_via_annular_width': ring}}}}
+
+
+def reference_path_rules(intent):
+    lines = []
+    for index, item in enumerate(intent['layout']):
+        if item['kind'] not in ('GUARD_RING', 'RETURN_PATH'):
+            continue
+        # Preserve the complete unmet copper requirement, not just DRC minima.
+        lines.append('# Unproven layout requirement: ' + json.dumps(item, sort_keys=True))
+        if item['kind'] == 'GUARD_RING':
+            signal, guard = [item[key].replace('\\', '\\\\').replace("'", "\\'")
+                             for key in ('net', 'guard_net')]
+            condition = (f"(A.NetName == '{signal}' && B.NetName == '{guard}') || "
+                         f"(A.NetName == '{guard}' && B.NetName == '{signal}')")
+            lines.append(rule('guard-clearance:' + str(index), 'clearance',
+                              millimeters(item['min_clearance']), condition))
+    return lines

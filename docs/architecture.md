@@ -249,3 +249,19 @@ Manufacturer-land generators repeat cited pad size, pitch and row spacing for
 two- or four-sided packages without adding gull-wing fillets. A distinct exposed
 pad is derived from its cited land dimensions; collision checks remain unchanged.
 Board-level thermal vias are not silently synthesized from a package illustration.
+
+## G3 analog models and functional wiring
+
+G3 keeps source-condition facts separate from the selected bench envelopes.
+Original calculators cover reference bias, thermistor transfer and RC filtering,
+TIA DC and first-order loop estimates, ferrite DC loss, RS-485 bias/loading and
+single-ended microstrip planning. The loop model uses an ideal integrator op-amp;
+the electrical operating assumptions are inputs, not inferred device guarantees.
+
+A brief can declare functional electrical binding groups. Expansion resolves
+function/port endpoints through selected instances to merged physical nets. All
+endpoints in a group must share a net, and different groups must remain distinct.
+This binds G3 supply providers, reference distribution, ADC channels and common
+return without matching graph labels or a stored reference answer. It is not a
+general power-flow solver. Guard and return-path copper checks are described in
+[the v2 model](knowledge-model-v2.md#guard-and-reference-copper-requirements).

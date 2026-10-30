@@ -153,3 +153,17 @@ preserved in `evals/synthesis/g2/`; the earlier round remains in `g2-round1/`.
 D54 subsequently corrects only fuse placement and adds pin proximity. Unchanged
 author graphs are independently revalidated against that catalog as a separate
 regression, not relabeled as fresh synthesis on different inputs.
+
+## G3 reference
+
+D55-D59 select a 15-35 degC bench acquisition board with an external 3.2-3.4 V
+supply, a 10 mA filtered analog budget, and separate external-host I2C and UART
+connections. The photodiode input is an imposed 0-50 uA electrical scenario at
+940 nm, not a calibrated irradiance specification. The NTC Beta transfer, ADC
+loading, TIA error envelope and first-order loop estimate retain their explicit
+engineering assumptions. Source test conditions are not broadened into operating
+guarantees. Both RS-485 nodes use SN65HVD75 receivers; only one bias pair is fitted.
+
+The hand-authored `g3.block-graph.json` carries common-ground return references
+and buffered-bias guard geometry. Their actual copper realization remains an A3
+check; the parked handoff does not establish it.

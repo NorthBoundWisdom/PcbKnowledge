@@ -157,6 +157,7 @@
         "gullwing_four_side",
         "crystal_four_pad",
         "pin_header",
+        "radial_two_lead",
         "mechanical_hole",
         "manufacturer_two_side_land",
         "manufacturer_four_side_land"

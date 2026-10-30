@@ -1,6 +1,8 @@
 """Bind layout rule templates to resolved components and electrical nets."""
 from copy import deepcopy
 
+from .reference_paths import NET_FIELDS
+
 
 def apply_rules(catalog, parts, nets, block_layout=()):
     connections = {(p['ref'],p['pin']):net['name'] for net in nets for p in net['pins']}
@@ -64,7 +66,7 @@ def apply_rules(catalog, parts, nets, block_layout=()):
                             options = [{**bindings,'decoupling_capacitor':chosen}]
                     for mapping in options:
                         constraint = deepcopy(raw)
-                        for key in ('subject','target','subjects','path','net','sense_nets'):
+                        for key in ('subject', 'target', 'subjects', 'path', *NET_FIELDS):
                             if key not in constraint:
                                 continue
                             value = constraint[key]

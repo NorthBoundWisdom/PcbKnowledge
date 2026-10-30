@@ -307,6 +307,8 @@ class Catalog:
 
     @staticmethod
     def _layout_references(constraint, components, nets):
+        from .reference_paths import validate_reference_path
+        validate_reference_path(constraint, nets)
         for field in ('subject','target','subjects','path'):
             values = constraint.get(field, [])
             for value in [values] if isinstance(values,str) else values:
@@ -316,7 +318,7 @@ class Catalog:
                 if marker and any(not any(p['number']==pin or p['name']==pin for p in part['pins'])
                                   for part in components[ref]):
                     raise ValueError(f'Dangling layout pin: {value}')
-        for field in ('net','sense_nets','nets'):
+        for field in ('net','sense_nets','nets','guard_net','return_net'):
             values = constraint.get(field, [])
             for value in [values] if isinstance(values,str) else values:
                 if value not in nets:

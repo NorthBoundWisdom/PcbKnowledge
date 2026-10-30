@@ -523,7 +523,10 @@
       "type": "object",
       "properties": {
         "code": {
-          "enum": ["UNSATISFIED_SELECTION", "CHECK_FAILED"]
+          "enum": [
+            "UNSATISFIED_SELECTION",
+            "CHECK_FAILED"
+          ]
         },
         "requirement": {
           "type": "string",
@@ -535,6 +538,50 @@
         "requirement"
       ],
       "additionalProperties": false
+    },
+    "electrical_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "maxLength": 256
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "function": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "port": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "function",
+                "port"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "endpoints"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [

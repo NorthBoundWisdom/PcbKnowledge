@@ -98,6 +98,12 @@ answer here.
 | D52 | Buck enable connection | Leave TPS5430 ENA unconnected as explicitly permitted by its internal pull-up; the part records the source-backed ENABLED default and the input checker retains it. |
 | D53 | G2 input edge | Place the power input header at the RIGHT edge within 5 mm, matching the existing header rule; the brief requires edge access but no particular side. This removes opposed defaults on the exported 80 by 100 mm outline. |
 | D54 | G2 entry placement | Place the fuse on the RIGHT edge within 8 mm and its directly connected input-header pad within 5 mm of the fuse pad. Matching edge names alone does not constrain along-edge separation. |
+| D55 | G3 operating inputs | Agent-selected bench front end: external3.2-3.4 V/150 mA, analog branch10 mA,15-35 degC,80x100 mm envelope and20 mm height. Two-layer1.6 mm board, common ground, separate analog/digital routing groups. |
+| D56 | G3 analog models | 940 nm,DC-1 Hz, imposed0-50 uA photocurrent;10 kohm transimpedance and buffered half-reference. Reference2.35-2.65 V and50 mV aggregate TIA DC error are explicit engineering envelopes, not manufacturer guarantees. Typical bandwidth/input capacitance inform a stability estimate. NTC uses its Beta approximation and tolerances; no total accuracy specification. |
+| D57 | G3 interfaces | ADS1115 +/-4.096 V,8 SPS single-shot with OS polling,100 kHz host I2C and50 pF total bus limit. Separate external-host UART/control drives115200 bit/s RS-485; two120 ohm terminations, one2 kohm-per-leg bias pair and0.6 mA adverse receiver-loading model. The second node also uses SN65HVD75; generic+200 mV receivers are outside this idle-bias design. |
+| D58 | G3 reference bias | Three parallel1 kohm resistors bias TL431;0.5 mA maximum reference load and no cathode capacitor. Source test conditions remain distinct from the selected operating model. |
+| D59 | G3 land density | Use the original COMPACT pad-fillets for ADS1115 VSSOP and MH2029 chip packages after source-contact review. This preserves the selected fab clearance and all manufacturer dimensions; NOMINAL fillets left insufficient pad clearance. |
+| D60 | G3 functional wiring | Bind functional supply, reference, sensor-channel and common-return endpoints to the actual expanded nets. Each named group shares one physical net and different groups remain distinct. Fixed parameter values alone do not establish physical wiring. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -613,13 +619,15 @@ KiCad 9.0.2 parked export: identity PASS, 0 DRC violations, 128 unconnected; A3/
 
 ## Stage 10 — G3 to A2
 
-- [ ] Concrete G3 inputs, reference graph.
-- [ ] Parts and blocks: op-amp front end, voltage reference, ADC, RS-485
+- [x] Concrete G3 inputs, reference graph.
+- [x] Parts and blocks: op-amp front end, voltage reference, ADC, RS-485
   transceiver with termination and bias, analog/digital return-path constraints.
-- [ ] Calculators: `opamp_gain`, `rc_filter`, `reference_load`,
+- [x] Calculators: `opamp_gain`, `rc_filter`, `reference_load`,
   `rs485_termination`, `trace_impedance_microstrip` (published closed-form
   approximation, implemented from first principles).
 - [ ] Synthesis evaluation as in Stage 8.
+
+Input receipt: reference42 components/62 checks;453 tests/no skips. Fresh synthesis and exact remote CI remain pending.
 
 Exit: G3 reference and two of three AI attempts reach A2.
 

@@ -123,6 +123,8 @@ class _Expansion:
             if count != function['count']:
                 raise ValueError('Graph function count differs from brief: ' + function['id'])
         unique(self.graph['connections'], 'net', 'graph net')
+        from .electrical_bindings import validate_bindings
+        validate_bindings(self.brief)
 
     def check_power_requirements(self):
         for group in ('sources','rails'):
@@ -370,7 +372,7 @@ class _Expansion:
                     if key in constraint:
                         value = constraint[key]
                         constraint[key] = iid + '_' + value if isinstance(value,str) else [iid+'_'+v for v in value]
-                for key in ('net','sense_nets','nets'):
+                for key in ('net','sense_nets','nets','guard_net','return_net'):
                     if key in constraint:
                         value = constraint[key]
                         constraint[key] = (
@@ -468,6 +470,8 @@ class _Expansion:
             from .gpio import configure_pins
             configure_pins(self)
             self.assemble_nets()
+            from .electrical_bindings import check_bindings
+            check_bindings(self)
             self.check_source_paths()
             self.apply_layout_rules()
             self.assemble_bom()

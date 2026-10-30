@@ -228,6 +228,27 @@ def _header_pads(context):
             for c in range(columns) for r in range(rows)]
 
 
+def _radial_pads(context):
+    """Two round plated holes on the x axis; explicit engineering hole/pad sizes."""
+    if context.count != 2 or context.package.get('mount_type') != 'THT':
+        raise ValueError('Radial generator requires two through-hole terminals')
+    if context.density != 'NOMINAL':
+        raise ValueError('Radial explicit hole and pad sizes require nominal density')
+    pitch = context.dimension('pitch', bound='typ')
+    sizes = {}
+    for name in ('drill', 'pad_width', 'pad_height'):
+        quantity = context.record.get(name, {})
+        if set(quantity) & {'value', 'min', 'typ', 'max'} != {'value'}:
+            raise ValueError(f'Radial {name} requires an exact selected dimension')
+        sizes[name] = context.dimension(name)
+    diameter = sizes['pad_width']
+    if diameter != sizes['pad_height'] or sizes['drill'] >= diameter:
+        raise ValueError('Radial round pads require equal diameters and a positive annular ring')
+    return [_pad(number, x, 0, diameter, diameter, kind='THROUGH_HOLE',
+                 shape='ROUND', drill=sizes['drill'])
+            for number, x in ((1, -pitch / 2), (2, pitch / 2))]
+
+
 def _mechanical_pads(context):
     drawing, dim, count = context.record, context.dimension, context.count
     if count != 1:
@@ -264,6 +285,7 @@ def _drawing_pads(package):
         'manufacturer_four_side_land': _manufacturer_land,
         'crystal_four_pad': _crystal_pads,
         'pin_header': _header_pads,
+        'radial_two_lead': _radial_pads,
         'mechanical_hole': _mechanical_pads,
     }
     if context.generator not in generators:

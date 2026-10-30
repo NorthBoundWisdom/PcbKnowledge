@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 
-from . import calculators_drivers, calculators_power, calculators_protection
+from . import calculators_analog, calculators_drivers, calculators_power, calculators_protection
 
 
 class CalculationError(ValueError):
@@ -33,6 +33,7 @@ INPUT_UNITS = {
                            'shunt_capacitance': 'F', 'load_capacitance': 'F',
                            'drive_current': 'A', 'power_rating': 'W'},
     'trace_width': {'current': 'A', 'temperature_rise': 'degC', 'copper_thickness': 'mm'},
+    **calculators_analog.INPUT_UNITS,
     **calculators_power.INPUT_UNITS,
     **calculators_drivers.INPUT_UNITS,
     **calculators_protection.INPUT_UNITS,
@@ -87,13 +88,20 @@ def calculate(name, inputs):
         raise CalculationError('Calculation exceeds finite numerical domain') from error
 
 
-def _calculate(name, inputs):
-    """Return conservative interval outputs; never silently use a typical value."""
+def _input_bounds(name, inputs):
     validate_inputs(name, inputs)
     b = {key: bounds(inputs[key], unit, key) for key, unit in INPUT_UNITS[name].items()}
     for key, (low, _) in b.items():
         if key not in ('ambient',) and low < 0:
             raise CalculationError(f'{key} must be nonnegative')
+    return b
+
+
+def _calculate(name, inputs):
+    """Return conservative interval outputs; never silently use a typical value."""
+    b = _input_bounds(name, inputs)
+    if name in calculators_analog.INPUT_UNITS:
+        return _calculate_analog(name, inputs, b)
     if name in calculators_drivers.INPUT_UNITS:
         return _calculate_drivers(name, inputs, b)
     if name in calculators_protection.INPUT_UNITS:
@@ -277,3 +285,13 @@ def evaluate_check(check, parameters, components=None):
                 'output': requirement['output'], 'value': value}
     except (ValueError, KeyError, TypeError) as error:
         return {'calculator': check.get('calculator', ''), 'result': 'REFUSED', 'reason': str(error)}
+
+
+def _calculate_analog(name, inputs, b):
+    try:
+        result = _result(name, inputs, calculators_analog.calculate(name, b))
+    except ValueError as error:
+        raise CalculationError(str(error)) from error
+    for value in result.values():
+        value['note'] = calculators_analog.NOTES[name]
+    return result

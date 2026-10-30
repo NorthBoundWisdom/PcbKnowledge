@@ -48,6 +48,8 @@ def validate_intent(catalog, intent, *, bundle_commit):
     if isinstance(fab_id, str):
         fab = catalog.get(fab_id, 'fab_profile')
         used.add(fab_id)
+        from .reference_paths import validate_reference_paths
+        validate_reference_paths(intent['layout'], set(nets), fab)
         from .assembly import validate_assembly
         validate_assembly(catalog, intent)
         if intent['manufacturing']['layers'] != fab['layer_count']:

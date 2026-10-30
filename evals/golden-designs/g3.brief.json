@@ -51,12 +51,150 @@
       "id": "sensitive_nets"
     }
   ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "input_terminal",
+          "port": "VIN"
+        },
+        {
+          "function": "rail_filter",
+          "port": "VIN"
+        },
+        {
+          "function": "rs485",
+          "port": "VDD"
+        }
+      ],
+      "id": "input_power"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "rail_filter",
+          "port": "VOUT"
+        },
+        {
+          "function": "reference",
+          "port": "VIN"
+        },
+        {
+          "function": "photodiode",
+          "port": "VDD"
+        },
+        {
+          "function": "adc",
+          "port": "VDD"
+        }
+      ],
+      "id": "analog_supply"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "reference",
+          "port": "VREF"
+        },
+        {
+          "function": "thermistor",
+          "port": "VREF"
+        },
+        {
+          "function": "photodiode",
+          "port": "VREF"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_REF"
+        }
+      ],
+      "id": "reference_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "thermistor",
+          "port": "OUT"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_NTC"
+        }
+      ],
+      "id": "thermistor_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "photodiode",
+          "port": "OUT"
+        },
+        {
+          "function": "adc",
+          "port": "AIN_TIA"
+        }
+      ],
+      "id": "optical_signal"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "input_terminal",
+          "port": "GND"
+        },
+        {
+          "function": "rail_filter",
+          "port": "GND"
+        },
+        {
+          "function": "reference",
+          "port": "GND"
+        },
+        {
+          "function": "photodiode",
+          "port": "GND"
+        },
+        {
+          "function": "thermistor",
+          "port": "GND"
+        },
+        {
+          "function": "adc",
+          "port": "GND"
+        },
+        {
+          "function": "rs485",
+          "port": "GND"
+        }
+      ],
+      "id": "common_return"
+    }
+  ],
   "functions": [
     {
+      "category": "sensor.temperature",
       "count": 1,
       "description": "NTCLE100 thermistor divider.",
       "id": "thermistor",
-      "parameters": {},
+      "parameters": {
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "D55 bench operating envelope.",
+          "unit": "degC"
+        }
+      },
       "part_preferences": [
         "NTCLE100"
       ],
@@ -65,23 +203,82 @@
       ]
     },
     {
+      "category": "sensor.photodiode",
       "count": 1,
       "description": "BPW34 photodiode with MCP6002 transimpedance stage.",
       "id": "photodiode",
-      "parameters": {},
+      "parameters": {
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 reserved dual-op-amp and output-load budget; not a datasheet maximum.",
+          "unit": "A",
+          "value": 0.002
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "photocurrent": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-05,
+          "min": 0,
+          "note": "D55 imposed optical photocurrent budget at 940 nm; not an irradiance-transfer guarantee.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        }
+      },
       "part_preferences": [
         "BPW34",
         "MCP6002"
       ],
       "requirements": [
-        "Optical spectrum, intensity, bandwidth and error requirements must be supplied before sizing."
+        "940 nm bench optical acquisition,DC-1 Hz; imposed photocurrent0-50 uA, not calibrated irradiance. Ideal transimpedance plus explicit engineering DC-error and stability estimates."
       ]
     },
     {
+      "category": "power.reference",
       "count": 1,
       "description": "TL431 reference.",
       "id": "reference",
-      "parameters": {},
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "A"
+        },
+        "reference_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 2.35,
+          "note": "Engineering operating envelope for nonprecision bench reference; not a guaranteed TL431 accuracy interval.",
+          "unit": "V"
+        }
+      },
       "part_preferences": [
         "TL431"
       ],
@@ -90,10 +287,98 @@
       ]
     },
     {
+      "category": "sensor.adc",
       "count": 1,
       "description": "ADS1115 ADC on I2C.",
       "id": "adc",
-      "parameters": {},
+      "parameters": {
+        "analog_input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2.65,
+          "min": 0,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum host+board I2C capacitance model.",
+          "unit": "F",
+          "value": 5e-11
+        },
+        "full_scale_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "V",
+          "value": 4.096
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering total supply budget: up to2.2mA for three pullups plus0.8mA IC allowance; not a datasheet guaranteed current.",
+          "unit": "A",
+          "value": 0.003
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Engineering maximum reference-input loading scenario; source differential input impedance is typical only, not a guaranteed loading bound.",
+          "unit": "A",
+          "value": 1e-05
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 8
+        }
+      },
       "part_preferences": [
         "ADS1115"
       ],
@@ -102,10 +387,36 @@
       ]
     },
     {
+      "category": "power.filter",
       "count": 1,
       "description": "MH2029 ferrite rail filter.",
       "id": "rail_filter",
-      "parameters": {},
+      "parameters": {
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 bench operating envelope.",
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      },
       "part_preferences": [
         "MH2029"
       ],
@@ -114,15 +425,135 @@
       ]
     },
     {
+      "category": "interface.rs485",
       "count": 1,
       "description": "SN65HVD75 RS-485 link.",
       "id": "rs485",
-      "parameters": {},
+      "parameters": {
+        "data_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G3 delegated bench design default.",
+          "unit": "Hz",
+          "value": 115200
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output HIGH minimum to device.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host output LOW maximum to device.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "G3 delegated bench design default.",
+          "unit": "V"
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIH threshold maximum.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required external host input VIL threshold minimum.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "receiver_load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0006,
+          "min": 0,
+          "note": "Adverse aggregate two-receiver differential load model, not a guaranteed device leakage bound.",
+          "unit": "A"
+        },
+        "receiver_positive_threshold": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Both nodes use SN65HVD75-compatible positive-going threshold <=-20mV; remote node has120ohm1% termination and no additional bias pair.",
+          "unit": "V",
+          "value": -0.02
+        }
+      },
       "part_preferences": [
         "SN65HVD75"
       ],
       "requirements": [
-        "Termination and bias options depend on bus topology and node role."
+        "115200 bit/s, two-node SN65HVD75 short bench bus,120 ohm termination at each end and only one bias pair; local bias and separate external-host UART/control header."
+      ]
+    },
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "External regulated 3.2-3.4 V,150 mA bench power header.",
+      "id": "input_terminal",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External source declared available continuous current budget.",
+          "unit": "A",
+          "value": 0.15
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Required external source rail range.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "External regulated 3.2-3.4 V,150 mA bench power header."
+      ]
+    },
+    {
+      "category": "mechanical.mounting",
+      "count": 1,
+      "description": "Four M3 mounting holes.",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Four M3 mounting holes."
       ]
     }
   ],
@@ -130,79 +561,83 @@
   "interfaces": [
     {
       "current_limit": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "External load current limit is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 5e-05
       },
-      "description": "Optical signal at the photodiode",
+      "description": "940 nm bench optical stimulus; electrical budget is imposed photocurrent, not a radiometric calibration.",
       "id": "optical",
       "signals": [
         "LIGHT"
       ],
       "voltage": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "Electrical voltage range is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
       }
     },
     {
       "current_limit": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "External load current limit is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.0003
       },
-      "description": "Thermistor sensing input",
+      "description": "On-board thermistor sensing node;15-35 degC Beta-model acquisition.",
       "id": "thermistor_input",
       "signals": [
         "SENSE",
         "RETURN"
       ],
       "voltage": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "Electrical voltage range is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 2.65,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
       }
     },
     {
       "current_limit": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "External load current limit is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.003
       },
-      "description": "Host I2C connection",
+      "description": "External host100 kHz I2C; totalbus50 pF maximum,8 SPS single-shot and OS polling.",
       "id": "i2c",
       "signals": [
         "SDA",
         "SCL",
+        "ALERT",
         "GND"
       ],
       "voltage": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "Electrical voltage range is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
       }
     },
     {
       "current_limit": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "External load current limit is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.06
       },
-      "description": "RS-485 link",
+      "description": "Two SN65HVD75 nodes,120 ohm terminated quiet bench bus, one bias pair; common ground and external host UART/control.",
       "id": "rs485",
       "signals": [
         "A",
@@ -210,87 +645,186 @@
         "GND"
       ],
       "voltage": {
-        "blocks": [
-          "Q11"
-        ],
-        "reason": "Electrical voltage range is not specified.",
-        "status": "UNKNOWN"
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.008
+      },
+      "description": "External3.3 V logic host supplies DI and DIR, receives RO; default receive. Independent of I2C.",
+      "id": "host_uart",
+      "signals": [
+        "DI",
+        "RO",
+        "DIR",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "A",
+        "value": 0.15
+      },
+      "description": "Regulated bench power input.",
+      "id": "input_terminal",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 3.2,
+        "note": "D55 delegated G3 bench design input.",
+        "unit": "V"
       }
     }
   ],
   "manufacturing": {
     "assembly": "SINGLE_SIDE_TOP",
     "copper": "ONE_OZ",
-    "layers": {
-      "blocks": [
-        "Q9"
-      ],
-      "reason": "Layer count not specified.",
-      "status": "UNKNOWN"
-    },
-    "note": "Unspecified; Unspecified",
-    "preferred_passives": "Unspecified",
-    "profile": {
-      "blocks": [
-        "Q9"
-      ],
-      "reason": "Fab profile not selected.",
-      "status": "UNKNOWN"
-    },
+    "layers": 2,
+    "note": "D55 two-layer mixed SMT/through-hole bench assembly.",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
     "thickness": {
-      "blocks": [
-        "Q9"
-      ],
-      "reason": "Board thickness not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
     }
   },
   "mechanical": {
-    "edge_interfaces": [],
+    "edge_interfaces": [
+      "input_terminal",
+      "i2c",
+      "rs485",
+      "host_uart"
+    ],
     "height": {
-      "blocks": [
-        "Q11"
-      ],
-      "reason": "Component height limit not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 20
     },
     "length": {
-      "blocks": [
-        "Q11"
-      ],
-      "reason": "Board length not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 100
     },
-    "mounting": [],
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
     "width": {
-      "blocks": [
-        "Q11"
-      ],
-      "reason": "Board width not specified.",
-      "status": "UNKNOWN"
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "D55 delegated G3 bench design input.",
+      "unit": "mm",
+      "value": 80
     }
   },
   "origin": "SYNTHETIC",
-  "owner_decisions": [],
+  "owner_decisions": [
+    "D38",
+    "D55",
+    "D56",
+    "D57",
+    "D58",
+    "D59",
+    "D60"
+  ],
   "power": {
-    "rails": [],
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "D55 bench operating envelope.",
+          "unit": "A"
+        },
+        "function": "rail_filter",
+        "id": "analog",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.1994,
+          "note": "D56 rail envelope from the 10 mA budget and 0.06 ohm DCR bench model.",
+          "unit": "V"
+        }
+      }
+    ],
     "sources": [
       {
         "current_budget": {
-          "blocks": [
-            "Q11"
-          ],
-          "reason": "Supply current budget not specified.",
-          "status": "UNKNOWN"
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D55 delegated G3 bench design input.",
+          "unit": "A",
+          "value": 0.15
         },
-        "description": "Power source to be selected.",
+        "description": "External regulated bench source.",
+        "function": "input_terminal",
         "id": "input_power",
         "voltage": {
-          "blocks": [
-            "Q11"
-          ],
-          "reason": "Supply voltage not specified.",
-          "status": "UNKNOWN"
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "D55 delegated G3 bench design input.",
+          "unit": "V"
         }
       }
     ]

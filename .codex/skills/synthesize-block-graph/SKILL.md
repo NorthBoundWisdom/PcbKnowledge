@@ -33,7 +33,10 @@ Requirement strings are brief IDs, not descriptions. The union of graph-level
 ID must be claimed by exactly its declared `count` of instances. Instances claim
 the functions and interfaces they implement; graph-level requirements can hold
 global constraints. Function categories and parameters, source/rail function
-bindings and budgets are enforced by expansion.
+bindings and budgets are enforced by expansion. Brief `electrical_bindings`
+name functional port groups: all endpoints in a group must share the actual
+physical net, and different groups must remain distinct. Resolve them through
+your selected instances; graph net labels do not establish those relationships.
 
 Run `v2 coverage <graph> --bundle <bundle>` and
 `expand --bundle <bundle> <graph> --output build/<attempt>/intent.json`. Inspect—not merely count—selected components, resolved pin nets, budgets,

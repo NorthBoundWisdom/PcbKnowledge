@@ -93,10 +93,14 @@ def assess_function(catalog, brief, function):
         parameters = function_parameters(brief, function)
     except ValueError as error:
         return refusal('CHECK_FAILED', path, str(error))
+    from .electrical_bindings import required_ports
+    required = required_ports(brief, function['id'])
     reasons = []
     for block in sorted(blocks, key=lambda item: item['id']):
         try:
             reason = block_eligibility(catalog, block, function, parameters)
+            if not required <= {port['name'] for port in block['ports']}:
+                reason = ('CHECK_FAILED', 'Block lacks an electrically bound function port')
         except (KeyError, ValueError) as error:
             reason = ('UNSATISFIED_SELECTION', str(error))
         if reason is None:
@@ -127,6 +131,11 @@ def assess_brief(catalog, brief):
     catalog.structure(brief, 'design-brief.schema.json')
     validate_package_requirements(catalog, brief)
     results = edge_interface_refusals(brief)
+    from .electrical_bindings import validate_bindings
+    try:
+        validate_bindings(brief)
+    except ValueError as error:
+        results.append(refusal('INVALID_REFERENCE', 'electrical_bindings', str(error)))
     function_ids = [function['id'] for function in brief['functions']]
     if len(set(function_ids)) != len(function_ids):
         results.append(refusal('CHECK_FAILED', 'functions', 'Duplicate function identities'))

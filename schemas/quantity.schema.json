@@ -86,6 +86,15 @@
         "feedback_parallel_divider",
         "tps5430_filter",
         "tps5430_ccm_design",
+        "ntc_divider",
+        "ferrite_loss",
+        "tia_frontend",
+        "tia_loop_model",
+        "opamp_gain",
+        "rc_filter",
+        "reference_load",
+        "rs485_termination",
+        "trace_impedance_microstrip",
         "tps5430_output_ripple",
         "input_protection"
       ]

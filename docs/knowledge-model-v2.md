@@ -172,6 +172,44 @@ checked; honest access provenance still requires human/agent review.
 skew. Derived KiCad rules retain these values and the fab floors. They neither
 establish 90-ohm impedance nor replace routing, signal-integrity or physical tests.
 
+### Functional electrical bindings
+
+A brief may declare `electrical_bindings`: uniquely named groups with an `id`
+and at least two `endpoints`, each naming a brief `function` and selected block
+`port`. Each bound function must have exactly one occurrence. An endpoint may
+appear only once across the groups. These are functional net requirements, not
+graph net labels or reference-instance names.
+
+Expansion resolves each function to its selected instance, then checks the
+actual merged physical nets. All endpoints within a group must share one net;
+different groups must remain on different nets. Missing or ambiguous functions,
+ports without physical connections, rewired endpoints and shorted groups refuse
+expansion. Eligibility also checks that candidate blocks expose the required
+ports. Existing briefs without the optional field retain their prior behavior.
+
+Derived intent carries the resulting checks. External intent consumption replays
+the graph against the pinned bundle's original brief through
+`validate_expansion`; supplied PASS labels cannot replace that reconstruction.
+These relations do not model voltage propagation through arbitrary components.
+
+### Guard and reference copper requirements
+
+`GUARD_RING` names a sensitive `net`, a distinct `guard_net`, positive scalar
+`min_clearance` and `min_width` in millimeters. It requires same-surface guard
+copper around the exposed sensitive-net geometry. It does not infer the guard
+net's drive impedance. `RETURN_PATH` names a signal `net` and distinct
+`return_net`, requiring a continuous adjacent reference copper path. Analog and
+digital signals may reference the same ground; this is not a split-ground,
+star-return or separated-corridor requirement.
+
+Expansion resolves both net identities and refuses a merged signal/guard or
+signal/reference short. Guard geometry must meet the selected fab floors.
+Intent exports retain each complete requirement; KiCad rules additionally carry
+supported guard width and pairwise clearance minima. Those DRC minima do not
+prove enclosure or reference continuity: read-only layout checks report both
+kinds as `NOT_CHECKABLE` until copper topology can be established. No guard or
+return copper is placed or routed by PcbKnowledge.
+
 ### Firmware pin configuration
 
 A part pin may list source-cited `functions` from `registry:pin-functions`.

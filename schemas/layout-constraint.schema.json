@@ -163,6 +163,16 @@
           "$ref": "unknown.schema.json"
         }
       ]
+    },
+    "guard_net": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "return_net": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
     }
   },
   "required": [

@@ -172,6 +172,9 @@ class LayoutChecks:
                     'EDGE_DISTANCE': self.edge, 'KEEPOUT': self.keepout, 'NET_WIDTH_MIN': self.width,
                     'MINIMIZE_LOOP': self.loop, 'COPPER_AREA': self.copper}
         kind = rule['kind']
+        if kind in ('GUARD_RING', 'RETURN_PATH'):
+            return finding(kind, 'NOT_CHECKABLE',
+                           'Continuous guard enclosure or adjacent return copper connectivity is not proven')
         if kind == 'KELVIN':
             return finding(kind, 'NOT_CHECKABLE', 'Explicit sense-branch mapping and routed branch proof are absent')
         if kind not in handlers:
