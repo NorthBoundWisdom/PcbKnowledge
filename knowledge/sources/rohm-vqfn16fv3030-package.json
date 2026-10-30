@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 626642,
+  "id": "source:rohm-vqfn16fv3030-package",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 10,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
+    "notes": "Official ROHM reference; small original factual metadata only. No source redistribution permission claimed; original remains ignored. Document-specific notices checked before electrical extraction.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "ROHM",
+  "revision": "Rev.004, 27 January 2020",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "ecd2f7367013c8e0a849c727fcae9163cd34e78d05c56c2c80536d5cbce92a23",
+  "title": "ROHM VQFN16FV3030 package information",
+  "url": "https://fscdn.rohm.com/en/techdata_basic/ic/package/Jisso_VQFN16FV3030-2-2_Rev004s_E2_Drypack%28MSL1%29.pdf",
+  "verification": "AGENT_VERIFIED"
+}

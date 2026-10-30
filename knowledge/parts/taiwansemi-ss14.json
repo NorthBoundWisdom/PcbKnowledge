@@ -1,0 +1,138 @@
+{
+  "id": "part:taiwansemi-ss14",
+  "identity_evidence": {
+    "page": 3,
+    "source": "source:taiwansemi-ss14"
+  },
+  "manufacturer": "Taiwan Semiconductor",
+  "mpn": "SS14",
+  "package": "package:taiwansemi-ss14-sma",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 1,
+      "note": "Absolute forward-current rating; p4 Fig.1 lead-temperature derating applies to SS12-SS14 and reaches zero at125degC.",
+      "unit": "A"
+    },
+    "forward_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TJ": {
+          "unit": "degC",
+          "value": 25
+        },
+        "forward_current": {
+          "unit": "A",
+          "value": 1
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 0.5,
+      "note": "IF1A,Tj25degC,pulse width0.3ms. Not a guaranteed cold-temperature forward drop.",
+      "unit": "V"
+    },
+    "input_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TJ": {
+          "unit": "degC",
+          "value": 100
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 40
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 0.006,
+      "note": "Reverse leakage at rated reverse voltage,Tj100degC,pulse width30ms.25degC maximum is200uA.",
+      "unit": "A"
+    },
+    "junction_temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 125,
+      "min": -55,
+      "unit": "degC"
+    },
+    "thermal_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:taiwansemi-ss14"
+      },
+      "note": "Typical junction-to-ambient, not a maximum guaranteed board thermal resistance.",
+      "typ": 88,
+      "unit": "degC/W"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 40,
+      "note": "Repetitive peak reverse voltage for SS14.",
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "ADR-024 polarized diode numbering:1=cathode,2=anode; p7 cathode band identifies polarity. Numbers are repository convention, not printed manufacturer pin numbers.",
+    "page": 7,
+    "source": "source:taiwansemi-ss14"
+  },
+  "pins": [
+    {
+      "name": "CATHODE",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "ANODE",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "diode.schottky"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

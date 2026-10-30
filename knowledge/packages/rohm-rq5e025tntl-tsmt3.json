@@ -1,0 +1,127 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 1.0,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 3.0,
+      "min": 2.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 1.8,
+      "min": 1.5,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Nominal original generator courtyard extension.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 0.7,
+      "min": 0.4,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 3.0,
+      "min": 2.6,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 0.5,
+      "min": 0.35,
+      "unit": "mm"
+    },
+    "pin_count": 3,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 11,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "note": "Same-side terminal separation is 2e; drawing gives e=0.95 mm between a terminal and centerline. Rotate top-view drawing clockwise so pins 1,2 are left and pin3 right.",
+      "unit": "mm",
+      "value": 1.9
+    }
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:rohm-rq5e025tntl"
+    },
+    {
+      "page": 11,
+      "source": "source:rohm-rq5e025tntl"
+    }
+  ],
+  "family": "SOT-346T",
+  "generator": "gullwing_two_side",
+  "id": "package:rohm-rq5e025tntl-tsmt3",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
+    "notes": "Source p11 terminal-position areas are not solder pads. Pads derive from cited lead dimensions and original nominal fillets, not from the b2/e1/l1 positional-area sketch.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:rohm-rq5e025tntl"
+      }
+    ],
+    "mpns": [
+      "RQ5E025TNTL"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,395 @@
+{
+  "category": "sensor.current",
+  "checks": [
+    {
+      "calculator": "shunt_resistor",
+      "inputs": {
+        "current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "G2 full protected-input current budget, upstream of every downstream load.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "power_rating": {
+          "bound": "max",
+          "component": "R1",
+          "parameter": "power_rating"
+        },
+        "resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "sense_limit": {
+          "parameter": "sense_limit"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Require a supported monitor transfer-range limit before accepting the block.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "voltage_margin"
+      }
+    },
+    {
+      "calculator": "rc_time",
+      "inputs": {
+        "capacitance": {
+          "component": "C6",
+          "parameter": "capacitance"
+        },
+        "resistance": {
+          "component": "R2",
+          "parameter": "resistance"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D37 source-tolerance filter budget only. C6 capacitance measured at 1 kHz/1 Vrms, not guaranteed under DC bias or temperature; no operating time-constant, ADC settling or accuracy guarantee.",
+          "unit": "s",
+          "value": 2e-06
+        },
+        "operator": "LE",
+        "output": "time_constant"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:rohm-bd14210g-latr"
+      }
+    },
+    {
+      "ref": "U2",
+      "select": {
+        "part": "part:rohm-bd79124muf-ce2"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rl1206fr-070r1l"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710rl"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C3",
+      "select": {
+        "part": "part:kemet-c0805c106k8pactu"
+      }
+    },
+    {
+      "ref": "C4",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C5",
+      "select": {
+        "part": "part:kemet-c0805c106k8pactu"
+      }
+    },
+    {
+      "ref": "C6",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:rohm-bd14210g-la"
+    },
+    {
+      "page": 5,
+      "source": "source:rohm-bd14210g-la"
+    },
+    {
+      "page": 8,
+      "source": "source:rohm-bd14210g-la"
+    },
+    {
+      "page": 9,
+      "source": "source:rohm-bd14210g-la"
+    },
+    {
+      "page": 3,
+      "source": "source:rohm-bd79124muf-c"
+    },
+    {
+      "page": 5,
+      "source": "source:rohm-bd79124muf-c"
+    },
+    {
+      "page": 17,
+      "source": "source:rohm-bd79124muf-c"
+    },
+    {
+      "page": 35,
+      "source": "source:rohm-bd79124muf-c"
+    },
+    {
+      "page": 36,
+      "source": "source:rohm-bd79124muf-c"
+    }
+  ],
+  "id": "block:g2-input-monitor",
+  "layout": [
+    {
+      "kind": "KELVIN",
+      "sense_nets": [
+        "SENSE_IN",
+        "SENSE_OUT"
+      ],
+      "target": "R1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G2 local bypass/filter placement decision.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "U1.pin:6"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G2 local bypass/filter placement decision.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C2",
+      "target": "U2.pin:7"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G2 local bypass/filter placement decision.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C3",
+      "target": "U2.pin:7"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G2 local bypass/filter placement decision.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C4",
+      "target": "U2.pin:10"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G2 local bypass/filter placement decision.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C5",
+      "target": "U2.pin:10"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G2 local bypass/filter placement decision.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C6",
+      "target": "U2.pin:15"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Initial G2 width floor; thermal and routing validation still required for 500 mA.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "SENSE_IN"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Initial G2 width floor; thermal and routing validation still required for 500 mA.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "SENSE_OUT"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:6",
+        "U2.pin:7",
+        "U2.pin:10",
+        "C1.pin:1",
+        "C2.pin:1",
+        "C3.pin:1",
+        "C4.pin:1",
+        "C5.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:2",
+        "U1.pin:5",
+        "U2.pin:9",
+        "U2.pin:EXP-PAD",
+        "U2.pin:11",
+        "U2.pin:16",
+        "U2.pin:1",
+        "U2.pin:2",
+        "U2.pin:3",
+        "U2.pin:4",
+        "U2.pin:5",
+        "U2.pin:6",
+        "C1.pin:2",
+        "C2.pin:2",
+        "C3.pin:2",
+        "C4.pin:2",
+        "C5.pin:2",
+        "C6.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:SENSE_IN",
+        "R1.pin:1",
+        "U1.pin:3"
+      ],
+      "name": "SENSE_IN"
+    },
+    {
+      "connect": [
+        "port:SENSE_OUT",
+        "R1.pin:2",
+        "U1.pin:4"
+      ],
+      "name": "SENSE_OUT"
+    },
+    {
+      "connect": [
+        "U1.pin:1",
+        "R2.pin:1"
+      ],
+      "name": "AMPLIFIED_CURRENT"
+    },
+    {
+      "connect": [
+        "R2.pin:2",
+        "C6.pin:1",
+        "U2.pin:15"
+      ],
+      "name": "FILTERED_CURRENT"
+    },
+    {
+      "connect": [
+        "port:SDA",
+        "U2.pin:14"
+      ],
+      "name": "SDA"
+    },
+    {
+      "connect": [
+        "port:SCL",
+        "U2.pin:13"
+      ],
+      "name": "SCL"
+    }
+  ],
+  "parameters": {
+    "sense_limit": {
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "POWER_IN",
+      "name": "SENSE_IN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "SENSE_OUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SDA"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SCL"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
+    "notes": "3.3 V supplies; ADDR=GND gives 0x10; TOUT/ALERT open, unused analog inputs grounded. Shared external I2C pullups. Chosen RC 10 ohm/100 nF and 10 uF+100 nF bypass differ from illustrative 11 ohm/1 uF. REF=0; low-current clipping unresolved.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

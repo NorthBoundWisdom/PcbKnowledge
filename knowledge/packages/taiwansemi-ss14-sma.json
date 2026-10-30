@@ -1,0 +1,117 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 2.5,
+      "min": 1.95,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 2.83,
+      "min": 2.29,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 4.6,
+      "min": 4.06,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Nominal original molded-diode generator courtyard extension.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 1.41,
+      "min": 0.75,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 5.33,
+      "min": 4.95,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 7,
+        "source": "source:taiwansemi-ss14"
+      },
+      "max": 1.58,
+      "min": 1.27,
+      "unit": "mm"
+    },
+    "pin_count": 2
+  },
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:taiwansemi-ss14"
+    },
+    {
+      "page": 7,
+      "source": "source:taiwansemi-ss14"
+    }
+  ],
+  "family": "SMA",
+  "generator": "molded_diode",
+  "id": "package:taiwansemi-ss14-sma",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
+    "notes": "Standard SMA generated from drawing bounds, not copied suggested pads. Original generated pad size may differ from manufacturer p7 suggested 1.60x1.90mm on4.00mm centers. Pin1 cathode follows marking; footprint cathode is left.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 3,
+        "source": "source:taiwansemi-ss14"
+      }
+    ],
+    "mpns": [
+      "SS14"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

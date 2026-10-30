@@ -1,0 +1,128 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 15,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 1.25,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 15,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 3.1,
+      "min": 2.7,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 15,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 1.7,
+      "min": 1.5,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G2 courtyard allowance; derived geometry must pass fabrication checks.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "pad_height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-ssop6-package"
+      },
+      "unit": "mm",
+      "value": 0.6
+    },
+    "pad_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-ssop6-package"
+      },
+      "unit": "mm",
+      "value": 1.0
+    },
+    "pin_count": 6,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-ssop6-package"
+      },
+      "unit": "mm",
+      "value": 0.95
+    },
+    "row_pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-ssop6-package"
+      },
+      "note": "Pad center separation: 1.4 mm inner gap plus 1.0 mm pad length.",
+      "unit": "mm",
+      "value": 2.4
+    }
+  },
+  "evidence": [
+    {
+      "page": 15,
+      "source": "source:rohm-bd14210g-la"
+    },
+    {
+      "page": 6,
+      "source": "source:rohm-ssop6-package"
+    }
+  ],
+  "family": "SSOP6",
+  "generator": "manufacturer_two_side_land",
+  "id": "package:rohm-ssop6",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
+    "notes": "ROHM SSOP6 manufacturer land dimensions, rotated to two-side generator orientation; pin numbers follow top view. No inferred maximum from datasheet minimum-only lead length.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 14,
+        "source": "source:rohm-bd14210g-la"
+      },
+      {
+        "page": 15,
+        "source": "source:rohm-bd14210g-la"
+      }
+    ],
+    "mpns": [
+      "BD14210G-LATR"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

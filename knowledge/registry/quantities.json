@@ -18,6 +18,9 @@
     "frequency": {
       "unit": "Hz"
     },
+    "inductance": {
+      "unit": "H"
+    },
     "length": {
       "unit": "mm"
     },

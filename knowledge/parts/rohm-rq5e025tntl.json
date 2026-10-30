@@ -1,0 +1,184 @@
+{
+  "id": "part:rohm-rq5e025tntl",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:rohm-rq5e025tntl"
+  },
+  "manufacturer": "ROHM Co., Ltd.",
+  "mpn": "RQ5E025TNTL",
+  "package": "package:rohm-rq5e025tntl-tsmt3",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 2.5,
+      "note": "Absolute continuous drain-current magnitude at Ta25degC; actual use must satisfy dissipation and thermal conditions.",
+      "unit": "A"
+    },
+    "input_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "gate_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "output_voltage": {
+          "unit": "V",
+          "value": 0
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 1e-05,
+      "note": "Gate-source leakage magnitude at VGS±12V,VDS0V,Ta25degC.",
+      "unit": "A"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 12,
+      "min": -12,
+      "note": "Absolute maximum gate-source voltage, not threshold or recommended drive.",
+      "unit": "V"
+    },
+    "junction_temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 150,
+      "unit": "degC"
+    },
+    "power_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 0.7,
+      "note": "Ta25degC on FR4 25x25x0.8mm (p2 footnote3); derate with ambient.",
+      "unit": "W"
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "gate_voltage": {
+          "unit": "V",
+          "value": 2.5
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 2.5
+        }
+      },
+      "evidence": {
+        "page": 2,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 0.133,
+      "note": "Static Rds(on), VGS2.5V and ID2.5A, pulsed, Ta25degC. Not a guaranteed hot resistance.",
+      "typ": 0.095,
+      "unit": "ohm"
+    },
+    "thermal_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 2,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 178,
+      "note": "Junction-ambient on FR4 25x25x0.8mm; mounted board must match or independently establish thermal performance.",
+      "unit": "degC/W"
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "evidence": {
+        "page": 1,
+        "source": "source:rohm-rq5e025tntl"
+      },
+      "max": 30,
+      "note": "Absolute maximum drain-source voltage.",
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 1,
+    "source": "source:rohm-rq5e025tntl"
+  },
+  "pins": [
+    {
+      "name": "GATE",
+      "number": "1",
+      "type": "INPUT"
+    },
+    {
+      "name": "SOURCE",
+      "number": "2",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "DRAIN",
+      "number": "3",
+      "type": "OPEN_DRAIN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
+    "notes": "Page1 type RQ5E025TN plus TL taping code establishes order code. Gate drive must exceed the cited Rds test voltage at actual MCU VOH and pulldown/leakage load; Vth is not an on-resistance guarantee.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "transistor.mosfet.n-channel"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

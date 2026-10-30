@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 1578981,
+  "id": "source:rohm-rq5e025tntl",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 14,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
+    "notes": "Website terms and PDF notices reviewed. Original factual curation only; document reproduction requires permission. No open license claimed; source original stays in ignored cache.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "ROHM Co., Ltd.",
+  "revision": "20190527 Rev.003",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "d288631ff5c669d65eec593a1dc7e6cc2006cc14a1e69c09f4ee9a5d609793ab",
+  "title": "RQ5E025TN small-signal MOSFET datasheet",
+  "url": "https://fscdn.rohm.com/en/products/databook/datasheet/discrete/transistor/mosfet/rq5e025tntl-e.pdf",
+  "verification": "AGENT_VERIFIED"
+}

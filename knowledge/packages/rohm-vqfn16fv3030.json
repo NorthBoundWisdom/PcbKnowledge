@@ -1,0 +1,151 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 39,
+        "source": "source:rohm-bd79124muf-c"
+      },
+      "max": 1.0,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 39,
+        "source": "source:rohm-bd79124muf-c"
+      },
+      "max": 3.1,
+      "min": 2.9,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 39,
+        "source": "source:rohm-bd79124muf-c"
+      },
+      "max": 3.1,
+      "min": 2.9,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "G2 courtyard allowance; derived geometry must pass fabrication checks.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "exposed_pad": {
+      "length": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 6,
+          "source": "source:rohm-vqfn16fv3030-package"
+        },
+        "unit": "mm",
+        "value": 1.0
+      },
+      "number": "EXP-PAD",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 6,
+          "source": "source:rohm-vqfn16fv3030-package"
+        },
+        "unit": "mm",
+        "value": 1.0
+      }
+    },
+    "pad_height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-vqfn16fv3030-package"
+      },
+      "unit": "mm",
+      "value": 0.27
+    },
+    "pad_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-vqfn16fv3030-package"
+      },
+      "unit": "mm",
+      "value": 0.8
+    },
+    "pin_count": 16,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-vqfn16fv3030-package"
+      },
+      "unit": "mm",
+      "value": 0.5
+    },
+    "row_pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:rohm-vqfn16fv3030-package"
+      },
+      "note": "Opposed land center spacing: 2.0 mm inner gap plus 0.8 mm land length.",
+      "unit": "mm",
+      "value": 2.8
+    }
+  },
+  "evidence": [
+    {
+      "page": 39,
+      "source": "source:rohm-bd79124muf-c"
+    },
+    {
+      "page": 6,
+      "source": "source:rohm-vqfn16fv3030-package"
+    }
+  ],
+  "family": "VQFN16FV3030",
+  "generator": "manufacturer_four_side_land",
+  "id": "package:rohm-vqfn16fv3030",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
+    "notes": "ROHM recommended land dimensions. EXP-PAD names the unnumbered ground contact. Land is 1.0 mm square; physical contact is 1.4 +/-0.1 mm. Illustrated thermal via is omitted pending board-level thermal validation; no thermal-performance acceptance.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 38,
+        "source": "source:rohm-bd79124muf-c"
+      },
+      {
+        "page": 39,
+        "source": "source:rohm-bd79124muf-c"
+      }
+    ],
+    "mpns": [
+      "BD79124MUF-CE2"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

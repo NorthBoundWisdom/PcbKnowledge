@@ -96,6 +96,24 @@
       "queries": [
         "Q3"
       ]
+    },
+    "SOT-346T": {
+      "queries": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    "SSOP6": {
+      "queries": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    "VQFN16FV3030": {
+      "queries": [
+        "Q2",
+        "Q3"
+      ]
     }
   },
   "id": "registry:package-families",

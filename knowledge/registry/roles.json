@@ -1,5 +1,12 @@
 {
   "entries": {
+    "adc.i2c": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q10"
+      ]
+    },
     "capacitor.bulk": {
       "queries": [
         "Q1",
@@ -90,6 +97,13 @@
         "Q4"
       ]
     },
+    "regulator.switching.buck": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "resistor": {
       "queries": [
         "Q1",
@@ -106,6 +120,13 @@
       "queries": [
         "Q1",
         "Q4"
+      ]
+    },
+    "transistor.mosfet.n-channel": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     }
   },

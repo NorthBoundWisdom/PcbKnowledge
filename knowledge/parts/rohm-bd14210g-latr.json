@@ -1,0 +1,269 @@
+{
+  "id": "part:rohm-bd14210g-latr",
+  "identity_evidence": {
+    "page": 14,
+    "source": "source:rohm-bd14210g-la"
+  },
+  "manufacturer": "ROHM",
+  "mpn": "BD14210G-LATR",
+  "package": "package:rohm-ssop6",
+  "parameters": {
+    "common_mode_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 26,
+      "min": -0.2,
+      "note": "Recommended VINP and VINM common-mode range.",
+      "unit": "V"
+    },
+    "gain": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "reference_voltage": {
+          "unit": "V",
+          "value": 2.5
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "note": "Typical V/V gain. Electrical limits are specified at 5 V, not extrapolated to 3.3 V.",
+      "typ": 20,
+      "unit": "1"
+    },
+    "gain_error": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "reference_voltage": {
+          "unit": "V",
+          "value": 2.5
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 0.01,
+      "min": -0.01,
+      "note": "At -40 to 125 degC and VOUT 0.5 to 4.5 V, VDD 5 V. Not a 3.3 V accuracy bound.",
+      "unit": "1"
+    },
+    "input_offset_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "reference_voltage": {
+          "unit": "V",
+          "value": 2.5
+        },
+        "sense_voltage": {
+          "unit": "V",
+          "value": 0
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 0.0006,
+      "min": -0.0006,
+      "note": "Input-referred offset at the stated 5 V test conditions.",
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 5.5,
+      "min": 2.7,
+      "unit": "V"
+    },
+    "output_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        },
+        "reference_voltage": {
+          "unit": "V",
+          "value": 2.5
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "min": 4.98,
+      "note": "10 kohm pulldown; source limit VDD-0.02 V at stated 5 V conditions.",
+      "unit": "V"
+    },
+    "output_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "load_resistance": {
+          "unit": "ohm",
+          "value": 10000
+        },
+        "reference_voltage": {
+          "unit": "V",
+          "value": 2.5
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 0.05,
+      "note": "10 kohm pullup; source limit GND+0.05 V at stated 5 V conditions.",
+      "unit": "V"
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "TA": {
+          "unit": "degC",
+          "value": 25
+        },
+        "common_mode_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "input_voltage": {
+          "unit": "V",
+          "value": 5
+        },
+        "reference_voltage": {
+          "unit": "V",
+          "value": 2.5
+        },
+        "sense_voltage": {
+          "unit": "V",
+          "value": 0
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:rohm-bd14210g-la"
+      },
+      "max": 0.00028,
+      "typ": 0.00017,
+      "unit": "A"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:rohm-bd14210g-la"
+  },
+  "pins": [
+    {
+      "name": "OUT",
+      "number": "1",
+      "type": "OUTPUT"
+    },
+    {
+      "name": "GND",
+      "number": "2",
+      "type": "GROUND"
+    },
+    {
+      "name": "VINP",
+      "number": "3",
+      "type": "ANALOG"
+    },
+    {
+      "name": "VINM",
+      "number": "4",
+      "type": "ANALOG"
+    },
+    {
+      "name": "REF",
+      "number": "5",
+      "type": "ANALOG"
+    },
+    {
+      "name": "VDD",
+      "number": "6",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
+    "notes": "p8: VOUT=Rshunt*Iload*20+VREF nominally; output clips at supply rails. p9: Kelvin sense close to shunt and supply bypass close to IC. REF=0 permits low-current clipping; accuracy at 3.3 V remains unspecified.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "roles": [
+    "monitor.current"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}

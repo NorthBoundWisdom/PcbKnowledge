@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-30",
+  "bytes": 301142,
+  "id": "source:taiwansemi-ss14",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 8,
+  "provenance": {
+    "created_by": "agent:/root/implement_pcbknowledge_brief/g2_actuation_eligibility",
+    "notes": "Official website terms and document page8 notice reviewed. Original factual metadata only, no source redistribution or open license claim. Source original stays in ignored cache.",
+    "verified_by": [
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+    ]
+  },
+  "publisher": "Taiwan Semiconductor",
+  "revision": "R2305",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "8e085a5e16774724ff83ba7536b30c9eab50a1d84dbd7679e4d0e7b28e77535e",
+  "title": "SS12–SS115 Schottky barrier rectifiers",
+  "url": "https://services.taiwansemi.com/storage/resources/datasheet/SS12%20SERIES_R2305.pdf",
+  "verification": "AGENT_VERIFIED"
+}
