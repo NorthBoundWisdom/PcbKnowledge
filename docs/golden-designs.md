@@ -189,3 +189,9 @@ they do not require calibrated irradiance or a guaranteed temperature-agreement
 accuracy. Functional bindings distinguish supplies, reference and each signal.
 N4 is the typed counterexample requiring a generic +0.2 V idle receiver threshold
 instead of the selected SN65HVD75-compatible negative threshold.
+
+The first cycle preserves three fresh query-mediated attempts for each of G4,
+G5 and N4 in their respective evals/synthesis directories. Both positive designs
+reach A2 in all attempts, and all three negative attempts reproduce the typed
+refusal. The cycle introduces no blocks, satisfying the Stage 11 stopping
+condition; the preserved cycle result links all three evaluation digests.

@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_11_ACTIVE` (G1, G2 and G3 at A2)
+> Status: `CORPUS_GROWTH_STOPPED_NO_NEW_BLOCKS` (G1-G5 positive designs at A2; owner layout next)
 > Updated: 2026-10-30
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -642,7 +642,8 @@ needing at most a few new blocks; reach A2 for both, with refusals tested for on
 new negative brief per cycle. Record one receipt line per cycle with the corpus
 pass rate. Stop adding briefs when a cycle's new briefs pass with no new blocks.
 
-Cycle 1 input: G4 optical acquisition reaches A2 (42 checks), G5 dual-temperature telemetry reaches A2 (50 checks); N4 returns the expected typed receiver-threshold refusal. No new blocks; full gate 464 tests/no skips, independent net/budget review passed. Fresh synthesis awaits published inputs.
+Cycle 1 receipt: published input a5e2bad; G4/G5 references and fresh attempts reach A2 (3/3 each), N4 typed refusals 3/3. No new blocks; independent review passed after strengthening exact block-content stop proof. Full gate: 471 tests/no skips, 162 records/125 reachable/31 graphs.
+Stop: this successful cycle needs no new blocks, so no further briefs are added under the Stage 11 stopping condition. A3-A6 remain owner/cross-repository work.
 
 ## Owner-only and cross-repository items
 

@@ -1,0 +1,36 @@
+{
+  "baseline_commit": "6a34628b5b17ea6cccaef15f7b681219d3fa4bbc",
+  "block_subtree_sha": "ffcfd9d842b1f1ca4371cc4b4aa0d23dbd0d23b7",
+  "briefs": {
+    "G4": {
+      "passed": 3,
+      "result_sha256": "647babc8f79706fbdacfbad0d0814201186c8418a17d88291ce2a479b5b09bc7",
+      "status": "PASS",
+      "total": 3
+    },
+    "G5": {
+      "passed": 3,
+      "result_sha256": "d2afea4db1149282bfbcb588a75301070c212359456e6c49b5da92a1addef47d",
+      "status": "PASS",
+      "total": 3
+    },
+    "N4": {
+      "passed": 3,
+      "result_sha256": "90acf0fce783fc3ee1590ae4ab1ec7971f02d92982545341cca5ce0abbd78ad5",
+      "status": "PASS",
+      "total": 3
+    }
+  },
+  "cycle": 1,
+  "format": "pcbknowledge.corpus-cycle.v1",
+  "input_commit": "a5e2badae344ba4baa29dad865603db459455f77",
+  "input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "new_block_ids": [],
+  "note": "Two distinct positive briefs and one typed negative pass using existing blocks. Stop adding briefs per Stage 11; layout and hardware acceptance remain owner work.",
+  "status": "PASS",
+  "stop_reason": "NO_NEW_BLOCKS"
+}

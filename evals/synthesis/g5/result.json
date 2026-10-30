@@ -1,0 +1,83 @@
+{
+  "attempts": [
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g5_synthesis_one",
+      "checks": 50,
+      "equivalence_review": "Independently authenticated a5e2badae344ba4baa29dad865603db459455f77 bundle and reviewed final graph against its frozen G5 reference and brief. Coordinator confirmed all authors and broker calls complete before hashing. Exactly eight instances: two distinct g3-thermistor instances plus reference, ADC, rail filter, RS485, input header and mounting. Each thermistor owns a distinct count-one function and sensing interface. All full parameter objects, port contracts and instance requirements equal frozen reference after function-based identifier mapping; no new block or absent photodiode/TIA reintroduced. All six physical bindings inspected: direct input header pin1 supplies ferrite pin1 and RS485 pin8; ferrite pin2 supplies ADC pin8/pullups and reference resistor bank; TL431 pins1/2 supply both divider tops and ADC AIN2 pin6; siteA OUT reaches ADC AIN0 pin4 and siteB OUT separately reaches AIN1 pin5; all seven electrical instances share ground. Complete expanded intent matches reference in every field except graph serialization hash after bijective instance/net renaming: all35 exact components/footprints,18 full physical net partitions including separate internal NTC SENSE nets, BOM, every layout constraint, evidence/dependencies, mechanical and manufacturing contracts. Each final graph independently EXPANDED with no refusals and all50 checks PASS. Reference-load arithmetic includes both NTCs:2*2.65/(9900+6142.14575)+10uA=340.38uA below500uA allowance. Reference bank maximum feed(3.4−2.35)/330=3.181818mA plus ADC3mA=6.181818mA below10mA filtered budget. No missing TIA current allocation is needed because no opamp exists. Minimum cathode current with full500uA envelope remains1.131881mA. Direct RS485 load remains separate within150mA external source budget. Both NTCs retain10k divider/series resistors,100nF filter model,15–35C Beta approximation,2mm thermal keepout and independent output RETURN_PATH to common ground. No optical guard or photodiode constraint remains. ADC AIN_TIA is solely the legacy port name for physical AIN1, not a TIA requirement. ADC address pin1 and unused AIN3 pin7 are grounded; header pins1/2 are grounds and3/4/5 SDA/SCL/ALERT. External host must configure ±4.096V range,100kHz/50pF I2C and sequential8SPS single-shot OS polling. Host compares channels and drives separate UART/control header; no simultaneous sampling, firmware or calibrated agreement guarantee. RS485 retains receive-default DIR pulldown, DE and active-low RE tied to DIR, separate host and bus headers, one local120ohm termination and one2kohm-per-leg bias pair. Remote120ohm termination and compatible−20mV receiver threshold remain assumptions; no generic+200mV receiver interoperability claim. No typical ADC loading, effective capacitance, ferrite temperature behavior or reference envelope promoted to a guaranteed bound. Board supply transients, physical return realization, placement/routing, DRC, fabrication and hardware operation remain unverified. Manual budget arithmetic complements fixed-design checks, not a generic current-flow solver. Attempt one: final graph g5-dual-ntc-independent-one, author notes and 15-entry final transcript reviewed; original submissions, query errors, notes and packets preserved without edits.",
+      "graph_sha256": "8ca4fb79f9b28b278b90868d3cf91a0754a37ba5e01b68b97ed2eab75f6e6425",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "COMPARED",
+      "structural_match": true
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g5_synthesis_two",
+      "checks": 50,
+      "equivalence_review": "Independently authenticated a5e2badae344ba4baa29dad865603db459455f77 bundle and reviewed final graph against its frozen G5 reference and brief. Coordinator confirmed all authors and broker calls complete before hashing. Exactly eight instances: two distinct g3-thermistor instances plus reference, ADC, rail filter, RS485, input header and mounting. Each thermistor owns a distinct count-one function and sensing interface. All full parameter objects, port contracts and instance requirements equal frozen reference after function-based identifier mapping; no new block or absent photodiode/TIA reintroduced. All six physical bindings inspected: direct input header pin1 supplies ferrite pin1 and RS485 pin8; ferrite pin2 supplies ADC pin8/pullups and reference resistor bank; TL431 pins1/2 supply both divider tops and ADC AIN2 pin6; siteA OUT reaches ADC AIN0 pin4 and siteB OUT separately reaches AIN1 pin5; all seven electrical instances share ground. Complete expanded intent matches reference in every field except graph serialization hash after bijective instance/net renaming: all35 exact components/footprints,18 full physical net partitions including separate internal NTC SENSE nets, BOM, every layout constraint, evidence/dependencies, mechanical and manufacturing contracts. Each final graph independently EXPANDED with no refusals and all50 checks PASS. Reference-load arithmetic includes both NTCs:2*2.65/(9900+6142.14575)+10uA=340.38uA below500uA allowance. Reference bank maximum feed(3.4−2.35)/330=3.181818mA plus ADC3mA=6.181818mA below10mA filtered budget. No missing TIA current allocation is needed because no opamp exists. Minimum cathode current with full500uA envelope remains1.131881mA. Direct RS485 load remains separate within150mA external source budget. Both NTCs retain10k divider/series resistors,100nF filter model,15–35C Beta approximation,2mm thermal keepout and independent output RETURN_PATH to common ground. No optical guard or photodiode constraint remains. ADC AIN_TIA is solely the legacy port name for physical AIN1, not a TIA requirement. ADC address pin1 and unused AIN3 pin7 are grounded; header pins1/2 are grounds and3/4/5 SDA/SCL/ALERT. External host must configure ±4.096V range,100kHz/50pF I2C and sequential8SPS single-shot OS polling. Host compares channels and drives separate UART/control header; no simultaneous sampling, firmware or calibrated agreement guarantee. RS485 retains receive-default DIR pulldown, DE and active-low RE tied to DIR, separate host and bus headers, one local120ohm termination and one2kohm-per-leg bias pair. Remote120ohm termination and compatible−20mV receiver threshold remain assumptions; no generic+200mV receiver interoperability claim. No typical ADC loading, effective capacitance, ferrite temperature behavior or reference envelope promoted to a guaranteed bound. Board supply transients, physical return realization, placement/routing, DRC, fabrication and hardware operation remain unverified. Manual budget arithmetic complements fixed-design checks, not a generic current-flow solver. Attempt two: final graph g5-independent-two, author notes and 15-entry final transcript reviewed; original submissions, query errors, notes and packets preserved without edits.",
+      "graph_sha256": "2198c085b7a79627e33e18925f21ff5f1131480854e9a96b399feca4269f9753",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "COMPARED",
+      "structural_match": true
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g5_synthesis_three",
+      "checks": 50,
+      "equivalence_review": "Independently authenticated a5e2badae344ba4baa29dad865603db459455f77 bundle and reviewed final graph against its frozen G5 reference and brief. Coordinator confirmed all authors and broker calls complete before hashing. Exactly eight instances: two distinct g3-thermistor instances plus reference, ADC, rail filter, RS485, input header and mounting. Each thermistor owns a distinct count-one function and sensing interface. All full parameter objects, port contracts and instance requirements equal frozen reference after function-based identifier mapping; no new block or absent photodiode/TIA reintroduced. All six physical bindings inspected: direct input header pin1 supplies ferrite pin1 and RS485 pin8; ferrite pin2 supplies ADC pin8/pullups and reference resistor bank; TL431 pins1/2 supply both divider tops and ADC AIN2 pin6; siteA OUT reaches ADC AIN0 pin4 and siteB OUT separately reaches AIN1 pin5; all seven electrical instances share ground. Complete expanded intent matches reference in every field except graph serialization hash after bijective instance/net renaming: all35 exact components/footprints,18 full physical net partitions including separate internal NTC SENSE nets, BOM, every layout constraint, evidence/dependencies, mechanical and manufacturing contracts. Each final graph independently EXPANDED with no refusals and all50 checks PASS. Reference-load arithmetic includes both NTCs:2*2.65/(9900+6142.14575)+10uA=340.38uA below500uA allowance. Reference bank maximum feed(3.4−2.35)/330=3.181818mA plus ADC3mA=6.181818mA below10mA filtered budget. No missing TIA current allocation is needed because no opamp exists. Minimum cathode current with full500uA envelope remains1.131881mA. Direct RS485 load remains separate within150mA external source budget. Both NTCs retain10k divider/series resistors,100nF filter model,15–35C Beta approximation,2mm thermal keepout and independent output RETURN_PATH to common ground. No optical guard or photodiode constraint remains. ADC AIN_TIA is solely the legacy port name for physical AIN1, not a TIA requirement. ADC address pin1 and unused AIN3 pin7 are grounded; header pins1/2 are grounds and3/4/5 SDA/SCL/ALERT. External host must configure ±4.096V range,100kHz/50pF I2C and sequential8SPS single-shot OS polling. Host compares channels and drives separate UART/control header; no simultaneous sampling, firmware or calibrated agreement guarantee. RS485 retains receive-default DIR pulldown, DE and active-low RE tied to DIR, separate host and bus headers, one local120ohm termination and one2kohm-per-leg bias pair. Remote120ohm termination and compatible−20mV receiver threshold remain assumptions; no generic+200mV receiver interoperability claim. No typical ADC loading, effective capacitance, ferrite temperature behavior or reference envelope promoted to a guaranteed bound. Board supply transients, physical return realization, placement/routing, DRC, fabrication and hardware operation remain unverified. Manual budget arithmetic complements fixed-design checks, not a generic current-flow solver. Attempt three: final graph g5-dual-site-independent-three, author notes and 12-entry final transcript reviewed; original submissions, query errors, notes and packets preserved without edits.",
+      "graph_sha256": "8a8642f4181638b0412e31b634caa0c3a82477e4c9191335f22e899918736af6",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "COMPARED",
+      "structural_match": true
+    }
+  ],
+  "brief": "G5",
+  "bundle_commit": "a5e2badae344ba4baa29dad865603db459455f77",
+  "bundle_sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233",
+  "evaluation_engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b",
+  "evaluation_input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "mode": "positive",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "original_bundles": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g5_synthesis_one",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g5_synthesis_two",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g5_synthesis_three",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    }
+  ],
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "reference_sha256": "123c0d33384b39035984a31f1d27d686ef6fe6471c5c87184ed54b3b4b221586",
+  "reference_status": "EXPANDED",
+  "required": 2,
+  "status": "PASS",
+  "total": 3
+}

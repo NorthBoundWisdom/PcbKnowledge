@@ -1,0 +1,83 @@
+{
+  "attempts": [
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g4_synthesis_one",
+      "checks": 42,
+      "equivalence_review": "Independently authenticated a5e2badae344ba4baa29dad865603db459455f77 bundle and used its frozen G4 brief/reference. Final graph reviewed, not author counts alone; coordinator confirmed this author and all broker calls final before transcript hashing. Exactly six original blocks: input header, ferrite rail, TL431 reference, dual-opamp photodiode, ADS1115 and four-hole mounting. Every complete parameter object, port contract and instance requirement equals frozen reference after function-based identifier mapping. No NTC, RS485, MCU or new block. All five physical bindings checked: raw header pin1 to ferrite pin1; ferrite pin2 feeds ADC pin8 and MCP6002 pin8 and reference resistor bank; TL431 pins1/2 feed photodiode divider and ADC pin6; TIA output pin7 reaches ADC pin5; common ground includes unused ADC AIN0 pin4 plus AIN3 pin7, ADDR pin1, supply returns and connector grounds. Full expanded-intent comparison after bijective instance/net renaming equals reference in every field except order-dependent graph hash: exact28 component selections and footprints, all11 physical net partitions, BOM, all layout constraints, evidence/dependencies, mechanical envelope, fab/manufacturing contract and checks. Independently expanded final graph: no refusals, all42 checks PASS. Reference load arithmetic:2.65/19800+10uA=143.838uA below500uA retained allowance. Worst reference feed(3.4-2.35)/330=3.181818mA; plus2mA TIA and3mA ADC=8.181818mA below10mA analog budget and150mA external source. Minimum cathode current with retained500uA scenario=1.131881mA. Budgets are manual fixed-design checks, not a generic runtime power-flow proof. Preserves0–50uA imposed photocurrent,940nm/DC–1Hz acquisition,10k feedback/four22pF capacitors, buffered half-reference bias,100nF+10uF opamp bypass, driven BIAS guard and common-ground RETURN_PATH. Grounding unused ADC input does not join the optical output or reference to ground. External host retains100kHz/50pF I2C, sequential single-shot8SPS, ±4.096V range, OS polling and score computation. ADC header pins1/2 ground,3/4/5 SDA/SCL/ALERT; no exported host supply or onboard firmware claim. Modeled reference interval, aggregate50mV error, typical ADC loading and ideal loop stability remain engineering assumptions, not accuracy/radiometric guarantees. Layout intent including guard, return paths, compact pads and mounting is preserved but no routed copper, DRC, fabrication or hardware performance is established. Attempt one final graph g4-independent-one; transcript has 11 preserved entries. Original submissions, query errors, author notes and packets unchanged.",
+      "graph_sha256": "13cb0b25aa3b0b0a77dbbfa4f24782cf7ff8430f80238d09771a5955168b15fc",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "COMPARED",
+      "structural_match": true
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g4_synthesis_two",
+      "checks": 42,
+      "equivalence_review": "Independently authenticated a5e2badae344ba4baa29dad865603db459455f77 bundle and used its frozen G4 brief/reference. Final graph reviewed, not author counts alone; coordinator confirmed this author and all broker calls final before transcript hashing. Exactly six original blocks: input header, ferrite rail, TL431 reference, dual-opamp photodiode, ADS1115 and four-hole mounting. Every complete parameter object, port contract and instance requirement equals frozen reference after function-based identifier mapping. No NTC, RS485, MCU or new block. All five physical bindings checked: raw header pin1 to ferrite pin1; ferrite pin2 feeds ADC pin8 and MCP6002 pin8 and reference resistor bank; TL431 pins1/2 feed photodiode divider and ADC pin6; TIA output pin7 reaches ADC pin5; common ground includes unused ADC AIN0 pin4 plus AIN3 pin7, ADDR pin1, supply returns and connector grounds. Full expanded-intent comparison after bijective instance/net renaming equals reference in every field except order-dependent graph hash: exact28 component selections and footprints, all11 physical net partitions, BOM, all layout constraints, evidence/dependencies, mechanical envelope, fab/manufacturing contract and checks. Independently expanded final graph: no refusals, all42 checks PASS. Reference load arithmetic:2.65/19800+10uA=143.838uA below500uA retained allowance. Worst reference feed(3.4-2.35)/330=3.181818mA; plus2mA TIA and3mA ADC=8.181818mA below10mA analog budget and150mA external source. Minimum cathode current with retained500uA scenario=1.131881mA. Budgets are manual fixed-design checks, not a generic runtime power-flow proof. Preserves0–50uA imposed photocurrent,940nm/DC–1Hz acquisition,10k feedback/four22pF capacitors, buffered half-reference bias,100nF+10uF opamp bypass, driven BIAS guard and common-ground RETURN_PATH. Grounding unused ADC input does not join the optical output or reference to ground. External host retains100kHz/50pF I2C, sequential single-shot8SPS, ±4.096V range, OS polling and score computation. ADC header pins1/2 ground,3/4/5 SDA/SCL/ALERT; no exported host supply or onboard firmware claim. Modeled reference interval, aggregate50mV error, typical ADC loading and ideal loop stability remain engineering assumptions, not accuracy/radiometric guarantees. Layout intent including guard, return paths, compact pads and mounting is preserved but no routed copper, DRC, fabrication or hardware performance is established. Attempt two final graph g4-independent-two; transcript has 13 preserved entries. Original submissions, query errors, author notes and packets unchanged.",
+      "graph_sha256": "11d63188205eb10f36b29db77a04af17f8b78fd83798103ff49ea0d19cf1b0b1",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "COMPARED",
+      "structural_match": true
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_pcbknowledge_brief/g4_synthesis_three",
+      "checks": 42,
+      "equivalence_review": "Independently authenticated a5e2badae344ba4baa29dad865603db459455f77 bundle and used its frozen G4 brief/reference. Final graph reviewed, not author counts alone; coordinator confirmed this author and all broker calls final before transcript hashing. Exactly six original blocks: input header, ferrite rail, TL431 reference, dual-opamp photodiode, ADS1115 and four-hole mounting. Every complete parameter object, port contract and instance requirement equals frozen reference after function-based identifier mapping. No NTC, RS485, MCU or new block. All five physical bindings checked: raw header pin1 to ferrite pin1; ferrite pin2 feeds ADC pin8 and MCP6002 pin8 and reference resistor bank; TL431 pins1/2 feed photodiode divider and ADC pin6; TIA output pin7 reaches ADC pin5; common ground includes unused ADC AIN0 pin4 plus AIN3 pin7, ADDR pin1, supply returns and connector grounds. Full expanded-intent comparison after bijective instance/net renaming equals reference in every field except order-dependent graph hash: exact28 component selections and footprints, all11 physical net partitions, BOM, all layout constraints, evidence/dependencies, mechanical envelope, fab/manufacturing contract and checks. Independently expanded final graph: no refusals, all42 checks PASS. Reference load arithmetic:2.65/19800+10uA=143.838uA below500uA retained allowance. Worst reference feed(3.4-2.35)/330=3.181818mA; plus2mA TIA and3mA ADC=8.181818mA below10mA analog budget and150mA external source. Minimum cathode current with retained500uA scenario=1.131881mA. Budgets are manual fixed-design checks, not a generic runtime power-flow proof. Preserves0–50uA imposed photocurrent,940nm/DC–1Hz acquisition,10k feedback/four22pF capacitors, buffered half-reference bias,100nF+10uF opamp bypass, driven BIAS guard and common-ground RETURN_PATH. Grounding unused ADC input does not join the optical output or reference to ground. External host retains100kHz/50pF I2C, sequential single-shot8SPS, ±4.096V range, OS polling and score computation. ADC header pins1/2 ground,3/4/5 SDA/SCL/ALERT; no exported host supply or onboard firmware claim. Modeled reference interval, aggregate50mV error, typical ADC loading and ideal loop stability remain engineering assumptions, not accuracy/radiometric guarantees. Layout intent including guard, return paths, compact pads and mounting is preserved but no routed copper, DRC, fabrication or hardware performance is established. Attempt three final graph g4-independent-three; transcript has 13 preserved entries. Original submissions, query errors, author notes and packets unchanged.",
+      "graph_sha256": "cf10b4b92e24f2d3f96db341e50266eaaf47b0363cba73fde138d923c29fa5f1",
+      "reference_equivalent": true,
+      "refusals": [],
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_comparison": "COMPARED",
+      "structural_match": true
+    }
+  ],
+  "brief": "G4",
+  "bundle_commit": "a5e2badae344ba4baa29dad865603db459455f77",
+  "bundle_sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233",
+  "evaluation_engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b",
+  "evaluation_input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "mode": "positive",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "original_bundles": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g4_synthesis_one",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g4_synthesis_two",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/g4_synthesis_three",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    }
+  ],
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "reference_sha256": "4f5bd66eb65cee4256101463ffab136dc1141cc2cb68b6e2b4ef91ab59c83dd2",
+  "reference_status": "EXPANDED",
+  "required": 2,
+  "status": "PASS",
+  "total": 3
+}

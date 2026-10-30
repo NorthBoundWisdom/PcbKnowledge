@@ -18,8 +18,9 @@ declared bench models and functional wiring checks. Hardware
 fabrication and bring-up are not claimed. Derived KiCad 9 handoff, read-only exported-board
 checks and an optional isolated DRC wrapper support the owner's layout work;
 parked skeletons and incomplete geometry checks are not A3/A4 acceptance.
-The first corpus-growth cycle adds optical scoring and dual-temperature telemetry
-briefs using existing blocks, plus a typed receiver-threshold counterexample.
+The first corpus-growth cycle passes optical scoring and dual-temperature telemetry
+briefs (three fresh attempts each), plus three correct typed receiver-threshold
+refusals. It stops under the no-new-blocks condition.
 [`TODO.md`](TODO.md) records the acceptance receipts and remaining work.
 
 ## Use

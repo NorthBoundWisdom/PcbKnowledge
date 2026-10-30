@@ -1,0 +1,71 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n4_synthesis_one",
+      "correct_refusal": true,
+      "refusal_sha256": "52471a78602acb1cff20dc2c81006afa02a9e1d7a7d08c41e2d24b8823d06ba0",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n4_synthesis_two",
+      "correct_refusal": true,
+      "refusal_sha256": "52471a78602acb1cff20dc2c81006afa02a9e1d7a7d08c41e2d24b8823d06ba0",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n4_synthesis_three",
+      "correct_refusal": true,
+      "refusal_sha256": "52471a78602acb1cff20dc2c81006afa02a9e1d7a7d08c41e2d24b8823d06ba0",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N4",
+  "bundle_commit": "a5e2badae344ba4baa29dad865603db459455f77",
+  "bundle_sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233",
+  "evaluation_engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b",
+  "evaluation_input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "input_identity": {
+    "audit_sha256": "ffae7b875847f68286883ebaee30a15b9b6dba3d4609d6234ffe010412f92f32",
+    "catalog_tree": "f9169b75b5fb35533ef0f586c4dc365a9a818f89",
+    "engine_sha256": "4ddd3b0da242181cad481f798221afd36d454cad59f352ffbfbe3192f7c1057b"
+  },
+  "mode": "negative",
+  "orchestrator": "agent:/root/implement_pcbknowledge_brief",
+  "original_bundles": [
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n4_synthesis_one",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n4_synthesis_two",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    },
+    {
+      "agent": "agent:/root/implement_pcbknowledge_brief/n4_synthesis_three",
+      "commit": "a5e2badae344ba4baa29dad865603db459455f77",
+      "sha256": "572801146c5b6e80f79694ba3e92098a7348f365bc49810a5784381597720233"
+    }
+  ],
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "reference_sha256": null,
+  "replayed_refusals": [
+    {
+      "code": "CHECK_FAILED",
+      "path": "functions.rs485",
+      "queries": [
+        "Q4"
+      ],
+      "reason": "No eligible block: Fixed operating parameter differs: receiver_positive_threshold"
+    }
+  ],
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}
