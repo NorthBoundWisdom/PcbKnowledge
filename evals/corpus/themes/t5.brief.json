@@ -1,0 +1,684 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "Active, settled sine/triangle: commanded 1-1000 Hz, nominal offset 1.25 V and peak amplitude 0-1 V. Amplitude error <= 5% of commanded peak + 25 mV; cycle-average offset error <= 25 mV; frequency error <= 0.1%. Phase lag is separate. Inactive/reset/underrun output may be 0 V to supply; no glitch-free guarantee.",
+      "id": "waveform"
+    },
+    {
+      "description": "Every source, rail, load, timing and analog acceptance quantity must bind the actual selected components before A2.",
+      "id": "closed_world"
+    },
+    {
+      "description": "Unremapped SPI1, mode 1 (CPOL=0, CPHA=1), 8-bit MSB-first transfers and 24 bits per SYNC frame. Meet every DAC p9 setup, hold, high-time and update-wait condition. Host low <= 0.15 V, high >= 2 V, transitions <= 30 ns and load <= 50 pF. Use 32-bit DDS, nearest phase word with ties upward; firmware <= 80 cycles/update and jitter <= 0.5 us. DAC p9 timing uses a 1 ns/V input-transition test domain; accepting host/board transitions up to 30 ns is an engineering applicability condition, not a manufacturer guarantee. The half-period budget does not replace the individual edge requirements.",
+      "id": "firmware_active_contract"
+    },
+    {
+      "description": "Waveform table, buffers and state use <= 1 KiB: 257 16-bit quarter-sine entries (514 B), two 32-frame 3-byte DMA blocks (192 B) and 128 B state total 834 B. No 50k-sample RAM table. Stack and other allocations must fit the selected STM32 source 20 KiB RAM.",
+      "id": "firmware_memory"
+    },
+    {
+      "description": "Accept separate 5 mV bounds for uniform pointwise DAC/follower residual and full-cycle mean residual including DDS/sample weighting. Neither follows from typical settling or jitter alone. Nominal offset is 1.25 V and commanded peak is 0-1 V; tolerated actual endpoints are 0.15-2.35 V, not a hard 0.25-2.25 V envelope.",
+      "id": "analog_applicability"
+    },
+    {
+      "description": "Fixed 23 degC still-air bench. Effective powered PTC resistance within the selected 0.15-0.7 ohm post-reflow source window is an engineering acceptance condition, not an all-temperature guarantee. USB total <= 100 mA; OPA core <= 1.5 mA plus output <= 0.3 mA; LDO IQ <= 0.5 mA; control rail <= 50 mA. Selected F1 hold rating is 0.5 A at 23 degC.",
+      "id": "power_applicability"
+    }
+  ],
+  "functions": [
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "T5 usb function.",
+      "id": "usb",
+      "parameters": {
+        "resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "ohm",
+          "value": 5100
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "power.protection",
+      "count": 1,
+      "description": "T5 protection function.",
+      "id": "protection",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "power.linear",
+      "count": 1,
+      "description": "T5 ldo function.",
+      "id": "ldo",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Proposed T5 operating decision; conditional model, not a source guarantee.",
+          "unit": "A",
+          "value": 0.05
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "digital.mcu",
+      "count": 1,
+      "description": "T5 mcu function.",
+      "id": "mcu",
+      "parameters": {
+        "clock_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "Hz",
+          "value": 8000000
+        },
+        "requested_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1000,
+          "min": 1,
+          "note": "Commanded range; actual acceptance includes0.1% frequency error.",
+          "unit": "Hz"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "digital.debug",
+      "count": 1,
+      "description": "T5 swd function.",
+      "id": "swd",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "interface.header",
+      "count": 1,
+      "description": "T5 uart function.",
+      "id": "uart",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "analog.dac",
+      "count": 1,
+      "description": "T5 dac function.",
+      "id": "dac",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "analog.buffer",
+      "count": 1,
+      "description": "T5 analog function.",
+      "id": "analog",
+      "parameters": {
+        "waveform_amplitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1,
+          "min": 0,
+          "note": "Configurable peak amplitude.",
+          "unit": "V"
+        },
+        "waveform_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed commanded DC offset.",
+          "unit": "V",
+          "value": 1.25
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "interface.header",
+      "count": 1,
+      "description": "T5 output function.",
+      "id": "output",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Preserve exact circuit and all source conditions."
+      ]
+    },
+    {
+      "category": "mechanical.mounting",
+      "count": 1,
+      "description": "Four non-plated M3 mounting holes, one near each board corner.",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "T5 screw-head keepout diameter; no additional inflation.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "T5 adopts the existing reviewed M3 non-plated mounting-hole block.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "T5 hole-center offset from both adjacent board edges.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Use four 3.2 mm non-plated holes, each with a 6 mm screw-head keepout and center 3.5 mm from both adjacent board edges."
+      ]
+    }
+  ],
+  "id": "T5",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Aggregate current for this physical interface, not per-pin extra current.",
+        "unit": "A",
+        "value": 0.1
+      },
+      "description": "T5 powered host interface; no external backfeed.",
+      "id": "usb",
+      "signals": [
+        "VBUS",
+        "GND",
+        "CC1",
+        "CC2"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 5.25,
+        "min": 4.75,
+        "note": "USB5 V source operating envelope before PTC and distribution.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Aggregate current for this physical interface, not per-pin extra current.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "T5 powered host interface; no external backfeed.",
+      "id": "swd",
+      "signals": [
+        "VREF",
+        "GND",
+        "SWDIO",
+        "SWCLK",
+        "NRST"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.43,
+        "min": 3.17,
+        "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Aggregate current for this physical interface, not per-pin extra current.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "T5 powered host interface; no external backfeed.",
+      "id": "uart",
+      "signals": [
+        "VREF",
+        "GND",
+        "TX",
+        "RX"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.43,
+        "min": 3.17,
+        "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "1 oz copper per D2; detailed stackup awaits the selected fab.; Single-side assembly",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "usb",
+      "swd",
+      "uart"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "D7: no component height limit.",
+      "status": "UNCONSTRAINED"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic design requirement.",
+      "unit": "mm"
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes, one at each corner; preserve screw-head keepouts.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "T5 adopts the existing reviewed M3 non-plated mounting-hole block.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "T5 hole-center offset from both adjacent board edges.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "T5 screw-head keepout diameter; no additional inflation.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic design requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D65",
+    "D98"
+  ],
+  "parameter_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "analog",
+          "parameter": "sample_rate"
+        },
+        {
+          "function": "mcu",
+          "parameter": "sample_rate"
+        }
+      ],
+      "id": "t5_sample_rate",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 50005,
+        "min": 49995,
+        "note": "Accepted actual50ksps interval; SPI/DDS clock containment must pass.",
+        "unit": "Hz"
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "analog",
+          "parameter": "frequency"
+        },
+        {
+          "function": "mcu",
+          "parameter": "frequency"
+        }
+      ],
+      "id": "t5_frequency",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 1001,
+        "min": 0.999,
+        "note": "Actual waveform acceptance for commanded1..1000 Hz within0.1%; includes clock and DDS rounding.",
+        "unit": "Hz"
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "usb",
+          "parameter": "output_voltage"
+        },
+        {
+          "function": "protection",
+          "parameter": "input_voltage"
+        }
+      ],
+      "id": "t5_source_voltage",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 5.25,
+        "min": 4.75,
+        "note": "USB5 V source operating envelope before PTC and distribution.",
+        "unit": "V"
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "protection",
+          "parameter": "output_voltage"
+        },
+        {
+          "function": "ldo",
+          "parameter": "input_voltage"
+        },
+        {
+          "function": "analog",
+          "parameter": "input_voltage"
+        }
+      ],
+      "id": "t5_protected_voltage",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 5.25,
+        "min": 4.63,
+        "note": "Accepted local protected rail after actual PTC and50 mV total distribution allowance.",
+        "unit": "V"
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "ldo",
+          "parameter": "output_voltage"
+        },
+        {
+          "function": "mcu",
+          "parameter": "input_voltage"
+        },
+        {
+          "function": "dac",
+          "parameter": "input_voltage"
+        }
+      ],
+      "id": "t5_control_voltage",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.43,
+        "min": 3.17,
+        "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+        "unit": "V"
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "usb",
+          "parameter": "output_current"
+        },
+        {
+          "function": "protection",
+          "parameter": "output_current"
+        }
+      ],
+      "id": "t5_input_budget",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Total USB input limit100 mA in all active modes.",
+        "unit": "A",
+        "value": 0.1
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "mcu",
+          "parameter": "input_current"
+        },
+        {
+          "function": "ldo",
+          "parameter": "mcu_current_budget"
+        }
+      ],
+      "id": "t5_mcu_budget",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "MCU15 mA accepted core/dynamic base plus three actual pull branches; allocation17 mA.",
+        "unit": "A",
+        "value": 0.017
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "dac",
+          "parameter": "input_current"
+        },
+        {
+          "function": "ldo",
+          "parameter": "dac_current_budget"
+        }
+      ],
+      "id": "t5_dac_budget",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "DAC4 mA accepted IC/dynamic base plus three actual SPI pull branches; allocation6 mA.",
+        "unit": "A",
+        "value": 0.006
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "swd",
+          "parameter": "output_current"
+        },
+        {
+          "function": "ldo",
+          "parameter": "swd_current_budget"
+        }
+      ],
+      "id": "t5_swd_budget",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Actual external interface total current limit5 mA, including powered load and signal loading.",
+        "unit": "A",
+        "value": 0.005
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "uart",
+          "parameter": "output_current"
+        },
+        {
+          "function": "ldo",
+          "parameter": "uart_current_budget"
+        }
+      ],
+      "id": "t5_uart_budget",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Actual external interface total current limit5 mA, including powered load and signal loading.",
+        "unit": "A",
+        "value": 0.005
+      }
+    },
+    {
+      "endpoints": [
+        {
+          "function": "protection",
+          "parameter": "temperature"
+        },
+        {
+          "function": "ldo",
+          "parameter": "temperature"
+        }
+      ],
+      "id": "t5_bench_temperature",
+      "value": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Fixed23 degC still-air bench condition matching selected PTC hold-current source rating.",
+        "unit": "degC",
+        "value": 23
+      }
+    }
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Proposed T5 operating decision; conditional model, not a source guarantee.",
+          "unit": "A",
+          "value": 0.05
+        },
+        "function": "ldo",
+        "id": "logic_3v3",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.43,
+          "min": 3.17,
+          "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Total USB input limit100 mA in all active modes.",
+          "unit": "A",
+          "value": 0.1
+        },
+        "description": "USB-C sink only; no USB data or power delivery required.",
+        "function": "usb",
+        "id": "usb_5v",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5.25,
+          "min": 4.75,
+          "note": "USB5 V source operating envelope before PTC and distribution.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "USB-powered DAC sine/triangle generator: commanded 1-1000 Hz, accepted actual 0.999-1001 Hz; fixed nominal 1.25 V offset and configurable 0-1 V peak with stated tolerances. Inactive output may be anywhere from ground to supply.",
+  "title": "USB-powered unipolar DAC waveform generator"
+}

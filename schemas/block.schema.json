@@ -41,7 +41,9 @@
         "sensor.adc",
         "interface.rs485",
         "sensor.photodiode",
-        "power.filter"
+        "power.filter",
+        "analog.dac",
+        "analog.buffer"
       ]
     },
     "parameters": {

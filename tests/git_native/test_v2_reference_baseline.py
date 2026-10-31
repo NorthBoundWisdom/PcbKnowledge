@@ -11,6 +11,7 @@ from pcbknowledge.v2.expansion import expand
 
 ROOT = Path(__file__).resolve().parents[2]
 REFERENCE_HASHES = {
+    't5': '47a92cd63892ede8edb164dd82f232b07a6c83da80137afda5b81c2032eebf3d',
     'g1': '55cbaeb975b794a5e61eb5faf47c87257317855ae95b872449ba100849a12ce8',
     'g1v1': 'd2299e2463daca5ffac626a23b15b4f37359985e7cd1b83c989ccfb0f4282973',
     'g1v2': '154a27a31d04a3ad08f3170033b46adef16022e1e8a2529e6cbb4e5c97d66ecf',
@@ -29,7 +30,7 @@ class ReferenceBaselineTests(unittest.TestCase):
     def test_every_committed_positive_ready_and_t1_refused(self):
         report = coverage_all(self.catalog)
         rows = {row['brief']: row for row in report['briefs']}
-        positives = {identity for identity in rows if identity.startswith('G')}
+        positives = {identity for identity, row in rows.items() if row['status'] == 'READY'}
         self.assertEqual(positives, {name.upper() for name in REFERENCE_HASHES})
         for identity in sorted(positives):
             with self.subTest(brief=identity):
@@ -42,8 +43,9 @@ class ReferenceBaselineTests(unittest.TestCase):
     def test_all_positive_reference_expansion_hashes(self):
         for name, expected in REFERENCE_HASHES.items():
             with self.subTest(reference=name):
-                graph = read_json((ROOT/f'evals/golden-designs/{name}.block-graph.json').read_bytes())
-                brief = read_json((ROOT/f'evals/golden-designs/{name}.brief.json').read_bytes())
+                folder = 'golden-designs' if name.startswith('g') else 'corpus/themes'
+                graph = read_json((ROOT/f'evals/{folder}/{name}.block-graph.json').read_bytes())
+                brief = read_json((ROOT/f'evals/{folder}/{name}.brief.json').read_bytes())
                 intent = expand(self.catalog, graph, brief, bundle_commit='a' * 40)
                 self.assertEqual(intent['status'], 'EXPANDED', intent['refusals'])
                 self.assertEqual(hashlib.sha256(canonical_json(intent).encode()).hexdigest(), expected)

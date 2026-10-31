@@ -51,12 +51,25 @@ class PinConfigurationTests(unittest.TestCase):
         self.assert_invalid('conflicts with a required pin function')
 
     def test_initial_state_and_mode_must_be_supported(self):
-        self.graph['pin_configurations'] = [self.config(initial_state='HIGH')]
+        self.graph['pin_configurations'] = [self.config(initial_state='UNDECLARED_STATE')]
         self.assert_invalid('Unknown pin-states')
         self.graph['pin_configurations'] = [self.config(mode='UART_TX')]
         self.assert_invalid('Unsupported firmware')
         del self.graph['pin_configurations'][0]['initial_state']
         self.assert_invalid('Missing required')
+
+    def test_declared_high_state_is_preserved_in_intent(self):
+        self.graph['pin_configurations'] = [self.config(initial_state='HIGH')]
+        result = self.expand()
+        self.assertEqual(result['status'], 'EXPANDED')
+        configuration = result['pin_configurations'][0]
+        self.assertEqual((configuration['ref'], configuration['pin'], configuration['initial_state']),
+                         ('mcu_U1', '30', 'HIGH'))
+        parts = {'mcu_U1': self.catalog.get('part:st-stm32f103c8t6')}
+        validate_configurations(self.catalog, parts, result['pin_configurations'])
+        configuration['initial_state'] = 'UNDECLARED_STATE'
+        with self.assertRaisesRegex(ValueError, 'Unknown pin-states'):
+            validate_configurations(self.catalog, parts, result['pin_configurations'])
 
     def test_active_uart_block_cannot_be_silently_repurposed(self):
         self.graph = read_json((ROOT / 'evals/golden-designs/g1.block-graph.json').read_bytes())
