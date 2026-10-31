@@ -104,5 +104,4 @@ class ReferencePathTests(unittest.TestCase):
         for item in intent['layout']:
             result = checker.check(item)
             self.assertEqual(result['result'], 'NOT_CHECKABLE')
-            expected = 'required' if item['kind'] == 'RETURN_PATH' else 'not proven'
-            self.assertIn(expected, result['reason'])
+            self.assertIn('required', result['reason'])

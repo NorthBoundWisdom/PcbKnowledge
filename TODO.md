@@ -136,6 +136,7 @@ answer here.
 | D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue. Ethan owns the items marked `(ethan)`. `TODO.md` is the only coordination channel; GitHub issues are not used. Both use the same GitHub account, so each commit body ends with `Developer: Wisdom` or `Developer: Ethan`. The shared account does not show independence: `created_by`, `verified_by` and reviewers are recorded as distinct agent identities. Wisdom's new decisions continue from D79; Ethan's use D100 upward. |
 | D78 | Repository scope (owner decision, 2026-10-31) | PcbKnowledge is a knowledge base serving PcbAtlas. It is not an algorithm library: it holds no placement, routing, zone-fill, DRC or fabrication-output algorithms and no pipeline orchestrating them. Retire ADR-026, D63, D64 and D76 and delete the pipeline. Keep expansion, handoff files, `layout check` and the thin optional `drc` wrapper. Developers may use KiCad and Freerouting as external test tools to find knowledge errors, for example on a hand-placed handoff board; each finding becomes a catalog fix with a tool-free test. CI and acceptance never need these tools. This repository accepts designs through A2; A3-A5 belong to PcbAtlas or a hand layout. |
 | D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
+| D101 | GUARD_RING measurement | Measure all sensitive-net pad and track copper on every exposed F/B surface, including both faces of through-hole pads. Require one simple closed track cycle per surface, existing minimum width and exact copper clearance. Prove guard contact through solid SMT copper, explicit track endpoints and center-ended plated through-via annuli; include annular width where a drill intersects the ring. Unsupported curves, sensitive vias, filled copper, ambiguous contacts and physical drill interruptions remain NOT_CHECKABLE. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -809,11 +810,13 @@ primitives retain their prior behavior.
   D-number. Put the handler in a new module and register it in `layout.py` with the smallest
   possible change. Synthetic tests: pass, gap in return copper, return on the wrong net,
   unsupported geometry staying `NOT_CHECKABLE`.
-- [ ] (ethan) `GUARD_RING` (G3, G4, `block:g3-photodiode`): prove a continuous enclosure on
+- [x] (ethan) `GUARD_RING` (G3, G4, `block:g3-photodiode`): prove a continuous enclosure on
   `guard_net` around the protected pads and copper, measuring width, clearance and gaps
   against the block's values and D56. If the constraint lacks a required field (protected
   targets, layer), add it through the registry and block records, keeping existing values.
   Synthetic tests: pass, broken ring, narrow ring, clearance violation.
+  D101 measures every exposed F/B surface and explicit through-via guard connections;
+  unsupported geometry stays `NOT_CHECKABLE`. G3/G4 exported-board acceptance remains unmeasured.
 - [ ] (ethan) Decide what the TPS5430 1 mm limit in `block:g2-buck` measures: fetch the source
   with `evidence fetch`, read the cited page, and summarize it in the decision. G2's
   `buck_C2` to `buck_U1.pin:7` minimum is 1.96 mm under the current courtyard and center-point

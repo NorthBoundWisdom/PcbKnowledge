@@ -354,3 +354,25 @@ boundary distance and failed segment indices. Interior slots and wrong-net coppe
 fail; unsupported geometry, signal vias/arcs and via-only return contact remain
 `NOT_CHECKABLE`. Pad-edge-only contact that is possible but unmeasured is also
 `NOT_CHECKABLE`, rather than a false failure. This is a read-only measurement of exported copper, not a router.
+
+### Guard enclosure measurement
+
+`layout check` applies D101 to `GUARD_RING`. The protected `net` identifies all
+its pads and routed tracks, not a selected subset. Every exposed F/B copper
+surface is checked independently, including both faces of through-hole pads.
+Each surface requires a simple closed straight-track cycle on `guard_net`.
+All surfaces must pass; a missing lower-face ring fails even with a valid top ring.
+The report retains per-surface width, clearance, enclosure and contact results.
+
+Guard contact is proved by explicit same-layer track endpoints, positive-area
+contact with solid SMT copper, and plated through-vias whose center-ended tracks
+cross the annulus beyond the drill radius. Via evidence identifies participating
+tracks; annular width participates in the ring minimum where the drill intersects
+ring tracks. A remote SMT source can therefore supply both surface rings.
+
+Exact rectangle, circle and cardinal oval pad extents and all straight sensitive
+tracks participate in clearance checks, including guard pads, vias and feed branches.
+Arcs, sensitive-net vias, filled guard/signal zones, ambiguous intersections,
+non-center via contacts, possible drill interruptions and pad-mediated ring closure
+remain `NOT_CHECKABLE`. An open, narrow, floating, misplaced or insufficient-clearance
+supported ring fails. This read-only check generates no copper.
