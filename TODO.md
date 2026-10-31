@@ -149,6 +149,7 @@ answer here.
 | D91 | Switching-node bring-up | `BUCK_SW` is a waveform check, not a DC window: typed high and low levels derived from the input range and the SS14 drop, with TPS5430 source limits. Bandwidth, sample rate, probe and uncertainty are engineering defaults chosen by the implementer and recorded here. Observations stay `NOT_RUN`. A missing protocol is a design decision, not `UNKNOWN`. |
 | D92 | Parallel corpus cycles | Developers may run different D65 cycles at once and claim them in `TODO.md` first. Themes stay ordered by cycle start, and a theme's content does not depend on another developer's unfinished theme. |
 | D93 | Synthesis evidence budget | `evals/` budget is 2.5 MB through T10, replacing the 1.5 MB Stage 12 limit, with at most 30 KB of committed archive per attempt. Full packets and transcripts stay in the ignored local cache. |
+| D94 | Stable existing selections | Pin `mcu-core` C6/C7 to the already selected KEMET C0805C106K3PACTU; their 10 uF match also admitted C0805C106K8PACTU. A catalog regression rejects verified different-MPN ambiguity in every block. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -787,9 +788,11 @@ Claims (D92): before starting a cycle, push your name on its line so work is not
 
 Shared preparation:
 
-- [ ] (wisdom) Selection hardening: list blocks where stable-ID order alone chooses between verified
+- [x] (wisdom) Selection hardening: list blocks where stable-ID order alone chooses between verified
   candidates with different MPNs, and pin each to an explicit part or a distinguishing parameter, so
   adding parts cannot change an existing design. Add a test that fails on a new such case.
+D94 receipt: the audit found only `mcu-core` C6/C7; both now pin the previously selected part. Selection and reference tests pass 11/11, all seven expansion hashes are unchanged, and 202 records validate. Independent review confirmed the unchanged choices.
+
 - [ ] (wisdom) Set the `evals/` limit in `test_v2_synthesis_evidence` to the D93 budget and add the
   per-attempt size check.
 
