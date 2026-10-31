@@ -164,11 +164,37 @@
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 29,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 161,
+              "source": "source:st-rm0008"
+            }
+          ],
+          "name": "GPIO_PUSH_PULL"
+        }
+      ],
       "name": "PA4",
       "number": "14",
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 29,
+              "source": "source:st-stm32f103"
+            }
+          ],
+          "name": "SPI1_SCK"
+        }
+      ],
       "name": "PA5",
       "number": "15",
       "type": "BIDIRECTIONAL"
@@ -179,6 +205,17 @@
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 29,
+              "source": "source:st-stm32f103"
+            }
+          ],
+          "name": "SPI1_MOSI"
+        }
+      ],
       "name": "PA7",
       "number": "17",
       "type": "BIDIRECTIONAL"
@@ -365,9 +402,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
-    "notes": "GPIO capability update by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author; original creator retained.",
+    "notes": "GPIO capability update by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author; original creator retained. T5 append: PA4 GPIO_PUSH_PULL, PA5 SPI1_SCK, PA7 SPI1_MOSI; author agent:/root/research_fixed_themes; scoped reviewer appended.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review",
+      "agent:/root/implement_reference_layout/stage12_review"
     ]
   },
   "roles": [

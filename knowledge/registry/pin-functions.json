@@ -6,6 +6,18 @@
         "Q2"
       ]
     },
+    "SPI1_MOSI": {
+      "queries": [
+        "Q10",
+        "Q2"
+      ]
+    },
+    "SPI1_SCK": {
+      "queries": [
+        "Q10",
+        "Q2"
+      ]
+    },
     "UART_TX": {
       "queries": [
         "Q10",
