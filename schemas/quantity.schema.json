@@ -105,6 +105,7 @@
         "control_rail_budget",
         "fccm_buck_with_local_loads",
         "output_shunt_budget",
+        "sampled_waveform_envelope",
         "single_resistor_load",
         "dual_resistor_load"
       ]

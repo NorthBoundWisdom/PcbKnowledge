@@ -412,3 +412,15 @@ this topology projection and rejects absent or altered receipts. Actual board
 source-path authority remains graph expansion and deterministic expansion replay;
 the projection alone is not a second independent proof of a power source. Legacy
 parts generate no new field, preserving historical positive expansion identities.
+
+### Sampled waveform envelope
+
+`sampled_waveform_envelope` bounds the half peak-to-peak amplitude and settled
+cycle-average error of sine and triangle samples through two parallel filter
+resistors, a capacitor and a follower with output isolation. Selected component
+bounds, effective-capacitance retention, sample timing, load and resistor body
+excursion are inputs. Separate accepted pointwise and cycle-mean residuals cover
+dynamic error and DDS/sample weighting; jitter or typical settling specifications
+do not establish either bound. Checks compare the calculated margins with zero.
+The calculator refuses unsupported sampling or unenclosable decay domains and
+does not generate a waveform or firmware.
