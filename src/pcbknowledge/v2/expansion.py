@@ -404,6 +404,8 @@ class _Expansion:
                 self.intent['layout'].append(constraint)
                 if constraint['kind'] == 'EDGE_PLACEMENT':
                     self.intent['mechanical']['edge_interfaces'].append(constraint['subject'].split('.pin:')[0])
+        from .conductor_keepouts import project_keepouts
+        self.intent['layout'].extend(project_keepouts(self.intent['components'], self.catalog))
         from .rules import apply_rules
         constraints, rules_used = apply_rules(self.catalog, self.parts, self.intent['nets'], self.intent['layout'])
         self.used.update(rules_used)

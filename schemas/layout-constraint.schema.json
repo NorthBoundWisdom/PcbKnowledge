@@ -200,10 +200,85 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 256
+    },
+    "region": {
+      "$ref": "#/$defs/conductor_keepout"
     }
   },
   "required": [
     "kind"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "conductor_keepout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$",
+          "maxLength": 64
+        },
+        "rectangle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "xmin": {
+              "$ref": "quantity.schema.json"
+            },
+            "ymin": {
+              "$ref": "quantity.schema.json"
+            },
+            "xmax": {
+              "$ref": "quantity.schema.json"
+            },
+            "ymax": {
+              "$ref": "quantity.schema.json"
+            }
+          },
+          "required": [
+            "xmin",
+            "ymin",
+            "xmax",
+            "ymax"
+          ]
+        },
+        "forbid": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "TRACK",
+              "VIA"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "layer_scope": {
+          "const": "ALL_COPPER"
+        },
+        "scope_basis": {
+          "const": "ENGINEERING_DEFAULT"
+        },
+        "scope_note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "evidence": {
+          "$ref": "evidence.schema.json"
+        }
+      },
+      "required": [
+        "id",
+        "rectangle",
+        "forbid",
+        "layer_scope",
+        "scope_basis",
+        "scope_note",
+        "evidence"
+      ]
+    }
+  }
 }

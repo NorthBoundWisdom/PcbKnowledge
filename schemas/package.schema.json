@@ -481,6 +481,13 @@
         ],
         "additionalProperties": false
       }
+    },
+    "conductor_keepouts": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "$ref": "layout-constraint.schema.json#/$defs/conductor_keepout"
+      }
     }
   },
   "required": [

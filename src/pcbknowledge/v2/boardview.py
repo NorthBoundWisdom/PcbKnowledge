@@ -129,7 +129,10 @@ def _graphic(node, origin, angle):
 
 def _unprojected_copper(node, supported, label, unsupported):
     """Do not silently discard conductive graphics that can join measured branches."""
+    from .boardview_keepout import nonconductive_keepout
     for item in node[1:]:
+        if nonconductive_keepout(item):
+            continue
         if not isinstance(item, list) or not item or item[0] in supported:
             continue
         layer = field(item, 'layer', [''])[0]

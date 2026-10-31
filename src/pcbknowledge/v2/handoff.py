@@ -61,6 +61,10 @@ def _footprint(intent, component, catalog, position, connections):
             if key in connections:
                 code, name = connections[key]
                 node.append(['net', str(code), name])
+    from .conductor_keepout_export import keepout_nodes
+    tree[:] = [node for node in tree if not isinstance(node, list) or node[0] != 'zone']
+    tree.extend(keepout_nodes(package, position=position, identity=_identity(intent, component['ref']),
+                             layers=['F.Cu', 'B.Cu']))
     return tree
 
 
@@ -90,6 +94,9 @@ def board_tree(intent, catalog):
         position = positions.get(component['ref'])
         if position is None:
             position = (width + 10 - courtyard['min_x'], cursor - courtyard['min_y'])
+            if package.get('conductor_keepouts'):
+                # Only parked derived origins are quantized; authority coordinates remain unchanged.
+                position = tuple(float(format(value, '.6f')) for value in position)
             cursor += courtyard['max_y'] - courtyard['min_y'] + 5
         tree.append(_footprint(intent, component, catalog, position, connections))
     return tree

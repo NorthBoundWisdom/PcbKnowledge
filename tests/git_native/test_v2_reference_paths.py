@@ -66,7 +66,8 @@ class ReferencePathTests(unittest.TestCase):
         block = {'layout': intent['layout']}
         state = SimpleNamespace(blocks={'sense': block}, resolved={
             'sense:SUM': 'sense_SUM', 'sense:BIAS': 'sense_BIAS', 'sense:GND': 'common_ground'},
-            intent={'layout': [], 'nets': [], 'mechanical': {'edge_interfaces': []}}, parts={}, used=set(),
+            intent={'layout': [], 'nets': [], 'components': [], 'mechanical': {'edge_interfaces': []}},
+            parts={}, used=set(),
             catalog=SimpleNamespace(search=lambda _: []))
         _Expansion.apply_layout_rules(state)
         guard, path = state.intent['layout']

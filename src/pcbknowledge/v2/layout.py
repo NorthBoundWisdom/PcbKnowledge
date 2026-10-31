@@ -146,6 +146,9 @@ class LayoutChecks:
         return check_copper_area(self.board, rule)
 
     def check(self, rule):
+        if rule['kind'] == 'CONDUCTOR_KEEPOUT':
+            from .layout_conductor_keepout import check_conductor_keepout
+            return check_conductor_keepout(self.board, rule)
         handlers = {'PLACE_NEAR': self.place_near, 'GROUP': self.group, 'EDGE_PLACEMENT': self.edge,
                     'EDGE_DISTANCE': self.edge, 'KEEPOUT': self.keepout, 'NET_WIDTH_MIN': self.width,
                     'MINIMIZE_LOOP': self.loop, 'COPPER_AREA': self.copper}

@@ -270,6 +270,22 @@ are established. The same capacitor binding drives decoupling and the unchanged
 local placement rule. Neither the bootstrap nor switch net becomes a board power
 source, and unrelated supply inputs still require ordinary source paths.
 
+### Package conductor exclusions
+
+A package may declare source-cited `conductor_keepouts`: uniquely identified local
+rectangles with explicit copper layers and prohibited `TRACK`/`VIA` object types.
+Expansion projects every selected package region into a `CONDUCTOR_KEEPOUT`
+constraint; intent replay rejects omitted or changed regions. Handoff emits the
+same footprint-owned native rule area. This is knowledge projection, not routing.
+
+The read-only checker applies cardinal front/back transforms and tests complete
+track capsules and via disks against the region, including tangency. Pads and
+zones are unaffected. Unsupported arcs, transforms or copper layers remain
+`NOT_CHECKABLE`. Native rule areas are accepted as nonconductive metadata only
+when their complete recognized grammar is unfilled and netless; malformed or
+conductive lookalikes remain unsupported. D95 distinguishes the manufacturer's
+strip width from the chosen body-length and all-layer extent.
+
 ### Independent mask and paste openings
 
 Packages may bind `layer_apertures` to an existing, uniquely numbered physical copper pad.

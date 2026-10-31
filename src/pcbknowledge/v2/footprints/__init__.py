@@ -332,6 +332,8 @@ def _explicit_pads(package):
 
 def derive_footprint(package):
     """Derive and validate physical pads without mutating authority records."""
+    from ..conductor_keepouts import validate_regions
+    validate_regions(package)
     standard = all(key in package for key in ('drawing', 'generator', 'density'))
     explicit = 'explicit_pads' in package
     if standard == explicit or (explicit and any(k in package for k in ('drawing', 'generator', 'density'))):
@@ -475,6 +477,8 @@ def export_kicad(package):
             f'(size {number(pad["width"])} {number(pad["height"])}){drill} (layers {layers}){paste})'
         )
     lines.extend(export_apertures(derived, number))
+    from ..conductor_keepout_export import keepout_text
+    lines.extend(keepout_text(package))
     lines.append(')')
     return '\n'.join(lines) + '\n'
 

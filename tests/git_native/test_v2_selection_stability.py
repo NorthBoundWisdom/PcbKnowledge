@@ -28,6 +28,8 @@ class SelectionStabilityTests(unittest.TestCase):
         alternate = deepcopy(catalog.get('part:yageo-rc0603fr-0710kl'))
         alternate.update(id='part:synthetic-alternative', mpn='SYNTHETIC-DIFFERENT-MPN')
         catalog.records[alternate['id']] = alternate
+        component = catalog.get('block:button-input')['components'][0]
+        component['select'] = {'role': 'resistor', 'match': {'resistance': {'value': 10000, 'unit': 'ohm'}}}
         self.assertTrue(ambiguous_selections(catalog))
 
     def test_pinned_bulk_capacitors_ignore_earlier_verified_id(self):
@@ -41,6 +43,15 @@ class SelectionStabilityTests(unittest.TestCase):
                 self.assertEqual(component['select'], {'part': 'part:kemet-c0805c106k3pactu'})
                 choices = catalog._candidates(component['select'])
                 self.assertEqual(selected_candidate(choices)['id'], 'part:kemet-c0805c106k3pactu')
+
+
+    def test_precision_resistor_promotion_preserves_existing_ten_kilohm_choices(self):
+        catalog = Catalog(ROOT, ROOT / 'schemas')
+        for name, refs in [('mcu-core', ('R1', 'R2', 'R3')), ('button-input', ('R1',))]:
+            block = catalog.get('block:' + name)
+            for component in block['components']:
+                if component['ref'] in refs:
+                    self.assertEqual(component['select'], {'part': 'part:yageo-rc0603fr-0710kl'})
 
 
 if __name__ == '__main__':

@@ -53,6 +53,9 @@ def validate_intent(catalog, intent, *, bundle_commit):
                     or branch['evidence']['source'] not in intent['dependencies']):
                 raise ValueError('Kelvin branch source is absent from intent evidence closure')
         catalog._layout_references(constraint, {r: [p] for r, p in parts.items()}, set(nets))
+    from .conductor_keepouts import validate_projection
+    if intent['status'] == 'EXPANDED' or any(c['kind'] == 'CONDUCTOR_KEEPOUT' for c in intent['layout']):
+        validate_projection(intent, catalog)
     fab_id = intent['fab_profile']
     if isinstance(fab_id, str):
         fab = catalog.get(fab_id, 'fab_profile')

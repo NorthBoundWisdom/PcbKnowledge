@@ -150,6 +150,7 @@ answer here.
 | D92 | Parallel corpus cycles | Developers may run different D65 cycles at once and claim them in `TODO.md` first. Themes stay ordered by cycle start, and a theme's content does not depend on another developer's unfinished theme. |
 | D93 | Synthesis evidence budget | `evals/` budget is 2.5 MB through T10, replacing the 1.5 MB Stage 12 limit, with at most 30 KB of committed archive per attempt. Full packets and transcripts stay in the ignored local cache. |
 | D94 | Stable existing selections | Pin `mcu-core` C6/C7 to the already selected KEMET C0805C106K3PACTU; their 10 uF match also admitted C0805C106K8PACTU. A catalog regression rejects verified different-MPN ambiguity in every block. |
+| D95 | Inductor conductor exclusion | Project the selected package's cited strip into intent and handoff. For Wurth 74437349047 preserve its 2.5 mm width; choose the maximum 6.9 mm body length and all copper layers as engineering defaults. Check full track/via copper including tangency; pads and zones remain allowed. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -812,7 +813,9 @@ Clamp blocker: TPS3700 has no maximum propagation bound for the 3.47 us brownout
 - [ ] (wisdom) Production operating-envelope and local-load calculator bindings.
 Calculator foundation: signed FCCM/local loads, preload budgets, reverse-current discharge, shunt headroom and live parameter limits pass 78 affected tests; 202 records and all seven reference hashes remain valid. Application bindings and clamp qualification are separate pending work.
 
-- [ ] (wisdom) Inductor underbody routing exclusion as a typed constraint with `layout check` support.
+- [x] (wisdom) Inductor underbody routing exclusion as a typed constraint with `layout check` support.
+D95 receipt: package exclusions project into handoff and full-width track/via checks; 77 affected tests and 204-record validation pass. Reviewed facts include the exact-MPN TPS3700 drawing and decimal resistor bounds; four new selection ambiguities retain prior RC10k choices. All seven reference hashes are unchanged; T1 blocks remain DRAFT.
+
 - [ ] (wisdom) Independent verification and promotion of all T1 records and blocks to `AGENT_VERIFIED`.
 - [ ] (wisdom) Three fresh pinned synthesis attempts, then record T1 at A2.
 
