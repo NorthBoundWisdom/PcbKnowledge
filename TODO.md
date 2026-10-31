@@ -151,6 +151,7 @@ answer here.
 | D93 | Synthesis evidence budget | `evals/` budget is 2.5 MB through T10, replacing the 1.5 MB Stage 12 limit, with at most 30 KB of committed archive per attempt. Full packets and transcripts stay in the ignored local cache. |
 | D94 | Stable existing selections | Pin `mcu-core` C6/C7 to the already selected KEMET C0805C106K3PACTU; their 10 uF match also admitted C0805C106K8PACTU. A catalog regression rejects verified different-MPN ambiguity in every block. |
 | D95 | Inductor conductor exclusion | Project the selected package's cited strip into intent and handoff. For Wurth 74437349047 preserve its 2.5 mm width; choose the maximum 6.9 mm body length and all copper layers as engineering defaults. Check full track/via copper including tangency; pads and zones remain allowed. |
+| D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -737,6 +738,9 @@ windows for G1V1, G1V2 and G5 plus eight G2 DC nodes (D103).
   unchanged. Update the G2 hash with the reason. Prove with a synthetic G2 buck board that all
   ten rules hold at once. If C2, C5 and C6 cannot all fit, keep the rules, add an owner question
   with a proposal, and continue.
+  COPPER_EDGE is implemented with unchanged values; C4-to-L1 is NOT_CHECKABLE because
+  no same-net candidate exists (owner question below). No ten-rule joint PASS is claimed;
+  the C2/C5/C6 simultaneous fit still needs a complete physical witness.
 - [ ] (ethan) Finish `BUCK_SW` bring-up in G2 (D91), giving `range_coverage` `COMPLETE`.
 - [ ] (ethan) Add a read-only `v2 validate` check that fails a `PLACE_NEAR` rule a footprint pair
   cannot meet, using the isolated geometric lower bound. This restores a useful catalog check
@@ -845,7 +849,9 @@ Exit: a consumer can go from a pinned bundle to a judged board using only the gu
 Add questions here with a recommended default, and keep working on everything else. Do not stop a
 session to wait for an answer.
 
-None open.
+- D90: C4 has CAP_OUT/GND pads, while L1 pin 2 is VOUT across RE1/RE2; no same-net
+  pad exists for that rule. Recommend targeting C4-to-RE1/RE2 CAP_OUT pads with the
+  same 3 mm bound, after owner approval; do not silently remove the series ESR path.
 
 ## Owner evidence list
 

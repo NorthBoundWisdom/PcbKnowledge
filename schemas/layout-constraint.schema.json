@@ -203,6 +203,12 @@
     },
     "region": {
       "$ref": "#/$defs/conductor_keepout"
+    },
+    "datum": {
+      "enum": [
+        "ORIGIN_PAD_CENTER",
+        "COPPER_EDGE"
+      ]
     }
   },
   "required": [

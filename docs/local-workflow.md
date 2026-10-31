@@ -407,3 +407,14 @@ Arcs, sensitive-net vias, filled guard/signal zones, ambiguous intersections,
 non-center via contacts, possible drill interruptions and pad-mediated ring closure
 remain `NOT_CHECKABLE`. An open, narrow, floating, misplaced or insufficient-clearance
 supported ring fails. This read-only check generates no copper.
+
+### Copper-edge placement distance
+
+`PLACE_NEAR.datum` defaults to `ORIGIN_PAD_CENTER`. D90 selects `COPPER_EDGE` for
+all ten G2 buck rules without changing their numbers. This is the owner's distance
+decision, not a datum explicitly stated by TI. The read-only check compares the
+subject component's same-net pads with the named target pin's physical pads on a
+common copper layer. Exact supported outlines retain selected pin identities,
+layer, distance and limit. Unsupported outlines or absent eligible pairs return a
+typed reason; there is no center or different-net fallback. The C4-to-L1 rule has
+no same-net pair across its series ESR resistors and remains an open owner question.

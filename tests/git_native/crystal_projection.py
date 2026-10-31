@@ -153,6 +153,27 @@ def _d80_kelvin(test, expected, catalog):
     test.assertIn(anchor, expected['evidence'])
 
 
+
+def _d90_copper_datum(test, expected, catalog):
+    target = _one(test, [c for c in expected['components'] if c['part'] == 'part:ti-tps5430dda'])['ref']
+    test.assertTrue(target.endswith('_U1'))
+    prefix = target[:-2]
+    pairs = [('C2', 'U1.pin:7', 1), ('C3', 'U1.pin:1', 2), ('D1', 'U1.pin:8', 2),
+             ('C4', 'L1.pin:2', 3), ('RF1', 'U1.pin:4', 3), ('C5', 'U1.pin:7', 1),
+             ('C6', 'U1.pin:7', 1), ('C2', 'U1.pin:6', 1), ('C5', 'U1.pin:6', 1), ('C6', 'U1.pin:6', 1)]
+    authority = [row for row in catalog.get('block:g2-buck')['layout'] if row['kind'] == 'PLACE_NEAR']
+    test.assertEqual(len(authority), 10)
+    for subject, endpoint, limit in pairs:
+        raw = _one(test, [r for r in authority if r['subject'] == subject and r['target'] == endpoint])
+        test.assertEqual(raw['datum'], 'COPPER_EDGE')
+        test.assertEqual(raw['max_distance']['value'], limit)
+        signature = {key: value for key, value in raw.items() if key != 'datum'}
+        signature.update(subject=prefix + subject, target=prefix + endpoint)
+        rule = _one(test, [r for r in expected['layout'] if r == signature])
+        test.assertNotIn('datum', rule)
+        test.assertEqual(rule['max_distance']['value'], limit)
+        rule['datum'] = 'COPPER_EDGE'
+
 def assert_reviewed_g2_projection(test, original, current, catalog):
     """Compare the complete intent after exactly the named reviewed changes; drop no fields."""
     _part_contract(test, catalog)
@@ -164,5 +185,6 @@ def assert_reviewed_g2_projection(test, original, current, catalog):
     _d69_anchors(test, expected)
     _d70_package_scope(test, expected, catalog)
     _d80_kelvin(test, expected, catalog)
+    _d90_copper_datum(test, expected, catalog)
     expected['bundle_commit'] = current['bundle_commit']
     test.assertEqual(expected, current)

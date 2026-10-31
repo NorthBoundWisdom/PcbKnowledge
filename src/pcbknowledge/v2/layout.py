@@ -85,6 +85,13 @@ class LayoutChecks:
         return [pad['at'] for pad in footprint['pads'][pin]]
 
     def place_near(self, rule):
+        datum = rule.get('datum', 'ORIGIN_PAD_CENTER')
+        if datum == 'COPPER_EDGE':
+            from .layout_distance import check_copper_edge
+            return check_copper_edge(self.board, rule)
+        if datum != 'ORIGIN_PAD_CENTER':
+            return finding('PLACE_NEAR', 'NOT_CHECKABLE', 'Unsupported distance datum',
+                           reason_code='UNSUPPORTED_DATUM')
         value = min(distance(a, b) for a in self.points(rule['subject']) for b in self.points(rule['target']))
         limit = quantity(rule, 'max_distance', 'mm')
         return measured(rule['kind'], value <= limit, 'Origin/pad-center nearest distance', distance_mm=value)

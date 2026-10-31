@@ -322,6 +322,9 @@ class Catalog:
     def _layout_references(constraint, components, nets):
         from .reference_paths import validate_reference_path
         validate_reference_path(constraint, nets)
+        if constraint.get('datum') == 'COPPER_EDGE':
+            if '.pin:' in constraint['subject'] or '.pin:' not in constraint['target']:
+                raise ValueError('COPPER_EDGE requires a subject component and exact target pin')
         from .kelvin_contract import validate_kelvin
         validate_kelvin(constraint, components)
         for field in ('subject','target','subjects','path'):
@@ -330,6 +333,9 @@ class Catalog:
                 ref, marker, pin = value.partition('.pin:')
                 if ref not in components:
                     raise ValueError(f'Dangling layout component: {value}')
+                if constraint.get('datum') == 'COPPER_EDGE' and field == 'target':
+                    if any(not any(p['number'] == pin for p in part['pins']) for part in components[ref]):
+                        raise ValueError('COPPER_EDGE requires a physical pin number: ' + value)
                 if marker and any(not any(p['number']==pin or p['name']==pin for p in part['pins'])
                                   for part in components[ref]):
                     raise ValueError(f'Dangling layout pin: {value}')

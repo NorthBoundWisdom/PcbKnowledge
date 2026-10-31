@@ -26,7 +26,9 @@ is checked before interpreting layout results.
 
 ## Measurement scope (D24)
 
-- Placement distances use footprint origins or the cited physical pad centers.
+- Placement distances default to footprint origins or physical pad centers. D90
+  explicitly selects nearest same-net pad copper edges for the ten G2 buck rules;
+  missing or unsupported pad candidates remain `NOT_CHECKABLE`.
 - A group without an explicit distance uses a 10 mm maximum pairwise origin
   distance, an implementer screening default rather than a manufacturer limit.
 - Exact edge-distance comparisons allow 0.01 mm serialization tolerance. Edge
