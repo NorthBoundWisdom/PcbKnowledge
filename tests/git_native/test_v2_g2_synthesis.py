@@ -6,6 +6,7 @@ import tempfile
 import unittest
 
 from pcbknowledge.serialization import read_json
+from tests.git_native.crystal_projection import assert_reviewed_g2_projection
 from pcbknowledge.v2.bundle import Bundle, build_bundle
 from pcbknowledge.v2.synthesis import digest, replay_corpus
 from pcbknowledge.v2.synthesis_evidence import load_attempt
@@ -82,7 +83,6 @@ class FinalG2SynthesisTests(G2SynthesisTests):
     corpus = ROOT / 'evals/synthesis/g2'
 
     def test_unchanged_graphs_against_current_catalog_are_separate_regressions(self):
-        import copy
         from pcbknowledge.v2.catalog import Catalog
         from pcbknowledge.v2.expansion import expand
         catalog = Catalog(ROOT, ROOT / 'schemas')
@@ -93,22 +93,50 @@ class FinalG2SynthesisTests(G2SynthesisTests):
             self.assertEqual(current['status'], 'EXPANDED', current['refusals'])
             original = [row['response']['intent'] for row in attempt['transcript']
                         if row['query']['op'] == 'validate'][-1]
-            projections = []
-            for intent in (original, current):
-                projection = copy.deepcopy(intent)
-                for key in ('bundle_commit', 'layout', 'dependencies'):
-                    projection.pop(key)
-                projection['mechanical'].pop('edge_interfaces')
-                projections.append(projection)
-            self.assertEqual(*projections)
+            assert_reviewed_g2_projection(self, original, current, catalog)
             self.assertEqual(digest(graph), attempt['receipt']['graph_sha256'])
-            self.assertEqual(len(current['checks']), 101)
+            self.assertEqual(len(current['checks']), 106)
             fuses = {c['ref'] for c in current['components'] if c['part'] == 'part:littelfuse-0451001-mrl'}
             self.assertEqual(len(fuses), 1)
             constraints = [c for c in current['layout'] if c['kind'] == 'PLACE_NEAR'
                            and c['subject'] == next(iter(fuses)) + '.pin:1']
             self.assertEqual(len(constraints), 1)
             self.assertEqual(constraints[0]['max_distance']['value'], 5)
+
+    def test_reviewed_crystal_projection_rejects_unrelated_or_incomplete_changes(self):
+        import copy
+        from pcbknowledge.v2.catalog import Catalog
+        from pcbknowledge.v2.expansion import expand
+        catalog = Catalog(ROOT, ROOT / 'schemas')
+        attempt = self.attempts[0]
+        original = [row['response']['intent'] for row in attempt['transcript']
+                    if row['query']['op'] == 'validate'][-1]
+        original_hash = digest(original)
+        brief = read_json((ROOT / 'evals/golden-designs/g2.brief.json').read_bytes())
+        current = expand(catalog, attempt['graph'], brief, bundle_commit='0' * 40)
+        crystal = next(c['ref'] for c in current['components'] if c['part'] == 'part:abracon-abmm2-8-18')
+        for mutation in ('signal', 'ground', 'check', 'loop', 'unrelated', 'evidence'):
+            forged = copy.deepcopy(current)
+            if mutation in ('signal', 'ground'):
+                pin = '3' if mutation == 'signal' else '4'
+                net = next(n for n in forged['nets'] if {'ref': crystal, 'pin': pin} in n['pins'])
+                net['pins'].remove({'ref': crystal, 'pin': pin})
+            elif mutation == 'check':
+                check = next(c for c in forged['checks'] if c['id'] == 'source:' + crystal + ':4')
+                check['result'] = 'FAIL'
+            elif mutation == 'loop':
+                loop = next(c for c in forged['layout'] if crystal + '.pin:3' in c.get('path', []))
+                loop['path'][2] = crystal + '.pin:2'
+            elif mutation == 'unrelated':
+                component = next(c for c in forged['components'] if c['ref'] != crystal)
+                component['part'] = 'part:forged'
+            else:
+                evidence = next(e for e in forged['evidence'] if e['source'] == 'source:abracon-abmm2')
+                evidence['page'] = 999
+            with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
+                assert_reviewed_g2_projection(self, original, forged, catalog)
+        self.assertEqual(digest(original), original_hash)
+        self.assertEqual(digest(attempt['graph']), attempt['receipt']['graph_sha256'])
 
     def test_current_regression_retains_distinct_original_and_evaluation_identities(self):
         from pcbknowledge.v2.synthesis_identity import validate_identity

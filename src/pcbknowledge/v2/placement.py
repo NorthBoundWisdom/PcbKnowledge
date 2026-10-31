@@ -1,8 +1,8 @@
 """Deterministic top-side placement from derived geometry; never relax constraints.
 
 Search is finite: four right-angle orientations and a board-origin grid, with exact
-edge-distance coordinates added to that grid. Exhaustion proves only that this
-search domain failed, not continuous geometric impossibility. Copper constraints
+edge-distance coordinates added to that grid. Heuristic beam exhaustion is not
+a proof of infeasibility in the grid or continuous geometry. Copper constraints
 remain the responsibility of the final layout checker and native DRC.
 """
 import math
@@ -199,7 +199,11 @@ def _priority(ref, positions, geometry, rules, mechanical):
                    for _, rule in rules if ref in _refs(rule))
     edge = any(rule['kind'].startswith('EDGE_') and _ref(rule['subject']) == ref for _, rule in rules)
     anchors = len({p['number'] for p in geometry[ref]['pads']}) > 2
-    return (0 if ref in mechanical else 1 if edge else 2 if attached else 3 if anchors else 4, -attached, ref)
+    degree = sum(ref in _refs(rule) for _, rule in rules)
+    courtyard = geometry[ref]['courtyard']
+    area = (courtyard['max_x'] - courtyard['min_x']) * (courtyard['max_y'] - courtyard['min_y'])
+    return (0 if ref in mechanical else 1 if edge else 2 if attached else 3 if anchors else 4,
+            -attached, -degree, -area, ref)
 
 
 def _score(ref, position, positions, geometry, rules, width, height):
@@ -244,68 +248,10 @@ def validate_positions(geometry, rules, positions, width, height):
 
 
 def place_geometry(geometry, rules, width, height, *, mechanical=(), grid_mm=0.5, max_states=200000):
-    """Pure geometry entry point for deterministic synthetic tests and derived footprints."""
-    width, height = _finite(width, 'width', positive=True), _finite(height, 'height', positive=True)
-    grid = _finite(grid_mm, 'grid', positive=True)
-    if isinstance(max_states, bool) or not isinstance(max_states, int) or max_states <= 0:
-        raise PlacementError('Invalid search state limit')
-    if len(geometry) > 256:
-        raise PlacementError('Placement component limit exceeded')
-    if not set(mechanical) <= geometry.keys():
-        raise PlacementError('Unknown mechanical component')
-    if width / grid > max_states or height / grid > max_states:
-        raise PlacementError('Axis candidate domain exceeds search budget')
-    _validate_geometry(geometry)
-    prepared = _prepare_rules(rules, geometry)
-    domains = {}
-    for ref in sorted(geometry):
-        values = []
-        for angle in (0, 90, 180, 270):
-            xs, ys = _domain(ref, angle, geometry, prepared, width, height, grid)
-            if len(values) + len(xs) * len(ys) > max_states:
-                raise PlacementError('Candidate domain exceeds search budget', constraints=range(len(rules)))
-            values.extend((x, y, angle) for y in ys for x in xs)
-        if not values:
-            indices = [index for index, rule in prepared if ref in _refs(rule)]
-            raise PlacementError('Empty legal domain for ' + ref, constraints=indices)
-        domains[ref] = values
-    positions, boxes, failed = {}, {}, set()
-    states = [0]
-    if not _search(geometry, prepared, width, height, set(mechanical), domains,
-                   positions, boxes, failed, states, max_states):
-        implicated = sorted(failed or {index for index, _ in prepared})
-        raise PlacementError('No placement in finite grid/orientation domain',
-                             constraints=implicated, states=states[0])
-    validate_positions(geometry, rules, positions, width, height)
-    return {ref: positions[ref] for ref in sorted(positions)}
-
-
-def _search(geometry, rules, width, height, mechanical, domains, positions, boxes, failed, states, budget):
-    if len(positions) == len(geometry):
-        return True
-    ref = min(set(geometry) - positions.keys(),
-              key=lambda item: _priority(item, positions, geometry, rules, mechanical))
-    candidates = sorted(domains[ref], key=lambda p: _score(ref, p, positions, geometry, rules, width, height))
-    for position in candidates:
-        states[0] += 1
-        if states[0] > budget:
-            raise PlacementError('Placement search budget exhausted',
-                                 constraints=sorted(failed or {index for index, _ in rules}), states=states[0])
-        box = _box(geometry[ref], position)
-        if any(overlap(box, previous) for previous in boxes.values()):
-            continue
-        positions[ref] = position
-        violations = [index for index, rule in rules
-                      if not _rule_ok(rule, geometry, positions, width, height)]
-        failed.update(violations)
-        if not violations:
-            boxes[ref] = box
-            if _search(geometry, rules, width, height, mechanical, domains,
-                       positions, boxes, failed, states, budget):
-                return True
-            boxes.pop(ref)
-        positions.pop(ref)
-    return False
+    """Solve a finite heuristic domain and independently validate every returned position."""
+    from .placement_search import solve_geometry
+    return solve_geometry(geometry, rules, width, height, mechanical=mechanical,
+                          grid_mm=grid_mm, max_states=max_states)
 
 
 def place_components(intent, catalog, *, grid_mm=0.5, max_states=200000):
@@ -342,8 +288,8 @@ def apply_positions(tree, positions):
             raise ValueError('Placement requires finite coordinates and orthogonal rotations')
         old = field(footprint, 'at', ['0', '0', '0'])
         old_angle = float(old[2]) if len(old) > 2 else 0
-        for node in children(footprint, 'at'):
-            node[1:] = [str(value) for value in position]
+        footprint[:] = [node for node in footprint if not isinstance(node, list) or node[0] != 'at']
+        footprint.insert(2, ['at', *map(str, position)])
         for pad in children(footprint, 'pad'):
             at = children(pad, 'at')[0]
             local_angle = float(at[3]) - old_angle if len(at) > 3 else -old_angle

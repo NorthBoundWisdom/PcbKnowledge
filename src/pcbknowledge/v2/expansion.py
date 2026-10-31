@@ -470,6 +470,8 @@ class _Expansion:
             from .gpio import configure_pins
             configure_pins(self)
             self.assemble_nets()
+            from .bringup_contract import project_bringup
+            project_bringup(self.graph, self.intent, self.catalog, self.used)
             from .electrical_bindings import check_bindings
             check_bindings(self)
             self.check_source_paths()

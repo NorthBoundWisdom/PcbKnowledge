@@ -10,6 +10,7 @@ import re
 
 from pcbknowledge.v2.boardview import parse_board
 from .layout_tools import derived_path, run_process
+from .svg_check import check_svg
 
 LAYERS = ('F.Cu', 'B.Cu', 'F.Mask', 'B.Mask', 'F.Paste', 'B.Paste',
           'F.Silkscreen', 'B.Silkscreen', 'Edge.Cuts')
@@ -79,7 +80,7 @@ def drill_count(text):
     return count
 
 
-def check_positions(text, board, smt_refs):
+def check_positions(text, board, smt_refs, *, bom_refs=None):
     reader = csv.DictReader(io.StringIO(text))
     if reader.fieldnames != ['Ref', 'Val', 'Package', 'PosX', 'PosY', 'Rot', 'Side']:
         raise UnsupportedFabrication('Unsupported position CSV header')
@@ -102,6 +103,8 @@ def check_positions(text, board, smt_refs):
         rows[ref] = row
     if set(smt_refs) - rows.keys():
         raise ValueError('SMT BOM references missing positions: ' + ', '.join(sorted(set(smt_refs) - rows.keys())))
+    if bom_refs is not None and set(rows) != set(bom_refs):
+        raise ValueError('Position references differ from complete BOM')
     return len(rows)
 
 
@@ -130,9 +133,14 @@ def reread_outputs(directory, board, intent):
     if drills != expected:
         raise ValueError('Fabrication drill/slot count differs from board')
     smt = {ref for row in intent['bom'] if row['mount_type'] == 'SMT' for ref in row['refs']}
-    positions = check_positions(read_text(directory / 'positions.csv'), board, smt)
+    bom_refs = [ref for row in intent['bom'] for ref in row['refs']]
+    if len(bom_refs) != len(set(bom_refs)) or set(bom_refs) != set(board['footprints']):
+        raise ValueError('Complete BOM and board references differ or repeat')
+    positions = check_positions(read_text(directory / 'positions.csv'), board, smt, bom_refs=bom_refs)
+    renders = {side: check_svg(read_text(directory / (side + '.svg'))) for side in ('top', 'bottom')}
     return {'status': 'PASS', 'layers': sorted(functions), 'bounds_mm': bounds,
-            'drill_slot_count': drills, 'position_count': positions, 'smt_reference_count': len(smt)}
+            'drill_slot_count': drills, 'position_count': positions, 'smt_reference_count': len(smt),
+            'renders': renders}
 
 
 def export_outputs(board_path, output, intent, tools, *, root):
@@ -150,9 +158,9 @@ def export_outputs(board_path, output, intent, tools, *, root):
                        '-o', str(output)]),
             ('positions', ['pos', '--format', 'csv', '--units', 'mm', '-o', str(output / 'positions.csv')]),
             ('top-svg', ['svg', '--mode-single', '--fit-page-to-board', '--layers',
-                         'F.Cu,F.Silkscreen,Edge.Cuts', '-o', str(output / 'top.svg')]),
+                         'F.Cu,F.Silkscreen,F.Fab,Edge.Cuts', '-o', str(output / 'top.svg')]),
             ('bottom-svg', ['svg', '--mode-single', '--mirror', '--fit-page-to-board', '--layers',
-                            'B.Cu,B.Silkscreen,Edge.Cuts', '-o', str(output / 'bottom.svg')])]
+                            'B.Cu,B.Silkscreen,B.Fab,Edge.Cuts', '-o', str(output / 'bottom.svg')])]
     results = {}
     for name, arguments in jobs:
         results[name] = run_process([tool['path'], 'pcb', 'export', *arguments, str(board_path)],

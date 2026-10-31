@@ -128,6 +128,9 @@ def _graphic(node, origin, angle):
 
 
 def _footprint(node, nets, unsupported, paste, zero_overrides):
+    tags = [item[0] for item in node if isinstance(item, list) and item]
+    if 'at' in tags and 'pad' in tags and tags.index('at') > tags.index('pad'):
+        raise ValueError('Footprint transform must precede pads')
     refs = [item[2] for item in children(node, 'property') if len(item) > 2 and item[1] == 'Reference']
     refs += [item[2] for item in children(node, 'fp_text') if len(item) > 2 and item[1] == 'reference']
     if not refs or len(set(refs)) != 1 or not refs[0]:

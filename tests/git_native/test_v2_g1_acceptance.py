@@ -10,8 +10,8 @@ from pcbknowledge.v2.assembly import validate_assembly
 from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
-# Stage 9 adds source-backed MCU GPIO and INA219 bus evidence; electrical projection is unchanged.
-G1_CANONICAL_SHA256 = 'a697c5bf8ed142c32fa584bd1c4316d74117e965aec08ce556c1c58e284615e8'
+# Stage 13 corrects physical anchors and replaces connector/crystal with reviewed manufacturer geometry.
+G1_CANONICAL_SHA256 = '848c96a98f1cd454ee9b76600c62cecdeb4484591a0bfd6392ea5544ddd83eff'
 
 
 class GoldenAcceptanceTests(unittest.TestCase):

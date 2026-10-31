@@ -341,8 +341,9 @@ Download tools outside the repository, verify hashes, and select explicit paths.
 The KiCad Python interpreter must come from the installed KiCad environment; the
 catalog process never imports `pcbnew`. Its isolated subprocess handles native
 DSN/SES conversion and zone fill. KiCad project settings and generated rules stay
-unchanged. Freerouting uses one optimizer thread, sequential selection, fixed
-maximum 100 autorouter/20 optimizer passes, and disables GUI, API and analytics.
+unchanged. Freerouting uses one thread for each routing stage, sequential selection,
+fixed maximum 100 autorouter/20 optimizer passes, and disables fanout, automatic
+neckdown, GUI, API and analytics. The neck-width override is zero (disabled). Session widths are independently checked against the intent.
 A router success is not DRC acceptance: the final filled board is checked again.
 
 ```bash
@@ -352,7 +353,7 @@ python3 configs/pcbknowledge_agent.py --repo . layout tools \
   --freerouting /tmp/pcbknowledge-tools/freerouting-2.5.0.jar
 python3 configs/pcbknowledge_agent.py --repo . layout run build/g1-intent.json \
   --bundle build/bundle/COMMIT.bundle.json --graph evals/golden-designs/g1.block-graph.json \
-  --output build/reference-g1 --kicad-python /usr/bin/python3 \
+  --output build/reference-g1 --grid-mm 0.1 --kicad-python /usr/bin/python3 \
   --java /tmp/pcbknowledge-tools/jdk-25.0.5+8-jre/bin/java \
   --freerouting /tmp/pcbknowledge-tools/freerouting-2.5.0.jar
 ```
@@ -366,3 +367,18 @@ The position CSV uses KiCad top-view coordinates (positive X right, Y up) and
 counterclockwise degrees; bottom-side rotation is not an assembly instruction for
 this TOP-only profile. JLCPCB's assembly preview must be reviewed against pin 1
 and the source drawing before ordering; do not add unrecorded rotation offsets.
+
+The placer uses four orthogonal orientations, explicit grid spacing and exact edge
+coordinates. Its deterministic beam is 64 candidates, candidate scans are capped
+at 500,000 per orientation, and cumulative compatibility work is capped at the
+smaller of 20 million operations or 10,000 times the legal-branch limit. Reports
+record these limits. Search exhaustion is a heuristic failure, not proof that the
+layout constraints are impossible. Every returned placement passes the independent
+courtyard, outline, proximity, group, edge, keepout and loop checks unchanged.
+
+Freerouting 2.5.0 fanout enables micro-neckdown independently of its automatic
+neckdown flag (`FoundConnectionInserter.java`, v2.5.0, lines 241-247 and 499-501).
+Both paths are disabled: no narrowed trace is accepted by session preflight.
+Native footprint image aliases are accepted only for a trailing positive-integer
+variant whose complete non-outline DSN image matches the base; reference sets,
+physical placement, electrical images and final native geometry remain checked.

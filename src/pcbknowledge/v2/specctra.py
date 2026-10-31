@@ -133,6 +133,41 @@ def _validate_padstacks(dsn, library, unit):
     return result
 
 
+def _equivalent_native_image(expected, actual, images):
+    if actual == expected:
+        return True
+    import re
+    match = re.fullmatch(r'(.+)::[1-9][0-9]*', expected)
+    if not match or actual != match[1] or actual not in images or expected not in images:
+        return False
+    # Native variants can differ only in nonconductive outline tessellation/order.
+    # Preserve every pin, padstack reference, keepout and other electrical item exactly.
+    def electrical(image):
+        return [item for item in image[2:] if not isinstance(item, list) or not item or item[0] != 'outline']
+    return electrical(images[expected]) == electrical(images[actual])
+
+
+def _validate_placements(dsn, actual, original):
+    """Retain normalized nanometre positions, modulo-360 angles and exact reference/side identities."""
+    if set(actual) != set(original):
+        raise ValueError('Router session changes component references')
+    rows = children(_one(dsn, 'library'), 'image')
+    if any(len(row) < 2 or not isinstance(row[1], str) or not row[1] for row in rows):
+        raise ValueError('Malformed DSN image identity')
+    if any(not isinstance(item, list) or not item or not isinstance(item[0], str)
+           for row in rows for item in row[2:]):
+        raise ValueError('Malformed DSN image child')
+    images = {row[1]: row for row in rows}
+    if len(images) != len(rows):
+        raise ValueError('Duplicate DSN image identity')
+    for ref, expected in original.items():
+        observed = actual[ref]
+        if observed[1:] != expected[1:]:
+            raise ValueError('Router session changes component placement')
+        if not _equivalent_native_image(expected[0], observed[0], images):
+            raise ValueError('Router session changes component image identity')
+
+
 def validate_session(text, dsn_text, widths, *, dsn_name):
     """Check identities, placements and route geometry before invoking native import."""
     tree, dsn = read_specctra(text), read_specctra(dsn_text)
@@ -146,8 +181,7 @@ def validate_session(text, dsn_text, widths, *, dsn_name):
     unit = _unit(routes, session=True)
     original = _placements(dsn, _unit(dsn))
     actual = _placements(tree, unit)
-    if actual and actual != original:
-        raise ValueError('Router session changes component placement')
+    _validate_placements(dsn, actual, original)
     layers = {row[1] for row in children(_one(dsn, 'structure'), 'layer')}
     if layers != {'F.Cu', 'B.Cu'}:
         raise ValueError('Only the declared two-layer route stack is supported')

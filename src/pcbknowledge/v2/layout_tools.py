@@ -137,6 +137,23 @@ def _jar_version(java, jar):
     return {'version': match.group(1)}
 
 
+def validate_versions(result):
+    for name in ('kicad', 'kicad_python', 'java'):
+        tool = result[name]
+        if tool['status'] != 'FOUND':
+            continue
+        match = re.search(r'(\d+)\.\d+', tool.get('version', ''))
+        major = int(match[1]) if match else None
+        supported = major in (9, 10) if name != 'java' else major is not None and major >= 21
+        if not supported:
+            tool.update(status='FAIL', reason='Unsupported tool version')
+        else:
+            tool['major'] = major
+    cli, bridge = result['kicad'], result['kicad_python']
+    if cli['status'] == bridge['status'] == 'FOUND' and cli['major'] != bridge['major']:
+        bridge.update(status='FAIL', reason='KiCad bridge major differs from CLI')
+
+
 def locate_tools(*, kicad=None, java=None, freerouting=None, kicad_python=None):
     result = {'kicad': _probe(resolve_executable(kicad, 'kicad-cli'), ['version']),
               'java': _probe(resolve_executable(java, 'java'), ['-version'])}
@@ -145,6 +162,7 @@ def locate_tools(*, kicad=None, java=None, freerouting=None, kicad_python=None):
             'sys.exit(3) if importlib.util.find_spec("pcbnew") is None else None; '
             'import pcbnew; print(pcbnew.Version())')
     result['kicad_python'] = _probe(python, ['-c', code], missing_code=3)
+    validate_versions(result)
     jar = Path(freerouting).expanduser().absolute() if freerouting is not None else None
     if jar is None or not jar.is_file():
         result['freerouting'] = {'status': 'NOT_FOUND', 'path': None}
@@ -176,6 +194,8 @@ def run_router(dsn, session, tools, *, root, directory):
     command = [tools['java']['path'], '-Djava.awt.headless=true', '-jar', tools['freerouting']['path'],
                '-de', str(dsn), '-do', str(session), '--gui.enabled=false', '--api_server.enabled=false', '-da',
                '--user_data_path=' + str(directory / 'router-settings'), '--router.autorouter.max_passes=100',
+               '--router.autorouter.max_threads=1', '--router.automatic_neckdown=false',
+               '--router.fanout.enabled=false', '--router.neck_width_um=0',
                '--router.optimizer.max_passes=20', '--router.optimizer.max_threads=1', '-is', 'sequential']
     result = run_process(command, root=root, directory=directory, timeout=1800)
     if result['status'] == 'PASS' and (not session.is_file() or session.stat().st_size == 0):

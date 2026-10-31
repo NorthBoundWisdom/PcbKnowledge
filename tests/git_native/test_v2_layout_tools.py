@@ -57,6 +57,10 @@ class ToolTests(unittest.TestCase):
             self.assertEqual(result['status'], 'FAIL')
             argv = runner.call_args.args[0]
             self.assertIn('--router.optimizer.max_threads=1', argv)
+            self.assertIn('--router.autorouter.max_threads=1', argv)
+            self.assertIn('--router.automatic_neckdown=false', argv)
+            self.assertIn('--router.fanout.enabled=false', argv)
+            self.assertIn('--router.neck_width_um=0', argv)
             self.assertIn('--router.autorouter.max_passes=100', argv)
             self.assertIn('-da', argv)
             self.assertNotIn('-inc', argv)
@@ -86,3 +90,15 @@ class ToolTests(unittest.TestCase):
                                  root=root, directory=root / 'build/overflow')
             self.assertEqual(result['status'], 'FAIL')
             self.assertEqual(Path(result['log']).stat().st_size, 100)
+
+
+class VersionTests(unittest.TestCase):
+    def test_supported_versions_and_bridge_major_are_checked(self):
+        from pcbknowledge.v2.layout_tools import validate_versions
+        for cli, bridge, java, expected in ((9, 9, 21, 'FOUND'), (10, 10, 25, 'FOUND'),
+                                            (8, 8, 21, 'FAIL'), (9, 10, 25, 'FAIL'), (9, 9, 17, 'FAIL')):
+            result = {name: {'status': 'FOUND', 'version': f'{version}.0.2'}
+                      for name, version in (('kicad', cli), ('kicad_python', bridge), ('java', java))}
+            validate_versions(result)
+            statuses = {tool['status'] for tool in result.values()}
+            self.assertEqual('FAIL' if 'FAIL' in statuses else 'FOUND', expected)

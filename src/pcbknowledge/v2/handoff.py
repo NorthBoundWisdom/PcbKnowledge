@@ -51,7 +51,8 @@ def _footprint(intent, component, catalog, position, connections):
     tree = parse(export_kicad(package))
     tree[1] = component['footprint']
     tree[:] = [item for item in tree if not isinstance(item, list) or item[0] not in ('version', 'generator')]
-    tree.extend([['at', *map(str, position)], ['uuid', _identity(intent, component['ref'])],
+    tree.insert(2, ['at', *map(str, position)])
+    tree.extend([['uuid', _identity(intent, component['ref'])],
                  ['property', 'Reference', component['ref'], ['at', '0', '0'], ['layer', 'F.Fab'],
                   ['effects', ['font', ['size', '1', '1'], ['thickness', '0.15']]]]])
     for node in tree:

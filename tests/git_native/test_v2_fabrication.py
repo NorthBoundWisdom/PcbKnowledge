@@ -48,12 +48,18 @@ class FabricationTests(unittest.TestCase):
                 (path / f'{index}.gm1').write_text('%TF.FileFunction,' + function + '*%\n' + content)
             (path / 'board.drl').write_text(DRILLS)
             (path / 'positions.csv').write_text(POSITIONS)
+            for side in ('top', 'bottom'):
+                (path / (side + '.svg')).write_text(
+                    '<svg viewBox="0 0 10 5"><path d="M0 0L10 5" stroke="black"/></svg>')
             intent = {'bom': [{'mount_type': 'SMT', 'refs': ['R1']}]}
             self.assertEqual(reread_outputs(path, board(), intent)['status'], 'PASS')
             (path / 'positions.csv').unlink()
             with self.assertRaises(ValueError):
                 reread_outputs(path, board(), intent)
             (path / 'positions.csv').write_text(POSITIONS)
+            for side in ('top', 'bottom'):
+                (path / (side + '.svg')).write_text(
+                    '<svg viewBox="0 0 10 5"><path d="M0 0L10 5" stroke="black"/></svg>')
             (path / '0.gm1').unlink()
             with self.assertRaises(ValueError):
                 reread_outputs(path, board(), intent)
@@ -81,3 +87,24 @@ class FabricationTests(unittest.TestCase):
             self.assertEqual(result['status'], 'FAIL')
             commands = [call.args[0] for call in process.call_args_list]
             self.assertNotIn('--smd-only', next(command for command in commands if 'pos' in command))
+
+    def test_all_bom_refs_not_only_smt_are_required(self):
+        from pcbknowledge.v2.fabrication import check_positions
+        b = board()
+        b['footprints']['J1'] = dict(b['footprints']['R1'])
+        with self.assertRaisesRegex(ValueError, 'complete BOM'):
+            check_positions(POSITIONS, b, {'R1'}, bom_refs={'R1', 'J1'})
+
+    def test_svg_visible_geometry_reread_rejects_missing_empty_or_hidden_render(self):
+        from pcbknowledge.v2.svg_check import check_svg
+        good = '<svg viewBox="0 0 10 5"><path d="M0 0L10 5" stroke="black"/></svg>'
+        self.assertEqual(check_svg(good)['visible_geometry_count'], 1)
+        bad = ['<svg/>', '<svg viewBox="0 0 10 5"/>', '<not-svg/>',
+               good.replace('<path', '<path opacity="0"'),
+               good.replace('<path', '<path display="none"'),
+               good.replace('M0 0L10 5', 'M0 0'),
+               '<svg viewBox="0 0 10 5"><defs><path d="M0 0L10 5"/></defs></svg>',
+               good.replace('0 0 10 5', '0 0 0 5'), '<!DOCTYPE svg><svg/>']
+        for text in bad:
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                check_svg(text)

@@ -204,6 +204,9 @@
         "additionalProperties": false
       },
       "minItems": 0
+    },
+    "bringup": {
+      "$ref": "design-intent.schema.json#/$defs/bringup"
     }
   },
   "required": [

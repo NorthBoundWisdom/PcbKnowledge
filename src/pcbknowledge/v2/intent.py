@@ -31,6 +31,9 @@ def validate_intent(catalog, intent, *, bundle_commit):
             if (ref, number) in connections:
                 raise ValueError('Intent pin connected more than once')
             connections[ref, number] = name
+    from .bringup_contract import validate_bringup, bringup_sources
+    validate_bringup(intent)
+    used.update(bringup_sources(intent.get('bringup', {})))
     from .gpio import validate_configurations, validate_configured_drivers
     validate_configurations(catalog, parts, intent.get('pin_configurations', []))
     validate_configured_drivers(parts, intent.get('pin_configurations', []), connections)
