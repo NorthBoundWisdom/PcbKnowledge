@@ -10,6 +10,16 @@
         "Q7"
       ]
     },
+    "CONDUCTOR_KEEPOUT": {
+      "fields": [
+        "subject",
+        "region"
+      ],
+      "queries": [
+        "Q6",
+        "Q7"
+      ]
+    },
     "COPPER_AREA": {
       "fields": [
         "target",

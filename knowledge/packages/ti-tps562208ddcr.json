@@ -101,7 +101,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Same TI DDC0006A6-pin package; exactTPS562208DDCR identity p26, mechanicalp23. FCCM alternative to Eco-mode201.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "schema": "pcbknowledge.package.v2",
   "scope": {
@@ -120,5 +122,5 @@
       "TPS562208DDCR"
     ]
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

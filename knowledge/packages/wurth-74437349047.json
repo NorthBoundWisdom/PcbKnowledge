@@ -35,6 +35,104 @@
       "unit": "mm"
     }
   },
+  "conductor_keepouts": [
+    {
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "forbid": [
+        "TRACK",
+        "VIA"
+      ],
+      "id": "underbody",
+      "layer_scope": "ALL_COPPER",
+      "rectangle": {
+        "xmax": {
+          "basis": "CALCULATED",
+          "calculator": "geometry_affine",
+          "conditions": {},
+          "inputs": {
+            "dimension": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:wurth-74437349047"
+              },
+              "unit": "mm",
+              "value": 2.5
+            },
+            "factor": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "Signed half-span for centered source dimension.",
+              "unit": "1",
+              "value": 0.5
+            },
+            "offset": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "Origin at the symmetric recommended land-pattern center.",
+              "unit": "mm",
+              "value": 0
+            }
+          },
+          "unit": "mm",
+          "value": 1.25
+        },
+        "xmin": {
+          "basis": "CALCULATED",
+          "calculator": "geometry_affine",
+          "conditions": {},
+          "inputs": {
+            "dimension": {
+              "basis": "DATASHEET",
+              "conditions": {},
+              "evidence": {
+                "page": 1,
+                "source": "source:wurth-74437349047"
+              },
+              "unit": "mm",
+              "value": 2.5
+            },
+            "factor": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "Signed half-span for centered source dimension.",
+              "unit": "1",
+              "value": -0.5
+            },
+            "offset": {
+              "basis": "ENGINEERING_DEFAULT",
+              "conditions": {},
+              "note": "Origin at the symmetric recommended land-pattern center.",
+              "unit": "mm",
+              "value": 0
+            }
+          },
+          "unit": "mm",
+          "value": -1.25
+        },
+        "ymax": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D95: conservative upper extent from maximum 6.9 mm body length; source strip ends are undimensioned.",
+          "unit": "mm",
+          "value": 3.45
+        },
+        "ymin": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D95: conservative lower extent from maximum 6.9 mm body length; source strip ends are undimensioned.",
+          "unit": "mm",
+          "value": -3.45
+        }
+      },
+      "scope_basis": "ENGINEERING_DEFAULT",
+      "scope_note": "D95: apply the source track/via prohibition to all copper layers; page 1 does not specify layer span. Pads and filled planes are not prohibited by this constraint."
+    }
+  ],
   "courtyard_margin": {
     "basis": "ENGINEERING_DEFAULT",
     "conditions": {},
@@ -252,8 +350,10 @@
   "pin1": "1",
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
-    "notes": "Source land geometry; underbody restricted strip2.5mm must prohibit vias/traces. Constraint proposal required before release.",
-    "verified_by": []
+    "notes": "D95 exclusion added by agent:/root/implement_reference_layout/placer_draft; all cited package fields and scoped defaults reviewed by agent:/root/implement_reference_layout/stage12_review.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "schema": "pcbknowledge.package.v2",
   "scope": {
@@ -268,5 +368,5 @@
       "74437349047"
     ]
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

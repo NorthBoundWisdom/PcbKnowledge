@@ -8,7 +8,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Application-development permission; no document-level AI-processing prohibition found. Manufacturer originals remain local.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "publisher": "Texas Instruments",
   "revision": "SLVSD91D; DDC0006A 4214841/E; addendum 2025-10-07",
@@ -16,5 +18,5 @@
   "sha256": "ffe49c93defa52ae2b754c26bc1e229fc270a90716bc5b5f382af99a6776bc12",
   "title": "TPS562201 and TPS562208 4.5-V to 17-V input 2-A buck converters",
   "url": "https://www.ti.com/lit/ds/symlink/tps562201.pdf",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

@@ -101,7 +101,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Original derived gull-wing lands, top-view pin1 upper-left. COMPACT VSSOP fillets for copper gap.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "schema": "pcbknowledge.package.v2",
   "scope": {
@@ -120,5 +122,5 @@
       "DAC60501ZDGSR"
     ]
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

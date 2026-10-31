@@ -84,7 +84,7 @@
         "page": 5,
         "source": "source:ti-tps562201"
       },
-      "note": "Typical at VOUT3.3V, not a guaranteed bound.",
+      "note": "Typical at VOUT3.3V, not a guaranteed bound. Table 5.5: VIN = 12 V, TJ = -40 to 125 degC.",
       "typ": 580000,
       "unit": "Hz"
     },
@@ -96,7 +96,7 @@
         "source": "source:ti-tps562201"
       },
       "min": 1.6,
-      "note": "EN high-level requirement.",
+      "note": "EN high-level requirement. Table 5.5: VIN = 12 V, TJ = -40 to 125 degC.",
       "unit": "V"
     },
     "input_low_voltage": {
@@ -107,7 +107,7 @@
         "source": "source:ti-tps562201"
       },
       "max": 0.8,
-      "note": "EN low-level requirement.",
+      "note": "EN low-level requirement. Table 5.5: VIN = 12 V, TJ = -40 to 125 degC.",
       "unit": "V"
     },
     "input_voltage": {
@@ -152,7 +152,7 @@
       },
       "max": 0.787,
       "min": 0.749,
-      "note": "VOUT1.05V continuous-mode test only; not a guaranteed all-setpoint bound for2.5..6V injected feedback.",
+      "note": "VOUT1.05V continuous-mode test only; not a guaranteed all-setpoint bound for2.5..6V injected feedback. Table 5.5: VIN = 12 V, TJ = -40 to 125 degC.",
       "typ": 0.768,
       "unit": "V"
     },
@@ -208,7 +208,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "TPS562208 FCCM p1, not Eco-mode201. Signed reverse inductor current at light load must be modeled; source frequency is typical only.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "roles": [
     "regulator.switching.buck"
@@ -217,5 +219,5 @@
   "sourcing": {
     "lifecycle": "ACTIVE"
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

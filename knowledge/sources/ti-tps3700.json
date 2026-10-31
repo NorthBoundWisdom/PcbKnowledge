@@ -8,7 +8,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Official public manufacturer reference; original evidence local only.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "publisher": "Texas Instruments",
   "revision": "SBVS187G February2019",
@@ -16,5 +18,5 @@
   "sha256": "3bb7daed20b154bf22ded78e23269c6437eb587400b89bce0f543813df94ebf0",
   "title": "TPS3700 window voltage supervisor",
   "url": "https://www.ti.com/lit/ds/symlink/tps3700.pdf",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

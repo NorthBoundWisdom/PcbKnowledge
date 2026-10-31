@@ -8,7 +8,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Official public manufacturer reference; original evidence local only.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "publisher": "YAGEO",
   "revision": "Generated2026-10-31",
@@ -16,5 +18,5 @@
   "sha256": "8060cfb5f344668636601e3e471f883b98548c540aac470f06360994a8cf198d",
   "title": "RT0603BRD0710KL manufacturer specification",
   "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RT0603BRD0710KL",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

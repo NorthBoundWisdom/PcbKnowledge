@@ -73,7 +73,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "VIN-powered supervisor; outputs wired-OR clamp buck EN for control UV/output OV. Startup450us max; output indeterminate belowPOR.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "roles": [
     "supervisor.voltage-window"
@@ -82,5 +84,5 @@
   "sourcing": {
     "lifecycle": "ACTIVE"
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

@@ -52,8 +52,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
-    "notes": "Exact manufacturer individual specsheet p1; new identity DRAFT.",
-    "verified_by": []
+    "notes": "Exact manufacturer individual specification, physical page 1.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "roles": [
     "resistor"
@@ -62,5 +64,5 @@
   "sourcing": {
     "lifecycle": "UNKNOWN"
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

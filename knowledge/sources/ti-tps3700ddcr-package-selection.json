@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-31",
+  "bytes": 89664,
+  "id": "source:ti-tps3700ddcr-package-selection",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "text/html",
+  "pages": 1,
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/stage12_review",
+    "notes": "Manufacturer exact-MPN package selection and linked drawing; originals remain local.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/tool_research"
+    ]
+  },
+  "publisher": "Texas Instruments",
+  "revision": "Accessed 2026-10-31; exact-MPN package selection",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "15143aec2237f8dc910c4968457cabfc486ae499e89468e59b9d37524dbe4af0",
+  "title": "TPS3700DDCR exact orderable part and selected package drawing",
+  "url": "https://www.ti.com/product/TPS3700/part-details/TPS3700DDCR",
+  "verification": "AGENT_VERIFIED"
+}

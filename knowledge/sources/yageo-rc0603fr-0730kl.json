@@ -8,7 +8,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Official public manufacturer reference; original evidence local only.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "publisher": "YAGEO",
   "revision": "Generated2026-10-31",
@@ -16,5 +18,5 @@
   "sha256": "6182bb1bfea883b73af4af5dae85746dab9b36551b639e0f1d71947d424b8ca6",
   "title": "RC0603FR-0730KL manufacturer specification",
   "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RC0603FR-0730KL",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

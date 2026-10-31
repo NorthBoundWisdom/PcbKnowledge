@@ -200,46 +200,19 @@
     {
       "ref": "R1",
       "select": {
-        "match": {
-          "resistance": {
-            "basis": "ENGINEERING_DEFAULT",
-            "conditions": {},
-            "note": "G1 engineering design choice; verify during board layout.",
-            "unit": "ohm",
-            "value": 10000
-          }
-        },
-        "role": "resistor"
+        "part": "part:yageo-rc0603fr-0710kl"
       }
     },
     {
       "ref": "R2",
       "select": {
-        "match": {
-          "resistance": {
-            "basis": "ENGINEERING_DEFAULT",
-            "conditions": {},
-            "note": "G1 engineering design choice; verify during board layout.",
-            "unit": "ohm",
-            "value": 10000
-          }
-        },
-        "role": "resistor"
+        "part": "part:yageo-rc0603fr-0710kl"
       }
     },
     {
       "ref": "R3",
       "select": {
-        "match": {
-          "resistance": {
-            "basis": "ENGINEERING_DEFAULT",
-            "conditions": {},
-            "note": "G1 engineering design choice; verify during board layout.",
-            "unit": "ohm",
-            "value": 10000
-          }
-        },
-        "role": "resistor"
+        "part": "part:yageo-rc0603fr-0710kl"
       }
     },
     {

@@ -98,7 +98,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Exact p1 dimensions; original chip generator lands, not copied drawing.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "schema": "pcbknowledge.package.v2",
   "scope": {
@@ -113,5 +115,5 @@
       "RT0603BRD0768K1L"
     ]
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

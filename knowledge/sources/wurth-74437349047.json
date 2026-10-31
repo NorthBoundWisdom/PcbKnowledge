@@ -8,7 +8,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Official public manufacturer reference; original evidence local only.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "publisher": "Wurth Elektronik",
   "revision": "003.000 2024-12-27",
@@ -16,5 +18,5 @@
   "sha256": "36668ce9127713bb98bae7ff9f1babf0258538251310da46ddade800c237863d",
   "title": "WE-LHMI 74437349047 SMT power inductor",
   "url": "https://www.we-online.com/components/products/datasheet/74437349047.pdf",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

@@ -8,7 +8,9 @@
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
     "notes": "Application-development permission; no document-level AI-processing prohibition found. Manufacturer originals remain local.",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "publisher": "Texas Instruments",
   "revision": "SBAS794E; DGS0010A 4221984/A; addendum 2025-11-09",
@@ -16,5 +18,5 @@
   "sha256": "51dcb60423765d2521c62af621e2d6c7f4d38c9aa48deec4b4044d49decbbc20",
   "title": "DACx0501 precision voltage-output DACs with internal reference",
   "url": "https://www.ti.com/lit/ds/symlink/dac60501.pdf",
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

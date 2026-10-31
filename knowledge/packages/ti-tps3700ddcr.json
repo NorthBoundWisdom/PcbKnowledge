@@ -4,8 +4,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "max": 1.1,
       "unit": "mm"
@@ -14,8 +14,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "max": 3.05,
       "min": 2.75,
@@ -25,8 +25,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "max": 1.75,
       "min": 1.45,
@@ -46,8 +46,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "max": 0.6,
       "min": 0.3,
@@ -57,8 +57,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "max": 3.05,
       "min": 2.55,
@@ -68,8 +68,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "max": 0.5,
       "min": 0.3,
@@ -80,8 +80,8 @@
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
       },
       "unit": "mm",
       "value": 0.95
@@ -89,8 +89,8 @@
   },
   "evidence": [
     {
-      "page": 23,
-      "source": "source:ti-tps562201"
+      "page": 1,
+      "source": "source:ti-ddc0006a-mpds124i"
     }
   ],
   "family": "SOT-23-6",
@@ -100,8 +100,11 @@
   "pin1": "1",
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
-    "notes": "DDC6 identity p23 TPS3700; common TI DDC0006A outline cited TPS562201 p23. Reviewer must confirm package-code correspondence before promotion.",
-    "verified_by": []
+    "notes": "Exact TPS3700DDCR manufacturer page directly selects MPDS124I DDC0006A; drawing 4214841/E 08/2024. Citation corrected by agent:/root/implement_reference_layout/stage12_review.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review",
+      "agent:/root/implement_reference_layout/tool_research"
+    ]
   },
   "schema": "pcbknowledge.package.v2",
   "scope": {
@@ -112,13 +115,17 @@
         "source": "source:ti-tps3700"
       },
       {
-        "page": 23,
-        "source": "source:ti-tps562201"
+        "page": 1,
+        "source": "source:ti-ddc0006a-mpds124i"
+      },
+      {
+        "page": 1,
+        "source": "source:ti-tps3700ddcr-package-selection"
       }
     ],
     "mpns": [
       "TPS3700DDCR"
     ]
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }

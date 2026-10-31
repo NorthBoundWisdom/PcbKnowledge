@@ -155,7 +155,9 @@
   ],
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
-    "verified_by": []
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
   },
   "roles": [
     "dac.i2c"
@@ -164,5 +166,5 @@
   "sourcing": {
     "lifecycle": "ACTIVE"
   },
-  "verification": "DRAFT"
+  "verification": "AGENT_VERIFIED"
 }
