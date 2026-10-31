@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_PARALLEL` (seven positive references at A2; Wisdom on Stage 16; Ethan on Stages 14 and 17)
+> Status: `CONTINUOUS_MODE_PARALLEL` (seven positive references at A2; both developers on Stage 16; Ethan Stage 14 parked and Stage 17 complete)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators, block expansion,
@@ -808,7 +808,7 @@ Claims (D92): before starting a cycle, push your name on its line so work is not
 | Cycle | Themes | Developer |
 |---|---|---|
 | 1 | T1 adjustable DC-DC, T2 Li-ion charger with boost | Wisdom |
-| 2 | T3 motor H-bridge, T4 stepper driver | Ethan, after his Stage 14 and 17 items |
+| 2 | T3 motor H-bridge, T4 stepper driver | Ethan, claimed 2026-10-31 after Stage 17 |
 | 3 | T5 DAC signal generator, T6 OLED and keypad | Wisdom |
 | 4 | T7 CAN node, T8 Wi-Fi carrier | first free developer |
 | 5 | T9 thermocouple, T10 class-D audio | first free developer |
