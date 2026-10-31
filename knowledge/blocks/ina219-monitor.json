@@ -149,6 +149,24 @@
       "target": "U1"
     },
     {
+      "branches": [
+        {
+          "evidence": {
+            "page": 27,
+            "source": "source:ti-ina219"
+          },
+          "sense": "U1.pin:1",
+          "target": "R1.pin:1"
+        },
+        {
+          "evidence": {
+            "page": 27,
+            "source": "source:ti-ina219"
+          },
+          "sense": "U1.pin:2",
+          "target": "R1.pin:2"
+        }
+      ],
       "kind": "KELVIN",
       "sense_nets": [
         "SENSE_IN",
@@ -258,6 +276,7 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "notes": "D80 mapping added by agent:/root/implement_reference_layout/tool_research; mappings only reviewed by agent:/root/implement_reference_layout/stage12_review from TI pages 3 and 27. Prior record verification retained.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
     ]

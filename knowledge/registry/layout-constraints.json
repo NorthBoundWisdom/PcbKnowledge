@@ -90,6 +90,9 @@
         "sense_nets",
         "target"
       ],
+      "optional_fields": [
+        "branches"
+      ],
       "queries": [
         "Q6",
         "Q7"

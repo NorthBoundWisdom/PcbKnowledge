@@ -157,6 +157,24 @@
       "target": "U1"
     },
     {
+      "branches": [
+        {
+          "evidence": {
+            "page": 27,
+            "source": "source:ti-ina219"
+          },
+          "sense": "U1.pin:1",
+          "target": "R1.pin:1"
+        },
+        {
+          "evidence": {
+            "page": 27,
+            "source": "source:ti-ina219"
+          },
+          "sense": "U1.pin:2",
+          "target": "R1.pin:2"
+        }
+      ],
       "kind": "KELVIN",
       "sense_nets": [
         "SENSE_IN",
@@ -266,7 +284,7 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/g2_monitor_author",
-    "notes": "D48: full protected-input 500 mA, PGA /2 (PG1:PG0=01, +/-80 mV), A0/A1 grounded address0x40. Firmware configures PG before use; G1 retains its separate40 mV range. Shared external I2C pullups; Kelvin two-terminal shunt.",
+    "notes": "D48: 500 mA, PGA /2 +/-80 mV, 0x40; configure PG; G1 40 mV; shared pullups. D80 added by agent:/root/implement_reference_layout/tool_research; branches only reviewed by agent:/root/implement_reference_layout/stage12_review.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/g2_source_review"
     ]

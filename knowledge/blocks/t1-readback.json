@@ -157,6 +157,24 @@
       "target": "U1"
     },
     {
+      "branches": [
+        {
+          "evidence": {
+            "page": 27,
+            "source": "source:ti-ina219"
+          },
+          "sense": "U1.pin:1",
+          "target": "R1.pin:1"
+        },
+        {
+          "evidence": {
+            "page": 27,
+            "source": "source:ti-ina219"
+          },
+          "sense": "U1.pin:2",
+          "target": "R1.pin:2"
+        }
+      ],
       "kind": "KELVIN",
       "sense_nets": [
         "SENSE_IN",
@@ -290,7 +308,7 @@
   ],
   "provenance": {
     "created_by": "agent:/root/research_fixed_themes",
-    "notes": "INA2190x40 output-side monitor, +/-80mV shunt range;.1ohm±1%,.5A. Voltage measured at load after shunt. Existing checked component facts preserved.",
+    "notes": "T1: output-side 0.5 A, 0.1 ohm +/-1%, +/-80 mV, 0x40. D80 added by agent:/root/implement_reference_layout/tool_research; branches only reviewed by agent:/root/implement_reference_layout/stage12_review.",
     "verified_by": []
   },
   "schema": "pcbknowledge.block.v2",
