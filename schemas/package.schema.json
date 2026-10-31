@@ -201,6 +201,9 @@
         "pitch": {
           "$ref": "quantity.schema.json"
         },
+        "opposite_pitch": {
+          "$ref": "quantity.schema.json"
+        },
         "row_pitch": {
           "$ref": "quantity.schema.json"
         },

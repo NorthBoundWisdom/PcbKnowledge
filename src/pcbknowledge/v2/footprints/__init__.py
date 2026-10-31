@@ -156,9 +156,10 @@ def _gullwing_pads(context):
     if sides == 2 and count in (3, 5):
         left = (count + 1) // 2
         right = count // 2
+        opposite_pitch = dim('opposite_pitch') if count == 5 else pitch
         pads = [_pad(i + 1, -center, (i - (left - 1) / 2) * pitch, pad_length, pad_width)
                 for i in range(left)]
-        pads.extend(_pad(count - i, center, (i - (right - 1) / 2) * pitch, pad_length, pad_width)
+        pads.extend(_pad(count - i, center, (i - (right - 1) / 2) * opposite_pitch, pad_length, pad_width)
                     for i in range(right))
         return sorted(pads, key=lambda p: int(p['number']))
     if count % sides:
@@ -283,6 +284,9 @@ def _exposed_pad_margin(pad, drawing):
 
 def _drawing_pads(package):
     context = _Drawing(package)
+    if 'opposite_pitch' in context.record and (
+            context.generator != 'gullwing_two_side' or context.count != 5 or 'tab' in context.record):
+        raise ValueError('Opposite row pitch requires a five-terminal two-sided gull-wing package')
     if 'terminal_gap' in context.record and context.generator != 'chip':
         raise ValueError('Terminal gap is supported only by the chip generator')
     generators = {

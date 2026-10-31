@@ -110,6 +110,8 @@ class FootprintTests(unittest.TestCase):
             self.assertAlmostEqual(pads[0]['y'],-(count/2-1)*.325)
         for count in (3,5):
             p=package('gullwing_two_side',count=count,lead_span=3,lead_length=.5,lead_width=.3,pitch=.95)
+            if count == 5:
+                p['drawing']['opposite_pitch'] = quantity(1.9, 'mm')
             self.assertEqual(len(derive_footprint(p)['pads']),count)
         p=package('gullwing_four_side',count=48,length=7,width=7,lead_span=9,lead_length=.6,lead_width=.27,pitch=.5)
         pads=derive_footprint(p)['pads']

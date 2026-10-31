@@ -822,6 +822,8 @@ D95 receipt: package exclusions project into handoff and full-width track/via ch
 
 - [ ] (wisdom) Independent verification and promotion of all T1 records and blocks to `AGENT_VERIFIED`.
 - [ ] (wisdom) Three fresh pinned synthesis attempts, then record T1 at A2.
+T1 A2 is parked with clamp and rail qualification: LDL1117 exceeds the retained host-load/thermal envelope; TPS709 with the retained capacitor network exceeds its 47 uF stability ceiling and the complete load ledger exceeds tentative 31 mA. Keep all limits; unqualified application and replacement data remain isolated.
+Completed helper checks: explicit five-terminal opposite-row pitch and source-temperature resistor-load budgets pass 57 affected tests; existing reference hashes remain unchanged. Independent reviews fixed the legacy five-pin fixture and retained all limits.
 
 Cycle 1, T2 and the negative brief:
 
@@ -852,6 +854,8 @@ session to wait for an answer.
 - D90: C4 has CAP_OUT/GND pads, while L1 pin 2 is VOUT across RE1/RE2; no same-net
   pad exists for that rule. Recommend targeting C4-to-RE1/RE2 CAP_OUT pads with the
   same 3 mm bound, after owner approval; do not silently remove the series ESR path.
+
+- T1: qualify a control-rail replacement with the full capacitor/load network. Recommended next design is TPS709 with a source-qualified 4.7 uF local output capacitor and an independently checked aggregate rail budget; preserve both 5 mA host limits and the 110 degC target.
 
 ## Owner evidence list
 

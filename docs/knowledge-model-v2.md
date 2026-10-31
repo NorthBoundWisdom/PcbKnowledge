@@ -254,6 +254,9 @@ A package may state `body.center.x/y` as typed millimeter coordinates relative t
 its footprint datum. Missing center means `(0, 0)`. Derived courtyard encloses
 that translated body and every pad, with the recorded margin. This supports a
 connector mating-face origin without changing an edge-placement distance.
+Five-terminal two-sided gull-wing drawings require an explicit `opposite_pitch`
+for the two-terminal row; its spacing cannot be inferred from the three-terminal
+row's `pitch`. Other generators reject this field.
 Manufacturer land generators may declare the cited `pad_numbers` permutation;
 numbering changes never move or resize the cited lands.
 
@@ -351,3 +354,9 @@ A calculator requirement may use an exact `{parameter: name}` limit instead of a
 literal quantity. The parameter must be declared by the block; current values are
 resolved and rechecked during expansion and intent replay. Missing, unknown or
 wrong-unit limits cannot pass.
+
+`single_resistor_load` and `dual_resistor_load` bind one or two physical resistances
+and bound total supply loading with source temperature coefficients. The downstream
+node must remain between ground and the supply: zero downstream voltage bounds the
+maximum, but back-driven negative nodes are outside this model. Allocation is a
+scalar capacity or exactly `[0, maximum]`; zero current is not a minimum-load proof.

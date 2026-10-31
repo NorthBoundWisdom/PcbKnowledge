@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 
+from . import calculators_resistor_load
 from . import calculators_geometry, calculators_envelope, calculators_envelope_power, calculators_output
 from . import calculators_analog, calculators_drivers, calculators_power, calculators_protection
 
@@ -19,8 +20,11 @@ AREA_EXPONENT = 0.725
 MM_PER_MIL = 0.0254
 I2C_RC_RISE_FACTOR = 0.8473
 
-ENVELOPE_MODULES = {name: module for module in (calculators_envelope, calculators_envelope_power, calculators_output)
-                    for name in module.INPUT_UNITS}
+ENVELOPE_MODULES = {
+    name: module
+    for module in (calculators_envelope, calculators_envelope_power, calculators_output, calculators_resistor_load)
+    for name in module.INPUT_UNITS
+}
 
 
 INPUT_UNITS = {
@@ -28,6 +32,7 @@ INPUT_UNITS = {
     **calculators_envelope.INPUT_UNITS,
     **calculators_envelope_power.INPUT_UNITS,
     **calculators_output.INPUT_UNITS,
+    **calculators_resistor_load.INPUT_UNITS,
     'ldo_headroom': {'input_voltage': 'V', 'output_voltage': 'V', 'dropout': 'V',
                      'input_current': 'A', 'series_resistance': 'ohm'},
     'ldo_dissipation': {'input_voltage': 'V', 'output_voltage': 'V', 'output_current': 'A',

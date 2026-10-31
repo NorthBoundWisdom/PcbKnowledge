@@ -104,7 +104,9 @@
         "monitor_input_load",
         "control_rail_budget",
         "fccm_buck_with_local_loads",
-        "output_shunt_budget"
+        "output_shunt_budget",
+        "single_resistor_load",
+        "dual_resistor_load"
       ]
     },
     "inputs": {
