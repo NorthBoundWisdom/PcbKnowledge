@@ -11,7 +11,7 @@ from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
 # Stage 13 uses reviewed physical anchors, source-compatible power connector and conditional rail test windows.
-G1_CANONICAL_SHA256 = 'd85a38238a73bffd1f3bdab1e74aceea1adfe2a503d876ceed889d9e4dddb252'
+G1_CANONICAL_SHA256 = '308a225c582b3f69aabcdb77416e7563fa404330411f23ad8f8721c159d70e47'
 
 
 class GoldenAcceptanceTests(unittest.TestCase):

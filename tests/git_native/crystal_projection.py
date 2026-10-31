@@ -119,6 +119,18 @@ def _d69_anchors(test, expected):
     test.assertEqual(changed, 4)
 
 
+def _d70_package_scope(test, expected, catalog):
+    source = 'source:kemet-c0603c101j5gactu'
+    package = catalog.get('package:chip-0603-kemet-c0g', 'package')
+    test.assertIn('C0603C101J5GACTU', package['scope']['mpns'])
+    test.assertIn({'source': source, 'page': 1}, package['scope']['evidence'])
+    test.assertNotIn(source, expected['dependencies'])
+    expected['dependencies'].append(source)
+    expected['dependencies'].sort()
+    expected['evidence'].append({'source': source, 'page': 1})
+    expected['evidence'].sort(key=lambda row: (row['source'], row['page']))
+
+
 def assert_reviewed_g2_projection(test, original, current, catalog):
     """Compare the complete intent after exactly the named reviewed changes; drop no fields."""
     _part_contract(test, catalog)
@@ -128,5 +140,6 @@ def assert_reviewed_g2_projection(test, original, current, catalog):
     _crystal(test, expected)
     _d54_fuse(test, expected)
     _d69_anchors(test, expected)
+    _d70_package_scope(test, expected, catalog)
     expected['bundle_commit'] = current['bundle_commit']
     test.assertEqual(expected, current)
