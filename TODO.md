@@ -1,13 +1,13 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_12_ACTIVE` (G1-G5 at A2; reference layout next, ADR-026)
+> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; reference layout next, ADR-026)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
-> expansion; PcbAtlas does placement, routing, DRC and fabrication output.
+> expansion and the ADR-026 reference layout pipeline; PcbAtlas is the product layout tool.
 > Direction: [ADR-022](docs/adr/ADR-022-board-generation-knowledge.md) ·
 > Model: [knowledge-model-v2](docs/knowledge-model-v2.md) ·
-> Targets: [golden designs](docs/golden-designs.md) ·
+> Acceptance: [current table](docs/golden-designs.md#current-acceptance) · Targets: [golden designs](docs/golden-designs.md) ·
 > Architecture: [architecture](docs/architecture.md)
 
 ## How this file works
@@ -98,10 +98,10 @@ answer here.
 | D52 | Buck enable connection | Leave TPS5430 ENA unconnected as explicitly permitted by its internal pull-up; the part records the source-backed ENABLED default and the input checker retains it. |
 | D53 | G2 input edge | Place the power input header at the RIGHT edge within 5 mm, matching the existing header rule; the brief requires edge access but no particular side. This removes opposed defaults on the exported 80 by 100 mm outline. |
 | D54 | G2 entry placement | Place the fuse on the RIGHT edge within 8 mm and its directly connected input-header pad within 5 mm of the fuse pad. Matching edge names alone does not constrain along-edge separation. |
-| D55 | G3 operating inputs | Agent-selected bench front end: external3.2-3.4 V/150 mA, analog branch10 mA,15-35 degC,80x100 mm envelope and20 mm height. Two-layer1.6 mm board, common ground, separate analog/digital routing groups. |
-| D56 | G3 analog models | 940 nm,DC-1 Hz, imposed0-50 uA photocurrent;10 kohm transimpedance and buffered half-reference. Reference2.35-2.65 V and50 mV aggregate TIA DC error are explicit engineering envelopes, not manufacturer guarantees. Typical bandwidth/input capacitance inform a stability estimate. NTC uses its Beta approximation and tolerances; no total accuracy specification. |
-| D57 | G3 interfaces | ADS1115 +/-4.096 V,8 SPS single-shot with OS polling,100 kHz host I2C and50 pF total bus limit. Separate external-host UART/control drives115200 bit/s RS-485; two120 ohm terminations, one2 kohm-per-leg bias pair and0.6 mA adverse receiver-loading model. The second node also uses SN65HVD75; generic+200 mV receivers are outside this idle-bias design. |
-| D58 | G3 reference bias | Three parallel1 kohm resistors bias TL431;0.5 mA maximum reference load and no cathode capacitor. Source test conditions remain distinct from the selected operating model. |
+| D55 | G3 operating inputs | Agent-selected bench front end: external 3.2-3.4 V/150 mA, analog branch 10 mA, 15-35 degC, 80 by 100 mm envelope and 20 mm height. Two-layer 1.6 mm board, common ground, separate analog/digital routing groups. |
+| D56 | G3 analog models | 940 nm, DC-1 Hz, imposed 0-50 uA photocurrent; 10 kohm transimpedance and buffered half-reference. Reference 2.35-2.65 V and 50 mV aggregate TIA DC error are engineering envelopes. Typical bandwidth/input capacitance inform a stability estimate. NTC checks use the Beta approximation and component tolerances. |
+| D57 | G3 interfaces | ADS1115 +/-4.096 V, 8 SPS single-shot with OS polling, 100 kHz host I2C and 50 pF total bus limit. Separate external-host UART/control drives 115200 bit/s RS-485; two 120 ohm terminations, one 2 kohm-per-leg bias pair and 0.6 mA adverse receiver-loading model. The second node also uses SN65HVD75; generic +200 mV receivers are outside this idle-bias design. |
+| D58 | G3 reference bias | Three parallel 1 kohm resistors bias TL431; 0.5 mA maximum reference load and no cathode capacitor. |
 | D59 | G3 land density | Use the original COMPACT pad-fillets for ADS1115 VSSOP and MH2029 chip packages after source-contact review. This preserves the selected fab clearance and all manufacturer dimensions; NOMINAL fillets left insufficient pad clearance. |
 | D60 | G3 functional wiring | Bind functional supply, reference, sensor-channel and common-return endpoints to the actual expanded nets. Each named group shares one physical net and different groups remain distinct. Fixed parameter values alone do not establish physical wiring. |
 | D61 | First corpus growth cycle | G4 is a slow optical alignment-score acquisition peripheral; G5 is a dual-temperature agreement telemetry peripheral. Reuse the G3 bench envelopes and verified blocks, with an external host responsible for sequential ADC acquisition, scoring/comparison and communication. Distinct functional channel bindings define each composition. |
@@ -658,16 +658,19 @@ transcripts per attempt), which grows with every cycle. D55-D62 lost spaces
 
 ## Stage 12 — Cleanup from the Stage 11 review
 
-- [ ] Synthesis evidence storage: per attempt, commit the graph, the receipt with
+- [x] Synthesis evidence storage: per attempt, commit the graph, the receipt with
   SHA-256 of the initial packet, submissions and transcript, and the independent
   review verdict. Full packets and transcripts go to the ignored local cache
   (`.pcbknowledge/evals/`). Replay tests keep passing. Keep `evals/` under 1.5 MB.
-- [ ] D42-D62: restore missing spaces; keep each entry to the decision and its
+- [x] D42-D62: restore missing spaces; keep each entry to the decision and its
   reason, and move real limitations into typed `UNKNOWN` values or checks.
-- [ ] Update `README.md`, `architecture.md` and `golden-designs.md` for ADR-026
+- [x] Update `README.md`, `architecture.md` and `golden-designs.md` for ADR-026
   and the current acceptance table (one authority, linked from the others).
 
 Exit: `evals/` within budget, replay unchanged, docs match ADR-026.
+
+Receipt (2026-10-31): full gate PASS, Test 476/no skips; committed evals 1.13 MB, all original receipt and submission hashes retained.
+Independent review verified cache-free replay of all 36 archived attempts; malformed-input and cross-platform byte handling findings fixed.
 
 ## Stage 13 — Reference layout for G1 (A3 to A5)
 

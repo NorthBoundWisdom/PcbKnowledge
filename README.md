@@ -2,26 +2,16 @@
 
 [![CI](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/NorthBoundWisdom/PcbKnowledge/actions/workflows/ci.yml)
 
-PcbKnowledge supplies Git-native engineering knowledge for a pipeline from a
-design brief to a manufacturable PCB. PcbAtlas owns synthesis orchestration,
-placement, routing, DRC and fabrication output. The product direction is
-[ADR-022](docs/adr/ADR-022-board-generation-knowledge.md).
+PcbKnowledge supplies Git-native engineering knowledge from a design brief to a
+manufacturable PCB: validated parts, original footprints, deterministic expansion,
+and exported-board checks. PcbAtlas remains the product layout tool.
+[ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md) authorizes a reference
+placement, Freerouting and KiCad fabrication pipeline, writing derived files only
+under `build/`; its implementation is queued in [`TODO.md`](TODO.md).
 
-The runtime uses one v2 model and shared structural/semantic validation, a
-read-only catalog, original footprint generators and commit-pinned deterministic
-design expansion. G1 has 100% catalog coverage and reaches A2 with its reference
-graph and all three independently authored AI graphs. G2 reaches A2 with its
-reference, three fresh graphs and separately recorded current-catalog regression;
-switching-power and external-load models retain explicit source conditions. G3
-reaches A2 with its reference and three independently authored graphs, retaining
-declared bench models and functional wiring checks. Hardware
-fabrication and bring-up are not claimed. Derived KiCad 9 handoff, read-only exported-board
-checks and an optional isolated DRC wrapper support the owner's layout work;
-parked skeletons and incomplete geometry checks are not A3/A4 acceptance.
-The first corpus-growth cycle passes optical scoring and dual-temperature telemetry
-briefs (three fresh attempts each), plus three correct typed receiver-threshold
-refusals. It stops under the no-new-blocks condition.
-[`TODO.md`](TODO.md) records the acceptance receipts and remaining work.
+See the [current acceptance table](docs/golden-designs.md#current-acceptance) for
+the golden designs and [`TODO.md`](TODO.md) for exact stage receipts. Parked
+handoffs are not placed or routed boards. Hardware bring-up remains owner-only.
 
 ## Use
 

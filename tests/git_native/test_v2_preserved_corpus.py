@@ -6,6 +6,7 @@ import unittest
 from pcbknowledge.serialization import read_json
 from pcbknowledge.v2.bundle import Bundle
 from pcbknowledge.v2.synthesis import digest, evaluate_historical_corpus
+from pcbknowledge.v2.synthesis_evidence import load_attempt
 from pcbknowledge.v2.synthesis_inputs import reconstruct_bundle
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,7 +21,7 @@ class PreservedCorpusTests(unittest.TestCase):
         cls.bundle = Bundle.from_document(reconstruct_bundle(ROOT, cls.snapshot))
         cls.addClassCleanup(cls.bundle.close)
         cls.attempts = {
-            brief: [read_json((CORPUS / brief.lower() / (name + '.json')).read_bytes())
+            brief: [load_attempt(ROOT, CORPUS / brief.lower() / (name + '.json'), recover_history=True)
                     for name in ('one', 'two', 'three')]
             for brief in BRIEFS
         }

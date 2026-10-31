@@ -8,6 +8,7 @@ import unittest
 from pcbknowledge.serialization import read_json
 from pcbknowledge.v2.bundle import Bundle, build_bundle
 from pcbknowledge.v2.synthesis import digest, replay_corpus
+from pcbknowledge.v2.synthesis_evidence import load_attempt
 from pcbknowledge.v2.synthesis_inputs import resolve_replay_inputs
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,7 +21,7 @@ class G3SynthesisTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.snapshot = read_json((cls.corpus / 'input.json').read_bytes())
-        cls.attempts = [read_json((cls.corpus / (name + '.json')).read_bytes())
+        cls.attempts = [load_attempt(ROOT, cls.corpus / (name + '.json'), recover_history=True)
                         for name in ('one', 'two', 'three')]
         cls.temp = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.temp.cleanup)

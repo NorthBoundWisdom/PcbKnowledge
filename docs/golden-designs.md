@@ -26,7 +26,10 @@ acceptance                      checks the generated design must pass (see below
 
 The synthesis step turns a brief into a **block graph** (blocks, parameters and
 port connections). `expand` turns the block graph into a design intent. PcbAtlas
-turns the design intent into a routed board and fabrication outputs.
+turns the design intent into a routed board and fabrication outputs. The
+[ADR-026](adr/ADR-026-reference-layout-pipeline.md) reference pipeline provides
+the authority for those derived stages under `build/`; implementation is tracked
+in `TODO.md`.
 
 ## Acceptance levels
 
@@ -34,12 +37,22 @@ turns the design intent into a routed board and fabrication outputs.
 |---|---|---|
 | A1 Knowledge closure | Every block and part the design needs exists with `AGENT_VERIFIED` or better; `expand` produces no refusal | PcbKnowledge |
 | A2 Electrical checks | Every IC power and ground pin is connected and decoupled; no floating required input; block calculator checks pass | PcbKnowledge (`expand` checks) |
-| A3 Layout constraints | Placed and routed board satisfies every constraint in the design intent | PcbAtlas (checker reads the constraint set) |
-| A4 DRC | Zero violations against the named fab profile | PcbAtlas / PcbCore |
-| A5 Fabrication outputs | Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer | PcbAtlas |
+| A3 Layout constraints | Placed and routed board satisfies every constraint in the design intent | PcbAtlas or ADR-026 reference pipeline |
+| A4 DRC | Zero violations against the named fab profile | PcbAtlas or ADR-026 reference pipeline |
+| A5 Fabrication outputs | Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer | PcbAtlas or ADR-026 reference pipeline |
 | A6 Hardware | Fabricated board passes bring-up: correct rails, programmer connects, functional test | Owner |
 
 A1 and A2 can be reached with a hand-written block graph before any AI synthesis.
+
+## Current acceptance
+
+This is the current acceptance summary; exact input identities and stage receipts
+are in [`TODO.md`](../TODO.md). A3-A5 require actual execution and output checks.
+
+| Designs | A1 | A2 | A3 | A4 | A5 | A6 |
+|---|---|---|---|---|---|---|
+| G1, G1V1, G1V2, G2, G3, G4, G5 | PASS | PASS | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
+| N1, N2, N3, N4 | Expected typed refusal | Not applicable | Not applicable | Not applicable | Not applicable | Not applicable |
 
 ## G1: sensor logger node (first target)
 
@@ -169,8 +182,9 @@ and buffered-bias guard geometry. Their actual copper realization remains an A3
 check; the parked handoff does not establish it.
 
 Three fresh query-mediated G3 attempts on published `5b16185` are preserved in
-`evals/synthesis/g3/`, including complete input packets, queries and original
-submissions. All three expand with 62 passing checks. Independent graph review
+`evals/synthesis/g3/`, with hashes of complete input packets, queries and original
+submissions (full bytes in the ignored local evidence cache). All three expand
+with 62 passing checks. Independent graph review
 compares complete selected parameters and physical net partitions; replay resolves
 the published input bundle rather than substituting the current catalog.
 
@@ -193,5 +207,6 @@ instead of the selected SN65HVD75-compatible negative threshold.
 The first cycle preserves three fresh query-mediated attempts for each of G4,
 G5 and N4 in their respective evals/synthesis directories. Both positive designs
 reach A2 in all attempts, and all three negative attempts reproduce the typed
-refusal. The cycle introduces no blocks, satisfying the Stage 11 stopping
-condition; the preserved cycle result links all three evaluation digests.
+refusal. The cycle introduces no blocks, meeting the historical Stage 11 stopping
+condition. The owner review replaced that condition with fixed themes D65 for
+Stage 16; the preserved cycle result links all three evaluation digests.

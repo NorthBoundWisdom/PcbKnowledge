@@ -68,6 +68,8 @@ The repository as of `58c6614` does not serve that goal:
    [ADR-025](ADR-025-derived-board-handoff.md) permits derived parked handoff
    projects and read-only checks over exported files, without transferring
    placement, routing or live-board ownership.
+   [ADR-026](ADR-026-reference-layout-pipeline.md) subsequently permits a derived
+   reference layout pipeline under `build/`, retaining the live-board boundary.
 
 ## Consequences
 

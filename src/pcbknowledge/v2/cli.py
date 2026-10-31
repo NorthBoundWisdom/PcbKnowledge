@@ -199,7 +199,9 @@ def catalog_command(arguments, root, catalog, snapshot):
 def synthesis_command(arguments, root, snapshot):
     from .synthesis import evaluate, evaluate_corpus, evaluate_historical_corpus, replay_corpus
 
-    attempts = [load_document(path) for path in arguments.attempt]
+    from .synthesis_evidence import load_attempt
+
+    attempts = [load_attempt(root, path) for path in arguments.attempt]
     reference = load_document(arguments.reference) if arguments.reference else None
     if arguments.brief:
         if not arguments.orchestrator or not arguments.skill:

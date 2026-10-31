@@ -33,8 +33,8 @@ One v2 record model lives in `schemas/` and `src/pcbknowledge/v2/`:
 The catalog covers all 15 G1 block instances with independently verified parts,
 packages, rules and manufacturing evidence. Standard footprints derive from cited
 drawing dimensions; irregular connectors retain explicit manufacturer patterns.
-The G1 reference and three independent AI-produced graphs reach A2 on a pinned
-bundle. Electrical screening is not a physical fabrication or bring-up claim.
+See the [current acceptance table](golden-designs.md#current-acceptance) for
+reference and synthesis progress.
 
 The retired record families, intake toolchain and approval UI are removed. Frozen
 migration input is available with `git show intake-final:knowledge/intake/<file>`.
@@ -100,13 +100,15 @@ commit-pinned consumer bundles and pure deterministic expansion:
 brief -> block graph -> expand(pinned bundle, graph) -> design intent -> PcbAtlas
 ```
 
-PcbAtlas owns synthesis orchestration, board state, placement, routing and
-fabrication output. Under D16-D17, PcbKnowledge additionally derives a parked
-KiCad 9 handoff and checks exported files without mutating them. Native DRC is
-optional and runs on isolated copies; unsupported geometry and absent tools are
-not passes. [ADR-025](adr/ADR-025-derived-board-handoff.md) defines this boundary. PcbKnowledge never reads or mutates live board state and has
-no PcbCore runtime dependency. [ADR-023](adr/ADR-023-design-intent-handoff.md) owns
-the JSON handoff and derived KiCad interchange contract.
+PcbAtlas owns product synthesis orchestration and live board state. The parked
+KiCad handoff and read-only checks follow [ADR-025](adr/ADR-025-derived-board-handoff.md).
+[ADR-026](adr/ADR-026-reference-layout-pipeline.md) additionally authorizes a
+reference pipeline: deterministic placement, external Freerouting, KiCad DRC and
+fabrication exports, all derived under `build/`. Its implementation is tracked in
+`TODO.md`. Optional installed tools never become catalog runtime dependencies;
+missing tools and unsupported geometry cannot pass. PcbKnowledge never reads or
+mutates live board state and has no PcbCore runtime dependency.
+[ADR-023](adr/ADR-023-design-intent-handoff.md) owns the JSON handoff contract.
 
 Expansion rejects mutually incompatible directional edge intervals across the
 shared maximum outline envelope. An envelope is not a fixed board size. The
@@ -265,3 +267,20 @@ This binds G3 supply providers, reference distribution, ADC channels and common
 return without matching graph labels or a stored reference answer. It is not a
 general power-flow solver. Guard and return-path copper checks are described in
 [the v2 model](knowledge-model-v2.md#guard-and-reference-copper-requirements).
+
+## Synthesis evidence storage
+
+Committed attempts contain the graph or typed refusal, unchanged receipt and
+independent review, plus SHA-256 identities for the initial packet, transcript,
+and each original submission. Full packets, submissions and query transcripts
+live in `.pcbknowledge/evals/sha256/<prefix>/<digest>.json`, ignored local state.
+`load_attempt` verifies the cache and every retained submission hash before replay;
+missing evidence reports `NOT_LOCALLY_VERIFIED`, never acceptance.
+
+Historical migrated attempts also name their original Git blob. For an explicit
+read-only historical replay, `load_attempt(root, path, recover_history=True)`
+recovers that blob from full local Git history and verifies its original receipt,
+graph and evidence digest. It performs no fetch or repository/cache writes. CI
+uses this route so all original replay and provenance assertions still run on a
+fresh clone. New attempts require their local cache; do not commit full evidence.
+The committed `evals/` budget is 1.5 MB and is tested alongside hash preservation.
