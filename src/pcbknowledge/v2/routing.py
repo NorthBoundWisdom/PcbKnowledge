@@ -30,6 +30,8 @@ def copy_rules(source, target, root):
 
 def _canonical_geometry(value, key=None):
     # Native KiCad stores nanometer coordinates and may reorder layer membership.
+    if key == "rotation" and isinstance(value, (int, float)) and not isinstance(value, bool):
+        return round(value % 360, 6)
     if isinstance(value, float):
         return round(value, 6)
     if isinstance(value, list):

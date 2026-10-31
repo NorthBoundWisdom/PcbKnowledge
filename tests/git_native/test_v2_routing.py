@@ -43,6 +43,20 @@ class RoutingTests(unittest.TestCase):
         with patch('pcbknowledge.v2.routing.parse_board', side_effect=[before, after]), self.assertRaises(ValueError):
             unchanged_placement('a', 'b')
 
+    def test_signed_native_rotation_is_equivalent_but_different_orientation_fails(self):
+        before = {"nets": {}, "outline": {}, "footprints": {"R1": {"rotation": 270.0}}}
+        after = deepcopy(before)
+        after["footprints"]["R1"]["rotation"] = -90.0
+        with patch("pcbknowledge.v2.routing.parse_board", side_effect=[before, after]):
+            self.assertEqual(unchanged_placement("a", "b")["status"], "PASS")
+        before["footprints"]["R1"]["pads"] = {"1": [{"rotation": 360.0}]}
+        after["footprints"]["R1"]["pads"] = {"1": [{"rotation": 0.0}]}
+        with patch("pcbknowledge.v2.routing.parse_board", side_effect=[before, after]):
+            self.assertEqual(unchanged_placement("a", "b")["status"], "PASS")
+        after["footprints"]["R1"]["rotation"] = -89.0
+        with patch("pcbknowledge.v2.routing.parse_board", side_effect=[before, after]), self.assertRaises(ValueError):
+            unchanged_placement("a", "b")
+
     def test_native_pad_number_loss_is_not_accepted(self):
         before = {'nets': {}, 'outline': {}, 'footprints': {'H1': {'pads': {'1': []}}}}
         after = {'nets': {}, 'outline': {}, 'footprints': {'H1': {'pads': {'': []}}}}
