@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_14_ACTIVE` (Stage 13 complete; seven positive references at A2; all-platform CI green)
+> Status: `CONTINUOUS_MODE_STAGE_16_ACTIVE` (Stages 13 and Wisdom Stage 14 work complete; Stage 14 parked on assigned dependencies; seven positive references at A2)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators, block expansion,
@@ -784,7 +784,7 @@ Exit: every CI job green; no module implements or orchestrates placement, routin
 fill, DRC or fabrication output; CI needs no external tool; `layout check` and the handoff still work on synthetic boards; all
 positive designs remain at A2.
 
-## Stage 14 — Layout knowledge and checks for PcbAtlas
+## Stage 14 — Layout knowledge and checks for PcbAtlas (parked)
 
 `layout check` judges any exported board against the constraints in the intent. It is
 the conformance oracle PcbAtlas will use, and it does not perform DRC.
@@ -857,6 +857,9 @@ primitives retain their prior behavior.
 Exit: `layout check` has no unconditional `NOT_CHECKABLE` kind; the G2 blocker is resolved
 or escalated; `range_coverage` is `COMPLETE` for every positive design.
 
+Wisdom completion: `cb67b8a` / `4cdb643` implement D79/D80 with independent checklist review; Build 692 tests passed and all four CI jobs plus CodeQL passed on `4cdb643` (runs 41204485156/41204485157). Seven positives remain A2; T1 remains REFUSED.
+Park: Ethan's D102 G2 source-datum escalation and D103 BUCK_SW waveform declaration remain unresolved. G1V1/G1V2/G5 ranges and G2 DC windows are now declared by his commits; their items and constraints remain unchanged. This is not a Stage 14 exit; continue the assigned Stage 16 queue under D75.
+
 ## Stage 15 — First fabricated board (owner-only)
 
 - [ ] (owner-only) Lay out G1 from the handoff project in PcbAtlas or by hand, run
@@ -877,8 +880,8 @@ Record one receipt line per cycle: themes, A-levels, new blocks and parts, and t
 corpus pass rate. Continue until all ten themes are done or parked, then propose
 the next ten as a TODO change.
 
-Not active: wait for Stages 13 and 14 to exit or park (D75). T1 work started early;
-its committed records stay, and no further theme work happens until then.
+Active after Stage 13 exit and the Stage 14 park (D75). Resume T1 and T2 in D65 order;
+existing T1 DRAFT records require executable checks and independent review before A2.
 
 T1 reference authority is DRAFT: the complete original competition brief and
 14-instance graph are committed for closure, not A1/A2 acceptance. Remaining
