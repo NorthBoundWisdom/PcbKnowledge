@@ -169,10 +169,25 @@
   ],
   "parameters": {
     "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D98: fixed T5 USB source operating envelope; no USB power-delivery negotiation.",
+        "unit": "A",
+        "value": 0.1
+      },
       "quantity": "current",
       "required": true
     },
     "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 5.25,
+        "min": 4.75,
+        "note": "D98: fixed T5 USB source operating envelope; no USB power-delivery negotiation.",
+        "unit": "V"
+      },
       "quantity": "voltage",
       "required": true
     },
