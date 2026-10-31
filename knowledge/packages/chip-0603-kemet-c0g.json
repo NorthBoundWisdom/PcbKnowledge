@@ -88,6 +88,10 @@
     {
       "page": 1,
       "source": "source:kemet-c0603c220j5gactu"
+    },
+    {
+      "page": 1,
+      "source": "source:kemet-c0603c101j5gactu"
     }
   ],
   "family": "CHIP_0603",
@@ -97,8 +101,10 @@
   "pin1": "1",
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
+    "notes": "D70 revision by agent:/root/implement_reference_layout/placer_draft; independently verified exact 100 pF source, unchanged package geometry, electrical envelopes and layout bounds.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review",
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "schema": "pcbknowledge.package.v2",
@@ -108,10 +114,15 @@
       {
         "page": 1,
         "source": "source:kemet-c0603c220j5gactu"
+      },
+      {
+        "page": 1,
+        "source": "source:kemet-c0603c101j5gactu"
       }
     ],
     "mpns": [
-      "C0603C220J5GACTU"
+      "C0603C220J5GACTU",
+      "C0603C101J5GACTU"
     ]
   },
   "verification": "AGENT_VERIFIED"

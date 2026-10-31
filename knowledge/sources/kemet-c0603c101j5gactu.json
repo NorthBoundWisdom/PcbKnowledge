@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-31",
+  "bytes": 241899,
+  "id": "source:kemet-c0603c101j5gactu",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 4,
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/placer_draft",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "publisher": "KEMET / Yageo Group",
+  "revision": "Generated 2026-10-31",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "38a10629ce43641d0f2a32aeab56956ec99de1fbe80bb8eb55d6f8bebba57ac7",
+  "title": "C0603C101J5GACTU component specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/C0603C101J5GACTU",
+  "verification": "AGENT_VERIFIED"
+}

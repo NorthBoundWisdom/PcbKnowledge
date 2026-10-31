@@ -135,22 +135,10 @@
       }
     },
     {
-      "calculator": "tia_loop_model",
+      "calculator": "tia_loop_total_capacitance",
       "inputs": {
-        "feedback_capacitance_a": {
+        "feedback_capacitance": {
           "component": "C2",
-          "parameter": "capacitance"
-        },
-        "feedback_capacitance_b": {
-          "component": "C3",
-          "parameter": "capacitance"
-        },
-        "feedback_capacitance_c": {
-          "component": "C4",
-          "parameter": "capacitance"
-        },
-        "feedback_capacitance_d": {
-          "component": "C5",
           "parameter": "capacitance"
         },
         "feedback_resistance": {
@@ -229,25 +217,7 @@
     {
       "ref": "C2",
       "select": {
-        "part": "part:kemet-c0603c220j5gactu"
-      }
-    },
-    {
-      "ref": "C3",
-      "select": {
-        "part": "part:kemet-c0603c220j5gactu"
-      }
-    },
-    {
-      "ref": "C4",
-      "select": {
-        "part": "part:kemet-c0603c220j5gactu"
-      }
-    },
-    {
-      "ref": "C5",
-      "select": {
-        "part": "part:kemet-c0603c220j5gactu"
+        "part": "part:kemet-c0603c101j5gactu"
       }
     },
     {
@@ -281,6 +251,10 @@
     {
       "page": 4,
       "source": "source:vishay-bpw34"
+    },
+    {
+      "page": 1,
+      "source": "source:kemet-c0603c101j5gactu"
     }
   ],
   "id": "block:g3-photodiode",
@@ -295,9 +269,6 @@
         "R3",
         "C1",
         "C2",
-        "C3",
-        "C4",
-        "C5",
         "C6"
       ]
     },
@@ -330,11 +301,11 @@
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D55 compact analog signal and return paths.",
+        "note": "D70 physical summing-terminal anchor; retained 2 mm bound.",
         "unit": "mm",
         "value": 2
       },
-      "subject": "R3",
+      "subject": "R3.pin:1",
       "target": "U1.pin:6"
     },
     {
@@ -342,47 +313,11 @@
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D55 compact analog signal and return paths.",
+        "note": "D70 physical summing-terminal anchor; retained 2 mm bound.",
         "unit": "mm",
         "value": 2
       },
-      "subject": "C2",
-      "target": "U1.pin:6"
-    },
-    {
-      "kind": "PLACE_NEAR",
-      "max_distance": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "D55 compact analog signal and return paths.",
-        "unit": "mm",
-        "value": 2
-      },
-      "subject": "C3",
-      "target": "U1.pin:6"
-    },
-    {
-      "kind": "PLACE_NEAR",
-      "max_distance": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "D55 compact analog signal and return paths.",
-        "unit": "mm",
-        "value": 2
-      },
-      "subject": "C4",
-      "target": "U1.pin:6"
-    },
-    {
-      "kind": "PLACE_NEAR",
-      "max_distance": {
-        "basis": "ENGINEERING_DEFAULT",
-        "conditions": {},
-        "note": "D55 compact analog signal and return paths.",
-        "unit": "mm",
-        "value": 2
-      },
-      "subject": "C5",
+      "subject": "C2.pin:1",
       "target": "U1.pin:6"
     },
     {
@@ -503,10 +438,7 @@
         "D1.pin:1",
         "U1.pin:6",
         "R3.pin:1",
-        "C2.pin:1",
-        "C3.pin:1",
-        "C4.pin:1",
-        "C5.pin:1"
+        "C2.pin:1"
       ],
       "name": "SUMMING"
     },
@@ -515,10 +447,7 @@
         "port:OUT",
         "U1.pin:7",
         "R3.pin:2",
-        "C2.pin:2",
-        "C3.pin:2",
-        "C4.pin:2",
-        "C5.pin:2"
+        "C2.pin:2"
       ],
       "name": "OUT"
     }
@@ -592,9 +521,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/g3_analog_author",
-    "notes": "D56: buffered half-reference; positive photocurrent leaves summing node. Four parallel 22 pF C0G capacitors total 88 pF nominal. Typical GBW and diode capacitance do not guarantee stability; bench validation remains. No irradiance or accuracy guarantee.",
+    "notes": "D70 revision by agent:/root/implement_reference_layout/placer_draft; independently verified exact 100 pF source, unchanged package geometry, electrical envelopes and layout bounds.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/g3_source_review"
+      "agent:/root/implement_pcbknowledge_brief/g3_source_review",
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",
