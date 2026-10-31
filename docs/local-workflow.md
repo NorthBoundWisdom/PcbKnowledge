@@ -346,6 +346,9 @@ sidecars are required before copying the exact source project and rules.
 Freerouting uses one thread for each routing stage, sequential selection,
 fixed maximum 100 autorouter/20 optimizer passes, and disables fanout, automatic
 neckdown, GUI, API and analytics. The neck-width override is zero (disabled). Session widths are independently checked against the intent.
+Unfilled zone outlines are excluded only from the router projection so they cannot
+imply electrical connectivity. Nets, pads, keepouts and rules remain; the original
+zones are filled after explicit routing and checked normally.
 A router success is not DRC acceptance: the final filled board is checked again.
 
 ```bash
