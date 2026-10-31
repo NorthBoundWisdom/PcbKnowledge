@@ -2,14 +2,14 @@
   "brief": "G2",
   "bringup": {
     "prerequisites": [
-      "D103 conditional steady-state DC plan for G2. Every hardware reading and prerequisite remains NOT_RUN until measured; establish each listed condition independently.",
+      "D103 DC and D105 waveform plans for G2. Every hardware reading and prerequisite remains NOT_RUN until measured.",
       "Use D34/D35 limits: total input current at most 500 mA, logic load at most 150 mA and each of three external loads at most 100 mA. Verify total current including converter losses; the sum of load nameplates is not an input-current measurement.",
       "Set ambient to 40 degC per D45. Establish each device junction and lead temperature against its existing part and model limits, including the MCU lower ceiling. Ambient alone does not establish junction temperature. Stop on abnormal heating, tripped protection, oscillation or unstable readings.",
       "Measure operating fuse, diode and shunt drops and both additional distribution losses. The D50 allocations and D41 hot-resistance factor are engineering models to check in this application, not measurements.",
       "Use safe current-limited loads tolerating the protected supply envelope; external inductance is at most 100 mH. Initialize PA0, PA1 and PA9 LOW before output mode per D46, then deliberately establish the requested continuous ON state. Keep switching events and flyback outside the DC measurement interval.",
       "Verify stable regulator operation and the actual capacitor, ESR, thermal and feedback-network conditions used by D49-D51. Measure each voltage window independently rather than deriving downstream compliance from an upstream pass.",
       "Record instrument accuracy, probe/contact offsets, temperature and operating conditions. Pass only when the complete measurement uncertainty interval is inside the acceptance interval; boundary overlap requires retest, never automatic widening.",
-      "BUCK_SW at buck_U1.pin:8 relative to buck_U1.pin:6 is a switching waveform, not a steady DC rail. Its waveform acquisition, time-dependent bounds and overshoot criteria are undeclared, so it remains UNKNOWN. A DMM average or one plateau cannot establish its voltage envelope or complete range coverage.",
+      "BUCK_SW uses the declared waveform protocol, not a DMM DC window. Plan completeness is not measured compliance.",
       "ON-state relay and MOSFET windows do not prove controllability. Perform the separate OFF tests and record any stuck-low return or load that remains energized as a functional failure."
     ],
     "rails": [
@@ -346,6 +346,181 @@
             "source": "source:rohm-rq5e025tntl"
           }
         ]
+      },
+      {
+        "at": "buck_U1.pin:8",
+        "prerequisites": [
+          "Synchronously acquire PH and VIN at the IC pads relative to pin 6, with local high-impedance active differential probes and no long ground clip. Establish the full D103 input, thermal and current conditions independently.",
+          "Set logic load to 145-150 mA and verify peak inductor current at most 0.81 A. Settle for at least 50 ms and verify output stability before acquiring at least 1 ms continuously.",
+          "Evaluate high level relative to synchronous VIN and low level relative to GND. Plateau statistics exclude 50 ns around edges; all raw samples remain included in peak and excursion checks. Require measurable high and low plateaus.",
+          "Rise/fall times use 10-90 percent of measured plateau levels. Positive excursion threshold is relative to VIN; negative threshold is relative to GND. Merge excursions separated by at most 2 ns before duration evaluation.",
+          "Record instrument calibration, gain, offset, probe loading and actual voltage/time uncertainty. Entire uncertainty intervals must lie within acceptance limits; boundary overlap is inconclusive and requires retest. Negative excursions including timing uncertainty must remain strictly shorter than 10 ns.",
+          "A DMM average cannot establish waveform compliance. Complete range coverage describes the plan only; all hardware observations remain NOT_RUN."
+        ],
+        "reference_at": "buck_U1.pin:6",
+        "supporting_evidence": [
+          {
+            "page": 4,
+            "source": "source:ti-tps5430"
+          },
+          {
+            "page": 5,
+            "source": "source:ti-tps5430"
+          },
+          {
+            "page": 2,
+            "source": "source:taiwansemi-ss14"
+          }
+        ],
+        "waveform": {
+          "ambient": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 40,
+            "min": 40,
+            "unit": "degC"
+          },
+          "bandwidth": {
+            "basis": "ENGINEERING_DEFAULT",
+            "min": 1000000000.0,
+            "unit": "Hz"
+          },
+          "basis": "ENGINEERING_DEFAULT",
+          "edge_time": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 5e-08,
+            "unit": "s"
+          },
+          "excursion_merge_gap": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 2e-09,
+            "min": 2e-09,
+            "unit": "s"
+          },
+          "frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 600000.0,
+            "min": 400000.0,
+            "unit": "Hz"
+          },
+          "high_offset": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.05,
+            "min": -0.4,
+            "unit": "V"
+          },
+          "high_voltage_uncertainty": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.1,
+            "unit": "V"
+          },
+          "input_at": "buck_U1.pin:7",
+          "input_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 12,
+            "min": 6.2715,
+            "unit": "V"
+          },
+          "logic_load": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.15,
+            "min": 0.145,
+            "unit": "A"
+          },
+          "low_level": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.05,
+            "min": -0.55,
+            "unit": "V"
+          },
+          "low_voltage_uncertainty": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.025,
+            "unit": "V"
+          },
+          "negative_excursion_duration": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 8e-09,
+            "unit": "s"
+          },
+          "negative_excursion_threshold": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": -0.55,
+            "min": -0.55,
+            "unit": "V"
+          },
+          "negative_peak": {
+            "basis": "ENGINEERING_DEFAULT",
+            "min": -0.9,
+            "unit": "V"
+          },
+          "note": "D105 engineering waveform acceptance plan; source absolute limits are safety ceilings, not nominal waveforms.",
+          "peak_inductor_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.81,
+            "unit": "A"
+          },
+          "plateau_edge_exclusion": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 5e-08,
+            "min": 5e-08,
+            "unit": "s"
+          },
+          "positive_excursion_duration": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 5e-08,
+            "unit": "s"
+          },
+          "positive_excursion_threshold": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.05,
+            "min": 0.05,
+            "unit": "V"
+          },
+          "positive_peak": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 12.5,
+            "unit": "V"
+          },
+          "positive_peak_offset": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 0.5,
+            "unit": "V"
+          },
+          "probe": "ACTIVE_DIFFERENTIAL",
+          "probe_capacitance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 2e-12,
+            "unit": "F"
+          },
+          "probe_range": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 20,
+            "min": -20,
+            "unit": "V"
+          },
+          "processing": "RAW_NO_AVERAGING_NO_FILTER",
+          "protocol": "TPS5430_PH_D91",
+          "record_duration": {
+            "basis": "ENGINEERING_DEFAULT",
+            "min": 0.001,
+            "unit": "s"
+          },
+          "sample_rate": {
+            "basis": "ENGINEERING_DEFAULT",
+            "min": 5000000000.0,
+            "unit": "Hz"
+          },
+          "settling_time": {
+            "basis": "ENGINEERING_DEFAULT",
+            "min": 0.05,
+            "unit": "s"
+          },
+          "timing_uncertainty": {
+            "basis": "ENGINEERING_DEFAULT",
+            "max": 1e-09,
+            "unit": "s"
+          }
+        }
       }
     ]
   },

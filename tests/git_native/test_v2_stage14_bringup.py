@@ -1,4 +1,4 @@
-"""Conditional variant rail windows and the unresolved G2 switching waveform."""
+"""Conditional variant rail windows and missing waveform coverage."""
 import json
 from pathlib import Path
 import unittest
@@ -67,7 +67,9 @@ class Stage14BringupTests(unittest.TestCase):
             self.assertIn(net + ': UNKNOWN', render_bringup(report))
 
     def test_g2_dc_windows_do_not_claim_switch_waveform_coverage(self):
-        report = self.report('g2')
+        graph = read('g2', 'block-graph')
+        graph['bringup']['rails'] = [row for row in graph['bringup']['rails'] if 'waveform' not in row]
+        report = self.report('g2', graph)
         self.assertEqual(report['range_coverage'], 'UNKNOWN')
         self.assertEqual(report['unresolved_rail_ranges'], ['BUCK_SW'])
         rails = {row['net']: row for row in report['rails']}

@@ -64,6 +64,7 @@ def parser():
     export.add_argument('--graph', type=Path, required=True)
     export.add_argument('--intent', type=Path, required=True)
     export.add_argument('--output', type=Path, default=Path('build/design'))
+    bringup_parser(groups)
     synthesis_parser(groups)
     layout_parsers(groups)
     groups.add_parser('change-scope')
@@ -82,6 +83,14 @@ def parser():
             if name == 'part':
                 search.add_argument('--role')
     return result
+
+
+def bringup_parser(groups):
+    command = groups.add_parser('bringup', help='Emit an unobserved bring-up measurement plan')
+    for name in ('bundle', 'graph', 'intent'):
+        command.add_argument('--' + name, type=Path, required=True)
+    command.add_argument('--output', type=Path, default=Path('build/bringup-report.json'))
+    command.add_argument('--markdown', type=Path, help='Optional human checklist below build/')
 
 
 def synthesis_parser(groups):
@@ -157,6 +166,8 @@ def write_result(root, requested, result):
 
 def catalog_command(arguments, root, catalog, snapshot):
     group = arguments.group
+    if group == 'bringup':
+        return bringup_command(arguments, root, snapshot)
     if group == 'layout':
         return layout_command(arguments, root, snapshot)
     if group == 'eval-synthesis':
@@ -185,6 +196,34 @@ def catalog_command(arguments, root, catalog, snapshot):
     if arguments.action == 'show':
         return catalog.get(arguments.id, 'fab_profile' if group == 'fab' else group)
     return catalog.search(group, arguments.text, getattr(arguments, 'role', None))
+
+
+def same_file(first, second):
+    return first == second or (first.exists() and second.exists() and first.samefile(second))
+
+
+def bringup_command(arguments, root, snapshot):
+    from .bringup import make_bringup, render_bringup
+
+    output = derived_path(root, arguments.output)
+    markdown = derived_path(root, arguments.markdown) if arguments.markdown else None
+    for destination in (output, markdown):
+        if destination is not None and destination.exists() and destination.stat().st_nlink > 1:
+            raise ValueError('Bring-up output must not overwrite a multiply linked file')
+    if markdown is not None and same_file(markdown, output):
+        raise ValueError('Bring-up JSON and Markdown destinations must differ')
+    inputs = {arguments.intent.resolve(), arguments.graph.resolve(), arguments.bundle.resolve()}
+    if any(same_file(target, source) for target in (output, markdown) if target is not None for source in inputs):
+        raise ValueError('Bring-up outputs must not overwrite bundle, graph or intent inputs')
+    intent, graph = load_document(arguments.intent), load_document(arguments.graph)
+    validate_expansion(snapshot, intent, graph)
+    report = make_bringup(intent, graph, snapshot.briefs[graph['brief']], snapshot.catalog)
+    checklist = render_bringup(report) if markdown else None
+    write_result(root, output, report)
+    if markdown:
+        markdown.parent.mkdir(parents=True, exist_ok=True)
+        markdown.write_text(checklist, encoding='utf-8', newline='\n')
+    return report
 
 
 def synthesis_command(arguments, root, snapshot):

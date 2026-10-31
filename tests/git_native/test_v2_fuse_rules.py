@@ -137,6 +137,8 @@ class FuseRuleTests(unittest.TestCase):
                     for key in ('at', 'reference_at'):
                         if key in rail:
                             rail[key] = prefix + rail[key]
+                    if 'waveform' in rail:
+                        rail['waveform']['input_at'] = prefix + rail['waveform']['input_at']
                 for configuration in graph.get('pin_configurations', []):
                     configuration['instance'] = prefix + configuration['instance']
                 for net in graph['connections']:

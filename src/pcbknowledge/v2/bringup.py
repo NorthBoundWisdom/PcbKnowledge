@@ -157,7 +157,7 @@ def make_bringup(intent, graph, brief, catalog, *, board=None):
             'range_coverage': 'UNKNOWN' if unresolved else 'COMPLETE', 'unresolved_rail_ranges': unresolved,
             'test_location_note': 'Terminal coordinates identify probes; physical probe accessibility is not proven.'}
     from .bringup_contract import apply_test_windows
-    return apply_test_windows(report, intent, locate=lambda pin: _location(pin, board))
+    return apply_test_windows(report, intent, locate=lambda pin: _location(pin, board), catalog=catalog)
 
 
 def render_bringup(report):
@@ -165,12 +165,15 @@ def render_bringup(report):
     lines = ['# Bring-up checklist: ' + report['brief'], '',
              'Bundle: `' + report['bundle_commit'] + '`', '',
              'Hardware observations: NOT_RUN. Voltage range coverage: ' + report['range_coverage'] + '.', '',
-             '## Rails', '', report['test_location_note'], '']
+             report.get('range_coverage_note', ''), '', '## Rails', '', report['test_location_note'], '']
     if report.get('prerequisites'):
         lines.extend(['## Shared prerequisites (NOT_RUN)', ''])
         lines.extend('- [ ] ' + item for item in report['prerequisites'])
         lines.append('')
     for rail in report['rails']:
+        if 'expected_waveform' in rail:
+            lines.extend(_render_waveform(rail))
+            continue
         value = rail['expected_voltage']
         expected = (f"{value['min']} to {value['max']} V" if value['status'] == 'DECLARED'
                     else 'UNKNOWN: ' + value['reason'])
@@ -202,3 +205,19 @@ def render_bringup(report):
         if item['parameters']:
             lines.append('  - Declared parameters: ' + str(item['parameters']))
     return '\n'.join(lines) + '\n'
+
+
+def _render_waveform(rail):
+    value = rail['expected_waveform']
+    lines = ['- [ ] ' + rail['net'] + ': WAVEFORM_PROTOCOL; observations NOT_RUN.']
+    for field, declaration in value['protocol'].items():
+        if isinstance(declaration, dict):
+            bounds = ', '.join(f'{key}={declaration[key]}' for key in ('min', 'max') if key in declaration)
+            lines.append(f"  - {field}: {bounds} {declaration['unit']} ({declaration['basis']})")
+        else:
+            lines.append(f'  - {field}: {declaration}')
+    lines.append('  Source limits: ' + str(value['source_limits']))
+    lines.extend('  - [ ] ' + item for item in value['prerequisites'])
+    for key in ('declared_test_location', 'declared_reference_location', 'declared_input_location'):
+        lines.append('  ' + key + ': ' + str(rail[key]))
+    return lines

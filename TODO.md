@@ -152,6 +152,7 @@ answer here.
 | D94 | Stable existing selections | Pin `mcu-core` C6/C7 to the already selected KEMET C0805C106K3PACTU; their 10 uF match also admitted C0805C106K8PACTU. A catalog regression rejects verified different-MPN ambiguity in every block. |
 | D95 | Inductor conductor exclusion | Project the selected package's cited strip into intent and handoff. For Wurth 74437349047 preserve its 2.5 mm width; choose the maximum 6.9 mm body length and all copper layers as engineering defaults. Check full track/via copper including tangency; pads and zones remain allowed. |
 | D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
+| D105 | BUCK_SW acquisition protocol | D91 uses synchronous PH/VIN differential acquisition at 1 GHz and 5 GS/s, full uncertainty intervals, source PH limits and explicit plateau/peak/time envelopes. The 0.40 V high-side drop and 0.55 V diode plateau allowances are engineering test budgets under D103 conditions; every observation stays NOT_RUN. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -741,7 +742,10 @@ windows for G1V1, G1V2 and G5 plus eight G2 DC nodes (D103).
   COPPER_EDGE is implemented with unchanged values; C4-to-L1 is NOT_CHECKABLE because
   no same-net candidate exists (owner question below). No ten-rule joint PASS is claimed;
   the C2/C5/C6 simultaneous fit still needs a complete physical witness.
-- [ ] (ethan) Finish `BUCK_SW` bring-up in G2 (D91), giving `range_coverage` `COMPLETE`.
+- [x] (ethan) Finish `BUCK_SW` bring-up in G2 (D91), giving `range_coverage` `COMPLETE`.
+  D105 binds a typed waveform protocol to PH8/GND6/VIN7; all nine G2 rails now have plans,
+  with observations NOT_RUN. Source review checked matched TPS5430/SS14 bytes; missing
+  protocols, contradictory peaks, inadequate acquisition and exact 10 ns boundaries refuse.
 - [ ] (ethan) Add a read-only `v2 validate` check that fails a `PLACE_NEAR` rule a footprint pair
   cannot meet, using the isolated geometric lower bound. This restores a useful catalog check
   deleted with the pipeline; it computes a bound and places nothing. Negative test: an impossible

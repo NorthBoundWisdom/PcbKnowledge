@@ -374,6 +374,36 @@ files. External tools are not prerequisites for CI, expansion or A2 acceptance.
 Bring-up report generation remains tool-free and supports an absent placed board;
 physical measurements and ordering remain owner-only activities.
 
+### Conditional waveform bring-up
+
+Regenerate the JSON plan and human checklist from one clean committed bundle:
+
+```sh
+python3 configs/pcbknowledge_agent.py --repo . bringup \
+  --bundle build/bundle/<commit>.json --graph evals/golden-designs/g2.block-graph.json \
+  --intent build/g2-intent.json --output build/g2-bringup.json --markdown build/g2-bringup.md
+```
+
+The CLI replays the supplied graph and intent against the bundle before writing
+under `build/`. It does not modify the graph, bundle or intent.
+
+A bring-up rail declares either `expected_voltage` or `waveform`, never both.
+D91 binds G2 BUCK_SW to TPS5430 PH pin 8, ground pin 6 and synchronous VIN pin 7.
+The report exposes `expected_waveform` with the complete typed acquisition protocol,
+source limits from the selected part and explicit probe locations. Its checklist
+prints every level, edge, excursion, uncertainty and acquisition setting.
+`range_coverage: COMPLETE` means all rails have measurement plans; hardware results
+and conditions remain `NOT_RUN`. Removing the waveform declaration leaves BUCK_SW
+`UNKNOWN`; a DMM reading cannot replace it.
+
+D105's high plateau is relative to measured VIN, its low plateau to ground.
+The high-drop budget uses D50's modeled hot resistance at the declared peak current;
+the low-drop budget uses the cited SS14 value as context, with an engineering margin.
+Neither extends the datasheet's RDS(on) or diode test conditions. The operator must
+establish the D103 thermal/current prerequisites and fit full measurement uncertainty
+inside each acceptance envelope. Source absolute ratings bound the protocol, not
+nominal behavior. No waveform acquisition or measured-pass evaluator is implemented.
+
 ### Return-copper measurement
 
 `layout check` applies D100 to `RETURN_PATH`: every observed straight signal

@@ -802,13 +802,662 @@
                   "$ref": "evidence.schema.json"
                 },
                 "uniqueItems": true
+              },
+              "waveform": {
+                "type": "object",
+                "properties": {
+                  "protocol": {
+                    "const": "TPS5430_PH_D91"
+                  },
+                  "basis": {
+                    "const": "ENGINEERING_DEFAULT"
+                  },
+                  "input_at": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[A-Za-z0-9_]+\\.pin:[A-Za-z0-9_]+$"
+                  },
+                  "probe": {
+                    "const": "ACTIVE_DIFFERENTIAL"
+                  },
+                  "processing": {
+                    "const": "RAW_NO_AVERAGING_NO_FILTER"
+                  },
+                  "note": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "input_voltage": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "high_offset": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "low_level": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "positive_peak_offset": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "positive_peak": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "negative_peak": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "positive_excursion_threshold": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "negative_excursion_threshold": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "positive_excursion_duration": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "negative_excursion_duration": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "edge_time": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "plateau_edge_exclusion": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "excursion_merge_gap": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "frequency": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "Hz"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "bandwidth": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "Hz"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "sample_rate": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "Hz"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "probe_capacitance": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "F"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "probe_range": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "settling_time": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "record_duration": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "low_voltage_uncertainty": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "high_voltage_uncertainty": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "V"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "timing_uncertainty": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "s"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "logic_load": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "A"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "peak_inductor_current": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "A"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "ambient": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {
+                        "const": "degC"
+                      },
+                      "basis": {
+                        "const": "ENGINEERING_DEFAULT"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "unit",
+                      "basis",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "protocol",
+                  "basis",
+                  "input_at",
+                  "probe",
+                  "processing",
+                  "note",
+                  "input_voltage",
+                  "high_offset",
+                  "low_level",
+                  "positive_peak_offset",
+                  "positive_peak",
+                  "negative_peak",
+                  "positive_excursion_threshold",
+                  "negative_excursion_threshold",
+                  "positive_excursion_duration",
+                  "negative_excursion_duration",
+                  "edge_time",
+                  "plateau_edge_exclusion",
+                  "excursion_merge_gap",
+                  "frequency",
+                  "bandwidth",
+                  "sample_rate",
+                  "probe_capacitance",
+                  "probe_range",
+                  "settling_time",
+                  "record_duration",
+                  "low_voltage_uncertainty",
+                  "high_voltage_uncertainty",
+                  "timing_uncertainty",
+                  "logic_load",
+                  "peak_inductor_current",
+                  "ambient"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
-              "at",
-              "expected_voltage"
+              "at"
             ],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "oneOf": [
+              {
+                "required": [
+                  "expected_voltage"
+                ],
+                "not": {
+                  "required": [
+                    "waveform"
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "waveform",
+                  "reference_at"
+                ],
+                "not": {
+                  "required": [
+                    "expected_voltage"
+                  ]
+                }
+              }
+            ]
           },
           "minItems": 1
         },
