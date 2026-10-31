@@ -29,7 +29,7 @@ class ConformanceTests(unittest.TestCase):
     def setUpClass(cls):
         cls.temporary = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.temporary.cleanup)
-        cls.directory = Path(cls.temporary.name)
+        cls.directory = Path(cls.temporary.name).resolve()
         cls.root = cls.directory / 'workspace'
         initialize_workspace(cls.root, schema_source_root=ROOT, init_git=True)
         for folder in ('knowledge', 'evals'):

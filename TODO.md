@@ -859,6 +859,8 @@ Independent exit/park review passes 13 groups, including seven cited values and 
 
 Cycle 3, T5/T6 (Wisdom):
 
+Blocking CI fixture repair: resolve the conformance temporary directory before bundle creation, preserving production symlink rejection. The macOS failure on `759ec7b` reproduces with an aliased temporary root; all 17 conformance tests pass after normalization, including the internal-symlink negative. Successor macOS CI remains required.
+
 - [ ] T5 DAC signal generator to A2 with three fresh synthesis attempts.
 Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate.
 Sampled-waveform calculator: 53 affected tests pass with exact selected-component and parameter bindings. Independent review fixed unenclosable decay and separated peak from cycle-mean residual bounds; 2,000 waveform comparisons support the conditional model. T5 operating predicates and source promotion remain pending.
