@@ -63,6 +63,14 @@ class ElectricalBindingTests(unittest.TestCase):
         for field in ('pin_configurations', 'port_requirements'):
             for item in self.graph.get(field, []):
                 item['instance'] = replacements[item['instance']]
+        for rail in self.graph.get('bringup', {}).get('rails', []):
+            for key in ('at', 'reference_at'):
+                if key not in rail:
+                    continue
+                matches = [old for old in replacements if rail[key].startswith(old + '_')]
+                self.assertEqual(len(matches), 1)
+                old = matches[0]
+                rail[key] = replacements[old] + rail[key][len(old):]
         result = self.expand()
         self.assertEqual(result['status'], 'EXPANDED', result['refusals'])
 
