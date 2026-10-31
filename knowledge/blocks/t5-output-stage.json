@@ -1,0 +1,557 @@
+{
+  "category": "analog.buffer",
+  "checks": [
+    {
+      "calculator": "sampled_waveform_envelope",
+      "inputs": {
+        "absolute_amplitude_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original absolute peak-amplitude allowance.",
+          "unit": "V",
+          "value": 0.025
+        },
+        "amplitude": {
+          "parameter": "waveform_amplitude"
+        },
+        "capacitance_retention": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.15,
+          "min": 0.5,
+          "note": "Accepted bias/temperature effective-C fraction multiplying actual initial tolerance.",
+          "unit": "1"
+        },
+        "cycle_mean_residual_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.005,
+          "min": 0,
+          "note": "Separately accepted complete-cycle aggregate DC residual including DDS weighting and dynamics; not deduced from jitter/sample count.",
+          "unit": "V"
+        },
+        "filter_capacitance": {
+          "component": "C1",
+          "parameter": "capacitance"
+        },
+        "filter_resistance_1": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "filter_resistance_2": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "gain_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "Accepted aggregate reference/gain bound; DGS source nominal2.5 V only; no DQF bound.",
+          "unit": "1"
+        },
+        "initial_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5.25,
+          "min": 0,
+          "note": "Inactive phase may be anywhere0..supply; no glitch-free claim.",
+          "unit": "V"
+        },
+        "isolation_resistance": {
+          "component": "R3",
+          "parameter": "resistance"
+        },
+        "load_resistance_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External resistive load>=10 kohm; capacitance<=100 pF.",
+          "unit": "ohm",
+          "value": 10000
+        },
+        "offset": {
+          "parameter": "waveform_offset"
+        },
+        "offset_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original cycle-average offset allowance.",
+          "unit": "V",
+          "value": 0.025
+        },
+        "pointwise_residual_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.005,
+          "min": 0,
+          "note": "Accepted uniform DAC/follower residual at every instant relative to held/RC model after settling; not a mean-only bound or typical settling guarantee.",
+          "unit": "V"
+        },
+        "relative_amplitude_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original peak-amplitude error coefficient.",
+          "unit": "1",
+          "value": 0.05
+        },
+        "sample_jitter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-07,
+          "min": 0,
+          "note": "Accepted edge-time jitter; not inferred from average frame budget.",
+          "unit": "s"
+        },
+        "sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "settle_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Active acceptance starts>=1 ms after valid configuration/change and accepted dynamic recovery.",
+          "unit": "s",
+          "value": 0.001
+        },
+        "static_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.004,
+          "min": 0,
+          "note": "Accepted DAC residual2 mV+follower residual1 mV+noise/quantization1 mV; no extra TUE addition.",
+          "unit": "V"
+        },
+        "tcr_magnitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0002,
+          "min": 0,
+          "note": "Conservative common bound:1k source100 ppm/C;10 ohm source200 ppm/C.",
+          "unit": "1/degC"
+        },
+        "temperature_excursion": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 15,
+          "min": 0,
+          "note": "Resistor BODY excursion relative to tolerance reference, not ambient alone.",
+          "unit": "degC"
+        },
+        "waveform_frequency": {
+          "parameter": "frequency"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Nonnegative required margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "amplitude_margin"
+      }
+    },
+    {
+      "calculator": "sampled_waveform_envelope",
+      "inputs": {
+        "absolute_amplitude_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original absolute peak-amplitude allowance.",
+          "unit": "V",
+          "value": 0.025
+        },
+        "amplitude": {
+          "parameter": "waveform_amplitude"
+        },
+        "capacitance_retention": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1.15,
+          "min": 0.5,
+          "note": "Accepted bias/temperature effective-C fraction multiplying actual initial tolerance.",
+          "unit": "1"
+        },
+        "cycle_mean_residual_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.005,
+          "min": 0,
+          "note": "Separately accepted complete-cycle aggregate DC residual including DDS weighting and dynamics; not deduced from jitter/sample count.",
+          "unit": "V"
+        },
+        "filter_capacitance": {
+          "component": "C1",
+          "parameter": "capacitance"
+        },
+        "filter_resistance_1": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "filter_resistance_2": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "gain_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0,
+          "note": "Accepted aggregate reference/gain bound; DGS source nominal2.5 V only; no DQF bound.",
+          "unit": "1"
+        },
+        "initial_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5.25,
+          "min": 0,
+          "note": "Inactive phase may be anywhere0..supply; no glitch-free claim.",
+          "unit": "V"
+        },
+        "isolation_resistance": {
+          "component": "R3",
+          "parameter": "resistance"
+        },
+        "load_resistance_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External resistive load>=10 kohm; capacitance<=100 pF.",
+          "unit": "ohm",
+          "value": 10000
+        },
+        "offset": {
+          "parameter": "waveform_offset"
+        },
+        "offset_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original cycle-average offset allowance.",
+          "unit": "V",
+          "value": 0.025
+        },
+        "pointwise_residual_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.005,
+          "min": 0,
+          "note": "Accepted uniform DAC/follower residual at every instant relative to held/RC model after settling; not a mean-only bound or typical settling guarantee.",
+          "unit": "V"
+        },
+        "relative_amplitude_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original peak-amplitude error coefficient.",
+          "unit": "1",
+          "value": 0.05
+        },
+        "sample_jitter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-07,
+          "min": 0,
+          "note": "Accepted edge-time jitter; not inferred from average frame budget.",
+          "unit": "s"
+        },
+        "sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "settle_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Active acceptance starts>=1 ms after valid configuration/change and accepted dynamic recovery.",
+          "unit": "s",
+          "value": 0.001
+        },
+        "static_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.004,
+          "min": 0,
+          "note": "Accepted DAC residual2 mV+follower residual1 mV+noise/quantization1 mV; no extra TUE addition.",
+          "unit": "V"
+        },
+        "tcr_magnitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0002,
+          "min": 0,
+          "note": "Conservative common bound:1k source100 ppm/C;10 ohm source200 ppm/C.",
+          "unit": "1/degC"
+        },
+        "temperature_excursion": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 15,
+          "min": 0,
+          "note": "Resistor BODY excursion relative to tolerance reference, not ambient alone.",
+          "unit": "degC"
+        },
+        "waveform_frequency": {
+          "parameter": "frequency"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Nonnegative required margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "offset_margin"
+      }
+    },
+    {
+      "calculator": "passive_supply_path",
+      "inputs": {
+        "accepted_output_voltage": {
+          "component": "U1",
+          "parameter": "input_voltage"
+        },
+        "current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.002,
+          "min": 0,
+          "note": "Local active consumption allowance.",
+          "unit": "A"
+        },
+        "current_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Local operating allocation, not a manufacturer absolute-current rating.",
+          "unit": "A",
+          "value": 0.002
+        },
+        "current_limit_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "No additional derating of the separately accepted local operating allocation.",
+          "unit": "1",
+          "value": 1
+        },
+        "distribution_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "No second loss subtraction at the same modeled local node.",
+          "unit": "V",
+          "value": 0
+        },
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Ideal local node: upstream accepted voltage already includes distribution losses.",
+          "unit": "ohm",
+          "value": 0
+        },
+        "source_voltage": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "voltage_margin"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-opa197idr"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "R3",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710rl"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c103k5ractu"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C3",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:ti-opa197"
+    }
+  ],
+  "id": "block:t5-output-stage",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Proposed T5 operating decision; conditional model, not a source guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C2",
+      "target": "U1.pin:7"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Proposed T5 operating decision; conditional model, not a source guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Proposed T5 operating decision; conditional model, not a source guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "R3",
+      "target": "U1.pin:6"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:7",
+        "C2.pin:1",
+        "C3.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:4",
+        "C1.pin:2",
+        "C2.pin:2",
+        "C3.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:IN",
+        "R1.pin:1",
+        "R2.pin:1"
+      ],
+      "name": "IN"
+    },
+    {
+      "connect": [
+        "R1.pin:2",
+        "R2.pin:2",
+        "C1.pin:1",
+        "U1.pin:3"
+      ],
+      "name": "FILTER"
+    },
+    {
+      "connect": [
+        "U1.pin:2",
+        "U1.pin:6",
+        "R3.pin:1"
+      ],
+      "name": "FEEDBACK"
+    },
+    {
+      "connect": [
+        "R3.pin:2",
+        "port:OUT"
+      ],
+      "name": "OUT"
+    }
+  ],
+  "parameters": {
+    "frequency": {
+      "quantity": "frequency",
+      "required": true
+    },
+    "input_voltage": {
+      "quantity": "voltage",
+      "required": true
+    },
+    "sample_rate": {
+      "quantity": "frequency",
+      "required": true
+    },
+    "waveform_amplitude": {
+      "quantity": "voltage",
+      "required": true
+    },
+    "waveform_offset": {
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "IN"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "OUT"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Original unity follower, feedback before 10 ohm isolation; parallel 1k filter resistors and 10 nF capacitor. Actual waveform, load and selected supply checks are bound under explicit conditional acceptance intervals.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,407 @@
+{
+  "category": "analog.dac",
+  "checks": [
+    {
+      "calculator": "triple_resistor_load_with_base",
+      "inputs": {
+        "allocation": {
+          "parameter": "input_current"
+        },
+        "base_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.004,
+          "min": 0,
+          "note": "Accepted IC core/dynamic current excluding explicitly counted external resistive branches.",
+          "unit": "A"
+        },
+        "resistance_1": {
+          "component": "RCS",
+          "parameter": "resistance"
+        },
+        "resistance_2": {
+          "component": "RCK",
+          "parameter": "resistance"
+        },
+        "resistance_3": {
+          "component": "RDI",
+          "parameter": "resistance"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "tcr_magnitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0002,
+          "min": 0,
+          "note": "Conservative common200 ppm/C envelope, not a changed source100 ppm fact.",
+          "unit": "1/degC"
+        },
+        "temperature_excursion": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 15,
+          "min": 0,
+          "note": "Actual resistor-body excursion from tolerance reference.",
+          "unit": "degC"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "A",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "allocation_margin"
+      }
+    },
+    {
+      "calculator": "passive_supply_path",
+      "inputs": {
+        "accepted_output_voltage": {
+          "component": "U1",
+          "parameter": "input_voltage"
+        },
+        "current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.006,
+          "min": 0,
+          "note": "Local active consumption allowance.",
+          "unit": "A"
+        },
+        "current_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Local operating allocation, not a manufacturer absolute-current rating.",
+          "unit": "A",
+          "value": 0.006
+        },
+        "current_limit_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "No additional derating of the separately accepted local operating allocation.",
+          "unit": "1",
+          "value": 1
+        },
+        "distribution_drop": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "No second loss subtraction at the same modeled local node.",
+          "unit": "V",
+          "value": 0
+        },
+        "series_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Ideal local node: upstream accepted voltage already includes distribution losses.",
+          "unit": "ohm",
+          "value": 0
+        },
+        "source_voltage": {
+          "parameter": "input_voltage"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "voltage_margin"
+      }
+    },
+    {
+      "calculator": "quad_parallel_capacitance",
+      "inputs": {
+        "capacitance_1": {
+          "component": "CR1",
+          "parameter": "capacitance"
+        },
+        "capacitance_2": {
+          "component": "CR2",
+          "parameter": "capacitance"
+        },
+        "capacitance_3": {
+          "component": "CR3",
+          "parameter": "capacitance"
+        },
+        "capacitance_4": {
+          "component": "CR4",
+          "parameter": "capacitance"
+        },
+        "positive_upper_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Include positive15% ceramic temperature change above initial tolerance.",
+          "unit": "1",
+          "value": 1.15
+        },
+        "required_window": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1e-06,
+          "min": 1.5e-07,
+          "note": "DACp21 minimum150 nF;1 uF upper is an engineering local-bank envelope.",
+          "unit": "F"
+        },
+        "retained_lower_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Accepted minimum effective fraction of selected initial capacitance under bias/temperature.",
+          "unit": "1",
+          "value": 0.5
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "F",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "window_margin"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-dac80501zdgsr"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CR1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "CR2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "CR3",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "RCS",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RCK",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RDI",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "CR4",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:ti-dac60501"
+    },
+    {
+      "page": 21,
+      "source": "source:ti-dac60501"
+    },
+    {
+      "page": 23,
+      "source": "source:ti-dac60501"
+    }
+  ],
+  "id": "block:t5-dac",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "C1",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "CR1",
+      "target": "U1.pin:10"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "CR2",
+      "target": "U1.pin:10"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:1",
+        "C1.pin:1",
+        "C2.pin:1",
+        "RCS.pin:2"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:4",
+        "C1.pin:2",
+        "C2.pin:2",
+        "CR1.pin:2",
+        "CR2.pin:2",
+        "U1.pin:5",
+        "CR3.pin:2",
+        "RCK.pin:2",
+        "RDI.pin:2",
+        "CR4.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:SCLK",
+        "U1.pin:6",
+        "RCK.pin:1"
+      ],
+      "name": "SCLK"
+    },
+    {
+      "connect": [
+        "port:SDIN",
+        "U1.pin:8",
+        "RDI.pin:1"
+      ],
+      "name": "SDIN"
+    },
+    {
+      "connect": [
+        "port:DAC_OUT",
+        "U1.pin:2"
+      ],
+      "name": "DAC_OUT"
+    },
+    {
+      "connect": [
+        "U1.pin:10",
+        "CR1.pin:1",
+        "CR2.pin:1",
+        "CR3.pin:1",
+        "CR4.pin:1"
+      ],
+      "name": "REF"
+    },
+    {
+      "connect": [
+        "port:SYNC",
+        "U1.pin:7",
+        "RCS.pin:1"
+      ],
+      "name": "SYNC"
+    }
+  ],
+  "parameters": {
+    "input_current": {
+      "quantity": "current",
+      "required": true
+    },
+    "input_voltage": {
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SCLK",
+      "required_function": "SPI1_SCK"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SDIN",
+      "required_function": "SPI1_MOSI"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SYNC"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "DAC_OUT"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Original16-bit SPI DAC; gain0x0101,24-bit frames,noMISO.10kSYNCpullup/SCLKandSDINpulldowns define reset inputs; all three loads enter rail ledger. Inactive0..rail,notglitchfree; active configuration/settling predicates in brief.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

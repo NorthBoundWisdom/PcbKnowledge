@@ -1,0 +1,147 @@
+{
+  "id": "part:ti-opa197idr",
+  "identity_evidence": {
+    "page": 34,
+    "source": "source:ti-opa197"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "OPA197IDR",
+  "package": "package:ti-opa197idr",
+  "parameters": {
+    "gain_bandwidth": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 8,
+        "source": "source:ti-opa197"
+      },
+      "note": "VS8..36 V,TA25C,VCM=VOUT=VS/2,Rload10k toVS/2; typical not guaranteed.",
+      "typ": 10000000,
+      "unit": "Hz"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-opa197"
+      },
+      "max": 36,
+      "min": 4.5,
+      "note": "Total supply difference V+ minus V-, not input signal range.",
+      "unit": "V"
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-opa197"
+      },
+      "max": 125,
+      "min": -40,
+      "unit": "degC"
+    },
+    "thermal_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-opa197"
+      },
+      "note": "SOIC D package RthetaJA characterization.",
+      "typ": 115.8,
+      "unit": "degC/W"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-opa197"
+  },
+  "pins": [
+    {
+      "name": "NC",
+      "number": "1",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "-IN",
+      "number": "2",
+      "type": "ANALOG"
+    },
+    {
+      "name": "+IN",
+      "number": "3",
+      "type": "ANALOG"
+    },
+    {
+      "name": "V-",
+      "number": "4",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "NC",
+      "number": "5",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "OUT",
+      "number": "6",
+      "type": "ANALOG"
+    },
+    {
+      "name": "V+",
+      "number": "7",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "NC",
+      "number": "8",
+      "type": "NO_CONNECT"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Single OPA197 D package. V- remains POWER_IN and is grounded only in this single-supply circuit. The sourced 7/4 pair and 0.1 uF bypass describe that mode; output swing, load and stability checks are conditional.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
+  },
+  "roles": [
+    "analog.opamp"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "single_supply_return": {
+    "capacitance_nominal": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 31,
+        "source": "source:ti-opa197"
+      },
+      "unit": "F",
+      "value": 1e-07
+    },
+    "evidence": [
+      {
+        "page": 4,
+        "source": "source:ti-opa197"
+      },
+      {
+        "page": 5,
+        "source": "source:ti-opa197"
+      },
+      {
+        "page": 31,
+        "source": "source:ti-opa197"
+      }
+    ],
+    "negative_pin": "4",
+    "positive_pin": "7"
+  },
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

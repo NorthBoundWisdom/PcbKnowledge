@@ -194,6 +194,13 @@
         "Q5"
       ]
     },
+    "dac_current_budget": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q10"
+      ]
+    },
     "dark_current": {
       "conditions": {
         "TA": "temperature",
@@ -776,6 +783,13 @@
         "Q5"
       ]
     },
+    "mcu_current_budget": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q10"
+      ]
+    },
     "minimum_cathode_current": {
       "conditions": {
         "TA": "temperature"
@@ -1042,6 +1056,13 @@
         "Q5"
       ]
     },
+    "requested_frequency": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q10"
+      ]
+    },
     "resistance": {
       "conditions": {
         "TA": "temperature",
@@ -1194,6 +1215,13 @@
         "Q5"
       ]
     },
+    "swd_current_budget": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q10"
+      ]
+    },
     "switch_node_absolute_voltage": {
       "conditions": {},
       "quantity": "voltage",
@@ -1310,6 +1338,13 @@
         "Q5"
       ]
     },
+    "uart_current_budget": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q10"
+      ]
+    },
     "uvlo_voltage": {
       "conditions": {
         "frequency": "frequency"
@@ -1333,6 +1368,20 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "waveform_amplitude": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q10"
+      ]
+    },
+    "waveform_offset": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q10"
       ]
     },
     "width": {

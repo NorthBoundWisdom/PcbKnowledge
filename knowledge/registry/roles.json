@@ -50,6 +50,12 @@
         "Q5"
       ]
     },
+    "dac.spi": {
+      "queries": [
+        "Q1",
+        "Q2"
+      ]
+    },
     "diode.schottky": {
       "queries": [
         "Q1",

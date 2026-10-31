@@ -1,0 +1,1546 @@
+{
+  "category": "digital.mcu",
+  "checks": [
+    {
+      "calculator": "oscillator_startup",
+      "inputs": {
+        "drive_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 52,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Assumed 1 mA RMS screening bound, not a datasheet guarantee. STM32 test is VDD=3.3 V, VIN=VSS, 30 pF load. Measure crystal drive during Stage6 bring-up.",
+          "unit": "A",
+          "value": 0.001
+        },
+        "frequency": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "load_capacitance": {
+          "component": "Y1",
+          "parameter": "load_capacitance"
+        },
+        "power_rating": {
+          "bound": "max",
+          "component": "Y1",
+          "parameter": "power_rating"
+        },
+        "resistance": {
+          "bound": "max",
+          "component": "Y1",
+          "parameter": "equivalent_series_resistance"
+        },
+        "shunt_capacitance": {
+          "bound": "max",
+          "component": "Y1",
+          "parameter": "shunt_capacitance"
+        },
+        "transconductance": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 52,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Use startup transconductance minimum; characterized, not production tested.",
+          "unit": "S",
+          "value": 0.025
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "AN2867 requires gain margin above five; retain a strict numerical threshold.",
+          "unit": "1",
+          "value": 5.01
+        },
+        "operator": "GE",
+        "output": "margin"
+      }
+    },
+    {
+      "calculator": "oscillator_startup",
+      "inputs": {
+        "drive_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "evidence": {
+            "page": 52,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Assumed 1 mA RMS screening bound, not a datasheet guarantee. STM32 test is VDD=3.3 V, VIN=VSS, 30 pF load. Measure crystal drive during Stage6 bring-up.",
+          "unit": "A",
+          "value": 0.001
+        },
+        "frequency": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "load_capacitance": {
+          "component": "Y1",
+          "parameter": "load_capacitance"
+        },
+        "power_rating": {
+          "bound": "max",
+          "component": "Y1",
+          "parameter": "power_rating"
+        },
+        "resistance": {
+          "bound": "max",
+          "component": "Y1",
+          "parameter": "equivalent_series_resistance"
+        },
+        "shunt_capacitance": {
+          "bound": "max",
+          "component": "Y1",
+          "parameter": "shunt_capacitance"
+        },
+        "transconductance": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 52,
+            "source": "source:st-stm32f103"
+          },
+          "note": "Use startup transconductance minimum; characterized, not production tested.",
+          "unit": "S",
+          "value": 0.025
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Do not exceed the crystal maximum drive-power rating.",
+          "unit": "W",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "drive_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "s",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "time_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "s",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "guard_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "Hz",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "serial_clock_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "s",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "serial_half_period_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "1",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "frequency_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "1",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "sampling_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "Hz",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "sample_rate_margin"
+      }
+    },
+    {
+      "calculator": "spi_dac_schedule",
+      "inputs": {
+        "accepted_sample_rate": {
+          "parameter": "sample_rate"
+        },
+        "accepted_waveform_frequency": {
+          "parameter": "frequency"
+        },
+        "clock": {
+          "component": "Y1",
+          "parameter": "frequency"
+        },
+        "clock_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0001,
+          "min": 0,
+          "note": "Accepted complete HSE frequency error100 ppm including initial/temperature/aging/loading; not source nominal accuracy.",
+          "unit": "1"
+        },
+        "firmware_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 80,
+          "min": 0,
+          "note": "Accepted worst-case firmware/DMA work per update; no execution observation.",
+          "unit": "1"
+        },
+        "frame_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DAC80501p23 actual24-bit frame; three8-bit SPI transfers.",
+          "unit": "1",
+          "value": 24
+        },
+        "frequency_error_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original0.1% commanded-frequency error limit.",
+          "unit": "1",
+          "value": 0.001
+        },
+        "guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Reserved edge/setup/hold/update guard; each firmware edge condition separately required.",
+          "unit": "s",
+          "value": 1.5e-06
+        },
+        "minimum_guard_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative sum of DACp9 setup13 ns+hold10 ns+SYNC high160 ns+updatewait1 us.",
+          "unit": "s",
+          "value": 1.183e-06
+        },
+        "phase_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Unsigned32-bit phase accumulator; nearest increment ties upward.",
+          "unit": "1",
+          "value": 32
+        },
+        "requested_frequency": {
+          "parameter": "requested_frequency"
+        },
+        "serial_clock_limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "DACp9 maximum SCLK50 MHz.",
+          "unit": "Hz",
+          "value": 50000000.0
+        },
+        "serial_half_period_minimum": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source9 ns minimum high/low plus accepted30 ns host/board transition allowance.",
+          "unit": "s",
+          "value": 3.9e-08
+        },
+        "spi_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "RM0008p743 BR000=PCLK/2; APB2=PCLK=HSE,PLLoff.",
+          "unit": "1",
+          "value": 2
+        },
+        "timer_divider": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Timer prescaler0,period160HSEcycles; nominal50ksps.",
+          "unit": "1",
+          "value": 160
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "Hz",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "waveform_frequency_margin"
+      }
+    },
+    {
+      "calculator": "triple_resistor_load_with_base",
+      "inputs": {
+        "allocation": {
+          "parameter": "input_current"
+        },
+        "base_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.015,
+          "min": 0,
+          "note": "Accepted IC core/dynamic current excluding explicitly counted external resistive branches.",
+          "unit": "A"
+        },
+        "resistance_1": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "resistance_2": {
+          "component": "R2",
+          "parameter": "resistance"
+        },
+        "resistance_3": {
+          "component": "R3",
+          "parameter": "resistance"
+        },
+        "supply": {
+          "parameter": "input_voltage"
+        },
+        "tcr_magnitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0002,
+          "min": 0,
+          "note": "Conservative common200 ppm/C envelope, not a changed source100 ppm fact.",
+          "unit": "1/degC"
+        },
+        "temperature_excursion": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 15,
+          "min": 0,
+          "note": "Actual resistor-body excursion from tolerance reference.",
+          "unit": "degC"
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Required nonnegative margin.",
+          "unit": "A",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "allocation_margin"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:st-stm32f103c8t6"
+      }
+    },
+    {
+      "ref": "Y1",
+      "select": {
+        "part": "part:abracon-abmm2-8-18"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C3",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C4",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C5",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C6",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "C7",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "C8",
+      "select": {
+        "part": "part:kemet-c0603c220j5gactu"
+      }
+    },
+    {
+      "ref": "C9",
+      "select": {
+        "part": "part:kemet-c0603c220j5gactu"
+      }
+    },
+    {
+      "ref": "C10",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "R2",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "R3",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "R4",
+      "select": {
+        "match": {
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 engineering design choice; verify during board layout.",
+            "unit": "ohm",
+            "value": 10
+          }
+        },
+        "role": "resistor"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 26,
+      "source": "source:st-stm32f103"
+    },
+    {
+      "page": 36,
+      "source": "source:st-stm32f103"
+    },
+    {
+      "page": 1,
+      "source": "source:abracon-abmm2"
+    },
+    {
+      "page": 1,
+      "source": "source:abracon-abmm2"
+    },
+    {
+      "page": 52,
+      "source": "source:st-stm32f103"
+    },
+    {
+      "page": 13,
+      "source": "source:st-an2867"
+    },
+    {
+      "page": 15,
+      "source": "source:st-an2867"
+    }
+  ],
+  "id": "block:t5-controller",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C2",
+      "target": "U1.pin:24"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C3",
+      "target": "U1.pin:36"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C4",
+      "target": "U1.pin:48"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C5",
+      "target": "U1.pin:9"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C7",
+      "target": "U1.pin:9"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C10",
+      "target": "U1.pin:7"
+    },
+    {
+      "kind": "GROUP",
+      "subjects": [
+        "Y1",
+        "C8",
+        "C9",
+        "U1"
+      ]
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "Y1",
+      "target": "U1.pin:5"
+    },
+    {
+      "kind": "MINIMIZE_LOOP",
+      "max_area": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Compact oscillator loop; 22 pF loads with estimated 7 pF total stray target crystal CL=18 pF.",
+        "unit": "mm2",
+        "value": 25
+      },
+      "path": [
+        "U1.pin:5",
+        "Y1.pin:1",
+        "Y1.pin:3",
+        "U1.pin:6"
+      ]
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "G1 engineering design choice; verify during board layout.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C6",
+      "target": "U1.pin:48"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:1",
+        "U1.pin:24",
+        "U1.pin:36",
+        "U1.pin:48",
+        "C1.pin:1",
+        "C2.pin:1",
+        "C3.pin:1",
+        "C4.pin:1",
+        "C6.pin:1",
+        "R1.pin:1",
+        "R4.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "R4.pin:2",
+        "U1.pin:9",
+        "C5.pin:1",
+        "C7.pin:1"
+      ],
+      "name": "VDDA"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:8",
+        "U1.pin:23",
+        "U1.pin:35",
+        "U1.pin:47",
+        "C1.pin:2",
+        "C2.pin:2",
+        "C3.pin:2",
+        "C4.pin:2",
+        "C5.pin:2",
+        "C6.pin:2",
+        "C7.pin:2",
+        "C8.pin:2",
+        "C9.pin:2",
+        "C10.pin:2",
+        "R2.pin:2",
+        "R3.pin:2",
+        "Y1.pin:2",
+        "Y1.pin:4"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "U1.pin:5",
+        "Y1.pin:1",
+        "C8.pin:1"
+      ],
+      "name": "OSC_IN"
+    },
+    {
+      "connect": [
+        "U1.pin:6",
+        "Y1.pin:3",
+        "C9.pin:1"
+      ],
+      "name": "OSC_OUT"
+    },
+    {
+      "connect": [
+        "port:NRST",
+        "U1.pin:7",
+        "R1.pin:2",
+        "C10.pin:1"
+      ],
+      "name": "NRST"
+    },
+    {
+      "connect": [
+        "U1.pin:44",
+        "R2.pin:1"
+      ],
+      "name": "BOOT0"
+    },
+    {
+      "connect": [
+        "U1.pin:20",
+        "R3.pin:1"
+      ],
+      "name": "BOOT1"
+    },
+    {
+      "connect": [
+        "port:SWDIO",
+        "U1.pin:34"
+      ],
+      "name": "SWDIO"
+    },
+    {
+      "connect": [
+        "port:SWCLK",
+        "U1.pin:37"
+      ],
+      "name": "SWCLK"
+    },
+    {
+      "connect": [
+        "port:UART_TX",
+        "U1.pin:30"
+      ],
+      "name": "UART_TX"
+    },
+    {
+      "connect": [
+        "port:UART_RX",
+        "U1.pin:31"
+      ],
+      "name": "UART_RX"
+    },
+    {
+      "connect": [
+        "port:SYNC",
+        "U1.pin:14"
+      ],
+      "name": "SYNC"
+    },
+    {
+      "connect": [
+        "port:SCLK",
+        "U1.pin:15"
+      ],
+      "name": "SCLK"
+    },
+    {
+      "connect": [
+        "port:SDIN",
+        "U1.pin:17"
+      ],
+      "name": "SDIN"
+    }
+  ],
+  "parameters": {
+    "clock_frequency": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+        "unit": "Hz",
+        "value": 8000000
+      },
+      "quantity": "frequency",
+      "required": true
+    },
+    "frequency": {
+      "quantity": "frequency",
+      "required": true
+    },
+    "input_current": {
+      "quantity": "current",
+      "required": true
+    },
+    "input_voltage": {
+      "quantity": "voltage",
+      "required": true
+    },
+    "requested_frequency": {
+      "quantity": "frequency",
+      "required": true
+    },
+    "sample_rate": {
+      "quantity": "frequency",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SWDIO"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SWCLK"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "NRST"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "UART_TX"
+    },
+    {
+      "kind": "INPUT",
+      "name": "UART_RX"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "SYNC"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "SCLK"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "SDIN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Original T5 topology derived from mcu-core; inherited source/layout constraints retained. PA4 software SYNC; PA5 SPI1_SCK; PA7 SPI1_MOSI. Typed hardware SPI function annotations are pending, not bitbang authority.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,0 +1,132 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "max": 1.7526,
+      "note": "Controlling inch dimensions converted exactly by 25.4 mm/in; bracketed rounded millimetres are reference only. D0008 A p50.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "max": 5.0038,
+      "min": 4.8006,
+      "note": "Controlling inch dimensions converted exactly by 25.4 mm/in; bracketed rounded millimetres are reference only. D0008 A p50.",
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "max": 3.9878,
+      "min": 3.81,
+      "note": "Controlling inch dimensions converted exactly by 25.4 mm/in; bracketed rounded millimetres are reference only. D0008 A p50.",
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Original courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "max": 1.27,
+      "min": 0.4064,
+      "note": "Controlling inch dimensions converted exactly by 25.4 mm/in; bracketed rounded millimetres are reference only. D0008 A p50.",
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "max": 6.1976,
+      "min": 5.7912,
+      "note": "Controlling inch dimensions converted exactly by 25.4 mm/in; bracketed rounded millimetres are reference only. D0008 A p50.",
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "max": 0.508,
+      "min": 0.3048,
+      "note": "Controlling inch dimensions converted exactly by 25.4 mm/in; bracketed rounded millimetres are reference only. D0008 A p50.",
+      "unit": "mm"
+    },
+    "pin_count": 8,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 50,
+        "source": "source:ti-opa197"
+      },
+      "unit": "mm",
+      "value": 1.27
+    }
+  },
+  "evidence": [
+    {
+      "page": 50,
+      "source": "source:ti-opa197"
+    }
+  ],
+  "family": "SOIC-8",
+  "generator": "gullwing_two_side",
+  "id": "package:ti-opa197idr",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Original gull-wing lands; NOMINAL SOIC fillets.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 34,
+        "source": "source:ti-opa197"
+      },
+      {
+        "page": 50,
+        "source": "source:ti-opa197"
+      }
+    ],
+    "mpns": [
+      "OPA197IDR"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

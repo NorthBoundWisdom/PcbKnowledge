@@ -1,0 +1,148 @@
+{
+  "id": "part:ti-dac80501zdgsr",
+  "identity_evidence": {
+    "page": 39,
+    "source": "source:ti-dac60501"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "DAC80501ZDGSR",
+  "package": "package:ti-dac80501zdgsr",
+  "parameters": {
+    "bus_frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 9,
+        "source": "source:ti-dac60501"
+      },
+      "max": 50000000,
+      "note": "SPI SCLK maximum subject to full timing table; not sample rate.",
+      "unit": "Hz"
+    },
+    "input_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "min": 1.62,
+      "unit": "V"
+    },
+    "input_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "max": 0.45,
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "max": 5.5,
+      "min": 2.7,
+      "unit": "V"
+    },
+    "reference_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 21,
+        "source": "source:ti-dac60501"
+      },
+      "note": "Internal reference nominal. p7 initial min/max characterized on DQF only per p8 footnote3; not DGS guaranteed bounds.",
+      "typ": 2.5,
+      "unit": "V"
+    },
+    "resolution": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-dac60501"
+      },
+      "note": "Resolution bits, not waveform amplitude accuracy.",
+      "unit": "1",
+      "value": 16
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-dac60501"
+  },
+  "pins": [
+    {
+      "name": "VDD",
+      "number": "1",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "VOUT",
+      "number": "2",
+      "type": "ANALOG"
+    },
+    {
+      "name": "NC",
+      "number": "3",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "AGND",
+      "number": "4",
+      "type": "GROUND"
+    },
+    {
+      "name": "SPI2C",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "SCLK/SCL",
+      "number": "6",
+      "type": "INPUT"
+    },
+    {
+      "name": "SYNC/A0",
+      "number": "7",
+      "type": "INPUT"
+    },
+    {
+      "name": "SDIN/SDA",
+      "number": "8",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "NC",
+      "number": "9",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "VREFIO",
+      "number": "10",
+      "type": "ANALOG"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "SPI2C low/static forSPI; no SPI readback pin. Zero-scale reset Z variant.3.3 V operation requires appropriate reference divider and gain.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/stage12_review"
+    ]
+  },
+  "roles": [
+    "dac.spi"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "AGENT_VERIFIED"
+}

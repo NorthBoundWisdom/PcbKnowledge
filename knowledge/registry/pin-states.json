@@ -1,5 +1,11 @@
 {
   "entries": {
+    "HIGH": {
+      "queries": [
+        "Q10",
+        "Q2"
+      ]
+    },
     "LOW": {
       "queries": [
         "Q10",
