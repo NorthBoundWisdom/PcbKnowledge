@@ -1,0 +1,731 @@
+{
+  "schema": "pcbknowledge.conformance-manifest.v1",
+  "description": "Original geometric probes and a separate authenticated consumer replay; expectation matches are not board acceptance.",
+  "coverage_registry": "knowledge/registry/layout-constraints.json",
+  "measurement_cases": [
+    {
+      "id": "simple-measurements",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/simple-routed.kicad_pcb",
+        "sha256": "f2db4e80c8136a4823ec0d357ce44ae0f6159be9b4493c691f8b419afe3c931d"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "PLACE_NEAR",
+            "subject": "A",
+            "target": "B.pin:1",
+            "max_distance": {
+              "value": 3,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        },
+        {
+          "id": "r1",
+          "input": {
+            "kind": "GROUP",
+            "subjects": [
+              "A",
+              "B",
+              "C"
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "input": {
+            "kind": "EDGE_PLACEMENT",
+            "subject": "A",
+            "edge": "LEFT",
+            "max_distance": {
+              "value": 2,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        },
+        {
+          "id": "r3",
+          "input": {
+            "kind": "EDGE_DISTANCE",
+            "subject": "A",
+            "edge": "TOP",
+            "distance": {
+              "value": 2,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        },
+        {
+          "id": "r4",
+          "input": {
+            "kind": "KEEPOUT",
+            "subject": "A",
+            "margin": {
+              "value": 0,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        },
+        {
+          "id": "r5",
+          "input": {
+            "kind": "NET_WIDTH_MIN",
+            "net": "N",
+            "min_width": {
+              "value": 0.3,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        },
+        {
+          "id": "r6",
+          "input": {
+            "kind": "MINIMIZE_LOOP",
+            "path": [
+              "A.pin:1",
+              "B.pin:1",
+              "C.pin:1"
+            ],
+            "max_area": {
+              "value": 5,
+              "unit": "mm2",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        },
+        {
+          "id": "r7",
+          "input": {
+            "kind": "COPPER_AREA",
+            "target": "A.pin:1",
+            "min_area": {
+              "value": 12,
+              "unit": "mm2",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "PLACE_NEAR",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r1",
+          "kind": "GROUP",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r2",
+          "kind": "EDGE_PLACEMENT",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r3",
+          "kind": "EDGE_DISTANCE",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r4",
+          "kind": "KEEPOUT",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r5",
+          "kind": "NET_WIDTH_MIN",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r6",
+          "kind": "MINIMIZE_LOOP",
+          "result": "PASS"
+        },
+        {
+          "rule_id": "r7",
+          "kind": "COPPER_AREA",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "return-straight",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/return-straight.kicad_pcb",
+        "sha256": "49b4e480d1ac6a644c7f0e765fdb9de5cb08850ae46554430a245d647cb64583"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "RETURN_PATH",
+            "net": "SIGNAL",
+            "return_net": "GND"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "RETURN_PATH",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "return-arc",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/return-arc.kicad_pcb",
+        "sha256": "96f2dbc890fc0c9cfca1ed425eab9243b72384b4b527c4e7ec932960bd20c0fd"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "RETURN_PATH",
+            "net": "SIGNAL",
+            "return_net": "GND"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "RETURN_PATH",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "return-signal-via",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/return-signal-via.kicad_pcb",
+        "sha256": "db1302b03c3783205eec98f83c1c1501e2c69d0610692e2839ef802ff42dd5c4"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "RETURN_PATH",
+            "net": "SIGNAL",
+            "return_net": "GND"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "RETURN_PATH",
+          "result": "NOT_CHECKABLE",
+          "reason_code": "UNSUPPORTED_RETURN_GEOMETRY"
+        }
+      ]
+    },
+    {
+      "id": "guard-two-face",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/guard-two-face.kicad_pcb",
+        "sha256": "bd887ff4f57694096235347264d347e3456648e014b2431859b0349ebeda57b1"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "GUARD_RING",
+            "net": "SIGNAL",
+            "guard_net": "BIAS",
+            "min_width": {
+              "value": 0.2,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            },
+            "min_clearance": {
+              "value": 0.25,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "GUARD_RING",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "kelvin-control",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/kelvin-control.kicad_pcb",
+        "sha256": "cb5d72515c475257193d80e4e82616130738759886610aa6f2ab34ecc27ecea5"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "KELVIN",
+            "target": "R1",
+            "sense_nets": [
+              "P",
+              "N"
+            ],
+            "branches": [
+              {
+                "sense": "U1.pin:1",
+                "target": "R1.pin:1",
+                "evidence": {
+                  "source": "source:synthetic",
+                  "page": 1
+                }
+              },
+              {
+                "sense": "U1.pin:2",
+                "target": "R1.pin:2",
+                "evidence": {
+                  "source": "source:synthetic",
+                  "page": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "KELVIN",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "kelvin-disconnected",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/kelvin-disconnected.kicad_pcb",
+        "sha256": "5fd60a732b3b4ced9120a6eeed96e370d486322b57dbff876262692883dd26dd"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "KELVIN",
+            "target": "R1",
+            "sense_nets": [
+              "P",
+              "N"
+            ],
+            "branches": [
+              {
+                "sense": "U1.pin:1",
+                "target": "R1.pin:1",
+                "evidence": {
+                  "source": "source:synthetic",
+                  "page": 1
+                }
+              },
+              {
+                "sense": "U1.pin:2",
+                "target": "R1.pin:2",
+                "evidence": {
+                  "source": "source:synthetic",
+                  "page": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "KELVIN",
+          "result": "FAIL"
+        }
+      ]
+    },
+    {
+      "id": "underbody-clear",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/underbody-clear.kicad_pcb",
+        "sha256": "5735954140dcaef85380933a181036fd6a1610596489846a41a5e5f635eb4b06"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "CONDUCTOR_KEEPOUT",
+            "subject": "L1",
+            "region": {
+              "id": "underbody",
+              "rectangle": {
+                "xmin": {
+                  "value": -1.25,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                },
+                "ymin": {
+                  "value": -3.45,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                },
+                "xmax": {
+                  "value": 1.25,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                },
+                "ymax": {
+                  "value": 3.45,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                }
+              },
+              "forbid": [
+                "TRACK",
+                "VIA"
+              ],
+              "layer_scope": "ALL_COPPER",
+              "scope_basis": "ENGINEERING_DEFAULT",
+              "scope_note": "Synthetic all-layer scope fixture, not a manufacturer claim.",
+              "evidence": {
+                "source": "source:synthetic",
+                "page": 1
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "CONDUCTOR_KEEPOUT",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "underbody-crossing",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/underbody-crossing.kicad_pcb",
+        "sha256": "dadd410ed6dccca0c230309d43c536813a1a414a5b24187ebd5f913f8accc919"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "CONDUCTOR_KEEPOUT",
+            "subject": "L1",
+            "region": {
+              "id": "underbody",
+              "rectangle": {
+                "xmin": {
+                  "value": -1.25,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                },
+                "ymin": {
+                  "value": -3.45,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                },
+                "xmax": {
+                  "value": 1.25,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                },
+                "ymax": {
+                  "value": 3.45,
+                  "unit": "mm",
+                  "conditions": {},
+                  "basis": "ENGINEERING_DEFAULT",
+                  "note": "Original synthetic fixture limit"
+                }
+              },
+              "forbid": [
+                "TRACK",
+                "VIA"
+              ],
+              "layer_scope": "ALL_COPPER",
+              "scope_basis": "ENGINEERING_DEFAULT",
+              "scope_note": "Synthetic all-layer scope fixture, not a manufacturer claim.",
+              "evidence": {
+                "source": "source:synthetic",
+                "page": 1
+              }
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "CONDUCTOR_KEEPOUT",
+          "result": "FAIL"
+        }
+      ]
+    },
+    {
+      "id": "unsupported-clearance_min",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/simple-routed.kicad_pcb",
+        "sha256": "f2db4e80c8136a4823ec0d357ce44ae0f6159be9b4493c691f8b419afe3c931d"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "CLEARANCE_MIN",
+            "subjects": [
+              "A",
+              "B"
+            ],
+            "min_clearance": {
+              "value": 0.2,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "CLEARANCE_MIN",
+          "result": "NOT_CHECKABLE"
+        }
+      ]
+    },
+    {
+      "id": "unsupported-orientation",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/simple-routed.kicad_pcb",
+        "sha256": "f2db4e80c8136a4823ec0d357ce44ae0f6159be9b4493c691f8b419afe3c931d"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "ORIENTATION",
+            "subject": "A",
+            "angle": {
+              "value": 0,
+              "unit": "deg",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "ORIENTATION",
+          "result": "NOT_CHECKABLE"
+        }
+      ]
+    },
+    {
+      "id": "unsupported-test_point",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/simple-routed.kicad_pcb",
+        "sha256": "f2db4e80c8136a4823ec0d357ce44ae0f6159be9b4493c691f8b419afe3c931d"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "TEST_POINT",
+            "net": "N",
+            "subject": "A.pin:1"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "TEST_POINT",
+          "result": "NOT_CHECKABLE"
+        }
+      ]
+    },
+    {
+      "id": "unsupported-differential_pair",
+      "scope": "ISOLATED_MEASUREMENT",
+      "verification": "DRAFT",
+      "board": {
+        "path": "tests/fixtures/layout/native/kelvin-control.kicad_pcb",
+        "sha256": "cb5d72515c475257193d80e4e82616130738759886610aa6f2ab34ecc27ecea5"
+      },
+      "context": {
+        "path": "evals/conformance/native.context.json",
+        "sha256": "0df0c18f394779ccecfbe3e632ac7fb25577cd498b80aa552c10f841b474e4a8"
+      },
+      "rules": [
+        {
+          "id": "r0",
+          "input": {
+            "kind": "DIFFERENTIAL_PAIR",
+            "nets": [
+              "P",
+              "N"
+            ],
+            "min_width": {
+              "value": 0.2,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            },
+            "gap": {
+              "value": 0.2,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            },
+            "max_skew": {
+              "value": 1,
+              "unit": "mm",
+              "conditions": {},
+              "basis": "ENGINEERING_DEFAULT",
+              "note": "Original synthetic fixture limit"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "rule_id": "r0",
+          "kind": "DIFFERENTIAL_PAIR",
+          "result": "NOT_CHECKABLE"
+        }
+      ]
+    }
+  ],
+  "consumer_replay": {
+    "scope": "BUNDLE_REPLAY",
+    "graph": "evals/golden-designs/g1.block-graph.json",
+    "expected_result": "FAIL"
+  },
+  "expected_status_counts": {
+    "PASS": 13,
+    "FAIL": 2,
+    "NOT_CHECKABLE": 5
+  }
+}

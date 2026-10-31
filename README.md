@@ -13,6 +13,9 @@ handoffs are not placed or routed boards. Hardware bring-up remains owner-only.
 
 ## Use
 
+The [consumer guide](docs/consumer-guide.md) covers pinned bundles, expansion,
+handoff files and judged reports for a layout-tool integrator.
+
 Git and Python 3.11+ are required; runtime code uses the standard library.
 
 ```bash

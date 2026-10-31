@@ -5,7 +5,16 @@ description: Independently synthesize a block graph from a design brief and veri
 
 # Synthesize Block Graph
 
-Use only the explicitly selected repository. Validate it with
+## Choose the access mode first
+
+For a `QUERY_MEDIATED` benchmark, follow the broker rules below instead of
+executing repository commands. The broker performs workspace validation, bundle
+creation, queries, coverage, expansion and handoff/report commands. The author
+receives only standalone packets and writes original submissions; no repository
+or raw-bundle access is permitted. The command recipe below is for the broker
+or an ordinary, explicitly authorized non-benchmark task.
+
+For an ordinary task, use only the explicitly selected repository. Validate it with
 `python3 configs/pcbknowledge_workspace.py validate <workspace>` and pass
 `--repo <workspace>` on query commands. Never fall back to another workspace.
 
@@ -23,8 +32,8 @@ identifiers, connect named exported ports, keep power source/load relationships
 explicit, and close every signal and ground path. Model mounting holes as
 mechanical instances with no electrical ports. Do not read, copy, transform or
 import a reference/golden graph or another attempt. A benchmark attempt must
-start in a separate agent context containing the brief and catalog, not previous
-solutions. Record the actual agent identity, input hashes, choices and output
+start in a separate agent context containing the brief and mediated catalog
+responses, not previous solutions. Record the actual agent identity, input hashes, choices and output
 path so another agent can review independence and reproducibility.
 
 Requirement strings are brief IDs, not descriptions. The union of graph-level
@@ -38,19 +47,49 @@ name functional port groups: all endpoints in a group must share the actual
 physical net, and different groups must remain distinct. Resolve them through
 your selected instances; graph net labels do not establish those relationships.
 
-Run `v2 coverage <graph> --bundle <bundle>` and
-`expand --bundle <bundle> <graph> --output build/<attempt>/intent.json`. Inspect—not merely count—selected components, resolved pin nets, budgets,
-calculator results, applied rules, layout constraints and unresolved gaps. Fix
-recoverable errors within this attempt. Report blockers honestly; a refused
-check is not a pass. Expansion emits the bundle commit, resolved JSON nets, layout constraints and
-typed refusals. Build the pinned bundle before synthesis, not from within an attempt. Export KiCad only after bundle validation succeeds.
+## Expansion and judged handoff
 
-For acceptance evaluation, preserve each original attempt and its terminal
-validation report. Have an independent reviewer assess graph coverage and
-physical intent. Run the repository golden evaluation; A2 requires real
-expansion and no blocking unknowns, not JSON shape alone. Never relabel copied
-reference graphs as independent AI syntheses, fabricate reviews, or promote an
-acceptance level manually. Do not deploy or purchase fabrication.
+Build the pinned bundle before synthesis, not from within an author attempt.
+The broker (or ordinary authorized task) runs these commands on the original
+submitted graph. Set `SOFTWARE` and `WORKSPACE` to their explicit absolute paths,
+and `GRAPH` and `BUNDLE` to the submitted graph and pinned bundle files. All
+outputs remain below the selected workspace's `build/`:
+
+```bash
+pk() { python3 "$SOFTWARE/configs/pcbknowledge_agent.py" --repo "$WORKSPACE" "$@"; }
+OUT="$WORKSPACE/build/synthesis/attempt"
+pk v2 coverage "$GRAPH" --bundle "$BUNDLE"
+pk expand "$GRAPH" --bundle "$BUNDLE" --output "$OUT/intent.json"
+# Only after successful expansion:
+pk layout export --bundle "$BUNDLE" --graph "$GRAPH" \
+  --intent "$OUT/intent.json" --output "$OUT/handoff"
+pk layout check "$OUT/intent.json" "$OUT/handoff/design.kicad_pcb" \
+  --bundle "$BUNDLE" --graph "$GRAPH" --output "$OUT/layout-report.json"
+```
+
+Set `OUT` to the assigned output directory. Inspect selected components,
+resolved pin nets, budgets, calculator results, applied rules, layout constraints
+and unresolved gaps. Preserve each submitted revision and command exit code;
+recoverable feedback goes to the same author without exposing a reference answer.
+A refused expansion is not exportable. Keep its typed refusal rather than inventing
+an intent or bypassing checks.
+
+`layout export` produces a parked project, not placement or routing. Its board
+check can legitimately return `FAIL` or `NOT_CHECKABLE`; record the actual result,
+not a forced pass. Do not add placement, routing, zone-fill or fabrication-output
+steps. Optional native `drc` is an external-tool wrapper, not a required synthesis
+or A2 dependency. Follow the [consumer guide](../../../docs/consumer-guide.md) for
+report contracts and input identities. Report validation and matching digests do
+not establish saved-file authenticity or physical acceptance.
+
+Freeze original submissions and terminal reports for independent review. A single
+skill smoke attempt does not satisfy the three-author corpus acceptance rule.
+For full acceptance evaluation, use the repository evaluator and independently
+review graph coverage and physical intent: A2 requires real expansion without
+blocking unknowns, not JSON shape alone. PcbKnowledge accepts through A2; A3–A5
+require a board from PcbAtlas or a hand layout, and A6 requires hardware observations.
+Never relabel copied reference graphs as independent syntheses, fabricate reviews,
+promote acceptance manually, or deploy or purchase fabrication.
 
 ## Query-mediated corpus benchmarks
 

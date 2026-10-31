@@ -64,10 +64,10 @@ python3 configs/pcbknowledge_workflow.py package
 Test and Package also accept `--workspace <workspace>`. Packages contain the
 validated manifest, schema snapshot, registries and records, with output under
 the software checkout's ignored `build/package/`. They are owner-facing metadata
-snapshots; Stage 5 implements commit-pinned consumer bundles.
+snapshots; use `bundle build` for commit-pinned consumer bundles.
 
 Manual acceptance: open a part, inspect an identity, a pin and a parameter citation,
-and compare their numbered pages to the PDF. Open a block page when blocks exist;
+and compare their numbered pages to the PDF. Open a block page;
 check nets and constraints. Repeat with an external workspace and confirm its path
 is displayed. Mutation requests must receive HTTP 405 and write no records.
 
@@ -143,7 +143,10 @@ contains commit-authenticated records and schemas, not cached source originals.
 `source authorize-read` remains a workspace-only operation. A dirty workspace
 cannot produce a bundle.
 
-Expand an agent-authored graph and export only after successful expansion:
+Expand an agent-authored graph and export only after successful expansion. This
+`export` command produces a netlist and footprint library, not a board project.
+For a parked project and judged board reports, follow the
+[consumer guide](consumer-guide.md) and the derived KiCad handoff section below:
 
 ```bash
 GRAPH=build/g1/graph.json
@@ -164,7 +167,10 @@ paths are ordinary explicit input paths relative to the calling directory.
 ### Independent AI synthesis evaluation
 
 For new corpus attempts, freeze content identity before giving the author its
-input packet:
+input packet. The broker runs the following commands and retains the raw bundle;
+query-mediated authors receive only standalone input and requested catalog packets,
+never repository files, reference graphs or the bundle. A single skill smoke
+attempt is not the three-author corpus acceptance evaluation:
 
 ```bash
 python3 configs/pcbknowledge_agent.py --repo . bundle identity --bundle "$BUNDLE"
@@ -241,12 +247,13 @@ All three graphs were authored in distinct fresh contexts without reference
 access and independently reviewed; moving `monitor_scope` to the graph level
 is documented as electrically equivalent.
 
-KiCad 9's official `kicad_netlist_reader` accepts the exported XML, including
-complete component/library links. `kicad-cli pcb` offers no netlist-import
-subcommand: full PCB import remains a manual KiCad step, not a claimed CLI pass.
-Import `design.net` in PCB Editor after adding the generated `pcbknowledge.pretty`
-footprint library, inspect all associations and unrouted nets, and perform the
-Stage 7 layout/DRC/hardware checks separately.
+For the netlist-only `export` workflow, KiCad 9's official `kicad_netlist_reader`
+accepts the exported XML, including complete component/library links.
+`kicad-cli pcb` offers no netlist-import subcommand: import `design.net` manually
+in PCB Editor after adding the generated `pcbknowledge.pretty` library, then
+inspect associations and unrouted nets. Alternatively, `layout export` below
+already produces a parked native project and needs no netlist-import step.
+Placement, routing and physical acceptance remain separate.
 
 ## Fetch or add local evidence
 
@@ -284,6 +291,13 @@ is rejected rather than passed to PDF.js. Engineering-default mechanical records
 without source/page citations display an explicit no-citation label.
 
 ## Derived KiCad handoff and read-only board checks
+
+The [consumer guide](consumer-guide.md) describes the complete input/output
+contract. [Owned consumer reports](knowledge-model-v2.md#owned-consumer-reports)
+defines report versions, validation and `identity` fields: bundle commit, graph
+digest, canonical intent digest and board-byte digest where applicable. Preserve
+the exact input files with each report. Digests are not signatures or proof that
+a saved measurement was performed on those inputs.
 
 Build a clean commit-pinned bundle and expand the original graph first. Keep the
 bundle, graph and intent together; neither a saved `PASS` label nor an edited

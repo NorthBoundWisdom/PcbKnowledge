@@ -114,8 +114,8 @@ def check_branch(shapes, terminals, branch, types, target_ref, net):
     return finding('PASS', 'Sense copper reaches its shunt pad without an outside load branch')
 
 
-def check_kelvin(board, rule, intent, catalog):
-    """No mutation; net names never stand in for physical connectivity."""
+def check_kelvin_geometry(board, rule, types):
+    """Measure original exported geometry with an explicit physical terminal-role map."""
     try:
         branches = rule.get('branches')
         if not isinstance(branches, list) or len(branches) != 2:
@@ -132,7 +132,6 @@ def check_kelvin(board, rule, intent, catalog):
         if any(not isinstance(net, str) or not net for net in nets):
             raise UnsupportedKelvin('Two distinct ordered sense nets are required')
         shapes, terminals = primitives(board, set(nets))
-        types = terminal_types(intent, catalog)
         if not senses | targets <= terminals.keys() or not senses | targets <= types.keys():
             raise UnsupportedKelvin('Mapped terminal identity or pin type is missing')
         results = [check_branch(shapes, terminals, branch, types, rule['target'], net)
@@ -143,3 +142,12 @@ def check_kelvin(board, rule, intent, catalog):
         return finding('PASS', 'Both sense branches connect only at their specified shunt pads')
     except (UnsupportedKelvin, KeyError, TypeError, ValueError, IndexError) as error:
         return finding('NOT_CHECKABLE', str(error))
+
+
+def check_kelvin(board, rule, intent, catalog):
+    """Production adapter: terminal roles come only from selected catalog parts."""
+    try:
+        types = terminal_types(intent, catalog)
+    except (UnsupportedKelvin, KeyError, TypeError, ValueError, IndexError) as error:
+        return finding('NOT_CHECKABLE', str(error))
+    return check_kelvin_geometry(board, rule, types)

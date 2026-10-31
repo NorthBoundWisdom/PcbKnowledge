@@ -160,6 +160,8 @@ answer here.
 
 | D108 | Consumer report binding | Version and validate owned reports against the selected bundle schemas; bind layout to actual board bytes and canonical intent, retain its full context in DRC, and distinguish bring-up plan coverage from observations. Digests identify inputs but are not signatures. |
 
+| D109 | Conformance evidence scope | Original fixture vectors test all registered constraint kinds with explicit expected PASS, FAIL or NOT_CHECKABLE results. An expectation match is not board acceptance; a separate real-bundle CLI replay tests the public input and report boundary. |
+
 ## Stage 0 — Course correction (complete)
 
 Stop expanding the old design, remove dead weight, align instructions.
@@ -875,9 +877,12 @@ itself is not edited from this repository.
   D108 adds pinned report definitions, input identities, copied constraints and consistent summaries.
   Full gate: 872 tests in Build and Test, 204 records; independent review fixed migration,
   scalar/datum/guard contradictions and input-output alias tests. Seven real CLI report chains validate.
-- [ ] (ethan) Conformance suite under `evals/conformance/`: original boards with expected results for
+- [x] (ethan) Conformance suite under `evals/conformance/`: original boards with expected results for
   every constraint kind, so another layout tool can test itself against `layout check`.
-- [ ] (ethan) Compare ADR-023 with what `expand` and the handoff emit; fix or record each difference.
+  D109 matches 20 original vectors across all 16 kinds: 13 PASS, 2 FAIL and 5 NOT_CHECKABLE.
+  Separate authenticated G1 CLI replay retains parked-board FAIL; independent review
+  verifies context separation, per-kind rates, provenance and input/output protections.
+- [x] (ethan) Compare ADR-023 with what `expand` and the handoff emit; fix or record each difference.
   Write one consumer guide in `docs/`: bundle, `expand`, handoff, `layout check`, refusals.
 - [ ] (ethan) Rewrite `.codex/skills/` and any remaining docs that still assume the retired pipeline, and
   rerun one synthesis attempt through the updated skill.

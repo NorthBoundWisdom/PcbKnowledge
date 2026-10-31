@@ -29,6 +29,7 @@ One v2 record model lives in `schemas/` and `src/pcbknowledge/v2/`:
 | Exported-board parser and measured checks | `v2/sexpr.py`, `boardview.py`, `layout.py` |
 | Isolated native DRC and combined reports | `v2/drc.py` |
 | Owned report schemas, input bindings and consistency | `v2/report_contracts.py`, `bringup_report_validation.py`, `drc_report_validation.py` |
+| Original isolated vectors and pinned public replay | `configs/pcbknowledge_conformance.py`, `evals/conformance/` |
 | Loopback transport, view models, HTML | `v2/server.py`, `application.py`, `views.py` |
 
 The catalog covers all 15 G1 block instances with independently verified parts,

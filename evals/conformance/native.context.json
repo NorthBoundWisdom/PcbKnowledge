@@ -1,0 +1,33 @@
+{
+  "schema": "pcbknowledge.conformance-context.v1",
+  "scope": "ISOLATED_MEASUREMENT",
+  "verification": "DRAFT",
+  "production_bundle_eligible": false,
+  "description": "Original synthetic geometric dimensions and terminal roles, not catalog facts.",
+  "derived_footprints": {
+    "simple-pad": {
+      "courtyard": {
+        "min_x": -0.75,
+        "min_y": -0.75,
+        "max_x": 0.75,
+        "max_y": 0.75
+      }
+    }
+  },
+  "footprint_geometry": {
+    "A": "simple-pad",
+    "B": "simple-pad",
+    "C": "simple-pad"
+  },
+  "terminal_types": {
+    "U1.pin:1": "ANALOG",
+    "U1.pin:2": "ANALOG",
+    "R1.pin:1": "PASSIVE",
+    "R1.pin:2": "PASSIVE",
+    "J1.pin:1": "POWER_IN",
+    "J1.pin:2": "GROUND"
+  },
+  "synthetic_evidence_tokens": {
+    "source:synthetic": "Placeholder used only by original conductor-keepout shape fixture; not an eligible source record or verified manufacturer fact."
+  }
+}
