@@ -1,5 +1,13 @@
 {
   "entries": {
+    "absolute_temperature_error": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "ac_voltage_rating": {
       "conditions": {
         "TA": "temperature",
@@ -9,6 +17,22 @@
       "queries": [
         "Q1",
         "Q5",
+        "Q10"
+      ]
+    },
+    "alias_rejection": {
+      "conditions": {},
+      "quantity": "logarithmic_gain",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "ambient_temperature": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
         "Q10"
       ]
     },
@@ -39,6 +63,30 @@
         "Q5"
       ]
     },
+    "audio_passband": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "bit_clock": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "bit_clock_to_frame_ratio": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "bus_frequency": {
       "conditions": {
         "TA": "temperature",
@@ -65,6 +113,14 @@
         "Q10"
       ]
     },
+    "cable_length": {
+      "conditions": {},
+      "quantity": "length",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "capacitance": {
       "conditions": {
         "TA": "temperature",
@@ -78,6 +134,22 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "channel_aperture_skew": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "channel_count": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "clamp_current": {
@@ -119,6 +191,14 @@
         "Q5"
       ]
     },
+    "clock_edge_alignment": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "clock_frequency": {
       "conditions": {
         "TA": "temperature",
@@ -131,6 +211,38 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "clock_frequency_tolerance": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "clock_period_jitter_peak": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "clock_period_jitter_rms": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "cold_junction_temperature": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "common_mode_voltage": {
@@ -213,6 +325,14 @@
         "Q5"
       ]
     },
+    "data_hold_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "data_rate": {
       "conditions": {},
       "quantity": "frequency",
@@ -220,6 +340,14 @@
         "Q1",
         "Q4",
         "Q5"
+      ]
+    },
+    "data_setup_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "differential_load_resistance": {
@@ -240,6 +368,22 @@
         "Q1",
         "Q4",
         "Q5"
+      ]
+    },
+    "digital_fall_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "digital_rise_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "direction_hold_time": {
@@ -411,6 +555,22 @@
         "Q10"
       ]
     },
+    "fixture_expanded_uncertainty": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "fixture_net_delay_mismatch": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "forward_voltage": {
       "conditions": {
         "TA": "temperature",
@@ -426,6 +586,14 @@
         "Q5"
       ]
     },
+    "frame_clock": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "frequency": {
       "conditions": {
         "TA": "temperature",
@@ -438,6 +606,14 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "full_ambient_output_power": {
+      "conditions": {},
+      "quantity": "power",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "full_scale_voltage": {
@@ -569,6 +745,14 @@
         "Q5"
       ]
     },
+    "hot_junction_temperature": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "impedance": {
       "conditions": {
         "TA": "temperature",
@@ -677,6 +861,14 @@
         "Q5"
       ]
     },
+    "input_leakage_magnitude": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "input_low_ratio": {
       "conditions": {
         "TA": "temperature",
@@ -736,6 +928,14 @@
         "Q5"
       ]
     },
+    "input_voltage_rms": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "io_voltage": {
       "conditions": {
         "TA": "temperature",
@@ -747,6 +947,14 @@
         "Q1",
         "Q10",
         "Q4"
+      ]
+    },
+    "jitter_observation_cycles": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "junction_temperature": {
@@ -761,6 +969,14 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "lead_loop_resistance": {
+      "conditions": {},
+      "quantity": "resistance",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "length": {
@@ -799,6 +1015,30 @@
         "Q5"
       ]
     },
+    "master_clock": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "master_clock_to_frame_ratio": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "maximum_fresh_acquisition_interval": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "mcu_current_budget": {
       "conditions": {},
       "quantity": "current",
@@ -815,6 +1055,14 @@
         "Q1",
         "Q4",
         "Q5"
+      ]
+    },
+    "minimum_continuous_test_duration": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "minimum_on_time": {
@@ -873,6 +1121,22 @@
         "Q5"
       ]
     },
+    "optional_i2c_pullup": {
+      "conditions": {},
+      "quantity": "resistance",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "optional_i2c_rise_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "output_current": {
       "conditions": {
         "TA": "temperature",
@@ -927,6 +1191,14 @@
         "Q1",
         "Q4",
         "Q5"
+      ]
+    },
+    "output_power": {
+      "conditions": {},
+      "quantity": "power",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "output_voltage": {
@@ -1006,6 +1278,14 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "power_settle_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "quiescent_current": {
@@ -1121,6 +1401,14 @@
         "Q4"
       ]
     },
+    "response_deviation": {
+      "conditions": {},
+      "quantity": "logarithmic_gain",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "return_event_interval": {
       "conditions": {},
       "quantity": "time",
@@ -1150,6 +1438,14 @@
         "Q5"
       ]
     },
+    "sample_pair_skew": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "sample_rate": {
       "conditions": {
         "TA": "temperature",
@@ -1161,6 +1457,14 @@
         "Q1",
         "Q10",
         "Q4"
+      ]
+    },
+    "sample_word_bits": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "saturation_current": {
@@ -1209,6 +1513,22 @@
         "Q4"
       ]
     },
+    "sensor_terminal_distance": {
+      "conditions": {},
+      "quantity": "length",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "sensor_terminal_temperature_mismatch": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "shunt_capacitance": {
       "conditions": {
         "TA": "temperature"
@@ -1217,6 +1537,30 @@
       "queries": [
         "Q1",
         "Q5"
+      ]
+    },
+    "shutdown_supply_current": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "sinad": {
+      "conditions": {},
+      "quantity": "logarithmic_gain",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "slot_width_bits": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "solder_mask_web": {
@@ -1231,6 +1575,22 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "source_dc_offset": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "source_impedance": {
+      "conditions": {},
+      "quantity": "resistance",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "standoff_voltage": {
@@ -1268,6 +1628,14 @@
       "quantity": "time",
       "queries": [
         "Q1",
+        "Q10"
+      ]
+    },
+    "surface_temperature": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
         "Q10"
       ]
     },
@@ -1313,6 +1681,46 @@
         "Q5"
       ]
     },
+    "terminal_count": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "terminal_temperature_difference": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "thd_plus_noise": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "thermal_equilibrium_change_threshold": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "thermal_equilibrium_window": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
     "thermal_resistance": {
       "conditions": {
         "TA": "temperature",
@@ -1326,6 +1734,14 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "thermal_test_ambient": {
+      "conditions": {},
+      "quantity": "temperature",
+      "queries": [
+        "Q4",
+        "Q10"
       ]
     },
     "thickness": {
@@ -1406,6 +1822,22 @@
       "conditions": {},
       "quantity": "current",
       "queries": [
+        "Q10"
+      ]
+    },
+    "uncertainty_coverage_factor": {
+      "conditions": {},
+      "quantity": "ratio",
+      "queries": [
+        "Q4",
+        "Q10"
+      ]
+    },
+    "update_rate": {
+      "conditions": {},
+      "quantity": "frequency",
+      "queries": [
+        "Q4",
         "Q10"
       ]
     },
