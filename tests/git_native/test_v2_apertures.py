@@ -6,7 +6,6 @@ from pcbknowledge.v2.apertures import aperture_identity, derive_apertures
 from pcbknowledge.v2.boardview import board_from_text, children
 from pcbknowledge.v2.footprints import derive_footprint, export_kicad
 from pcbknowledge.v2.layout_identity import pad_geometry_result
-from pcbknowledge.v2.placement import apply_positions
 from pcbknowledge.v2.sexpr import parse, dumps
 from pcbknowledge.v2.handoff import _syntax
 from tests.git_native.test_v2_footprints import package
@@ -26,9 +25,14 @@ def fixture():
     return p
 
 
-def board(p):
+def board(p, angle=0):
     fp = parse(export_kicad(p))
-    fp.insert(2, ['at', '10', '10', '0'])
+    fp.insert(2, ['at', '10', '10', str(angle)])
+    # Explicit zero-local-angle fixture pads carry the supplied native absolute angle.
+    for pad in children(fp, 'pad'):
+        at = children(pad, 'at')[0]
+        assert float(at[3]) == 0
+        at[3] = str(angle)
     fp.append(['property', 'Reference', 'U1'])
     return ['kicad_pcb', ['version', '20241229'], ['net', '0', ''], fp]
 
@@ -55,7 +59,7 @@ class ApertureTests(unittest.TestCase):
     def test_rigid_rotations_preserve_all_openings(self):
         p = fixture()
         for angle in (0, 90, 180, 270):
-            result = apply_positions(board(p), {'U1': (12, 13, angle)})
+            result = board(p, angle)
             self.assertTrue(aperture_identity(measured(result), derive_footprint(p)))
 
     def test_missing_extra_moved_and_layer_substitution_fail(self):
@@ -157,8 +161,12 @@ class ApertureTests(unittest.TestCase):
             layers = children(pad, 'layers')[0]
             layers[1:] = [layer.replace('F.', 'B.') for layer in layers[1:]]
         for angle in (0, 90, 180, 270):
-            transformed = apply_positions(tree, {'U1': (12, 13, angle)})
-            actual = measured(transformed)
+            fixture_tree = deepcopy(tree)
+            fp = children(fixture_tree, 'footprint')[0]
+            children(fp, 'at')[0][3] = str(angle)
+            for pad in children(fp, 'pad'):
+                children(pad, 'at')[0][3] = str(angle)
+            actual = measured(fixture_tree)
             self.assertTrue(aperture_identity(actual, derive_footprint(p)))
             self.assertEqual(pad_geometry_result(actual, derive_footprint(p))[0], 'PASS')
 
@@ -223,14 +231,13 @@ class ApertureTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Overlapping aperture'):
             derive_footprint(p)
 
-    def test_aperture_multiset_is_order_independent_but_preserves_duplicates(self):
-        from pcbknowledge.v2.routing import _canonical_geometry
-        a = measured(board(fixture()))
-        b = deepcopy(a)
-        b['apertures'].reverse()
-        self.assertEqual(_canonical_geometry(a), _canonical_geometry(b))
-        b['apertures'].append(deepcopy(b['apertures'][0]))
-        self.assertNotEqual(_canonical_geometry(a), _canonical_geometry(b))
+    def test_aperture_identity_is_order_independent_but_preserves_duplicates(self):
+        p = fixture()
+        a = measured(board(p))
+        a['apertures'].reverse()
+        self.assertTrue(aperture_identity(a, derive_footprint(p)))
+        a['apertures'].append(deepcopy(a['apertures'][0]))
+        self.assertFalse(aperture_identity(a, derive_footprint(p)))
 
     def test_handoff_never_assigns_aperture_net(self):
         from pcbknowledge.v2.handoff import _footprint

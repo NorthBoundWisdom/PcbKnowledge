@@ -100,14 +100,22 @@ commit-pinned consumer bundles and pure deterministic expansion:
 brief -> block graph -> expand(pinned bundle, graph) -> design intent -> PcbAtlas
 ```
 
-PcbAtlas owns product synthesis orchestration and live board state. The parked
-KiCad handoff and read-only checks follow [ADR-025](adr/ADR-025-derived-board-handoff.md).
-[ADR-026](adr/ADR-026-reference-layout-pipeline.md) additionally authorizes a
-reference pipeline: deterministic placement, external Freerouting, KiCad DRC and
-fabrication exports, all derived under `build/`. Its implementation is tracked in
-`TODO.md`. Optional installed tools never become catalog runtime dependencies;
-missing tools and unsupported geometry cannot pass. PcbKnowledge never reads or
-mutates live board state and has no PcbCore runtime dependency.
+PcbAtlas owns layout algorithms, product synthesis orchestration and live board state.
+PcbKnowledge accepts designs through A2 and exports knowledge-backed handoff files;
+it does not place, route, fill zones, implement DRC or generate fabrication outputs.
+The parked KiCad handoff and read-only checks follow
+[ADR-025](adr/ADR-025-derived-board-handoff.md). D78 retires the reference pipeline
+formerly authorized by [ADR-026](adr/ADR-026-reference-layout-pipeline.md).
+The thin optional `drc` wrapper invokes an external KiCad executable; it is not a
+DRC implementation or an acceptance dependency. `layout check` evaluates supplied
+board files against catalog constraints without changing them. Unsupported checks
+remain `NOT_CHECKABLE`, never a pass.
+
+Developers may use external KiCad or Freerouting manually to discover knowledge
+errors. Such findings must become catalog corrections with tool-free regressions;
+local boards and tool outputs stay uncommitted under `build/`. CI and A2 acceptance
+need neither tool. PcbKnowledge never reads or mutates live board state and has no
+PcbCore runtime dependency.
 [ADR-023](adr/ADR-023-design-intent-handoff.md) owns the JSON handoff contract.
 
 Expansion rejects mutually incompatible directional edge intervals across the

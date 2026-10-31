@@ -1,12 +1,10 @@
 """Physical reference data fixes preserve electrical identity and manufacturing geometry."""
 import copy
 import unittest
-from unittest.mock import patch
 
 from pcbknowledge.v2.footprints import derive_footprint, export_kicad
 from pcbknowledge.v2.sexpr import parse
 from pcbknowledge.v2.boardview import children, field
-from pcbknowledge.v2.placement import apply_positions
 from tests.git_native.test_v2_footprints import package
 from tests.git_native.test_v2_record_contracts import quantity
 
@@ -33,17 +31,11 @@ class GeometryExportTests(unittest.TestCase):
         self.assertEqual(pads[0][1:4], ['', 'np_thru_hole', 'circle'])
         self.assertEqual(field(pads[0], 'drill'), ['3.2'])
 
-    def test_smt_attribute_and_rigid_rotation_preserve_absolute_pad_angles(self):
+    def test_smt_attribute_and_local_pad_angles_are_exported(self):
         part = package('chip', lead_span=1.6, lead_width=.8, lead_length=.3)
         fp = parse(export_kicad(part))
         self.assertEqual(field(fp, 'attr'), ['smd'])
-        fp.extend([['at', '0', '0', '0'], ['property', 'Reference', 'R1']])
-        tree = ['kicad_pcb', fp]
-        for angle in (0, 90, 180, 270):
-            rotated = apply_positions(tree, {'R1': (5, 5, angle)})
-            result = children(rotated, 'footprint')[0]
-            self.assertTrue(all(float(field(p, 'at')[2]) == angle for p in children(result, 'pad')))
-            self.assertEqual(rotated, apply_positions(rotated, {'R1': (5, 5, angle)}))
+        self.assertTrue(all(float(field(p, 'at')[2]) == 0 for p in children(fp, 'pad')))
 
     def test_manufacturer_land_numbered_map_does_not_move_copper(self):
         part = package('manufacturer_two_side_land', count=4, pitch=2.5, row_pitch=4.35,

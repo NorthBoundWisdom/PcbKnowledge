@@ -710,18 +710,29 @@ repair chain, and T1's DRAFT resistors make `v2 coverage --all` report G1, G1V1,
 and G2 as `INCOMPLETE`/`REFUSED` although each expands at `AGENT_VERIFIED`. The
 knowledge corrections the pipeline exposed (D66, D68-D71) stay.
 
-- [ ] Delete from `src/pcbknowledge/v2/`: `fabrication`, `fanout_*`, `kicad_bridge`,
+- [x] Delete from `src/pcbknowledge/v2/`: `fabrication`, `fanout_*`, `kicad_bridge`,
   `layout_copper`, `layout_pipeline`, `layout_tools`, `placement*`, `reservation_*`,
   `review_readiness`, `routing*`, `specctra`, `svg_check`. Delete the `layout tools` and
   `layout run` commands and the tests that only cover them. The import graph on `e1a5cbe`
   shows no kept module imports these; recheck it before deleting, including `drc`.
-- [ ] Keep `layout check`, `drc` (the thin `kicad-cli` wrapper, `NOT_RUN` when KiCad is
+- [x] Keep `layout check`, `drc` (the thin `kicad-cli` wrapper, `NOT_RUN` when KiCad is
   absent), `boardview`, `sexpr`, `handoff`, `handoff_rules`, `bringup*`, `apertures`,
   `assembly`, `netlist` and footprint export. If a kept test needs a board,
   use a synthetic fixture. `bringup` keeps working without a placed board.
-- [ ] Remove the layout-pipeline sections from `docs/local-workflow.md`,
+- [x] Remove the layout-pipeline sections from `docs/local-workflow.md`,
   `docs/architecture.md`, and any remaining symlink handling that belongs only to deleted
   code. Add a short section on using KiCad and Freerouting as manual test tools. Keep the `build/` boundary for what remains.
+Retirement receipt (2026-10-31): D78 removes 33 runtime modules and 37
+pipeline-only test files. Six mixed suites retain source pins, numeric bounds,
+footprint exports, aperture identity and board-reader checks using synthetic
+fixtures. The import audit found only the CLI as a retained caller of retired
+modules. `python3 configs/pcbknowledge_workflow.py build` passed 580 tests and
+validated 202 records after deletion; the retained path/UTF-8 fixes then passed
+44 focused CLI, DRC, handoff, alias and synthesis-evidence tests. Independent
+review by `agent:/root/implement_reference_layout/stage12_review` found a
+junction-policy classification bug; lexical repository-boundary checks fixed it
+with a regression. CI on all platforms remains required below.
+
 - [ ] Green CI on every job. If a macOS or Windows failure survives the deletion, fix it
   with a test; read the Windows log rather than assuming the cause.
 - [ ] `coverage` judges the part `expand` actually selects, so an unselected DRAFT

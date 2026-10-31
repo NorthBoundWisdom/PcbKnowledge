@@ -317,104 +317,24 @@ not acceptable waivers for a finished board. Unsupported outline/courtyard/fill
 geometry and ambiguous Kelvin sense branches remain explicit. Loop-area checks
 are pad-center bounding-polygon estimates, not proof of a routed return path;
 keepout checks are conservative courtyard-envelope comparisons. See
-[ADR-025](adr/ADR-025-derived-board-handoff.md) for measurement scope. A3/A4 require
-review of the completed layout and all remaining findings; ordering and physical
-bring-up remain owner-only A5/A6 work.
+[ADR-025](adr/ADR-025-derived-board-handoff.md) for measurement scope. PcbKnowledge acceptance ends at A2. A3-A5 belong to PcbAtlas or a manual layout;
+ordering and physical bring-up remain owner-only activities.
 
-## Reference layout tools (ADR-026, D64)
+## Optional manual external-tool checks (D78)
 
-Stage 13 uses installed external processes, not catalog runtime dependencies.
-Unit tests use original synthetic fixtures and do not require these tools.
-`layout tools` reports each explicit path or PATH discovery and actual version;
-missing tools remain `NOT_FOUND` and execution is `NOT_RUN`.
+PcbKnowledge accepts designs through A2. Placement, routing, zone fill, native DRC
+and fabrication belong to PcbAtlas or a manual layout, not this repository.
+The retired `layout tools` and `layout run` commands are unavailable.
 
-Verified on 2026-10-31: KiCad CLI and installed Python bridge 9.0.2,
-Temurin Java 25.0.5+8, Freerouting 2.5.0 (latest stable official release checked
-at first use). The release requires Java 25, which satisfies D64's 21-or-newer rule.
+A developer may open the parked handoff in an independently installed KiCad or use
+Freerouting manually to investigate a catalog constraint or footprint. Keep the
+original pinned bundle, graph, intent, adjacent project/rules and footprint library;
+record the exact external command and tool version with any resulting finding.
+Keep boards, receipts and rendered comparisons locally under `build/`; do not commit
+them. A finding must be corrected at its knowledge source and covered by a tool-free
+regression, not bypassed by changing a constraint or accepting a DRC waiver.
 
-- Freerouting: `https://github.com/freerouting/freerouting/releases/download/v2.5.0/freerouting-2.5.0.jar`
-  SHA-256 `f6f51bb02245e8e717f9359bd260cc9c5c0b1bc0acc8b7cb2cd5b8ffeb5de3c7`.
-- Java: `https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jre_x64_linux_hotspot_25.0.5_8.tar.gz`
-  SHA-256 `6fac98f0c8202efc3135a9e9e42aa61963ec42d1c5cbb40caf231e7b14a24ef6`.
-
-Download tools outside the repository, verify hashes, and select explicit paths.
-The KiCad Python interpreter must come from the installed KiCad environment; the
-catalog process never imports `pcbnew`. Its isolated subprocess handles native
-DSN/SES conversion and zone fill. KiCad project settings and generated rules stay
-unchanged. Native board saves disable project-settings output; fresh destination
-sidecars are required before copying the exact source project and rules.
-Freerouting uses one thread for each routing stage, sequential selection,
-fixed maximum 100 autorouter/20 optimizer passes, and disables fanout, automatic
-neckdown, GUI, API and analytics. The neck-width override is zero (disabled). Session widths are independently checked against the intent.
-Unfilled zone outlines are excluded only from the router projection so they cannot
-imply electrical connectivity. Nets, pads, keepouts and rules remain; the original
-zones are filled after explicit routing and checked normally.
-A router success is not DRC acceptance: the final filled board is checked again.
-
-```bash
-python3 configs/pcbknowledge_agent.py --repo . layout tools \
-  --kicad /usr/bin/kicad-cli --kicad-python /usr/bin/python3 \
-  --java /tmp/pcbknowledge-tools/jdk-25.0.5+8-jre/bin/java \
-  --freerouting /tmp/pcbknowledge-tools/freerouting-2.5.0.jar
-python3 configs/pcbknowledge_agent.py --repo . layout run build/g1-intent.json \
-  --bundle build/bundle/COMMIT.bundle.json --graph evals/golden-designs/g1.block-graph.json \
-  --output build/reference-g1 --grid-mm 0.1 --kicad-python /usr/bin/python3 \
-  --java /tmp/pcbknowledge-tools/jdk-25.0.5+8-jre/bin/java \
-  --freerouting /tmp/pcbknowledge-tools/freerouting-2.5.0.jar
-```
-
-Each run needs a fresh output directory; stale fabrication files cannot pass.
-Read `report.json`, then inspect `fabrication/top.svg` and `bottom.svg` and the
-routed KiCad board. Inspect USB access, mounting clearances, pin-1 markers,
-decoupling, oscillator loop and test access. Zero violations and unconnected
-items are required; unresolved layout checks retain their individual reasons.
-The position CSV uses KiCad top-view coordinates (positive X right, Y up) and
-counterclockwise degrees; bottom-side rotation is not an assembly instruction for
-this TOP-only profile. JLCPCB's assembly preview must be reviewed against pin 1
-and the source drawing before ordering; do not add unrecorded rotation offsets.
-
-The placer uses four orthogonal orientations, explicit grid spacing and exact edge
-coordinates. Its deterministic beam is 64 candidates, candidate scans are capped
-at 500,000 per orientation, and cumulative compatibility work is capped at the
-smaller of 20 million operations or 10,000 times the legal-branch limit. Reports
-record these limits. Search exhaustion is a heuristic failure, not proof that the
-layout constraints are impossible. Every returned placement passes the independent
-courtyard, outline, proximity, group, edge, keepout and loop checks unchanged.
-
-Freerouting 2.5.0 fanout enables micro-neckdown independently of its automatic
-neckdown flag (`FoundConnectionInserter.java`, v2.5.0, lines 241-247 and 499-501).
-Both paths are disabled: no narrowed trace is accepted by session preflight.
-Native footprint image aliases are accepted only for a trailing positive-integer
-variant whose complete non-outline DSN image matches the base; reference sets,
-physical placement, electrical images and final native geometry remain checked.
-
-Placement also checks the generated pin-1 ink: actual circle-to-circle and
-circle-to-pad collisions, including stroke extent and rotated pad bounds. The
-source courtyard remains unchanged; empty courtyard space is not treated as ink.
-A necessary endpoint-distance bound rejects isolated impossible proximity rules
-before search. It does not prove joint feasibility or convert search exhaustion
-into geometric impossibility.
-
-The reference report distinguishes `owner_review_ready` from strict A3-A5 and
-`review_ready`. Owner inspection requires clean final native DRC, independently
-re-read fabrication outputs, complete conditional bring-up ranges, top/bottom
-SVGs, and no failed layout checks. Each remaining `NOT_CHECKABLE` reason stays
-visible beside the renders. This inspection checkpoint does not approve ordering
-or convert unsupported physical proofs into passing checks.
-
-
-### Partial-route reservation API
-
-Use `pcbknowledge.v2.reservation_repair.reserve_route(original, current, prior,
-drc, intent, bundle, failed_pad_uuid, tools, output, root=repository)` for one
-explicit failed-pad repair. Paths must be under `build/`; `original` is the
-handoff board beside its authenticated `graph.json`, not a copied seed board.
-`prior` is the exact board fingerprinted by `drc`; the current board must preserve
-its placement and source project/rules. Supply a fresh output directory and the
-same tool descriptors used by `layout run`. Receipts retain failed intermediate
-connectivity, removed copper identities, router scope, native findings and runtime.
-No repeated attempt is automatic. Layout unknowns do not become PASS.
-
-Review SVGs show copper, silkscreen and outline without the drawing sheet or
-fabrication annotations. Use the native board and placement CSV to identify parts.
-Inspect the listed thermal-area and Kelvin unknowns before considering manufacture.
+The retained `layout check` and optional thin `drc` commands above inspect supplied
+files. External tools are not prerequisites for CI, expansion or A2 acceptance.
+Bring-up report generation remains tool-free and supports an absent placed board;
+physical measurements and ordering remain owner-only activities.

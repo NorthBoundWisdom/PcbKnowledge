@@ -36,7 +36,7 @@ class SynthesisEvidenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             attempt = root / 'attempt.json'
-            attempt.write_text(canonical_json(document))
+            attempt.write_text(canonical_json(document), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'NOT_LOCALLY_VERIFIED'):
                 load_attempt(root, attempt)
             sha = document['evidence']['sha256']
@@ -54,7 +54,7 @@ class SynthesisEvidenceTests(unittest.TestCase):
                 load_attempt(root, attempt)
             mutated = copy.deepcopy(document)
             mutated['evidence']['sha256'] = '../escape'
-            attempt.write_text(canonical_json(mutated))
+            attempt.write_text(canonical_json(mutated), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'Invalid'):
                 load_attempt(root, attempt)
 
@@ -70,7 +70,7 @@ class SynthesisEvidenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             attempt = root / 'attempt.json'
-            attempt.write_text(canonical_json(document))
+            attempt.write_text(canonical_json(document), encoding='utf-8')
             cache = root / '.pcbknowledge/evals/sha256' / sha[:2] / (sha + '.json')
             cache.parent.mkdir(parents=True)
             cache.write_bytes(payload.encode('utf-8'))

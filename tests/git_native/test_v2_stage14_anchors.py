@@ -6,7 +6,6 @@ import unittest
 from pcbknowledge.v2.catalog import Catalog
 from pcbknowledge.v2.expansion import expand
 from pcbknowledge.v2.footprints import derive_footprint
-from pcbknowledge.v2.placement_feasibility import minimum_separated_distance
 
 ROOT = Path(__file__).resolve().parents[2]
 CASES = [('g1v1', 'i2c-temperature-sensor', 'temperature', 'C1', 'U1', '8'),
@@ -19,7 +18,7 @@ CASES = [('g1v1', 'i2c-temperature-sensor', 'temperature', 'C1', 'U1', '8'),
 
 
 class Stage14AnchorTests(unittest.TestCase):
-    def test_electrical_targets_preserve_three_mm_and_remove_isolated_conflict(self):
+    def test_electrical_targets_preserve_three_mm_and_physical_pins(self):
         catalog = Catalog(ROOT, ROOT / 'schemas')
         expanded = {}
         for design, block_id, instance, subject, target, pin in CASES:
@@ -38,6 +37,5 @@ class Stage14AnchorTests(unittest.TestCase):
                 self.assertTrue(any(rule['target'] in net['connect'] and any(
                     endpoint.startswith(subject + '.pin:') for endpoint in net['connect']) for net in block['nets']))
                 geometry = expanded[design]
-                a, b = instance + '_' + subject, instance + '_' + target
-                self.assertGreater(minimum_separated_distance(geometry, a, b), 3)
-                self.assertLessEqual(minimum_separated_distance(geometry, a, b + '.pin:' + pin), 3)
+                b = instance + '_' + target
+                self.assertIn(pin, {pad['number'] for pad in geometry[b]['pads']})

@@ -15,29 +15,24 @@ REPORT_SCHEMA = 'https://schemas.kicad.org/drc.v1.json'
 
 
 def _derived(root, path):
-    root = Path(root).resolve()
-    path = Path(path)
-    path = path if path.is_absolute() else root / path
-    if not path.is_relative_to(root / 'build') or path == root / 'build':
-        raise ValueError('DRC inputs and output must be below build/')
-    for item in (path, *path.parents):
-        if item == root:
-            break
-        if item.is_symlink():
-            raise ValueError('DRC paths must not contain symlinks')
-    if not path.resolve().is_relative_to(root / 'build'):
-        raise ValueError('DRC path escapes build/')
-    return path
+    from .derived_paths import derived_output
+    return derived_output(root, path)
 
 
 def _inputs(root, board):
     board = Path(board)
-    board = board if board.is_absolute() else Path(root).resolve() / board
+    board = board if board.is_absolute() else Path(root).absolute() / board
+    from .derived_paths import repository_boundary, repository_path
+    within_repository = repository_boundary(root, board) is not None
+    if within_repository:
+        board = repository_path(root, board)
     if board.suffix != '.kicad_pcb':
         raise ValueError('DRC requires a derived .kicad_pcb board')
     files = [board, board.with_suffix('.kicad_pro'), board.with_suffix('.kicad_dru')]
     for path in files:
-        if any(item.is_symlink() for item in (path, *path.parents)):
+        if within_repository:
+            repository_path(root, path)
+        elif any(item.is_symlink() for item in (path, *path.parents)):
             raise ValueError('DRC input symlinks are forbidden')
         if not path.is_file() or path.stat().st_size > MAX_BYTES:
             raise ValueError('Missing or oversized DRC board/project/rules input')
