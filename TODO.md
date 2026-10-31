@@ -813,7 +813,7 @@ Claims (D92): before starting a cycle, push your name on its line so work is not
 | 2 | T3 motor H-bridge, T4 stepper driver | Ethan, claimed 2026-10-31 after Stage 17 |
 | 3 | T5 DAC signal generator, T6 OLED and keypad | Wisdom |
 | 4 | T7 CAN node, T8 Wi-Fi carrier | Wisdom |
-| 5 | T9 thermocouple, T10 class-D audio | first free developer |
+| 5 | T9 thermocouple, T10 class-D audio | Ethan |
 
 Shared preparation:
 
@@ -869,7 +869,10 @@ Cycle 2, T3/T4/N6 (Ethan):
 - [ ] T4 A2 and three fresh synthesis attempts: PARKED_SOURCE_QUALIFICATION.
   DRV8424 low-VREF accuracy and DRV8825 reference/scaling/blanking conditions do not yet prove
   the retained hold/peak-current window. Keep the original limits; no universal infeasibility claim.
-- [ ] N6 three fresh query-mediated refusals, followed by independent review and the cycle gate.
+- [x] N6 three fresh query-mediated refusals, independently reviewed and evaluated.
+N6 on bundle `347fcde` passes 3/3; independent review reproduces 22 query commands and authenticates every original. The complete result retains motor/logic input failures alongside the missing three-phase function; attempts are at most 3,693 bytes and full evidence stays local.
+Cycle 2 gate on `f8af2c3`: all AGENTS section 10 checks pass; Build/Test each pass 978 tests with zero skips, 216 records validate and Package passes. A clean-checkout CLI reproduces the committed N6 result exactly.
+Cycle 2: T3/T4 remain parked below A2; no new parts or blocks; N6 passes 3/3. Independent exit review retains both source-qualification gaps and the original limits. Cycle 5 is claimed for Ethan; Cycle 4 stays with Wisdom.
 
 Cycle 3, T5/T6 (Wisdom):
 

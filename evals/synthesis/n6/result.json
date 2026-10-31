@@ -1,0 +1,87 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/advance_knowledge_development/n6_author_one",
+      "correct_refusal": true,
+      "refusal_sha256": "42b63dcdf266d1826774f82959325c50d86010ee178da850729ee19f89d91596",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/advance_knowledge_development/n6_author_two",
+      "correct_refusal": true,
+      "refusal_sha256": "9c883c697bd55eec5a8a69737ba972c862bee848b203eb0fdef1c9da4e5cfb88",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/advance_knowledge_development/n6_author_three",
+      "correct_refusal": true,
+      "refusal_sha256": "aed8a700e3170a93d315b89cd538b7b17e73bb83770fa5522d41148a513e00a3",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N6",
+  "bundle_commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+  "bundle_sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a",
+  "evaluation_engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602",
+  "evaluation_input_identity": {
+    "audit_sha256": "f9703ec100fb030e2ae7dde2a9125b41d81d9bddd3dbf0225a17ebc7f23b13ac",
+    "catalog_tree": "b836713aa68330abdc95a2897b64b5ac7fc9f1f7",
+    "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+  },
+  "input_identity": {
+    "audit_sha256": "f9703ec100fb030e2ae7dde2a9125b41d81d9bddd3dbf0225a17ebc7f23b13ac",
+    "catalog_tree": "b836713aa68330abdc95a2897b64b5ac7fc9f1f7",
+    "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+  },
+  "mode": "negative",
+  "orchestrator": "agent:/root/advance_knowledge_development",
+  "original_bundles": [
+    {
+      "agent": "agent:/root/advance_knowledge_development/n6_author_one",
+      "commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+      "sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a"
+    },
+    {
+      "agent": "agent:/root/advance_knowledge_development/n6_author_two",
+      "commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+      "sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a"
+    },
+    {
+      "agent": "agent:/root/advance_knowledge_development/n6_author_three",
+      "commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+      "sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a"
+    }
+  ],
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "reference_sha256": null,
+  "replayed_refusals": [
+    {
+      "code": "CHECK_FAILED",
+      "path": "functions.motor_input",
+      "queries": [
+        "Q4"
+      ],
+      "reason": "No eligible block: Block does not declare requested parameter: clamp_current"
+    },
+    {
+      "code": "CHECK_FAILED",
+      "path": "functions.logic_input",
+      "queries": [
+        "Q4"
+      ],
+      "reason": "No eligible block: Block does not declare requested parameter: input_high_voltage"
+    },
+    {
+      "code": "UNSATISFIED_SELECTION",
+      "path": "functions.three_phase_drive",
+      "queries": [
+        "Q1"
+      ],
+      "reason": "No block provides declared category: motor.three-phase-bldc"
+    }
+  ],
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}

@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 917587,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "877c50da3d61b82792ba64524444b35f97115d65378437a34ed623a3f6abe356",
+    "submission_hashes": [
+      {
+        "original_sha256": "9c883c697bd55eec5a8a69737ba972c862bee848b203eb0fdef1c9da4e5cfb88",
+        "refusal_sha256": "9c883c697bd55eec5a8a69737ba972c862bee848b203eb0fdef1c9da4e5cfb88"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/advance_knowledge_development/n6_author_two",
+    "brief_sha256": "4675667970ada5f8656ae9d770c4c89303ac0f78eeea72c66f4cac459d331a58",
+    "bundle_commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+    "bundle_sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a",
+    "equivalence_review": "CORRECT_REFUSAL: Replayed all six queries exactly. Complete block enumeration and detailed 0.1 A sink-only contracts support refusal of the three-phase function, not a fabricated or substituted graph. Original bytes and hashes match; no hardware acceptance is implied.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "ba4944de83d9ed81e0d865d90f7d8d8defd85e51e4a5d04e3eb98d10aa63a696",
+    "input_identity": {
+      "audit_sha256": "f9703ec100fb030e2ae7dde2a9125b41d81d9bddd3dbf0225a17ebc7f23b13ac",
+      "catalog_tree": "b836713aa68330abdc95a2897b64b5ac7fc9f1f7",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/advance_knowledge_development",
+    "reference_accessed": false,
+    "refusal_sha256": "9c883c697bd55eec5a8a69737ba972c862bee848b203eb0fdef1c9da4e5cfb88",
+    "reviewer": "agent:/root/review_stage_zero",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "fe39c8ac422e4a274751694bb6929ef6d3093a25f3a656982c2b360b368112da"
+  },
+  "refusal": {
+    "brief": "N6",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.three_phase_drive",
+    "reason": "N6 requires three independently commanded half-bridges for a star-connected three-phase motor, including source, sink and floating phase states at 0.50 A and 10 kHz. The complete broker-provided block search (response-004) contains no motor.three-phase-bldc block or exported three-half-bridge interface. Actual show inspection of block:g2-low-side-switch (response-005, AGENT_VERIFIED) finds one GATE input and one POWER_SINK RETURN: Q1.pin:2 is permanently on GND, Q1.pin:3 connects RETURN, and VLOAD connects only the clamp diode D1.pin:1. It therefore supplies no controlled high-side sourcing switch. Its fixed output_current is also 0.1 A. Actual inspection of block:g2-relay-channels (response-006, AGENT_VERIFIED) finds two POWER_SINK returns, GATE1/GATE2 inputs and the ULN2003A common emitter grounded; VLOAD is its clamp connection, not a controlled phase source. Its fixed per-channel current is 0.1 A and its calculator uses a 10 Hz external coil switching contract. Repeating these sink-only blocks does not implement the required independently sourceable three phases. No eligible block selection implements the required function; changing net labels or substituting a relay/load sink would discard the topology requirement. This is a catalog-selection refusal, not a claim that this motor circuit is impossible to engineer outside the supplied catalog."
+  }
+}

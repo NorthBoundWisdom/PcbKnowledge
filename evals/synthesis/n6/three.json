@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 920507,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "9292964b4135a5f09889c7b4f69c0bb591523723361625095149f914bd0b0e4c",
+    "submission_hashes": [
+      {
+        "original_sha256": "aed8a700e3170a93d315b89cd538b7b17e73bb83770fa5522d41148a513e00a3",
+        "refusal_sha256": "aed8a700e3170a93d315b89cd538b7b17e73bb83770fa5522d41148a513e00a3"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/advance_knowledge_development/n6_author_three",
+    "brief_sha256": "4675667970ada5f8656ae9d770c4c89303ac0f78eeea72c66f4cac459d331a58",
+    "bundle_commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+    "bundle_sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a",
+    "equivalence_review": "CORRECT_REFUSAL: Replayed six successful queries and the actual registry-search error exactly. Full block enumeration and inspected sink-only contracts establish the missing three-phase function. The unsupported query is not absence evidence; original bytes and hashes match.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "ba4944de83d9ed81e0d865d90f7d8d8defd85e51e4a5d04e3eb98d10aa63a696",
+    "input_identity": {
+      "audit_sha256": "f9703ec100fb030e2ae7dde2a9125b41d81d9bddd3dbf0225a17ebc7f23b13ac",
+      "catalog_tree": "b836713aa68330abdc95a2897b64b5ac7fc9f1f7",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/advance_knowledge_development",
+    "reference_accessed": false,
+    "refusal_sha256": "aed8a700e3170a93d315b89cd538b7b17e73bb83770fa5522d41148a513e00a3",
+    "reviewer": "agent:/root/review_stage_zero",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "358b8eb6ff4bf4b18b9c1a2079b40c07e02a7b666ffe0c0e646a16cf3d878af7"
+  },
+  "refusal": {
+    "brief": "N6",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.three_phase_drive",
+    "reason": "N6 requires three independently commanded half-bridges, six host gate commands, three distinct winding terminals and a floating inactive phase for a star-connected BLDC motor at 0.50 A and 10 kHz. The complete broker block search was inspected for every block category and exported port; it provides no motor.three-phase-bldc or independently controlled half-bridge contract. Actual show contracts for block:g2-low-side-switch and block:g2-relay-channels establish why the available switching candidates cannot substitute: g2-low-side-switch exposes only GATE and POWER_SINK RETURN, with Q1.pin:2 tied to GND, Q1.pin:3 tied to RETURN, and VLOAD connected to the clamp diode, not a commanded high-side switch; its fixed output_current is 0.1 A. g2-relay-channels exposes GATE1/GATE2 and POWER_SINK RETURN1/RETURN2, ties the ULN2003A emitter and unused inputs to ground, and exposes no controllable high-side source. Its fixed per-channel output_current is 0.1 A and its thermal check assumes a 10 Hz external coil switching rate. Replicating these sink-only contracts cannot supply the required independently selectable source/sink/floating phase functions. This is an unavailable topology/function selection, not a claim that a suitable real-world BLDC design is impossible. No brushed, stepper, or invented replacement graph is submitted."
+  }
+}

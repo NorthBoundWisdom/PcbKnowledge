@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 1270310,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "547f485665e7eb55d02a896b7e0b9874e3e5524c41ab812961932741c1ca4e3c",
+    "submission_hashes": [
+      {
+        "original_sha256": "42b63dcdf266d1826774f82959325c50d86010ee178da850729ee19f89d91596",
+        "refusal_sha256": "42b63dcdf266d1826774f82959325c50d86010ee178da850729ee19f89d91596"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/advance_knowledge_development/n6_author_one",
+    "brief_sha256": "4675667970ada5f8656ae9d770c4c89303ac0f78eeea72c66f4cac459d331a58",
+    "bundle_commit": "347fcde2f93623ec6c5c99a4e22fd8671b05fedf",
+    "bundle_sha256": "f612161b54065aaff50ab2da9b3cbb50f21aa6bba5f7d8fe05465d4104a3a08a",
+    "equivalence_review": "CORRECT_REFUSAL: Replayed all nine queries exactly. The complete block listing and inspected MOSFET/ULN2003 sink contracts cannot provide the required three controlled half-bridges. Original refusal and hashes match; this is catalog-bounded, not physical infeasibility.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "ba4944de83d9ed81e0d865d90f7d8d8defd85e51e4a5d04e3eb98d10aa63a696",
+    "input_identity": {
+      "audit_sha256": "f9703ec100fb030e2ae7dde2a9125b41d81d9bddd3dbf0225a17ebc7f23b13ac",
+      "catalog_tree": "b836713aa68330abdc95a2897b64b5ac7fc9f1f7",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/advance_knowledge_development",
+    "reference_accessed": false,
+    "refusal_sha256": "42b63dcdf266d1826774f82959325c50d86010ee178da850729ee19f89d91596",
+    "reviewer": "agent:/root/review_stage_zero",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "dd802316cd38ed9f4b3cd903866e0a162d37da5e47da1356dcdbe402253474a6"
+  },
+  "refusal": {
+    "brief": "N6",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.three_phase_drive",
+    "reason": "The pinned catalog has no eligible block implementing the requested motor.three-phase-bldc function. I inspected the IDs, categories and verification levels of all 47 blocks returned by the unfiltered catalog query, not just the empty motor/three-phase searches. Actual alternative switch contracts do not provide the required three independently commanded sourcing/sinking/floating phase outputs: block:g2-low-side-switch exports GATE and RETURN, fixes output_current to 0.1 A, and internally connects Q1 SOURCE (pin 2) to GND and DRAIN (pin 3) to RETURN; VLOAD connects only to the catch diode. block:g2-relay-channels exports two POWER_SINK returns, fixes output_current to 0.1 A per active channel, grounds ULN2003 emitter pin 8, and connects VLOAD to COM pin 9, not to a commanded high-side source. The inspected underlying part contracts confirm an N-channel MOSFET and a common-emitter Darlington sink array, respectively; these are not exported three-half-bridge motor contracts. The complete 55-part role listing contains no motor-inverter or half-bridge driver contract. Merely duplicating these low-side blocks or relabeling their returns U/V/W cannot implement a source phase, sink phase and floating phase with the six external control inputs at the required 0.50 A winding current and 10 kHz PWM. A newly qualified inverter block would be needed; substituting a different topology or inventing a block would violate the supplied brief and verified-catalog synthesis rules. This is a selection refusal, not an assertion that a qualified three-phase circuit is physically impossible."
+  }
+}
