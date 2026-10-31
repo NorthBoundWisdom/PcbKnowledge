@@ -24,6 +24,7 @@ INPUT_UNITS = {
 NOTES = {
     **calculators_sensing.NOTES,
     'tia_loop_model': calculators_tia_loop.NOTE,
+    'tia_loop_total_capacitance': calculators_tia_loop.NOTE,
     'opamp_gain': ('Ideal DC TIA: positive input current leaves the summing node, Vout=Vbias+I*Rf. '
                    'Excludes offset, bias current, finite loop gain, stability and output limits.'),
     'rc_filter': 'Unloaded ideal series-R shunt-C low-pass driven by a zero-impedance voltage source.',
@@ -120,6 +121,8 @@ def microstrip(b):
 
 
 def calculate(name, b):
+    if name == 'tia_loop_total_capacitance':
+        return calculators_tia_loop.calculate_total(b)
     if name == 'tia_loop_model':
         return calculators_tia_loop.calculate(b)
     if name in calculators_sensing.INPUT_UNITS:

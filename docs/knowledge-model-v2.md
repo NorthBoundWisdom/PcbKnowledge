@@ -98,7 +98,9 @@ independence are machine checked; the Git reviewer checks that the named actor
 actually performed the observation.
 
 Executable calculators validate registered inputs and recompute `CALCULATED`
-quantities. `geometry_affine` computes signed package coordinates as offset plus
+quantities. The TIA total-capacitance calculator and preserved historical four-part
+calculator have distinct exact input contracts and share one numerical core (D70).
+`geometry_affine` computes signed package coordinates as offset plus
 factor times dimension, using cited dimensional leaves and explicit mathematical
 coefficients. Nested calculations retain source closure; intervals round outward,
 and nonfinite results or lost nonzero scalar values fail. The G1 reference and independent graphs use collected records, not

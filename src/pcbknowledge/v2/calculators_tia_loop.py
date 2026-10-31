@@ -6,6 +6,9 @@ INPUT_UNITS = {'tia_loop_model': {'gain_bandwidth': 'Hz', 'input_capacitance': '
                                  'feedback_resistance': 'ohm', 'feedback_capacitance_a': 'F',
                                  'feedback_capacitance_b': 'F', 'feedback_capacitance_c': 'F',
                                  'feedback_capacitance_d': 'F'}}
+INPUT_UNITS['tia_loop_total_capacitance'] = {
+    'gain_bandwidth': 'Hz', 'input_capacitance': 'F',
+    'feedback_resistance': 'ohm', 'feedback_capacitance': 'F'}
 NOTE = ('Engineering integrator op-amp loop estimate using supplied GBW and capacitances; '
         'excludes extra amplifier poles, parasitic uncertainty and output loading. '
         'Phase margin is conditional on this model, not guaranteed actual stability.')
@@ -28,12 +31,19 @@ def crossover(omega_t, tau_zero, tau_pole):
 
 
 def calculate(b):
-    gbw, input_cap, resistance = (b[key] for key in
-                                   ('gain_bandwidth', 'input_capacitance', 'feedback_resistance'))
+    """Historical four-capacitor contract; its exact sum enters the single numerical core."""
     capacitors = [b['feedback_capacitance_' + suffix] for suffix in 'abcd']
     if any(cap[0] <= 0 for cap in capacitors):
         raise ValueError('Four parallel feedback capacitors require positive bounds')
-    feedback_cap = tuple(sum(cap[i] for cap in capacitors) for i in (0, 1))
+    total = tuple(sum(cap[i] for cap in capacitors) for i in (0, 1))
+    return calculate_total({key: b[key] for key in ('gain_bandwidth', 'input_capacitance', 'feedback_resistance')}
+                           | {'feedback_capacitance': total})
+
+
+def calculate_total(b):
+    gbw, input_cap, resistance = (b[key] for key in
+                                   ('gain_bandwidth', 'input_capacitance', 'feedback_resistance'))
+    feedback_cap = b['feedback_capacitance']
     if min(gbw[0], feedback_cap[0], resistance[0]) <= 0:
         raise ValueError('TIA loop model requires positive GBW, feedback capacitance and resistance')
     zero = tuple(resistance[i] * (input_cap[i] + feedback_cap[i]) for i in (0, 1))

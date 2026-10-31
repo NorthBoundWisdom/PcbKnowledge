@@ -115,6 +115,8 @@ answer here.
 | D68 | Power-only USB connector | Use GCT USB4125-GF-A-0190 for the power-only sink: the USB4110 recommended locators conflict with the unchanged 0.25 mm hole-clearance rule. The replacement has no NPTH locators and passes the same native coupon rules; retain USB4110 for the separate USB2 block and manually solder the four new shell stakes. |
 | D69 | Stage 14 physical anchors | Use source-mapped supply, driver-input and switched-return pins for six impossible center-origin proximity rules, retaining every 3 mm bound and GROUP/loop constraint. Keep the separate eight G2 buck conflicts unresolved until the existing physical-distance contract can be satisfied. |
 
+| D70 | G3/G4 feedback layout and replay | Replace four parallel 22 pF capacitors with one source-qualified 100 pF C0G part and source-mapped SUMMING terminals, retaining 2 mm proximity, 9 mm² loops and electrical requirements. Current blocks use `tia_loop_total_capacitance`; retain the distinct historical four-input `tia_loop_model` for mandatory receipt replay, with one shared numerical core and exact input validation for each ID. Agent-selected under delegated migration authority; originals and hashes remain unchanged. |
+
 ## Stage 0 — Course correction (complete)
 
 Stop expanding the old design, remove dead weight, align instructions.

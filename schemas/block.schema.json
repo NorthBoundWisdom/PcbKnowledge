@@ -221,7 +221,8 @@
               "rs485_termination",
               "trace_impedance_microstrip",
               "tps5430_output_ripple",
-              "input_protection"
+              "input_protection",
+              "tia_loop_total_capacitance"
             ]
           },
           "inputs": {
