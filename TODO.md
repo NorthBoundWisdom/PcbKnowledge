@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_16_ACTIVE` (Stages 13 and Wisdom Stage 14 work complete; Stage 14 parked on assigned dependencies; seven positive references at A2)
+> Status: `CONTINUOUS_MODE_PARALLEL` (seven positive references at A2; Wisdom on Stage 16; Ethan on Stages 14 and 17)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators, block expansion,
@@ -35,13 +35,16 @@
   regenerate it.
 - Items marked **(owner-only)** never block the queue: skip them and continue with
   the next item. Items marked **(escalate)** stop work until the owner answers.
+- **Keep moving.** Follow the blocker table in [`docs/implementer-brief.md`](docs/implementer-brief.md). A
+  blocked item never stops a session while other items remain.
+- **Receipts stay short.** One to three lines per stage or item. Details go in commit bodies.
 - **A blocked stage parks; the queue moves on.** When a stage cannot finish
   (missing evidence no listed default resolves), record the blocker under the
   stage in two or three lines, mark the status `..._PARKED`, and start the next
   stage. Stop the session only when every remaining stage is parked or an
   escalation applies. Revisit parked stages at the start of each session.
 - **One implementing session per developer, on disjoint work (D77).** Wisdom works
-  the queue. Ethan works the items marked `(ethan)`, and Wisdom skips them. Wisdom skips nothing else.
+  the queue. Each takes only items marked with their name and unassigned items in claimed cycles.
   Neither developer takes the other's items or edits the other's files. Rebase onto
   `origin/main` before every push and never force-push. Do not run two sessions for
   the same developer; it produced duplicate rebased commits and an ancestry merge in
@@ -133,15 +136,19 @@ answer here.
 | D74 | T1 conditional reference design | Use TPS562208 FCCM with DAC60501 feedback setpoint and INA219 voltage/current readback for 12 V nominal input and 2.5-6 V / 0.5 A external output. Include local loads and explicit control-rail/preload operating budgets; keep the new authority DRAFT until driven-clamp, bound-calculator and underbody routing checks are integrated. |
 | D75 | Strict A3 and queue order (reviewing agent, 2026-10-31) | A3 requires every constraint `PASS`, matching the A3 definition; `NOT_CHECKABLE` is reported as an open checker gap and no longer satisfies a stage exit. Stage 16 waits for Stages 13 and 14 to exit or park. |
 | D76 | Superseded by D78. External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
-| D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue. Ethan owns the items marked `(ethan)`. `TODO.md` is the only coordination channel; GitHub issues are not used. Both use the same GitHub account, so each commit body ends with `Developer: Wisdom` or `Developer: Ethan`. The shared account does not show independence: `created_by`, `verified_by` and reviewers are recorded as distinct agent identities. Wisdom's new decisions continue from D79; Ethan's use D100 upward. |
+| D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue. Ethan owns the items marked `(ethan)`. `TODO.md` is the only coordination channel; GitHub issues are not used. Both use the same GitHub account, so each commit body ends with `Developer: Wisdom` or `Developer: Ethan`. The shared account does not show independence: `created_by`, `verified_by` and reviewers are recorded as distinct agent identities. Wisdom's new decisions continue from D94; Ethan's continue from D104. |
 | D78 | Repository scope (owner decision, 2026-10-31) | PcbKnowledge is a knowledge base serving PcbAtlas. It is not an algorithm library: it holds no placement, routing, zone-fill, DRC or fabrication-output algorithms and no pipeline orchestrating them. Retire ADR-026, D63, D64 and D76 and delete the pipeline. Keep expansion, handoff files, `layout check` and the thin optional `drc` wrapper. Developers may use KiCad and Freerouting as external test tools to find knowledge errors, for example on a hand-placed handoff board; each finding becomes a catalog fix with a tool-free test. CI and acceptance never need these tools. This repository accepts designs through A2; A3-A5 belong to PcbAtlas or a hand layout. |
 | D79 | Connected filled-copper area | Measure exact filled-region area directly contacting the target pad, subtracting holes and summing disjoint regions joined by that pad. Disconnected copper cannot increase the result. Unsupported unions, indirect connections needed to reach the bound and ambiguous target geometry remain NOT_CHECKABLE; no numeric limit changes. |
 | D80 | Kelvin branch proof | Explicit ordered sense/shunt pin pairs preserve the declared net identities. For supported direct, unfiltered branches, finite-width copper may join load-current copper only inside the corresponding shunt pad. A proven load-terminal connection outside it fails; ambiguous contacts, optional input filters and unsupported copper remain NOT_CHECKABLE. TI INA219 SBOS448G physical pages 3 and 27 support the DCN pin mapping and Kelvin requirement; pages 11 and 25 permit filters. This measurement scope changes no numeric limit. Legacy records without explicit branches remain unmeasured. |
 | D82 | Shared operating inputs | Declare a shared quantity once in the brief and bind it to exact function parameter endpoints. Every graph consumer must preserve the full value, conditions and provenance; reject duplicate local definitions. Use this for T1 cross-block load budgets rather than independent copied limits. |
 | D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
 | D101 | GUARD_RING measurement | Measure all sensitive-net pad and track copper on every exposed F/B surface, including both faces of through-hole pads. Require one simple closed track cycle per surface, existing minimum width and exact copper clearance. Prove guard contact through solid SMT copper, explicit track endpoints and center-ended plated through-via annuli; include annular width where a drill intersects the ring. Unsupported curves, sensitive vias, filled copper, ambiguous contacts and physical drill interruptions remain NOT_CHECKABLE. |
-| D102 | TPS5430 distance datum escalation | Preserve all ten g2-buck PLACE_NEAR limits and their origin/pad-center metric. The official SLVS632L pages 3 and 23 viewed online do not define a copper-edge datum; cached-byte source verification remains blocked. Do not convert the six 1 mm input-capacitor limits or the other four rules on that evidence. Escalate the eight current courtyard conflicts for a clarified source datum or a separately authorized part/package change under D10. |
+| D102 | Superseded by D90. TPS5430 distance datum escalation | Preserve all ten g2-buck PLACE_NEAR limits and their origin/pad-center metric. The official SLVS632L pages 3 and 23 viewed online do not define a copper-edge datum; cached-byte source verification remains blocked. Do not convert the six 1 mm input-capacitor limits or the other four rules on that evidence. Escalate the eight current courtyard conflicts for a clarified source datum or a separately authorized part/package change under D10. |
 | D103 | Remaining positive-design bring-up windows | Use independent conditional DC test windows at exact graph terminals. Match G1V1/G1V2 to D67 parts and budgets, remove the absent G1V1 shunt, and include variant loads in the existing total budget. Match G5 to D73 with both thermistor loads combined. For G2 retain D34/D45/D50 circuit limits, choose a 7.02 V bench input floor to budget two additional 10 mV distribution losses, and measure driver returns only in declared sustained-ON states. Keep BUCK_SW UNKNOWN until a supported switching-waveform acquisition and envelope contract exists. |
+| D90 | G2 buck distance datum (owner decision, 2026-10-31, supersedes D102) | TPS5430 SLVS632L page 3 says to place the bypass capacitor within 1 mm of the VIN pin and the GND pin and defines no datum; the center metric is this repository's proxy. All ten `block:g2-buck` `PLACE_NEAR` rules measure nearest copper edge from the subject's same-net pad to the target pin pad. Numbers stay unchanged; other blocks keep the center metric. Page and hash were read on the owner's Mac; an independent reviewer rechecks the page. |
+| D91 | Switching-node bring-up | `BUCK_SW` is a waveform check, not a DC window: typed high and low levels derived from the input range and the SS14 drop, with TPS5430 source limits. Bandwidth, sample rate, probe and uncertainty are engineering defaults chosen by the implementer and recorded here. Observations stay `NOT_RUN`. A missing protocol is a design decision, not `UNKNOWN`. |
+| D92 | Parallel corpus cycles | Developers may run different D65 cycles at once and claim them in `TODO.md` first. Themes stay ordered by cycle start, and a theme's content does not depend on another developer's unfinished theme. |
+| D93 | Synthesis evidence budget | `evals/` budget is 2.5 MB through T10, replacing the 1.5 MB Stage 12 limit, with at most 30 KB of committed archive per attempt. Full packets and transcripts stay in the ignored local cache. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -705,161 +712,51 @@ Exit: `evals/` within budget, replay unchanged, docs match ADR-026.
 Receipt (2026-10-31): full gate PASS, Test 476/no skips; committed evals 1.13 MB, all original receipt and submission hashes retained.
 Independent review verified cache-free replay of all 36 archived attempts; malformed-input and cross-platform byte handling findings fixed.
 
-## Stage 13 — Retire the reference layout pipeline (D78, complete)
+## Stage 13 — Retire the reference layout pipeline (complete)
 
-PcbKnowledge returns to a knowledge base serving PcbAtlas. Git history keeps the
-pipeline: the last commit containing it is `e1a5cbe`.
+Receipt: `6ff6a5b` removed 33 modules and 37 test files, `aade83e` aligned coverage and pinned all
+seven positive expansion hashes. CI passed all four jobs; last pipeline commit is `e1a5cbe`.
+Review (2026-10-31, `ff236b7`): Test 698/no skips on macOS, CI green, coverage READY for all
+seven positive designs, T1 REFUSED. The work is sound. Three gaps remain: `layout check` is
+proven only on synthetic boards, two Ethan items stopped on blockers a default could resolve,
+and receipts grew far past the three-line limit.
 
-Review (2026-10-31, `c7948ee`): `main` CI fails on macOS and Windows (22 of 789 local
-tests on macOS, from `derived_path` and the KiCad bridge rejecting symlinked ancestors;
-the Windows log was not read). The G1 zero-unconnected board came from a hand-driven
-repair chain, and T1's DRAFT resistors make `v2 coverage --all` report G1, G1V1, G1V2
-and G2 as `INCOMPLETE`/`REFUSED` although each expands at `AGENT_VERIFIED`. The
-knowledge corrections the pipeline exposed (D66, D68-D71) stay.
+## Stage 14 — Layout knowledge and checks for PcbAtlas
 
-- [x] Delete from `src/pcbknowledge/v2/`: `fabrication`, `fanout_*`, `kicad_bridge`,
-  `layout_copper`, `layout_pipeline`, `layout_tools`, `placement*`, `reservation_*`,
-  `review_readiness`, `routing*`, `specctra`, `svg_check`. Delete the `layout tools` and
-  `layout run` commands and the tests that only cover them. The import graph on `e1a5cbe`
-  shows no kept module imports these; recheck it before deleting, including `drc`.
-- [x] Keep `layout check`, `drc` (the thin `kicad-cli` wrapper, `NOT_RUN` when KiCad is
-  absent), `boardview`, `sexpr`, `handoff`, `handoff_rules`, `bringup*`, `apertures`,
-  `assembly`, `netlist` and footprint export. If a kept test needs a board,
-  use a synthetic fixture. `bringup` keeps working without a placed board.
-- [x] Remove the layout-pipeline sections from `docs/local-workflow.md`,
-  `docs/architecture.md`, and any remaining symlink handling that belongs only to deleted
-  code. Add a short section on using KiCad and Freerouting as manual test tools. Keep the `build/` boundary for what remains.
-Retirement receipt (2026-10-31): D78 removes 33 runtime modules and 37
-pipeline-only test files. Six mixed suites retain source pins, numeric bounds,
-footprint exports, aperture identity and board-reader checks using synthetic
-fixtures. The import audit found only the CLI as a retained caller of retired
-modules. `python3 configs/pcbknowledge_workflow.py build` passed 580 tests and
-validated 202 records after deletion; the retained path/UTF-8 fixes then passed
-44 focused CLI, DRC, handoff, alias and synthesis-evidence tests. Independent
-review by `agent:/root/implement_reference_layout/stage12_review` found a
-junction-policy classification bug; lexical repository-boundary checks fixed it
-with a regression. CI on all platforms remains required below.
+`layout check` judges any exported board against the constraints in the intent. It is the
+conformance oracle PcbAtlas will use, and it does not perform DRC.
 
-- [x] Green CI on every job. If a macOS or Windows failure survives the deletion, fix it
-  with a test; read the Windows log rather than assuming the cause.
-- [x] `coverage` judges the part `expand` actually selects, so an unselected DRAFT
-  candidate is listed but does not block, while a design that can only select a DRAFT part
-  still refuses. Add a test over the committed catalog: every positive G and V brief is
-  `READY`, and T1 stays `REFUSED` until promoted.
-- [x] Pin the canonical expansion hash of every positive reference design (only G1 is
-  pinned now), so adding or promoting parts cannot silently change a selection.
-- [x] Remove the disclaimer and restore missing spaces in the T1 brief summary.
+Done: `COPPER_AREA` (D79), `KELVIN` (D80), `RETURN_PATH` (D100), `GUARD_RING` (D101), and bring-up
+windows for G1V1, G1V2 and G5 plus eight G2 DC nodes (D103).
 
-CI receipt: retirement commit `6ff6a5be8faa74d711ec2bb84b1e27675aade932`
-passed CI run `41200235511`: Core Ubuntu/Python 3.11, Public Ubuntu/Python 3.14,
-Public macOS/Python 3.11 and Public Windows/Python 3.11. CodeQL run `41200235509`
-also passed. Exact-tree local Build and Test each passed 586 tests, with no skips;
-Package passed. Windows failures were read from the actual job log: retired
-pipeline fixture path mismatches disappeared with their modules, and retained
-synthesis-evidence fixtures now write UTF-8 explicitly. Repository-scoped path
-checks allow system aliases above the repository while retaining descendant
-symlink/reparse and output-escape rejection.
+- [ ] (ethan) Apply D90 to `block:g2-buck`: add a typed distance datum to `PLACE_NEAR`, default
+  the existing center metric, implement `COPPER_EDGE` in `layout check`, and set all ten rules
+  to it with every number unchanged. Tests: pass, each rule just over its limit, other designs
+  unchanged. Update the G2 hash with the reason. Prove with a synthetic G2 buck board that all
+  ten rules hold at once. If C2, C5 and C6 cannot all fit, keep the rules, add an owner question
+  with a proposal, and continue.
+- [ ] (ethan) Finish `BUCK_SW` bring-up in G2 (D91), giving `range_coverage` `COMPLETE`.
+- [ ] (ethan) Add a read-only `v2 validate` check that fails a `PLACE_NEAR` rule a footprint pair
+  cannot meet, using the isolated geometric lower bound. This restores a useful catalog check
+  deleted with the pipeline; it computes a bound and places nothing. Negative test: an impossible
+  rule fails with both references named.
+- [ ] (ethan) Test `layout check` on real exported boards. Using KiCad and Freerouting as external
+  tools, make small original routed boards exercising each constraint kind, with vias, arcs and
+  zones as a router really produces them. Report the `NOT_CHECKABLE` rate per kind. D100 refuses
+  arcs and layer transitions, so routed boards may rarely pass. Add measurement support for what
+  real boards contain, without relaxing any bound. Commit small boards as original fixtures; do
+  not commit scratch placement scripts.
+- [ ] (ethan) Check the handoff of all seven positive designs on KiCad 9 and 10: project opens,
+  footprints load, DRC with generated rules reports only unrouted or placement findings. Fix any
+  knowledge finding with a tool-free test. A version you cannot run is `NOT_RUN` and goes on the
+  owner tool list.
+- [ ] Every layout or DRC failure found in PcbAtlas or in developer KiCad or Freerouting tests that
+  comes from knowledge (footprint, rule, constraint) is fixed in the catalog with a test, ahead of
+  the queue.
 
-Selection receipt: coverage, expansion and requirement screening now share the
-same verification-priority/stable-ID selector. Coverage lists all candidates but
-checks only the selected dependency closure. The committed-catalog regression
-requires all seven positive references to be READY, matches their exact expanded
-part selections and pins each canonical expansion hash; T1 remains REFUSED.
-A changed positive hash requires an explained knowledge change, including changes
-made by Ethan. The T1 summary now has normal spacing and no disclaimer.
-`PYTHONPATH=src python3 -m unittest tests.git_native.test_v2_reference_baseline
-tests.git_native.test_v2_g1_acceptance tests.git_native.test_v2_coverage
-tests.git_native.test_v2_coverage_reconciliation tests.git_native.test_v2_bundle_expansion`
-passed 39 focused tests. Build and Test each passed 591 tests with no skips before
-rebasing onto Ethan's RETURN_PATH commit. Independent stage-exit review by
-`agent:/root/implement_reference_layout/stage12_review` found no remaining issues.
-Integrated exit commit `aade83e1a5b58b1aff0f42e710d2410ca0a74370` preserves
-Ethan's RETURN_PATH work. Build and Test each passed 602 tests with zero skips;
-Package passed. CI run `41201494682` passed all four jobs (Ubuntu/Python 3.11,
-Ubuntu/Python 3.14, macOS/Python 3.11, Windows/Python 3.11); CodeQL run
-`41201494622` passed. G1, G1V1, G1V2, G2, G3, G4 and G5 remain at A2;
-T1 remains REFUSED. Independent review found no remaining issues. No new
-decisions were required for this stage.
-
-Exit: every CI job green; no module implements or orchestrates placement, routing, zone
-fill, DRC or fabrication output; CI needs no external tool; `layout check` and the handoff still work on synthetic boards; all
-positive designs remain at A2.
-
-## Stage 14 — Layout knowledge and checks for PcbAtlas (parked)
-
-`layout check` judges any exported board against the constraints in the intent. It is
-the conformance oracle PcbAtlas will use, and it does not perform DRC.
-
-D79/D80 implement COPPER_AREA and KELVIN as read-only handlers. Explicit source-cited
-sense/shunt mappings change only G1, G1V2 and G2 expansion hashes; all seven positives
-remain A2, and T1 remains DRAFT/REFUSED. Ethan's placement and bring-up items are unchanged.
-Handler verification: full Build and Test each passed 690 tests; Package and all local guards passed (202 records). After rebasing onto `cac31d3`, 127 affected tests passed.
-Independent review resolved exact-area rounding, indirect island contact, hidden copper/cutout and target-junction net-identity findings; no constraint was relaxed. Stage 14 exit still awaits the assigned G2/range work below.
-
-Parser review found that copper drawings/text could be silently omitted from the
-measured board. The retained reader now tags unprojected board/footprint copper
-objects as unsupported, so they cannot preserve a layout PASS. Four new exported
-S-expression regressions and 34 existing layout/reference/return tests pass;
-independent review by `agent:/root/review_kelvin_checker` confirmed the original
-load-branch bypass is now NOT_CHECKABLE. Non-copper graphics and known copper
-primitives retain their prior behavior.
-
-- [x] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad on
-  that net, including a zone with several islands; only connected copper counts. Tests
-  cover pass, too small, and a disconnected island.
-- [x] `KELVIN`: blocks declare explicit sense branches from cited pins, and the checker
-  proves from routed copper that the sense branch leaves at the required pads and carries
-  no load path. Tests cover pass and each failure. Unsupported geometry stays `NOT_CHECKABLE`.
-- [x] (ethan) `RETURN_PATH` (G3, G4, G5): define a measurable criterion for continuous
-  return copper along the routed net (for example, same-net copper on the reference layer
-  under every segment within a stated offset, unbroken by slots) and record it with a
-  D-number. Put the handler in a new module and register it in `layout.py` with the smallest
-  possible change. Synthetic tests: pass, gap in return copper, return on the wrong net,
-  unsupported geometry staying `NOT_CHECKABLE`.
-- [x] (ethan) `GUARD_RING` (G3, G4, `block:g3-photodiode`): prove a continuous enclosure on
-  `guard_net` around the protected pads and copper, measuring width, clearance and gaps
-  against the block's values and D56. If the constraint lacks a required field (protected
-  targets, layer), add it through the registry and block records, keeping existing values.
-  Synthetic tests: pass, broken ring, narrow ring, clearance violation.
-  D101 measures every exposed F/B surface and explicit through-via guard connections;
-  unsupported geometry stays `NOT_CHECKABLE`. G3/G4 exported-board acceptance remains unmeasured.
-- [ ] (ethan) Decide what the TPS5430 1 mm limit in `block:g2-buck` measures: fetch the source
-  with `evidence fetch`, read the cited page, and summarize it in the decision. G2's
-  `buck_C2` to `buck_U1.pin:7` minimum is 1.96 mm under the current courtyard and center-point
-  metric, and eight buck constraints are affected. If the source means copper-to-copper
-  distance, add a typed distance basis, implement it in `layout check`, check each of the
-  eight constraints separately, keep the number and record a D-number. Otherwise keep the rule
-  and escalate to the owner; another part or package under D10 is one option to present. An
-  independent reviewer rechecks the page. Add negative tests. Prove the result with a
-  synthetic G2 buck placement through `layout check`.
-  D102 remains escalated: normal `evidence fetch --source source:ti-tps5430` failed DNS;
-  the authorized network retry could not start because of a read-only sandbox mount.
-  No cached PDF or SHA verification was obtained. Online official pages 3/23 do not
-  define the distance datum. Keep every rule unchanged; independent source review
-  cannot claim byte-verified completion. Pair-level exported-board regressions preserve
-  all eight failures and exact thresholds; they do not establish a complete G2 layout.
-  Current isolated courtyard lower bounds (mm) are C2-to-VIN7/GND6 1.96 versus 1,
-  C5/C6-to-VIN7/GND6 2.21 versus 1, D1-to-PH8 2.51 versus 2, and C4-to-L1.2
-  5.95 versus 3. The other two PLACE_NEAR rules are not individually contradictory.
-- [ ] (ethan) Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
-  `c7948ee` (G1V1 leaves `LOGGER_3V3`, `MCU_VDDA`, `PROTECTED_5V` and `USB_VBUS` unresolved).
-  Bind windows at exact graph terminals as D67 and D73 do, from cited values or recorded
-  decisions; do not copy a range from a similar design unless the part and conditions match.
-  Hardware observations stay `NOT_RUN`. Add a negative test for a rail with a missing range.
-  D103 supplies complete declarations for G1V1/G1V2/G5 and eight G2 DC nodes. G2 remains
-  `UNKNOWN` solely at BUCK_SW: a switching node requires supported waveform limits,
-  acquisition bandwidth/rate, edge-duration treatment and probe uncertainty, not a DC
-  number or a change of net class. Its completion is blocked; all observations remain
-  `NOT_RUN`. Newly reused source context is not locally byte-verified in this workspace.
-- [ ] Every layout or DRC failure found in PcbAtlas or in developer KiCad or Freerouting
-  tests that comes from knowledge
-  (footprint, rule, constraint) is fixed in the catalog with a test, ahead of the queue.
-
-Exit: `layout check` has no unconditional `NOT_CHECKABLE` kind; the G2 blocker is resolved
-or escalated; `range_coverage` is `COMPLETE` for every positive design.
-
-Wisdom completion: `cb67b8a` / `4cdb643` implement D79/D80 with independent checklist review; Build 692 tests passed and all four CI jobs plus CodeQL passed on `4cdb643` (runs 41204485156/41204485157). Seven positives remain A2; T1 remains REFUSED.
-Park: Ethan's D102 G2 source-datum escalation and D103 BUCK_SW waveform declaration remain unresolved. G1V1/G1V2/G5 ranges and G2 DC windows are now declared by his commits; their items and constraints remain unchanged. This is not a Stage 14 exit; continue the assigned Stage 16 queue under D75.
+Exit: `layout check` has no unconditional `NOT_CHECKABLE` kind and returns measured results on the
+real-board fixtures; G2 rules are feasible or an owner question is open; `range_coverage` is
+`COMPLETE` for every positive design.
 
 ## Stage 15 — First fabricated board (owner-only)
 
@@ -872,17 +769,31 @@ Park: Ethan's D102 G2 source-datum escalation and D103 BUCK_SW waveform declarat
 
 ## Stage 16 — Corpus growth by fixed themes
 
-Each cycle takes the next two themes from D65, in order, and one new negative
-brief. A theme brief states requirements a competition would state; it is not
-shaped to reuse existing blocks. Each positive brief must reach A2, with three
-fresh synthesis attempts as in Stage 8. A theme
-may be parked only for part or evidence availability, with the blocker recorded.
-Record one receipt line per cycle: themes, A-levels, new blocks and parts, and the
-corpus pass rate. Continue until all ten themes are done or parked, then propose
-the next ten as a TODO change.
+Each cycle takes the next two themes from D65 and one new negative brief. A theme brief states what
+a competition would state; it is not shaped to reuse existing blocks. Each positive brief must reach
+A2, with three fresh synthesis attempts as in Stage 8. A theme may park only for part or evidence
+availability, with the blocker recorded. Record one receipt line per cycle: themes, A-levels, new
+blocks and parts, corpus pass rate. When all ten themes are done or parked, propose the next ten.
 
-Active after Stage 13 exit and the Stage 14 park (D75). Resume T1 and T2 in D65 order;
-existing T1 DRAFT records require executable checks and independent review before A2.
+Claims (D92): before starting a cycle, push your name on its line so work is not duplicated.
+
+| Cycle | Themes | Developer |
+|---|---|---|
+| 1 | T1 adjustable DC-DC, T2 Li-ion charger with boost | Wisdom |
+| 2 | T3 motor H-bridge, T4 stepper driver | Ethan, after his Stage 14 and 17 items |
+| 3 | T5 DAC signal generator, T6 OLED and keypad | first free developer |
+| 4 | T7 CAN node, T8 Wi-Fi carrier | first free developer |
+| 5 | T9 thermocouple, T10 class-D audio | first free developer |
+
+Shared preparation:
+
+- [ ] (wisdom) Selection hardening: list blocks where stable-ID order alone chooses between verified
+  candidates with different MPNs, and pin each to an explicit part or a distinguishing parameter, so
+  adding parts cannot change an existing design. Add a test that fails on a new such case.
+- [ ] (wisdom) Set the `evals/` limit in `test_v2_synthesis_evidence` to the D93 budget and add the
+  per-attempt size check.
+
+Cycle 1, T1 (brief and 14-instance graph committed; authority DRAFT):
 
 T1 foundations add D82 shared parameter bindings and exact interval checks for DAC
 feedback injection and supervisor dividers. Build and Test each pass 715 tests;
@@ -890,12 +801,46 @@ feedback injection and supervisor dividers. Build and Test each pass 715 tests;
 floating-point cancellation false PASS and the temperature-coefficient unit. T1
 remains REFUSED pending application/state checks and independently reviewed records.
 
-T1 reference authority is DRAFT: the complete original competition brief and
-14-instance graph are committed for closure, not A1/A2 acceptance. Remaining
-work is typed driven open-drain clamp validation, production operating-envelope
-and local-load calculator bindings, the inductor underbody routing exclusion,
-independent record/block promotion, and three fresh pinned synthesis attempts.
-No source/evidence availability blocker is claimed for any of the ten themes.
+- [ ] (wisdom) Typed driven open-drain clamp validation with a negative test.
+- [ ] (wisdom) Production operating-envelope and local-load calculator bindings.
+- [ ] (wisdom) Inductor underbody routing exclusion as a typed constraint with `layout check` support.
+- [ ] (wisdom) Independent verification and promotion of all T1 records and blocks to `AGENT_VERIFIED`.
+- [ ] (wisdom) Three fresh pinned synthesis attempts, then record T1 at A2.
+
+Cycle 1, T2 and the negative brief:
+
+- [ ] (wisdom) T2 brief, decisions, parts, blocks, calculators, reference graph, A2, three attempts.
+- [ ] (wisdom) A new negative brief with a typed expected refusal, 3/3.
+
+## Stage 17 — PcbAtlas consumer contract
+
+PcbAtlas has no PcbKnowledge integration yet. These items make the contract ready from this side; PCBAtlas
+itself is not edited from this repository.
+
+- [ ] (ethan) Schema and version the `layout check`, bring-up and `drc` JSON reports; add schema
+  validation and tamper tests.
+- [ ] (ethan) Conformance suite under `evals/conformance/`: original boards with expected results for
+  every constraint kind, so another layout tool can test itself against `layout check`.
+- [ ] (ethan) Compare ADR-023 with what `expand` and the handoff emit; fix or record each difference.
+  Write one consumer guide in `docs/`: bundle, `expand`, handoff, `layout check`, refusals.
+- [ ] (ethan) Rewrite `.codex/skills/` and any remaining docs that still assume the retired pipeline, and
+  rerun one synthesis attempt through the updated skill.
+
+Exit: a consumer can go from a pinned bundle to a judged board using only the guide and the schemas.
+
+## Owner questions
+
+Add questions here with a recommended default, and keep working on everything else. Do not stop a
+session to wait for an answer.
+
+None open.
+
+## Owner evidence list
+
+Sources a developer sandbox could not download. The owner runs `evidence fetch --source <id>` on the
+Mac and reports `MATCH` or a differing hash here.
+
+- `source:ti-tps5430`: `MATCH` on 2026-10-31, SHA-256 `88c98e6e...85da`.
 
 ## Owner-only and cross-repository items
 

@@ -58,6 +58,35 @@ constraint checks, and PcbAtlas owns placement, routing, DRC and fabrication out
 - Keep each change the smallest that serves the stage. Delete what becomes unused.
 - Data commits (`[data]`) and code or contract commits stay separate.
 
+## When something blocks you
+
+Do not stop while any item of yours remains. Try the listed action, record the blocker in at
+most three lines, and move to your next item.
+
+| Situation | Action |
+|---|---|
+| Design input, budget, test condition or protocol is missing | It is a decision. Choose a sensible `ENGINEERING_DEFAULT`, add a D-number with one line of reason, continue |
+| `evidence fetch` fails in your sandbox (DNS, mount, HTTP 403) | Try once. Then download manually and use `evidence add`. If that fails, keep the record `DRAFT`, add the source to the Owner evidence list in `TODO.md`, and continue with other work. Do not claim byte verification |
+| Source is unavailable or a part lacks an essential parameter | Substitute an equivalent part under D10 and record it |
+| Source wording is ambiguous | Read the cited page. Choose the most conservative physically achievable reading that keeps the number, and record it. If that changes how an existing check measures, add an owner question and move on |
+| Constraint looks physically impossible | Prove it with a lower-bound test, add an owner question with a proposal, keep the rule, and move on |
+| Checker cannot prove some geometry | Return `NOT_CHECKABLE` with a typed reason, list it in `TODO.md`, and move on |
+| External tool is missing | Result is `NOT_RUN`. Continue, and list it in `TODO.md` if the owner should run it |
+| Test failure from the other developer's push | If it blocks you, make the smallest fix, state it in the commit body, and continue. Do not revert their work |
+| Rebase conflict | Keep both sides. In `TODO.md`, keep both developers' lines |
+| Review finding is outside your item | Add it to `TODO.md` as an item and continue |
+| Two different attempts at one item have failed | Record what you tried, park that item, and go to the next |
+
+Decide without asking whenever a D-number default or this table covers the case. An owner question
+never stops the session. Only the escalation list in `TODO.md` limits what you may do: for those
+cases never take the weakened path, and keep working on everything else. Stop only when all of your
+items and every claimable cycle are done or parked.
+
+## Pace
+
+Finish an item at its stated tests, then move on. Do not gold-plate one checker while later items wait.
+One independent review pass per item group is enough unless it finds a real defect.
+
 ## At every stage exit
 
 1. Run the full gate (AGENTS section 10).
