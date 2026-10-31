@@ -123,7 +123,9 @@ class Vocabulary:
                 self.parameters(value['match'])
             if key == 'layout':
                 entry = self.member('layout-constraints', value['kind'])
-                if set(value) != {'kind', *entry['fields']}:
+                required = {'kind', *entry['fields']}
+                allowed = required | set(entry.get('optional_fields', []))
+                if not required <= set(value) <= allowed:
                     raise ValueError(f'Wrong fields for layout kind {value["kind"]}')
             for name, child in value.items():
                 walk(child, name)

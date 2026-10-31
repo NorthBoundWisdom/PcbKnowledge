@@ -131,6 +131,28 @@ def _d70_package_scope(test, expected, catalog):
     expected['evidence'].sort(key=lambda row: (row['source'], row['page']))
 
 
+def _d80_kelvin(test, expected, catalog):
+    block = catalog.get('block:g2-input-monitor', 'block')
+    authority = _one(test, [row for row in block['layout'] if row['kind'] == 'KELVIN'])
+    branches = [{'sense': 'U1.pin:' + pin, 'target': 'R1.pin:' + pin,
+                 'evidence': {'source': 'source:ti-ina219', 'page': 27}} for pin in ('1', '2')]
+    test.assertEqual(authority['branches'], branches)
+    rule = _one(test, [row for row in expected['layout'] if row['kind'] == 'KELVIN'])
+    test.assertNotIn('branches', rule)
+    prefix, separator, target = rule['target'].rpartition('_')
+    test.assertTrue(separator)
+    test.assertEqual(target, 'R1')
+    rule['branches'] = [{**branch, 'sense': prefix + '_' + branch['sense'],
+                         'target': prefix + '_' + branch['target']} for branch in branches]
+    for index, branch in enumerate(rule['branches']):
+        pins = [{'ref': endpoint.partition('.pin:')[0], 'pin': endpoint.partition('.pin:')[2]}
+                for endpoint in (branch['sense'], branch['target'])]
+        net = _one(test, [row for row in expected['nets'] if row['name'] == rule['sense_nets'][index]])
+        test.assertTrue(all(pin in net['pins'] for pin in pins))
+    anchor = {'source': 'source:ti-ina219', 'page': 27}
+    test.assertIn(anchor, expected['evidence'])
+
+
 def assert_reviewed_g2_projection(test, original, current, catalog):
     """Compare the complete intent after exactly the named reviewed changes; drop no fields."""
     _part_contract(test, catalog)
@@ -141,5 +163,6 @@ def assert_reviewed_g2_projection(test, original, current, catalog):
     _d54_fuse(test, expected)
     _d69_anchors(test, expected)
     _d70_package_scope(test, expected, catalog)
+    _d80_kelvin(test, expected, catalog)
     expected['bundle_commit'] = current['bundle_commit']
     test.assertEqual(expected, current)

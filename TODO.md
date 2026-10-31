@@ -135,6 +135,8 @@ answer here.
 | D76 | Superseded by D78. External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
 | D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue. Ethan owns the items marked `(ethan)`. `TODO.md` is the only coordination channel; GitHub issues are not used. Both use the same GitHub account, so each commit body ends with `Developer: Wisdom` or `Developer: Ethan`. The shared account does not show independence: `created_by`, `verified_by` and reviewers are recorded as distinct agent identities. Wisdom's new decisions continue from D79; Ethan's use D100 upward. |
 | D78 | Repository scope (owner decision, 2026-10-31) | PcbKnowledge is a knowledge base serving PcbAtlas. It is not an algorithm library: it holds no placement, routing, zone-fill, DRC or fabrication-output algorithms and no pipeline orchestrating them. Retire ADR-026, D63, D64 and D76 and delete the pipeline. Keep expansion, handoff files, `layout check` and the thin optional `drc` wrapper. Developers may use KiCad and Freerouting as external test tools to find knowledge errors, for example on a hand-placed handoff board; each finding becomes a catalog fix with a tool-free test. CI and acceptance never need these tools. This repository accepts designs through A2; A3-A5 belong to PcbAtlas or a hand layout. |
+| D79 | Connected filled-copper area | Measure exact filled-region area directly contacting the target pad, subtracting holes and summing disjoint regions joined by that pad. Disconnected copper cannot increase the result. Unsupported unions, indirect connections needed to reach the bound and ambiguous target geometry remain NOT_CHECKABLE; no numeric limit changes. |
+| D80 | Kelvin branch proof | Explicit ordered sense/shunt pin pairs preserve the declared net identities. For supported direct, unfiltered branches, finite-width copper may join load-current copper only inside the corresponding shunt pad. A proven load-terminal connection outside it fails; ambiguous contacts, optional input filters and unsupported copper remain NOT_CHECKABLE. TI INA219 SBOS448G physical pages 3 and 27 support the DCN pin mapping and Kelvin requirement; pages 11 and 25 permit filters. This measurement scope changes no numeric limit. Legacy records without explicit branches remain unmeasured. |
 | D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
 | D101 | GUARD_RING measurement | Measure all sensitive-net pad and track copper on every exposed F/B surface, including both faces of through-hole pads. Require one simple closed track cycle per surface, existing minimum width and exact copper clearance. Prove guard contact through solid SMT copper, explicit track endpoints and center-ended plated through-via annuli; include annular width where a drill intersects the ring. Unsupported curves, sensitive vias, filled copper, ambiguous contacts and physical drill interruptions remain NOT_CHECKABLE. |
 | D102 | TPS5430 distance datum escalation | Preserve all ten g2-buck PLACE_NEAR limits and their origin/pad-center metric. The official SLVS632L pages 3 and 23 viewed online do not define a copper-edge datum; cached-byte source verification remains blocked. Do not convert the six 1 mm input-capacitor limits or the other four rules on that evidence. Escalate the eight current courtyard conflicts for a clarified source datum or a separately authorized part/package change under D10. |
@@ -786,10 +788,11 @@ positive designs remain at A2.
 `layout check` judges any exported board against the constraints in the intent. It is
 the conformance oracle PcbAtlas will use, and it does not perform DRC.
 
-Wisdom is implementing the COPPER_AREA and KELVIN handlers in separate read-only
-checker modules; shared `layout.py` changes stay local to those handlers. KELVIN
-contract work covers only explicit sense/shunt mappings in `ina219-monitor`,
-`g2-input-monitor` and `t1-readback`; Ethan's placement and bring-up items are unchanged.
+D79/D80 implement COPPER_AREA and KELVIN as read-only handlers. Explicit source-cited
+sense/shunt mappings change only G1, G1V2 and G2 expansion hashes; all seven positives
+remain A2, and T1 remains DRAFT/REFUSED. Ethan's placement and bring-up items are unchanged.
+Handler verification: full Build and Test each passed 690 tests; Package and all local guards passed (202 records). After rebasing onto `cac31d3`, 127 affected tests passed.
+Independent review resolved exact-area rounding, indirect island contact, hidden copper/cutout and target-junction net-identity findings; no constraint was relaxed. Stage 14 exit still awaits the assigned G2/range work below.
 
 Parser review found that copper drawings/text could be silently omitted from the
 measured board. The retained reader now tags unprojected board/footprint copper
@@ -799,10 +802,10 @@ independent review by `agent:/root/review_kelvin_checker` confirmed the original
 load-branch bypass is now NOT_CHECKABLE. Non-copper graphics and known copper
 primitives retain their prior behavior.
 
-- [ ] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad on
+- [x] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad on
   that net, including a zone with several islands; only connected copper counts. Tests
   cover pass, too small, and a disconnected island.
-- [ ] `KELVIN`: blocks declare explicit sense branches from cited pins, and the checker
+- [x] `KELVIN`: blocks declare explicit sense branches from cited pins, and the checker
   proves from routed copper that the sense branch leaves at the required pads and carries
   no load path. Tests cover pass and each failure. Unsupported geometry stays `NOT_CHECKABLE`.
 - [x] (ethan) `RETURN_PATH` (G3, G4, G5): define a measurable criterion for continuous

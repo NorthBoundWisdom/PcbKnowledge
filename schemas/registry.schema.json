@@ -159,6 +159,11 @@
                 "minItems": 1,
                 "uniqueItems": true
               },
+              "optional_fields": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1, "maxLength": 256},
+                "uniqueItems": true
+              },
               "fields": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1, "maxLength": 256},

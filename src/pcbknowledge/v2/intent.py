@@ -45,7 +45,13 @@ def validate_intent(catalog, intent, *, bundle_commit):
             raise ValueError('Dangling mounting component')
     if not set(intent['mechanical']['edge_interfaces']) <= set(components):
         raise ValueError('Dangling edge-interface component')
+    from .kelvin_contract import validate_kelvin
     for constraint in intent['layout']:
+        validate_kelvin(constraint, {r: [p] for r, p in parts.items()}, connections)
+        for branch in constraint.get('branches', []):
+            if (branch['evidence'] not in intent['evidence']
+                    or branch['evidence']['source'] not in intent['dependencies']):
+                raise ValueError('Kelvin branch source is absent from intent evidence closure')
         catalog._layout_references(constraint, {r: [p] for r, p in parts.items()}, set(nets))
     fab_id = intent['fab_profile']
     if isinstance(fab_id, str):

@@ -8,7 +8,9 @@ from .layout_identity import authoritative_bounds, pad_geometry_result
 from .layout_board import board_requirements
 from .layout_return import check_return_path
 from .layout_guard import check_guard_ring
-from .layout_geometry import contains, convex_hull, distance, overlap, polygon_area, simple_polygon
+from .layout_kelvin import check_kelvin
+from .layout_copper_area import check_copper_area
+from .layout_geometry import convex_hull, distance, overlap, polygon_area
 
 GROUP_MAX_DISTANCE_MM = 10.0
 EDGE_EQUALITY_TOLERANCE_MM = 0.01
@@ -66,6 +68,8 @@ def identity_check(board, intent, catalog):
 class LayoutChecks:
     def __init__(self, board, intent, catalog):
         self.board = board
+        self.intent = intent
+        self.catalog = catalog
         self.footprints = board['footprints']
         self.authority_bounds = {}
         for component in intent['components']:
@@ -139,38 +143,7 @@ class LayoutChecks:
                        estimated_area_mm2=area)
 
     def copper(self, rule):
-        if self.board.get('unsupported'):
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'Unsupported board geometry prevents filled-area proof')
-        ref, separator, pin = rule['target'].partition('.pin:')
-        if not separator:
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'A physical target pad is required')
-        pads = self.footprints[ref]['pads'][pin]
-        nets = {pad.get('net') for pad in pads}
-        if not nets or None in nets or '' in nets:
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'Target needs an assigned copper net')
-        zones = [zone for zone in self.board['zones'] if zone['net'] in nets]
-        fills = [(zone, points) for zone in zones for points in zone['filled_polygons']]
-        if len(fills) != 1:
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'Exactly one unambiguous filled polygon is supported')
-        zone, points = fills[0]
-        outline = self.board['outline']
-        if not outline.get('closed') or not outline.get('rectangular'):
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'A rectangular board boundary is required for area proof')
-        xmin, ymin, xmax, ymax = outline['bounds']
-        if any(not (xmin <= x <= xmax and ymin <= y <= ymax) for x, y in points):
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'Filled copper extends outside supported board boundary')
-        if not zone['layer'].endswith('.Cu'):
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'Fill is not on a copper layer')
-        if zone.get('unsupported') or not simple_polygon(points):
-            return finding('COPPER_AREA', 'NOT_CHECKABLE',
-                           'Filled polygon is degenerate, intersecting or contains holes')
-        contacts = [pad for pad in pads if (zone['layer'] in pad['layers'] or '*.Cu' in pad['layers'])
-                    and contains(pad['at'], points)]
-        if not contacts:
-            return finding('COPPER_AREA', 'NOT_CHECKABLE', 'No direct same-layer filled copper contact to target pad')
-        area = polygon_area(points)
-        return measured('COPPER_AREA', area >= quantity(rule, 'min_area', 'mm2'),
-                        'Area of single simple filled polygon directly contacting target pad center', area_mm2=area)
+        return check_copper_area(self.board, rule)
 
     def check(self, rule):
         handlers = {'PLACE_NEAR': self.place_near, 'GROUP': self.group, 'EDGE_PLACEMENT': self.edge,
@@ -182,7 +155,7 @@ class LayoutChecks:
         if kind == 'GUARD_RING':
             return check_guard_ring(self.board, rule)
         if kind == 'KELVIN':
-            return finding(kind, 'NOT_CHECKABLE', 'Explicit sense-branch mapping and routed branch proof are absent')
+            return check_kelvin(self.board, rule, self.intent, self.catalog)
         if kind not in handlers:
             return finding(kind, 'NOT_CHECKABLE', 'Unsupported layout constraint')
         try:

@@ -3,6 +3,33 @@
   "$id": "layout-constraint.schema.json",
   "type": "object",
   "properties": {
+    "branches": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "$ref": "evidence.schema.json"
+          },
+          "sense": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "target": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "sense",
+          "target",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
     "kind": {
       "type": "string",
       "minLength": 1,

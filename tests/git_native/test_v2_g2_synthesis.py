@@ -115,7 +115,9 @@ class FinalG2SynthesisTests(G2SynthesisTests):
         brief = read_json((ROOT / 'evals/golden-designs/g2.brief.json').read_bytes())
         current = expand(catalog, attempt['graph'], brief, bundle_commit='0' * 40)
         crystal = next(c['ref'] for c in current['components'] if c['part'] == 'part:abracon-abmm2-8-18')
-        for mutation in ('signal', 'ground', 'check', 'loop', 'unrelated', 'evidence', 'scope_evidence'):
+        mutations = ('signal', 'ground', 'check', 'loop', 'unrelated', 'evidence', 'scope_evidence',
+                     'kelvin_mapping', 'kelvin_evidence')
+        for mutation in mutations:
             forged = copy.deepcopy(current)
             if mutation in ('signal', 'ground'):
                 pin = '3' if mutation == 'signal' else '4'
@@ -130,6 +132,11 @@ class FinalG2SynthesisTests(G2SynthesisTests):
             elif mutation == 'unrelated':
                 component = next(c for c in forged['components'] if c['ref'] != crystal)
                 component['part'] = 'part:forged'
+            elif mutation == 'kelvin_mapping':
+                rule = next(c for c in forged['layout'] if c['kind'] == 'KELVIN')
+                rule['branches'].reverse()
+            elif mutation == 'kelvin_evidence':
+                forged['evidence'].remove({'source': 'source:ti-ina219', 'page': 27})
             elif mutation == 'scope_evidence':
                 forged['evidence'] = [e for e in forged['evidence']
                                       if e['source'] != 'source:kemet-c0603c101j5gactu']

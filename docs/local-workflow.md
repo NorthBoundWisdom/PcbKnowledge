@@ -324,6 +324,37 @@ keepout checks are conservative courtyard-envelope comparisons. See
 [ADR-025](adr/ADR-025-derived-board-handoff.md) for measurement scope. PcbKnowledge acceptance ends at A2. A3-A5 belong to PcbAtlas or a manual layout;
 ordering and physical bring-up remain owner-only activities.
 
+### Explicit Kelvin branch checks
+
+KELVIN declarations may carry two ordered `branches`, each naming the exact sense
+pin, corresponding shunt pin and source/page anchor. Expansion binds each pair to
+its declared sense net; editing a saved intent cannot substitute another pair.
+Unmapped legacy declarations remain `NOT_CHECKABLE`.
+
+The checker measures supported straight finite-width copper and solid rectangular
+or circular SMD pads on a closed rectangular board. A direct sense branch may join
+load-current copper only within its specified shunt pad. A proven connection to a
+supply/load terminal outside that pad fails. Unresolved input filters, crossing
+contacts, relevant vias, zones, drilled pads and unsupported shapes remain
+`NOT_CHECKABLE`; remote unsupported objects are ignored only when their separation
+is proved. Optional INA219 input filters are not prohibited by the datasheet.
+Copper drawings/text that the reader cannot project also remain explicitly unknown.
+These measurements neither route the board nor replace external DRC.
+
+### Connected filled-copper area
+
+`layout check` applies D79 to `COPPER_AREA` using exact rational area and
+positive-area contact with a cardinal rectangular, solid SMD target pad. It
+subtracts recognized keyhole-contour holes and can sum disjoint filled regions
+joined directly by that physical pad. A disconnected island does not increase the
+measured area. A supported direct region below the declared bound fails.
+
+Overlapping or touching regions requiring a union, ambiguous repeated pads,
+unresolved drill voids and unsupported target shapes remain `NOT_CHECKABLE`.
+If tracks, vias or another pad might connect additional material needed to reach
+the bound, that indirect connection is also `NOT_CHECKABLE`. This checker reads
+exported fills; it neither generates copper nor changes the area requirement.
+
 ## Optional manual external-tool checks (D78)
 
 PcbKnowledge accepts designs through A2. Placement, routing, zone fill, native DRC

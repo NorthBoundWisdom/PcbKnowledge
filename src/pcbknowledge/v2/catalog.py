@@ -309,13 +309,18 @@ class Catalog:
                         value['parameter'] not in p['parameters'] for p in candidates[value['component']]
                     ):
                         raise ValueError('Dangling calculator component parameter')
+        from .kelvin_contract import block_connections, validate_kelvin
         for constraint in block['layout']:
             self._layout_references(constraint, candidates, set(n['name'] for n in block['nets']))
+            if constraint['kind'] == 'KELVIN' and 'branches' in constraint:
+                validate_kelvin(constraint, candidates, block_connections(block, candidates))
 
     @staticmethod
     def _layout_references(constraint, components, nets):
         from .reference_paths import validate_reference_path
         validate_reference_path(constraint, nets)
+        from .kelvin_contract import validate_kelvin
+        validate_kelvin(constraint, components)
         for field in ('subject','target','subjects','path'):
             values = constraint.get(field, [])
             for value in [values] if isinstance(values,str) else values:

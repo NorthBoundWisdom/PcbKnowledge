@@ -385,6 +385,8 @@ class _Expansion:
         for iid, block in sorted(self.blocks.items()):
             for raw in block['layout']:
                 constraint = deepcopy(raw)
+                from .kelvin_contract import prefix_branches
+                prefix_branches(constraint, iid)
                 for key in ('subject','target','subjects','path'):
                     if key in constraint:
                         value = constraint[key]

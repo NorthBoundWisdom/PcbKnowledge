@@ -291,3 +291,15 @@ Geometry support does not establish assembly capability. In particular, pin-in-p
 process and stencil qualification remain prerequisites before a process-constrained
 package or design can reach manufacturing acceptance. The current aperture contract does
 not supply that qualification or authorize a manual-solder substitution.
+
+### Explicit Kelvin sense branches
+
+A KELVIN constraint retains its target component and ordered sense nets. Optional
+`branches` supplies exactly two source-cited `{sense, target, evidence}` entries;
+entry order matches `sense_nets`. Endpoints use exact numbered pins, with analog
+sense inputs and distinct target terminals. Expansion prefixes both endpoints
+and validates their actual net assignments after merging. Evidence enters the
+ordinary source closure. An older constraint without branches remains valid but
+cannot establish a measured Kelvin result. Source-permitted filters are not
+forbidden by this direct-branch contract; unsupported filter topology remains
+NOT_CHECKABLE in the board checker. No numeric layout limits change.
