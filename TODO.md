@@ -1,10 +1,10 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; G1 layout candidate not yet reproducible or A3/A5; `main` CI red, see Stage 13)
+> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; retiring the reference layout pipeline per D78; `main` CI red)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
-> manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
-> expansion and the ADR-026 reference layout pipeline; PcbAtlas is the product layout tool.
+> manufacturable board. PcbKnowledge supplies the knowledge, calculators, block expansion,
+> handoff files and constraint checks; PcbAtlas owns layout, routing, DRC and fabrication.
 > Direction: [ADR-022](docs/adr/ADR-022-board-generation-knowledge.md) ·
 > Model: [knowledge-model-v2](docs/knowledge-model-v2.md) ·
 > Acceptance: [current table](docs/golden-designs.md#current-acceptance) · Targets: [golden designs](docs/golden-designs.md) ·
@@ -31,8 +31,8 @@
   commit group, not only at a stage exit, and leave the session with a clean tree
   and `HEAD` equal to `origin/main`. A red `main` CI job goes ahead of the queue.
 - **Receipts must be reproducible from a clean checkout.** `build/` is not shared
-  between machines. A layout claim names the bundle commit, the CLI commands and the
-  tool versions that regenerate it.
+  between machines. A receipt names the bundle commit and the CLI commands that
+  regenerate it.
 - Items marked **(owner-only)** never block the queue: skip them and continue with
   the next item. Items marked **(escalate)** stop work until the owner answers.
 - **A blocked stage parks; the queue moves on.** When a stage cannot finish
@@ -41,7 +41,7 @@
   stage. Stop the session only when every remaining stage is parked or an
   escalation applies. Revisit parked stages at the start of each session.
 - **One implementing session per developer, on disjoint work (D77).** Wisdom works
-  the queue. Ethan works the items marked `(ethan, #N)`, and the queue skips them.
+  the queue. Ethan works the items marked `(ethan)`, and Wisdom skips them. Wisdom skips nothing else.
   Neither developer takes the other's items or edits the other's files. Rebase onto
   `origin/main` before every push and never force-push. Do not run two sessions for
   the same developer; it produced duplicate rebased commits and an ancestry merge in
@@ -117,8 +117,8 @@ answer here.
 | D60 | G3 functional wiring | Bind functional supply, reference, sensor-channel and common-return endpoints to the actual expanded nets. Each named group shares one physical net and different groups remain distinct. Fixed parameter values alone do not establish physical wiring. |
 | D61 | First corpus growth cycle | G4 is a slow optical alignment-score acquisition peripheral; G5 is a dual-temperature agreement telemetry peripheral. Reuse the G3 bench envelopes and verified blocks, with an external host responsible for sequential ADC acquisition, scoring/comparison and communication. Distinct functional channel bindings define each composition. |
 | D62 | Reused ADC channels and receiver counterexample | G4 grounds unused ADC AIN0. G5 maps temperature A/B to physical AIN0/AIN1, although the existing second port is named AIN_TIA; AIN2 measures the shared reference. N4 requests a generic +0.2 V idle receiver threshold, which the existing SN65-specific weak-bias block does not support. |
-| D63 | Who places and routes (owner decision, 2026-10-31) | The owner chose a reference layout pipeline inside PcbKnowledge ([ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md)): original constraint-driven placement, Freerouting as an external autorouter, KiCad DRC and fabrication exports, all derived into `build/`. PcbAtlas remains the product layout tool and can be compared against this reference |
-| D64 | Layout tools | KiCad 9 or 10 `kicad-cli` (the owner has 10.0.6 at `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`), Java 21 or newer, and the latest stable Freerouting release jar. Record the exact Freerouting version and jar SHA-256 in `docs/local-workflow.md` at first use; run it single-threaded with fixed passes. Outputs must work on KiCad 9 and 10 |
+| D63 | Superseded by D78. Who places and routes (owner decision, 2026-10-31) | The owner chose a reference layout pipeline inside PcbKnowledge ([ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md)): original constraint-driven placement, Freerouting as an external autorouter, KiCad DRC and fabrication exports, all derived into `build/`. PcbAtlas remains the product layout tool and can be compared against this reference |
+| D64 | Superseded by D78. Layout tools | KiCad 9 or 10 `kicad-cli` (the owner has 10.0.6 at `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`), Java 21 or newer, and the latest stable Freerouting release jar. Record the exact Freerouting version and jar SHA-256 in `docs/local-workflow.md` at first use; run it single-threaded with fixed passes. Outputs must work on KiCad 9 and 10 |
 | D65 | Corpus themes (fixed order, chosen by the reviewing agent under delegation) | T1 adjustable DC-DC supply with digital setpoint and readback; T2 single-cell Li-ion charger with boost to 5 V; T3 brushed DC motor H-bridge with encoder input; T4 bipolar stepper driver; T5 DAC signal generator with op-amp output stage; T6 OLED and keypad user-interface board; T7 CAN bus node; T8 Wi-Fi module carrier with USB programming; T9 thermocouple measurement with cold-junction sensing; T10 class-D audio amplifier. Take themes in this order; do not reshape a theme to reuse existing blocks |
 
 | D66 | Reference layout knowledge corrections | Replace impossible center-origin proximity proxies with the electrically relevant source-mapped pins, retaining every numerical limit and loop/GROUP check. Use GCT USB4110-GF-A with a typed mating-face datum and Abracon ABMM2-8.000MHZ-18-T to make physical placement possible; cited source values and native geometry checks remain authoritative. |
@@ -131,9 +131,10 @@ answer here.
 | D71 | CH340C supply-pin decoupling | Use separate existing KEMET 100 nF ceramics: C1 at V3 pin 4 and C2 at VCC pin 16, both across the joined external 3.3 V rail and ground. Retain each 3 mm placement bound; one capacitor cannot be within 3 mm of both pad centers, 6.690747 mm apart. WCH V3D pp3/5 specifies VCC decoupling and joined V3/VCC in 3.3 V mode; the second local capacitor is an engineering decision under the unchanged per-power-pin rule. |
 | D73 | Reference rail bring-up windows | Reuse the existing D55 2.35-2.65 V reference envelope as an independent settled-DC test window for G3/G4, measured at TL431 cathode pin 1 relative to anode pin 3 under the existing 3.1994-3.4 V input and 0.5 mA load limits. Measurements remain NOT_RUN. |
 | D74 | T1 conditional reference design | Use TPS562208 FCCM with DAC60501 feedback setpoint and INA219 voltage/current readback for 12 V nominal input and 2.5-6 V / 0.5 A external output. Include local loads and explicit control-rail/preload operating budgets; keep the new authority DRAFT until driven-clamp, bound-calculator and underbody routing checks are integrated. |
-| D75 | Strict A3 and queue order (reviewing agent, 2026-10-31) | A3 requires every constraint `PASS`, matching `layout_pipeline` and the A3 definition; `NOT_CHECKABLE` is reported as an open checker gap and no longer satisfies a stage exit. `owner_review_ready` stays an inspection aid and never advances an acceptance level. Stage 16 waits for Stages 13 and 14 to exit or park. |
-| D76 | External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
-| D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue, the pipeline and routing files, ADR-027 and the router. Ethan owns GitHub issues #37-#40. Ethan's native writers, fill and DRC are built now as separate modules and are not wired into the acceptance path; Wisdom switches it after the Stage 13 exit, so D76's order holds. Wisdom's new decisions continue from D78; Ethan's use D100 upward. |
+| D75 | Strict A3 and queue order (reviewing agent, 2026-10-31) | A3 requires every constraint `PASS`, matching the A3 definition; `NOT_CHECKABLE` is reported as an open checker gap and no longer satisfies a stage exit. Stage 16 waits for Stages 13 and 14 to exit or park. |
+| D76 | Superseded by D78. External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
+| D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue. Ethan owns the items marked `(ethan)`. `TODO.md` is the only coordination channel; GitHub issues are not used. Both use the same GitHub account, so each commit body ends with `Developer: Wisdom` or `Developer: Ethan`. The shared account does not show independence: `created_by`, `verified_by` and reviewers are recorded as distinct agent identities. Wisdom's new decisions continue from D79; Ethan's use D100 upward. |
+| D78 | Repository scope (owner decision, 2026-10-31) | PcbKnowledge is a knowledge base serving PcbAtlas. It is not an algorithm library: it holds no placement, routing, zone-fill, DRC or fabrication-output algorithms and no pipeline orchestrating them. Retire ADR-026, D63, D64 and D76 and delete the pipeline. Keep expansion, handoff files, `layout check` and the thin optional `drc` wrapper. Developers may use KiCad and Freerouting as external test tools to find knowledge errors, for example on a hand-placed handoff board; each finding becomes a catalog fix with a tool-free test. CI and acceptance never need these tools. This repository accepts designs through A2; A3-A5 belong to PcbAtlas or a hand layout. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -697,170 +698,102 @@ Exit: `evals/` within budget, replay unchanged, docs match ADR-026.
 Receipt (2026-10-31): full gate PASS, Test 476/no skips; committed evals 1.13 MB, all original receipt and submission hashes retained.
 Independent review verified cache-free replay of all 36 archived attempts; malformed-input and cross-platform byte handling findings fixed.
 
-## Stage 13 — Reference layout for G1 (A3 to A5)
+## Stage 13 — Retire the reference layout pipeline (D78)
 
-Implements [ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md) on G1 first.
+PcbKnowledge returns to a knowledge base serving PcbAtlas. Git history keeps the
+pipeline: the last commit containing it is `e1a5cbe`.
 
-Review (2026-10-31, `c7948ee`): the pipeline exists and is real progress: 39 commits,
-about 5k lines of `src`, and all 7 fast gate commands pass. On this Mac the repository's
-own placer passes for G1, G1V1, G1V2, G3, G4 and G5, and fails for G2. Problems: (1)
-`main` CI fails on macOS and Windows; the full local macOS run has 22 failures in 789
-tests. The verified macOS cause is `derived_path` and the KiCad bridge rejecting
-symlinked ancestors above the repository (`/var` to `/private/var`). The Windows log
-could not be downloaded, so its cause is unread. (2) Work ran for a whole stage without
-a push, so these failures surfaced only at the end. (3) The zero-unconnected G1 board
-came from a hand-driven `reserve_route` Python call chain over artifacts in another
-machine's `build/`. `layout run` does not call repair, and `fanout_*` and
-`reservation_repair` have no CLI, so the result is not rebuildable from intent and bundle
-as ADR-026 requires. (4) T1's DRAFT resistors entered selection candidates, so
-`v2 coverage --all` now reports G1, G1V1, G1V2 and G2 as `INCOMPLETE`/`REFUSED` although
-each graph expands at `AGENT_VERIFIED`; no test guards the committed catalog. (5) T1 work
-started while Stages 13 and 14 were open. (6) `GUARD_RING`, `RETURN_PATH` and `KELVIN`
-are unconditionally `NOT_CHECKABLE`, so A3 is unreachable for G1, G1V2, G2, G3, G4 and G5.
-The Freerouting route, DRC and KiCad 10 were not rerun in this review.
+Review (2026-10-31, `c7948ee`): `main` CI fails on macOS and Windows (22 of 789 local
+tests on macOS, from `derived_path` and the KiCad bridge rejecting symlinked ancestors;
+the Windows log was not read). The G1 zero-unconnected board came from a hand-driven
+repair chain, and T1's DRAFT resistors make `v2 coverage --all` report G1, G1V1, G1V2
+and G2 as `INCOMPLETE`/`REFUSED` although each expands at `AGENT_VERIFIED`. The
+knowledge corrections the pipeline exposed (D66, D68-D71) stay.
 
-### 13a Restore a trustworthy baseline (do first, in this order)
-
-- [ ] Green CI on all jobs: `derived_path` and the KiCad bridge reject symlinks only
-  at or below the repository root, keeping the `build/` boundary. Add a test with a
-  symlinked ancestor. Read the Windows log and fix whatever else fails there.
+- [ ] Delete from `src/pcbknowledge/v2/`: `fabrication`, `fanout_*`, `kicad_bridge`,
+  `layout_copper`, `layout_pipeline`, `layout_tools`, `placement*`, `reservation_*`,
+  `review_readiness`, `routing*`, `specctra`, `svg_check`. Delete the `layout tools` and
+  `layout run` commands and the tests that only cover them. The import graph on `e1a5cbe`
+  shows no kept module imports these; recheck it before deleting, including `drc`.
+- [ ] Keep `layout check`, `drc` (the thin `kicad-cli` wrapper, `NOT_RUN` when KiCad is
+  absent), `boardview`, `sexpr`, `handoff`, `handoff_rules`, `bringup*`, `apertures`,
+  `assembly`, `netlist` and footprint export. If a kept test needs a board,
+  use a synthetic fixture. `bringup` keeps working without a placed board.
+- [ ] Remove the layout-pipeline sections from `docs/local-workflow.md`,
+  `docs/architecture.md`, and any remaining symlink handling that belongs only to deleted
+  code. Add a short section on using KiCad and Freerouting as manual test tools. Keep the `build/` boundary for what remains.
+- [ ] Green CI on every job. If a macOS or Windows failure survives the deletion, fix it
+  with a test; read the Windows log rather than assuming the cause.
 - [ ] `coverage` judges the part `expand` actually selects, so an unselected DRAFT
-  candidate is listed but does not block, while a design that can only select a
-  DRAFT part still refuses. Add a test over the committed catalog: every positive
-  G and V brief is `READY`, and T1 stays `REFUSED` until promoted.
+  candidate is listed but does not block, while a design that can only select a DRAFT part
+  still refuses. Add a test over the committed catalog: every positive G and V brief is
+  `READY`, and T1 stays `REFUSED` until promoted.
 - [ ] Pin the canonical expansion hash of every positive reference design (only G1 is
   pinned now), so adding or promoting parts cannot silently change a selection.
 - [ ] Remove the disclaimer and restore missing spaces in the T1 brief summary.
 
-### 13b Reproducible G1 reference layout
+Exit: every CI job green; no module implements or orchestrates placement, routing, zone
+fill, DRC or fabrication output; CI needs no external tool; `layout check` and the handoff still work on synthetic boards; all
+positive designs remain at A2.
 
-- [ ] `layout run` performs the complete deterministic sequence, including a bounded
-  repair if repair is needed, using only intent, bundle and tool paths. Add the
-  repair receipts to `report.json`. Delete any `fanout_*` or `reservation_*` module the
-  final sequence does not call, and rewrite the API section of `docs/local-workflow.md`
-  and ADR-026 to match. The target is zero violations and zero unconnected items from
-  one CLI command in a fresh output directory; identical inputs and tools give an
-  identical board hash.
-- [ ] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad
-  on that net, including a zone with several islands; only connected copper counts.
-  Tests cover pass, too small, and a disconnected island.
+## Stage 14 — Layout knowledge and checks for PcbAtlas
+
+`layout check` judges any exported board against the constraints in the intent. It is
+the conformance oracle PcbAtlas will use, and it does not perform DRC.
+
+- [ ] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad on
+  that net, including a zone with several islands; only connected copper counts. Tests
+  cover pass, too small, and a disconnected island.
 - [ ] `KELVIN`: blocks declare explicit sense branches from cited pins, and the checker
-  proves from routed copper that the sense branch leaves at the required pads and
-  carries no load path. Tests cover pass and each failure. Unsupported geometry remains
-  `NOT_CHECKABLE`.
-- [ ] Add an owner reproduction section to `docs/local-workflow.md` with macOS paths
-  (KiCad 10 under `/Applications/KiCad/KiCad.app`) and the exact tool downloads and hashes.
+  proves from routed copper that the sense branch leaves at the required pads and carries
+  no load path. Tests cover pass and each failure. Unsupported geometry stays `NOT_CHECKABLE`.
+- [ ] (ethan) `RETURN_PATH` (G3, G4, G5): define a measurable criterion for continuous
+  return copper along the routed net (for example, same-net copper on the reference layer
+  under every segment within a stated offset, unbroken by slots) and record it with a
+  D-number. Put the handler in a new module and register it in `layout.py` with the smallest
+  possible change. Synthetic tests: pass, gap in return copper, return on the wrong net,
+  unsupported geometry staying `NOT_CHECKABLE`.
+- [ ] (ethan) `GUARD_RING` (G3, G4, `block:g3-photodiode`): prove a continuous enclosure on
+  `guard_net` around the protected pads and copper, measuring width, clearance and gaps
+  against the block's values and D56. If the constraint lacks a required field (protected
+  targets, layer), add it through the registry and block records, keeping existing values.
+  Synthetic tests: pass, broken ring, narrow ring, clearance violation.
+- [ ] (ethan) Decide what the TPS5430 1 mm limit in `block:g2-buck` measures: fetch the source
+  with `evidence fetch`, read the cited page, and summarize it in the decision. G2's
+  `buck_C2` to `buck_U1.pin:7` minimum is 1.96 mm under the current courtyard and center-point
+  metric, and eight buck constraints are affected. If the source means copper-to-copper
+  distance, add a typed distance basis, implement it in `layout check`, check each of the
+  eight constraints separately, keep the number and record a D-number. Otherwise keep the rule
+  and escalate to the owner; another part or package under D10 is one option to present. An
+  independent reviewer rechecks the page. Add negative tests. Prove the result with a
+  synthetic G2 buck placement through `layout check`.
+- [ ] (ethan) Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
+  `c7948ee` (G1V1 leaves `LOGGER_3V3`, `MCU_VDDA`, `PROTECTED_5V` and `USB_VBUS` unresolved).
+  Bind windows at exact graph terminals as D67 and D73 do, from cited values or recorded
+  decisions; do not copy a range from a similar design unless the part and conditions match.
+  Hardware observations stay `NOT_RUN`. Add a negative test for a rail with a missing range.
+- [ ] Every layout or DRC failure found in PcbAtlas or in developer KiCad or Freerouting
+  tests that comes from knowledge
+  (footprint, rule, constraint) is fixed in the catalog with a test, ahead of the queue.
 
-### Pipeline parts already implemented
-
-- [x] `layout tools`: report the located `kicad-cli`, Java and Freerouting jar
-  with versions, or `NOT_FOUND`. Document setup per D64.
-- [x] Placer (original code, deterministic): rectangular outline from the brief;
-  edge, mechanical and connector items first; anchor ICs; `PLACE_NEAR` and `GROUP`
-  members around their targets; courtyard legalization on a grid; top-side SMT per
-  the fab profile. Unsatisfiable constraints are reported, never relaxed.
-- [x] Copper: bottom-layer GND zone and stitching vias where the intent asks;
-  zones are filled before DRC and export.
-- [x] Routing: write Specctra DSN with net classes (widths, clearances, via size)
-  from the fab profile and intent; run Freerouting single-threaded; read SES and
-  merge tracks and vias into the derived board. Tests use small hand-written
-  DSN/SES fixtures; no tool needed.
-- [x] `layout run <intent>`: place, route, merge, fill, `layout check`, `drc`,
-  export, re-read; one report with A3, A4 and A5 each `PASS`, `FAIL` or `NOT_RUN`.
-  Repair is not part of it yet (13b).
-- [x] Fabrication outputs: `kicad-cli pcb export gerbers|drill|pos` plus the BOM;
-  independent re-read checks the layer set, board extents, drill count against
-  holes, and that every SMT BOM reference has a position line. Document the CPL
-  rotation convention for the D12 fab.
-- [x] Bring-up checklist export from the intent: each rail with expected voltage
-  range and test location, programming connector pinout, and the brief's
-  functional tests. Used by the owner in Stage 15. G1 coverage is `COMPLETE`.
-- [x] Owner review aids: top and bottom SVG renders under `build/` and manual
-  steps in `docs/local-workflow.md`.
-
-Exit (D75): from a clean checkout, one `layout run` command gives G1 `layout check`
-all `PASS`, DRC zero violations and zero unconnected items, and fabrication outputs
-generated and re-read. Every CI job is green. Record tool versions in the receipt.
-
-G1 owner-review candidate (implementer's report on another machine, KiCad 9.0.2 and
-Freerouting 2.5.0, through the hand-driven repair chain): original 46-component
-placement passes; scoped routing completed in 58.201 s with native zero violations,
-zero unconnected items and zero parity findings. Layout has 54 PASS, zero FAIL and two
-NOT_CHECKABLE: multi-polygon thermal area and missing Kelvin branch proof. Fabrication
-re-read and conditional bring-up coverage pass. A3/A5 remain FAIL. This run is not a
-stage receipt until 13b reproduces it.
-
-## Stage 13R — Replace external layout tools (D76)
-
-Wisdom's items start after the Stage 13 exit and run before Stage 14. Ethan's items
-may be built now (D77) but change no acceptance path until then. Switch one
-replacement at a time, in this order; each keeps the G1 board at its Stage 13
-acceptance level.
-
-- [ ] ADR-027 amending ADR-026: the original pipeline becomes the acceptance path, and
-  KiCad becomes an optional comparison. Before the first board order, the owner still
-  gets one independent check (the fab's DFM or opening the board in KiCad).
-- [ ] (ethan, #37) Original Gerber, drill and position writers. Compare layers, extents,
-  drill counts and positions with the KiCad exports for G1.
-- [ ] (ethan, #38) Original zone fill. Compare filled area and connectivity with KiCad on G1.
-- [ ] (ethan, #38) Original DRC for the D12 fab rules and connectivity. Every mutated
-  synthetic board must fail with the expected kind, and on G1 the findings must match KiCad's.
-- [ ] Switch `export_outputs`, zone fill and `run_drc` to the original code once #37 and
-  #38 are closed and the Stage 13 exit has passed.
-- [ ] Original deterministic router for two-layer boards, using the constraints in the
-  intent. Compare completion, via count and copper length with the Freerouting result.
-- [ ] Delete the Freerouting, DSN/SES and KiCad bridge paths and the `fanout_*` and
-  `reservation_*` modules once nothing calls them; update D64 and the workflow doc.
-
-Exit: G1 reaches the same acceptance levels from one `layout run` command with no
-Freerouting or KiCad installed, and the recorded KiCad comparison shows no unexplained
-difference. A router that cannot complete G1 parks this stage with the recorded blocker
-and the existing tools stay in place.
-
-## Stage 14 — Reference layout for G1V1, G1V2 and G2 to G5
-
-- [ ] Run Stage 13 on every positive design. Add placer and router features each
-  design needs (wide power nets and thermal copper for G2, USB pair for G1V2,
-  analog/digital separation for G3-G5) as constraint support, not per-design code.
-- [ ] Every layout or DRC failure that comes from knowledge (footprint, rule,
-  constraint) is fixed in the catalog with a test, before tuning the placer.
-- [ ] (ethan, #39) Checker support for `GUARD_RING` (G3, G4) and `RETURN_PATH` (G3, G4, G5), proven
-  from routed copper with passing and failing fixtures. Both are unconditionally
-  `NOT_CHECKABLE` today, so those designs cannot reach A3.
-- [ ] (ethan, #40) Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
-  `c7948ee` (G1V1 leaves `LOGGER_3V3`, `MCU_VDDA`, `PROTECTED_5V` and `USB_VBUS`
-  unresolved).
-- [ ] (ethan, #40) Reopen the G2 blocker: read the cited TPS5430 page and decide what the 1 mm limit
-  measures. If the source means copper-to-copper distance, add a typed distance basis
-  to the constraint, measure that, and record the decision with a D-number, keeping the
-  number. If the source does not support that reading, keep the rule and escalate it.
-  Changing a measurement to pass without that source basis is relaxing a constraint.
-
-Placement-only rerun on `c7948ee` at 0.1 mm grid with no router: G1, G1V1, G1V2, G3,
-G4 and G5 place in 5-36 s; G2 fails at once on `buck_C2` to `buck_U1.pin:7`.
-
-G2 parked: TPS5430 source page 3 requires input bypass within 1 mm of VIN/GND;
-the current strict courtyard and point-center metric cannot satisfy eight buck
-constraints even with terminal anchors (minimum 1.885/2.035 mm versus 1 mm,
-2.095 mm versus 2 mm, and 3.325 mm versus 3 mm). This is a knowledge/physical-distance
-modeling blocker; no bound or DRC rule was changed. Other designs continue.
-
-Exit: every positive golden design at A5 (reference).
+Exit: `layout check` has no unconditional `NOT_CHECKABLE` kind; the G2 blocker is resolved
+or escalated; `range_coverage` is `COMPLETE` for every positive design.
 
 ## Stage 15 — First fabricated board (owner-only)
 
-- [ ] (owner-only) Order G1 from the Stage 13 outputs; hand-solder THT parts.
-- [ ] (owner-only) Bring-up with the Stage 13 checklist: rails, SWD connects, LED,
+- [ ] (owner-only) Lay out G1 from the handoff project in PcbAtlas or by hand, run
+  `layout check`, and order boards from that tool's outputs; hand-solder THT parts.
+- [ ] (owner-only) Bring-up with the exported checklist: rails, SWD connects, LED,
   button and I2C tests (A6). Record results in `TODO.md`.
-- [ ] Every bring-up failure becomes a catalog or pipeline fix with a test, ahead
+- [ ] Every bring-up failure becomes a catalog fix with a test, ahead
   of the queue.
 
 ## Stage 16 — Corpus growth by fixed themes
 
 Each cycle takes the next two themes from D65, in order, and one new negative
 brief. A theme brief states requirements a competition would state; it is not
-shaped to reuse existing blocks. Each positive brief must reach A5 (reference
-layout), not only A2, with three fresh synthesis attempts as in Stage 8. A theme
+shaped to reuse existing blocks. Each positive brief must reach A2, with three
+fresh synthesis attempts as in Stage 8. A theme
 may be parked only for part or evidence availability, with the blocker recorded.
 Record one receipt line per cycle: themes, A-levels, new blocks and parts, and the
 corpus pass rate. Continue until all ten themes are done or parked, then propose
@@ -880,9 +813,8 @@ No source/evidence availability blocker is claimed for any of the ten themes.
 
 These never block the queue.
 
-- [ ] (owner-only) PcbAtlas import of the G1 handoff (tracked in PcbAtlas).
-- [ ] (owner-only, optional) Open the Stage 13 G1 reference layout in KiCad and
-  review placement and routing by eye before ordering boards (Stage 15).
+- [ ] (owner-only) PcbAtlas import of the G1 handoff (tracked in PcbAtlas). PcbAtlas has
+  no PcbKnowledge integration or App automatic-routing command yet.
 - [ ] (owner-only) Optional spot checks: open the viewer, pick five cited values per
   stage and confirm them; a confirmed record may then be set to `HUMAN_VERIFIED`
   by the owner.
@@ -896,8 +828,8 @@ These never block the queue.
 - A new runtime dependency, network listener, hosted service or database.
 - Weakening, skipping or deleting a check, test or golden design to make a stage
   pass, or changing the A1-A6 definitions.
-- Anything that would make PcbKnowledge place, route or write a board outside the
-  ADR-026 pipeline and `build/`, or relax a layout constraint to pass.
+- Adding placement, routing, zone-fill, DRC or fabrication-output algorithms or a pipeline
+  to this repository, or relaxing a layout constraint to pass.
 
 ## Later (not started)
 

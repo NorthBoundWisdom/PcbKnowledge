@@ -26,10 +26,7 @@ acceptance                      checks the generated design must pass (see below
 
 The synthesis step turns a brief into a **block graph** (blocks, parameters and
 port connections). `expand` turns the block graph into a design intent. PcbAtlas
-turns the design intent into a routed board and fabrication outputs. The
-[ADR-026](adr/ADR-026-reference-layout-pipeline.md) reference pipeline provides
-the authority for those derived stages under `build/`; implementation is tracked
-in `TODO.md`.
+turns the design intent into a routed board and fabrication outputs.
 
 ## Acceptance levels
 
@@ -37,9 +34,9 @@ in `TODO.md`.
 |---|---|---|
 | A1 Knowledge closure | Every block and part the design needs exists with `AGENT_VERIFIED` or better; `expand` produces no refusal | PcbKnowledge |
 | A2 Electrical checks | Every IC power and ground pin is connected and decoupled; no floating required input; block calculator checks pass | PcbKnowledge (`expand` checks) |
-| A3 Layout constraints | Placed and routed board satisfies every constraint in the design intent | PcbAtlas or ADR-026 reference pipeline |
-| A4 DRC | Zero violations against the named fab profile | PcbAtlas or ADR-026 reference pipeline |
-| A5 Fabrication outputs | Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer | PcbAtlas or ADR-026 reference pipeline |
+| A3 Layout constraints | Placed and routed board satisfies every constraint in the design intent | PcbAtlas or a hand layout; judged by `layout check` |
+| A4 DRC | Zero violations against the named fab profile | PcbAtlas or a hand layout |
+| A5 Fabrication outputs | Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer | PcbAtlas or a hand layout |
 | A6 Hardware | Fabricated board passes bring-up: correct rails, programmer connects, functional test | Owner |
 
 A1 and A2 can be reached with a hand-written block graph before any AI synthesis.
@@ -47,17 +44,13 @@ A1 and A2 can be reached with a hand-written block graph before any AI synthesis
 ## Current acceptance
 
 This is the current acceptance summary; exact input identities and stage receipts
-are in [`TODO.md`](../TODO.md). A3-A5 require actual execution and output checks.
+are in [`TODO.md`](../TODO.md). A3-A5 require an actual board from PcbAtlas or a hand layout (D78).
 
 | Designs | A1 | A2 | A3 | A4 | A5 | A6 |
 |---|---|---|---|---|---|---|
-| G1 | PASS | PASS | FAIL | NOT_RUN | FAIL | NOT_RUN |
-| G1V1, G1V2, G2, G3, G4, G5 | PASS | PASS | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
+| G1, G1V1, G1V2, G2, G3, G4, G5 | PASS | PASS | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
 | T1 | REFUSED (DRAFT authority) | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
 | N1, N2, N3, N4 | Expected typed refusal | Not applicable | Not applicable | Not applicable | Not applicable | Not applicable |
-
-G1 A4 stays `NOT_RUN` until one `layout run` command reproduces the clean board
-reported through hand-driven repair (Stage 13b).
 
 ## G1: sensor logger node (first target)
 

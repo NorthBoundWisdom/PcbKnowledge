@@ -29,7 +29,7 @@ ADRs record durable choices from the architecture baseline. `Accepted` decisions
 | [023](ADR-023-design-intent-handoff.md) | Accepted | D3/D4 design-intent JSON handoff and PcbAtlas synthesis ownership |
 | [024](ADR-024-terminals-packages-selection.md) | Accepted | Two-terminal numbering convention, package drawing dimensions as authority, range-aware selection |
 | [025](ADR-025-derived-board-handoff.md) | Accepted | Derived KiCad handoff and read-only exported-board checks under D16-D17 |
-| [026](ADR-026-reference-layout-pipeline.md) | Accepted | Reference placement, external autorouting, DRC and fabrication outputs under `build/` (owner decision D63) |
+| [026](ADR-026-reference-layout-pipeline.md) | Superseded (D78) | Reference placement, external autorouting, DRC and fabrication outputs under `build/` (owner decision D63) |
 
 ADR-018 supersedes ADR-002, ADR-003, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009, and ADR-017 for the executable local product. Those files remain historical records rather than descriptions of the current runtime.
 

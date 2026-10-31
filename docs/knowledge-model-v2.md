@@ -147,8 +147,6 @@ reads the frozen history rather than restoring the queue.
 
 [ADR-025](adr/ADR-025-derived-board-handoff.md) permits deterministic parked
 KiCad projects derived from revalidated intent.
-[ADR-026](adr/ADR-026-reference-layout-pipeline.md) extends this to reference layout
-and fabrication outputs under `build/`.
 Rules and net classes preserve fab floors and intent minimum widths. Assembly
 CSV includes mount types and orderable identities; no placement file is emitted.
 A read-only bounded board parser checks identity and supported layout geometry.
@@ -214,8 +212,7 @@ signal/reference short. Guard geometry must meet the selected fab floors.
 Intent exports retain each complete requirement; KiCad rules additionally carry
 supported guard width and pairwise clearance minima. Those DRC minima do not
 prove enclosure or reference continuity: read-only layout checks report both
-kinds as `NOT_CHECKABLE` until copper topology can be established. Reference copper generation is authorized only through the derived
-[ADR-026 pipeline](adr/ADR-026-reference-layout-pipeline.md).
+kinds as `NOT_CHECKABLE` until copper topology can be established. This repository generates no copper (D78).
 
 ### Firmware pin configuration
 

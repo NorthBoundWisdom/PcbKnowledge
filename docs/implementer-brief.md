@@ -9,10 +9,10 @@ Copy everything below the line into the implementing agent's task.
 ---
 
 You are continuing PcbKnowledge in **continuous mode**. The goal is that a
-simple design brief becomes a manufacturable board. This repository supplies the
-knowledge, expansion, handoff files and checks, and a reference layout pipeline
-(ADR-026) that places, autoroutes and exports boards only into `build/`. The
-current acceptance level of each golden design is in `TODO.md`.
+simple design brief becomes a manufacturable board. This repository is the knowledge
+base serving PcbAtlas: it supplies the knowledge, expansion, handoff files and
+constraint checks, and PcbAtlas owns placement, routing, DRC and fabrication output
+(D78). The current acceptance level of each golden design is in `TODO.md`.
 
 ## Read first
 
@@ -20,7 +20,7 @@ current acceptance level of each golden design is in `TODO.md`.
 2. `TODO.md`: owner decisions, the latest stage receipt and review, and the open
    stages
 3. `docs/review-checklist.md`
-4. ADR-022 to ADR-026 and any newer ADR
+4. ADR-022 to ADR-025 and any newer ADR
 
 ## How to work
 
@@ -29,9 +29,10 @@ current acceptance level of each golden design is in `TODO.md`.
   the blocker, park it and start the next stage. Stop only when every remaining
   stage is parked, at an `(escalate)` condition, or at a gate failure you cannot
   fix.
-- Two developers work on `main` at once (D77). Skip every `TODO.md` item marked
-  `(ethan, #N)` and every GitHub issue titled `[Ethan]`; do not edit the modules
-  those issues create. Run one implementing session per developer. Sub-agents for
+- Two developers work on `main` at once (D77). `TODO.md` is the only coordination channel.
+  Ethan works only `(ethan)` items and Wisdom skips them. Rebase before every push, do
+  not revert each other's work, and end each commit body with `Developer: Wisdom` or
+  `Developer: Ethan`. Run one implementing session per developer. Sub-agents for
   review and synthesis are expected.
 - **Commit and push; do not stop at commit.** You are not on the owner's computer,
   and only `origin/main` reaches the owner. This brief is standing authorization to
@@ -41,9 +42,12 @@ current acceptance level of each golden design is in `TODO.md`.
   "original local commit" trailers.
 - A red CI job on `main` on any operating system goes ahead of the queue. Do not
   assume Linux results hold on macOS or Windows.
-- `build/` stays on your machine. A layout result counts only when one CLI command
-  regenerates it from a clean checkout; hand-driven Python call chains do not count.
-- `NOT_CHECKABLE` is not a pass, and `owner_review_ready` is not an acceptance level.
+- `build/` stays on your machine. A result counts only when a CLI command regenerates
+  it from a clean checkout; hand-driven Python call chains do not count.
+- `NOT_CHECKABLE` is not a pass.
+- This repository is not an algorithm library (D78). You may use KiCad and Freerouting
+  as external test tools to find knowledge errors. Fix each finding in the catalog with
+  a tool-free test; do not add placement, routing, DRC or fabrication algorithms.
 - Sources: follow D38. A public manufacturer datasheet is usable whatever the
   website terms say; download one at a time and never work around bot checks.
   When an essential parameter is `UNKNOWN` in one part, select a part whose

@@ -1,6 +1,6 @@
 # ADR-026: Reference layout pipeline
 
-- Status: Accepted
+- Status: Superseded on 2026-10-31 by the owner (decision D78 in `TODO.md`). PcbKnowledge is a knowledge base; the pipeline is deleted and remains in Git history up to `e1a5cbe`.
 - Date: 2026-10-31
 - Accepted: 2026-10-31 by the owner (decision D63 in `TODO.md`).
 - Amends: ADR-022 decision 7 and ADR-025 ("PcbAtlas or the owner owns actual

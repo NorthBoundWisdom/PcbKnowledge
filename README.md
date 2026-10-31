@@ -4,10 +4,8 @@
 
 PcbKnowledge supplies Git-native engineering knowledge from a design brief to a
 manufacturable PCB: validated parts, original footprints, deterministic expansion,
-and exported-board checks. PcbAtlas remains the product layout tool.
-[ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md) authorizes a reference
-placement, Freerouting and KiCad fabrication pipeline, writing derived files only
-under `build/`; its implementation is in progress in [`TODO.md`](TODO.md).
+and exported-board checks. It is a knowledge base serving PcbAtlas, which owns
+placement, routing, DRC and fabrication output.
 
 See the [current acceptance table](docs/golden-designs.md#current-acceptance) for
 the golden designs and [`TODO.md`](TODO.md) for exact stage receipts. Parked

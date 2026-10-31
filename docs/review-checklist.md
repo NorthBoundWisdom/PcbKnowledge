@@ -29,7 +29,8 @@ When a guard automates a check, delete the check here and name the guard in the
 3. Two-terminal polarity cites a marking or drawing page; multi-terminal parts cite
    a numbered map (ADR-024).
 4. `created_by` and `verified_by` are different agents, and neither is the
-   orchestrator that assigned the work.
+   orchestrator that assigned the work. Wisdom and Ethan share one Git account, so
+   the commit author does not establish independence.
 5. Every substitution or new design default has a D-number with a reason.
 
 ## Design
@@ -43,11 +44,9 @@ When a guard automates a check, delete the check here and name the guard in the
    tolerances). Flag values chosen only because they make a check pass.
 9. Evaluations can fail: a negative case exists for each new check, and synthesis
    attempts had no access to references, tests or other attempts.
-9a. Layout (ADR-026): no layout constraint or DRC rule was relaxed, waived or
-    excluded to pass; the count of `NOT_CHECKABLE` results did not grow without a
-    reason; A3-A5 claims name the tool versions and the single `layout run` command
-    that regenerates the report from a clean checkout. Rerun it, and do not accept a
-    report produced by hand-driven calls or counted through `owner_review_ready`.
+9a. Layout checks: no layout constraint was relaxed or waived to pass; the count of
+    `NOT_CHECKABLE` results did not grow without a reason; no placement, routing, zone-fill,
+    DRC or fabrication-output algorithm or pipeline was added (D78).
 9b. New corpus briefs follow the D65 theme order and state what a competition
     would ask, not what the catalog already has.
 
