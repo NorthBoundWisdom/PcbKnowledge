@@ -1335,6 +1335,7 @@
   "id": "block:g2-buck",
   "layout": [
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1347,6 +1348,7 @@
       "target": "U1.pin:7"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1359,6 +1361,7 @@
       "target": "U1.pin:1"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1371,6 +1374,7 @@
       "target": "U1.pin:8"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1383,6 +1387,7 @@
       "target": "L1.pin:2"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1435,6 +1440,7 @@
       "net": "VOUT"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1447,6 +1453,7 @@
       "target": "U1.pin:7"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1459,6 +1466,7 @@
       "target": "U1.pin:7"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1471,6 +1479,7 @@
       "target": "U1.pin:6"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
@@ -1483,6 +1492,7 @@
       "target": "U1.pin:6"
     },
     {
+      "datum": "COPPER_EDGE",
       "kind": "PLACE_NEAR",
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",

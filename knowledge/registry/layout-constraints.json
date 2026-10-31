@@ -144,6 +144,9 @@
         "target",
         "max_distance"
       ],
+      "optional_fields": [
+        "datum"
+      ],
       "queries": [
         "Q6",
         "Q7"
