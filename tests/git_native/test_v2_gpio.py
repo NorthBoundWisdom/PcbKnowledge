@@ -82,6 +82,21 @@ class PinConfigurationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'conflicts with another output'):
             validate_configured_drivers(parts, configurations, {('U1', '1'): 'N', ('U2', '1'): 'N'})
 
+    def test_spi_source_capabilities_bind_exact_physical_pins(self):
+        from pcbknowledge.v2.gpio import _capability
+        part = self.catalog.get('part:st-stm32f103c8t6')
+        parts = {'U1': part}
+        for number, name, function in [('14', 'PA4', 'GPIO_PUSH_PULL'),
+                                        ('15', 'PA5', 'SPI1_SCK'), ('17', 'PA7', 'SPI1_MOSI')]:
+            pin = next(pin for pin in part['pins'] if pin['number'] == number)
+            self.assertEqual((pin['name'], pin['type']), (name, 'BIDIRECTIONAL'))
+            selected = _capability(self.catalog, parts, 'U1', number, function)
+            self.assertIn({'source': 'source:st-stm32f103', 'page': 29}, selected['evidence'])
+        with self.assertRaisesRegex(ValueError, 'does not support'):
+            _capability(self.catalog, parts, 'U1', '16', 'SPI1_MOSI')
+        with self.assertRaisesRegex(ValueError, 'does not support'):
+            _capability(self.catalog, parts, 'U1', '17', 'SPI1_SCK')
+
     def test_part_cannot_claim_a_gpio_function_on_a_supply_pin(self):
         part = deepcopy(self.catalog.get('part:st-stm32f103c8t6'))
         pin = next(p for p in part['pins'] if p['number'] == '1')
