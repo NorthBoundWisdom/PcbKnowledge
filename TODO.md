@@ -793,8 +793,10 @@ Shared preparation:
   adding parts cannot change an existing design. Add a test that fails on a new such case.
 D94 receipt: the audit found only `mcu-core` C6/C7; both now pin the previously selected part. Selection and reference tests pass 11/11, all seven expansion hashes are unchanged, and 202 records validate. Independent review confirmed the unchanged choices.
 
-- [ ] (wisdom) Set the `evals/` limit in `test_v2_synthesis_evidence` to the D93 budget and add the
+- [x] (wisdom) Set the `evals/` limit in `test_v2_synthesis_evidence` to the D93 budget and add the
   per-attempt size check.
+
+D93 receipt: six G2 archives retain every field with compact whitespace; all attempts are at most 30,000 bytes and total `evals/` is 1,108,958 bytes. Historical parsed content, receipts, hashes and replay are unchanged; 13 affected tests pass. Independent review fixed malformed-receipt audit skipping.
 
 Cycle 1, T1 (brief and 14-instance graph committed; authority DRAFT):
 

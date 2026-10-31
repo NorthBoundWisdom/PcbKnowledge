@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from pcbknowledge.serialization import canonical_json, read_json
 from pcbknowledge.v2.synthesis_evidence import FIELDS, load_attempt
@@ -15,19 +16,41 @@ ROOT = Path(__file__).resolve().parents[2]
 class SynthesisEvidenceTests(unittest.TestCase):
     def test_budget_and_all_historical_receipts_and_hashes_are_preserved(self):
         total = sum(p.stat().st_size for p in (ROOT / 'evals').rglob('*') if p.is_file())
-        self.assertLess(total, 1_500_000)
+        self.assertLessEqual(total, 2_500_000)
         for path in (ROOT / 'evals/synthesis').rglob('*.json'):
             document = read_json(path.read_bytes())
-            if not isinstance(document, dict) or 'evidence' not in document:
+            if not isinstance(document, dict) or not {'receipt', 'evidence'} & set(document):
+                continue
+            self.assertLessEqual(path.stat().st_size, 30_000, str(path.relative_to(ROOT)))
+            self.assertIsInstance(document.get('receipt'), dict, str(path.relative_to(ROOT)))
+            if 'evidence' not in document:
                 continue
             self.assertFalse(set(FIELDS) & set(document))
             raw = subprocess.check_output(['git', 'cat-file', 'blob', document['evidence']['historical_blob']], cwd=ROOT)
             original = read_json(raw)
+            for key, value in document.items():
+                if key != 'evidence':
+                    self.assertEqual(value, original[key], (str(path.relative_to(ROOT)), key))
             self.assertEqual(document['receipt'], original['receipt'])
             self.assertEqual(load_attempt(ROOT, path, recover_history=True)['transcript'], original['transcript'])
             self.assertEqual(document['evidence']['submission_hashes'], [
                 {k: v for k, v in submission.items() if k.endswith('sha256')}
                 for submission in original['submissions']])
+
+    def test_budget_audit_rejects_malformed_archives(self):
+        cases = ({'evidence': {}}, {'evidence': {}, 'receipt': []}, {'receipt': 'invalid'})
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / 'evals/synthesis/attempt.json'
+            path.parent.mkdir(parents=True)
+            for document in cases:
+                path.write_text(canonical_json(document), encoding='utf-8')
+                with self.subTest(document=document), patch(__name__ + '.ROOT', root):
+                    with self.assertRaises(AssertionError):
+                        self.test_budget_and_all_historical_receipts_and_hashes_are_preserved()
+            path.write_text(canonical_json({'receipt': {}, 'padding': 'x' * 30_000}), encoding='utf-8')
+            with patch(__name__ + '.ROOT', root), self.assertRaises(AssertionError):
+                self.test_budget_and_all_historical_receipts_and_hashes_are_preserved()
 
     def test_missing_tampered_or_unsafe_cache_never_passes(self):
         source = ROOT / 'evals/synthesis/g3/one.json'
