@@ -79,3 +79,21 @@ confirmed the state change. This corrects router access to movable existing
 copper; it does not change widths, clearances, nets, placement or DRC rules.
 The final session, native board, layout and DRC checks remain authoritative.
 Source: [Freerouting 2.5.0 Wiring parser](https://github.com/freerouting/freerouting/blob/v2.5.0/src/main/java/app/freerouting/io/specctra/parser/Wiring.java).
+
+### Authenticated local routing repair
+
+`reservation_repair.reserve_route` accepts an original handoff, current partial
+board, its exact prior DRC board/report, pinned intent/bundle, and an explicit
+failed-pad UUID. It selects native-clearance-checked escape candidates and removes
+only authenticated unlocked generated copper blocking the chosen candidate.
+Every other board node is retained. Intermediate dangling findings remain FAIL;
+continuation requires exact seed or released-track adjacency provenance and no
+other geometric/manufacturing findings.
+
+The DSN projection protects the exact new escape and all unaffected already
+connected nets. Only nets derived from seed and removed copper remain movable.
+The installed router reader verifies these states. Postflight compares exact
+seed and unaffected-copper multisets; all displaced connections remain required.
+Final native DRC still requires zero violations and zero unconnected items.
+The repair result stays FAIL when layout has NOT_CHECKABLE checks, even when its
+native A4 result passes. Owner inspection eligibility is evaluated separately.

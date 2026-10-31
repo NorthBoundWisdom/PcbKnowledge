@@ -87,6 +87,11 @@ class FabricationTests(unittest.TestCase):
             self.assertEqual(result['status'], 'FAIL')
             commands = [call.args[0] for call in process.call_args_list]
             self.assertNotIn('--smd-only', next(command for command in commands if 'pos' in command))
+            svg_commands = [command for command in commands if 'svg' in command]
+            self.assertEqual(len(svg_commands), 2)
+            for command in svg_commands:
+                self.assertIn('--exclude-drawing-sheet', command)
+                self.assertNotIn('.Fab', command[command.index('--layers') + 1])
 
     def test_all_bom_refs_not_only_smt_are_required(self):
         from pcbknowledge.v2.fabrication import check_positions

@@ -715,12 +715,13 @@ Exit: G1 reference layout with `layout check` all `PASS` (any `NOT_CHECKABLE`
 kind listed with its reason), DRC zero violations and zero unconnected items,
 fabrication outputs generated and re-read. Record tool versions in the receipt.
 
-Current G1 diagnostic: placement passes; the best checked route has zero DRC
-violations and four unconnected items (`build/native-fanout-routing/`), with
-54 layout PASS and two NOT_CHECKABLE (multi-polygon thermal area and Kelvin
-branch proof). The 58.732057 s router run is not A4/A5. A second cumulative
-repair retained four dangling-via warnings and five unconnected items rather
-than improving the result; no final DRC exclusions apply.
+G1 owner-review candidate: original 46-component placement passes; scoped routing
+completed in 58.201 s with native zero violations, zero unconnected items and
+zero parity findings. Layout has 54 PASS, zero FAIL and two NOT_CHECKABLE:
+multi-polygon thermal area and missing Kelvin branch proof. Independent fabrication
+re-read and conditional bring-up coverage pass. Strict A3/A5 remain FAIL; A4 is
+PASS. The separate owner-review predicate does not authorize ordering. Final
+committed aggregate verification and owner inspection remain pending.
 
 ## Stage 14 — Reference layout for G1V1, G1V2 and G2 to G5
 

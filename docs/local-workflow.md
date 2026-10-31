@@ -401,3 +401,20 @@ re-read fabrication outputs, complete conditional bring-up ranges, top/bottom
 SVGs, and no failed layout checks. Each remaining `NOT_CHECKABLE` reason stays
 visible beside the renders. This inspection checkpoint does not approve ordering
 or convert unsupported physical proofs into passing checks.
+
+
+### Partial-route reservation API
+
+Use `pcbknowledge.v2.reservation_repair.reserve_route(original, current, prior,
+drc, intent, bundle, failed_pad_uuid, tools, output, root=repository)` for one
+explicit failed-pad repair. Paths must be under `build/`; `original` is the
+handoff board beside its authenticated `graph.json`, not a copied seed board.
+`prior` is the exact board fingerprinted by `drc`; the current board must preserve
+its placement and source project/rules. Supply a fresh output directory and the
+same tool descriptors used by `layout run`. Receipts retain failed intermediate
+connectivity, removed copper identities, router scope, native findings and runtime.
+No repeated attempt is automatic. Layout unknowns do not become PASS.
+
+Review SVGs show copper, silkscreen and outline without the drawing sheet or
+fabrication annotations. Use the native board and placement CSV to identify parts.
+Inspect the listed thermal-area and Kelvin unknowns before considering manufacture.

@@ -157,10 +157,11 @@ def export_outputs(board_path, output, intent, tools, *, root):
                        '--excellon-zeros-format', 'decimal', '--excellon-oval-format', 'alternate',
                        '-o', str(output)]),
             ('positions', ['pos', '--format', 'csv', '--units', 'mm', '-o', str(output / 'positions.csv')]),
-            ('top-svg', ['svg', '--mode-single', '--fit-page-to-board', '--layers',
-                         'F.Cu,F.Silkscreen,F.Fab,Edge.Cuts', '-o', str(output / 'top.svg')]),
-            ('bottom-svg', ['svg', '--mode-single', '--mirror', '--fit-page-to-board', '--layers',
-                            'B.Cu,B.Silkscreen,B.Fab,Edge.Cuts', '-o', str(output / 'bottom.svg')])]
+            ('top-svg', ['svg', '--exclude-drawing-sheet', '--mode-single', '--fit-page-to-board', '--layers',
+                         'F.Cu,F.Silkscreen,Edge.Cuts', '-o', str(output / 'top.svg')]),
+            ('bottom-svg', ['svg', '--exclude-drawing-sheet', '--mode-single', '--mirror',
+                            '--fit-page-to-board', '--layers',
+                            'B.Cu,B.Silkscreen,Edge.Cuts', '-o', str(output / 'bottom.svg')])]
     results = {}
     for name, arguments in jobs:
         results[name] = run_process([tool['path'], 'pcb', 'export', *arguments, str(board_path)],

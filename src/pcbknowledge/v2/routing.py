@@ -55,7 +55,7 @@ def unchanged_placement(source, final):
     return {'status': 'PASS', 'component_count': len(after['footprints'])}
 
 
-def _route(board, directory, intent, catalog, tools, root, result):
+def _route(board, directory, intent, catalog, tools, root, result, seed_receipt=None, scope=None):
     dsn = directory / 'routing.dsn'
     result['export_dsn'] = run_bridge('export-dsn', board, dsn, tools, root=root,
                                       directory=directory / 'process-dsn')
@@ -65,6 +65,18 @@ def _route(board, directory, intent, catalog, tools, root, result):
     projected, result['dsn_projection'] = project_routing_planes(dsn.read_text(), parse_board(board))
     configured = configure_dsn(projected, intent, catalog)
     normalized, result['wire_states'] = normalize_native_wire_states(configured, board.read_text())
+    if seed_receipt is not None:
+        from .reservation_protection import protect_seed
+        normalized, result['protected_seed'] = protect_seed(
+            normalized, board.read_text(), seed_receipt,
+            expected_board_sha256=seed_receipt['output_sha256'],
+            expected_dsn_sha256=hashlib.sha256(normalized.encode()).hexdigest())
+    if scope is not None:
+        from .routing_scope import freeze_unaffected
+        normalized, result['routing_scope'] = freeze_unaffected(
+            normalized, board.read_text(), scope['current'].read_text(), scope['baseline'].read_text(),
+            seed_receipt, result['protected_seed'],
+            expected_dsn_sha256=hashlib.sha256(normalized.encode()).hexdigest())
     dsn.write_text(normalized, encoding='utf-8')
     session = directory / 'routing.ses'
     result['router'] = run_router(dsn, session, tools, root=root, directory=directory / 'process-router')
@@ -88,19 +100,36 @@ def _route(board, directory, intent, catalog, tools, root, result):
     return 'PASS'
 
 
-def route_board(board, directory, intent, catalog, tools, *, root):
+def route_board(board, directory, intent, catalog, tools, *, root, seed_receipt=None, scope=None):
     board, directory = derived_path(root, board), derived_path(root, directory)
     if directory.exists():
         raise ValueError('Routing output directory must be fresh')
     for suffix in ('.kicad_pro', '.kicad_dru'):
         derived_path(root, board.with_suffix(suffix))
     fingerprints = input_fingerprints(board)
+    scope_files = {}
+    if scope is not None:
+        from .kicad_bridge import _path
+        if seed_receipt is None or set(scope) != {'current', 'baseline'}:
+            raise ValueError('Scoped routing requires explicit source/baseline and exact seed receipt')
+        scope = {key: _path(root, value, exists=True) for key, value in scope.items()}
+        scope_files = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in scope.values()}
+        if (scope_files[str(scope['current'])] != seed_receipt['current_sha256']
+                or scope_files[str(scope['baseline'])] != seed_receipt['baseline_drc_sha256']):
+            raise ValueError('Scoped routing source/baseline changed')
     directory.mkdir(parents=True)
     result = {'status': 'FAIL', 'input_sha256': fingerprints, 'routing_completeness': 'NOT_CHECKABLE'}
     try:
-        result['status'] = _route(board, directory, intent, catalog, tools, root, result)
+        result['status'] = _route(board, directory, intent, catalog, tools, root, result, seed_receipt, scope)
     except (OSError, ValueError, TypeError, KeyError) as error:
         result.update(status='FAIL', reason=str(error))
-    if input_fingerprints(board) != fingerprints:
-        result.update(status='FAIL', reason='Routing modified original board/project/rules')
+    try:
+        if input_fingerprints(board) != fingerprints:
+            result.update(status='FAIL', reason='Routing modified original board/project/rules')
+        if scope_files:
+            result['scope_input_sha256'] = scope_files
+            if any(hashlib.sha256(Path(path).read_bytes()).hexdigest() != sha for path, sha in scope_files.items()):
+                result.update(status='FAIL', reason='Routing changed scoped source/baseline')
+    except (OSError, ValueError) as error:
+        result.update(status='FAIL', reason='Routing source recheck failed: ' + str(error))
     return result
