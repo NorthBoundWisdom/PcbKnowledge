@@ -164,6 +164,8 @@ answer here.
 | D109 | Conformance evidence scope | Original fixture vectors test all registered constraint kinds with explicit expected PASS, FAIL or NOT_CHECKABLE results. An expectation match is not board acceptance; a separate real-bundle CLI replay tests the public input and report boundary. |
 | D110 | Cycle 2 motor modules | T3 uses 5.5–6 V, 0.25 A RMS continuous and 0.60 A/100 ms starts; T4 uses 8.5–12 V and nominal 0.25 A full-step regulation with 0.15–0.30 A settled and 0.35 A peak limits. Both use external 3.2–3.4 V hosts, specified passive loads, finite regeneration fixtures and 15–35 degC bench conditions; the original briefs define the complete operating inputs. |
 | D111 | Cycle 2 negative brief | N6 requires a 10.8–12 V three-phase sensored BLDC inverter with independent Hall inputs and host six-step commutation. Preserve that topology instead of substituting a brushed bridge or two-phase stepper; only actual pinned-catalog refusal evaluation can pass the negative case. |
+| D112 | Cycle 5 measurement and audio defaults | T9 is a floating Type K channel, 0-300 degC, 3 degC guarded error and four fresh paired readings per second; T10 is a 5 V analog mono class-D bridge with 0.5 W at 25 degC and 0.25 W across 15-35 degC into 8 ohm. The independent briefs fix host thresholds, loads, timing and power order. Thermal acceptance requires at least 600 s plus equilibrium and a strictly less than 1 degC surface change; typed values are configured thresholds, not observations. |
+| D113 | Cycle 5 negative brief | N9 asks for simultaneous stereo audio conversion with 48 kHz I2S, 24-bit words in 32-bit slots and 70 dB SINAD. Preserve simultaneous acquisition and separate physical clock/data nets; the negative hypothesis requires actual pinned-catalog queries and three reviewed refusals. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -904,6 +906,17 @@ Cycle 4, T7/T8 (Wisdom):
 
 CAN capability facts: independently verified STM32 PA11/32 CAN_RX and PA12/33 CAN_TX add only DS5319 p33 and RM0008 p185 evidence to five existing reference intents; every component, pin, net, check and constraint is unchanged. Canonical hash prefixes: T5 `47a92cd63892` → `3bb338e25cd7`; G1 `55cbaeb975b7` → `4504b6c60304`; G1V1 `d2299e2463da` → `41ae0357637d`; G1V2 `154a27a31d04` → `42436bb2a4ef`; G2 `30d522f03e34` → `cedf35a3c1a9`. Historical synthesis input and receipt hashes remain unchanged. Independent review and 26 affected tests pass; 216 records validate.
 Historical G2-to-current comparison now projects only the two reviewed CAN anchors after checking their exact pin/source mapping; complete-intent equality and historical hashes remain enforced. Fourteen affected tests pass, including missing, wrong and duplicate anchor refusals; successor CI must confirm the repair.
+
+Cycle 5, T9/T10/N9 (Ethan):
+
+- [x] Independently authored competition briefs with canonical operating inputs and physical signal bindings.
+- [ ] T9 A2 and three fresh synthesis attempts: PARKED_SOURCE_QUALIFICATION.
+  MAX31856 raw conversion/coherent sampling and conditioned SPI qualification remain incomplete;
+  ADS1220 gain-offset and compensation bounds do not close the same contract. Conditional error arithmetic alone is not A2.
+- [ ] T10 A2 and three fresh synthesis attempts: PARKED_SOURCE_QUALIFICATION.
+  TPA2005D1 and TPA2011D1 lack qualified loaded-current/loss bounds for this design;
+  MAX98306 gain and loss data do not close the gap. Preserve output, gain and thermal limits.
+- [ ] N9 three fresh query-mediated attempts, independent review and the cycle gate.
 
 ## Stage 17 — PcbAtlas consumer contract
 

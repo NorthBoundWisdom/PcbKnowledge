@@ -1,0 +1,666 @@
+{
+  "acceptance": [
+    {
+      "criterion": "Parse and schema-validate the brief and verify evidence-backed component selection for every required function without relaxing the original requirements. Any unsupported selection remains an explicit failure or refusal, not acceptance.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Complete and verify electrical connectivity, supply and current budgets, signal compatibility, required decoupling and all supporting electrical/thermal calculations. Resolve every physical electrical binding and numerical requirement with evidence.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "If supported, verify a maximum 45 by 35 mm outline, independent analog input paths, clock/data routing and local conversion decoupling.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Run actual fabrication DRC against named profile CYCLE5_2L_FR4_1OZ, resolving violations and checking the requested stackup and single-side assembly. A named profile is not a claim that DRC has run.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Generate and cross-check manufacturing outputs: copper/mask/silkscreen/outline fabrication layers, drill files, stackup/fabrication notes, BOM, placement file and assembly drawing, with mutually consistent revision and coordinates.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "First assess whether evidence supports true simultaneous stereo acquisition. If unsupported, record refusal and its exact evidence gap; do not call hardware accepted. If supported, test I2S framing, sample rate/skew, >=70 dB SINAD, passband response and >=40 dB alias rejection at 25 degC with calibrated sources and captured PCM. A supported result disproves the planned negative hypothesis. Review the hardware evidence against this unchanged functional envelope; no electrical or hardware success is pre-approved.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "All numerical requirements and fixture choices are independent ENGINEERING_DEFAULT decisions, not manufacturer facts. No part selections are prescribed.",
+      "id": "independent_defaults"
+    },
+    {
+      "description": "External fixture supplies only the stated power, stimulus, host and load. Required signal conversion and conditioning remain on this board.",
+      "id": "responsibility"
+    },
+    {
+      "description": "The planned negative condition is absence of a supported simultaneous stereo audio ADC capability. Catalog coverage is not known to this author. Expected refusal is an untested hypothesis, not a successful test; if a valid design is supported, record that outcome without making this brief harder.",
+      "id": "negative_hypothesis_only"
+    },
+    {
+      "description": "Named fabrication DRC profile CYCLE5_2L_FR4_1OZ: minimum finished trace width 0.20 mm, copper clearance 0.20 mm, plated drill 0.30 mm, annular ring 0.15 mm and copper-to-routed-edge clearance 0.30 mm. These are independent prototype fabrication defaults, not an assertion of any manufacturer capability.",
+      "id": "fabrication_drc_profile"
+    }
+  ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "pcm_host_link",
+          "port": "mclk"
+        },
+        {
+          "function": "stereo_audio_adc",
+          "port": "mclk"
+        }
+      ],
+      "id": "i2s_mclk"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "pcm_host_link",
+          "port": "bclk"
+        },
+        {
+          "function": "stereo_audio_adc",
+          "port": "bclk"
+        }
+      ],
+      "id": "i2s_bclk"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "pcm_host_link",
+          "port": "lrclk"
+        },
+        {
+          "function": "stereo_audio_adc",
+          "port": "lrclk"
+        }
+      ],
+      "id": "i2s_lrclk"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "pcm_host_link",
+          "port": "sdout"
+        },
+        {
+          "function": "stereo_audio_adc",
+          "port": "sdout"
+        }
+      ],
+      "id": "i2s_sdout"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "power_entry",
+          "port": "board_supply"
+        },
+        {
+          "function": "stereo_audio_adc",
+          "port": "supply"
+        }
+      ],
+      "id": "board_supply_net"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "power_entry",
+          "port": "ground"
+        },
+        {
+          "function": "stereo_audio_adc",
+          "port": "ground"
+        }
+      ],
+      "id": "board_ground_net"
+    }
+  ],
+  "expected_refusal": {
+    "code": "UNSATISFIED_SELECTION",
+    "requirement": "stereo_audio_adc"
+  },
+  "functions": [
+    {
+      "category": "simultaneous_stereo_audio_conversion",
+      "count": 1,
+      "description": "Two-channel simultaneous audio ADC",
+      "id": "stereo_audio_adc",
+      "parameters": {
+        "alias_rejection": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 40,
+          "note": "Independent competition design requirement.",
+          "unit": "dB"
+        },
+        "ambient_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "audio_passband": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 15000,
+          "min": 100,
+          "note": "Independent competition design requirement.",
+          "unit": "Hz"
+        },
+        "channel_aperture_skew": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1e-06,
+          "note": "Independent competition design requirement.",
+          "unit": "s"
+        },
+        "channel_count": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "1",
+          "value": 2
+        },
+        "input_impedance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 10000,
+          "note": "Independent competition design requirement.",
+          "unit": "ohm"
+        },
+        "input_voltage_rms": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1,
+          "min": 0,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        },
+        "response_deviation": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1,
+          "min": -1,
+          "note": "Independent competition design requirement.",
+          "unit": "dB"
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "Hz",
+          "value": 48000
+        },
+        "sample_word_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "1",
+          "value": 24
+        },
+        "sinad": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 70,
+          "note": "Independent competition design requirement.",
+          "unit": "dB"
+        },
+        "slot_width_bits": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "1",
+          "value": 32
+        },
+        "source_dc_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.05,
+          "min": -0.05,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        },
+        "source_impedance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 100,
+          "note": "Independent competition design requirement.",
+          "unit": "ohm"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Convert two independent ground-referenced analog audio channels simultaneously on the board, using a dedicated acquisition/conversion path for each channel with synchronized effective sample times. Normal synchronous dual-channel delta-sigma conversion is allowed; discrete sample-and-hold topology is not mandated. A time-multiplexed single ADC, external digitizer or software-generated PCM is not a substitute.",
+        "Accept up to 1 Vrms sinusoidal input per channel from sources with <=100 ohm impedance and +/-50 mV DC offset. Provide on-board AC coupling, biasing and anti-alias conditioning. Input impedance >=10 kohm at 1 kHz per channel.",
+        "Produce 24-bit signed samples in standard I2S framing with two 32-bit slots per stereo frame at 48000 frames/s. Container width is an interface requirement, not a claim of 24-bit effective resolution.",
+        "At 1 kHz and 0.5 Vrms per channel require unweighted signal-to-noise-and-distortion ratio >=70 dB over 20 Hz to 20 kHz. Channel aperture skew <=1 us. Relative to 1 kHz, passband response stays within +/-1 dB from 100 Hz to 15 kHz.",
+        "At a 33 kHz input tone, output alias magnitude is at least 40 dB below the digital response to an equal-amplitude 15 kHz input tone; use 0.25 Vrms test tones. The board must perform the requisite anti-alias function.",
+        "Operation is non-isolated at 15 to 35 degC ambient. Audio performance is qualified at 25 degC. No microphone bias, phantom power, power-amplifier output or audio playback is required.",
+        "Connect analog sources only after board power has settled for at least 100 ms. Disconnect both analog source signals before removing board power; do not depend on a muted source retaining zero DC offset. Ground may remain connected. No unpowered analog-input operation is required.",
+        "All stated input amplitudes and DC offsets are measured at the loaded board input connectors. Source impedance means Thevenin output impedance, not an additional board input load."
+      ]
+    },
+    {
+      "category": "externally_clocked_i2s_host_connector",
+      "count": 1,
+      "description": "Externally clocked I2S capture interface",
+      "id": "pcm_host_link",
+      "parameters": {
+        "bit_clock": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "Hz",
+          "value": 3072000
+        },
+        "bit_clock_to_frame_ratio": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent blind scope-review clarification.",
+          "unit": "1",
+          "value": 64
+        },
+        "clock_edge_alignment": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-09,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "clock_frequency_tolerance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-05,
+          "note": "Independent competition design requirement.",
+          "unit": "1"
+        },
+        "clock_period_jitter_peak": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2e-09,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "clock_period_jitter_rms": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-10,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "data_hold_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 2e-08,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "data_setup_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 2e-08,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "digital_fall_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2e-08,
+          "min": 2e-09,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        },
+        "digital_rise_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2e-08,
+          "min": 2e-09,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        },
+        "duty_cycle": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.55,
+          "min": 0.45,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "1"
+        },
+        "fixture_net_delay_mismatch": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2e-09,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "frame_clock": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "Hz",
+          "value": 48000
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 2,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "input_leakage_magnitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1e-05,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "A"
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.8,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "io_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.465,
+          "min": 3.135,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        },
+        "jitter_observation_cycles": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 1000000,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "1"
+        },
+        "load_capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3e-11,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "F"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "A"
+        },
+        "master_clock": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "Hz",
+          "value": 12288000
+        },
+        "master_clock_to_frame_ratio": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent blind scope-review clarification.",
+          "unit": "1",
+          "value": 256
+        },
+        "optional_i2c_pullup": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 10000,
+          "min": 7500,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "ohm"
+        },
+        "optional_i2c_rise_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1e-06,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 2.8,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.4,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "power_settle_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 0.1,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "An external host supplies phase-coherent MCLK=12.288 MHz, BCLK=3.072 MHz and LRCLK=48 kHz at 3.3 V logic from one common source, with exact MCLK:LRCLK=256:1 and BCLK:LRCLK=64:1 ratios. All three clocks share the same frequency offset within +/-50 ppm; they are not three independently drifting sources. The board is a clock slave and drives stereo SDOUT.",
+        "I2S format uses LRCLK low for left, high for right, MSB first, with MSB one BCLK period after LRCLK transition. Host samples on BCLK rising edges; board changes data on falling edges. Pad the eight least-significant unused slot bits with zero.",
+        "Configuration may use static on-board straps or 100 kHz I2C exposed to the host; implementation must document the chosen method and register sequence where needed. The host performs capture and analysis only, not analog-to-digital conversion.",
+        "Digital fixture default: both host and board receivers shall recognize inputs <=0.8 V as low and >=2.0 V as high. Both host and board active outputs shall provide <=0.4 V low and >=2.8 V high at the specified load throughout the declared board supply range. These are compatibility requirements, not measured capabilities.",
+        "Each active digital output drives at most 0.5 mA steady-state load and 30 pF total load including receiver, connector and fixture wiring. Each receiver input leakage magnitude is <=10 uA. Output 10%-90% rise and fall times at that load must be between 2 ns and 20 ns. Fixture logic high never exceeds the instantaneous board supply.",
+        "Power sequence is controlled, not arbitrary: connect common ground first; power the host with its board-directed signals held low and board-output receivers high-impedance; apply board power, allow 100 ms settling, then start transactions/clocks. For shutdown stop clocks, drive host outputs low, remove board power, then remove host power. Board-output receivers remain powered and high-impedance until board power is removed. No connector signal may power an unpowered endpoint.",
+        "Firmware and fixture must prevent contention; the host never actively drives the board data-output pin. No hot-plug operation is required.",
+        "If optional 100 kHz I2C configuration is used, use separate SDA/SCL nets with on-board pull-ups to the board supply, each between 7.5 and 10 kohm. Host open-drain outputs sink <=0.4 V at 0.5 mA; input thresholds and leakage remain as stated. I2C rise time may be up to 1000 ns instead of the active-output 20 ns limit; fall time is <=20 ns. Do not drive an unpowered board through pull-ups.",
+        "Clock fixture requirements: MCLK and BCLK duty cycles are 45% to 55%; LRCLK has exactly 32 BCLK periods per half frame. BCLK rising edges align to MCLK rising edges within 5 ns. LRCLK transitions occur at BCLK falling edges within 5 ns. MCLK and BCLK cycle-period jitter relative to their measured mean period is <=0.5 ns RMS and <=2 ns maximum absolute deviation over at least one million cycles. Clock timing is guaranteed at board connector pins under the declared 30 pF maximum net load, not only at an unloaded generator.",
+        "Implementation timing responsibility: each board clock/data receiver must support the specified fixture edge rates, duty cycle, jitter and phase relationship without violating its required setup/hold or clock-width limits, established from evidence. Board SDOUT shall be valid at the host connector at least 20 ns before and remain valid at least 20 ns after each BCLK rising sample edge. The external host requires no more than 20 ns setup and 20 ns hold. Fixture cable delay mismatch between related digital nets is <=2 ns; board timing analysis must include this bound and the declared load. Channel aperture skew refers to synchronized effective analog sample times, not serial-slot transmission time."
+      ]
+    },
+    {
+      "category": "regulated_dc_power_entry",
+      "count": 1,
+      "description": "Regulated external DC entry and board power distribution",
+      "id": "power_entry",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Accept the declared external regulated supply at the power connector and distribute it with implementation-required local decoupling. Any internally derived rails and their budgets remain on-board responsibilities; the source is not a substitute for core signal conversion."
+      ]
+    }
+  ],
+  "id": "N9",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.15,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "External 3.3 V regulated supply.",
+      "id": "power",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.465,
+        "min": 3.135,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.0002,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "Two independent ground-referenced line inputs, including peak signal and allowed source DC offset.",
+      "id": "stereo_line",
+      "signals": [
+        "LEFT_IN",
+        "RIGHT_IN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 1.47,
+        "min": -1.47,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.002,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "Common-ground synchronous PCM host; optional I2C signals exposed if used. Logic outputs do not exceed board supply.",
+      "id": "pcm_host",
+      "signals": [
+        "MCLK",
+        "BCLK",
+        "LRCLK",
+        "SDOUT",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.465,
+        "min": 0,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "No mandatory mounting holes; fixture supports board edges with insulated clips. Board dimensions include connectors, excluding mating cables.",
+    "preferred_passives": "0603 or larger",
+    "profile": "CYCLE5_2L_FR4_1OZ",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Independent competition design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "power",
+      "stereo_line",
+      "pcm_host"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 15,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 45,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    },
+    "mounting": [],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 35,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D65",
+    "D113"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.15,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "function": "power_entry",
+        "id": "board_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.465,
+          "min": 3.135,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.15,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "description": "Regulated external DC supply; stated operating range applies at board connector.",
+        "function": "power_entry",
+        "id": "external_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.465,
+          "min": 3.135,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "A companion audio-measurement board requiring true simultaneous stereo audio conversion and synchronous serial PCM output; candidate unsupported-capability hypothesis only.",
+  "title": "Simultaneous stereo line-level audio digitizer"
+}

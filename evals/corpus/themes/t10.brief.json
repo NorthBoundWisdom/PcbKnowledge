@@ -1,0 +1,535 @@
+{
+  "acceptance": [
+    {
+      "criterion": "Parse and schema-validate the brief and verify evidence-backed component selection for every required function without relaxing the original requirements. Any unsupported selection remains an explicit failure or refusal, not acceptance.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Complete and verify electrical connectivity, supply and current budgets, signal compatibility, required decoupling and all supporting electrical/thermal calculations. Resolve every physical electrical binding and numerical requirement with evidence.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Verify a maximum 40 by 30 mm outline, bridge-output labeling, default-disable circuit, thermal copper and compact switching-current loops.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Run actual fabrication DRC against named profile CYCLE5_2L_FR4_1OZ, resolving violations and checking the requested stackup and single-side assembly. A named profile is not a claim that DRC has run.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Generate and cross-check manufacturing outputs: copper/mask/silkscreen/outline fabrication layers, drill files, stackup/fabrication notes, BOM, placement file and assembly drawing, with mutually consistent revision and coordinates.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Using an 8 ohm load rated >=2 W, differential analyzer, carrier-rejection filter and 0.5 m twisted output pair, verify gain, frequency response, 0.5 W continuous output, <=1% THD+N and <=75 degC surface temperature at both supply endpoints. Run each power/thermal test 10 minutes at 25 degC in still air; verify default disable and <=1 mA shutdown consumption. Review the hardware evidence against this unchanged functional envelope; no electrical or hardware success is pre-approved. The 10-minute run is a minimum, not the steady-state stopping criterion: continue until the stated equilibrium condition, and substantiate junction-temperature margin separately. Additionally verify the continuous 0.25 W operating target at 15 and 35 degC and support the bound between those ambients. Calibrate audio amplitudes at the loaded input connector.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "All numerical requirements and fixture choices are independent ENGINEERING_DEFAULT decisions, not manufacturer facts. No part selections are prescribed.",
+      "id": "independent_defaults"
+    },
+    {
+      "description": "External fixture supplies only the stated power, stimulus, host and load. Required signal conversion and conditioning remain on this board.",
+      "id": "responsibility"
+    },
+    {
+      "description": "Named fabrication DRC profile CYCLE5_2L_FR4_1OZ: minimum finished trace width 0.20 mm, copper clearance 0.20 mm, plated drill 0.30 mm, annular ring 0.15 mm and copper-to-routed-edge clearance 0.30 mm. These are independent prototype fabrication defaults, not an assertion of any manufacturer capability.",
+      "id": "fabrication_drc_profile"
+    }
+  ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "audio_input",
+          "port": "conditioned_output"
+        },
+        {
+          "function": "class_d_amplifier",
+          "port": "audio_input"
+        }
+      ],
+      "id": "conditioned_audio"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "class_d_amplifier",
+          "port": "output_positive"
+        },
+        {
+          "function": "speaker_connector",
+          "port": "positive"
+        }
+      ],
+      "id": "speaker_positive"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "class_d_amplifier",
+          "port": "output_negative"
+        },
+        {
+          "function": "speaker_connector",
+          "port": "negative"
+        }
+      ],
+      "id": "speaker_negative"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "power_entry",
+          "port": "board_supply"
+        },
+        {
+          "function": "class_d_amplifier",
+          "port": "supply"
+        }
+      ],
+      "id": "board_supply_net"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "power_entry",
+          "port": "ground"
+        },
+        {
+          "function": "class_d_amplifier",
+          "port": "ground"
+        }
+      ],
+      "id": "board_ground_net"
+    }
+  ],
+  "functions": [
+    {
+      "category": "analog_line_input_conditioning",
+      "count": 1,
+      "description": "Single-ended line input conditioning",
+      "id": "audio_input",
+      "parameters": {
+        "input_impedance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 10000,
+          "note": "Independent competition design requirement.",
+          "unit": "ohm"
+        },
+        "input_voltage_rms": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.25,
+          "min": 0,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        },
+        "source_dc_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.05,
+          "min": -0.05,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        },
+        "source_impedance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1000,
+          "note": "Independent competition design requirement.",
+          "unit": "ohm"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Accept ground-referenced single-ended analog audio through an on-board AC coupling path. Source output impedance is at most 1 kohm and source DC offset lies within +/-50 mV.",
+        "Board input impedance must be at least 10 kohm at 1 kHz. Source amplitude is adjustable from zero to 0.25 Vrms; no digital audio source or external power amplifier is allowed.",
+        "All stated input Vrms amplitudes and DC offsets refer to the actual loaded board line-input connector relative to board ground, not the generator open-circuit setting. The source impedance limit is its Thevenin output impedance; calibrate the connector amplitude with the board connected."
+      ]
+    },
+    {
+      "category": "mono_class_d_bridge_power_amplification",
+      "count": 1,
+      "description": "Mono class-D bridge-tied-load power amplification",
+      "id": "class_d_amplifier",
+      "parameters": {
+        "ambient_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "audio_passband": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 10000,
+          "min": 100,
+          "note": "Independent competition design requirement.",
+          "unit": "Hz"
+        },
+        "cable_length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 500,
+          "note": "Independent competition design requirement.",
+          "unit": "mm"
+        },
+        "differential_load_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "ohm",
+          "value": 8
+        },
+        "frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "Hz",
+          "value": 1000
+        },
+        "full_ambient_output_power": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 0.25,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "W"
+        },
+        "gain": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 11,
+          "min": 9,
+          "note": "Independent competition design requirement.",
+          "typ": 10,
+          "unit": "1"
+        },
+        "minimum_continuous_test_duration": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "s",
+          "value": 600
+        },
+        "output_power": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 0.5,
+          "note": "Independent competition design requirement.",
+          "unit": "W"
+        },
+        "power_settle_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 0.1,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        },
+        "response_deviation": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3,
+          "min": -3,
+          "note": "Independent competition design requirement.",
+          "unit": "dB"
+        },
+        "shutdown_supply_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.001,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "surface_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 75,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "thd_plus_noise": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "note": "Independent competition design requirement.",
+          "unit": "1"
+        },
+        "thermal_equilibrium_change_threshold": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "degC"
+        },
+        "thermal_equilibrium_window": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s",
+          "value": 300
+        },
+        "thermal_test_ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "degC",
+          "value": 25
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Use a switching class-D output stage on the board, not a linear output stage or an external amplifier module.",
+        "Deliver at least 0.5 W continuous sine-wave power into an 8 ohm resistive differential load at 1 kHz, at each supply-range endpoint and at 25 degC ambient. At that operating point, THD+N shall be <=1% measured with a 20 Hz to 20 kHz bandwidth and appropriate analyzer switching-carrier rejection.",
+        "Nominal midband voltage gain is 10 V/V, permitted range 9 to 11 V/V at 1 kHz and 0.1 Vrms input, measured differentially across the load. Input amplitude may be adjusted within the declared envelope for the power test.",
+        "Relative to 1 kHz gain, response must stay within +/-3 dB from 100 Hz to 10 kHz at 0.1 Vrms input into 8 ohm.",
+        "Both speaker terminals are driven; neither may be grounded. Board includes all stability and switching-output components required by its chosen implementation for a 0.5 m twisted speaker pair.",
+        "Provide active-high ENABLE at 3.3 V host logic with on-board default-low bias. Low or disconnected ENABLE stops switching and consumes <=1 mA total board supply current. High enables normal audio operation.",
+        "With the board edge-supported horizontally in still air, no enclosure, no heatsink or fan, sustain the 0.5 W test continuously without thermal shutdown at 25 degC ambient. Run for at least 10 minutes and continue until thermal equilibrium, defined as hottest measured package surface changing by less than 1 degC over a further 5-minute window; the surface must remain <=75 degC throughout. Ten minutes alone is not proof of steady-state junction temperature. Separately substantiate junction temperature margin using implementation-specific dissipation and thermal evidence. Operational ambient range is 15 to 35 degC; at every ambient in that range require at least 0.25 W continuous output into 8 ohm at 1 kHz with <=1% THD+N, normal gain/enable/shutdown behavior and <=75 degC surface temperature. The stricter 0.5 W rated-power qualification remains at 25 degC only.",
+        "No short-circuit, EMC certification, pop-noise or maximum unclipped-power claim is required.",
+        "Controlled fixture sequence: connect common ground; hold ENABLE low; apply board power and allow at least 100 ms settling; connect the audio signal, then assert ENABLE. Before board power removal, deassert ENABLE, disconnect the audio signal and hold ENABLE at 0 V until power is removed. An unpowered board must not receive a high ENABLE or any driven audio signal. Host is powered before the board and removed afterward; no arbitrary power ordering or hot plugging is required."
+      ]
+    },
+    {
+      "category": "differential_speaker_termination",
+      "count": 1,
+      "description": "Differential loudspeaker output connector",
+      "id": "speaker_connector",
+      "parameters": {
+        "differential_load_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "ohm",
+          "value": 8
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Expose separate OUT_P and OUT_N and label both as driven outputs, with no speaker-return connection to ground."
+      ]
+    },
+    {
+      "category": "regulated_dc_power_entry",
+      "count": 1,
+      "description": "Regulated external DC entry and board power distribution",
+      "id": "power_entry",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Accept the declared external regulated supply at the power connector and distribute it with implementation-required local decoupling. Any internally derived rails and their budgets remain on-board responsibilities; the source is not a substitute for core signal conversion."
+      ]
+    }
+  ],
+  "id": "T10",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 1,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "External 5 V regulated supply at board terminals.",
+      "id": "power",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 5.25,
+        "min": 4.75,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.0001,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "Single-ended audio input; 0.25 Vrms maximum sine plus allowed DC offset gives this peak pin envelope.",
+      "id": "line_input",
+      "signals": [
+        "AUDIO_IN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.41,
+        "min": -0.41,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.001,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "External common-ground logic: <=0.4 V low, >=2.8 V high, maximum 3.465 V. Default disabled if disconnected.",
+      "id": "enable",
+      "signals": [
+        "ENABLE",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.465,
+        "min": 0,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.7,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "Bridge output; voltage is differential instantaneous operating envelope, current is maximum intended peak load current, not a protection guarantee.",
+      "id": "speaker",
+      "signals": [
+        "OUT_P",
+        "OUT_N"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 5.25,
+        "min": -5.25,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "No mandatory mounting holes; fixture supports board edges with insulated clips. Board dimensions include connectors, excluding mating cables.",
+    "preferred_passives": "0603 or larger",
+    "profile": "CYCLE5_2L_FR4_1OZ",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Independent competition design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "power",
+      "line_input",
+      "enable",
+      "speaker"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 15,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 40,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    },
+    "mounting": [],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 30,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D65",
+    "D112"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "function": "power_entry",
+        "id": "board_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5.25,
+          "min": 4.75,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "description": "Regulated external DC supply; stated operating range applies at board connector.",
+        "function": "power_entry",
+        "id": "external_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5.25,
+          "min": 4.75,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "A compact analog-input class-D board delivering modest loudspeaker power from an external 5 V source.",
+  "title": "Mono bridge-output class-D audio amplifier"
+}

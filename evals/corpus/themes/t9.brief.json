@@ -1,0 +1,580 @@
+{
+  "acceptance": [
+    {
+      "criterion": "Parse and schema-validate the brief and verify evidence-backed component selection for every required function without relaxing the original requirements. Any unsupported selection remains an explicit failure or refusal, not acceptance.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Complete and verify electrical connectivity, supply and current budgets, signal compatibility, required decoupling and all supporting electrical/thermal calculations. Resolve every physical electrical binding and numerical requirement with evidence.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Verify the 45 by 30 mm maximum outline, cold-junction placement, terminal thermal region, input filtering and host interface routing.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Run actual fabrication DRC against named profile CYCLE5_2L_FR4_1OZ, resolving violations and checking the requested stackup and single-side assembly. A named profile is not a claim that DRC has run.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Generate and cross-check manufacturing outputs: copper/mask/silkscreen/outline fabrication layers, drill files, stackup/fabrication notes, BOM, placement file and assembly drawing, with mutually consistent revision and coordinates.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "After at least 10 minutes equilibration in still air, exercise hot-junction equivalents 0, 100, 200 and 300 degC at terminal ambients 15, 25 and 35 degC using a calibrated floating thermocouple simulator and independently measured temperature of each copper transition. At each point require absolute measured error + fixture expanded uncertainty U (k=2) <=3 degC, with U<=0.5 degC. Establish an evidence-backed error bound between the discrete points throughout the full requested continuous ranges. Verify TC and CJ each acquire fresh samples >=4 Hz with <=250 ms intervals and <=100 ms effective timestamp skew in published pairs. Verify terminal-pair and sensor-to-EACH-terminal <=0.5 degC mismatch. No electrical or hardware success is pre-approved.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "All numerical requirements and fixture choices are independent ENGINEERING_DEFAULT decisions, not manufacturer facts. No part selections are prescribed.",
+      "id": "independent_defaults"
+    },
+    {
+      "description": "External fixture supplies only the stated power, stimulus, host and load. Required signal conversion and conditioning remain on this board.",
+      "id": "responsibility"
+    },
+    {
+      "description": "Named fabrication DRC profile CYCLE5_2L_FR4_1OZ: minimum finished trace width 0.20 mm, copper clearance 0.20 mm, plated drill 0.30 mm, annular ring 0.15 mm and copper-to-routed-edge clearance 0.30 mm. These are independent prototype fabrication defaults, not an assertion of any manufacturer capability.",
+      "id": "fabrication_drc_profile"
+    }
+  ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "probe_connector",
+          "port": "positive"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "input_positive"
+        }
+      ],
+      "id": "thermocouple_positive"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "probe_connector",
+          "port": "negative"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "input_negative"
+        }
+      ],
+      "id": "thermocouple_negative"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "host_link",
+          "port": "cs_n"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "cs_n"
+        }
+      ],
+      "id": "spi_cs_n"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "host_link",
+          "port": "sclk"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "sclk"
+        }
+      ],
+      "id": "spi_sclk"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "host_link",
+          "port": "mosi"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "mosi"
+        }
+      ],
+      "id": "spi_mosi"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "host_link",
+          "port": "miso"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "miso"
+        }
+      ],
+      "id": "spi_miso"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "power_entry",
+          "port": "board_supply"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "supply"
+        }
+      ],
+      "id": "board_supply_net"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "power_entry",
+          "port": "ground"
+        },
+        {
+          "function": "thermocouple_measurement",
+          "port": "ground"
+        }
+      ],
+      "id": "board_ground_net"
+    }
+  ],
+  "functions": [
+    {
+      "category": "thermocouple_acquisition_with_cold_junction_sensing",
+      "count": 1,
+      "description": "Type K differential acquisition and cold-junction compensation",
+      "id": "thermocouple_measurement",
+      "parameters": {
+        "absolute_temperature_error": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "cable_length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1000,
+          "note": "Independent competition design requirement.",
+          "unit": "mm"
+        },
+        "cold_junction_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "fixture_expanded_uncertainty": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.5,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "degC"
+        },
+        "hot_junction_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 300,
+          "min": 0,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "lead_loop_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 100,
+          "note": "Independent competition design requirement.",
+          "unit": "ohm"
+        },
+        "maximum_fresh_acquisition_interval": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.25,
+          "note": "Independent blind scope-review clarification.",
+          "unit": "s"
+        },
+        "sample_pair_skew": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.1,
+          "note": "Independent competition design requirement.",
+          "unit": "s"
+        },
+        "sensor_terminal_distance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5,
+          "note": "Independent competition design requirement.",
+          "unit": "mm"
+        },
+        "sensor_terminal_temperature_mismatch": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.5,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "terminal_temperature_difference": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.5,
+          "note": "Independent competition design requirement.",
+          "unit": "degC"
+        },
+        "uncertainty_coverage_factor": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent blind scope-review clarification.",
+          "unit": "1",
+          "value": 2
+        },
+        "update_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 4,
+          "note": "Independent competition design requirement.",
+          "unit": "Hz"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Accept one ungrounded Type K thermocouple through a two-terminal connector. Type K extension wire reaches the board terminals; transitions to board copper define the cold junction.",
+        "Core board hardware must acquire differential thermocouple voltage and physically sense the terminal cold-junction temperature. The host may perform documented Type K linearization and compensation arithmetic from board raw measurements; the host may not provide the cold-junction measurement.",
+        "Across the entire continuous hot-junction range 0 to 300 degC and terminal/board ambient range 15 to 35 degC, absolute board-indicated hot-junction error including conversion, linearization and cold-junction error shall not exceed 3 degC. Probe calibration and extension-wire inhomogeneity are excluded from board error and separately characterized. For each validation measurement, pass only if absolute measured error plus the fixture expanded uncertainty U (coverage factor k=2) is <=3 degC; U must be <=0.5 degC. Twelve specified discrete test points sample this continuous requirement but do not replace it; an evidence-backed between-point error bound is also required.",
+        "Operating hot-junction range is 0 to 300 degC and terminal/board ambient is 15 to 35 degC. Deliver genuinely new thermocouple samples at least four times per second and genuinely new cold-junction samples at least four times per second; each channel has at most 250 ms between fresh acquisitions. Each published measurement pair uses acquisitions whose effective sample timestamps differ by at most 100 ms. Repeating or re-labeling an old sample is not a fresh update.",
+        "Fixture has a floating thermocouple source, at most 100 ohm total loop resistance, at most 1 m unshielded twisted extension pair, no imposed common-mode voltage and no intentional RF disturbance. Provide input bias/return and filtering on board without relying on a grounded hot junction.",
+        "The two copper-transition terminal temperatures must differ by no more than 0.5 degC. The cold-junction sensor temperature must differ from EACH copper-transition temperature by no more than 0.5 degC, not merely their average, under the stated steady-state fixture. Locate the cold-junction sensor within 5 mm of the copper transition region; use an isothermal placement region away from dissipative circuitry.",
+        "No galvanic isolation, hazardous-voltage connection, open-wire diagnosis or probe supply is required."
+      ]
+    },
+    {
+      "category": "spi_measurement_host_connector",
+      "count": 1,
+      "description": "External host digital measurement interface",
+      "id": "host_link",
+      "parameters": {
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1000000,
+          "note": "Independent competition design requirement.",
+          "unit": "Hz"
+        },
+        "digital_fall_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2e-08,
+          "min": 2e-09,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        },
+        "digital_rise_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 2e-08,
+          "min": 2e-09,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 2,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "input_leakage_magnitude": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 1e-05,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "A"
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.8,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "io_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.465,
+          "min": 3.135,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        },
+        "load_capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3e-11,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "F"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.0005,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "A"
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 2.8,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.4,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "V"
+        },
+        "power_settle_time": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 0.1,
+          "note": "Independent fixture/interface default added by blind scope review.",
+          "unit": "s"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Use SPI with separate chip select, clock, host-to-board data and board-to-host data at 3.3 V logic, clock no faster than 1 MHz. Document SPI mode, transaction format, sample units/scaling and freshness indication.",
+        "Host controls acquisition and reads measurements; a board processor is optional, but analog acquisition and cold-junction sensing cannot be external.",
+        "Digital fixture default: both host and board receivers shall recognize inputs <=0.8 V as low and >=2.0 V as high. Both host and board active outputs shall provide <=0.4 V low and >=2.8 V high at the specified load throughout the declared board supply range. These are compatibility requirements, not measured capabilities.",
+        "Each active digital output drives at most 0.5 mA steady-state load and 30 pF total load including receiver, connector and fixture wiring. Each receiver input leakage magnitude is <=10 uA. Output 10%-90% rise and fall times at that load must be between 2 ns and 20 ns. Fixture logic high never exceeds the instantaneous board supply.",
+        "Power sequence is controlled, not arbitrary: connect common ground first; power the host with its board-directed signals held low and board-output receivers high-impedance; apply board power, allow 100 ms settling, then start transactions/clocks. For shutdown stop clocks, drive host outputs low, remove board power, then remove host power. Board-output receivers remain powered and high-impedance until board power is removed. No connector signal may power an unpowered endpoint.",
+        "Firmware and fixture must prevent contention; the host never actively drives the board data-output pin. No hot-plug operation is required."
+      ]
+    },
+    {
+      "category": "thermocouple_wire_termination",
+      "count": 1,
+      "description": "Two-terminal thermocouple wire termination",
+      "id": "probe_connector",
+      "parameters": {
+        "terminal_count": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Independent competition design requirement.",
+          "unit": "1",
+          "value": 2
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Mark positive and negative Type K polarity. Terminations and sensor placement form the board cold-junction region."
+      ]
+    },
+    {
+      "category": "regulated_dc_power_entry",
+      "count": 1,
+      "description": "Regulated external DC entry and board power distribution",
+      "id": "power_entry",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Accept the declared external regulated supply at the power connector and distribute it with implementation-required local decoupling. Any internally derived rails and their budgets remain on-board responsibilities; the source is not a substitute for core signal conversion."
+      ]
+    }
+  ],
+  "id": "T9",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.05,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "External regulated 3.3 V supply and common return.",
+      "id": "power",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.465,
+        "min": 3.135,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.002,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "Common-ground SPI host; logic endpoints must be compatible throughout the supply range. External host outputs may not exceed board supply.",
+      "id": "host",
+      "signals": [
+        "SCLK",
+        "CS_N",
+        "MOSI",
+        "MISO",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.465,
+        "min": 0,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 1e-06,
+        "note": "Independent competition design requirement.",
+        "unit": "A"
+      },
+      "description": "Floating Type K input; normal differential voltage envelope only, not a withstand rating. No intentional excitation; 1 uA maximum input current per lead.",
+      "id": "thermocouple",
+      "signals": [
+        "TC_P",
+        "TC_N"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 0.014,
+        "min": -0.002,
+        "note": "Independent competition design requirement.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "No mandatory mounting holes; fixture supports board edges with insulated clips. Board dimensions include connectors, excluding mating cables.",
+    "preferred_passives": "0603 or larger",
+    "profile": "CYCLE5_2L_FR4_1OZ",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Independent competition design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "power",
+      "host",
+      "thermocouple"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 15,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 45,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    },
+    "mounting": [],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 30,
+      "note": "Independent competition design requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D65",
+    "D112"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.05,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "function": "power_entry",
+        "id": "board_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.465,
+          "min": 3.135,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.05,
+          "note": "Independent competition design requirement.",
+          "unit": "A"
+        },
+        "description": "Regulated external DC supply; stated operating range applies at board connector.",
+        "function": "power_entry",
+        "id": "external_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.465,
+          "min": 3.135,
+          "note": "Independent competition design requirement.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "A compact non-isolated Type K thermocouple measurement board with on-board cold-junction sensing and a digital host interface.",
+  "title": "Single-channel thermocouple reader with local cold-junction sensing"
+}
