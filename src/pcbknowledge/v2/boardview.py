@@ -127,6 +127,17 @@ def _graphic(node, origin, angle):
     return None
 
 
+def _unprojected_copper(node, supported, label, unsupported):
+    """Do not silently discard conductive graphics that can join measured branches."""
+    for item in node[1:]:
+        if not isinstance(item, list) or not item or item[0] in supported:
+            continue
+        layer = field(item, 'layer', [''])[0]
+        layers = field(item, 'layers', [])
+        if any(str(value).endswith('.Cu') for value in [layer, *layers]):
+            unsupported.append(f'{label}: unprojected copper object {item[0]}')
+
+
 def _footprint(node, nets, unsupported, paste, zero_overrides):
     tags = [item[0] for item in node if isinstance(item, list) and item]
     if 'at' in tags and 'pad' in tags and tags.index('at') > tags.index('pad'):
@@ -136,6 +147,7 @@ def _footprint(node, nets, unsupported, paste, zero_overrides):
     if not refs or len(set(refs)) != 1 or not refs[0]:
         raise ValueError('Missing or conflicting footprint reference')
     ref = refs[0]
+    _unprojected_copper(node, {'pad'}, ref, unsupported)
     at = field(node, 'at', ['0', '0'])
     origin = point(at)
     angle = number(at[2]) if len(at) > 2 else 0.0
@@ -284,6 +296,7 @@ def board_from_text(text):
             nets[node[1]] = node[2]
             names.add(node[2])
         unsupported = []
+        _unprojected_copper(root, {'footprint', 'segment', 'arc', 'via', 'zone'}, 'Board', unsupported)
         footprints = {}
         setup = ['setup', *field(root, 'setup', [])]
         paste = _paste_settings(setup, {'paste_margin': 0.0, 'paste_ratio': 0.0}, board=True)

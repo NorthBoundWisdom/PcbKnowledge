@@ -789,6 +789,14 @@ checker modules; shared `layout.py` changes stay local to those handlers. KELVIN
 contract work covers only explicit sense/shunt mappings in `ina219-monitor`,
 `g2-input-monitor` and `t1-readback`; Ethan's placement and bring-up items are unchanged.
 
+Parser review found that copper drawings/text could be silently omitted from the
+measured board. The retained reader now tags unprojected board/footprint copper
+objects as unsupported, so they cannot preserve a layout PASS. Four new exported
+S-expression regressions and 34 existing layout/reference/return tests pass;
+independent review by `agent:/root/review_kelvin_checker` confirmed the original
+load-branch bypass is now NOT_CHECKABLE. Non-copper graphics and known copper
+primitives retain their prior behavior.
+
 - [ ] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad on
   that net, including a zone with several islands; only connected copper counts. Tests
   cover pass, too small, and a disconnected island.
