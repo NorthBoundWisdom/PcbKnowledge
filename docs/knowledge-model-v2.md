@@ -457,3 +457,15 @@ or proof of saved-file authenticity. Consumers validate a saved report's shape
 and consistency, then compare its identities and copied constraints with their
 own selected inputs. Schema validation alone does not establish that a saved
 report covers every rail or that its measured values came from the named board.
+
+### Selected passive paths and load budgets
+
+Passive-path checks bind source voltage, selected series resistance and current
+capacity to the accepted output interval, distribution loss and explicit current
+derating. Dual or quad parallel-capacitance checks sum the selected physical
+capacitors before applying retained-lower and positive-upper factors. These
+factors and source-rating conditions must match the declared operating envelope.
+A three-resistor load with an IC base-current allocation and a four-preload,
+four-consumer ledger keep each physical branch and remote allocation visible.
+Only the physical preload resistors establish minimum load; consumer allocations
+and resistive output-load budgets do not establish a nonzero minimum draw.

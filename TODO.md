@@ -858,10 +858,11 @@ Independent exit/park review passes 13 groups, including seven cited values and 
 Cycle 3, T5/T6 (Wisdom):
 
 - [ ] T5 DAC signal generator to A2 with three fresh synthesis attempts.
-Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate. T5 application and waveform checks remain in progress.
+Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate.
 Sampled-waveform calculator: 53 affected tests pass with exact selected-component and parameter bindings. Independent review fixed unenclosable decay and separated peak from cycle-mean residual bounds; 2,000 waveform comparisons support the conditional model. T5 operating predicates and source promotion remain pending.
 SPI/DDS scheduling: 57 affected tests pass with shared-clock rounding and accepted-interval checks. Independent review fixed omitted phase-word quantization in the sampling ratio and verified the integrated dispatcher; firmware edge placement and application bindings remain explicit requirements.
 SPI source bindings: independently verified STM32 PA4/PA5/PA7 capabilities retain the original pin map and prior provenance; 30 affected tests pass and all seven positive expansion hashes are unchanged.
+Physical budget checks: 74 affected tests pass for selected passive-path loss/current capacity, dual/quad effective capacitance, three pull branches plus base current, and four physical preloads/four consumer allocations. Independent review and dispatcher mutation tests pass; existing seven positive hashes remain unchanged.
 - [ ] T6 OLED and keypad board to A2 with three fresh synthesis attempts, then the cycle negative brief.
 
 ## Stage 17 — PcbAtlas consumer contract
