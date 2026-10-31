@@ -315,11 +315,49 @@
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 31,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 33,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 185,
+              "source": "source:st-rm0008"
+            }
+          ],
+          "name": "CAN_RX"
+        }
+      ],
       "name": "PA11",
       "number": "32",
       "type": "BIDIRECTIONAL"
     },
     {
+      "functions": [
+        {
+          "evidence": [
+            {
+              "page": 31,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 33,
+              "source": "source:st-stm32f103"
+            },
+            {
+              "page": 185,
+              "source": "source:st-rm0008"
+            }
+          ],
+          "name": "CAN_TX"
+        }
+      ],
       "name": "PA12",
       "number": "33",
       "type": "BIDIRECTIONAL"
@@ -402,7 +440,7 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
-    "notes": "GPIO capability update by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author; original creator retained. T5 append: PA4 GPIO_PUSH_PULL, PA5 SPI1_SCK, PA7 SPI1_MOSI; author agent:/root/research_fixed_themes; scoped reviewer appended.",
+    "notes": "GPIO: agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author. T5 PA4 GPIO, PA5 SCK, PA7 MOSI and T7 CAN_RX pin32/CAN_TX pin33: agent:/root/research_fixed_themes; scoped source review retained.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/g2_source_review",
       "agent:/root/implement_reference_layout/stage12_review"

@@ -1,5 +1,17 @@
 {
   "entries": {
+    "CAN_RX": {
+      "queries": [
+        "Q2",
+        "Q10"
+      ]
+    },
+    "CAN_TX": {
+      "queries": [
+        "Q2",
+        "Q10"
+      ]
+    },
     "GPIO_PUSH_PULL": {
       "queries": [
         "Q10",
