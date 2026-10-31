@@ -18,7 +18,8 @@ def fixture(root):
     digest = hashlib.sha256(board.read_bytes()).hexdigest()
     return {'placement': {'status': 'PASS'}, 'layout': {'checks': [
         {'result': 'PASS'}, {'result': 'NOT_CHECKABLE', 'reason': 'Kelvin branch proof unavailable'}]},
-        'drc': {'status': 'PASS', 'a4': 'PASS', 'board': str(board), 'input_sha256': {name: value for name, value in hashes.items() if name.startswith('board.')},
+        'drc': {'status': 'NOT_CHECKABLE', 'drc_status': 'PASS', 'exit_code': 0, 'finding_count': 0,
+                'a4': 'PASS', 'board': str(board), 'input_sha256': {name: value for name, value in hashes.items() if name.startswith('board.')},
                 'report': {'violations': [], 'unconnected_items': [], 'schematic_parity': []}},
         'fabrication': {'status': 'PASS', 'reread': {'status': 'PASS'}, 'input_sha256': digest,
                         'output': str(root), 'artifact_sha256': {name: hashes[name] for name in ('top.svg', 'bottom.svg')}},
@@ -76,6 +77,7 @@ class ReviewReadinessTests(unittest.TestCase):
             report = fixture(Path(directory))
             cases = [('bringup', 'range_coverage', 'UNKNOWN'), ('placement', 'status', 'FAIL'),
                      ('drc', 'a4', 'FAIL'), ('drc', 'status', 'NOT_RUN'),
+                     ('drc', 'drc_status', 'FAIL'), ('drc', 'exit_code', 5), ('drc', 'finding_count', 1),
                      ('drc', 'input_sha256', {}), ('fabrication', 'input_sha256', 'wrong')]
             for section, key, value in cases:
                 changed = deepcopy(report)
@@ -96,3 +98,11 @@ class ReviewReadinessTests(unittest.TestCase):
             path.write_text('not an SVG')
             report['fabrication']['artifact_sha256']['top.svg'] = hashlib.sha256(path.read_bytes()).hexdigest()
             self.assertFalse(owner_review_ready(report))
+
+    def test_aggregate_unknown_requires_a_corresponding_explained_layout_unknown(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = fixture(Path(directory))
+            report['layout']['checks'] = [{'result': 'PASS'}]
+            self.assertFalse(owner_review_ready(report))
+            report['drc']['status'] = 'PASS'
+            self.assertTrue(owner_review_ready(report))

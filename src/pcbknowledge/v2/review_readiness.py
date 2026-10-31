@@ -37,7 +37,11 @@ def _eligible(report):
            for row in checks if row['result'] == 'NOT_CHECKABLE'):
         return False
     drc = report.get('drc', {})
-    if drc.get('a4') != 'PASS' or drc.get('status') != 'PASS':
+    if (drc.get('a4') != 'PASS' or drc.get('drc_status') != 'PASS'
+            or drc.get('status') not in ('PASS', 'NOT_CHECKABLE')
+            or drc.get('exit_code') != 0 or drc.get('finding_count') != 0):
+        return False
+    if drc['status'] == 'NOT_CHECKABLE' and not any(row['result'] == 'NOT_CHECKABLE' for row in checks):
         return False
     native = drc.get('report', {})
     if any(native.get(key) != [] for key in ('violations', 'unconnected_items', 'schematic_parity')):
