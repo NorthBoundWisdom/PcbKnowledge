@@ -1,0 +1,991 @@
+{
+  "corpus_acceptance": false,
+  "evidence": {
+    "bytes": 1168550,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "d6f6b466543484dc47fe485c114d595aa23bf0d1c8255ddf9e33e32efb173241",
+    "submission_hashes": [
+      {
+        "graph_sha256": "a8615ae1fa55004bd741714b5fdac07a44f58eb46387bae2dcae6da0159b68c4",
+        "original_sha256": "e135c3b0127cb5b9698002b5e21b3d7836e11bdd820a07e56a47c25861405e1f"
+      },
+      {
+        "graph_sha256": "f72e3a8ca63c6064d53b1f18017b0697c5fd15c087a631a674f9c67504b0f8c2",
+        "original_sha256": "b77c190fbfd6c45a7eed51e7758560200e794d2a5d06b82b00a1b4022ca992b7"
+      },
+      {
+        "graph_sha256": "f71c71dfca13f9319083dffe1fc3e654c0df8800ace0e0afad03c4647d543df8",
+        "original_sha256": "ab3509a943078c340505a99d6c30bab42320bae5ecd01215617f8ecc815bbd84"
+      }
+    ]
+  },
+  "graph": {
+    "brief": "G1",
+    "connections": [
+      {
+        "endpoints": [
+          {
+            "instance": "entry",
+            "port": "VBUS"
+          },
+          {
+            "instance": "guard",
+            "port": "VIN"
+          }
+        ],
+        "net": "USB_RAW"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "guard",
+            "port": "VOUT"
+          },
+          {
+            "instance": "regulator",
+            "port": "VIN"
+          }
+        ],
+        "net": "USB_PROTECTED"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "regulator",
+            "port": "VOUT"
+          },
+          {
+            "instance": "monitor",
+            "port": "VDD"
+          },
+          {
+            "instance": "monitor",
+            "port": "SENSE_IN"
+          }
+        ],
+        "net": "REGULATED_UPSTREAM"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "monitor",
+            "port": "SENSE_OUT"
+          },
+          {
+            "instance": "controller",
+            "port": "VDD"
+          },
+          {
+            "instance": "power_light",
+            "port": "DRIVE"
+          },
+          {
+            "instance": "button",
+            "port": "VDD"
+          },
+          {
+            "instance": "pullups",
+            "port": "VDD"
+          },
+          {
+            "instance": "memory",
+            "port": "VDD"
+          },
+          {
+            "instance": "expansion",
+            "port": "VDD"
+          },
+          {
+            "instance": "serial",
+            "port": "VREF"
+          },
+          {
+            "instance": "debug",
+            "port": "VREF"
+          }
+        ],
+        "net": "LOGGER_3V3"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "entry",
+            "port": "GND"
+          },
+          {
+            "instance": "guard",
+            "port": "GND"
+          },
+          {
+            "instance": "regulator",
+            "port": "GND"
+          },
+          {
+            "instance": "monitor",
+            "port": "GND"
+          },
+          {
+            "instance": "controller",
+            "port": "GND"
+          },
+          {
+            "instance": "power_light",
+            "port": "GND"
+          },
+          {
+            "instance": "user_light_a",
+            "port": "GND"
+          },
+          {
+            "instance": "user_light_b",
+            "port": "GND"
+          },
+          {
+            "instance": "button",
+            "port": "GND"
+          },
+          {
+            "instance": "memory",
+            "port": "GND"
+          },
+          {
+            "instance": "expansion",
+            "port": "GND"
+          },
+          {
+            "instance": "serial",
+            "port": "GND"
+          },
+          {
+            "instance": "debug",
+            "port": "GND"
+          }
+        ],
+        "net": "GND"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "SDA"
+          },
+          {
+            "instance": "pullups",
+            "port": "SDA"
+          },
+          {
+            "instance": "monitor",
+            "port": "SDA"
+          },
+          {
+            "instance": "memory",
+            "port": "SDA"
+          },
+          {
+            "instance": "expansion",
+            "port": "SDA"
+          }
+        ],
+        "net": "I2C_SDA"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "SCL"
+          },
+          {
+            "instance": "pullups",
+            "port": "SCL"
+          },
+          {
+            "instance": "monitor",
+            "port": "SCL"
+          },
+          {
+            "instance": "memory",
+            "port": "SCL"
+          },
+          {
+            "instance": "expansion",
+            "port": "SCL"
+          }
+        ],
+        "net": "I2C_SCL"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "LED1"
+          },
+          {
+            "instance": "user_light_a",
+            "port": "DRIVE"
+          }
+        ],
+        "net": "USER_LED_A"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "LED2"
+          },
+          {
+            "instance": "user_light_b",
+            "port": "DRIVE"
+          }
+        ],
+        "net": "USER_LED_B"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "button",
+            "port": "SIGNAL"
+          },
+          {
+            "instance": "controller",
+            "port": "BUTTON"
+          }
+        ],
+        "net": "USER_BUTTON"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "SWDIO"
+          },
+          {
+            "instance": "debug",
+            "port": "SWDIO"
+          }
+        ],
+        "net": "SWDIO"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "SWCLK"
+          },
+          {
+            "instance": "debug",
+            "port": "SWCLK"
+          }
+        ],
+        "net": "SWCLK"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "NRST"
+          },
+          {
+            "instance": "debug",
+            "port": "NRST"
+          }
+        ],
+        "net": "NRST"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "UART_TX"
+          },
+          {
+            "instance": "serial",
+            "port": "TX"
+          }
+        ],
+        "net": "UART_TX"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "controller",
+            "port": "UART_RX"
+          },
+          {
+            "instance": "serial",
+            "port": "RX"
+          }
+        ],
+        "net": "UART_RX"
+      }
+    ],
+    "id": "stage17-g1-independent-smoke",
+    "instances": [
+      {
+        "block": "block:usb-c-5v-sink",
+        "id": "entry",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "A",
+            "value": 0.5
+          },
+          "output_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "V",
+            "value": 5
+          },
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "ohm",
+            "value": 5100
+          }
+        },
+        "ports": [
+          {
+            "name": "VBUS",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "usb_sink",
+          "usb"
+        ]
+      },
+      {
+        "block": "block:input-protection",
+        "id": "guard",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "VIN",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "VOUT",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "input_protection"
+        ]
+      },
+      {
+        "block": "block:ldo-fixed",
+        "id": "regulator",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "A",
+            "value": 0.15
+          },
+          "output_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "V",
+            "value": 3.3
+          }
+        },
+        "ports": [
+          {
+            "name": "VIN",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "VOUT",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "regulation"
+        ]
+      },
+      {
+        "block": "block:ina219-monitor",
+        "id": "monitor",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "SENSE_IN",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "SENSE_OUT",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SDA",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SCL",
+            "type": "INPUT"
+          }
+        ],
+        "requirements": [
+          "power_monitor"
+        ]
+      },
+      {
+        "block": "block:mcu-core",
+        "id": "controller",
+        "parameters": {
+          "clock_frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "Hz",
+            "value": 8000000
+          }
+        },
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SWDIO",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SWCLK",
+            "type": "INPUT"
+          },
+          {
+            "name": "NRST",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "LED1",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "LED2",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "BUTTON",
+            "type": "INPUT"
+          },
+          {
+            "name": "SDA",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SCL",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "UART_TX",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "UART_RX",
+            "type": "INPUT"
+          }
+        ],
+        "requirements": [
+          "mcu"
+        ]
+      },
+      {
+        "block": "block:led-indicator",
+        "id": "power_light",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "DRIVE",
+            "type": "INPUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "power_led"
+        ]
+      },
+      {
+        "block": "block:led-indicator",
+        "id": "user_light_a",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "DRIVE",
+            "type": "INPUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "user_leds"
+        ]
+      },
+      {
+        "block": "block:led-indicator",
+        "id": "user_light_b",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "DRIVE",
+            "type": "INPUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "user_leds"
+        ]
+      },
+      {
+        "block": "block:button-input",
+        "id": "button",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SIGNAL",
+            "type": "OUTPUT"
+          }
+        ],
+        "requirements": [
+          "user_button"
+        ]
+      },
+      {
+        "block": "block:i2c-pullups",
+        "id": "pullups",
+        "parameters": {
+          "bus_frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "Hz",
+            "value": 100000
+          },
+          "capacitance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "F",
+            "value": 1e-10
+          }
+        },
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "SDA",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SCL",
+            "type": "BIDIRECTIONAL"
+          }
+        ],
+        "requirements": [
+          "i2c_bus"
+        ]
+      },
+      {
+        "block": "block:i2c-eeprom",
+        "id": "memory",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SDA",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SCL",
+            "type": "INPUT"
+          }
+        ],
+        "requirements": [
+          "eeprom"
+        ]
+      },
+      {
+        "block": "block:i2c-header",
+        "id": "expansion",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "A",
+            "value": 0.04
+          }
+        },
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SDA",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SCL",
+            "type": "BIDIRECTIONAL"
+          }
+        ],
+        "requirements": [
+          "i2c_expansion",
+          "i2c_header"
+        ]
+      },
+      {
+        "block": "block:uart-header",
+        "id": "serial",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "A",
+            "value": 0.005
+          }
+        },
+        "ports": [
+          {
+            "name": "VREF",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "TX",
+            "type": "INPUT"
+          },
+          {
+            "name": "RX",
+            "type": "OUTPUT"
+          }
+        ],
+        "requirements": [
+          "uart",
+          "uart_header"
+        ]
+      },
+      {
+        "block": "block:swd-header",
+        "id": "debug",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "A",
+            "value": 0.005
+          }
+        },
+        "ports": [
+          {
+            "name": "VREF",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SWDIO",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SWCLK",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "NRST",
+            "type": "BIDIRECTIONAL"
+          }
+        ],
+        "requirements": [
+          "debug",
+          "swd"
+        ]
+      },
+      {
+        "block": "block:mounting-holes",
+        "id": "mounts",
+        "parameters": {
+          "clearance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "mm",
+            "value": 6
+          },
+          "drill": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "mm",
+            "value": 3.2
+          },
+          "length": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "G1 brief operating budget or fixed catalog contract.",
+            "unit": "mm",
+            "value": 3.5
+          }
+        },
+        "ports": [],
+        "requirements": [
+          "mounting"
+        ]
+      }
+    ],
+    "interface_status": "PLANNED_BLOCK_CONTRACTS",
+    "pin_configurations": [
+      {
+        "initial_state": "LOW",
+        "instance": "controller",
+        "mode": "GPIO_PUSH_PULL",
+        "port": "LED1"
+      },
+      {
+        "initial_state": "LOW",
+        "instance": "controller",
+        "mode": "GPIO_PUSH_PULL",
+        "port": "LED2"
+      }
+    ],
+    "port_requirements": [
+      {
+        "function": "UART_TX",
+        "instance": "controller",
+        "port": "UART_TX"
+      },
+      {
+        "function": "GPIO_PUSH_PULL",
+        "instance": "controller",
+        "port": "LED1"
+      },
+      {
+        "function": "GPIO_PUSH_PULL",
+        "instance": "controller",
+        "port": "LED2"
+      }
+    ],
+    "requirements": [
+      "closed_world",
+      "monitor_scope"
+    ],
+    "schema": "pcbknowledge.block-graph.v2",
+    "status": "DRAFT"
+  },
+  "independent_review": {
+    "author": "agent:/root/advance_knowledge_development/stage17_g1_author",
+    "blocking_findings": [],
+    "brief_sha256": "b4bd82ff53b91fffe639129234c0afa591610785b6622dac40da0bda65d46abd",
+    "bringup_plan_difference": {
+      "actual_range_coverage": "UNKNOWN",
+      "actual_unresolved_rails": [
+        "CONTROLLER_VDDA",
+        "LOGGER_3V3",
+        "REGULATED_UPSTREAM",
+        "USB_PROTECTED",
+        "USB_RAW"
+      ],
+      "assessment": "Optional post-A2 measurement windows were not supplied by the blind author. Do not claim reference bring-up equivalence, COMPLETE coverage, or A6 acceptance for this submitted graph.",
+      "author_graph_has_bringup": false,
+      "reference_has_D67_windows": true
+    },
+    "bundle_commit": "759ec7b6d2a3ea75f8c698c5b7a163df4da2b7fa",
+    "bundle_sha256": "2776c642a251775cd8b93bc57768670696cf63c5901fa765146b8190cbfdfe82",
+    "evidence_sha256": {
+      "author-output/final-author-report.json": "356918c1b9dd78f97d74b9e5b46bec899b97e3060d30f9da98da42d2d434a935",
+      "export-result.json": "f19bb1dfa8827bb1eb4c5591a5aa81a8787c54291ce848fcb86f535b304a2c63",
+      "initial-packet.json": "523d802bf05493fd2ac200f0a81d7016aaf98e64e2c229639ad0a2bc0f29cb19",
+      "input.json": "9d0093c8cb7812545d48eeee4be3e11977b7dcac9d8b78d97b5cfa1404e9c747",
+      "layout-cli.json": "c0d00ca57468955a5a82d69bf3906a119fd0317bd051d9cf17c41cc121e8adf6",
+      "submissions.json": "90dbcc697a9b7452b8e1cf461b84a83e70c236562256d5a3a6c33d95fa95be99",
+      "transcript.json": "e91b53092200411f7016339c14afe8e0bbcafdcfda9a4dbbaaa26dfbbbdc8161"
+    },
+    "graph_sha256": "f71c71dfca13f9319083dffe1fc3e654c0df8800ace0e0afad03c4647d543df8",
+    "independence": {
+      "author_attests_no_reference_access": true,
+      "broker_reports_fresh_fork_none": true,
+      "limitations": "Reviewed preserved packets, transcript and author attestation; no claim of enforced filesystem isolation or independently observed complete author filesystem history. Hashes identify preserved bytes, not signatures.",
+      "reference_read_by_reviewer_only_after_author_freeze": true,
+      "supplied_packets_contain_only_brief_schema_skill_decisions_allowed_queries_and_own_feedback": true
+    },
+    "input_identity": {
+      "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+      "catalog_tree": "0960a8d35d18723678fd97e62a78c7231df05364",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "instance_mapping": {
+      "button": "button",
+      "controller": "mcu",
+      "debug": "swd",
+      "entry": "usb",
+      "expansion": "i2c_header",
+      "guard": "protection",
+      "memory": "eeprom",
+      "monitor": "monitor",
+      "mounts": "mounting",
+      "power_light": "power_led",
+      "pullups": "i2c",
+      "regulator": "ldo",
+      "serial": "uart",
+      "user_light_a": "user_led1",
+      "user_light_b": "user_led2"
+    },
+    "numeric_inputs_checked": [
+      "USB 5 V / 0.5 A and two 5100 ohm CC resistors",
+      "LDO 3.3 V / 0.15 A",
+      "8 MHz crystal",
+      "100 kHz / 100 pF I2C",
+      "SWD/I2C/UART expansion 5/40/5 mA",
+      "M3 mounting drill 3.2 mm, keepout diameter 6 mm, edge offset 3.5 mm"
+    ],
+    "observed_handoff": {
+      "export_status": "EXPORTED",
+      "finding_counts": {
+        "FAIL": 23,
+        "NOT_CHECKABLE": 8,
+        "PASS": 25
+      },
+      "identity_result": "PASS",
+      "layout_result": "FAIL",
+      "report_identity": {
+        "block_graph_sha256": "f71c71dfca13f9319083dffe1fc3e654c0df8800ace0e0afad03c4647d543df8",
+        "board_sha256": "77cdd27920d20abd6812de81ab0cf3445c01c2ece9eb45096601e108b7c509f2",
+        "bundle_commit": "759ec7b6d2a3ea75f8c698c5b7a163df4da2b7fa",
+        "intent_sha256": "f3a11740ef7dfbc76d1c686deed77deae87d80d55b318b2417cdbdccb9d8d5f7"
+      },
+      "routing_certified": false
+    },
+    "orchestrator": "agent:/root/advance_knowledge_development",
+    "original_graph_sha256": "ab3509a943078c340505a99d6c30bab42320bae5ecd01215617f8ecc815bbd84",
+    "rationale": "Equivalent to the pinned G1 reference for the brief and A2 electrical design, not byte-identical or equivalent in later bring-up-plan coverage. An explicit bijection preserves all 15 block instances, numeric parameters, units, conditions and every connected port set. The monitor_scope requirement moves from the monitor instance to graph requirements without changing the monitored circuit. Added supported UART_TX/LED port requirements and LOW push-pull LED configurations preserve the design. Independent replay reaches EXPANDED with 96 passing checks and no refusals. This is one skill smoke attempt, not three-author corpus acceptance.",
+    "reference_graph_sha256": "b502bfde3abdab60824e91b2b34dda7e126f63b246ecf03c78653574ed09f8a3",
+    "remaining_boundaries": [
+      "Single author with three revisions is not three independent authors.",
+      "Parked handoff is FAIL and is not A3/A4/A5 acceptance.",
+      "Hardware observations remain NOT_RUN.",
+      "Do not retrofit reference D67 windows into the original blind submission or rewrite historical hashes."
+    ],
+    "review_checklist_scope": {
+      "independent_reference_comparison": true,
+      "negative_revisions_preserved": true,
+      "new_source_facts_or_thresholds": false,
+      "no_repo_changes": true,
+      "source_original_sampling": "N/A: graph-only use of pinned existing catalog; no new manufacturer fact, package drawing or pin map authored. This review does not reverify all underlying catalog source PDFs."
+    },
+    "reviewer": "agent:/root/review_stage_zero",
+    "schema": "pcbknowledge.independent-smoke-review.v1",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "verdict": "EQUIVALENT",
+    "verification": {
+      "bundle_and_skill_hashes_match": true,
+      "check_results": {
+        "PASS": 96
+      },
+      "components": 46,
+      "failed_queries_preserved": 1,
+      "final_checks": 96,
+      "nets": 25,
+      "original_revisions_verified": 3,
+      "packet_hashes_checked": 8,
+      "refusals": [],
+      "revision_feedback_replayed_exactly": true,
+      "revision_statuses": [
+        "REFUSED",
+        "REFUSED",
+        "EXPANDED"
+      ],
+      "selected_brief_and_graph_schema_match_initial_packet": true,
+      "successful_queries_rechecked_against_bundle": 4
+    }
+  },
+  "receipt": {
+    "agent": "agent:/root/advance_knowledge_development/stage17_g1_author",
+    "brief_sha256": "b4bd82ff53b91fffe639129234c0afa591610785b6622dac40da0bda65d46abd",
+    "bundle_commit": "759ec7b6d2a3ea75f8c698c5b7a163df4da2b7fa",
+    "bundle_sha256": "2776c642a251775cd8b93bc57768670696cf63c5901fa765146b8190cbfdfe82",
+    "equivalence_review": "Equivalent to the pinned G1 reference for the brief and A2 electrical design, not byte-identical or equivalent in later bring-up-plan coverage. An explicit bijection preserves all 15 block instances, numeric parameters, units, conditions and every connected port set. The monitor_scope requirement moves from the monitor instance to graph requirements without changing the monitored circuit. Added supported UART_TX/LED port requirements and LOW push-pull LED configurations preserve the design. Independent replay reaches EXPANDED with 96 passing checks and no refusals. This is one skill smoke attempt, not three-author corpus acceptance.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "graph_sha256": "f71c71dfca13f9319083dffe1fc3e654c0df8800ace0e0afad03c4647d543df8",
+    "initial_packet_sha256": "523d802bf05493fd2ac200f0a81d7016aaf98e64e2c229639ad0a2bc0f29cb19",
+    "input_identity": {
+      "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+      "catalog_tree": "0960a8d35d18723678fd97e62a78c7231df05364",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/advance_knowledge_development",
+    "reference_accessed": false,
+    "reviewer": "agent:/root/review_stage_zero",
+    "reviewer_verdict": "EQUIVALENT",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "e91b53092200411f7016339c14afe8e0bbcafdcfda9a4dbbaaa26dfbbbdc8161"
+  },
+  "scope": "SINGLE_SKILL_SMOKE"
+}

@@ -886,10 +886,16 @@ itself is not edited from this repository.
   verifies context separation, per-kind rates, provenance and input/output protections.
 - [x] (ethan) Compare ADR-023 with what `expand` and the handoff emit; fix or record each difference.
   Write one consumer guide in `docs/`: bundle, `expand`, handoff, `layout check`, refusals.
-- [ ] (ethan) Rewrite `.codex/skills/` and any remaining docs that still assume the retired pipeline, and
+- [x] (ethan) Rewrite `.codex/skills/` and any remaining docs that still assume the retired pipeline, and
   rerun one synthesis attempt through the updated skill.
+  One fresh query-mediated G1 author reached EXPANDED after two preserved refusals;
+  independent review confirms circuit equivalence, not three-author corpus acceptance.
+  Parked layout remains FAIL and the new graph has five UNKNOWN bring-up ranges.
 
 Exit: a consumer can go from a pinned bundle to a judged board using only the guide and the schemas.
+Stage 17 exit: full gate passes Build/Test 944/944, 204 records and Package; independent
+review covers report contracts, conformance and fresh skill replay. Exact CLI replay judges the
+parked board FAIL; the single attempt does not change corpus or hardware acceptance.
 
 ## Owner questions
 
