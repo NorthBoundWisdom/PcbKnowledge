@@ -847,6 +847,8 @@ The exact pack source omits the NTC reference temperature, beta tolerance and fu
 - [x] (wisdom) A new negative brief with a typed expected refusal, 3/3.
 N5 receipt: three fresh query-mediated authors on bundle `d1f1baa4fb7d319087a9e4faa251fd70d968d44b` return the expected refusal, 3/3. Independent review authenticated 41 response rows and all original outputs; per-attempt archives are at most 3,189 bytes. Cycle 1: T1/T2 remain parked below A2; N5 passes its negative contract.
 New cache-only attempt descriptors and authenticated local import pass 30 affected tests; independent review fixed CRLF checkout and ancestor-alias handling. Historical replay remains intact; CI audits new metadata, while full replay requires the original local evidence.
+Cycle 1 gate `60cd99dc817d857b4d9a7c3544edf32075a31bce`: Python 3.12.14/Git 2.52.0; `for action in config build test package; do python3 configs/pcbknowledge_workflow.py "$action"; done`, `python3 configs/pcbknowledge_agent.py --repo . v2 validate` and all AGENTS section 10 guards pass. Build/Test each pass 823 tests with zero skips; 204 records validate and Package passes.
+Independent exit/park review passes 13 groups, including seven cited values and two pin maps. Reconciliation with Ethan `0b1f64a` passes 26 affected tests; T1/T2 stay below A2, while Cycle 3 is claimed for Wisdom.
 
 ## Stage 17 — PcbAtlas consumer contract
 
