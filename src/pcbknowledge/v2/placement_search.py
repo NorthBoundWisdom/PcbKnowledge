@@ -216,17 +216,47 @@ class GridSearch:
                 return ref, values
         return best[1], best[2]
 
+    def connected_ready(self, ready):
+        """Choose one deterministic rule-connected near cluster, without batching unrelated groups."""
+        linked = {}
+        for ref in sorted(ready):
+            for _, _, refs in self.local_rules[ref]:
+                for endpoint in refs:
+                    linked.setdefault(endpoint, set()).add(ref)
+        remaining, components = set(ready), []
+        while remaining:
+            component, pending = set(), {min(remaining)}
+            while pending:
+                ref = min(pending)
+                pending.remove(ref)
+                component.add(ref)
+                remaining.discard(ref)
+                for _, _, refs in self.local_rules[ref]:
+                    for endpoint in refs:
+                        pending.update(linked.get(endpoint, set()) - component)
+            components.append(component)
+        candidates = [component for component in components if len(component) >= 2]
+        if not candidates:
+            return set()
+        return min(candidates, key=lambda component: min(
+            _priority(ref, self.positions, self.geometry, self.prepared, self.mechanical)
+            for ref in component))
+
     def cluster(self):
         if (self.edge | self.mechanical) - self.positions.keys():
             return None
         ready = {ref for ref in self.geometry.keys() - self.positions.keys() if ref not in self.edge
                  and any(rule['kind'] == 'PLACE_NEAR' and (refs - {ref}) <= self.positions.keys()
                          for _, rule, refs in self.local_rules[ref])}
-        if not ready:
+        near_attached = bool(ready)
+        if near_attached:
+            ready = self.connected_ready(ready)
+        if not near_attached:
             ready = {ref for ref in self.geometry.keys() - self.positions.keys() if ref not in self.edge
                      and any(rule['kind'] == 'GROUP' and (refs - {ref}) & self.positions.keys()
                              for _, rule, refs in self.local_rules[ref])}
-        if len(ready) < 2 or any(len(refs & ready) > 2 for _, _, refs in self.rules):
+        if len(ready) < 2 or any(len(refs & ready) > 2 and (not near_attached or rule['kind'] != 'GROUP')
+                                 for _, rule, refs in self.rules):
             return None
         return {ref: self.candidates(ref) for ref in sorted(ready)}
 

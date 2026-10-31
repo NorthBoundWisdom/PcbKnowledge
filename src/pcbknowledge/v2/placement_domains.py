@@ -1,6 +1,7 @@
 """Bitset propagation of pairwise courtyard and placement constraints."""
 from bisect import bisect_left, bisect_right
 import math
+from itertools import combinations
 
 from .placement import EPSILON, GROUP_MAX_DISTANCE_MM, PlacementError, _rule_ok
 
@@ -49,6 +50,10 @@ class ClusterSearch:
         self.cache, self.pair_rules = {}, {}
         for index, rule, refs in owner.rules:
             unresolved = refs & domains.keys()
+            if rule['kind'] == 'GROUP':
+                for pair in combinations(sorted(unresolved), 2):
+                    self.pair_rules.setdefault(frozenset(pair), []).append(rule)
+                continue
             if len(unresolved) > 2:
                 raise PlacementError('Cluster requires pairwise unresolved constraints', constraints=(index,))
             if len(unresolved) == 2:
