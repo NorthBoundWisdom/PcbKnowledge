@@ -31,6 +31,9 @@ def validate_intent(catalog, intent, *, bundle_commit):
             if (ref, number) in connections:
                 raise ValueError('Intent pin connected more than once')
             connections[ref, number] = name
+    from .single_supply import validate_projection as validate_single_supply
+    if intent['status'] == 'EXPANDED':
+        validate_single_supply(parts, connections, intent)
     from .bringup_contract import validate_bringup, bringup_sources
     validate_bringup(intent, catalog)
     used.update(bringup_sources(intent.get('bringup', {})))
@@ -197,6 +200,18 @@ def _validate_checks_and_closure(catalog, intent, parts, used):
 
 
 def _check_pin_support(ref, part, pin, key, ground, parts, connections, component_nets, add):
+    if pin['type'] == 'POWER_IN' and part.get('single_supply_return'):
+        from .single_supply import binding
+        descriptor = part['single_supply_return']
+        if pin['number'] in (descriptor['positive_pin'], descriptor['negative_pin']):
+            try:
+                binding(parts, connections, ref)
+                passed = True
+            except ValueError:
+                passed = False
+            add('decoupling:' + ref + ':' + pin['number'], passed,
+                'Single-supply pair has sourced nominal bypass; negative terminal serves as return')
+            return
     if pin['type'] == 'POWER_IN':
         from .bootstrap import decoupling
         try:

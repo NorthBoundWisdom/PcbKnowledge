@@ -850,6 +850,12 @@ New cache-only attempt descriptors and authenticated local import pass 30 affect
 Cycle 1 gate `60cd99dc817d857b4d9a7c3544edf32075a31bce`: Python 3.12.14/Git 2.52.0; `for action in config build test package; do python3 configs/pcbknowledge_workflow.py "$action"; done`, `python3 configs/pcbknowledge_agent.py --repo . v2 validate` and all AGENTS section 10 guards pass. Build/Test each pass 823 tests with zero skips; 204 records validate and Package passes.
 Independent exit/park review passes 13 groups, including seven cited values and two pin maps. Reconciliation with Ethan `0b1f64a` passes 26 affected tests; T1/T2 stay below A2, while Cycle 3 is claimed for Wisdom.
 
+Cycle 3, T5/T6 (Wisdom):
+
+- [ ] T5 DAC signal generator to A2 with three fresh synthesis attempts.
+Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate. T5 application and waveform checks remain in progress.
+- [ ] T6 OLED and keypad board to A2 with three fresh synthesis attempts, then the cycle negative brief.
+
 ## Stage 17 — PcbAtlas consumer contract
 
 PcbAtlas has no PcbKnowledge integration yet. These items make the contract ready from this side; PCBAtlas

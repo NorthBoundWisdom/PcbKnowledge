@@ -233,6 +233,8 @@ class Catalog:
         validate_part_functions(self, part)
         from .pin_defaults import validate_unconnected_states
         validate_unconnected_states(self, part)
+        from .single_supply import validate_part as validate_single_supply
+        validate_single_supply(part, self.evidence)
         for pin in pins.values():
             alias = pin.get('same_net_as')
             if alias and (alias not in pins or alias == pin['number'] or 'same_net_as' in pins[alias]):

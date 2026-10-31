@@ -15,6 +15,13 @@ def _decoupling_options(catalog, parts, connections, ref, part, pin, bindings, a
     descriptors = validate_part(part, catalog.evidence) if part.get('bootstrap_supplies') else []
     descriptor = next((d for d in descriptors
                        if pin and d['bootstrap_pin'] == pin['number']), None)
+    from .single_supply import binding
+    single = part.get('single_supply_return')
+    if single and pin and pin['number'] in (single['positive_pin'], single['negative_pin']):
+        if pin['number'] == single['negative_pin']:
+            return []
+        chosen = binding(parts, connections, ref, catalog.evidence)['capacitor']
+        return [{**bindings, 'decoupling_capacitor': chosen}]
     if descriptor is not None:
         chosen, _, _ = capacitor_binding(parts, connections, ref, descriptor, catalog.evidence)
         candidates = [chosen]

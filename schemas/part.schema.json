@@ -339,6 +339,36 @@
         ],
         "additionalProperties": false
       }
+    },
+    "single_supply_return": {
+      "type": "object",
+      "properties": {
+        "positive_pin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "negative_pin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capacitance_nominal": {
+          "$ref": "quantity.schema.json"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "evidence.schema.json"
+          }
+        }
+      },
+      "required": [
+        "positive_pin",
+        "negative_pin",
+        "capacitance_nominal",
+        "evidence"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [

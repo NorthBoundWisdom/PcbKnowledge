@@ -390,3 +390,25 @@ and final output before writing only `.pcbknowledge/evals/sha256/`. It does not
 rewrite a receipt or source and will not replace a different existing cache file.
 The evidence object contains `initial_packet`, `submissions`, `transcript`, and
 optionally `author_reports`, with the original field values and submission text.
+
+### Single-supply return pairs
+
+A part may declare `single_supply_return` with exact `positive_pin` and
+`negative_pin`, source/page evidence, and a sourced `capacitance_nominal` quantity.
+Both terminals remain `POWER_IN`. This contract supports only the documented
+single-supply connection, not arbitrary dual supplies or pin-name exceptions.
+
+Expansion qualifies the negative terminal only on an actual board-source ground,
+with the positive terminal on a distinct supplied net and a sourced ceramic
+capacitor of the specified nominal value between the pair. The nominal bypass
+requirement does not claim effective capacitance. Other power terminals and power
+ports retain ordinary power-to-ground short and source-path checks. The positive
+terminal keeps its existing decoupling placement rule; the qualified negative
+terminal is a return, not a request for a capacitor to itself.
+
+The optional `single_supply_returns` intent projection records the exact pair,
+actual nets, selected capacitor and source anchors. Intent validation reconstructs
+this topology projection and rejects absent or altered receipts. Actual board
+source-path authority remains graph expansion and deterministic expansion replay;
+the projection alone is not a second independent proof of a power source. Legacy
+parts generate no new field, preserving historical positive expansion identities.

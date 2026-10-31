@@ -307,9 +307,11 @@ class _Expansion:
         for name, pins in sorted(nets.items()):
             types = kinds.get(name, set())
             for endpoint in pins:
-                types.add(next(
-                    p['type'] for p in self.parts[endpoint['ref']]['pins'] if p['number'] == endpoint['pin']
-                ))
+                from .single_supply import negative_pin
+                part = self.parts[endpoint['ref']]
+                pin = endpoint['pin']
+                if not negative_pin(part, pin):
+                    types.add(next(p['type'] for p in part['pins'] if p['number'] == pin))
             power = bool(types & {'POWER_IN','POWER_OUT','POWER_SINK'})
             ground = 'GROUND' in types
             if power and ground:
@@ -368,6 +370,16 @@ class _Expansion:
                 self.intent['checks'].append({'id': 'bootstrap:topology', 'result': 'FAIL',
                                               'reason': str(error)[:256]})
                 self.refuse('CHECK_FAILED', 'bootstrap:topology', error)
+        pin_nets = {key: self.resolved[node] for key, node in self.pin_nodes.items()}
+        single_returns = set()
+        if any(part.get('single_supply_return') for part in self.parts.values()):
+            from .single_supply import qualify as qualify_single
+            try:
+                single_returns, receipts = qualify_single(
+                    self.parts, pin_nets, self.powered, self.source_grounds, self.catalog.evidence)
+                self.intent['single_supply_returns'] = receipts
+            except ValueError as error:
+                self.refuse('CHECK_FAILED', 'single_supply_return', error)
         for ref, part in self.parts.items():
             for pin in part['pins']:
                 if pin['type'] not in ('POWER_IN','GROUND'):
@@ -376,7 +388,7 @@ class _Expansion:
                 net = self.resolved.get(node)
                 allowed = self.powered if pin['type']=='POWER_IN' else self.source_grounds
                 bootstrap = pin['type'] == 'POWER_IN' and (ref, pin['number']) in bootstrap_pins
-                passed = net in allowed or bootstrap
+                passed = net in allowed or bootstrap or (ref, pin['number']) in single_returns
                 identity = 'source:'+ref+':'+pin['number']
                 self.intent['checks'].append({'id':identity, 'result':'PASS' if passed else 'FAIL',
                                          'reason': ('Source-backed floating bootstrap has powered charger'

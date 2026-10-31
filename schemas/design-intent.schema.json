@@ -609,6 +609,56 @@
     },
     "bringup": {
       "$ref": "#/$defs/bringup"
+    },
+    "single_supply_returns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "component": {
+            "type": "string",
+            "minLength": 1
+          },
+          "positive_pin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "negative_pin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "supply_net": {
+            "type": "string",
+            "minLength": 1
+          },
+          "return_net": {
+            "type": "string",
+            "minLength": 1
+          },
+          "capacitor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "evidence.schema.json"
+            }
+          }
+        },
+        "required": [
+          "component",
+          "positive_pin",
+          "negative_pin",
+          "supply_net",
+          "return_net",
+          "capacitor",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
