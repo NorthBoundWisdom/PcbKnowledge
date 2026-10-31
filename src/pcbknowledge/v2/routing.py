@@ -10,6 +10,7 @@ from pcbknowledge.v2.handoff_rules import net_widths
 from .layout_tools import derived_path, run_bridge, run_router
 from .specctra import configure_dsn, validate_session, verify_native_vias
 from .routing_planes import project_routing_planes
+from .routing_states import normalize_native_wire_states
 
 
 def input_fingerprints(board):
@@ -62,7 +63,9 @@ def _route(board, directory, intent, catalog, tools, root, result):
         return result['export_dsn']['status']
     verify_native_vias(dsn.read_text(), catalog.get(intent['fab_profile'], 'fab_profile'))
     projected, result['dsn_projection'] = project_routing_planes(dsn.read_text(), parse_board(board))
-    dsn.write_text(configure_dsn(projected, intent, catalog), encoding='utf-8')
+    configured = configure_dsn(projected, intent, catalog)
+    normalized, result['wire_states'] = normalize_native_wire_states(configured, board.read_text())
+    dsn.write_text(normalized, encoding='utf-8')
     session = directory / 'routing.ses'
     result['router'] = run_router(dsn, session, tools, root=root, directory=directory / 'process-router')
     if result['router']['status'] != 'PASS':

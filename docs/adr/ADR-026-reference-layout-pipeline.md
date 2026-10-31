@@ -64,3 +64,18 @@ against the current domain; all support scans and queue work consume the shared
 search budget. Loop and full-board checks still run on completed assignments.
 Resource exhaustion and finite heuristic exhaustion are not geometric
 infeasibility proofs. Synthetic exhaustive-oracle tests preserve every solution.
+
+### Existing copper in the router projection
+
+KiCad 9 exports unlocked copper with DSN `type route`. Freerouting 2.5.0's
+`Wiring.calcFixed` treats that token as `USER_FIXED`, whereas `normal` is
+`UNFIXED`. The pipeline translates only `route` to `normal` for a paired native
+export from a board without locked copper or unsupported groups. Explicit
+fixed states remain unchanged; malformed and unknown states refuse. The
+projection preserves every other DSN node and records input/output hashes.
+
+The installed release JAR's scanner and whole-board reader independently
+confirmed the state change. This corrects router access to movable existing
+copper; it does not change widths, clearances, nets, placement or DRC rules.
+The final session, native board, layout and DRC checks remain authoritative.
+Source: [Freerouting 2.5.0 Wiring parser](https://github.com/freerouting/freerouting/blob/v2.5.0/src/main/java/app/freerouting/io/specctra/parser/Wiring.java).
