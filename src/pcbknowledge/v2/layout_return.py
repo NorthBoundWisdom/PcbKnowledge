@@ -64,6 +64,7 @@ def may_contact(at, size, polygon):
 
 def reference_contact(board, net, layer, polygon):
     """True proves solid contact, None marks possible unmeasured contact."""
+    from .layout_guard_contacts import pad_void_ambiguous, possible_pad_shape
     uncertain = False
     for footprint in board['footprints'].values():
         for pads in footprint['pads'].values():
@@ -72,7 +73,8 @@ def reference_contact(board, net, layer, polygon):
                     continue
                 solid = pad.get('kind') == 'smd' and not pad.get('drill') and not pad.get('geometry_unsupported')
                 if solid and contains(point(pad['at']), [point(p) for p in polygon]):
-                    return True
+                    if not pad_void_ambiguous(board, possible_pad_shape(pad)[0]):
+                        return True
                 uncertain |= may_contact(pad['at'], pad['size'], polygon)
     for via in board['vias']:
         if via['net'] == net:
@@ -102,7 +104,7 @@ def check_return_path(board, rule):
     """Require the entire track-width corridor on the opposite copper layer.
 
     Each covering polygon must directly contact a physical return-net pad. This
-    measures observed straight routes only, not signal routing completeness.
+    measures observed routes only, not signal routing completeness.
     """
     try:
         if board.get('unsupported') or set(board.get('copper_layers') or []) != {'F.Cu', 'B.Cu'}:
@@ -111,18 +113,24 @@ def check_return_path(board, rule):
             raise ValueError('Closed rectangular outline without board slots required')
         if rule['net'] == rule['return_net']:
             raise ValueError('Signal and return nets must differ')
-        if any(item['net'] == rule['net'] for kind in ('arcs', 'vias') for item in board[kind]):
-            raise ValueError('Signal arcs and layer transitions need another measurement method')
+        if any(item['net'] == rule['net'] for item in board['vias']):
+            raise ValueError('Signal layer transitions need another measurement method')
         segments = [item for item in board['segments'] if item['net'] == rule['net']]
-        if not segments:
-            raise ValueError('No routed signal segments to measure')
+        arcs = [item for item in board['arcs'] if item['net'] == rule['net']]
+        if not segments and not arcs:
+            raise ValueError('No routed signal segments or arcs to measure')
+        if len({item['layer'] for item in segments + arcs}) != 1:
+            raise ValueError('Signal layer transitions need another measurement method')
+        from .layout_return_arcs import measure_arc
+        measured_arcs = [measure_arc(board, rule, arc, index) for index, arc in enumerate(arcs)]
         measured = [measure_segment(board, rule, segment, index) for index, segment in enumerate(segments)]
         failed = [item['segment'] for item in measured if not item['covered']]
         return return_result('FAIL' if failed else 'PASS',
                              'Full track-width corridor on opposite layer with direct return-pad contact',
-                             segments=measured, failed_segments=failed, offset_mm=0)
+                             segments=measured, arcs=measured_arcs, failed_segments=failed, offset_mm=0)
     except (KeyError, ValueError, TypeError, IndexError, ZeroDivisionError) as error:
-        return return_result('NOT_CHECKABLE', str(error))
+        return return_result('NOT_CHECKABLE', str(error),
+                             reason_code=getattr(error, 'reason_code', 'UNSUPPORTED_RETURN_GEOMETRY'))
 
 
 def measure_segment(board, rule, segment, index):

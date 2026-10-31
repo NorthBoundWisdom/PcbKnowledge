@@ -141,7 +141,7 @@ answer here.
 | D79 | Connected filled-copper area | Measure exact filled-region area directly contacting the target pad, subtracting holes and summing disjoint regions joined by that pad. Disconnected copper cannot increase the result. Unsupported unions, indirect connections needed to reach the bound and ambiguous target geometry remain NOT_CHECKABLE; no numeric limit changes. |
 | D80 | Kelvin branch proof | Explicit ordered sense/shunt pin pairs preserve the declared net identities. For supported direct, unfiltered branches, finite-width copper may join load-current copper only inside the corresponding shunt pad. A proven load-terminal connection outside it fails; ambiguous contacts, optional input filters and unsupported copper remain NOT_CHECKABLE. TI INA219 SBOS448G physical pages 3 and 27 support the DCN pin mapping and Kelvin requirement; pages 11 and 25 permit filters. This measurement scope changes no numeric limit. Legacy records without explicit branches remain unmeasured. |
 | D82 | Shared operating inputs | Declare a shared quantity once in the brief and bind it to exact function parameter endpoints. Every graph consumer must preserve the full value, conditions and provenance; reject duplicate local definitions. Use this for T1 cross-block load budgets rather than independent copied limits. |
-| D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
+| D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. D107 extends arcs; layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
 | D101 | GUARD_RING measurement | Measure all sensitive-net pad and track copper on every exposed F/B surface, including both faces of through-hole pads. Require one simple closed track cycle per surface, existing minimum width and exact copper clearance. Prove guard contact through solid SMT copper, explicit track endpoints and center-ended plated through-via annuli; include annular width where a drill intersects the ring. Unsupported curves, sensitive vias, filled copper, ambiguous contacts and physical drill interruptions remain NOT_CHECKABLE. |
 | D102 | Superseded by D90. TPS5430 distance datum escalation | Preserve all ten g2-buck PLACE_NEAR limits and their origin/pad-center metric. The official SLVS632L pages 3 and 23 viewed online do not define a copper-edge datum; cached-byte source verification remains blocked. Do not convert the six 1 mm input-capacitor limits or the other four rules on that evidence. Escalate the eight current courtyard conflicts for a clarified source datum or a separately authorized part/package change under D10. |
 | D103 | Remaining positive-design bring-up windows | Use independent conditional DC test windows at exact graph terminals. Match G1V1/G1V2 to D67 parts and budgets, remove the absent G1V1 shunt, and include variant loads in the existing total budget. Match G5 to D73 with both thermistor loads combined. For G2 retain D34/D45/D50 circuit limits, choose a 7.02 V bench input floor to budget two additional 10 mV distribution losses, and measure driver returns only in declared sustained-ON states. Keep BUCK_SW UNKNOWN until a supported switching-waveform acquisition and envelope contract exists. |
@@ -156,6 +156,7 @@ answer here.
 | D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
 | D105 | BUCK_SW acquisition protocol | D91 uses synchronous PH/VIN differential acquisition at 1 GHz and 5 GS/s, full uncertainty intervals, source PH limits and explicit plateau/peak/time envelopes. The 0.40 V high-side drop and 0.55 V diode plateau allowances are engineering test budgets under D103 conditions; every observation stays NOT_RUN. |
 | D106 | Necessary distance audit | Use exact inscribed-disk lower bounds for center-based PLACE_NEAR only when an explicit KEEPOUT imposes projected courtyard exclusion. Follow the existing checker contract across surfaces, reject proven contradictions and leave unsupported or copper-edge cases unproved. |
+| D107 | Native-board arc return measurement | Prove a full-circle enclosure around each observed arc, with exact outward 1 nm radius rounding, full track width, one contacted opposite-layer return polygon and no possible physical holes. Unproved enclosures and signal layer transitions remain NOT_CHECKABLE. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -762,6 +763,9 @@ windows for G1V1, G1V2 and G5 plus eight G2 DC nodes (D103).
   arcs and layer transitions, so routed boards may rarely pass. Add measurement support for what
   real boards contain, without relaxing any bound. Commit small boards as original fixtures; do
   not commit scratch placement scripts.
+  KiCad 9 partial receipt: nine native boards, 20 probes; RETURN_PATH NC 1/3 after D107,
+  four unimplemented kinds (CLEARANCE_MIN, DIFFERENTIAL_PAIR, ORIENTATION, TEST_POINT) NC 1/1 each; others 0.
+  Signal-via transitions remain unproved; Freerouting output is NOT_RUN (tool list below).
 - [ ] (ethan) Check the handoff of all seven positive designs on KiCad 9 and 10: project opens,
   footprints load, DRC with generated rules reports only unrouted or placement findings. Fix any
   knowledge finding with a tool-free test. A version you cannot run is `NOT_RUN` and goes on the
@@ -879,6 +883,11 @@ Sources a developer sandbox could not download. The owner runs `evidence fetch -
 Mac and reports `MATCH` or a differing hash here.
 
 - `source:ti-tps5430`: `MATCH` on 2026-10-31, SHA-256 `88c98e6e...85da`.
+
+## Owner tool list
+
+- Freerouting executable/JAR is unavailable in the cloud environment. The native KiCad fixtures
+  contain original manual routes; router-produced corpus verification remains NOT_RUN.
 
 ## Owner-only and cross-repository items
 

@@ -412,9 +412,17 @@ opposite layer of a closed rectangular two-layer board. Possible intersecting
 drill apertures and board slots remain `NOT_CHECKABLE`. The covering polygon must directly contact
 a solid SMT pad on that return net. Reports include the reference layer, squared
 boundary distance and failed segment indices. Interior slots and wrong-net copper
-fail; unsupported geometry, signal vias/arcs and via-only return contact remain
+fail; unsupported geometry, signal vias and via-only return contact remain
 `NOT_CHECKABLE`. Pad-edge-only contact that is possible but unmeasured is also
 `NOT_CHECKABLE`, rather than a false failure. This is a read-only measurement of exported copper, not a router.
+
+D107 additionally checks observed arcs by an exact circumcircle and an outward
+1 nm rounded full-circle bounding box. One simple opposite-layer return polygon
+must contain the entire box and track width; its physical pad contact must survive
+possible drill intersections. The expanded box must stay inside the board outline
+and contain no possible physical holes. Reports identify the enclosure method and
+bounds. Failure to prove this conservative enclosure is `NOT_CHECKABLE`, even if
+the actual arc might fit. Signal vias and layer transitions remain unresolved.
 
 ### Guard enclosure measurement
 
@@ -464,3 +472,20 @@ expanded graph/rule occurrences, not unique rules or feasible layouts. No exclus
 premise, unsupported endpoints and `COPPER_EDGE` produce no proof; they retain their
 normal runtime checks. The audit neither places parts nor establishes joint layout
 feasibility, and does not impose a universal courtyard exclusion where none exists.
+
+### Native exported-board regression corpus
+
+Nine small original fixtures in `tests/fixtures/layout/native/` were saved and
+reloaded by KiCad 9.0.2; boards with zones were filled by that external tool.
+They exercise straight tracks, arcs, plated vias, real fill polygons and two-face
+guard connectivity. Reproduce the tool-free measurements and per-kind rates with:
+
+```sh
+PYTHONPATH=src python3 -B -m tests.git_native.test_layout_native_boards
+```
+
+The report distinguishes a full identity-checked simple board from isolated
+constraint probes on the other boards. Negative cases remain failures, and
+`NOT_CHECKABLE` remains part of each kind's denominator. Reserved, unimplemented
+registry kinds are included rather than silently excluded. These results do not
+establish complete routing or replace the owner's DRC and hardware checks.
