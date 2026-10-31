@@ -1,0 +1,190 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [],
+  "expected_refusal": {
+    "code": "UNSATISFIED_SELECTION",
+    "requirement": "cell_balance"
+  },
+  "functions": [
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "USB-C 5 V sink power entry; no USB data or power delivery.",
+      "id": "power_input",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "USB-C 5 V sink power entry; no USB data or power delivery."
+      ]
+    },
+    {
+      "category": "power.cell-balancing",
+      "count": 1,
+      "description": "Independently monitor and selectively bleed either cell of a two-series-cell Li-ion pack. Retain the stated 50 mA and voltage thresholds.",
+      "id": "cell_balance",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Independently monitor and selectively bleed either cell of a two-series-cell Li-ion pack. Retain the stated 50 mA and voltage thresholds."
+      ]
+    }
+  ],
+  "id": "N5",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition requirement.",
+        "unit": "A",
+        "value": 0.5
+      },
+      "description": "5 V USB-C power input",
+      "id": "usb",
+      "signals": [
+        "VBUS",
+        "GND",
+        "CC1",
+        "CC2"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition requirement.",
+        "unit": "V",
+        "value": 5
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition requirement.",
+        "unit": "A",
+        "value": 0.05
+      },
+      "description": "Three-wire 2S pack connection: negative, midpoint and positive.",
+      "id": "pack",
+      "signals": [
+        "PACK_NEG",
+        "CELL_MID",
+        "PACK_POS"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition requirement.",
+        "unit": "V",
+        "value": 8.4
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "1 oz copper per D2; detailed stackup awaits the selected fab.; Single-side assembly",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "usb",
+      "pack"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "No component height limit.",
+      "status": "UNCONSTRAINED"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic competition requirement.",
+      "unit": "mm"
+    },
+    "mounting": [],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic competition requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [],
+  "power": {
+    "rails": [],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition requirement.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "description": "External regulated USB 5 V supply, separate from the monitored pack.",
+        "function": "power_input",
+        "id": "usb_5v",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition requirement.",
+          "unit": "V",
+          "value": 5
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Build a USB-powered competition battery-balancing daughterboard for a two-series-cell Li-ion pack. Monitor each cell independently and bleed the higher-voltage cell at 50 mA above 4.10 V; stop balancing below 4.05 V. Support 3.0–4.2 V per cell. Do not replace the two-cell pack with a single cell or substitute pack-only voltage monitoring. Charging is external and is not part of this board.",
+  "title": "Two-cell battery balancing daughterboard"
+}

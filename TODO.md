@@ -151,6 +151,7 @@ answer here.
 | D93 | Synthesis evidence budget | `evals/` budget is 2.5 MB through T10, replacing the 1.5 MB Stage 12 limit, with at most 30 KB of committed archive per attempt. Full packets and transcripts stay in the ignored local cache. |
 | D94 | Stable existing selections | Pin `mcu-core` C6/C7 to the already selected KEMET C0805C106K3PACTU; their 10 uF match also admitted C0805C106K8PACTU. A catalog regression rejects verified different-MPN ambiguity in every block. |
 | D95 | Inductor conductor exclusion | Project the selected package's cited strip into intent and handoff. For Wurth 74437349047 preserve its 2.5 mm width; choose the maximum 6.9 mm body length and all copper layers as engineering defaults. Check full track/via copper including tangency; pads and zones remain allowed. |
+| D96 | Cycle 1 negative brief | N5 requires independent monitoring and 50 mA selective balancing of two series Li-ion cells at 3.0–4.2 V each, starting above 4.10 V and stopping below 4.05 V; external charging is outside this daughterboard. This tests an absent catalog function without substituting single-cell or pack-only monitoring. |
 | D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
 | D105 | BUCK_SW acquisition protocol | D91 uses synchronous PH/VIN differential acquisition at 1 GHz and 5 GS/s, full uncertainty intervals, source PH limits and explicit plateau/peak/time envelopes. The 0.40 V high-side drop and 0.55 V diode plateau allowances are engineering test budgets under D103 conditions; every observation stays NOT_RUN. |
 
@@ -833,6 +834,7 @@ Cycle 1, T2 and the negative brief:
 
 - [ ] (wisdom) T2 brief, decisions, parts, blocks, calculators, reference graph, A2, three attempts.
 - [ ] (wisdom) A new negative brief with a typed expected refusal, 3/3.
+N5 input is committed under D96: two-cell selective balancing is absent from the catalog. Schema, exact refusal and synthetic eligible-contract counterexample pass with 17 affected tests; three fresh attempts remain pending.
 
 ## Stage 17 — PcbAtlas consumer contract
 
