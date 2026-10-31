@@ -48,6 +48,42 @@ def _unit(node, *, session=False):
     raise ValueError('Explicit Specctra coordinate unit is required')
 
 
+def _guard_clearances(intent, names, floor):
+    """Unordered net pairs retain the strongest explicit guard requirement."""
+    pairs = {}
+    for rule in intent.get('layout', []):
+        if rule['kind'] != 'GUARD_RING':
+            continue
+        pair = tuple(sorted((rule['net'], rule['guard_net'])))
+        if pair[0] == pair[1] or not set(pair) <= names:
+            raise ValueError('Guard clearance requires two distinct known nets')
+        value = _number(millimeters(rule['min_clearance']))
+        pairs[pair] = max(pairs.get(pair, floor), value)
+    return pairs
+
+
+def _routing_classes(network, widths, clearance, unit, pairs):
+    """Freerouting class_class scopes apply exact symmetric net-pair clearance."""
+    guarded = {name for pair in pairs for name in pair}
+    classes = {}
+    for index, width in enumerate(sorted(set(widths.values())), 1):
+        nets = sorted(net for net, value in widths.items() if value == width and net not in guarded)
+        if nets:
+            name = 'width_' + str(index)
+            classes.update({net: name for net in nets})
+            network.append([Atom('class'), name, *nets,
+                            [Atom('rule'), [Atom('width'), width / unit], [Atom('clearance'), clearance / unit]]])
+    for index, net in enumerate(sorted(guarded), 1):
+        name = 'guard_' + str(index)
+        classes[net] = name
+        network.append([Atom('class'), name, net,
+                        [Atom('rule'), [Atom('width'), widths[net] / unit],
+                         [Atom('clearance'), clearance / unit]]])
+    for pair, value in sorted(pairs.items()):
+        network.append([Atom('class_class'), [Atom('classes'), *(classes[net] for net in pair)],
+                        [Atom('rule'), [Atom('clearance'), value / unit]]])
+
+
 def configure_dsn(text, intent, catalog):
     """Replace native net classes with the same catalog-derived routing minima as KiCad."""
     tree = read_specctra(text)
@@ -61,15 +97,13 @@ def configure_dsn(text, intent, catalog):
         raise ValueError('Native DSN nets differ from design intent')
     fab = catalog.get(intent['fab_profile'], 'fab_profile')
     widths = net_widths(intent, fab)
-    clearance = millimeters(fab['clearance_min']) / unit
+    clearance = millimeters(fab['clearance_min'])
+    pairs = _guard_clearances(intent, expected, clearance)
     floor = millimeters(fab['trace_width_min']) / unit
     structure[:] = [item for item in structure if not isinstance(item, list) or item[0] != 'rule']
-    structure.append([Atom('rule'), [Atom('width'), floor], [Atom('clearance'), clearance]])
-    network[:] = [item for item in network if not isinstance(item, list) or item[0] != 'class']
-    for index, width in enumerate(sorted(set(widths.values())), 1):
-        nets = sorted(net for net, value in widths.items() if value == width)
-        network.append([Atom('class'), 'width_' + str(index), *nets,
-                        [Atom('rule'), [Atom('width'), width / unit], [Atom('clearance'), clearance]]])
+    structure.append([Atom('rule'), [Atom('width'), floor], [Atom('clearance'), clearance / unit]])
+    network[:] = [item for item in network if not isinstance(item, list) or item[0] not in ('class', 'class_class')]
+    _routing_classes(network, widths, clearance, unit, pairs)
     return write_specctra(tree)
 
 
