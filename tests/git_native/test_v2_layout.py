@@ -10,10 +10,14 @@ from tests.git_native.test_v2_record_contracts import fixtures
 
 
 def q(value, unit='mm'):
-    return {'value': value, 'unit': unit}
+    return {'value': value, 'unit': unit, 'conditions': {},
+            'basis': 'ENGINEERING_DEFAULT', 'note': 'Original synthetic fixture limit'}
 
 
 class FixtureCatalog:
+    from pcbknowledge.v2.schema import ContractSchemas
+    schemas = ContractSchemas()
+
     def get(self, identity, kind):
         assert kind == 'package' and identity == 'package:synthetic'
         return fixtures()['package']
@@ -35,7 +39,7 @@ def board_text():
 
 
 def intent():
-    return {'status': 'EXPANDED',
+    return {'status': 'EXPANDED', 'bundle_commit': 'a' * 40, 'block_graph_sha256': 'b' * 64,
             'mechanical': {'outline_envelope': {'shape': 'RECTANGLE', 'max_width': q(20), 'max_length': q(20)},
                            'height_limit': {'status': 'UNCONSTRAINED'}},
             'manufacturing': {'layers': 2, 'thickness': q(1.6), 'assembly_side': 'TOP'}, 'components': [{'ref': ref, 'package': 'package:synthetic',

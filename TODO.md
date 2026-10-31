@@ -158,6 +158,8 @@ answer here.
 | D106 | Necessary distance audit | Use exact inscribed-disk lower bounds for center-based PLACE_NEAR only when an explicit KEEPOUT imposes projected courtyard exclusion. Follow the existing checker contract across surfaces, reject proven contradictions and leave unsupported or copper-edge cases unproved. |
 | D107 | Native-board arc return measurement | Prove a full-circle enclosure around each observed arc, with exact outward 1 nm radius rounding, full track width, one contacted opposite-layer return polygon and no possible physical holes. Unproved enclosures and signal layer transitions remain NOT_CHECKABLE. |
 
+| D108 | Consumer report binding | Version and validate owned reports against the selected bundle schemas; bind layout to actual board bytes and canonical intent, retain its full context in DRC, and distinguish bring-up plan coverage from observations. Digests identify inputs but are not signatures. |
+
 ## Stage 0 — Course correction (complete)
 
 Stop expanding the old design, remove dead weight, align instructions.
@@ -770,6 +772,9 @@ windows for G1V1, G1V2 and G5 plus eight G2 DC nodes (D103).
   footprints load, DRC with generated rules reports only unrouted or placement findings. Fix any
   knowledge finding with a tool-free test. A version you cannot run is `NOT_RUN` and goes on the
   owner tool list.
+  KiCad 9.0.2 loads all seven projects, boards and local footprints; parity findings are zero.
+  Six designs have zero native violations; G1V2 has four USB4110 hole-clearance violations
+  (D68 conflict, 0.1751/0.2099 mm against 0.25 mm). All seven remain unrouted; no A4 PASS.
 - [ ] Every layout or DRC failure found in PcbAtlas or in developer KiCad or Freerouting tests that
   comes from knowledge (footprint, rule, constraint) is fixed in the catalog with a test, ahead of
   the queue.
@@ -863,8 +868,11 @@ SPI/DDS scheduling: 57 affected tests pass with shared-clock rounding and accept
 PcbAtlas has no PcbKnowledge integration yet. These items make the contract ready from this side; PCBAtlas
 itself is not edited from this repository.
 
-- [ ] (ethan) Schema and version the `layout check`, bring-up and `drc` JSON reports; add schema
+- [x] (ethan) Schema and version the `layout check`, bring-up and `drc` JSON reports; add schema
   validation and tamper tests.
+  D108 adds pinned report definitions, input identities, copied constraints and consistent summaries.
+  Full gate: 872 tests in Build and Test, 204 records; independent review fixed migration,
+  scalar/datum/guard contradictions and input-output alias tests. Seven real CLI report chains validate.
 - [ ] (ethan) Conformance suite under `evals/conformance/`: original boards with expected results for
   every constraint kind, so another layout tool can test itself against `layout check`.
 - [ ] (ethan) Compare ADR-023 with what `expand` and the handoff emit; fix or record each difference.
@@ -875,6 +883,10 @@ itself is not edited from this repository.
 Exit: a consumer can go from a pinned bundle to a judged board using only the guide and the schemas.
 
 ## Owner questions
+
+- G1V2 USB4110 retains four D68 intrinsic NPTH-to-pad clearance conflicts. Recommend
+  qualifying Hirose CX90B2-24P with plated shell slots, subject to approval to replace
+  D66 all-SMT shell assembly with manual shell soldering; keep the 0.25 mm floor.
 
 Add questions here with a recommended default, and keep working on everything else. Do not stop a
 session to wait for an answer.
@@ -895,6 +907,8 @@ Mac and reports `MATCH` or a differing hash here.
 - `source:ti-tps5430`: `MATCH` on 2026-10-31, SHA-256 `88c98e6e...85da`.
 
 ## Owner tool list
+
+- KiCad 10 is unavailable in the cloud environment; seven-design handoff verification is NOT_RUN.
 
 - Freerouting executable/JAR is unavailable in the cloud environment. The native KiCad fixtures
   contain original manual routes; router-produced corpus verification remains NOT_RUN.

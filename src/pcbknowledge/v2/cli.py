@@ -202,23 +202,28 @@ def same_file(first, second):
     return first == second or (first.exists() and second.exists() and first.samefile(second))
 
 
+def protect_report_outputs(destinations, inputs):
+    outputs = [path for path in destinations if path is not None]
+    sources = [Path(path).resolve() for path in inputs if path is not None]
+    for target in outputs:
+        if target.exists() and target.stat().st_nlink > 1:
+            raise ValueError('Report output must not overwrite a multiply linked file')
+        if any(same_file(target, source) for source in sources):
+            raise ValueError('Report output must not overwrite an input')
+    if any(same_file(a, b) for index, a in enumerate(outputs) for b in outputs[index + 1:]):
+        raise ValueError('Report destinations must differ')
+
+
 def bringup_command(arguments, root, snapshot):
     from .bringup import make_bringup, render_bringup
 
     output = derived_path(root, arguments.output)
     markdown = derived_path(root, arguments.markdown) if arguments.markdown else None
-    for destination in (output, markdown):
-        if destination is not None and destination.exists() and destination.stat().st_nlink > 1:
-            raise ValueError('Bring-up output must not overwrite a multiply linked file')
-    if markdown is not None and same_file(markdown, output):
-        raise ValueError('Bring-up JSON and Markdown destinations must differ')
-    inputs = {arguments.intent.resolve(), arguments.graph.resolve(), arguments.bundle.resolve()}
-    if any(same_file(target, source) for target in (output, markdown) if target is not None for source in inputs):
-        raise ValueError('Bring-up outputs must not overwrite bundle, graph or intent inputs')
+    protect_report_outputs((output, markdown), (arguments.intent, arguments.graph, arguments.bundle))
     intent, graph = load_document(arguments.intent), load_document(arguments.graph)
     validate_expansion(snapshot, intent, graph)
     report = make_bringup(intent, graph, snapshot.briefs[graph['brief']], snapshot.catalog)
-    checklist = render_bringup(report) if markdown else None
+    checklist = render_bringup(report, schemas=snapshot.catalog.schemas) if markdown else None
     write_result(root, output, report)
     if markdown:
         markdown.parent.mkdir(parents=True, exist_ok=True)
@@ -271,6 +276,7 @@ def layout_command(arguments, root, snapshot):
     if arguments.action == 'export':
         path = export_handoff(load_document(arguments.intent), snapshot, load_document(arguments.graph), output)
         return {'status': 'EXPORTED', 'directory': str(path), 'commit': snapshot.commit}
+    protect_report_outputs((output,), (arguments.board, arguments.intent, arguments.graph, arguments.bundle))
     result = checked_layout(arguments, snapshot)
     write_result(root, output, result)
     return result
@@ -281,10 +287,13 @@ def drc_command(arguments, root):
     if any(context) and not all(context):
         raise ValueError('DRC layout context requires --intent, --bundle and --graph together')
     output = derived_path(root, arguments.output)
+    protect_report_outputs((output,), (arguments.board, *context))
     report = None
     if all(context):
         with Bundle(arguments.bundle) as snapshot:
             report = checked_layout(arguments, snapshot)
+            return run_drc(arguments.board, output, root=root, layout_report=report,
+                           schemas=snapshot.catalog.schemas)
     return run_drc(arguments.board, output, root=root, layout_report=report)
 
 

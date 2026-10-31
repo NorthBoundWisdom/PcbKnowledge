@@ -194,6 +194,35 @@ class CliTests(unittest.TestCase):
                 self.assertEqual(code, 2)
                 check.assert_not_called()
 
+    def test_layout_and_drc_outputs_preserve_inputs_and_hardlink_aliases(self):
+        import os
+        bundle = self.bundle()
+        graph = self.document('graph.json', {'id': 'synthetic'})
+        intent = self.document('intent.json', {'status': 'EXPANDED'})
+        board = self.root / 'build/source.kicad_pcb'
+        board.write_text('Original board input')
+        commands = [('layout', 'check', intent, board), ('drc', board, '--intent', intent)]
+        for source in (bundle, graph, intent, board):
+            before = source.read_bytes()
+            alias = self.root / 'build/alias.json'
+            for linked in (False, True):
+                if linked:
+                    os.link(source, alias)
+                destination = alias if linked else source
+                for command in commands:
+                    with self.subTest(source=source.name, linked=linked, command=command[0]):
+                        with patch('pcbknowledge.v2.cli.checked_layout', return_value={'status': 'PASS'}) as layout:
+                            with patch('pcbknowledge.v2.cli.run_drc', return_value={'status': 'PASS'}) as drc:
+                                code, result = self.run_cli(*command, '--bundle', bundle, '--graph', graph,
+                                                            '--output', destination)
+                                self.assertEqual(code, 2, result)
+                                self.assertRegex(result['message'], 'overwrite|multiply linked')
+                                layout.assert_not_called()
+                                drc.assert_not_called()
+                                self.assertEqual(source.read_bytes(), before)
+                if linked:
+                    alias.unlink()
+
     def test_drc_context_all_or_none_and_missing_layout_not_accepted(self):
         board = self.root / 'build/board.kicad_pcb'
         with patch('pcbknowledge.v2.cli.run_drc', return_value={'status': 'NOT_CHECKABLE', 'a4': 'PASS'}) as drc:

@@ -64,7 +64,7 @@ class Stage14BringupTests(unittest.TestCase):
             report = self.report(name, graph)
             self.assertEqual(report['range_coverage'], 'UNKNOWN')
             self.assertIn(net, report['unresolved_rail_ranges'])
-            self.assertIn(net + ': UNKNOWN', render_bringup(report))
+            self.assertIn(net + ': UNKNOWN', render_bringup(report, schemas=self.catalog.schemas))
 
     def test_g2_dc_windows_do_not_claim_switch_waveform_coverage(self):
         graph = read('g2', 'block-graph')
@@ -86,7 +86,7 @@ class Stage14BringupTests(unittest.TestCase):
             self.assertEqual(value['max'], maximum)
             self.assertEqual(value['conditions_status'], 'NOT_RUN')
             self.assertTrue(value['prerequisites'])
-        self.assertIn('BUCK_SW: UNKNOWN', render_bringup(report))
+        self.assertIn('BUCK_SW: UNKNOWN', render_bringup(report, schemas=self.catalog.schemas))
         self.assertTrue(all(row['result'] == 'NOT_RUN' for row in rails.values()))
 
     def test_g5_reference_uses_matching_circuit_and_combined_load_budget(self):

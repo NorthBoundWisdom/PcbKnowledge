@@ -432,3 +432,28 @@ sample and waveform intervals must fit their shared accepted inputs, including
 quantization when enforcing samples per cycle. Individual setup/hold placement,
 SPI mode and electrical loading remain explicit operating requirements rather
 than consequences of an aggregate guard-time allowance.
+
+## Owned consumer reports
+
+The pinned `envelope.schema.json` defines `layoutReport`, `bringupReport` and
+`drcReport` under `$defs`. Public report producers validate these definitions and
+cross-field consistency before writing results. The schema file set remains
+unchanged so historical synthesis bundles reconstruct from their original bytes;
+an old snapshot without a requested report definition refuses rather than using
+a newer working-tree definition.
+Layout reports identify the bundle commit, block graph, canonical expanded intent
+and actual board bytes, and retain the input constraints for scalar/result
+consistency checks. DRC retains the complete validated layout report and
+checks that its board digest matches the board sent to the isolated native tool.
+Without layout context, a native DRC PASS leaves the aggregate NOT_CHECKABLE.
+Standalone DRC uses the installed software report contract; bundle-context DRC
+uses that bundle's schema snapshot without a working-tree fallback.
+
+Bring-up reports identify the bundle, graph and canonical intent. Their board
+hash is null: reported probe coordinates, when present, are a projection rather
+than a byte-bound judged board. COMPLETE describes test-plan coverage; A6 and
+all observations remain NOT_RUN. Checksums are input identities, not signatures
+or proof of saved-file authenticity. Consumers validate a saved report's shape
+and consistency, then compare its identities and copied constraints with their
+own selected inputs. Schema validation alone does not establish that a saved
+report covers every rail or that its measured values came from the named board.

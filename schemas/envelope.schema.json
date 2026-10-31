@@ -28,6 +28,1284 @@
       },
       "required": ["created_by", "verified_by"],
       "additionalProperties": false
+    },
+    "layoutReport": {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.layout-check.v2"},
+        "identity": {"$ref": "envelope.schema.json#/$defs/layoutReport/$defs/identity"},
+        "constraints": {"type": "array", "items": {"$ref": "layout-constraint.schema.json"}},
+        "result": {"enum": ["PASS", "FAIL", "NOT_CHECKABLE"]},
+        "status": {"enum": ["PASS", "FAIL", "NOT_CHECKABLE"]},
+        "checks": {
+          "type": "array",
+          "items": {"$ref": "envelope.schema.json#/$defs/layoutReport/$defs/finding"},
+          "minItems": 1
+        },
+        "routing_certified": {"const": false},
+        "scope": {"type": "string", "minLength": 1}
+      },
+      "required": ["schema", "identity", "constraints", "result", "status", "checks", "routing_certified", "scope"],
+      "additionalProperties": false,
+      "$defs": {
+        "identity": {
+          "type": "object",
+          "properties": {
+            "bundle_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "block_graph_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "intent_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "board_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          },
+          "required": ["bundle_commit", "block_graph_sha256", "intent_sha256", "board_sha256"],
+          "additionalProperties": false
+        },
+        "finding": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "ASSEMBLY_SIDE"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"}
+              },
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "BOARD_ENVELOPE"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"}
+              },
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "BOARD_THICKNESS"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"}
+              },
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "CLEARANCE_MIN"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "COMPONENT_HEIGHT"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"}
+              },
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "CONDUCTOR_KEEPOUT"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "CONSTRAINTS"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"}
+              },
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "COPPER_AREA"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "COPPER_LAYER_COUNT"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"}
+              },
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "DIFFERENTIAL_PAIR"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "EDGE_DISTANCE"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "EDGE_PLACEMENT"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {"kind": {"const": "GEOMETRY"}, "result": {"enum": ["NOT_CHECKABLE"]}, "reason": {"type": "string"}},
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GROUP"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GUARD_RING"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {"kind": {"const": "IDENTITY"}, "result": {"enum": ["NOT_CHECKABLE"]}, "reason": {"type": "string"}},
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "KEEPOUT"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "KELVIN"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "MINIMIZE_LOOP"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "NET_WIDTH_MIN"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "ORIENTATION"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "PLACE_NEAR"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "TEST_POINT"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {"kind": {"const": "IDENTITY"}, "result": {"enum": ["PASS", "FAIL"]}, "reason": {"type": "string"}},
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "KELVIN"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {"kind": {"const": "COMPONENT_HEIGHT"}, "result": {"enum": ["PASS"]}, "reason": {"type": "string"}},
+              "required": ["kind", "result", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "PLACE_NEAR"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "distance_mm": {"type": "number", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index", "distance_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GROUP"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "distance_mm": {"type": "number", "minimum": 0},
+                "limit_mm": {"type": "number", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index", "distance_mm", "limit_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "EDGE_DISTANCE"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "distance_mm": {"type": "number"}
+              },
+              "required": ["kind", "result", "reason", "index", "distance_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "EDGE_PLACEMENT"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "distance_mm": {"type": "number"}
+              },
+              "required": ["kind", "result", "reason", "index", "distance_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "KEEPOUT"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "collisions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+              },
+              "required": ["kind", "result", "reason", "index", "collisions"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "NET_WIDTH_MIN"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "min_width_mm": {"type": "number", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index", "min_width_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "MINIMIZE_LOOP"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "estimated_area_mm2": {"type": "number", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index", "estimated_area_mm2"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "BOARD_ENVELOPE"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "width_mm": {"type": "number", "minimum": 0},
+                "length_mm": {"type": "number", "minimum": 0},
+                "max_width_mm": {"type": "number", "minimum": 0},
+                "max_length_mm": {"type": "number", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "width_mm", "length_mm", "max_width_mm", "max_length_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "BOARD_THICKNESS"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "thickness_mm": {"type": "number"},
+                "expected_mm": {"type": "number", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "thickness_mm", "expected_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "COPPER_LAYER_COUNT"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "layers": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+                "expected_count": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "layers", "expected_count"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "ASSEMBLY_SIDE"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "misplaced": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+              },
+              "required": ["kind", "result", "reason", "misplaced"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "CONDUCTOR_KEEPOUT"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "region": {"type": "string", "minLength": 1},
+                "collisions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"kind": {"enum": ["TRACK", "VIA"]}, "index": {"type": "integer", "minimum": 0}},
+                    "required": ["kind", "index"],
+                    "additionalProperties": false
+                  }
+                },
+                "items_checked": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index", "region", "collisions", "items_checked"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "PLACE_NEAR"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "datum": {"const": "COPPER_EDGE"},
+                "distance_mm": {"type": "number", "minimum": 0},
+                "limit_mm": {"type": "number", "minimum": 0},
+                "subject_pad": {"type": "string", "minLength": 1},
+                "subject_pad_index": {"type": "integer", "minimum": 0},
+                "target_pad": {"type": "string", "minLength": 1},
+                "target_pad_index": {"type": "integer", "minimum": 0},
+                "net": {"type": "string", "minLength": 1},
+                "common_layers": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true}
+              },
+              "required": [
+                "kind",
+                "result",
+                "reason",
+                "index",
+                "datum",
+                "distance_mm",
+                "limit_mm",
+                "subject_pad",
+                "subject_pad_index",
+                "target_pad",
+                "target_pad_index",
+                "net",
+                "common_layers"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "PLACE_NEAR"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "datum": {"const": "COPPER_EDGE"},
+                "reason_code": {
+                  "enum": [
+                    "INVALID_RULE",
+                    "UNSUPPORTED_LAYERS",
+                    "MISSING_COMPONENT",
+                    "MISSING_PAD",
+                    "NO_SAME_NET_PAD",
+                    "NO_COMMON_COPPER_LAYER",
+                    "UNSUPPORTED_GEOMETRY",
+                    "DRILL_INTERSECTION",
+                    "INVALID_GEOMETRY"
+                  ]
+                }
+              },
+              "required": ["kind", "result", "reason", "index", "datum", "reason_code"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "PLACE_NEAR"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "reason_code": {"const": "UNSUPPORTED_DATUM"}
+              },
+              "required": ["kind", "result", "reason", "index", "reason_code"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "COPPER_AREA"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "vertices_examined": {"type": "integer", "minimum": 0},
+                "geometry_work": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "COPPER_AREA"},
+                "result": {"enum": ["PASS", "FAIL", "NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "area_mm2": {"type": "number", "minimum": 0},
+                "min_area_mm2": {"type": "number", "minimum": 0},
+                "layer": {"type": "string", "minLength": 1},
+                "contacting_regions": {"type": "integer", "minimum": 0},
+                "excluded_regions": {"type": "integer", "minimum": 0},
+                "subtracted_holes": {"type": "integer", "minimum": 0},
+                "vertices_examined": {"type": "integer", "minimum": 0},
+                "geometry_work": {"type": "integer", "minimum": 0}
+              },
+              "required": [
+                "kind",
+                "result",
+                "reason",
+                "index",
+                "area_mm2",
+                "min_area_mm2",
+                "layer",
+                "contacting_regions",
+                "excluded_regions",
+                "subtracted_holes"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "RETURN_PATH"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "segments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "segment": {"type": "integer", "minimum": 0},
+                      "signal_layer": {"enum": ["F.Cu", "B.Cu"]},
+                      "reference_layer": {"enum": ["F.Cu", "B.Cu"]},
+                      "width_mm": {"type": "number", "minimum": 0},
+                      "covered": {"type": "boolean"},
+                      "observed_boundary_distance_squared_mm2": {"anyOf": [{"type": "number", "minimum": 0}, {"type": "null"}]}
+                    },
+                    "required": [
+                      "segment",
+                      "signal_layer",
+                      "reference_layer",
+                      "width_mm",
+                      "covered",
+                      "observed_boundary_distance_squared_mm2"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "arcs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "arc": {"type": "integer", "minimum": 0},
+                      "signal_layer": {"enum": ["F.Cu", "B.Cu"]},
+                      "reference_layer": {"enum": ["F.Cu", "B.Cu"]},
+                      "width_mm": {"type": "number", "minimum": 0},
+                      "covered": {"const": true},
+                      "method": {"const": "OUTWARD_NM_FULL_CIRCLE_BOX"},
+                      "enclosure_bounds_mm": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4}
+                    },
+                    "required": [
+                      "arc",
+                      "signal_layer",
+                      "reference_layer",
+                      "width_mm",
+                      "covered",
+                      "method",
+                      "enclosure_bounds_mm"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "failed_segments": {"type": "array", "items": {"type": "integer", "minimum": 0}, "uniqueItems": true},
+                "offset_mm": {"const": 0}
+              },
+              "required": ["kind", "result", "reason", "index", "segments", "arcs", "failed_segments", "offset_mm"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "RETURN_PATH"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "reason_code": {
+                  "enum": [
+                    "UNSUPPORTED_RETURN_GEOMETRY",
+                    "DEGENERATE_ARC",
+                    "INVALID_ARC_WIDTH",
+                    "ARC_BOX_DRILL_INTERSECTION",
+                    "ARC_BOX_OUTSIDE_OUTLINE",
+                    "ARC_ENCLOSURE_UNPROVED",
+                    "UNSUPPORTED_ARC_GEOMETRY"
+                  ]
+                }
+              },
+              "required": ["kind", "result", "reason", "index", "reason_code"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GUARD_RING"},
+                "result": {"enum": ["NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "layer": {"enum": ["F.Cu", "B.Cu"]}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GUARD_RING"},
+                "result": {"enum": ["FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0}
+              },
+              "required": ["kind", "result", "reason", "index"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GUARD_RING"},
+                "result": {"enum": ["FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "layer": {"enum": ["F.Cu", "B.Cu"]},
+                "nearest_open_gap_mm": {"anyOf": [{"type": "number", "minimum": 0}, {"type": "null"}]},
+                "open_endpoints": {
+                  "type": "array",
+                  "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}
+                }
+              },
+              "required": ["kind", "result", "reason", "index", "layer", "nearest_open_gap_mm", "open_endpoints"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GUARD_RING"},
+                "result": {"enum": ["PASS", "FAIL"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "layer": {"enum": ["F.Cu", "B.Cu"]},
+                "connected_to_guard_pad": {"type": "boolean"},
+                "protected": {"type": "boolean"},
+                "min_width_mm": {"type": "number", "minimum": 0},
+                "min_clearance_mm": {"type": "number", "minimum": 0},
+                "required_width_mm": {"type": "number", "minimum": 0},
+                "required_clearance_mm": {"type": "number", "minimum": 0},
+                "max_gap_mm": {"type": "number", "minimum": 0},
+                "closed_segments": {"type": "integer", "minimum": 0},
+                "protected_pads": {"type": "integer", "minimum": 0},
+                "protected_tracks": {"type": "integer", "minimum": 0}
+              },
+              "required": [
+                "kind",
+                "result",
+                "reason",
+                "index",
+                "layer",
+                "connected_to_guard_pad",
+                "protected",
+                "min_width_mm",
+                "min_clearance_mm",
+                "required_width_mm",
+                "required_clearance_mm",
+                "max_gap_mm",
+                "closed_segments",
+                "protected_pads",
+                "protected_tracks"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "GUARD_RING"},
+                "result": {"enum": ["PASS", "FAIL", "NOT_CHECKABLE"]},
+                "reason": {"type": "string"},
+                "index": {"type": "integer", "minimum": 0},
+                "surfaces": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {"const": "GUARD_RING"},
+                          "result": {"enum": ["NOT_CHECKABLE"]},
+                          "reason": {"type": "string"},
+                          "layer": {"enum": ["F.Cu", "B.Cu"]}
+                        },
+                        "required": ["kind", "result", "reason"],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {"const": "GUARD_RING"},
+                          "result": {"enum": ["FAIL"]},
+                          "reason": {"type": "string"}
+                        },
+                        "required": ["kind", "result", "reason"],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {"const": "GUARD_RING"},
+                          "result": {"enum": ["FAIL"]},
+                          "reason": {"type": "string"},
+                          "layer": {"enum": ["F.Cu", "B.Cu"]},
+                          "nearest_open_gap_mm": {"anyOf": [{"type": "number", "minimum": 0}, {"type": "null"}]},
+                          "open_endpoints": {
+                            "type": "array",
+                            "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}
+                          }
+                        },
+                        "required": ["kind", "result", "reason", "layer", "nearest_open_gap_mm", "open_endpoints"],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {"const": "GUARD_RING"},
+                          "result": {"enum": ["PASS", "FAIL"]},
+                          "reason": {"type": "string"},
+                          "layer": {"enum": ["F.Cu", "B.Cu"]},
+                          "connected_to_guard_pad": {"type": "boolean"},
+                          "protected": {"type": "boolean"},
+                          "min_width_mm": {"type": "number", "minimum": 0},
+                          "min_clearance_mm": {"type": "number", "minimum": 0},
+                          "required_width_mm": {"type": "number", "minimum": 0},
+                          "required_clearance_mm": {"type": "number", "minimum": 0},
+                          "max_gap_mm": {"type": "number", "minimum": 0},
+                          "closed_segments": {"type": "integer", "minimum": 0},
+                          "protected_pads": {"type": "integer", "minimum": 0},
+                          "protected_tracks": {"type": "integer", "minimum": 0}
+                        },
+                        "required": [
+                          "kind",
+                          "result",
+                          "reason",
+                          "layer",
+                          "connected_to_guard_pad",
+                          "protected",
+                          "min_width_mm",
+                          "min_clearance_mm",
+                          "required_width_mm",
+                          "required_clearance_mm",
+                          "max_gap_mm",
+                          "closed_segments",
+                          "protected_pads",
+                          "protected_tracks"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "via_connections": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "via": {"type": "integer", "minimum": 0},
+                      "at_mm": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+                      "supported": {"type": "boolean"},
+                      "diameter_mm": {"type": "number", "minimum": 0},
+                      "drill_mm": {"type": "number", "minimum": 0},
+                      "proven_tracks": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+                      "uncertain_tracks": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+                      "unproved_pad_contact": {"type": "boolean"},
+                      "method": {"const": "center endpoint crosses annulus beyond drill radius"}
+                    },
+                    "required": [
+                      "via",
+                      "at_mm",
+                      "supported",
+                      "diameter_mm",
+                      "drill_mm",
+                      "proven_tracks",
+                      "uncertain_tracks",
+                      "unproved_pad_contact",
+                      "method"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["kind", "result", "reason", "index", "surfaces", "via_connections"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      }
+    },
+    "bringupReport": {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "pcbknowledge.bringup.v2"},
+        "identity": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/identity"},
+        "brief": {"type": "string", "minLength": 1},
+        "bundle_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "rails": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "net": {"type": "string", "minLength": 1},
+                  "result": {"const": "NOT_RUN"},
+                  "test_locations": {"type": "array", "items": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"}},
+                  "expected_voltage": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/basicVoltage"}
+                },
+                "required": ["net", "result", "test_locations", "expected_voltage"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "net": {"type": "string", "minLength": 1},
+                  "result": {"const": "NOT_RUN"},
+                  "test_locations": {"type": "array", "items": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"}},
+                  "expected_voltage": {
+                    "type": "object",
+                    "properties": {
+                      "unit": {"const": "V"},
+                      "declarations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "origin": {"type": "string", "minLength": 1},
+                            "quantity": {"$ref": "quantity.schema.json"}
+                          },
+                          "required": ["origin", "quantity"],
+                          "additionalProperties": false
+                        }
+                      },
+                      "nominal": {"type": "number"},
+                      "status": {"const": "DECLARED"},
+                      "min": {"type": "number"},
+                      "max": {"type": "number"},
+                      "acceptance_type": {"const": "ENGINEERING_TEST_WINDOW"},
+                      "conditions_status": {"const": "NOT_RUN"},
+                      "prerequisites": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                      "basis": {"const": "ENGINEERING_DEFAULT"},
+                      "conditions": {"allOf": [{"$ref": "quantity.schema.json#/properties/conditions"}, {"minProperties": 1}]},
+                      "decision_note": {"type": "string", "minLength": 1},
+                      "contextual_expectation": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/basicVoltage"},
+                      "supporting_evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "uniqueItems": true}
+                    },
+                    "required": [
+                      "unit",
+                      "declarations",
+                      "status",
+                      "min",
+                      "max",
+                      "acceptance_type",
+                      "conditions_status",
+                      "prerequisites",
+                      "basis",
+                      "conditions",
+                      "decision_note",
+                      "contextual_expectation",
+                      "supporting_evidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "declared_test_location": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"},
+                  "declared_reference_location": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"}
+                },
+                "required": ["net", "result", "test_locations", "expected_voltage", "declared_test_location"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "net": {"type": "string", "minLength": 1},
+                  "result": {"const": "NOT_RUN"},
+                  "test_locations": {"type": "array", "items": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"}},
+                  "expected_waveform": {
+                    "type": "object",
+                    "properties": {
+                      "status": {"const": "DECLARED"},
+                      "acceptance_type": {"const": "WAVEFORM_PROTOCOL"},
+                      "protocol": {
+                        "$ref": "design-intent.schema.json#/$defs/bringup/properties/rails/items/properties/waveform"
+                      },
+                      "conditions_status": {"const": "NOT_RUN"},
+                      "source_limits": {
+                        "type": "object",
+                        "properties": {
+                          "switch_node_absolute_voltage": {"$ref": "quantity.schema.json"},
+                          "switch_node_transient_voltage": {"$ref": "quantity.schema.json"},
+                          "switch_node_negative_transient_duration_limit": {"$ref": "quantity.schema.json"},
+                          "input_voltage": {"$ref": "quantity.schema.json"},
+                          "frequency": {"$ref": "quantity.schema.json"}
+                        },
+                        "required": [
+                          "switch_node_absolute_voltage",
+                          "switch_node_transient_voltage",
+                          "switch_node_negative_transient_duration_limit",
+                          "input_voltage",
+                          "frequency"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "prerequisites": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                      "supporting_evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}, "uniqueItems": true}
+                    },
+                    "required": [
+                      "status",
+                      "acceptance_type",
+                      "protocol",
+                      "conditions_status",
+                      "source_limits",
+                      "prerequisites",
+                      "supporting_evidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "declared_test_location": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"},
+                  "declared_reference_location": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"},
+                  "declared_input_location": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/location"}
+                },
+                "required": [
+                  "net",
+                  "result",
+                  "test_locations",
+                  "expected_waveform",
+                  "declared_test_location",
+                  "declared_reference_location",
+                  "declared_input_location"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "programming": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "instance": {"type": "string", "minLength": 1},
+              "block": {"type": "string", "minLength": 1},
+              "pinout": {
+                "type": "array",
+                "items": {"$ref": "envelope.schema.json#/$defs/bringupReport/$defs/programmingLocation"}
+              },
+              "result": {"const": "NOT_RUN"}
+            },
+            "required": ["instance", "block", "pinout", "result"],
+            "additionalProperties": false
+          }
+        },
+        "functional_tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "description": {"type": "string", "minLength": 1},
+              "count": {"type": "integer", "minimum": 1},
+              "requirements": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1},
+              "parameters": {"$ref": "parameters.schema.json"},
+              "result": {"const": "NOT_RUN"}
+            },
+            "required": ["id", "description", "count", "requirements", "parameters", "result"],
+            "additionalProperties": false
+          }
+        },
+        "a6": {"const": "NOT_RUN"},
+        "range_coverage": {"enum": ["COMPLETE", "UNKNOWN"]},
+        "unresolved_rail_ranges": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "test_location_note": {"type": "string", "minLength": 1},
+        "range_coverage_note": {"type": "string", "minLength": 1},
+        "prerequisites": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1},
+        "prerequisites_status": {"const": "NOT_RUN"}
+      },
+      "required": [
+        "schema",
+        "identity",
+        "brief",
+        "bundle_commit",
+        "rails",
+        "programming",
+        "functional_tests",
+        "a6",
+        "range_coverage",
+        "unresolved_rail_ranges",
+        "test_location_note",
+        "range_coverage_note"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "oneOf": [
+            {"required": ["prerequisites", "prerequisites_status"]},
+            {"not": {"anyOf": [{"required": ["prerequisites"]}, {"required": ["prerequisites_status"]}]}}
+          ]
+        }
+      ],
+      "$defs": {
+        "identity": {
+          "type": "object",
+          "properties": {
+            "bundle_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "block_graph_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "intent_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "board_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]}
+          },
+          "required": ["bundle_commit", "block_graph_sha256", "intent_sha256", "board_sha256"],
+          "additionalProperties": false
+        },
+        "location": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "ref": {"type": "string", "minLength": 1},
+                "pin": {"type": "string", "minLength": 1},
+                "net": {"type": "string", "minLength": 1},
+                "location_status": {"const": "UNKNOWN"},
+                "reason": {"type": "string"}
+              },
+              "required": ["ref", "pin", "location_status", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "ref": {"type": "string", "minLength": 1},
+                "pin": {"type": "string", "minLength": 1},
+                "net": {"type": "string", "minLength": 1},
+                "location_status": {"const": "LOCATED"},
+                "pad_centers_mm": {
+                  "type": "array",
+                  "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+                  "minItems": 1
+                }
+              },
+              "required": ["ref", "pin", "location_status", "pad_centers_mm"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "programmingLocation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "ref": {"type": "string", "minLength": 1},
+                "pin": {"type": "string", "minLength": 1},
+                "net": {"type": "string", "minLength": 1},
+                "location_status": {"const": "UNKNOWN"},
+                "reason": {"type": "string"},
+                "signal": {"type": "string", "minLength": 1}
+              },
+              "required": ["ref", "pin", "location_status", "reason", "net", "signal"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "ref": {"type": "string", "minLength": 1},
+                "pin": {"type": "string", "minLength": 1},
+                "net": {"type": "string", "minLength": 1},
+                "location_status": {"const": "LOCATED"},
+                "pad_centers_mm": {
+                  "type": "array",
+                  "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+                  "minItems": 1
+                },
+                "signal": {"type": "string", "minLength": 1}
+              },
+              "required": ["ref", "pin", "location_status", "pad_centers_mm", "net", "signal"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "basicVoltage": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "unit": {"const": "V"},
+                "declarations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"origin": {"type": "string", "minLength": 1}, "quantity": {"$ref": "quantity.schema.json"}},
+                    "required": ["origin", "quantity"],
+                    "additionalProperties": false
+                  }
+                },
+                "nominal": {"type": "number"},
+                "status": {"const": "UNKNOWN"},
+                "reason": {"type": "string"}
+              },
+              "required": ["status", "reason"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "unit": {"const": "V"},
+                "declarations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"origin": {"type": "string", "minLength": 1}, "quantity": {"$ref": "quantity.schema.json"}},
+                    "required": ["origin", "quantity"],
+                    "additionalProperties": false
+                  }
+                },
+                "nominal": {"type": "number"},
+                "status": {"const": "DECLARED"},
+                "min": {"type": "number"},
+                "max": {"type": "number"}
+              },
+              "required": ["status", "unit", "declarations", "min", "max"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      }
+    },
+    "drcReport": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schema": {"const": "pcbknowledge.drc.v2"},
+            "identity": {"anyOf": [{"$ref": "envelope.schema.json#/$defs/layoutReport/$defs/identity"}, {"type": "null"}]},
+            "layout_report": {"anyOf": [{"$ref": "envelope.schema.json#/$defs/layoutReport"}, {"type": "null"}]},
+            "board": {"type": "string", "minLength": 1},
+            "input_sha256": {
+              "type": "object",
+              "minProperties": 3,
+              "propertyNames": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"},
+              "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            },
+            "drc_status": {"enum": ["FAIL", "NOT_RUN"]},
+            "a4": {"enum": ["FAIL", "NOT_RUN"]},
+            "status": {"enum": ["PASS", "FAIL", "NOT_RUN", "NOT_CHECKABLE"]},
+            "reason": {"type": "string"}
+          },
+          "required": ["schema", "identity", "layout_report", "board", "input_sha256", "drc_status", "a4", "status", "reason"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schema": {"const": "pcbknowledge.drc.v2"},
+            "identity": {"anyOf": [{"$ref": "envelope.schema.json#/$defs/layoutReport/$defs/identity"}, {"type": "null"}]},
+            "layout_report": {"anyOf": [{"$ref": "envelope.schema.json#/$defs/layoutReport"}, {"type": "null"}]},
+            "board": {"type": "string", "minLength": 1},
+            "input_sha256": {
+              "type": "object",
+              "minProperties": 3,
+              "propertyNames": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"},
+              "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            },
+            "drc_status": {"enum": ["PASS", "FAIL"]},
+            "a4": {"enum": ["PASS", "FAIL"]},
+            "status": {"enum": ["PASS", "FAIL", "NOT_RUN", "NOT_CHECKABLE"]},
+            "exit_code": {"type": "integer"},
+            "finding_count": {"type": "integer", "minimum": 0},
+            "report": {
+              "type": "object",
+              "properties": {
+                "$schema": {"const": "https://schemas.kicad.org/drc.v1.json"},
+                "kicad_version": {"type": "string"},
+                "violations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"type": {"type": "string"}},
+                    "required": ["type"],
+                    "additionalProperties": true
+                  }
+                },
+                "unconnected_items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"type": {"type": "string"}},
+                    "required": ["type"],
+                    "additionalProperties": true
+                  }
+                },
+                "schematic_parity": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"type": {"type": "string"}},
+                    "required": ["type"],
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "required": ["$schema", "kicad_version", "violations", "unconnected_items", "schematic_parity"],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "schema",
+            "identity",
+            "layout_report",
+            "board",
+            "input_sha256",
+            "drc_status",
+            "a4",
+            "status",
+            "exit_code",
+            "finding_count",
+            "report"
+          ],
+          "additionalProperties": false
+        }
+      ]
     }
   }
 }

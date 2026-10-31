@@ -1,6 +1,7 @@
 """Run KiCad DRC on isolated copies of derived handoff files, never a live board."""
 from __future__ import annotations
 
+import copy
 import hashlib
 import os
 from pathlib import Path
@@ -11,7 +12,7 @@ import tempfile
 from pcbknowledge.serialization import canonical_json, read_json
 
 MAX_BYTES = 32 * 1024 * 1024
-REPORT_SCHEMA = 'https://schemas.kicad.org/drc.v1.json'
+from .drc_report_validation import REPORT_SCHEMA, aggregate_status, validate_drc_report, validate_native_report
 
 
 def _derived(root, path):
@@ -90,20 +91,11 @@ def _parse_report(path):
     if not path.is_file() or path.stat().st_size > MAX_BYTES:
         raise ValueError('Missing or oversized KiCad JSON report')
     report = read_json(path.read_bytes())
-    if not isinstance(report, dict) or report.get('$schema') != REPORT_SCHEMA:
-        raise ValueError('Unsupported KiCad DRC report schema')
-    if not isinstance(report.get('kicad_version'), str):
-        raise ValueError('Missing KiCad version in report')
-    for key in ('violations', 'unconnected_items', 'schematic_parity'):
-        values = report.get(key)
-        if not isinstance(values, list):
-            raise ValueError('Malformed KiCad DRC findings')
-        if any(not isinstance(item, dict) or not isinstance(item.get('type'), str) for item in values):
-            raise ValueError('Malformed KiCad DRC finding')
+    validate_native_report(report)
     return report
 
 
-def _invoke(executable, files):
+def _invoke(executable, files, expected_digests):
     with tempfile.TemporaryDirectory(prefix='pcbknowledge-drc-') as name:
         directory = Path(name).resolve()
         env = _environment(directory)
@@ -114,6 +106,9 @@ def _invoke(executable, files):
             destination = directory / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, destination)
+            key = path.relative_to(files[0].parent).as_posix()
+            if hashlib.sha256(destination.read_bytes()).hexdigest() != expected_digests[key]:
+                raise ValueError('Copied DRC input differs from recorded digest: ' + key)
         output = directory / 'drc-report.json'
         command = [executable, 'pcb', 'drc', '--format', 'json', '--severity-all',
                    '--exit-code-violations', '--output', str(output), str(directory / files[0].name)]
@@ -124,18 +119,6 @@ def _invoke(executable, files):
             'status': 'PASS' if process.returncode == 0 and count == 0 else 'FAIL',
             'exit_code': process.returncode, 'finding_count': count, 'report': report,
         }
-
-
-def aggregate_status(drc_result, layout_report):
-    """Overall status combines native A4 DRC and measured layout; a4 remains the native result."""
-    layout_status = (layout_report or {}).get('result', (layout_report or {}).get('status'))
-    if drc_result['status'] == 'FAIL' or layout_status == 'FAIL':
-        return 'FAIL'
-    if drc_result['status'] == 'NOT_RUN':
-        return 'NOT_RUN'
-    if layout_status != 'PASS':
-        return 'NOT_CHECKABLE'
-    return 'PASS'
 
 
 def _write(root, path, result):
@@ -152,25 +135,37 @@ def _write(root, path, result):
         temporary.unlink(missing_ok=True)
 
 
-def run_drc(board, output, *, root, layout_report=None, kicad=None):
+def run_drc(board, output, *, root, layout_report=None, kicad=None, schemas=None):
     """Return and save a bounded JSON receipt; missing KiCad never counts as passing A4."""
+    from .report_contracts import validate_layout_report
+    from .schema import ContractSchemas
+
+    schemas = ContractSchemas() if schemas is None else schemas
     files = _inputs(root, board)
     files.extend(_library_inputs(files[0]))
     output = _derived(root, output)
-    if output.suffix != '.json' or output in files:
+    if output.suffix != '.json' or output in files or (
+            output.exists() and any(output.samefile(path) for path in files)):
         raise ValueError('DRC output must be a separate derived JSON report')
     digests = {path.relative_to(files[0].parent).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                for path in files}
+    layout_report = copy.deepcopy(layout_report)
+    if layout_report is not None:
+        validate_layout_report(layout_report, schemas, board_sha256=digests[files[0].name])
     executable = shutil.which(str(kicad)) if kicad else shutil.which('kicad-cli')
     if not executable:
         result = {'status': 'NOT_RUN', 'reason': 'kicad-cli is unavailable'}
     else:
         try:
-            result = _invoke(executable, files)
+            result = _invoke(executable, files, digests)
         except (OSError, ValueError, subprocess.SubprocessError) as error:
             result = {'status': 'FAIL', 'reason': str(error)}
     drc_status = result['status']
-    result.update(board=str(files[0]), input_sha256=digests, drc_status=drc_status, a4=drc_status,
+    result.update(schema='pcbknowledge.drc.v2',
+                  identity=copy.deepcopy(layout_report['identity']) if layout_report is not None else None,
+                  layout_report=layout_report, board=str(files[0]), input_sha256=digests,
+                  drc_status=drc_status, a4=drc_status,
                   status=aggregate_status(result, layout_report))
+    validate_drc_report(result, schemas)
     _write(root, output, result)
     return result

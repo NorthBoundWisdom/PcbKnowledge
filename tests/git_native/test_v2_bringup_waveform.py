@@ -67,7 +67,7 @@ class WaveformTests(unittest.TestCase):
         for key, value in expected['source_limits'].items():
             self.assertEqual(value, parameters[key])
             self.assertEqual(value['evidence']['source'], 'source:ti-tps5430')
-        rendered = render_bringup(report)
+        rendered = render_bringup(report, schemas=self.catalog.schemas)
         self.assertIn('WAVEFORM_PROTOCOL', rendered)
         self.assertIn('not measured compliance', rendered)
         self.assertNotIn('- [x]', rendered)
@@ -86,7 +86,7 @@ class WaveformTests(unittest.TestCase):
         report = make_bringup(*self.expanded(graph))
         self.assertEqual(report['range_coverage'], 'UNKNOWN')
         self.assertEqual(report['unresolved_rail_ranges'], ['BUCK_SW'])
-        self.assertIn('BUCK_SW: UNKNOWN', render_bringup(report))
+        self.assertIn('BUCK_SW: UNKNOWN', render_bringup(report, schemas=self.catalog.schemas))
 
     def assert_graph_refused(self, graph):
         intent = expand(self.catalog, graph, read('brief'), bundle_commit='a' * 40)

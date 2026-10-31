@@ -28,6 +28,7 @@ One v2 record model lives in `schemas/` and `src/pcbknowledge/v2/`:
 | Derived KiCad project, rules and assembly BOM | `v2/handoff.py`, `handoff_rules.py` |
 | Exported-board parser and measured checks | `v2/sexpr.py`, `boardview.py`, `layout.py` |
 | Isolated native DRC and combined reports | `v2/drc.py` |
+| Owned report schemas, input bindings and consistency | `v2/report_contracts.py`, `bringup_report_validation.py`, `drc_report_validation.py` |
 | Loopback transport, view models, HTML | `v2/server.py`, `application.py`, `views.py` |
 
 The catalog covers all 15 G1 block instances with independently verified parts,

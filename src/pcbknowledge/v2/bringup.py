@@ -157,11 +157,16 @@ def make_bringup(intent, graph, brief, catalog, *, board=None):
             'range_coverage': 'UNKNOWN' if unresolved else 'COMPLETE', 'unresolved_rail_ranges': unresolved,
             'test_location_note': 'Terminal coordinates identify probes; physical probe accessibility is not proven.'}
     from .bringup_contract import apply_test_windows
-    return apply_test_windows(report, intent, locate=lambda pin: _location(pin, board), catalog=catalog)
+    from .bringup_report_validation import report_identity, validate_bringup_report
+    report['identity'] = report_identity(intent, graph)
+    apply_test_windows(report, intent, locate=lambda pin: _location(pin, board), catalog=catalog)
+    return validate_bringup_report(report, catalog.schemas)
 
 
-def render_bringup(report):
-    """Human-readable checklist; observations stay unchecked until owner bring-up."""
+def render_bringup(report, *, schemas):
+    """Validate the selected schema before rendering an unobserved measurement plan."""
+    from .bringup_report_validation import validate_bringup_report
+    validate_bringup_report(report, schemas)
     lines = ['# Bring-up checklist: ' + report['brief'], '',
              'Bundle: `' + report['bundle_commit'] + '`', '',
              'Hardware observations: NOT_RUN. Voltage range coverage: ' + report['range_coverage'] + '.', '',

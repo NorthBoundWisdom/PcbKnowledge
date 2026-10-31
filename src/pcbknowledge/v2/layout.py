@@ -195,5 +195,19 @@ def check_layout(board, intent, catalog):
 
 
 def check_board(path, intent, catalog):
-    from .boardview import parse_board
-    return check_layout(parse_board(path), intent, catalog)
+    import hashlib
+    from pathlib import Path
+    from .boardview import board_from_text, MAX_BYTES
+    from .report_contracts import report_identity, validate_layout_report
+    path = Path(path)
+    if path.is_symlink() or path.stat().st_size > MAX_BYTES:
+        raise ValueError('Unsafe or oversized board input')
+    payload = path.read_bytes()
+    if len(payload) > MAX_BYTES:
+        raise ValueError('Oversized board input')
+    report = check_layout(board_from_text(payload.decode('utf-8')), intent, catalog)
+    from copy import deepcopy
+    report['constraints'] = deepcopy(intent['layout'])
+    report['status'] = report['result']
+    report['identity'] = report_identity(intent, board_sha256=hashlib.sha256(payload).hexdigest())
+    return validate_layout_report(report, catalog.schemas, intent=intent)
