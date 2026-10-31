@@ -22,6 +22,8 @@ class GridSearch:
         self.prepared = [(index, rule) for index, rule, _ in self.rules]
         from .placement_feasibility import check_isolated_near_bounds
         check_isolated_near_bounds(geometry, self.prepared)
+        from .placement_joint_feasibility import check_shared_anchor_pairs
+        check_shared_anchor_pairs(geometry, self.prepared)
         self.local_rules = {ref: [(index, rule, refs) for index, rule, refs in self.rules if ref in refs]
                             for ref in geometry}
         self.mechanical, self.grid, self.budget = set(mechanical), grid, budget
