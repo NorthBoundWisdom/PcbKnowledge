@@ -211,8 +211,10 @@ Expansion resolves both net identities and refuses a merged signal/guard or
 signal/reference short. Guard geometry must meet the selected fab floors.
 Intent exports retain each complete requirement; KiCad rules additionally carry
 supported guard width and pairwise clearance minima. Those DRC minima do not
-prove enclosure or reference continuity: read-only layout checks report both
-kinds as `NOT_CHECKABLE` until copper topology can be established. This repository generates no copper (D78).
+prove enclosure or reference continuity. `RETURN_PATH` uses the D100 read-only
+track-corridor measurement described in [local workflow](local-workflow.md#return-copper-measurement);
+unsupported topology remains `NOT_CHECKABLE`. Guard enclosure is not implemented
+yet. This repository generates no copper (D78).
 
 ### Firmware pin configuration
 

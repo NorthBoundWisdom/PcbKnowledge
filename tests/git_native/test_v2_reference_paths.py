@@ -97,10 +97,12 @@ class ReferencePathTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             export_rules(intent, catalog)
 
-    def test_layout_does_not_promote_placement_or_tracks_to_copper_proof(self):
+    def test_layout_without_projected_copper_remains_not_checkable(self):
         intent, _ = fixture()
         checker = LayoutChecks.__new__(LayoutChecks)
+        checker.board = {}
         for item in intent['layout']:
             result = checker.check(item)
             self.assertEqual(result['result'], 'NOT_CHECKABLE')
-            self.assertIn('not proven', result['reason'])
+            expected = 'required' if item['kind'] == 'RETURN_PATH' else 'not proven'
+            self.assertIn(expected, result['reason'])

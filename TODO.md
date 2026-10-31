@@ -135,6 +135,7 @@ answer here.
 | D76 | Superseded by D78. External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
 | D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue. Ethan owns the items marked `(ethan)`. `TODO.md` is the only coordination channel; GitHub issues are not used. Both use the same GitHub account, so each commit body ends with `Developer: Wisdom` or `Developer: Ethan`. The shared account does not show independence: `created_by`, `verified_by` and reviewers are recorded as distinct agent identities. Wisdom's new decisions continue from D79; Ethan's use D100 upward. |
 | D78 | Repository scope (owner decision, 2026-10-31) | PcbKnowledge is a knowledge base serving PcbAtlas. It is not an algorithm library: it holds no placement, routing, zone-fill, DRC or fabrication-output algorithms and no pipeline orchestrating them. Retire ADR-026, D63, D64 and D76 and delete the pipeline. Keep expansion, handoff files, `layout check` and the thin optional `drc` wrapper. Developers may use KiCad and Freerouting as external test tools to find knowledge errors, for example on a hand-placed handoff board; each finding becomes a catalog fix with a tool-free test. CI and acceptance never need these tools. This repository accepts designs through A2; A3-A5 belong to PcbAtlas or a hand layout. |
+| D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -758,7 +759,7 @@ the conformance oracle PcbAtlas will use, and it does not perform DRC.
 - [ ] `KELVIN`: blocks declare explicit sense branches from cited pins, and the checker
   proves from routed copper that the sense branch leaves at the required pads and carries
   no load path. Tests cover pass and each failure. Unsupported geometry stays `NOT_CHECKABLE`.
-- [ ] (ethan) `RETURN_PATH` (G3, G4, G5): define a measurable criterion for continuous
+- [x] (ethan) `RETURN_PATH` (G3, G4, G5): define a measurable criterion for continuous
   return copper along the routed net (for example, same-net copper on the reference layer
   under every segment within a stated offset, unbroken by slots) and record it with a
   D-number. Put the handler in a new module and register it in `layout.py` with the smallest

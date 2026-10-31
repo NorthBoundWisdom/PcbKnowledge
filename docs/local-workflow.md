@@ -338,3 +338,15 @@ The retained `layout check` and optional thin `drc` commands above inspect suppl
 files. External tools are not prerequisites for CI, expansion or A2 acceptance.
 Bring-up report generation remains tool-free and supports an absent placed board;
 physical measurements and ordering remain owner-only activities.
+
+### Return-copper measurement
+
+`layout check` applies D100 to `RETURN_PATH`: every observed straight signal
+segment must have its full width covered by simple filled return copper on the
+opposite layer of a closed rectangular two-layer board. Possible intersecting
+drill apertures and board slots remain `NOT_CHECKABLE`. The covering polygon must directly contact
+a solid SMT pad on that return net. Reports include the reference layer, squared
+boundary distance and failed segment indices. Interior slots and wrong-net copper
+fail; unsupported geometry, signal vias/arcs and via-only return contact remain
+`NOT_CHECKABLE`. Pad-edge-only contact that is possible but unmeasured is also
+`NOT_CHECKABLE`, rather than a false failure. This is a read-only measurement of exported copper, not a router.

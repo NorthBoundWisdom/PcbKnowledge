@@ -6,6 +6,7 @@ import math
 from .footprints import derive_footprint
 from .layout_identity import authoritative_bounds, pad_geometry_result
 from .layout_board import board_requirements
+from .layout_return import check_return_path
 from .layout_geometry import contains, convex_hull, distance, overlap, polygon_area, simple_polygon
 
 GROUP_MAX_DISTANCE_MM = 10.0
@@ -175,7 +176,9 @@ class LayoutChecks:
                     'EDGE_DISTANCE': self.edge, 'KEEPOUT': self.keepout, 'NET_WIDTH_MIN': self.width,
                     'MINIMIZE_LOOP': self.loop, 'COPPER_AREA': self.copper}
         kind = rule['kind']
-        if kind in ('GUARD_RING', 'RETURN_PATH'):
+        if kind == 'RETURN_PATH':
+            return check_return_path(self.board, rule)
+        if kind == 'GUARD_RING':
             return finding(kind, 'NOT_CHECKABLE',
                            'Continuous guard enclosure or adjacent return copper connectivity is not proven')
         if kind == 'KELVIN':
