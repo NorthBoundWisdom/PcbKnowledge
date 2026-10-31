@@ -170,31 +170,13 @@
     {
       "ref": "C6",
       "select": {
-        "match": {
-          "capacitance": {
-            "basis": "ENGINEERING_DEFAULT",
-            "conditions": {},
-            "note": "G1 engineering design choice; verify during board layout.",
-            "unit": "F",
-            "value": 1e-05
-          }
-        },
-        "role": "capacitor.ceramic"
+        "part": "part:kemet-c0805c106k3pactu"
       }
     },
     {
       "ref": "C7",
       "select": {
-        "match": {
-          "capacitance": {
-            "basis": "ENGINEERING_DEFAULT",
-            "conditions": {},
-            "note": "G1 engineering design choice; verify during board layout.",
-            "unit": "F",
-            "value": 1e-05
-          }
-        },
-        "role": "capacitor.ceramic"
+        "part": "part:kemet-c0805c106k3pactu"
       }
     },
     {
