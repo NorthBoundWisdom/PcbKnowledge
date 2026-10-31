@@ -364,6 +364,8 @@
         "analog_drop_max": "voltage",
         "analog_resistance_max": "resistance",
         "input_current_max": "current",
+        "input_voltage_max": "voltage",
+        "input_voltage_min": "voltage",
         "ptc_resistance_max": "resistance",
         "regulator_headroom_min": "voltage",
         "regulator_load_max": "current",
