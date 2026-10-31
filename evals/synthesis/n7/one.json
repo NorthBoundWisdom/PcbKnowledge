@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 801368,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "8faba75b0b50912cc01a3ba53b1cf09796b4b04e12a2bab6c5acbd1f0c70c824",
+    "submission_hashes": [
+      {
+        "original_sha256": "993e4a208b0c572d836a440260bd963284e647ebd589bbc2e6ebe9fc561264ac",
+        "refusal_sha256": "0622853e7f383d14d8a563686f895e38c16ff7be8a91f7d27b9d08c09d840c53"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/n7_author_one",
+    "brief_sha256": "5bba1c810f7bacb8ffcdb08371dc4327754245858b239db122359542efdd4d0e",
+    "bundle_commit": "b97ed0dc994610b51563b8d835e1de49251d1a7d",
+    "bundle_sha256": "1c79fe12032b4dce4374f0e2d532f0cb6a597b436cd851150c8276a8f0501c2b",
+    "equivalence_review": "Correct closed-world refusal. The author inspected full block and part inventories after preserving failed positional searches, then examined physical ADC, monitor, reference, photodiode and output-buffer contracts. I independently checked the pinned 8 SPS ADC setting and grounded AIN3, onboard INA219 shunt connections, internal photodiode summing node and voltage-follower feedback. These exported functions do not implement the requested four-wire PT100 excitation and calibrated conversion. The silicon ADC maximum rate is not confused with the fixed block setting; raw parts are not treated as an implemented eligible block.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "075844bbb548d4d090e39499273a614749a4614f2ea8cac695089c4a26b613f3",
+    "input_identity": {
+      "audit_sha256": "94e506da60d1be3f7cb934fa4f5d8327a181138d82ed71aa676f398958c99967",
+      "catalog_tree": "0febd92eefcad559080e75b378b28d7591a70cd9",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "refusal_sha256": "0622853e7f383d14d8a563686f895e38c16ff7be8a91f7d27b9d08c09d840c53",
+    "reviewer": "agent:/root/implement_reference_layout/stage12_review",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "3fe0a0ee6773252651c211c17d6176af7fd8cecf0454d8c1fd0a39482fae15fd"
+  },
+  "refusal": {
+    "brief": "N7",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.rtd_interface",
+    "reason": "No eligible catalog block or combination of exported block functions provides the required 100 uA four-wire PT100 excitation and independent differential sensing with calibrated 0–100 degC conversion, 0.5 degC absolute error and >=10 Hz 3.3 V UART reporting. The inspected ADC block is a fixed 8 SPS voltage acquisition circuit without excitation or RTD conversion. Current-monitor blocks sense an installed 0.1 ohm shunt rather than independently excite/sense an external PT100; the thermistor, silicon temperature sensor, photodiode frontend, voltage-reference, DAC and unity-follower contracts do not supply the missing RTD function. Raw op-amp or ADC part availability does not create an eligible reviewed RTD block."
+  }
+}

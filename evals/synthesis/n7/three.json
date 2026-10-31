@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 577863,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "e5e492f75f8aedac7ceb7d9e0f64d0e1b232374ba6977b428aadfe1c1af35b3b",
+    "submission_hashes": [
+      {
+        "original_sha256": "37cdddc89cb12d11900a0c59aa91322e48db5d744934892ea7a7b13622f13b70",
+        "refusal_sha256": "ab79e7bd0ba42a01bf692c5acf7422da5f42ca59407de6380cb244fda693b3e3"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/n7_author_three",
+    "brief_sha256": "5bba1c810f7bacb8ffcdb08371dc4327754245858b239db122359542efdd4d0e",
+    "bundle_commit": "b97ed0dc994610b51563b8d835e1de49251d1a7d",
+    "bundle_sha256": "1c79fe12032b4dce4374f0e2d532f0cb6a597b436cd851150c8276a8f0501c2b",
+    "equivalence_review": "Correct closed-world refusal. The author preserved unsuccessful positional searches and the missing registry-ID call, then obtained successful full inventories and relevant contracts. I independently checked ADC, thermistor, silicon temperature sensor, photodiode, reference and buffer nets and parameters. Their existing exported functions do not provide the requested complete RTD measurement contract. The refusal concerns this pinned catalog, not physical impossibility or absence of possible future designs.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "075844bbb548d4d090e39499273a614749a4614f2ea8cac695089c4a26b613f3",
+    "input_identity": {
+      "audit_sha256": "94e506da60d1be3f7cb934fa4f5d8327a181138d82ed71aa676f398958c99967",
+      "catalog_tree": "0febd92eefcad559080e75b378b28d7591a70cd9",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "refusal_sha256": "ab79e7bd0ba42a01bf692c5acf7422da5f42ca59407de6380cb244fda693b3e3",
+    "reviewer": "agent:/root/implement_reference_layout/stage12_review",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "9d66454435807819e7025cbf87242183c525ade723ee74f15f49c7f7acc868e5"
+  },
+  "refusal": {
+    "brief": "N7",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.rtd_interface",
+    "reason": "The inspected verified catalog has no block or composable exported function implementing 100 uA PT100 excitation, separate force and differential sense paths, and calibrated 0–100 degC conversion within 0.5 degC at >=10 UART readings/s. Full block and part inventories plus sensor, analog, ADC, current and UART contracts were inspected. g3-adc is a voltage ADC block fixed at 8 SPS with no excitation or PT100 conversion; INA219 monitor blocks connect their two sense ports across a local 0.1 ohm shunt, not an independent four-wire RTD frontend. The NTC divider, on-chip temperature sensor, internal photodiode TIA, voltage DAC and unity buffer do not supply the missing RTD function. Existing UART/MCU, USB power and mounting support cannot remedy that missing verified measurement function. This is a catalog selection gap, not a claim that a PT100 instrument is physically impossible."
+  }
+}

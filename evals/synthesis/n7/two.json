@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 576314,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "f916f2db6bc92f791be92f15902040b04dfb2c094bcabf3387ff8f86ca8ada2c",
+    "submission_hashes": [
+      {
+        "original_sha256": "f0a798b95a67288bdafafa5a1d86c48200aa8abbb7e8d0e6be5cf06b6209cb26",
+        "refusal_sha256": "7ec768b0c7853eb9dd7970b40f986c739ad6c40493ade82c40de0726fb1aa49c"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/n7_author_two",
+    "brief_sha256": "5bba1c810f7bacb8ffcdb08371dc4327754245858b239db122359542efdd4d0e",
+    "bundle_commit": "b97ed0dc994610b51563b8d835e1de49251d1a7d",
+    "bundle_sha256": "1c79fe12032b4dce4374f0e2d532f0cb6a597b436cd851150c8276a8f0501c2b",
+    "equivalence_review": "Correct closed-world refusal. Full inventories and related physical contracts support a catalog gap rather than a keyword-only inference. I checked the pinned ADC ports and 8 SPS contract, reference feed network, INA219 onboard shunt and OPA197 unity-feedback topology against the submitted reasoning. Available power, mounting and UART support does not supply the missing 100 uA excitation and independent force/sense conversion function. All original quantitative requirements are retained; no substitute sensor or threshold waiver was accepted.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "075844bbb548d4d090e39499273a614749a4614f2ea8cac695089c4a26b613f3",
+    "input_identity": {
+      "audit_sha256": "94e506da60d1be3f7cb934fa4f5d8327a181138d82ed71aa676f398958c99967",
+      "catalog_tree": "0febd92eefcad559080e75b378b28d7591a70cd9",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "refusal_sha256": "7ec768b0c7853eb9dd7970b40f986c739ad6c40493ade82c40de0726fb1aa49c",
+    "reviewer": "agent:/root/implement_reference_layout/stage12_review",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "9db75c7bccf9413b8757bee37b2db3743991e88b7465bfbc2b681bbb5f905799"
+  },
+  "refusal": {
+    "brief": "N7",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.rtd_interface",
+    "reason": "The queried pinned catalog has no eligible verified implementation of 100 uA PT100 excitation with independent force/sense leads and calibrated 0–100 degC conversion meeting 0.5 degC absolute error at >=10 readings/s over 3.3 V UART. Related contracts were inspected: g3-adc measures voltage, fixes 8 samples/s and +/-4.096 V full scale, exports analog inputs but no excitation or temperature-conversion function; INA219 blocks sense an onboard shunt rather than exciting an external four-wire RTD; the thermistor and local I2C temperature blocks are different sensing mechanisms; the photodiode amplifier, DAC voltage output, unity buffer and shunt voltage-reference blocks do not supply the missing reviewed RTD function. Raw catalog op-amp/ADC parts do not constitute an eligible implemented block. USB sink and mounting support do not remedy this missing required function."
+  }
+}

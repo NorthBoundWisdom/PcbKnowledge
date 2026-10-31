@@ -812,7 +812,7 @@ Claims (D92): before starting a cycle, push your name on its line so work is not
 | 1 | T1 adjustable DC-DC, T2 Li-ion charger with boost | Wisdom |
 | 2 | T3 motor H-bridge, T4 stepper driver | Ethan, claimed 2026-10-31 after Stage 17 |
 | 3 | T5 DAC signal generator, T6 OLED and keypad | Wisdom |
-| 4 | T7 CAN node, T8 Wi-Fi carrier | first free developer |
+| 4 | T7 CAN node, T8 Wi-Fi carrier | Wisdom |
 | 5 | T9 thermocouple, T10 class-D audio | first free developer |
 
 Shared preparation:
@@ -873,11 +873,11 @@ Cycle 2, T3/T4/N6 (Ethan):
 
 Cycle 3, T5/T6 (Wisdom):
 
-Blocking CI fixture repair: resolve the conformance temporary directory before bundle creation, preserving production symlink rejection. The macOS failure on `759ec7b` reproduces with an aliased temporary root; all 17 conformance tests pass after normalization, including the internal-symlink negative. Successor macOS CI remains required.
+Blocking CI fixture repair: resolve the conformance temporary directory before bundle creation, preserving production symlink rejection. The macOS failure on `759ec7b` reproduces with an aliased temporary root; all 17 conformance tests pass after normalization, including the internal-symlink negative. Integrated successor `7f3b72f` passes macOS and every other CI job.
 
 - [x] T5 DAC signal generator to A2 with three fresh synthesis attempts.
 Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate.
-Sampled-waveform calculator: 53 affected tests pass with exact selected-component and parameter bindings. Independent review fixed unenclosable decay and separated peak from cycle-mean residual bounds; 2,000 waveform comparisons support the conditional model. T5 operating predicates and source promotion remain pending.
+Sampled-waveform calculator: 53 affected tests pass with exact selected-component and parameter bindings. Independent review fixed unenclosable decay and separated peak from cycle-mean residual bounds; 2,000 waveform comparisons support the conditional model. The reviewed application below supplies the operating predicates and promoted sources.
 SPI/DDS scheduling: 57 affected tests pass with shared-clock rounding and accepted-interval checks. Independent review fixed omitted phase-word quantization in the sampling ratio and verified the integrated dispatcher; firmware edge placement and application bindings remain explicit requirements.
 SPI source bindings: independently verified STM32 PA4/PA5/PA7 capabilities retain the original pin map and prior provenance; 30 affected tests pass and all seven positive expansion hashes are unchanged.
 Physical budget checks: 74 affected tests pass for selected passive-path loss/current capacity, dual/quad effective capacitance, three pull branches plus base current, and four physical preloads/four consumer allocations. Independent review and dispatcher mutation tests pass; existing seven positive hashes remain unchanged.
@@ -888,9 +888,13 @@ Application integration: 41 application/reference/GPIO/replay/evidence tests and
 T5 CI correction: fixed D98 USB voltage/current declarations preserve the 12 V negative; verified-alternative feasibility stays separate from selected-graph verification, and G2 LOW tampering is rejected by deterministic replay. Independent review and 50 affected tests pass; all eight positive hashes are unchanged.
 T5 synthesis: three fresh authors on `e96f5ae` yield 2 PASS / 1 REFUSED, meeting the unchanged 2-of-3 threshold. Independent review authenticates 33 query responses and all five submitted originals; the failed second revision stays scored and the third stays NOT_RUN.
 Reference A2 and corpus threshold PASS do not make aggregate replay READY: it remains INCOMPLETE because the failed attempt is preserved. Successful parked exports each report 19 PASS / 30 FAIL / 4 NOT_CHECKABLE, with no A3 claim.
-- [ ] T6 OLED and keypad board to A2 (parked); then finish the cycle negative brief.
+- [ ] T6 OLED and keypad board to A2 (parked).
+- [x] Cycle 3 negative brief N7, three fresh attempts.
 T6 assembly qualification is parked after two interconnect approaches: the Wurth stack fails worst-case module-hole fit; the PRECI-DIP direct-solder option lacks sourced dimensional tolerances and a qualified support/separation stack.
-Panasonic EVQP0Q02Q resolves the key low-load source screen; no T6 A2 or synthesis result is claimed. N7 now tests the distinct absent four-wire RTD function; its three fresh attempts remain pending.
+Panasonic EVQP0Q02Q resolves the key low-load source screen; no T6 A2 or synthesis result is claimed. N7 three fresh authors on `b97ed0d` return the matching RTD refusal, 3/3; independent review authenticates 88 response rows and every original output. Committed attempt metadata is at most 3,268 bytes; full evidence remains local.
+
+Cycle 3 gate on `b97ed0d`: Python 3.12.14/Git 2.52.0; `for action in config build test package; do python3 configs/pcbknowledge_workflow.py "$action"; done`, Agent validation and all AGENTS section 10 guards pass. Build/Test each pass 971 tests, zero skips; 216 records validate.
+Cycle 3: T5 reference A2 and synthesis 2/3 meet the existing threshold; T6 remains parked below A2; N7 passes 3/3. Independent exit review passes 14 numbered checks plus layout/theme checks, including six cited fields and two pin maps; 23 affected tests pass after preserving Ethan `347fcde`. Cycle 4 is claimed for Wisdom.
 
 
 ## Stage 17 — PcbAtlas consumer contract

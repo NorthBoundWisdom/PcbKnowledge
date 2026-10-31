@@ -1,0 +1,39 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/implement_reference_layout/n7_author_one",
+      "correct_refusal": true,
+      "refusal_sha256": "0622853e7f383d14d8a563686f895e38c16ff7be8a91f7d27b9d08c09d840c53",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_reference_layout/n7_author_two",
+      "correct_refusal": true,
+      "refusal_sha256": "7ec768b0c7853eb9dd7970b40f986c739ad6c40493ade82c40de0726fb1aa49c",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_reference_layout/n7_author_three",
+      "correct_refusal": true,
+      "refusal_sha256": "ab79e7bd0ba42a01bf692c5acf7422da5f42ca59407de6380cb244fda693b3e3",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N7",
+  "bundle_commit": "b97ed0dc994610b51563b8d835e1de49251d1a7d",
+  "bundle_sha256": "1c79fe12032b4dce4374f0e2d532f0cb6a597b436cd851150c8276a8f0501c2b",
+  "evaluation_engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602",
+  "format": "pcbknowledge.synthesis-result-metadata.v1",
+  "full_report_sha256": "05be48a0351b937e896623d492e69e30169c0ee47af4c8bbd21317a40ed29757",
+  "input_identity": {
+    "audit_sha256": "94e506da60d1be3f7cb934fa4f5d8327a181138d82ed71aa676f398958c99967",
+    "catalog_tree": "0febd92eefcad559080e75b378b28d7591a70cd9",
+    "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+  },
+  "mode": "negative",
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}
