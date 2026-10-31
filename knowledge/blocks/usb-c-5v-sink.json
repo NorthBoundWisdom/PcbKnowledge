@@ -39,7 +39,7 @@
     {
       "ref": "J1",
       "select": {
-        "part": "part:gct-usb4110-gf-a"
+        "part": "part:gct-usb4125-gf-a-0190"
       }
     },
     {
@@ -76,7 +76,7 @@
   "evidence": [
     {
       "page": 1,
-      "source": "source:gct-usb4110-drawing"
+      "source": "source:gct-usb4125-drawing"
     }
   ],
   "id": "block:usb-c-5v-sink",
@@ -133,16 +133,16 @@
     {
       "connect": [
         "port:VBUS",
-        "J1.pin:A4_B9",
-        "J1.pin:B4_A9"
+        "J1.pin:B9",
+        "J1.pin:A9"
       ],
       "name": "VBUS"
     },
     {
       "connect": [
         "port:GND",
-        "J1.pin:A1_B12",
-        "J1.pin:B1_A12",
+        "J1.pin:B12",
+        "J1.pin:A12",
         "J1.pin:SHELL1",
         "J1.pin:SHELL2",
         "J1.pin:SHELL3",
@@ -207,7 +207,7 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
-    "notes": "D66: physical placement anchor and selected package correction; numerical layout limits retained.",
+    "notes": "D68 revised by agent:/root/implement_reference_layout/tool_research: power-only connector substitution; ports, 5 V, 5.1 kohm and numeric layout limits retained. Reflow SMT contacts and manually solder four through-hole shell stakes.",
     "verified_by": [
       "agent:/root/implement_pcbknowledge_brief/stage6_package_review",
       "agent:/root/implement_reference_layout/placement_review"

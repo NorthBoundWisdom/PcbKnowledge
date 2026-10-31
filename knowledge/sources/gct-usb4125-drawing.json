@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-31",
+  "bytes": 469688,
+  "id": "source:gct-usb4125-drawing",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 2,
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "publisher": "Global Connector Technology",
+  "revision": "A6, 2025-11-20",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "ea33e0b40545e545bf698cbac3bb1c0f5a3fc7ca6b5b7fda83a63134d4affaa7",
+  "title": "USB4125 Type C Receptacle, Horizontal, SMT, For Power Charging Only",
+  "url": "https://gct.co/files/drawings/usb4125.pdf",
+  "verification": "AGENT_VERIFIED"
+}

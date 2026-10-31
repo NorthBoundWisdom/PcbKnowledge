@@ -1,0 +1,718 @@
+{
+  "body": {
+    "center": {
+      "x": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Centerline datum.",
+        "unit": "mm",
+        "value": 0
+      },
+      "y": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D68 body datum: nominal 6.80 / 2 inward from mating face.",
+        "unit": "mm",
+        "value": 3.4
+      }
+    },
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4125-drawing"
+      },
+      "max": 3.41,
+      "min": 2.91,
+      "note": "Page 1 dimension; explicit depth tolerance±.15, otherwise generalX.XX±.25.",
+      "typ": 3.16,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4125-drawing"
+      },
+      "max": 6.95,
+      "min": 6.65,
+      "note": "Page 1 dimension; explicit depth tolerance±.15, otherwise generalX.XX±.25.",
+      "typ": 6.8,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4125-drawing"
+      },
+      "max": 9.19,
+      "min": 8.69,
+      "note": "Page 1 dimension; explicit depth tolerance±.15, otherwise generalX.XX±.25.",
+      "typ": 8.94,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:gct-usb4125-drawing"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "B12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.8
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Centered source horizontal span/2.",
+        "unit": "mm",
+        "value": -2.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Mating-face origin: 2.60 + 3.80 + 0.68 - 1.20 / 2 = 6.48; upper pad edge is 0.68 above rear-hole center.",
+        "unit": "mm",
+        "value": 6.48
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "B9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.76
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Centered source horizontal span/2.",
+        "unit": "mm",
+        "value": -1.52
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Mating-face origin: 2.60 + 3.80 + 0.68 - 1.20 / 2 = 6.48; upper pad edge is 0.68 above rear-hole center.",
+        "unit": "mm",
+        "value": 6.48
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.7
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Centered source horizontal span/2.",
+        "unit": "mm",
+        "value": -0.5
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Mating-face origin: 2.60 + 3.80 + 0.68 - 1.20 / 2 = 6.48; upper pad edge is 0.68 above rear-hole center.",
+        "unit": "mm",
+        "value": 6.48
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "B5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.7
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Centered source horizontal span/2.",
+        "unit": "mm",
+        "value": 0.5
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Mating-face origin: 2.60 + 3.80 + 0.68 - 1.20 / 2 = 6.48; upper pad edge is 0.68 above rear-hole center.",
+        "unit": "mm",
+        "value": 6.48
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.76
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Centered source horizontal span/2.",
+        "unit": "mm",
+        "value": 1.52
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Mating-face origin: 2.60 + 3.80 + 0.68 - 1.20 / 2 = 6.48; upper pad edge is 0.68 above rear-hole center.",
+        "unit": "mm",
+        "value": 6.48
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "kind": "SMD",
+      "number": "A12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.8
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Centered source horizontal span/2.",
+        "unit": "mm",
+        "value": 2.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Mating-face origin: 2.60 + 3.80 + 0.68 - 1.20 / 2 = 6.48; upper pad edge is 0.68 above rear-hole center.",
+        "unit": "mm",
+        "value": 6.48
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.7
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "8.64 / 2 from centerline.",
+        "unit": "mm",
+        "value": -4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Front stake 2.60 behind mating face; rear stake 2.60 + 3.80.",
+        "unit": "mm",
+        "value": 2.6
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.7
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "8.64 / 2 from centerline.",
+        "unit": "mm",
+        "value": 4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Front stake 2.60 behind mating face; rear stake 2.60 + 3.80.",
+        "unit": "mm",
+        "value": 2.6
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.7
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "8.64 / 2 from centerline.",
+        "unit": "mm",
+        "value": -4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Front stake 2.60 behind mating face; rear stake 2.60 + 3.80.",
+        "unit": "mm",
+        "value": 6.4
+      }
+    },
+    {
+      "drill_height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.2
+      },
+      "drill_width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.7
+      },
+      "kind": "THROUGH_HOLE",
+      "number": "SHELL4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned source pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "OVAL",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "unit": "mm",
+        "value": 1.1
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "8.64 / 2 from centerline.",
+        "unit": "mm",
+        "value": 4.32
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4125-drawing"
+        },
+        "note": "Front stake 2.60 behind mating face; rear stake 2.60 + 3.80.",
+        "unit": "mm",
+        "value": 6.4
+      }
+    }
+  ],
+  "family": "EXPLICIT",
+  "id": "package:gct-usb4125-gf-a-0190",
+  "mount_type": "SMT",
+  "pin1": "B12",
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:gct-usb4125-drawing"
+      }
+    ],
+    "mpns": [
+      "USB4125-GF-A-0190"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

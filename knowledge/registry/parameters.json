@@ -355,6 +355,28 @@
         "Q5"
       ]
     },
+    "expected_voltage": {
+      "conditions": {
+        "TA": "temperature",
+        "TJ_max": "temperature",
+        "TJ_min": "temperature",
+        "analog_current_max": "current",
+        "analog_drop_max": "voltage",
+        "analog_resistance_max": "resistance",
+        "input_current_max": "current",
+        "ptc_resistance_max": "resistance",
+        "regulator_headroom_min": "voltage",
+        "regulator_load_max": "current",
+        "regulator_load_min": "current",
+        "segment_drop_max": "voltage",
+        "shunt_resistance_max": "resistance",
+        "supply_difference_max": "voltage"
+      },
+      "quantity": "voltage",
+      "queries": [
+        "Q10"
+      ]
+    },
     "forward_voltage": {
       "conditions": {
         "TA": "temperature",

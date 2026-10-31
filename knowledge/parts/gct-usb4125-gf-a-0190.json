@@ -1,0 +1,117 @@
+{
+  "id": "part:gct-usb4125-gf-a-0190",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:gct-usb4125-drawing"
+  },
+  "manufacturer": "Global Connector Technology",
+  "mpn": "USB4125-GF-A-0190",
+  "package": "package:gct-usb4125-gf-a-0190",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4125-drawing"
+      },
+      "note": "Collective VBUS rating, not per-pin.",
+      "unit": "A",
+      "value": 3
+    },
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Engineering board choice; source offers 1.90 mm shell stakes via the 0190 suffix.",
+      "unit": "mm",
+      "value": 1.6
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4125-drawing"
+      },
+      "note": "DC connector rating; circuit remains a 5 V sink.",
+      "unit": "V",
+      "value": 48
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "note": "Page 1 pin table explicitly SHELL=GND. SHELL1-4 are local labels for four plated retention slots. Six power-only contacts, no USB data contacts.",
+    "page": 1,
+    "source": "source:gct-usb4125-drawing"
+  },
+  "pins": [
+    {
+      "name": "GND",
+      "number": "B12",
+      "type": "GROUND"
+    },
+    {
+      "name": "VBUS",
+      "number": "B9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CC1",
+      "number": "A5",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CC2",
+      "number": "B5",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VBUS",
+      "number": "A9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "A12",
+      "type": "GROUND"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL1",
+      "same_net_as": "B12",
+      "type": "GROUND"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL2",
+      "same_net_as": "B12",
+      "type": "GROUND"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL3",
+      "same_net_as": "B12",
+      "type": "GROUND"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL4",
+      "same_net_as": "B12",
+      "type": "GROUND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "roles": [
+    "connector.usb-c-sink"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}
