@@ -8,10 +8,11 @@ Copy everything below the line into the implementing agent's task.
 
 ---
 
-You are continuing PcbKnowledge in **continuous mode**. G1 is at A2. The goal is
-that a simple design brief becomes a manufacturable board; this repository
-supplies the knowledge, expansion, handoff files and checks, and never places or
-routes a board.
+You are continuing PcbKnowledge in **continuous mode**. The goal is that a
+simple design brief becomes a manufacturable board. This repository supplies the
+knowledge, expansion, handoff files and checks, and a reference layout pipeline
+(ADR-026) that places, autoroutes and exports boards only into `build/`. The
+current acceptance level of each golden design is in `TODO.md`.
 
 ## Read first
 
@@ -19,7 +20,7 @@ routes a board.
 2. `TODO.md`: owner decisions, the latest stage receipt and review, and the open
    stages
 3. `docs/review-checklist.md`
-4. ADR-022, ADR-023, ADR-024 and any newer ADR
+4. ADR-022 to ADR-026 and any newer ADR
 
 ## How to work
 

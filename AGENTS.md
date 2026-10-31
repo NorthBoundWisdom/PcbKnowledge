@@ -4,7 +4,7 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 
 ## 0. Direction and priorities
 
-- The product goal is that a design package (for example a simple hardware-competition brief) becomes a manufacturable board. PcbKnowledge supplies parts, footprints, blocks, rules, fab profiles, calculators and block expansion; PcbAtlas does placement, routing, DRC and fabrication output. Read [ADR-022](docs/adr/ADR-022-board-generation-knowledge.md), [`docs/knowledge-model-v2.md`](docs/knowledge-model-v2.md) and [`docs/golden-designs.md`](docs/golden-designs.md) before planning work.
+- The product goal is that a design package (for example a simple hardware-competition brief) becomes a manufacturable board. PcbKnowledge supplies parts, footprints, blocks, rules, fab profiles, calculators and block expansion, plus a reference layout pipeline ([ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md)) that places, autoroutes, checks and exports boards into `build/` as a derived reference; PcbAtlas remains the product layout tool. Read [ADR-022](docs/adr/ADR-022-board-generation-knowledge.md), [`docs/knowledge-model-v2.md`](docs/knowledge-model-v2.md) and [`docs/golden-designs.md`](docs/golden-designs.md) before planning work.
 - Work only on the active stage in [`TODO.md`](TODO.md) unless the user explicitly asks otherwise. Every record type, field, tool and collection task must serve a consumer query in the v2 model or a golden-design requirement. If it serves neither, do not build it.
 - Progress is measured by golden-design acceptance levels (A1 to A6), not by record, test or document counts.
 - The intake queue, v1 model and review UI are removed. Migrate later golden-design parts from the frozen `intake-final` Git tag; never restore an intake authority or toolchain.
@@ -53,7 +53,7 @@ These rules apply to the whole repository. A more specific `AGENTS.md` may add s
 - Keep a round moving with the smallest implementation that serves the golden design. Do not gold-plate one sub-item while later items in the round are untouched.
 - **Continuous mode.** From Stage 6 the queue in `TODO.md` replaces per-round briefs; the standing task is [`docs/implementer-brief.md`](docs/implementer-brief.md). Take the first unchecked item of the lowest open stage. Skip `(owner-only)` items. At each stage exit an independent reviewer agent runs [`docs/review-checklist.md`](docs/review-checklist.md) before the push.
 - A blocked stage parks with a recorded blocker and the queue moves to the next stage; stop only when every remaining stage is parked. Run one implementing session on `main` at a time.
-- Stop and ask the owner only for the escalation list in `TODO.md`: a permanent boundary, a new runtime dependency or service, weakening or deleting a check, test or golden design, or PcbKnowledge placing, routing or mutating a board. Never relax a check to make a design pass.
+- Stop and ask the owner only for the escalation list in `TODO.md`: a permanent boundary, a new runtime dependency or service, weakening or deleting a check, test or golden design, or PcbKnowledge placing, routing or writing a board outside the ADR-026 pipeline and `build/`. Never relax a check or a layout constraint to make a design pass.
 
 ## 4. Public source boundary
 
@@ -104,6 +104,7 @@ This upstream publishes software and small original curated knowledge under [ADR
 - Local OS filesystem permissions and Git repository access are the trust boundary.
 - Query CLI commands and the GUI are read-only. Explicit `evidence fetch [--source <id>]` and `evidence add <file>` may write only ignored local evidence caches, never knowledge records or Git. Fetch failures are reported without access-control workarounds; differing bytes are quarantined without replacing recorded originals.
 - The current GUI is read-only and refuses all mutation methods. Any future mutation routes require loopback Host/Origin validation, CSRF protection and optimistic revision tokens. The GUI never executes Git write commands.
+- External tools (KiCad `kicad-cli`, Java, Freerouting) are optional processes located by explicit path or `PATH`, never vendored. Unit tests never need them; a missing tool is `NOT_RUN`, never a pass.
 - Runtime and tests use the Python standard library. A new third-party runtime dependency requires explicit approval and a lockfile decision.
 - Maintain `HTTP handler -> application/view-model -> repository/domain`. HTML rendering consumes view models; route handlers stay thin.
 - Keep UI state derived from the selected workspace. Do not cache authority in process-global mutable objects.

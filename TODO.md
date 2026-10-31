@@ -1,7 +1,7 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CORPUS_GROWTH_STOPPED_NO_NEW_BLOCKS` (G1-G5 positive designs at A2; owner layout next)
-> Updated: 2026-10-30
+> Status: `CONTINUOUS_MODE_STAGE_12_ACTIVE` (G1-G5 at A2; reference layout next, ADR-026)
+> Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
 > expansion; PcbAtlas does placement, routing, DRC and fabrication output.
@@ -106,6 +106,9 @@ answer here.
 | D60 | G3 functional wiring | Bind functional supply, reference, sensor-channel and common-return endpoints to the actual expanded nets. Each named group shares one physical net and different groups remain distinct. Fixed parameter values alone do not establish physical wiring. |
 | D61 | First corpus growth cycle | G4 is a slow optical alignment-score acquisition peripheral; G5 is a dual-temperature agreement telemetry peripheral. Reuse the G3 bench envelopes and verified blocks, with an external host responsible for sequential ADC acquisition, scoring/comparison and communication. Distinct functional channel bindings define each composition. |
 | D62 | Reused ADC channels and receiver counterexample | G4 grounds unused ADC AIN0. G5 maps temperature A/B to physical AIN0/AIN1, although the existing second port is named AIN_TIA; AIN2 measures the shared reference. N4 requests a generic +0.2 V idle receiver threshold, which the existing SN65-specific weak-bias block does not support. |
+| D63 | Who places and routes (owner decision, 2026-10-31) | The owner chose a reference layout pipeline inside PcbKnowledge ([ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md)): original constraint-driven placement, Freerouting as an external autorouter, KiCad DRC and fabrication exports, all derived into `build/`. PcbAtlas remains the product layout tool and can be compared against this reference |
+| D64 | Layout tools | KiCad 9 or 10 `kicad-cli` (the owner has 10.0.6 at `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`), Java 21 or newer, and the latest stable Freerouting release jar. Record the exact Freerouting version and jar SHA-256 in `docs/local-workflow.md` at first use; run it single-threaded with fixed passes. Outputs must work on KiCad 9 and 10 |
+| D65 | Corpus themes (fixed order, chosen by the reviewing agent under delegation) | T1 adjustable DC-DC supply with digital setpoint and readback; T2 single-cell Li-ion charger with boost to 5 V; T3 brushed DC motor H-bridge with encoder input; T4 bipolar stepper driver; T5 DAC signal generator with op-amp output stage; T6 OLED and keypad user-interface board; T7 CAN bus node; T8 Wi-Fi module carrier with USB programming; T9 thermocouple measurement with cold-junction sensing; T10 class-D audio amplifier. Take themes in this order; do not reshape a theme to reuse existing blocks |
 
 ## Stage 0 — Course correction (complete)
 
@@ -644,16 +647,96 @@ pass rate. Stop adding briefs when a cycle's new briefs pass with no new blocks.
 
 Cycle 1 receipt: published input a5e2bad; G4/G5 references and fresh attempts reach A2 (3/3 each), N4 typed refusals 3/3. No new blocks; independent review passed after strengthening exact block-content stop proof. Full gate: 471 tests/no skips, 162 records/125 reachable/31 graphs.
 Stop: this successful cycle needs no new blocks, so no further briefs are added under the Stage 11 stopping condition. A3-A6 remain owner/cross-repository work.
+Review (2026-10-31, `7b786b4`): all gates pass locally (471 tests, no skips) and
+in CI; TPS5430 source hash and cited UVLO, enable, frequency, current-limit and
+RDS(on) values match the datasheet. G2 and G3 are real progress. Two issues: the
+Stage 11 stop rule let the implementer choose briefs (G4, G5) built from existing
+blocks, so the stop proved nothing (replaced by the fixed theme list D65); and
+synthesis evidence is committed in full (about 6.5 MB of `evals/`, 200 KB
+transcripts per attempt), which grows with every cycle. D55-D62 lost spaces
+("external3.2-3.4 V") and carry "not manufacturer guarantees" clauses again.
+
+## Stage 12 — Cleanup from the Stage 11 review
+
+- [ ] Synthesis evidence storage: per attempt, commit the graph, the receipt with
+  SHA-256 of the initial packet, submissions and transcript, and the independent
+  review verdict. Full packets and transcripts go to the ignored local cache
+  (`.pcbknowledge/evals/`). Replay tests keep passing. Keep `evals/` under 1.5 MB.
+- [ ] D42-D62: restore missing spaces; keep each entry to the decision and its
+  reason, and move real limitations into typed `UNKNOWN` values or checks.
+- [ ] Update `README.md`, `architecture.md` and `golden-designs.md` for ADR-026
+  and the current acceptance table (one authority, linked from the others).
+
+Exit: `evals/` within budget, replay unchanged, docs match ADR-026.
+
+## Stage 13 — Reference layout for G1 (A3 to A5)
+
+Implements [ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md) on G1 first.
+
+- [ ] `layout tools`: report the located `kicad-cli`, Java and Freerouting jar
+  with versions, or `NOT_FOUND`. Document setup per D64.
+- [ ] Placer (original code, deterministic): rectangular outline from the brief;
+  edge, mechanical and connector items first; anchor ICs; `PLACE_NEAR` and `GROUP`
+  members around their targets; courtyard legalization on a grid; top-side SMT per
+  the fab profile. Unsatisfiable constraints are reported, never relaxed.
+- [ ] Copper: bottom-layer GND zone and stitching vias where the intent asks;
+  zones are filled before DRC and export.
+- [ ] Routing: write Specctra DSN with net classes (widths, clearances, via size)
+  from the fab profile and intent; run Freerouting single-threaded; read SES and
+  merge tracks and vias into the derived board. Tests use small hand-written
+  DSN/SES fixtures; no tool needed.
+- [ ] `layout run <intent>`: place, route, merge, fill, `layout check`, `drc`,
+  export, re-read; one report with A3, A4 and A5 each `PASS`, `FAIL` or `NOT_RUN`.
+- [ ] Fabrication outputs: `kicad-cli pcb export gerbers|drill|pos` plus the BOM;
+  independent re-read checks the layer set, board extents, drill count against
+  holes, and that every SMT BOM reference has a position line. Document the CPL
+  rotation convention for the D12 fab.
+- [ ] Bring-up checklist export from the intent: each rail with expected voltage
+  range and test location, programming connector pinout, and the brief's
+  functional tests. Used by the owner in Stage 15.
+- [ ] Owner review aids: top and bottom SVG renders under `build/` and manual
+  steps in `docs/local-workflow.md`.
+
+Exit: G1 reference layout with `layout check` all `PASS` (any `NOT_CHECKABLE`
+kind listed with its reason), DRC zero violations and zero unconnected items,
+fabrication outputs generated and re-read. Record tool versions in the receipt.
+
+## Stage 14 — Reference layout for G1V1, G1V2 and G2 to G5
+
+- [ ] Run Stage 13 on every positive design. Add placer and router features each
+  design needs (wide power nets and thermal copper for G2, USB pair for G1V2,
+  analog/digital separation for G3-G5) as constraint support, not per-design code.
+- [ ] Every layout or DRC failure that comes from knowledge (footprint, rule,
+  constraint) is fixed in the catalog with a test, before tuning the placer.
+
+Exit: every positive golden design at A5 (reference).
+
+## Stage 15 — First fabricated board (owner-only)
+
+- [ ] (owner-only) Order G1 from the Stage 13 outputs; hand-solder THT parts.
+- [ ] (owner-only) Bring-up with the Stage 13 checklist: rails, SWD connects, LED,
+  button and I2C tests (A6). Record results in `TODO.md`.
+- [ ] Every bring-up failure becomes a catalog or pipeline fix with a test, ahead
+  of the queue.
+
+## Stage 16 — Corpus growth by fixed themes
+
+Each cycle takes the next two themes from D65, in order, and one new negative
+brief. A theme brief states requirements a competition would state; it is not
+shaped to reuse existing blocks. Each positive brief must reach A5 (reference
+layout), not only A2, with three fresh synthesis attempts as in Stage 8. A theme
+may be parked only for part or evidence availability, with the blocker recorded.
+Record one receipt line per cycle: themes, A-levels, new blocks and parts, and the
+corpus pass rate. Continue until all ten themes are done or parked, then propose
+the next ten as a TODO change.
 
 ## Owner-only and cross-repository items
 
 These never block the queue.
 
 - [ ] (owner-only) PcbAtlas import of the G1 handoff (tracked in PcbAtlas).
-- [ ] (owner-only, recommended next) Lay out G1 by hand in KiCad 9 from the
-  Stage 7 handoff project, then run `layout check` and `drc`. This is the
-  fastest test of A3/A4 while PcbAtlas has no placement or routing plan, and it
-  turns real layout friction into PcbKnowledge fixes.
+- [ ] (owner-only, optional) Open the Stage 13 G1 reference layout in KiCad and
+  review placement and routing by eye before ordering boards (Stage 15).
 - [ ] (owner-only) Optional spot checks: open the viewer, pick five cited values per
   stage and confirm them; a confirmed record may then be set to `HUMAN_VERIFIED`
   by the owner.
@@ -667,7 +750,8 @@ These never block the queue.
 - A new runtime dependency, network listener, hosted service or database.
 - Weakening, skipping or deleting a check, test or golden design to make a stage
   pass, or changing the A1-A6 definitions.
-- Anything that would make PcbKnowledge place, route or mutate a board.
+- Anything that would make PcbKnowledge place, route or write a board outside the
+  ADR-026 pipeline and `build/`, or relax a layout constraint to pass.
 
 ## Later (not started)
 

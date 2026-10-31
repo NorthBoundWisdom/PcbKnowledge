@@ -43,6 +43,11 @@ When a guard automates a check, delete the check here and name the guard in the
    tolerances). Flag values chosen only because they make a check pass.
 9. Evaluations can fail: a negative case exists for each new check, and synthesis
    attempts had no access to references, tests or other attempts.
+9a. Layout (ADR-026): no layout constraint or DRC rule was relaxed, waived or
+    excluded to pass; the count of `NOT_CHECKABLE` results did not grow without a
+    reason; A3-A5 claims name the tool versions and a report under `build/`.
+9b. New corpus briefs follow the D65 theme order and state what a competition
+    would ask, not what the catalog already has.
 
 ## Code and documents
 
