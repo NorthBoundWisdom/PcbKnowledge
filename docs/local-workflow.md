@@ -394,3 +394,10 @@ source courtyard remains unchanged; empty courtyard space is not treated as ink.
 A necessary endpoint-distance bound rejects isolated impossible proximity rules
 before search. It does not prove joint feasibility or convert search exhaustion
 into geometric impossibility.
+
+The reference report distinguishes `owner_review_ready` from strict A3-A5 and
+`review_ready`. Owner inspection requires clean final native DRC, independently
+re-read fabrication outputs, complete conditional bring-up ranges, top/bottom
+SVGs, and no failed layout checks. Each remaining `NOT_CHECKABLE` reason stays
+visible beside the renders. This inspection checkpoint does not approve ordering
+or convert unsupported physical proofs into passing checks.

@@ -175,4 +175,7 @@ def export_outputs(board_path, output, intent, tools, *, root):
         reread = {'status': 'FAIL', 'reason': str(error)}
     if hashlib.sha256(board_path.read_bytes()).hexdigest() != fingerprint:
         reread = {'status': 'FAIL', 'reason': 'Export modified source board'}
-    return {'status': reread['status'], 'processes': results, 'reread': reread, 'input_sha256': fingerprint}
+    artifacts = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                 for path in sorted(output.iterdir()) if path.is_file() and not path.is_symlink()}
+    return {'status': reread['status'], 'processes': results, 'reread': reread, 'input_sha256': fingerprint,
+            'output': str(output), 'artifact_sha256': artifacts}

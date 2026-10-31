@@ -16,6 +16,7 @@ from .layout_tools import derived_path
 from .placement import PlacementError, apply_positions, place_components
 from .placement_search import BEAM_WIDTH, COMPATIBILITY_WORK_PER_BRANCH, MAX_COMPATIBILITY_WORK, MAX_DOMAIN_CANDIDATES
 from .routing import route_board
+from .review_readiness import owner_review_ready
 from .sexpr import dumps, parse
 
 
@@ -108,5 +109,6 @@ def run_layout(intent, bundle, graph, output, tools, *, root, grid_mm=.5, max_st
     report['review_ready'] = ready
     report['status'] = 'PASS' if ready else 'FAIL'
     report['svg_paths'] = [str(path) for path in sorted((output / 'fabrication').rglob('*.svg'))]
+    report['owner_review_ready'] = owner_review_ready(report)
     (output / 'report.json').write_text(canonical_json(report), encoding='utf-8', newline='\n')
     return report
