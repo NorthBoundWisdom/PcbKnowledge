@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 
+from . import calculators_spi_schedule
 from . import calculators_waveform
 from . import calculators_resistor_load
 from . import calculators_geometry, calculators_envelope, calculators_envelope_power, calculators_output
@@ -24,7 +25,7 @@ I2C_RC_RISE_FACTOR = 0.8473
 ENVELOPE_MODULES = {
     name: module
     for module in (calculators_envelope, calculators_envelope_power, calculators_output,
-                   calculators_resistor_load, calculators_waveform)
+                   calculators_resistor_load, calculators_waveform, calculators_spi_schedule)
     for name in module.INPUT_UNITS
 }
 
@@ -36,6 +37,7 @@ INPUT_UNITS = {
     **calculators_output.INPUT_UNITS,
     **calculators_resistor_load.INPUT_UNITS,
     **calculators_waveform.INPUT_UNITS,
+    **calculators_spi_schedule.INPUT_UNITS,
     'ldo_headroom': {'input_voltage': 'V', 'output_voltage': 'V', 'dropout': 'V',
                      'input_current': 'A', 'series_resistance': 'ohm'},
     'ldo_dissipation': {'input_voltage': 'V', 'output_voltage': 'V', 'output_current': 'A',

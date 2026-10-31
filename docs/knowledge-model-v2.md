@@ -424,3 +424,11 @@ dynamic error and DDS/sample weighting; jitter or typical settling specification
 do not establish either bound. Checks compare the calculated margins with zero.
 The calculator refuses unsupported sampling or unenclosable decay domains and
 does not generate a waveform or firmware.
+
+`spi_dac_schedule` checks the shared-clock frame and firmware-cycle reservation,
+SPI clock and half-period limits, and nearest-integer DDS phase-word rounding.
+The same physical clock scales the chosen word and sample rate. The calculated
+sample and waveform intervals must fit their shared accepted inputs, including
+quantization when enforcing samples per cycle. Individual setup/hold placement,
+SPI mode and electrical loading remain explicit operating requirements rather
+than consequences of an aggregate guard-time allowance.

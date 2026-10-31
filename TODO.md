@@ -855,6 +855,7 @@ Cycle 3, T5/T6 (Wisdom):
 - [ ] T5 DAC signal generator to A2 with three fresh synthesis attempts.
 Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate. T5 application and waveform checks remain in progress.
 Sampled-waveform calculator: 53 affected tests pass with exact selected-component and parameter bindings. Independent review fixed unenclosable decay and separated peak from cycle-mean residual bounds; 2,000 waveform comparisons support the conditional model. T5 operating predicates and source promotion remain pending.
+SPI/DDS scheduling: 57 affected tests pass with shared-clock rounding and accepted-interval checks. Independent review fixed omitted phase-word quantization in the sampling ratio and verified the integrated dispatcher; firmware edge placement and application bindings remain explicit requirements.
 - [ ] T6 OLED and keypad board to A2 with three fresh synthesis attempts, then the cycle negative brief.
 
 ## Stage 17 — PcbAtlas consumer contract
