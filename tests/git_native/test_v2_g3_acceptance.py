@@ -85,15 +85,19 @@ class G3AcceptanceTests(unittest.TestCase):
         nets = {n['name']: set(n['connect']) for n in block['nets']}
         self.assertIn('D1.pin:1', nets['SUMMING'])
         self.assertIn('D1.pin:2', nets['GND'])
-        total = [0, 0]
-        for ref in ('C2', 'C3', 'C4', 'C5'):
-            self.assertIn(ref + '.pin:1', nets['SUMMING'])
-            self.assertIn(ref + '.pin:2', nets['OUT'])
-            low, high = limits(self.part(block, ref)['parameters']['capacitance'])
-            total[0] += low
-            total[1] += high
-        self.assertAlmostEqual(total[0], 83.6e-12)
-        self.assertAlmostEqual(total[1], 92.4e-12)
+        self.assertIn('C2.pin:1', nets['SUMMING'])
+        self.assertIn('C2.pin:2', nets['OUT'])
+        self.assertFalse({'C3', 'C4', 'C5'} & {item['ref'] for item in block['components']})
+        low, high = limits(self.part(block, 'C2')['parameters']['capacitance'])
+        self.assertAlmostEqual(low, 95e-12, delta=1e-24)
+        self.assertAlmostEqual(high, 105e-12, delta=1e-24)
+        loop = self.model(block, 'tia_loop_total_capacitance')
+        self.assertGreaterEqual(loop['phase_margin']['min'], 45)
+        self.assertGreaterEqual(loop['feedback_pole']['min'], 1)
+        near = {row['subject']: row for row in block['layout'] if row['kind'] == 'PLACE_NEAR'}
+        for subject in ('C2.pin:1', 'R3.pin:1'):
+            self.assertEqual(near[subject]['target'], 'U1.pin:6')
+            self.assertEqual(near[subject]['max_distance']['value'], 2)
         model = self.model(block, 'tia_frontend')
         self.assertAlmostEqual(model['bias_voltage']['min'], 1.16325)
         self.assertAlmostEqual(model['bias_voltage']['max'], 1.33825)
