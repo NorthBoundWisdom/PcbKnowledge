@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 
+from . import calculators_geometry
 from . import calculators_analog, calculators_drivers, calculators_power, calculators_protection
 
 
@@ -19,6 +20,7 @@ MM_PER_MIL = 0.0254
 I2C_RC_RISE_FACTOR = 0.8473
 
 INPUT_UNITS = {
+    **calculators_geometry.INPUT_UNITS,
     'ldo_headroom': {'input_voltage': 'V', 'output_voltage': 'V', 'dropout': 'V',
                      'input_current': 'A', 'series_resistance': 'ohm'},
     'ldo_dissipation': {'input_voltage': 'V', 'output_voltage': 'V', 'output_current': 'A',
@@ -80,12 +82,19 @@ def _result(name, inputs, output):
 
 def calculate(name, inputs):
     try:
-        result = _calculate(name, inputs)
+        result = _geometry(inputs) if name in calculators_geometry.INPUT_UNITS else _calculate(name, inputs)
         for value in result.values():
             bounds(value, value['unit'], 'output')
         return result
     except ArithmeticError as error:
         raise CalculationError('Calculation exceeds finite numerical domain') from error
+
+
+def _geometry(inputs):
+    try:
+        return calculators_geometry.calculate(inputs)
+    except ValueError as error:
+        raise CalculationError(str(error)) from error
 
 
 def _input_bounds(name, inputs):

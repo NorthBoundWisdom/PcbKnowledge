@@ -98,7 +98,10 @@ independence are machine checked; the Git reviewer checks that the named actor
 actually performed the observation.
 
 Executable calculators validate registered inputs and recompute `CALCULATED`
-quantities. The G1 reference and independent graphs use collected records, not
+quantities. `geometry_affine` computes signed package coordinates as offset plus
+factor times dimension, using cited dimensional leaves and explicit mathematical
+coefficients. Nested calculations retain source closure; intervals round outward,
+and nonfinite results or lost nonzero scalar values fail. The G1 reference and independent graphs use collected records, not
 planned identifiers. `v2 audit` follows reference/corpus and preserved synthesis
 graph selections plus dependency closure; unreachable parts, packages and sources
 fail `v2 validate` and bundle compilation. A refusal fixture may demonstrate a

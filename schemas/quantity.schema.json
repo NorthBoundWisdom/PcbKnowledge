@@ -96,7 +96,8 @@
         "rs485_termination",
         "trace_impedance_microstrip",
         "tps5430_output_ripple",
-        "input_protection"
+        "input_protection",
+        "geometry_affine"
       ]
     },
     "inputs": {
