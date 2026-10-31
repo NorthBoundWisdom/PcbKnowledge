@@ -67,6 +67,10 @@ def load_attempt(root, path, *, recover_history=False):
         return document
     if not isinstance(descriptor, dict):
         raise ValueError('Malformed synthesis evidence descriptor')
+    cache_only = 'format' in descriptor
+    if cache_only:
+        from .synthesis_cache import validate_descriptor
+        validate_descriptor(document)
     expected = descriptor.get('sha256')
     if not _hex(expected, 64):
         raise ValueError('Invalid synthesis evidence digest')
@@ -77,7 +81,7 @@ def load_attempt(root, path, *, recover_history=False):
         if not cache.is_file() or cache.stat().st_size > LIMIT:
             raise ValueError('Oversized synthesis evidence')
         payload = cache.read_bytes()
-    elif recover_history:
+    elif recover_history and not cache_only:
         blob = descriptor.get('historical_blob')
         if not _hex(blob, 40):
             raise ValueError('No authenticated historical evidence blob')
@@ -93,6 +97,9 @@ def load_attempt(root, path, *, recover_history=False):
         payload = canonical_json({key: original[key] for key in FIELDS if key in original}).encode()
     else:
         raise ValueError('NOT_LOCALLY_VERIFIED: missing synthesis evidence ' + expected)
+    if cache_only:
+        from .synthesis_cache import validate_payload
+        return {**document, **validate_payload(document, payload)}
     if _sha(payload) != expected:
         raise ValueError('Synthesis evidence SHA-256 mismatch')
     evidence = read_json(payload)

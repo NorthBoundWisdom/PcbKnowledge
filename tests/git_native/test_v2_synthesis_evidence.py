@@ -26,7 +26,17 @@ class SynthesisEvidenceTests(unittest.TestCase):
             if 'evidence' not in document:
                 continue
             self.assertFalse(set(FIELDS) & set(document))
-            raw = subprocess.check_output(['git', 'cat-file', 'blob', document['evidence']['historical_blob']], cwd=ROOT)
+            if 'format' in document['evidence']:
+                from pcbknowledge.v2.synthesis_cache import validate_descriptor
+                validate_descriptor(document)
+                with tempfile.TemporaryDirectory() as directory:
+                    missing = Path(directory) / 'attempt.json'
+                    missing.write_bytes(path.read_bytes())
+                    with self.assertRaisesRegex(ValueError, 'NOT_LOCALLY_VERIFIED'):
+                        load_attempt(Path(directory), missing, recover_history=True)
+                continue
+            raw = subprocess.check_output(
+                ['git', 'cat-file', 'blob', document['evidence']['historical_blob']], cwd=ROOT)
             original = read_json(raw)
             for key, value in document.items():
                 if key != 'evidence':

@@ -835,6 +835,7 @@ Cycle 1, T2 and the negative brief:
 - [ ] (wisdom) T2 brief, decisions, parts, blocks, calculators, reference graph, A2, three attempts.
 - [ ] (wisdom) A new negative brief with a typed expected refusal, 3/3.
 N5 input is committed under D96: two-cell selective balancing is absent from the catalog. Schema, exact refusal and synthetic eligible-contract counterexample pass with 17 affected tests; three fresh attempts remain pending.
+New cache-only attempt descriptors and authenticated local import pass 30 affected tests; independent review fixed CRLF checkout and ancestor-alias handling. Historical replay remains intact; CI audits new metadata, while full replay requires the original local evidence.
 
 ## Stage 17 — PcbAtlas consumer contract
 

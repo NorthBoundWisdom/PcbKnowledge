@@ -360,3 +360,33 @@ and bound total supply loading with source temperature coefficients. The downstr
 node must remain between ground and the supply: zero downstream voltage bounds the
 maximum, but back-driven negative nodes are outside this model. Allocation is a
 scalar capacity or exactly `[0, maximum]`; zero current is not a minimum-load proof.
+
+### Cache-only synthesis evidence
+
+New attempt archives may use an evidence descriptor with exactly `format`, `bytes`,
+`sha256`, and `submission_hashes`; format is `pcbknowledge.synthesis-cache.v1`.
+The positive byte count and SHA-256 identify the exact UTF-8 evidence JSON bytes.
+Each submission hash entry contains `original_sha256` (or `raw_sha256`) and exactly
+one `graph_sha256` or `refusal_sha256`. The committed archive retains the final
+output and content-identified v2 receipt, including packet/transcript hashes,
+input identity, independent actors and review. It contains no full evidence and
+no fictional historical blob. Existing historical descriptors remain unchanged.
+
+CI audits new descriptor metadata and verifies that absent evidence refuses with
+`NOT_LOCALLY_VERIFIED`; it does not claim to replay missing packets or transcripts.
+Full evaluation still requires the authenticated local evidence. Import supplied
+original evidence against an unchanged, committed attempt descriptor with:
+
+```sh
+PYTHONPATH=src python3 -m pcbknowledge.v2.synthesis_cache --repo /path/to/workspace \
+  --attempt /path/to/workspace/evals/synthesis/theme/one.json \
+  --evidence /path/to/original-evidence.json
+```
+
+The command validates the workspace and authenticates the descriptor against HEAD
+using Git checkout conversion (including CRLF), not parsed-JSON equivalence. It then verifies byte
+count, evidence hash, packet/transcript receipt hashes, every original submission
+and final output before writing only `.pcbknowledge/evals/sha256/`. It does not
+rewrite a receipt or source and will not replace a different existing cache file.
+The evidence object contains `initial_packet`, `submissions`, `transcript`, and
+optionally `author_reports`, with the original field values and submission text.
