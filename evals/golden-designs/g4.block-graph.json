@@ -1,5 +1,38 @@
 {
   "brief": "G4",
+  "bringup": {
+    "prerequisites": [
+      "Measure the external supply and filtered analog rail before probing VREF. Verify the declared input voltage and reference-load bounds independently.",
+      "Check VREF independently after settling, including ADC and analog loads; absence of oscillation and probe loading must be checked. This window is an engineering test decision."
+    ],
+    "rails": [
+      {
+        "at": "reference_U1.pin:1",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "input_voltage_max": {
+              "unit": "V",
+              "value": 3.4
+            },
+            "input_voltage_min": {
+              "unit": "V",
+              "value": 3.1994
+            },
+            "regulator_load_max": {
+              "unit": "A",
+              "value": 0.0005
+            }
+          },
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D55 reference envelope used as an independent settled-DC bench acceptance window.",
+          "unit": "V"
+        },
+        "reference_at": "reference_U1.pin:3"
+      }
+    ]
+  },
   "connections": [
     {
       "endpoints": [

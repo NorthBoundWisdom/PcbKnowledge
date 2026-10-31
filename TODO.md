@@ -118,6 +118,7 @@ answer here.
 | D70 | G3/G4 feedback layout and replay | Replace four parallel 22 pF capacitors with one source-qualified 100 pF C0G part and source-mapped SUMMING terminals, retaining 2 mm proximity, 9 mm² loops and electrical requirements. Current blocks use `tia_loop_total_capacitance`; retain the distinct historical four-input `tia_loop_model` for mandatory receipt replay, with one shared numerical core and exact input validation for each ID. Agent-selected under delegated migration authority; originals and hashes remain unchanged. |
 
 | D71 | CH340C supply-pin decoupling | Use separate existing KEMET 100 nF ceramics: C1 at V3 pin 4 and C2 at VCC pin 16, both across the joined external 3.3 V rail and ground. Retain each 3 mm placement bound; one capacitor cannot be within 3 mm of both pad centers, 6.690747 mm apart. WCH V3D pp3/5 specifies VCC decoupling and joined V3/VCC in 3.3 V mode; the second local capacitor is an engineering decision under the unchanged per-power-pin rule. |
+| D73 | Reference rail bring-up windows | Reuse the existing D55 2.35-2.65 V reference envelope as an independent settled-DC test window for G3/G4, measured at TL431 cathode pin 1 relative to anode pin 3 under the existing 3.1994-3.4 V input and 0.5 mA load limits. Measurements remain NOT_RUN. |
 
 ## Stage 0 — Course correction (complete)
 
