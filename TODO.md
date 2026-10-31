@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; reference pipeline retired per D78; `main` CI green; selection regression slice awaiting CI)
+> Status: `CONTINUOUS_MODE_STAGE_14_ACTIVE` (Stage 13 complete; seven positive references at A2; all-platform CI green)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators, block expansion,
@@ -699,7 +699,7 @@ Exit: `evals/` within budget, replay unchanged, docs match ADR-026.
 Receipt (2026-10-31): full gate PASS, Test 476/no skips; committed evals 1.13 MB, all original receipt and submission hashes retained.
 Independent review verified cache-free replay of all 36 archived attempts; malformed-input and cross-platform byte handling findings fixed.
 
-## Stage 13 — Retire the reference layout pipeline (D78)
+## Stage 13 — Retire the reference layout pipeline (D78, complete)
 
 PcbKnowledge returns to a knowledge base serving PcbAtlas. Git history keeps the
 pipeline: the last commit containing it is `e1a5cbe`.
@@ -767,8 +767,13 @@ tests.git_native.test_v2_coverage_reconciliation tests.git_native.test_v2_bundle
 passed 39 focused tests. Build and Test each passed 591 tests with no skips before
 rebasing onto Ethan's RETURN_PATH commit. Independent stage-exit review by
 `agent:/root/implement_reference_layout/stage12_review` found no remaining issues.
-CI for the integrated selection slice remains pending; the checked CI item above
-records the retirement slice only.
+Integrated exit commit `aade83e1a5b58b1aff0f42e710d2410ca0a74370` preserves
+Ethan's RETURN_PATH work. Build and Test each passed 602 tests with zero skips;
+Package passed. CI run `41201494682` passed all four jobs (Ubuntu/Python 3.11,
+Ubuntu/Python 3.14, macOS/Python 3.11, Windows/Python 3.11); CodeQL run
+`41201494622` passed. G1, G1V1, G1V2, G2, G3, G4 and G5 remain at A2;
+T1 remains REFUSED. Independent review found no remaining issues. No new
+decisions were required for this stage.
 
 Exit: every CI job green; no module implements or orchestrates placement, routing, zone
 fill, DRC or fabrication output; CI needs no external tool; `layout check` and the handoff still work on synthetic boards; all
@@ -778,6 +783,11 @@ positive designs remain at A2.
 
 `layout check` judges any exported board against the constraints in the intent. It is
 the conformance oracle PcbAtlas will use, and it does not perform DRC.
+
+Wisdom is implementing the COPPER_AREA and KELVIN handlers in separate read-only
+checker modules; shared `layout.py` changes stay local to those handlers. KELVIN
+contract work covers only explicit sense/shunt mappings in `ina219-monitor`,
+`g2-input-monitor` and `t1-readback`; Ethan's placement and bring-up items are unchanged.
 
 - [ ] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad on
   that net, including a zone with several islands; only connected copper counts. Tests
