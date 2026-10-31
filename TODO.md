@@ -152,6 +152,7 @@ answer here.
 | D94 | Stable existing selections | Pin `mcu-core` C6/C7 to the already selected KEMET C0805C106K3PACTU; their 10 uF match also admitted C0805C106K8PACTU. A catalog regression rejects verified different-MPN ambiguity in every block. |
 | D95 | Inductor conductor exclusion | Project the selected package's cited strip into intent and handoff. For Wurth 74437349047 preserve its 2.5 mm width; choose the maximum 6.9 mm body length and all copper layers as engineering defaults. Check full track/via copper including tangency; pads and zones remain allowed. |
 | D96 | Cycle 1 negative brief | N5 requires independent monitoring and 50 mA selective balancing of two series Li-ion cells at 3.0–4.2 V each, starting above 4.10 V and stopping below 4.05 V; external charging is outside this daughterboard. This tests an absent catalog function without substituting single-cell or pack-only monitoring. |
+| D97 | T2 alternative screening | Screen fixed 4.2 V BQ24074 charging plus TPS61023 boost against exact VARTA 56427201022 pack limits, replacing the provisional 4.160 V input only for this alternative. The pack temperature window remains 0–45 degC; the source-qualified NTC protection gap parks this candidate. |
 | D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
 | D105 | BUCK_SW acquisition protocol | D91 uses synchronous PH/VIN differential acquisition at 1 GHz and 5 GS/s, full uncertainty intervals, source PH limits and explicit plateau/peak/time envelopes. The 0.40 V high-side drop and 0.55 V diode plateau allowances are engineering test budgets under D103 conditions; every observation stays NOT_RUN. |
 | D106 | Necessary distance audit | Use exact inscribed-disk lower bounds for center-based PLACE_NEAR only when an explicit KEEPOUT imposes projected courtyard exclusion. Follow the existing checker contract across surfaces, reject proven contradictions and leave unsupported or copper-edge cases unproved. |
@@ -796,7 +797,7 @@ Claims (D92): before starting a cycle, push your name on its line so work is not
 |---|---|---|
 | 1 | T1 adjustable DC-DC, T2 Li-ion charger with boost | Wisdom |
 | 2 | T3 motor H-bridge, T4 stepper driver | Ethan, after his Stage 14 and 17 items |
-| 3 | T5 DAC signal generator, T6 OLED and keypad | first free developer |
+| 3 | T5 DAC signal generator, T6 OLED and keypad | Wisdom |
 | 4 | T7 CAN node, T8 Wi-Fi carrier | first free developer |
 | 5 | T9 thermocouple, T10 class-D audio | first free developer |
 
@@ -837,8 +838,10 @@ Completed helper checks: explicit five-terminal opposite-row pitch and source-te
 Cycle 1, T2 and the negative brief:
 
 - [ ] (wisdom) T2 brief, decisions, parts, blocks, calculators, reference graph, A2, three attempts.
-- [ ] (wisdom) A new negative brief with a typed expected refusal, 3/3.
-N5 input is committed under D96: two-cell selective balancing is absent from the catalog. Schema, exact refusal and synthetic eligible-contract counterexample pass with 17 affected tests; three fresh attempts remain pending.
+T2 A2 is parked after two architectures: BQ25895 still lacks qualified mode/source-domain and logic-sink contracts; BQ24074/TPS61023 with VARTA 56427201022 lacks a source-qualified 0–45 degC NTC window.
+The exact pack source omits the NTC reference temperature, beta tolerance and full R(T) envelope; four screening tests and independent page review preserve this evidence gap without claiming all architectures impossible.
+- [x] (wisdom) A new negative brief with a typed expected refusal, 3/3.
+N5 receipt: three fresh query-mediated authors on bundle `d1f1baa4fb7d319087a9e4faa251fd70d968d44b` return the expected refusal, 3/3. Independent review authenticated 41 response rows and all original outputs; per-attempt archives are at most 3,189 bytes. Cycle 1: T1/T2 remain parked below A2; N5 passes its negative contract.
 New cache-only attempt descriptors and authenticated local import pass 30 affected tests; independent review fixed CRLF checkout and ancestor-alias handling. Historical replay remains intact; CI audits new metadata, while full replay requires the original local evidence.
 
 ## Stage 17 — PcbAtlas consumer contract
@@ -867,6 +870,8 @@ session to wait for an answer.
   same 3 mm bound, after owner approval; do not silently remove the series ESR path.
 
 - T1: qualify a control-rail replacement with the full capacitor/load network. Recommended next design is TPS709 with a source-qualified 4.7 uF local output capacitor and an independently checked aggregate rail budget; preserve both 5 mA host limits and the 110 degC target.
+
+- T2: obtain a qualified temperature-window circuit and the exact pack NTC R(T) envelope. Recommended default is separately qualified hardware protection covering the pack 0–45 degC charge window, including tolerance and open/short behavior; do not widen the allowed temperature range.
 
 ## Owner evidence list
 

@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 174586,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "7e3648315c26917faa1678c712f894116bc25451ca347684f4676ee163a8dc8d",
+    "submission_hashes": [
+      {
+        "original_sha256": "ca3fd8e7f7e319e82ff2f29a46e6ebc1842ecaf1a0cfd6d5ea2b1123c72e002b",
+        "refusal_sha256": "ca3fd8e7f7e319e82ff2f29a46e6ebc1842ecaf1a0cfd6d5ea2b1123c72e002b"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/n5_author_two",
+    "brief_sha256": "15c6ffcf6abc64e67bb4f7c42b36e7a12b088affdaae34a153fa576d2cc04ae5",
+    "bundle_commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+    "bundle_sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708",
+    "equivalence_review": "Correct closed-world refusal. Actual power records plus full low-side-switch, USB sink and DRAFT hardware-gate records and monitor results exclude a qualified two-cell balancing contract. The gate has combined ENABLE rather than separate cell controls; the switch has no bleed load or threshold controller. The unsupported registry query is accurately retained as exit 2, not claimed as evidence. The report names its canonical agent path without the agent: prefix; it identifies the same distinct author recorded in the manifest.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "028f42876a296862fac2ca34149b26bc8962c1428052b77f465c38dc09c11f3d",
+    "input_identity": {
+      "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+      "catalog_tree": "4d0660c8e71887c1120f3c9226fff3f36ce0958d",
+      "engine_sha256": "13aba45ddb992af5aff87b17b5249696adfac03431661fc613187cf5652111c6"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "refusal_sha256": "ca3fd8e7f7e319e82ff2f29a46e6ebc1842ecaf1a0cfd6d5ea2b1123c72e002b",
+    "reviewer": "agent:/root/implement_reference_layout/placement_review",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "25b7be2cb70064ffde140302ab2abc0091be51f82c2ebe52d07af346bdf670a5",
+    "transcript_sha256": "adf8000e6cc0f2e4fa3fa99c5d14f98ad50d7a571bb54c2a72f30f9c0f73338b"
+  },
+  "refusal": {
+    "brief": "N5",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.cell_balance",
+    "reason": "The queried pinned catalog provides no eligible block implementing independent monitoring and selective 50 mA bleeding of both cells of a 2S pack over 3.0–4.2 V per cell, with start above 4.10 V and stop below 4.05 V. Actual power and monitoring contracts were inspected: g2-low-side-switch is a gate-driven load-return switch with no bleed load, cell sensing or threshold controller; INA219 monitor blocks expose a fixed shunt current-monitor topology rather than a complete two-cell balancer; t1-hardware-gate is an unverified DRAFT UV/OV enable clamp with fixed dividers and tied comparator outputs, not independent cell bleed controls. USB-C 5 V entry is available, but cannot replace the missing balancing function. A pack-only monitor, single-cell substitution, or invented block would not satisfy the brief."
+  }
+}

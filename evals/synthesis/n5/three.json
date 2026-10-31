@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 185561,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "5b27d96ca1dc1d7acc2a10b382dddd899bb75580a7f27492714589c3233bf10b",
+    "submission_hashes": [
+      {
+        "original_sha256": "9484b51bdce0967f3573c0cfeccfc83e8d8a8b582100bd24f930093dd66d153b",
+        "refusal_sha256": "9484b51bdce0967f3573c0cfeccfc83e8d8a8b582100bd24f930093dd66d153b"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/n5_author_three",
+    "brief_sha256": "15c6ffcf6abc64e67bb4f7c42b36e7a12b088affdaae34a153fa576d2cc04ae5",
+    "bundle_commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+    "bundle_sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708",
+    "equivalence_review": "Correct closed-world refusal. The author additionally inspected both INA219 block maps and the INA219 part after power/switch/gate searches. A voltage-range-compatible monitoring IC does not supply the missing selective bleed and hysteresis function. I independently checked those pinned nets and the preserved 3.0–4.2 V per-cell, 50 mA and 4.10/4.05 V requirements. No single-cell or pack-only substitution was made.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "028f42876a296862fac2ca34149b26bc8962c1428052b77f465c38dc09c11f3d",
+    "input_identity": {
+      "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+      "catalog_tree": "4d0660c8e71887c1120f3c9226fff3f36ce0958d",
+      "engine_sha256": "13aba45ddb992af5aff87b17b5249696adfac03431661fc613187cf5652111c6"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "refusal_sha256": "9484b51bdce0967f3573c0cfeccfc83e8d8a8b582100bd24f930093dd66d153b",
+    "reviewer": "agent:/root/implement_reference_layout/placement_review",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "25b7be2cb70064ffde140302ab2abc0091be51f82c2ebe52d07af346bdf670a5",
+    "transcript_sha256": "e199da0392017a6654561b8d3e516a92ad4a96dd41fcf47fd9e1934cbc2b1f91"
+  },
+  "refusal": {
+    "brief": "N5",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.cell_balance",
+    "reason": "No eligible catalog block found implementing independent monitoring and selective 50 mA bleeding of either cell in the specified 2S pack (3.0–4.2 V per cell, start above 4.10 V, stop below 4.05 V). Cell/balance/battery searches yielded no candidates. Inspection of actual power, switch, protection and INA219 monitor contracts found no two-cell balancing implementation: INA219 blocks provide a single ground-referenced bus reading with a low-ohmic shunt, not two selective bleed paths; the low-side switch lacks a bleed load or current regulator; the draft hardware gate has fixed rail dividers and one combined enable. USB-C 5 V input is available but does not satisfy the missing function. A pack-only monitor or single-cell substitution would violate the brief."
+  }
+}

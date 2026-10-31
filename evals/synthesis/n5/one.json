@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "bytes": 231169,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "42de74be19c9a0a26020d76376f999809e399c3c6f5d3e177978cba24f4a4485",
+    "submission_hashes": [
+      {
+        "original_sha256": "27b9a38502fa2c7088af2ef0900c01e5e339dcdc0bd9d4b0880056fb73adbc69",
+        "refusal_sha256": "27b9a38502fa2c7088af2ef0900c01e5e339dcdc0bd9d4b0880056fb73adbc69"
+      }
+    ]
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/n5_author_one",
+    "brief_sha256": "15c6ffcf6abc64e67bb4f7c42b36e7a12b088affdaae34a153fa576d2cc04ae5",
+    "bundle_commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+    "bundle_sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708",
+    "equivalence_review": "Correct closed-world refusal. The author inspected broad power, switch, voltage and monitor records and the INA219 part, not merely an empty category search. I checked the pinned TL431 REF/cathode connection, fixed grounded INA219 address pins, and ground-referenced MOSFET/flyback topology: none provides two separately monitored and selectively bled cells with the required thresholds. USB power remains available. All requirements and exact output bytes are preserved.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "initial_packet_sha256": "028f42876a296862fac2ca34149b26bc8962c1428052b77f465c38dc09c11f3d",
+    "input_identity": {
+      "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+      "catalog_tree": "4d0660c8e71887c1120f3c9226fff3f36ce0958d",
+      "engine_sha256": "13aba45ddb992af5aff87b17b5249696adfac03431661fc613187cf5652111c6"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "refusal_sha256": "27b9a38502fa2c7088af2ef0900c01e5e339dcdc0bd9d4b0880056fb73adbc69",
+    "reviewer": "agent:/root/implement_reference_layout/placement_review",
+    "reviewer_verdict": "CORRECT_REFUSAL",
+    "skill_sha256": "25b7be2cb70064ffde140302ab2abc0091be51f82c2ebe52d07af346bdf670a5",
+    "transcript_sha256": "5d784c3b0d13bd445d9b531b5f3d64323c0d2e76043deecd03224929398eb1d6"
+  },
+  "refusal": {
+    "brief": "N5",
+    "code": "UNSATISFIED_SELECTION",
+    "path": "functions.cell_balance",
+    "reason": "The queried pinned catalog supplies no eligible block implementing independent two-series-cell voltage monitoring and selective 50 mA bleeding of the higher cell above 4.10 V with stop below 4.05 V across 3.0–4.2 V per cell. Actual power and monitoring contracts were inspected: INA219 blocks expose shunt/bus sensing with fixed grounded address pins but no bleed actuation; the low-side-switch block contains a ground-referenced MOSFET, flyback diode and gate bias, not a 50 mA cell bleed load or upper-cell level-shifted control; the TL431 reference has REF tied to cathode and fixed approximately 2.5 V reference behavior, not the required cell thresholds. USB-C 5 V sink entry is available, but cannot satisfy the missing cell_balance function. Replacing the pack by one cell or monitoring only pack voltage would violate the brief."
+  }
+}

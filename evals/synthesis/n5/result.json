@@ -1,0 +1,71 @@
+{
+  "attempts": [
+    {
+      "agent": "agent:/root/implement_reference_layout/n5_author_one",
+      "correct_refusal": true,
+      "refusal_sha256": "27b9a38502fa2c7088af2ef0900c01e5e339dcdc0bd9d4b0880056fb73adbc69",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_reference_layout/n5_author_two",
+      "correct_refusal": true,
+      "refusal_sha256": "ca3fd8e7f7e319e82ff2f29a46e6ebc1842ecaf1a0cfd6d5ea2b1123c72e002b",
+      "status": "REFUSED"
+    },
+    {
+      "agent": "agent:/root/implement_reference_layout/n5_author_three",
+      "correct_refusal": true,
+      "refusal_sha256": "9484b51bdce0967f3573c0cfeccfc83e8d8a8b582100bd24f930093dd66d153b",
+      "status": "REFUSED"
+    }
+  ],
+  "brief": "N5",
+  "bundle_commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+  "bundle_sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708",
+  "evaluation_engine_sha256": "13aba45ddb992af5aff87b17b5249696adfac03431661fc613187cf5652111c6",
+  "evaluation_input_identity": {
+    "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+    "catalog_tree": "4d0660c8e71887c1120f3c9226fff3f36ce0958d",
+    "engine_sha256": "13aba45ddb992af5aff87b17b5249696adfac03431661fc613187cf5652111c6"
+  },
+  "input_identity": {
+    "audit_sha256": "19ed5219f365aa718e0b184a887cb79643b213c405ffaa7161cbc47721fa70e7",
+    "catalog_tree": "4d0660c8e71887c1120f3c9226fff3f36ce0958d",
+    "engine_sha256": "13aba45ddb992af5aff87b17b5249696adfac03431661fc613187cf5652111c6"
+  },
+  "mode": "negative",
+  "orchestrator": "agent:/root/implement_reference_layout",
+  "original_bundles": [
+    {
+      "agent": "agent:/root/implement_reference_layout/n5_author_one",
+      "commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+      "sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708"
+    },
+    {
+      "agent": "agent:/root/implement_reference_layout/n5_author_two",
+      "commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+      "sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708"
+    },
+    {
+      "agent": "agent:/root/implement_reference_layout/n5_author_three",
+      "commit": "d1f1baa4fb7d319087a9e4faa251fd70d968d44b",
+      "sha256": "8e6b1faa6fd1acd8d3cee43c088b48b2069d61edb14eecca450682eff826c708"
+    }
+  ],
+  "passed": 3,
+  "receipt_identity": "CATALOG_CONTENT",
+  "reference_sha256": null,
+  "replayed_refusals": [
+    {
+      "code": "UNSATISFIED_SELECTION",
+      "path": "functions.cell_balance",
+      "queries": [
+        "Q1"
+      ],
+      "reason": "No block provides declared category: power.cell-balancing"
+    }
+  ],
+  "required": 3,
+  "status": "PASS",
+  "total": 3
+}
