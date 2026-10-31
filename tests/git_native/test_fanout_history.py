@@ -1,7 +1,7 @@
 import copy
 import unittest
 from pcbknowledge.v2.fanout_history import combine
-from test_fanout_solver import candidate
+from tests.git_native.test_fanout_solver import candidate
 
 
 def proposal(uuid, x):

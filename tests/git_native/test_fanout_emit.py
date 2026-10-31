@@ -1,6 +1,6 @@
 import unittest
 from pcbknowledge.v2.fanout_emit import append_copper
-from test_fanout_solver import candidate
+from tests.git_native.test_fanout_solver import candidate
 from pcbknowledge.v2.sexpr import parse
 
 
