@@ -1,6 +1,5 @@
 """End-to-end G1 reference and adversarial mutations through production expansion."""
 import copy
-import hashlib
 from pathlib import Path
 import unittest
 from pcbknowledge.serialization import canonical_json, read_json
@@ -10,8 +9,6 @@ from pcbknowledge.v2.assembly import validate_assembly
 from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
-# Stage 13 uses reviewed physical anchors, source-compatible power connector and conditional rail test windows.
-G1_CANONICAL_SHA256 = '308a225c582b3f69aabcdb77416e7563fa404330411f23ad8f8721c159d70e47'
 
 
 class GoldenAcceptanceTests(unittest.TestCase):
@@ -31,7 +28,6 @@ class GoldenAcceptanceTests(unittest.TestCase):
         self.assertTrue(all(check['result']=='PASS' for check in one['checks']))
         self.assertEqual(canonical_json(one),canonical_json(two))
         self.assertEqual(len(one['components']),46)
-        self.assertEqual(hashlib.sha256(canonical_json(one).encode()).hexdigest(), G1_CANONICAL_SHA256)
 
     def test_overbudget_and_requirement_spoof_refuse(self):
         changed=copy.deepcopy(self.graph)

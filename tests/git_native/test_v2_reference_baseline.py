@@ -1,0 +1,94 @@
+"""Current catalog readiness and canonical selection/expansion regression pins."""
+import copy
+import hashlib
+from pathlib import Path
+import unittest
+
+from pcbknowledge.serialization import canonical_json, read_json
+from pcbknowledge.v2.catalog import Catalog, selected_candidate
+from pcbknowledge.v2.coverage import coverage, coverage_all
+from pcbknowledge.v2.expansion import expand
+
+ROOT = Path(__file__).resolve().parents[2]
+REFERENCE_HASHES = {
+    'g1': '308a225c582b3f69aabcdb77416e7563fa404330411f23ad8f8721c159d70e47',
+    'g1v1': '6dca67111fa659442a773a7bff8a29cfa63d418d21264ff724102d565e5341eb',
+    'g1v2': '3e81d86e349f27794635e0e919d7da29d3637802a3c99474a7d3b3bd9a47c888',
+    'g2': '9cd6585484f8799cbbd55c7296ca76463c877882f31b56a925bb602d9b169226',
+    'g3': 'e4081cac68a671af983b7d4d26a0d9f54f6b8d6606b66767bac2a0aae3671ab2',
+    'g4': '54e16127e3886ac83d8aa36bfba1de8ac109f0d29defe08ef6e68d724b54f857',
+    'g5': '70733522f227058e5ed86e21df6d708e4bf84de10f31b647f7e2b185c5d67a58',
+}
+
+
+class ReferenceBaselineTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.catalog = Catalog(ROOT, ROOT/'schemas')
+
+    def test_every_committed_positive_ready_and_t1_refused(self):
+        report = coverage_all(self.catalog)
+        rows = {row['brief']: row for row in report['briefs']}
+        positives = {identity for identity in rows if identity.startswith('G')}
+        self.assertEqual(positives, {name.upper() for name in REFERENCE_HASHES})
+        for identity in sorted(positives):
+            with self.subTest(brief=identity):
+                self.assertEqual(rows[identity]['status'], 'READY', rows[identity])
+                self.assertEqual(rows[identity]['blocks_ready'], rows[identity]['blocks_total'])
+        self.assertEqual(rows['T1']['graph_readiness'], 'REFUSED')
+        self.assertTrue(rows['T1']['graphs'])
+        self.assertTrue(all(graph['status'] == 'REFUSED' for graph in rows['T1']['graphs']))
+
+    def test_all_positive_reference_expansion_hashes(self):
+        for name, expected in REFERENCE_HASHES.items():
+            with self.subTest(reference=name):
+                graph = read_json((ROOT/f'evals/golden-designs/{name}.block-graph.json').read_bytes())
+                brief = read_json((ROOT/f'evals/golden-designs/{name}.brief.json').read_bytes())
+                intent = expand(self.catalog, graph, brief, bundle_commit='a' * 40)
+                self.assertEqual(intent['status'], 'EXPANDED', intent['refusals'])
+                self.assertEqual(hashlib.sha256(canonical_json(intent).encode()).hexdigest(), expected)
+                readiness = coverage(self.catalog, graph)
+                chosen = {row['instance'] + '_' + ref: part for row in readiness['instances']
+                          for ref, part in row['selected_parts'].items()}
+                self.assertEqual(chosen, {part['ref']: part['part'] for part in intent['components']})
+
+    def test_shared_selection_priority_and_tiebreak(self):
+        choices = [{'id': 'part:a', 'verification': 'DRAFT'},
+                   {'id': 'part:c', 'verification': 'AGENT_VERIFIED'},
+                   {'id': 'part:b', 'verification': 'AGENT_VERIFIED'}]
+        self.assertEqual(selected_candidate(choices)['id'], 'part:b')
+        self.assertEqual(selected_candidate(list(reversed(choices)))['id'], 'part:b')
+        choices.append({'id': 'part:z', 'verification': 'HUMAN_VERIFIED'})
+        self.assertEqual(selected_candidate(choices)['id'], 'part:z')
+        with self.assertRaises(ValueError):
+            selected_candidate([])
+
+    def test_unselected_draft_does_not_contaminate_selected_closure(self):
+        catalog = copy.deepcopy(self.catalog)
+        graph = read_json((ROOT/'evals/golden-designs/g1.block-graph.json').read_bytes())
+        actual_candidates = catalog._candidates
+        observed = []
+        def with_draft(selection):
+            choices = actual_candidates(selection)
+            part = copy.deepcopy(selected_candidate(choices))
+            part['id'], part['verification'] = 'part:synthetic-draft-alternative', 'DRAFT'
+            part['package'] = 'package:unselected-unavailable'
+            observed.append(part['id'])
+            return [part, *choices]
+        catalog._candidates = with_draft
+        result = coverage(catalog, graph)
+        self.assertEqual(result['status'], 'READY', result)
+        self.assertTrue(observed)
+        self.assertTrue(all('part:synthetic-draft-alternative' in ids for row in result['instances']
+                            for ids in row['selections'].values()))
+        self.assertTrue(all(part != 'part:synthetic-draft-alternative' for row in result['instances']
+                            for part in row['selected_parts'].values()))
+
+    def test_only_draft_selection_is_incomplete_and_expansion_refused(self):
+        catalog = copy.deepcopy(self.catalog)
+        graph = read_json((ROOT/'evals/golden-designs/g1.block-graph.json').read_bytes())
+        brief = read_json((ROOT/'evals/golden-designs/g1.brief.json').read_bytes())
+        for part in catalog.search('part'):
+            part['verification'] = 'DRAFT'
+        self.assertEqual(coverage(catalog, graph)['status'], 'INCOMPLETE')
+        self.assertEqual(expand(catalog, graph, brief, bundle_commit='a' * 40)['status'], 'REFUSED')

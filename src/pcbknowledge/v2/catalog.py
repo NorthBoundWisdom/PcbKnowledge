@@ -18,6 +18,13 @@ ELIGIBLE = {'PUBLIC_REFERENCE', 'OPEN_LICENSE', 'INTERNAL'}
 MAX_RECORD_BYTES = 1_000_000
 
 
+def selected_candidate(candidates):
+    """Use expansion's verification priority and stable identity tie-break."""
+    if not candidates:
+        raise ValueError("No candidate matches the requested selection")
+    return min(candidates, key=lambda part: (-LEVELS.index(part["verification"]), part["id"]))
+
+
 def regular_bytes(root, path):
     path = Path(path)
     if not path.is_relative_to(root):

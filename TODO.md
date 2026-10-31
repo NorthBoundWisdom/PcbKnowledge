@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; retiring the reference layout pipeline per D78; `main` CI red)
+> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; reference pipeline retired per D78; `main` CI green; selection regression slice awaiting CI)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators, block expansion,
@@ -734,15 +734,41 @@ review by `agent:/root/implement_reference_layout/stage12_review` found a
 junction-policy classification bug; lexical repository-boundary checks fixed it
 with a regression. CI on all platforms remains required below.
 
-- [ ] Green CI on every job. If a macOS or Windows failure survives the deletion, fix it
+- [x] Green CI on every job. If a macOS or Windows failure survives the deletion, fix it
   with a test; read the Windows log rather than assuming the cause.
-- [ ] `coverage` judges the part `expand` actually selects, so an unselected DRAFT
+- [x] `coverage` judges the part `expand` actually selects, so an unselected DRAFT
   candidate is listed but does not block, while a design that can only select a DRAFT part
   still refuses. Add a test over the committed catalog: every positive G and V brief is
   `READY`, and T1 stays `REFUSED` until promoted.
-- [ ] Pin the canonical expansion hash of every positive reference design (only G1 is
+- [x] Pin the canonical expansion hash of every positive reference design (only G1 is
   pinned now), so adding or promoting parts cannot silently change a selection.
-- [ ] Remove the disclaimer and restore missing spaces in the T1 brief summary.
+- [x] Remove the disclaimer and restore missing spaces in the T1 brief summary.
+
+CI receipt: retirement commit `6ff6a5be8faa74d711ec2bb84b1e27675aade932`
+passed CI run `41200235511`: Core Ubuntu/Python 3.11, Public Ubuntu/Python 3.14,
+Public macOS/Python 3.11 and Public Windows/Python 3.11. CodeQL run `41200235509`
+also passed. Exact-tree local Build and Test each passed 586 tests, with no skips;
+Package passed. Windows failures were read from the actual job log: retired
+pipeline fixture path mismatches disappeared with their modules, and retained
+synthesis-evidence fixtures now write UTF-8 explicitly. Repository-scoped path
+checks allow system aliases above the repository while retaining descendant
+symlink/reparse and output-escape rejection.
+
+Selection receipt: coverage, expansion and requirement screening now share the
+same verification-priority/stable-ID selector. Coverage lists all candidates but
+checks only the selected dependency closure. The committed-catalog regression
+requires all seven positive references to be READY, matches their exact expanded
+part selections and pins each canonical expansion hash; T1 remains REFUSED.
+A changed positive hash requires an explained knowledge change, including changes
+made by Ethan. The T1 summary now has normal spacing and no disclaimer.
+`PYTHONPATH=src python3 -m unittest tests.git_native.test_v2_reference_baseline
+tests.git_native.test_v2_g1_acceptance tests.git_native.test_v2_coverage
+tests.git_native.test_v2_coverage_reconciliation tests.git_native.test_v2_bundle_expansion`
+passed 39 focused tests. Build and Test each passed 591 tests with no skips before
+rebasing onto Ethan's RETURN_PATH commit. Independent stage-exit review by
+`agent:/root/implement_reference_layout/stage12_review` found no remaining issues.
+CI for the integrated selection slice remains pending; the checked CI item above
+records the retirement slice only.
 
 Exit: every CI job green; no module implements or orchestrates placement, routing, zone
 fill, DRC or fabrication output; CI needs no external tool; `layout check` and the handoff still work on synthetic boards; all

@@ -122,6 +122,10 @@ python3 configs/pcbknowledge_agent.py --repo . v2 coverage evals/golden-designs/
 
 Use the actual reference-graph filename in the selected checkout. Coverage reports
 remaining selections and inputs per block; it does not invent missing records.
+`selections` lists all matching candidates; `selected_parts` identifies the part
+expansion chooses by verification level, then stable ID. Only that chosen part
+and its dependency closure determine readiness; an unselected DRAFT candidate
+does not block a verified selection. A selected DRAFT dependency still blocks.
 `INCOMPLETE` returns exit code 2.
 
 After committing all authority changes, build a snapshot from the clean workspace:

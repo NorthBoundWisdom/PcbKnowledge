@@ -6,7 +6,7 @@ import hashlib
 
 from pcbknowledge.serialization import canonical_json
 from .calculators import evaluate_check
-from .catalog import LEVELS, unique
+from .catalog import LEVELS, unique, selected_candidate
 from .footprints import footprint_name
 from .intent import validate_intent
 
@@ -212,7 +212,7 @@ class _Expansion:
                     'No candidate matches the requested selection', ('Q1',)
                 )
                 continue
-            part = sorted(candidates, key=lambda p: (-LEVELS.index(p['verification']), p['id']))[0]
+            part = selected_candidate(candidates)
             ref = iid + '_' + component['ref']
             if ref in self.parts:
                 raise ValueError('Qualified component reference collision: ' + ref)

@@ -1,7 +1,7 @@
 """Explain reference-graph readiness without inventing missing catalog records."""
 from __future__ import annotations
 
-from .catalog import LEVELS
+from .catalog import LEVELS, selected_candidate
 from .expansion import dependency_closure
 
 
@@ -13,6 +13,7 @@ def coverage(catalog, graph):
     for instance in graph['instances']:
         missing = []
         selected = {}
+        chosen = {}
         if instance["id"] in duplicate_ids:
             missing.append("Duplicate instance identity")
         try:
@@ -30,11 +31,12 @@ def coverage(catalog, graph):
                 try:
                     candidates = catalog._candidates(component['select'])
                     selected[component['ref']] = [part['id'] for part in candidates]
-                    for part in candidates:
-                        used.add(part['id'])
-                        for record in (part, catalog.get(part['package'], 'package')):
-                            if LEVELS.index(record['verification']) < LEVELS.index('AGENT_VERIFIED'):
-                                missing.append(f'Unverified dependency: {record["id"]}')
+                    part = selected_candidate(candidates)
+                    chosen[component['ref']] = part['id']
+                    used.add(part['id'])
+                    for record in (part, catalog.get(part['package'], 'package')):
+                        if LEVELS.index(record['verification']) < LEVELS.index('AGENT_VERIFIED'):
+                            missing.append(f'Unverified dependency: {record["id"]}')
                 except ValueError as error:
                     missing.append(f'{component["ref"]}: {error}')
             for name, declaration in block['parameters'].items():
@@ -57,7 +59,7 @@ def coverage(catalog, graph):
             if declared != provided or len(provided) != len(instance['ports']):
                 missing.append('Graph ports differ from block contract')
         results.append({'instance': instance['id'], 'block': instance['block'],
-                        'ready': not missing, 'selections': selected, 'remaining': missing})
+                        'ready': not missing, 'selections': selected, 'selected_parts': chosen, 'remaining': missing})
     ready = sum(row['ready'] for row in results)
     return {'status': 'READY' if ready == len(results) else 'INCOMPLETE',
             'ready': ready, 'total': len(results),

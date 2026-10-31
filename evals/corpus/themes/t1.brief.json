@@ -885,6 +885,6 @@
   },
   "schema": "pcbknowledge.design-brief.v2",
   "status": "DRAFT",
-  "summary": "Original competition task:12V adapter to2.5–6.0V/.5A resistive load, UART setpoint/readback and hardware enable inhibit. No constant-current or safety-instrument claim.",
+  "summary": "Original competition task: 12 V adapter to 2.5–6.0 V / 0.5 A resistive load, UART setpoint/readback and hardware enable inhibit.",
   "title": "Digitally settable bench DC-DC supply with voltage/current readback"
 }

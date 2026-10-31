@@ -1,5 +1,5 @@
 """Typed brief feasibility screening; eligibility is not graph or A2 acceptance."""
-from .catalog import LEVELS
+from .catalog import LEVELS, selected_candidate
 from .expansion import dependency_closure
 
 
@@ -32,7 +32,7 @@ def selected_parts(catalog, block):
         candidates = catalog._candidates(component['select'])
         if not candidates:
             raise ValueError('No eligible part for component ' + component['ref'])
-        parts.append(sorted(candidates, key=lambda part: (-LEVELS.index(part['verification']), part['id']))[0])
+        parts.append(selected_candidate(candidates))
     return parts
 
 
