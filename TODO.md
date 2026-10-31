@@ -137,6 +137,7 @@ answer here.
 | D78 | Repository scope (owner decision, 2026-10-31) | PcbKnowledge is a knowledge base serving PcbAtlas. It is not an algorithm library: it holds no placement, routing, zone-fill, DRC or fabrication-output algorithms and no pipeline orchestrating them. Retire ADR-026, D63, D64 and D76 and delete the pipeline. Keep expansion, handoff files, `layout check` and the thin optional `drc` wrapper. Developers may use KiCad and Freerouting as external test tools to find knowledge errors, for example on a hand-placed handoff board; each finding becomes a catalog fix with a tool-free test. CI and acceptance never need these tools. This repository accepts designs through A2; A3-A5 belong to PcbAtlas or a hand layout. |
 | D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
 | D101 | GUARD_RING measurement | Measure all sensitive-net pad and track copper on every exposed F/B surface, including both faces of through-hole pads. Require one simple closed track cycle per surface, existing minimum width and exact copper clearance. Prove guard contact through solid SMT copper, explicit track endpoints and center-ended plated through-via annuli; include annular width where a drill intersects the ring. Unsupported curves, sensitive vias, filled copper, ambiguous contacts and physical drill interruptions remain NOT_CHECKABLE. |
+| D102 | TPS5430 distance datum escalation | Preserve all ten g2-buck PLACE_NEAR limits and their origin/pad-center metric. The official SLVS632L pages 3 and 23 viewed online do not define a copper-edge datum; cached-byte source verification remains blocked. Do not convert the six 1 mm input-capacitor limits or the other four rules on that evidence. Escalate the eight current courtyard conflicts for a clarified source datum or a separately authorized part/package change under D10. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -826,6 +827,15 @@ primitives retain their prior behavior.
   and escalate to the owner; another part or package under D10 is one option to present. An
   independent reviewer rechecks the page. Add negative tests. Prove the result with a
   synthetic G2 buck placement through `layout check`.
+  D102 remains escalated: normal `evidence fetch --source source:ti-tps5430` failed DNS;
+  the authorized network retry could not start because of a read-only sandbox mount.
+  No cached PDF or SHA verification was obtained. Online official pages 3/23 do not
+  define the distance datum. Keep every rule unchanged; independent source review
+  cannot claim byte-verified completion. Pair-level exported-board regressions preserve
+  all eight failures and exact thresholds; they do not establish a complete G2 layout.
+  Current isolated courtyard lower bounds (mm) are C2-to-VIN7/GND6 1.96 versus 1,
+  C5/C6-to-VIN7/GND6 2.21 versus 1, D1-to-PH8 2.51 versus 2, and C4-to-L1.2
+  5.95 versus 3. The other two PLACE_NEAR rules are not individually contradictory.
 - [ ] (ethan) Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
   `c7948ee` (G1V1 leaves `LOGGER_3V3`, `MCU_VDDA`, `PROTECTED_5V` and `USB_VBUS` unresolved).
   Bind windows at exact graph terminals as D67 and D73 do, from cited values or recorded
