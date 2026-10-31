@@ -1194,6 +1194,27 @@
         "Q5"
       ]
     },
+    "switch_node_absolute_voltage": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q10"
+      ]
+    },
+    "switch_node_negative_transient_duration_limit": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q10"
+      ]
+    },
+    "switch_node_transient_voltage": {
+      "conditions": {},
+      "quantity": "voltage",
+      "queries": [
+        "Q10"
+      ]
+    },
     "temperature": {
       "conditions": {
         "TA": "temperature",

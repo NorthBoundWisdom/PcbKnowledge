@@ -169,6 +169,40 @@
       "typ": 1.221,
       "unit": "V"
     },
+    "switch_node_absolute_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps5430"
+      },
+      "max": 40,
+      "min": -0.6,
+      "note": "PH relative to GND absolute maximum ratings; not an operating guarantee.",
+      "unit": "V"
+    },
+    "switch_node_negative_transient_duration_limit": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps5430"
+      },
+      "note": "Strict exclusive duration ceiling for PH negative transient absolute rating; duration including uncertainty must be less than this value.",
+      "unit": "s",
+      "value": 1e-08
+    },
+    "switch_node_transient_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps5430"
+      },
+      "min": -1.2,
+      "note": "PH negative transient only, strictly shorter than switch_node_negative_transient_duration_limit.",
+      "unit": "V"
+    },
     "uvlo_voltage": {
       "basis": "DATASHEET",
       "conditions": {},
@@ -249,9 +283,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/stage9a_source_rescreen",
-    "notes": "PH power-output function follows p3/p9 despite table label; DAP is thermal pad name. DCM p14; thermal model CCM p17. D52 ENA default annotation by agent:/root/implement_pcbknowledge_brief/g2_passive_author; p3/p9 permit floating.",
+    "notes": "PH role p3/p9; DAP thermal; DCM p14; thermal p17; ENA p3/p9. D91 PH limits: authored agent:/root/advance_knowledge_development/g2_rails; verified agent:/root/review_stage_zero from SHA-matched p4.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/g2_source_review"
+      "agent:/root/implement_pcbknowledge_brief/g2_source_review",
+      "agent:/root/review_stage_zero"
     ]
   },
   "roles": [
