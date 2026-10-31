@@ -54,3 +54,13 @@ Boundaries:
 - PcbAtlas can later replace either step and be compared against the reference.
 - The escalation rule in `AGENTS.md` changes from "PcbKnowledge never places or
   routes" to "only through this pipeline, only into `build/`".
+
+### Placement support propagation
+
+Connected placement clusters use exact pairwise support propagation before
+ranking candidates. A candidate is removed only when no remaining candidate of
+an adjacent constrained component supports it. Cached witnesses are checked
+against the current domain; all support scans and queue work consume the shared
+search budget. Loop and full-board checks still run on completed assignments.
+Resource exhaustion and finite heuristic exhaustion are not geometric
+infeasibility proofs. Synthetic exhaustive-oracle tests preserve every solution.

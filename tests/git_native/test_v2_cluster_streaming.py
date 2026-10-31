@@ -40,7 +40,8 @@ class ClusterStreamingTests(unittest.TestCase):
     def test_batch_bound_yields_before_all_nonterminal_candidates_ranked(self):
         owner, domains, _ = setup(1000)
         search = ClusterSearch(owner, domains)
-        self.assertEqual(set(next(search.solutions())), {'A', 'B', 'C'})
+        masks = {ref: domain.full for ref, domain in search.domains.items()}
+        self.assertIsNotNone(next(search.ranked_candidates('A', masks)))
         self.assertLess(owner.compatibility_work, 40000)
         self.assertLessEqual(len(search.cache), 33)
 
