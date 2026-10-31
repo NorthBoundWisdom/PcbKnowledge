@@ -45,7 +45,9 @@ When a guard automates a check, delete the check here and name the guard in the
    attempts had no access to references, tests or other attempts.
 9a. Layout (ADR-026): no layout constraint or DRC rule was relaxed, waived or
     excluded to pass; the count of `NOT_CHECKABLE` results did not grow without a
-    reason; A3-A5 claims name the tool versions and a report under `build/`.
+    reason; A3-A5 claims name the tool versions and the single `layout run` command
+    that regenerates the report from a clean checkout. Rerun it, and do not accept a
+    report produced by hand-driven calls or counted through `owner_review_ready`.
 9b. New corpus briefs follow the D65 theme order and state what a competition
     would ask, not what the catalog already has.
 

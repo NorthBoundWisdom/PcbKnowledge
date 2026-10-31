@@ -51,8 +51,13 @@ are in [`TODO.md`](../TODO.md). A3-A5 require actual execution and output checks
 
 | Designs | A1 | A2 | A3 | A4 | A5 | A6 |
 |---|---|---|---|---|---|---|
-| G1, G1V1, G1V2, G2, G3, G4, G5 | PASS | PASS | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
+| G1 | PASS | PASS | FAIL | NOT_RUN | FAIL | NOT_RUN |
+| G1V1, G1V2, G2, G3, G4, G5 | PASS | PASS | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
+| T1 | REFUSED (DRAFT authority) | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN | NOT_RUN |
 | N1, N2, N3, N4 | Expected typed refusal | Not applicable | Not applicable | Not applicable | Not applicable | Not applicable |
+
+G1 A4 stays `NOT_RUN` until one `layout run` command reproduces the clean board
+reported through hand-driven repair (Stage 13b).
 
 ## G1: sensor logger node (first target)
 

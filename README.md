@@ -7,7 +7,7 @@ manufacturable PCB: validated parts, original footprints, deterministic expansio
 and exported-board checks. PcbAtlas remains the product layout tool.
 [ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md) authorizes a reference
 placement, Freerouting and KiCad fabrication pipeline, writing derived files only
-under `build/`; its implementation is queued in [`TODO.md`](TODO.md).
+under `build/`; its implementation is in progress in [`TODO.md`](TODO.md).
 
 See the [current acceptance table](docs/golden-designs.md#current-acceptance) for
 the golden designs and [`TODO.md`](TODO.md) for exact stage receipts. Parked

@@ -31,6 +31,17 @@ current acceptance level of each golden design is in `TODO.md`.
   fix.
 - Run as the only implementing session on `main`. Sub-agents for review and
   synthesis are expected.
+- **Commit and push; do not stop at commit.** You are not on the owner's computer,
+  and only `origin/main` reaches the owner. This brief is standing authorization to
+  commit and push to `main`. After each coherent commit group: run the affected tests,
+  `git fetch`, rebase onto `origin/main` if it moved, push, and check CI. Never
+  force-push, and never leave local-only commits for someone else to import. Do not add
+  "original local commit" trailers.
+- A red CI job on `main` on any operating system goes ahead of the queue. Do not
+  assume Linux results hold on macOS or Windows.
+- `build/` stays on your machine. A layout result counts only when one CLI command
+  regenerates it from a clean checkout; hand-driven Python call chains do not count.
+- `NOT_CHECKABLE` is not a pass, and `owner_review_ready` is not an acceptance level.
 - Sources: follow D38. A public manufacturer datasheet is usable whatever the
   website terms say; download one at a time and never work around bot checks.
   When an essential parameter is `UNKNOWN` in one part, select a part whose
@@ -49,11 +60,21 @@ current acceptance level of each golden design is in `TODO.md`.
 3. Record a receipt of one to three lines in `TODO.md` (commits, test count,
    coverage or acceptance result, review summary) and advance the status line.
 4. `git fetch`, rebase onto `origin/main` if it moved, rerun affected tests, push.
-   Never force-push. Wait for CI and fix failures in the same stage.
+   Never force-push. Wait for every CI job and fix failures in the same stage.
 5. Continue with the next stage in the same session.
+
+## Before you end any session
+
+Interrupted or parked work included:
+
+1. Commit finished work and push it. Update `TODO.md` so unfinished work is findable.
+2. Confirm `git status` is clean and `git rev-parse HEAD` equals
+   `git rev-parse origin/main`.
+3. Confirm CI for that commit, or report the exact jobs still running or failed.
 
 ## Report when you stop
 
+- The pushed `HEAD` hash and the CI result of each job.
 - Stages completed with commit hashes and test counts.
 - Acceptance and coverage per brief (`v2 coverage --all` once it exists).
 - New D-numbers and substitutions.

@@ -1,6 +1,6 @@
 # TODO — PcbKnowledge roadmap
 
-> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; reference layout next, ADR-026)
+> Status: `CONTINUOUS_MODE_STAGE_13_ACTIVE` (G1-G5 at A2; G1 layout candidate not yet reproducible or A3/A5; `main` CI red, see Stage 13)
 > Updated: 2026-10-31
 > Goal: a design package (for example a simple hardware-competition brief) becomes a
 > manufacturable board. PcbKnowledge supplies the knowledge, calculators and block
@@ -23,8 +23,16 @@
   without a per-round brief. Take the first unchecked item of the lowest open
   stage, finish it, and continue. At every stage exit run the full gate and an
   independent review per [`docs/review-checklist.md`](docs/review-checklist.md),
-  fix what it finds, record the receipt, push, and start the next stage. The
-  standing task prompt is [`docs/implementer-brief.md`](docs/implementer-brief.md).
+  fix what it finds, record the receipt, and start the next stage. The standing
+  task prompt is [`docs/implementer-brief.md`](docs/implementer-brief.md).
+- **Push every commit group.** Implementing sessions run on other machines, so a
+  commit that is not on `origin/main` does not exist for the owner. Continuous mode
+  is standing authorization to commit and push to `main`. Push after each coherent
+  commit group, not only at a stage exit, and leave the session with a clean tree
+  and `HEAD` equal to `origin/main`. A red `main` CI job goes ahead of the queue.
+- **Receipts must be reproducible from a clean checkout.** `build/` is not shared
+  between machines. A layout claim names the bundle commit, the CLI commands and the
+  tool versions that regenerate it.
 - Items marked **(owner-only)** never block the queue: skip them and continue with
   the next item. Items marked **(escalate)** stop work until the owner answers.
 - **A blocked stage parks; the queue moves on.** When a stage cannot finish
@@ -120,6 +128,8 @@ answer here.
 | D71 | CH340C supply-pin decoupling | Use separate existing KEMET 100 nF ceramics: C1 at V3 pin 4 and C2 at VCC pin 16, both across the joined external 3.3 V rail and ground. Retain each 3 mm placement bound; one capacitor cannot be within 3 mm of both pad centers, 6.690747 mm apart. WCH V3D pp3/5 specifies VCC decoupling and joined V3/VCC in 3.3 V mode; the second local capacitor is an engineering decision under the unchanged per-power-pin rule. |
 | D73 | Reference rail bring-up windows | Reuse the existing D55 2.35-2.65 V reference envelope as an independent settled-DC test window for G3/G4, measured at TL431 cathode pin 1 relative to anode pin 3 under the existing 3.1994-3.4 V input and 0.5 mA load limits. Measurements remain NOT_RUN. |
 | D74 | T1 conditional reference design | Use TPS562208 FCCM with DAC60501 feedback setpoint and INA219 voltage/current readback for 12 V nominal input and 2.5-6 V / 0.5 A external output. Include local loads and explicit control-rail/preload operating budgets; keep the new authority DRAFT until driven-clamp, bound-calculator and underbody routing checks are integrated. |
+| D75 | Strict A3 and queue order (reviewing agent, 2026-10-31) | A3 requires every constraint `PASS`, matching `layout_pipeline` and the A3 definition; `NOT_CHECKABLE` is reported as an open checker gap and no longer satisfies a stage exit. `owner_review_ready` stays an inspection aid and never advances an acceptance level. Stage 16 waits for Stages 13 and 14 to exit or park. |
+| D76 | External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -687,41 +697,117 @@ Independent review verified cache-free replay of all 36 archived attempts; malfo
 
 Implements [ADR-026](docs/adr/ADR-026-reference-layout-pipeline.md) on G1 first.
 
-- [ ] `layout tools`: report the located `kicad-cli`, Java and Freerouting jar
+Review (2026-10-31, `c7948ee`): the pipeline exists and is real progress: 39 commits,
+about 5k lines of `src`, and all 7 fast gate commands pass. On this Mac the repository's
+own placer passes for G1, G1V1, G1V2, G3, G4 and G5, and fails for G2. Problems: (1)
+`main` CI fails on macOS and Windows; the full local macOS run has 22 failures in 789
+tests. The verified macOS cause is `derived_path` and the KiCad bridge rejecting
+symlinked ancestors above the repository (`/var` to `/private/var`). The Windows log
+could not be downloaded, so its cause is unread. (2) Work ran for a whole stage without
+a push, so these failures surfaced only at the end. (3) The zero-unconnected G1 board
+came from a hand-driven `reserve_route` Python call chain over artifacts in another
+machine's `build/`. `layout run` does not call repair, and `fanout_*` and
+`reservation_repair` have no CLI, so the result is not rebuildable from intent and bundle
+as ADR-026 requires. (4) T1's DRAFT resistors entered selection candidates, so
+`v2 coverage --all` now reports G1, G1V1, G1V2 and G2 as `INCOMPLETE`/`REFUSED` although
+each graph expands at `AGENT_VERIFIED`; no test guards the committed catalog. (5) T1 work
+started while Stages 13 and 14 were open. (6) `GUARD_RING`, `RETURN_PATH` and `KELVIN`
+are unconditionally `NOT_CHECKABLE`, so A3 is unreachable for G1, G1V2, G2, G3, G4 and G5.
+The Freerouting route, DRC and KiCad 10 were not rerun in this review.
+
+### 13a Restore a trustworthy baseline (do first, in this order)
+
+- [ ] Green CI on all jobs: `derived_path` and the KiCad bridge reject symlinks only
+  at or below the repository root, keeping the `build/` boundary. Add a test with a
+  symlinked ancestor. Read the Windows log and fix whatever else fails there.
+- [ ] `coverage` judges the part `expand` actually selects, so an unselected DRAFT
+  candidate is listed but does not block, while a design that can only select a
+  DRAFT part still refuses. Add a test over the committed catalog: every positive
+  G and V brief is `READY`, and T1 stays `REFUSED` until promoted.
+- [ ] Pin the canonical expansion hash of every positive reference design (only G1 is
+  pinned now), so adding or promoting parts cannot silently change a selection.
+- [ ] Remove the disclaimer and restore missing spaces in the T1 brief summary.
+
+### 13b Reproducible G1 reference layout
+
+- [ ] `layout run` performs the complete deterministic sequence, including a bounded
+  repair if repair is needed, using only intent, bundle and tool paths. Add the
+  repair receipts to `report.json`. Delete any `fanout_*` or `reservation_*` module the
+  final sequence does not call, and rewrite the API section of `docs/local-workflow.md`
+  and ADR-026 to match. The target is zero violations and zero unconnected items from
+  one CLI command in a fresh output directory; identical inputs and tools give an
+  identical board hash.
+- [ ] `COPPER_AREA`: measure the filled polygon or polygons contacting the target pad
+  on that net, including a zone with several islands; only connected copper counts.
+  Tests cover pass, too small, and a disconnected island.
+- [ ] `KELVIN`: blocks declare explicit sense branches from cited pins, and the checker
+  proves from routed copper that the sense branch leaves at the required pads and
+  carries no load path. Tests cover pass and each failure. Unsupported geometry remains
+  `NOT_CHECKABLE`.
+- [ ] Add an owner reproduction section to `docs/local-workflow.md` with macOS paths
+  (KiCad 10 under `/Applications/KiCad/KiCad.app`) and the exact tool downloads and hashes.
+
+### Pipeline parts already implemented
+
+- [x] `layout tools`: report the located `kicad-cli`, Java and Freerouting jar
   with versions, or `NOT_FOUND`. Document setup per D64.
-- [ ] Placer (original code, deterministic): rectangular outline from the brief;
+- [x] Placer (original code, deterministic): rectangular outline from the brief;
   edge, mechanical and connector items first; anchor ICs; `PLACE_NEAR` and `GROUP`
   members around their targets; courtyard legalization on a grid; top-side SMT per
   the fab profile. Unsatisfiable constraints are reported, never relaxed.
-- [ ] Copper: bottom-layer GND zone and stitching vias where the intent asks;
+- [x] Copper: bottom-layer GND zone and stitching vias where the intent asks;
   zones are filled before DRC and export.
-- [ ] Routing: write Specctra DSN with net classes (widths, clearances, via size)
+- [x] Routing: write Specctra DSN with net classes (widths, clearances, via size)
   from the fab profile and intent; run Freerouting single-threaded; read SES and
   merge tracks and vias into the derived board. Tests use small hand-written
   DSN/SES fixtures; no tool needed.
-- [ ] `layout run <intent>`: place, route, merge, fill, `layout check`, `drc`,
+- [x] `layout run <intent>`: place, route, merge, fill, `layout check`, `drc`,
   export, re-read; one report with A3, A4 and A5 each `PASS`, `FAIL` or `NOT_RUN`.
-- [ ] Fabrication outputs: `kicad-cli pcb export gerbers|drill|pos` plus the BOM;
+  Repair is not part of it yet (13b).
+- [x] Fabrication outputs: `kicad-cli pcb export gerbers|drill|pos` plus the BOM;
   independent re-read checks the layer set, board extents, drill count against
   holes, and that every SMT BOM reference has a position line. Document the CPL
   rotation convention for the D12 fab.
-- [ ] Bring-up checklist export from the intent: each rail with expected voltage
+- [x] Bring-up checklist export from the intent: each rail with expected voltage
   range and test location, programming connector pinout, and the brief's
-  functional tests. Used by the owner in Stage 15.
-- [ ] Owner review aids: top and bottom SVG renders under `build/` and manual
+  functional tests. Used by the owner in Stage 15. G1 coverage is `COMPLETE`.
+- [x] Owner review aids: top and bottom SVG renders under `build/` and manual
   steps in `docs/local-workflow.md`.
 
-Exit: G1 reference layout with `layout check` all `PASS` (any `NOT_CHECKABLE`
-kind listed with its reason), DRC zero violations and zero unconnected items,
-fabrication outputs generated and re-read. Record tool versions in the receipt.
+Exit (D75): from a clean checkout, one `layout run` command gives G1 `layout check`
+all `PASS`, DRC zero violations and zero unconnected items, and fabrication outputs
+generated and re-read. Every CI job is green. Record tool versions in the receipt.
 
-G1 owner-review candidate: original 46-component placement passes; scoped routing
-completed in 58.201 s with native zero violations, zero unconnected items and
-zero parity findings. Layout has 54 PASS, zero FAIL and two NOT_CHECKABLE:
-multi-polygon thermal area and missing Kelvin branch proof. Independent fabrication
-re-read and conditional bring-up coverage pass. Strict A3/A5 remain FAIL; A4 is
-PASS. The separate owner-review predicate does not authorize ordering. Final
-committed aggregate verification and owner inspection remain pending.
+G1 owner-review candidate (implementer's report on another machine, KiCad 9.0.2 and
+Freerouting 2.5.0, through the hand-driven repair chain): original 46-component
+placement passes; scoped routing completed in 58.201 s with native zero violations,
+zero unconnected items and zero parity findings. Layout has 54 PASS, zero FAIL and two
+NOT_CHECKABLE: multi-polygon thermal area and missing Kelvin branch proof. Fabrication
+re-read and conditional bring-up coverage pass. A3/A5 remain FAIL. This run is not a
+stage receipt until 13b reproduces it.
+
+## Stage 13R — Replace external layout tools (D76)
+
+Starts after the Stage 13 exit and runs before Stage 14. Work in this order, one
+replacement at a time; each keeps the G1 board at its Stage 13 acceptance level.
+
+- [ ] ADR-027 amending ADR-026: the original pipeline becomes the acceptance path, and
+  KiCad becomes an optional comparison. Before the first board order, the owner still
+  gets one independent check (the fab's DFM or opening the board in KiCad).
+- [ ] Original Gerber, drill and position writers. Compare layers, extents, drill counts
+  and positions with the KiCad exports for G1.
+- [ ] Original zone fill. Compare filled area and connectivity with KiCad on G1.
+- [ ] Original DRC for the D12 fab rules and connectivity. Every mutated synthetic board
+  must fail with the expected kind, and on G1 the findings must match KiCad's.
+- [ ] Original deterministic router for two-layer boards, using the constraints in the
+  intent. Compare completion, via count and copper length with the Freerouting result.
+- [ ] Delete the Freerouting, DSN/SES and KiCad bridge paths and the `fanout_*` and
+  `reservation_*` modules once nothing calls them; update D64 and the workflow doc.
+
+Exit: G1 reaches the same acceptance levels from one `layout run` command with no
+Freerouting or KiCad installed, and the recorded KiCad comparison shows no unexplained
+difference. A router that cannot complete G1 parks this stage with the recorded blocker
+and the existing tools stay in place.
 
 ## Stage 14 — Reference layout for G1V1, G1V2 and G2 to G5
 
@@ -730,6 +816,20 @@ committed aggregate verification and owner inspection remain pending.
   analog/digital separation for G3-G5) as constraint support, not per-design code.
 - [ ] Every layout or DRC failure that comes from knowledge (footprint, rule,
   constraint) is fixed in the catalog with a test, before tuning the placer.
+- [ ] Checker support for `GUARD_RING` (G3, G4) and `RETURN_PATH` (G3, G4, G5), proven
+  from routed copper with passing and failing fixtures. Both are unconditionally
+  `NOT_CHECKABLE` today, so those designs cannot reach A3.
+- [ ] Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
+  `c7948ee` (G1V1 leaves `LOGGER_3V3`, `MCU_VDDA`, `PROTECTED_5V` and `USB_VBUS`
+  unresolved).
+- [ ] Reopen the G2 blocker: read the cited TPS5430 page and decide what the 1 mm limit
+  measures. If the source means copper-to-copper distance, add a typed distance basis
+  to the constraint, measure that, and record the decision with a D-number, keeping the
+  number. If the source does not support that reading, keep the rule and escalate it.
+  Changing a measurement to pass without that source basis is relaxing a constraint.
+
+Placement-only rerun on `c7948ee` at 0.1 mm grid with no router: G1, G1V1, G1V2, G3,
+G4 and G5 place in 5-36 s; G2 fails at once on `buck_C2` to `buck_U1.pin:7`.
 
 G2 parked: TPS5430 source page 3 requires input bypass within 1 mm of VIN/GND;
 the current strict courtyard and point-center metric cannot satisfy eight buck
@@ -757,6 +857,9 @@ may be parked only for part or evidence availability, with the blocker recorded.
 Record one receipt line per cycle: themes, A-levels, new blocks and parts, and the
 corpus pass rate. Continue until all ten themes are done or parked, then propose
 the next ten as a TODO change.
+
+Not active: wait for Stages 13 and 14 to exit or park (D75). T1 work started early;
+its committed records stay, and no further theme work happens until then.
 
 T1 reference authority is DRAFT: the complete original competition brief and
 14-instance graph are committed for closure, not A1/A2 acceptance. Remaining
