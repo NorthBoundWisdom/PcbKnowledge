@@ -40,8 +40,8 @@
         "unit": "mm",
         "value": 3
       },
-      "subject": "D1",
-      "target": "F1"
+      "subject": "D1.pin:1",
+      "target": "F1.pin:2"
     },
     {
       "kind": "NET_WIDTH_MIN",
@@ -122,8 +122,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "notes": "D66: physical placement anchor and selected package correction; numerical layout limits retained.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts"
+      "agent:/root/implement_pcbknowledge_brief/implement_footprint_contracts",
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",

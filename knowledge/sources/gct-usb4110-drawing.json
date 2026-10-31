@@ -1,0 +1,22 @@
+{
+  "accessed_on": "2026-10-31",
+  "bytes": 494431,
+  "id": "source:gct-usb4110-drawing",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 2,
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "notes": "D38 public manufacturer drawing; extracted facts only. Source copyright notice retained in local original.",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "publisher": "Global Connector Technology",
+  "revision": "B4, 2024-05-22",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "b083cd7825c1d58d590e9b0ec6e8533ec43711b385d448d7b7a0fd25bd7f4d71",
+  "title": "USB4110 USB Type C Receptacle for USB 2.0, SMT Type, PCB Top Mount",
+  "url": "https://gct.co/files/drawings/usb4110.pdf",
+  "verification": "AGENT_VERIFIED"
+}

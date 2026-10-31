@@ -1,0 +1,21 @@
+{
+  "accessed_on": "2026-10-31",
+  "bytes": 444077,
+  "id": "source:abracon-abmm2",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 5,
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "publisher": "Abracon",
+  "revision": "2024-07-31",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "4f689f26fbd29160765bf20fdde9a6d8617819a8a99cc103c58e00e1b768ba9d",
+  "title": "ABMM2 Ceramic SMD Crystal",
+  "url": "https://abracon.com/Resonators/abmm2.pdf",
+  "verification": "AGENT_VERIFIED"
+}

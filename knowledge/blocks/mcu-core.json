@@ -134,7 +134,7 @@
     {
       "ref": "Y1",
       "select": {
-        "part": "part:abracon-abls-8-18"
+        "part": "part:abracon-abmm2-8-18"
       }
     },
     {
@@ -287,11 +287,11 @@
     },
     {
       "page": 1,
-      "source": "source:abracon-abls"
+      "source": "source:abracon-abmm2"
     },
     {
-      "page": 3,
-      "source": "source:abracon-abls"
+      "page": 1,
+      "source": "source:abracon-abmm2"
     },
     {
       "page": 52,
@@ -411,7 +411,7 @@
         "value": 5
       },
       "subject": "Y1",
-      "target": "U1"
+      "target": "U1.pin:5"
     },
     {
       "kind": "MINIMIZE_LOOP",
@@ -425,7 +425,7 @@
       "path": [
         "U1.pin:5",
         "Y1.pin:1",
-        "Y1.pin:2",
+        "Y1.pin:3",
         "U1.pin:6"
       ]
     },
@@ -487,7 +487,9 @@
         "C9.pin:2",
         "C10.pin:2",
         "R2.pin:2",
-        "R3.pin:2"
+        "R3.pin:2",
+        "Y1.pin:2",
+        "Y1.pin:4"
       ],
       "name": "GND"
     },
@@ -502,7 +504,7 @@
     {
       "connect": [
         "U1.pin:6",
-        "Y1.pin:2",
+        "Y1.pin:3",
         "C9.pin:1"
       ],
       "name": "OSC_OUT"
@@ -659,8 +661,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/build_g1_blocks",
+    "notes": "D66: physical placement anchor and selected package correction; numerical layout limits retained.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals"
+      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",

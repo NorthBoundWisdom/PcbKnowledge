@@ -1,0 +1,132 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "max": 1.2,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "max": 3.7,
+      "min": 3.3,
+      "typ": 3.5,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "max": 6.2,
+      "min": 5.8,
+      "typ": 6,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 courtyard allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "NOMINAL",
+  "drawing": {
+    "pad_height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "unit": "mm",
+      "value": 1.4
+    },
+    "pad_numbers": [
+      "4",
+      "1",
+      "2",
+      "3"
+    ],
+    "pad_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "unit": "mm",
+      "value": 1.95
+    },
+    "pin_count": 4,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "note": "Recommended vertical center spacing: 1.40 mm land height + 1.10 mm inner gap.",
+      "unit": "mm",
+      "value": 2.5
+    },
+    "row_pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      },
+      "note": "Recommended horizontal center spacing: 1.95 mm land width + 2.40 mm inner gap.",
+      "unit": "mm",
+      "value": 4.35
+    }
+  },
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:abracon-abmm2"
+    }
+  ],
+  "family": "CRYSTAL_6035",
+  "generator": "manufacturer_two_side_land",
+  "id": "package:abracon-abmm2",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 2,
+        "source": "source:abracon-abmm2"
+      },
+      {
+        "page": 3,
+        "source": "source:abracon-abmm2"
+      }
+    ],
+    "mpns": [
+      "ABMM2-8.000MHZ-18-T"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

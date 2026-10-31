@@ -1,0 +1,1098 @@
+{
+  "body": {
+    "center": {
+      "x": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "D66 conservative envelope center: x=0 on source centerline; y=7.70/2 from cited nominal overall depth. Footprint origin is the mating face.",
+        "unit": "mm",
+        "value": 0
+      },
+      "y": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "D66 conservative envelope center: x=0 on source centerline; y=7.70/2 from cited nominal overall depth. Footprint origin is the mating face.",
+        "unit": "mm",
+        "value": 3.85
+      }
+    },
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4110-drawing"
+      },
+      "max": 3.46,
+      "min": 3.06,
+      "note": "3.26 overall above-board height; drawing general X.XX tolerance +/-0.20.",
+      "typ": 3.26,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4110-drawing"
+      },
+      "max": 8.0,
+      "min": 7.4,
+      "note": "Overall front-to-tail depth, 7.70 +/-0.30; conservative body-envelope center is 3.85 mm inward from mating face.",
+      "typ": 7.7,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4110-drawing"
+      },
+      "max": 11.6,
+      "min": 11.0,
+      "note": "Overall shell width including SMT retention tabs, 11.30 +/-0.30.",
+      "typ": 11.3,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 allowance; footprint y=0 is the mating face and the conservative body envelope center is y=3.85 mm.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:gct-usb4110-drawing"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A1_B12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -3.2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A4_B9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -2.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -1.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -1.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -0.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -0.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A7",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 0.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B6",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 0.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "A8",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 1.25
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B5",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.3
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 1.75
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B4_A9",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 2.4
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 1.15
+      },
+      "kind": "SMD",
+      "number": "B1_A12",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.6
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 3.2
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 7.355
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2
+      },
+      "kind": "SMD",
+      "number": "SHELL1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2.18
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -5.11
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 2.85
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2
+      },
+      "kind": "SMD",
+      "number": "SHELL2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2.18
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 5.11
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 2.85
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2
+      },
+      "kind": "SMD",
+      "number": "SHELL3",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2.18
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -5.11
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 6.78
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2
+      },
+      "kind": "SMD",
+      "number": "SHELL4",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 2.18
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 5.11
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 6.78
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "MECHANICAL",
+      "number": "NC1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": -2.89
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 6.28
+      }
+    },
+    {
+      "drill": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "kind": "MECHANICAL",
+      "number": "NC2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis-aligned manufacturer top-view land pattern.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "ROUND",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "unit": "mm",
+        "value": 0.65
+      },
+      "x": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Manufacturer component-side layout; x centered on connector.",
+        "unit": "mm",
+        "value": 2.89
+      },
+      "y": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:gct-usb4110-drawing"
+        },
+        "note": "Top-view position relative to the source drawing mating-face datum.",
+        "unit": "mm",
+        "value": 6.28
+      }
+    }
+  ],
+  "family": "EXPLICIT",
+  "id": "package:gct-usb4110-gf-a",
+  "mount_type": "SMT",
+  "pin1": "A1_B12",
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:gct-usb4110-drawing"
+      }
+    ],
+    "mpns": [
+      "USB4110-GF-A"
+    ]
+  },
+  "verification": "AGENT_VERIFIED"
+}

@@ -1,30 +1,32 @@
 {
-  "id": "part:abracon-abls-8-18",
+  "id": "part:abracon-abmm2-8-18",
   "identity_evidence": {
     "page": 2,
-    "source": "source:abracon-abls"
+    "source": "source:abracon-abmm2"
   },
   "manufacturer": "Abracon",
-  "mpn": "ABLS-8.000MHZ-18",
-  "package": "package:hc49-us-smd-abls",
+  "mpn": "ABMM2-8.000MHZ-18-T",
+  "package": "package:abracon-abmm2",
   "parameters": {
     "equivalent_series_resistance": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:abracon-abls"
+        "source": "source:abracon-abmm2"
       },
-      "max": 80,
+      "max": 72,
+      "note": "Maximum ESR for 8.000 through 10.000 MHz fundamental.",
       "unit": "ohm"
     },
     "frequency": {
       "basis": "DATASHEET",
       "conditions": {},
       "evidence": {
-        "page": 1,
-        "source": "source:abracon-abls"
+        "page": 2,
+        "source": "source:abracon-abmm2"
       },
+      "note": "Selected 8.000 MHz order code within the page 1 fundamental range.",
       "unit": "Hz",
       "value": 8000000.0
     },
@@ -33,7 +35,7 @@
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:abracon-abls"
+        "source": "source:abracon-abmm2"
       },
       "unit": "F",
       "value": 1.8e-11
@@ -43,10 +45,10 @@
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:abracon-abls"
+        "source": "source:abracon-abmm2"
       },
-      "max": 0.001,
-      "note": "Maximum crystal drive level; typical drive100µW.",
+      "max": 0.0005,
+      "note": "Maximum drive level 500 uW; typical 100 uW.",
       "unit": "W"
     },
     "shunt_capacitance": {
@@ -54,17 +56,17 @@
       "conditions": {},
       "evidence": {
         "page": 1,
-        "source": "source:abracon-abls"
+        "source": "source:abracon-abmm2"
       },
       "max": 7e-12,
       "unit": "F"
     }
   },
   "pin_evidence": {
-    "basis": "STANDARD_CONVENTION",
-    "convention": "Unpolarized two-terminal crystal: terminals numbered1 and2; drawing establishes two physical leads.",
+    "basis": "DATASHEET",
+    "note": "Numbered circuit and bottom-view drawing: 1/3 are crystal electrodes; 2/4 connect to the metal lid and must connect to GND. Top-view order is 1 lower-left, 2 lower-right, 3 upper-right, 4 upper-left.",
     "page": 3,
-    "source": "source:abracon-abls"
+    "source": "source:abracon-abmm2"
   },
   "pins": [
     {
@@ -73,15 +75,26 @@
       "type": "PASSIVE"
     },
     {
-      "name": "XTAL2",
+      "name": "GND",
       "number": "2",
+      "type": "GROUND"
+    },
+    {
+      "name": "XTAL2",
+      "number": "3",
       "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "4",
+      "same_net_as": "2",
+      "type": "GROUND"
     }
   ],
   "provenance": {
-    "created_by": "agent:/root/implement_pcbknowledge_brief/curate_g1_parts/curate_g1_mcu_peripherals",
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/curate_g1_parts"
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "roles": [

@@ -1,0 +1,146 @@
+{
+  "id": "part:gct-usb4110-gf-a",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:gct-usb4110-drawing"
+  },
+  "manufacturer": "Global Connector Technology",
+  "mpn": "USB4110-GF-A",
+  "package": "package:gct-usb4110-gf-a",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4110-drawing"
+      },
+      "note": "Collective VBUS rating, not per-contact current.",
+      "unit": "A",
+      "value": 5
+    },
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Design choice for top-mounted SMT connector with 0.63 mm plastic pegs; drawing specifies no board-thickness rating.",
+      "unit": "mm",
+      "value": 1.6
+    },
+    "voltage_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:gct-usb4110-drawing"
+      },
+      "note": "DC connector rating; design remains USB 5 V sink.",
+      "unit": "V",
+      "value": 48
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "note": "A1_B12, A4_B9, B4_A9 and B1_A12 label four shared physical lands shown in the top-view layout. SHELL1-4 are local retention-tab identifiers. NC1/NC2 are plastic locator holes, not electrical terminals.",
+    "page": 1,
+    "source": "source:gct-usb4110-drawing"
+  },
+  "pins": [
+    {
+      "name": "GND",
+      "number": "A1_B12",
+      "type": "GROUND"
+    },
+    {
+      "name": "VBUS",
+      "number": "A4_B9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SBU2",
+      "number": "B8",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CC1",
+      "number": "A5",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dn2",
+      "number": "B7",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dp1",
+      "number": "A6",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dn1",
+      "number": "A7",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "Dp2",
+      "number": "B6",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SBU1",
+      "number": "A8",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "CC2",
+      "number": "B5",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "VBUS",
+      "number": "B4_A9",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "GND",
+      "number": "B1_A12",
+      "type": "GROUND"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL2",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL3",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "SHIELD",
+      "number": "SHELL4",
+      "same_net_as": "SHELL1",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/implement_reference_layout/tool_research",
+    "verified_by": [
+      "agent:/root/implement_reference_layout/placement_review"
+    ]
+  },
+  "roles": [
+    "connector.usb-c-sink"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "AGENT_VERIFIED"
+}
