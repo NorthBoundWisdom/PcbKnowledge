@@ -341,7 +341,9 @@ Download tools outside the repository, verify hashes, and select explicit paths.
 The KiCad Python interpreter must come from the installed KiCad environment; the
 catalog process never imports `pcbnew`. Its isolated subprocess handles native
 DSN/SES conversion and zone fill. KiCad project settings and generated rules stay
-unchanged. Freerouting uses one thread for each routing stage, sequential selection,
+unchanged. Native board saves disable project-settings output; fresh destination
+sidecars are required before copying the exact source project and rules.
+Freerouting uses one thread for each routing stage, sequential selection,
 fixed maximum 100 autorouter/20 optimizer passes, and disables fanout, automatic
 neckdown, GUI, API and analytics. The neck-width override is zero (disabled). Session widths are independently checked against the intent.
 A router success is not DRC acceptance: the final filled board is checked again.

@@ -122,12 +122,12 @@ class DomainTests(unittest.TestCase):
 
     def test_cluster_ranking_resource_budget_precedes_branch_selection(self):
         from pcbknowledge.v2.placement_domains import ClusterSearch
-        geometry = {'A': part(), 'B': part()}
+        geometry = {'A': part(), 'B': part(), 'C': part()}
         rules = [{'kind': 'GROUP', 'subjects': ['A', 'B']}]
         owner = GridSearch(geometry, rules, 100, 100, (), 1, 2, 500000, 64)
         values = [((), (index / 10, 1, 0), (index / 10, 0, index / 10 + .1, .1))
                   for index in range(1000)]
-        search = ClusterSearch(owner, {'A': values, 'B': values})
+        search = ClusterSearch(owner, {'A': values, 'B': values, 'C': values})
         with self.assertRaisesRegex(PlacementError, 'compatibility-work budget exhausted'):
             next(search.solutions())
         self.assertEqual(owner.compatibility_work, owner.compatibility_limit)

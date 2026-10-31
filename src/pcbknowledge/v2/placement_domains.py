@@ -77,11 +77,29 @@ class ClusterSearch:
         self.cache[key] = mask
         return mask
 
+    def terminal_solutions(self, masks, chosen):
+        """Yield final one/two-variable assignments without quadratic lookahead ranking."""
+        ref = min(masks, key=lambda name: (masks[name].bit_count(), name))
+        others = {name: mask for name, mask in masks.items() if name != ref}
+        for index in indices(masks[ref]):
+            if self.owner.states >= self.owner.budget:
+                raise PlacementError('Placement legal-branch budget exhausted', states=self.owner.states)
+            self.owner.spend_compatibility_work()
+            remaining = {other: mask & self.compatible(ref, index, other) for other, mask in others.items()}
+            if any(not mask for mask in remaining.values()):
+                continue
+            self.owner.states += 1
+            position = self.domains[ref].values[index][1]
+            yield from self.solutions(remaining, {**chosen, ref: position})
+
     def solutions(self, masks=None, chosen=None):
         masks = {ref: domain.full for ref, domain in self.domains.items()} if masks is None else masks
         chosen = {} if chosen is None else chosen
         if not masks:
             yield chosen
+            return
+        if len(masks) <= 2:
+            yield from self.terminal_solutions(masks, chosen)
             return
         ref = min(masks, key=lambda name: (masks[name].bit_count(), name))
         others = {name: mask for name, mask in masks.items() if name != ref}

@@ -28,6 +28,10 @@ def operate(root, action, board_path, output_path, session_path=None):
     expected_suffix = '.dsn' if action == 'export-dsn' else '.kicad_pcb'
     if output.suffix != expected_suffix or action not in ('export-dsn', 'merge-session', 'fill'):
         raise ValueError('Unsupported KiCad bridge action or output type')
+    if action != 'export-dsn':
+        for suffix in ('.kicad_pro', '.kicad_dru', '.kicad_prl'):
+            if _path(root, output.with_suffix(suffix)).exists():
+                raise ValueError('KiCad bridge destination project/rules/settings must be fresh')
     session = _path(root, session_path, exists=True) if session_path else None
     if (action == 'merge-session') != (session is not None):
         raise ValueError('Session input is required only for merge-session')
@@ -47,7 +51,7 @@ def operate(root, action, board_path, output_path, session_path=None):
             raise ValueError('KiCad rejected the router session')
         if action == 'fill':
             pcbnew.ZONE_FILLER(board).Fill(board.Zones())
-        success = pcbnew.SaveBoard(str(output), board)
+        success = pcbnew.SaveBoard(str(output), board, True)
     if success is False or not output.is_file() or output.stat().st_size == 0:
         raise ValueError('KiCad did not produce the requested output')
     print(pcbnew.Version())
