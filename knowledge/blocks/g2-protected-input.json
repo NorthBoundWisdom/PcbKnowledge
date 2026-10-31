@@ -814,7 +814,7 @@
         "value": 3
       },
       "subject": "C2",
-      "target": "C1"
+      "target": "C1.pin:1"
     },
     {
       "kind": "MINIMIZE_LOOP",
@@ -972,9 +972,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/g2_relay_author_d40",
-    "notes": "D54 layout correction by agent:/root/implement_pcbknowledge_brief/g2_edge_author under owner delegation. Prior verifier: agent:/root/implement_pcbknowledge_brief/g2_source_review. D50 steady-state model unchanged; fault/inrush separate.",
+    "notes": "D54 by agent:/root/implement_pcbknowledge_brief/g2_edge_author under owner delegation. Prior verifier: agent:/root/implement_pcbknowledge_brief/g2_source_review. D50 steady-state model unchanged; fault/inrush separate. D69: pin anchors; same 3 mm.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/g2_attempt_review"
+      "agent:/root/implement_pcbknowledge_brief/g2_attempt_review",
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",

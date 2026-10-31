@@ -63,7 +63,7 @@
         "value": 3
       },
       "subject": "C1",
-      "target": "U1"
+      "target": "U1.pin:8"
     }
   ],
   "nets": [
@@ -153,9 +153,10 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_audit_packages",
-    "notes": "Grounded address pins select 0x48. OS has a 1 kohm local pull-up and is unused externally. Shared I2C bus supplies SDA/SCL pull-ups; C1 is the documented 0.1 uF supply decoupler.",
+    "notes": "Grounded address pins select 0x48. OS has a 1 kohm local pull-up and is unused externally. Shared I2C bus supplies SDA/SCL pull-ups; C1 is the documented 0.1 uF supply decoupler. D69: pin anchors; same 3 mm.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/stage6_package_review"
+      "agent:/root/implement_pcbknowledge_brief/stage6_package_review",
+      "agent:/root/implement_reference_layout/placement_review"
     ]
   },
   "schema": "pcbknowledge.block.v2",
