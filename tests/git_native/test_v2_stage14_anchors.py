@@ -10,7 +10,8 @@ from pcbknowledge.v2.placement_feasibility import minimum_separated_distance
 
 ROOT = Path(__file__).resolve().parents[2]
 CASES = [('g1v1', 'i2c-temperature-sensor', 'temperature', 'C1', 'U1', '8'),
-         ('g1v2', 'usb-uart-bridge', 'bridge', 'C1', 'U1', '16'),
+         ('g1v2', 'usb-uart-bridge', 'bridge', 'C1', 'U1', '4'),
+         ('g1v2', 'usb-uart-bridge', 'bridge', 'C2', 'U1', '16'),
          ('g2', 'g2-protected-input', 'protection', 'C2', 'C1', '1'),
          ('g2', 'g2-relay-channels', 'relay', 'RP1', 'U1', '1'),
          ('g2', 'g2-relay-channels', 'relay', 'RP2', 'U1', '2'),
@@ -18,7 +19,7 @@ CASES = [('g1v1', 'i2c-temperature-sensor', 'temperature', 'C1', 'U1', '8'),
 
 
 class Stage14AnchorTests(unittest.TestCase):
-    def test_six_electrical_targets_preserve_three_mm_and_remove_isolated_conflict(self):
+    def test_electrical_targets_preserve_three_mm_and_remove_isolated_conflict(self):
         catalog = Catalog(ROOT, ROOT / 'schemas')
         expanded = {}
         for design, block_id, instance, subject, target, pin in CASES:
