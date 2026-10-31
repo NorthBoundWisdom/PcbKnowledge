@@ -119,6 +119,7 @@ answer here.
 
 | D71 | CH340C supply-pin decoupling | Use separate existing KEMET 100 nF ceramics: C1 at V3 pin 4 and C2 at VCC pin 16, both across the joined external 3.3 V rail and ground. Retain each 3 mm placement bound; one capacitor cannot be within 3 mm of both pad centers, 6.690747 mm apart. WCH V3D pp3/5 specifies VCC decoupling and joined V3/VCC in 3.3 V mode; the second local capacitor is an engineering decision under the unchanged per-power-pin rule. |
 | D73 | Reference rail bring-up windows | Reuse the existing D55 2.35-2.65 V reference envelope as an independent settled-DC test window for G3/G4, measured at TL431 cathode pin 1 relative to anode pin 3 under the existing 3.1994-3.4 V input and 0.5 mA load limits. Measurements remain NOT_RUN. |
+| D74 | T1 conditional reference design | Use TPS562208 FCCM with DAC60501 feedback setpoint and INA219 voltage/current readback for 12 V nominal input and 2.5-6 V / 0.5 A external output. Include local loads and explicit control-rail/preload operating budgets; keep the new authority DRAFT until driven-clamp, bound-calculator and underbody routing checks are integrated. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -755,6 +756,13 @@ may be parked only for part or evidence availability, with the blocker recorded.
 Record one receipt line per cycle: themes, A-levels, new blocks and parts, and the
 corpus pass rate. Continue until all ten themes are done or parked, then propose
 the next ten as a TODO change.
+
+T1 reference authority is DRAFT: the complete original competition brief and
+14-instance graph are committed for closure, not A1/A2 acceptance. Remaining
+work is typed driven open-drain clamp validation, production operating-envelope
+and local-load calculator bindings, the inductor underbody routing exclusion,
+independent record/block promotion, and three fresh pinned synthesis attempts.
+No source/evidence availability blocker is claimed for any of the ten themes.
 
 ## Owner-only and cross-repository items
 

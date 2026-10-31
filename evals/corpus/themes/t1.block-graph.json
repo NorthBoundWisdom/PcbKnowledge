@@ -1,0 +1,827 @@
+{
+  "brief": "T1",
+  "connections": [
+    {
+      "endpoints": [
+        {
+          "instance": "input",
+          "port": "VIN"
+        },
+        {
+          "instance": "control_rail",
+          "port": "VIN"
+        },
+        {
+          "instance": "buck",
+          "port": "VIN"
+        },
+        {
+          "instance": "hardware_gate",
+          "port": "VIN"
+        }
+      ],
+      "net": "VIN"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "control_rail",
+          "port": "VDD"
+        },
+        {
+          "instance": "controller",
+          "port": "VDD"
+        },
+        {
+          "instance": "setpoint",
+          "port": "VDD"
+        },
+        {
+          "instance": "hardware_gate",
+          "port": "VDD"
+        },
+        {
+          "instance": "readback",
+          "port": "VDD"
+        },
+        {
+          "instance": "i2c",
+          "port": "VDD"
+        },
+        {
+          "instance": "swd",
+          "port": "VREF"
+        },
+        {
+          "instance": "uart",
+          "port": "VREF"
+        }
+      ],
+      "net": "VDD"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "input",
+          "port": "GND"
+        },
+        {
+          "instance": "control_rail",
+          "port": "GND"
+        },
+        {
+          "instance": "controller",
+          "port": "GND"
+        },
+        {
+          "instance": "setpoint",
+          "port": "GND"
+        },
+        {
+          "instance": "buck",
+          "port": "GND"
+        },
+        {
+          "instance": "hardware_gate",
+          "port": "GND"
+        },
+        {
+          "instance": "readback",
+          "port": "GND"
+        },
+        {
+          "instance": "output",
+          "port": "GND"
+        },
+        {
+          "instance": "inhibit",
+          "port": "GND"
+        },
+        {
+          "instance": "swd",
+          "port": "GND"
+        },
+        {
+          "instance": "uart",
+          "port": "GND"
+        },
+        {
+          "instance": "status",
+          "port": "GND"
+        },
+        {
+          "instance": "controller",
+          "port": "BUTTON"
+        }
+      ],
+      "net": "GND"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "SCL"
+        },
+        {
+          "instance": "setpoint",
+          "port": "SCL"
+        },
+        {
+          "instance": "readback",
+          "port": "SCL"
+        },
+        {
+          "instance": "i2c",
+          "port": "SCL"
+        }
+      ],
+      "net": "SCL"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "SDA"
+        },
+        {
+          "instance": "setpoint",
+          "port": "SDA"
+        },
+        {
+          "instance": "readback",
+          "port": "SDA"
+        },
+        {
+          "instance": "i2c",
+          "port": "SDA"
+        }
+      ],
+      "net": "SDA"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "setpoint",
+          "port": "SETPOINT"
+        },
+        {
+          "instance": "buck",
+          "port": "SETPOINT"
+        }
+      ],
+      "net": "SETPOINT"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "REQUEST"
+        },
+        {
+          "instance": "hardware_gate",
+          "port": "REQUEST"
+        }
+      ],
+      "net": "REQUEST"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "hardware_gate",
+          "port": "ENABLE"
+        },
+        {
+          "instance": "buck",
+          "port": "ENABLE"
+        },
+        {
+          "instance": "inhibit",
+          "port": "ENABLE"
+        }
+      ],
+      "net": "ENABLE"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "buck",
+          "port": "VREG"
+        },
+        {
+          "instance": "hardware_gate",
+          "port": "VREG"
+        },
+        {
+          "instance": "readback",
+          "port": "SENSE_IN"
+        }
+      ],
+      "net": "VREG"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "readback",
+          "port": "SENSE_OUT"
+        },
+        {
+          "instance": "output",
+          "port": "VOUT"
+        }
+      ],
+      "net": "VOUT"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "SWDIO"
+        },
+        {
+          "instance": "swd",
+          "port": "SWDIO"
+        }
+      ],
+      "net": "SWDIO"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "SWCLK"
+        },
+        {
+          "instance": "swd",
+          "port": "SWCLK"
+        }
+      ],
+      "net": "SWCLK"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "NRST"
+        },
+        {
+          "instance": "swd",
+          "port": "NRST"
+        }
+      ],
+      "net": "NRST"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "UART_TX"
+        },
+        {
+          "instance": "uart",
+          "port": "TX"
+        }
+      ],
+      "net": "UART_TX"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "UART_RX"
+        },
+        {
+          "instance": "uart",
+          "port": "RX"
+        }
+      ],
+      "net": "UART_RX"
+    },
+    {
+      "endpoints": [
+        {
+          "instance": "controller",
+          "port": "LED2"
+        },
+        {
+          "instance": "status",
+          "port": "DRIVE"
+        }
+      ],
+      "net": "STATUS"
+    }
+  ],
+  "id": "t1-original-competition",
+  "instances": [
+    {
+      "block": "block:t1-input",
+      "id": "input",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 1
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 13.2,
+          "min": 10.8,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "input"
+      ]
+    },
+    {
+      "block": "block:t1-control-rail",
+      "id": "control_rail",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 0.035
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.43,
+          "min": 3.17,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VDD",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "control_rail"
+      ]
+    },
+    {
+      "block": "block:t1-controller",
+      "id": "controller",
+      "parameters": {
+        "clock_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "Hz",
+          "value": 8000000
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SWDIO",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SWCLK",
+          "type": "INPUT"
+        },
+        {
+          "name": "NRST",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "REQUEST",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "LED2",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "BUTTON",
+          "type": "INPUT"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "UART_TX",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "UART_RX",
+          "type": "INPUT"
+        }
+      ],
+      "requirements": [
+        "controller"
+      ]
+    },
+    {
+      "block": "block:t1-setpoint",
+      "id": "setpoint",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SCL",
+          "type": "INPUT"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SETPOINT",
+          "type": "ANALOG"
+        }
+      ],
+      "requirements": [
+        "setpoint"
+      ]
+    },
+    {
+      "block": "block:t1-buck",
+      "id": "buck",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 0.507
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6.1,
+          "min": 2.5,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "VREG",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "SETPOINT",
+          "type": "ANALOG"
+        },
+        {
+          "name": "ENABLE",
+          "type": "INPUT"
+        }
+      ],
+      "requirements": [
+        "buck"
+      ]
+    },
+    {
+      "block": "block:t1-hardware-gate",
+      "id": "hardware_gate",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VIN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "VDD",
+          "type": "ANALOG"
+        },
+        {
+          "name": "VREG",
+          "type": "ANALOG"
+        },
+        {
+          "name": "REQUEST",
+          "type": "INPUT"
+        },
+        {
+          "name": "ENABLE",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "hardware_gate"
+      ]
+    },
+    {
+      "block": "block:t1-readback",
+      "id": "readback",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6,
+          "min": 2.5,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "SENSE_IN",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "SENSE_OUT",
+          "type": "POWER_OUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "INPUT"
+        }
+      ],
+      "requirements": [
+        "readback"
+      ]
+    },
+    {
+      "block": "block:t1-output",
+      "id": "output",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "VOUT",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "output"
+      ]
+    },
+    {
+      "block": "block:t1-inhibit",
+      "id": "inhibit",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "ENABLE",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "inhibit"
+      ]
+    },
+    {
+      "block": "block:i2c-pullups",
+      "id": "i2c",
+      "parameters": {
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Total internal I2C bus design budget.",
+          "unit": "F",
+          "value": 1e-10
+        }
+      },
+      "ports": [
+        {
+          "name": "VDD",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "SDA",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SCL",
+          "type": "BIDIRECTIONAL"
+        }
+      ],
+      "requirements": [
+        "i2c"
+      ]
+    },
+    {
+      "block": "block:swd-header",
+      "id": "swd",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External host headers do not power any board rail.",
+          "unit": "A",
+          "value": 0
+        }
+      },
+      "ports": [
+        {
+          "name": "VREF",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "SWDIO",
+          "type": "BIDIRECTIONAL"
+        },
+        {
+          "name": "SWCLK",
+          "type": "OUTPUT"
+        },
+        {
+          "name": "NRST",
+          "type": "BIDIRECTIONAL"
+        }
+      ],
+      "requirements": [
+        "swd"
+      ]
+    },
+    {
+      "block": "block:uart-header",
+      "id": "uart",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External host headers do not power any board rail.",
+          "unit": "A",
+          "value": 0
+        }
+      },
+      "ports": [
+        {
+          "name": "VREF",
+          "type": "POWER_IN"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        },
+        {
+          "name": "TX",
+          "type": "INPUT"
+        },
+        {
+          "name": "RX",
+          "type": "OUTPUT"
+        }
+      ],
+      "requirements": [
+        "uart"
+      ]
+    },
+    {
+      "block": "block:led-indicator",
+      "id": "status",
+      "parameters": {},
+      "ports": [
+        {
+          "name": "DRIVE",
+          "type": "INPUT"
+        },
+        {
+          "name": "GND",
+          "type": "GROUND"
+        }
+      ],
+      "requirements": [
+        "status"
+      ]
+    },
+    {
+      "block": "block:mounting-holes",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "ports": [],
+      "requirements": [
+        "mounting"
+      ]
+    }
+  ],
+  "interface_status": "PLANNED_BLOCK_CONTRACTS",
+  "pin_configurations": [
+    {
+      "initial_state": "LOW",
+      "instance": "controller",
+      "mode": "GPIO_PUSH_PULL",
+      "port": "REQUEST"
+    }
+  ],
+  "requirements": [
+    "t1_operating_envelope",
+    "adapter",
+    "load",
+    "t1_hardware_inhibit",
+    "t1_measurement",
+    "t1_layout"
+  ],
+  "schema": "pcbknowledge.block-graph.v2",
+  "status": "DRAFT"
+}

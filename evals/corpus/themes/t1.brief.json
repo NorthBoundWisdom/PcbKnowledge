@@ -1,0 +1,890 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "Control UV, output OV, host reset and held inhibit button prevent buck enable; no firmware-only brownout protection.",
+      "id": "t1_hardware_inhibit"
+    },
+    {
+      "description": "Report load voltage/current at10Hz; requested voltage error target<=100mV after calibration and<=5s large-step settling for0..0.5A resistive loads.",
+      "id": "t1_measurement"
+    },
+    {
+      "description": "Retain every block constraint and explicit inductor central-strip no-via/no-trace exclusion.",
+      "id": "t1_layout"
+    },
+    {
+      "description": "Enforce typed ENGINEERING_DEFAULT operating-envelope.json:35mA control allocation, all output local loads, FCCM signed current and accepted effective-L/f/C/DC error windows. Hardware observations remainNOT_RUN; load must tolerate8V transients, no hardOVP clamp claim.",
+      "id": "t1_operating_envelope"
+    }
+  ],
+  "electrical_bindings": [
+    {
+      "endpoints": [
+        {
+          "function": "input",
+          "port": "VIN"
+        },
+        {
+          "function": "control_rail",
+          "port": "VIN"
+        },
+        {
+          "function": "buck",
+          "port": "VIN"
+        },
+        {
+          "function": "hardware_gate",
+          "port": "VIN"
+        }
+      ],
+      "id": "vin"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "control_rail",
+          "port": "VDD"
+        },
+        {
+          "function": "controller",
+          "port": "VDD"
+        },
+        {
+          "function": "setpoint",
+          "port": "VDD"
+        },
+        {
+          "function": "hardware_gate",
+          "port": "VDD"
+        },
+        {
+          "function": "readback",
+          "port": "VDD"
+        },
+        {
+          "function": "i2c",
+          "port": "VDD"
+        },
+        {
+          "function": "swd",
+          "port": "VREF"
+        },
+        {
+          "function": "uart",
+          "port": "VREF"
+        }
+      ],
+      "id": "vdd"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "input",
+          "port": "GND"
+        },
+        {
+          "function": "control_rail",
+          "port": "GND"
+        },
+        {
+          "function": "controller",
+          "port": "GND"
+        },
+        {
+          "function": "setpoint",
+          "port": "GND"
+        },
+        {
+          "function": "buck",
+          "port": "GND"
+        },
+        {
+          "function": "hardware_gate",
+          "port": "GND"
+        },
+        {
+          "function": "readback",
+          "port": "GND"
+        },
+        {
+          "function": "output",
+          "port": "GND"
+        },
+        {
+          "function": "inhibit",
+          "port": "GND"
+        },
+        {
+          "function": "swd",
+          "port": "GND"
+        },
+        {
+          "function": "uart",
+          "port": "GND"
+        },
+        {
+          "function": "status",
+          "port": "GND"
+        },
+        {
+          "function": "controller",
+          "port": "BUTTON"
+        }
+      ],
+      "id": "gnd"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "SCL"
+        },
+        {
+          "function": "setpoint",
+          "port": "SCL"
+        },
+        {
+          "function": "readback",
+          "port": "SCL"
+        },
+        {
+          "function": "i2c",
+          "port": "SCL"
+        }
+      ],
+      "id": "scl"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "SDA"
+        },
+        {
+          "function": "setpoint",
+          "port": "SDA"
+        },
+        {
+          "function": "readback",
+          "port": "SDA"
+        },
+        {
+          "function": "i2c",
+          "port": "SDA"
+        }
+      ],
+      "id": "sda"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "setpoint",
+          "port": "SETPOINT"
+        },
+        {
+          "function": "buck",
+          "port": "SETPOINT"
+        }
+      ],
+      "id": "setpoint"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "REQUEST"
+        },
+        {
+          "function": "hardware_gate",
+          "port": "REQUEST"
+        }
+      ],
+      "id": "request"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "hardware_gate",
+          "port": "ENABLE"
+        },
+        {
+          "function": "buck",
+          "port": "ENABLE"
+        },
+        {
+          "function": "inhibit",
+          "port": "ENABLE"
+        }
+      ],
+      "id": "enable"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "buck",
+          "port": "VREG"
+        },
+        {
+          "function": "hardware_gate",
+          "port": "VREG"
+        },
+        {
+          "function": "readback",
+          "port": "SENSE_IN"
+        }
+      ],
+      "id": "vreg"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "readback",
+          "port": "SENSE_OUT"
+        },
+        {
+          "function": "output",
+          "port": "VOUT"
+        }
+      ],
+      "id": "vout"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "SWDIO"
+        },
+        {
+          "function": "swd",
+          "port": "SWDIO"
+        }
+      ],
+      "id": "swdio"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "SWCLK"
+        },
+        {
+          "function": "swd",
+          "port": "SWCLK"
+        }
+      ],
+      "id": "swclk"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "NRST"
+        },
+        {
+          "function": "swd",
+          "port": "NRST"
+        }
+      ],
+      "id": "nrst"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "UART_TX"
+        },
+        {
+          "function": "uart",
+          "port": "TX"
+        }
+      ],
+      "id": "uart_tx"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "UART_RX"
+        },
+        {
+          "function": "uart",
+          "port": "RX"
+        }
+      ],
+      "id": "uart_rx"
+    },
+    {
+      "endpoints": [
+        {
+          "function": "controller",
+          "port": "LED2"
+        },
+        {
+          "function": "status",
+          "port": "DRIVE"
+        }
+      ],
+      "id": "status"
+    }
+  ],
+  "functions": [
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "input",
+      "id": "input",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 1
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 13.2,
+          "min": 10.8,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "power.linear",
+      "count": 1,
+      "description": "control rail",
+      "id": "control_rail",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 0.035
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.43,
+          "min": 3.17,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "digital.mcu",
+      "count": 1,
+      "description": "controller",
+      "id": "controller",
+      "parameters": {
+        "clock_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "Hz",
+          "value": 8000000
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "power.reference",
+      "count": 1,
+      "description": "setpoint",
+      "id": "setpoint",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "power.switching",
+      "count": 1,
+      "description": "buck",
+      "id": "buck",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 0.507
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6.1,
+          "min": 2.5,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "power.protection",
+      "count": 1,
+      "description": "hardware gate",
+      "id": "hardware_gate",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "sensor.current",
+      "count": 1,
+      "description": "readback",
+      "id": "readback",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original T1 current boundary.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6,
+          "min": 2.5,
+          "note": "Original T1 power boundary.",
+          "unit": "V"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "interface.header",
+      "count": 1,
+      "description": "output",
+      "id": "output",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "ui.button",
+      "count": 1,
+      "description": "inhibit",
+      "id": "inhibit",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "bus.i2c",
+      "count": 1,
+      "description": "i2c",
+      "id": "i2c",
+      "parameters": {
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "Hz",
+          "value": 100000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Total internal I2C bus design budget.",
+          "unit": "F",
+          "value": 1e-10
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "digital.debug",
+      "count": 1,
+      "description": "swd",
+      "id": "swd",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External host headers do not power any board rail.",
+          "unit": "A",
+          "value": 0
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "interface.header",
+      "count": 1,
+      "description": "uart",
+      "id": "uart",
+      "parameters": {
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "External host headers do not power any board rail.",
+          "unit": "A",
+          "value": 0
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "ui.indicator",
+      "count": 1,
+      "description": "status",
+      "id": "status",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    },
+    {
+      "category": "mechanical.mounting",
+      "count": 1,
+      "description": "mounting",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Fixed G1 block choice from D7/D9; a different choice requires a reviewed block revision.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Original T1 contract; see competition-brief.md and mandatory-checks.json."
+      ]
+    }
+  ],
+  "id": "T1",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "External interface current boundary; UART/SWD signals only.",
+        "unit": "A",
+        "value": 1
+      },
+      "description": "Input header pin1VIN,pins2..4GND; no reverse-polarity input allowed.",
+      "id": "adapter",
+      "signals": [
+        "VIN",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 13.2,
+        "min": 10.8,
+        "note": "Input boundary.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "External interface current boundary; UART/SWD signals only.",
+        "unit": "A",
+        "value": 0.5
+      },
+      "description": "Output header pin1VOUT,pins2..4GND; no external backdrive or capacitive load beyond specified budget.",
+      "id": "load",
+      "signals": [
+        "VOUT",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 6,
+        "min": 2.5,
+        "note": "Commanded output; fault transient qualification separate.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "External interface current boundary; UART/SWD signals only.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "3.3V UART9600bps set/query commands; no USB power injection.",
+      "id": "uart",
+      "signals": [
+        "UART_TX",
+        "UART_RX",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.43,
+        "min": 0,
+        "note": "Host logic envelope.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "External interface current boundary; UART/SWD signals only.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "SWD programming with reference-only VREF.",
+      "id": "swd",
+      "signals": [
+        "SWDIO",
+        "SWCLK",
+        "NRST",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.43,
+        "min": 0,
+        "note": "Host logic envelope.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "D12 reused two-layer assembly profile; D34 G2 board envelope.",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "adapter",
+      "load",
+      "uart",
+      "swd"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 20,
+      "note": "D34 selected G2 component-height envelope.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original100x80mm competition board.",
+      "unit": "mm",
+      "value": 100
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes; centers offset from board edges.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Owner decision D7.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original100x80mm competition board.",
+      "unit": "mm",
+      "value": 80
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D65"
+  ],
+  "power": {
+    "rails": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Explicit load-ledger allocation including four1k minimum-load resistors; requires mode-specific qualification.",
+          "unit": "A",
+          "value": 0.035
+        },
+        "function": "control_rail",
+        "id": "control",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.43,
+          "min": 3.17,
+          "note": "Proposed regulated LDO envelope; preload and startup/stability/thermal qualification required.",
+          "unit": "V"
+        }
+      },
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum external load; no CC mode.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "function": "readback",
+        "id": "adjustable",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6,
+          "min": 2.5,
+          "note": "Requested load-terminal setpoint range.",
+          "unit": "V"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Upstream source current limit.",
+          "unit": "A",
+          "value": 1
+        },
+        "description": "Isolated correctly polarized12V adapter; external1A current limit.",
+        "function": "input",
+        "id": "adapter",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 13.2,
+          "min": 10.8,
+          "note": "Original competition source envelope.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Original competition task:12V adapter to2.5–6.0V/.5A resistive load, UART setpoint/readback and hardware enable inhibit. No constant-current or safety-instrument claim.",
+  "title": "Digitally settable bench DC-DC supply with voltage/current readback"
+}
