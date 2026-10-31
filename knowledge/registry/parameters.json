@@ -242,6 +242,22 @@
         "Q5"
       ]
     },
+    "direction_hold_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
+    "direction_setup_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
     "dissipation_factor": {
       "conditions": {},
       "quantity": "thermal_dissipation",
@@ -927,6 +943,14 @@
         "Q5"
       ]
     },
+    "peak_duration": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
     "phase_margin": {
       "conditions": {
         "TA": "temperature",
@@ -1097,6 +1121,14 @@
         "Q4"
       ]
     },
+    "return_event_interval": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
     "ripple_current": {
       "conditions": {
         "TA": "temperature",
@@ -1215,6 +1247,30 @@
         "Q5"
       ]
     },
+    "startup_interval": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
+    "step_high_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
+    "step_low_time": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
     "swd_current_budget": {
       "conditions": {},
       "quantity": "current",
@@ -1324,6 +1380,14 @@
         "Q5"
       ]
     },
+    "transition_interval": {
+      "conditions": {},
+      "quantity": "time",
+      "queries": [
+        "Q1",
+        "Q10"
+      ]
+    },
     "trip_current": {
       "conditions": {
         "TA": "temperature",
@@ -1396,6 +1460,14 @@
         "Q1",
         "Q10",
         "Q5"
+      ]
+    },
+    "winding_peak_current": {
+      "conditions": {},
+      "quantity": "current",
+      "queries": [
+        "Q1",
+        "Q10"
       ]
     }
   },
