@@ -44,7 +44,7 @@ def identity_check(board, intent, catalog):
             return finding('IDENTITY', 'FAIL', 'Footprint library identity differs: ' + ref)
         package = catalog.get(component['package'], 'package')
         derived = derive_footprint(package)
-        expected = Counter(pad['number'] for pad in derived['pads'])
+        expected = Counter('' if pad['kind'] == 'MECHANICAL' else pad['number'] for pad in derived['pads'])
         actual = Counter({number: len(pads) for number, pads in footprint['pads'].items()})
         if expected != actual:
             return finding('IDENTITY', 'FAIL', 'Physical pad identities or multiplicities differ: ' + ref)

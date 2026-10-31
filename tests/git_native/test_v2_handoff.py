@@ -1,4 +1,5 @@
 """Original derived-project tests, without claiming a placed or routed board."""
+from collections import Counter
 import copy
 import csv
 from io import StringIO
@@ -49,7 +50,8 @@ class HandoffTests(unittest.TestCase):
                 pads = nodes(fp, 'pad')
                 package = self.catalog.get(components[ref]['package'])
                 expected = derive_footprint(package)['pads']
-                self.assertEqual({p[1] for p in pads}, {p['number'] for p in expected})
+                self.assertEqual(Counter(p[1] for p in pads),
+                                 Counter('' if p['kind'] == 'MECHANICAL' else p['number'] for p in expected))
                 for pad in pads:
                     for net in nodes(pad, 'net'):
                         actual[ref, pad[1]] = net[2]

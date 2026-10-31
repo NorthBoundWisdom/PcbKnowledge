@@ -118,7 +118,7 @@ def _syntax(tree):
             result.append(_syntax(item))
         elif index == 0 or (isinstance(item, str) and (
                 re.fullmatch(r'-?\d+(?:\.\d+)?', item)
-                or item in {'signal', 'user', 'default', 'none', 'smd', 'through_hole'})):
+                or item in {'signal', 'user', 'default', 'none', 'smd', 'through_hole', 'yes', 'edge'})):
             result.append(Atom(item))
         else:
             result.append(item)

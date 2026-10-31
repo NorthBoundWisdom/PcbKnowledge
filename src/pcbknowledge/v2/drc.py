@@ -157,7 +157,7 @@ def _write(root, path, result):
         temporary.unlink(missing_ok=True)
 
 
-def run_drc(board, output, *, root, layout_report=None):
+def run_drc(board, output, *, root, layout_report=None, kicad=None):
     """Return and save a bounded JSON receipt; missing KiCad never counts as passing A4."""
     files = _inputs(root, board)
     files.extend(_library_inputs(files[0]))
@@ -166,7 +166,7 @@ def run_drc(board, output, *, root, layout_report=None):
         raise ValueError('DRC output must be a separate derived JSON report')
     digests = {path.relative_to(files[0].parent).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                for path in files}
-    executable = shutil.which('kicad-cli')
+    executable = shutil.which(str(kicad)) if kicad else shutil.which('kicad-cli')
     if not executable:
         result = {'status': 'NOT_RUN', 'reason': 'kicad-cli is unavailable'}
     else:

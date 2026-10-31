@@ -193,7 +193,14 @@ def _manufacturer_land(context):
             pads.append(_pad(per_side + i + 1, position, rows / 2, height, width))
             pads.append(_pad(3 * per_side - i, rows / 2, position, width, height))
             pads.append(_pad(4 * per_side - i, position, -rows / 2, height, width))
-    return sorted(pads, key=lambda pad: int(pad['number']))
+    pads = sorted(pads, key=lambda pad: int(pad['number']))
+    numbers = context.record.get('pad_numbers')
+    if numbers is not None:
+        if len(numbers) != len(pads) or len(set(numbers)) != len(numbers):
+            raise ValueError('Manufacturer land requires one distinct number per pad')
+        for pad, number in zip(pads, numbers):
+            pad['number'] = number
+    return pads
 
 
 def _crystal_pads(context):
@@ -360,13 +367,16 @@ def derive_footprint(package):
     by = dimension(package['body']['length'], 'body.length') / 2
     if dimension(package['body']['height'], 'body.height', positive=False) < 0:
         raise ValueError('Body height cannot be negative')
+    center = package['body'].get('center')
+    cx = dimension(center['x'], 'body.center.x', positive=False) if center else 0
+    cy = dimension(center['y'], 'body.center.y', positive=False) if center else 0
     margin = dimension(package['courtyard_margin'], 'courtyard_margin', positive=False)
     if margin < 0:
         raise ValueError('Courtyard margin cannot be negative')
-    courtyard = dict(min_x=_round(min(-bx, *(r[0] for r in rectangles)) - margin),
-                     min_y=_round(min(-by, *(r[1] for r in rectangles)) - margin),
-                     max_x=_round(max(bx, *(r[2] for r in rectangles)) + margin),
-                     max_y=_round(max(by, *(r[3] for r in rectangles)) + margin))
+    courtyard = dict(min_x=_round(min(cx - bx, *(r[0] for r in rectangles)) - margin),
+                     min_y=_round(min(cy - by, *(r[1] for r in rectangles)) - margin),
+                     max_x=_round(max(cx + bx, *(r[2] for r in rectangles)) + margin),
+                     max_y=_round(max(cy + by, *(r[3] for r in rectangles)) + margin))
     return {'pads': pads, 'courtyard': courtyard, 'pin1': package['pin1']}
 
 
@@ -388,6 +398,10 @@ def export_kicad(package):
     quote = lambda value: json.dumps(str(value), ensure_ascii=True)
     number = lambda value: format(value, '.6f').rstrip('0').rstrip('.') or '0'
     lines = [f'(footprint {quote(name)}', '  (version 20240108)', '  (generator "pcbknowledge")', '  (layer "F.Cu")']
+    if package['mount_type'] == 'SMT':
+        lines.append('  (attr smd)')
+    elif package['mount_type'] == 'THT':
+        lines.append('  (attr through_hole)')
     c = derived['courtyard']
     lines.append(
         f'  (fp_rect (start {number(c["min_x"])} {number(c["min_y"])}) '
@@ -412,7 +426,7 @@ def export_kicad(package):
             drill = f' (drill oval {number(pad["drill_width"])} {number(pad["drill_height"])})'
         paste = f' (solder_paste_margin {number(pad["paste_margin"])})' if 'paste_margin' in pad else ''
         lines.append(
-            f'  (pad {quote(pad["number"])} {kind} {shape} '
+            f'  (pad {quote("" if kind == "np_thru_hole" else pad["number"])} {kind} {shape} '
             f'(at {number(pad["x"])} {number(pad["y"])} {number(pad["rotation"])}) '
             f'(size {number(pad["width"])} {number(pad["height"])}){drill} (layers {layers}){paste})'
         )

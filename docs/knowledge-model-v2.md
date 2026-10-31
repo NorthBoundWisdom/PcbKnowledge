@@ -241,3 +241,17 @@ requires a connected power sink, and every connected sink requires an approved
 return without ground, supply or competing active-output shorts. Unconnected spare
 collectors are allowed. This is a concrete topology contract, not general power-flow
 inference or proof of load ratings.
+
+### Package datum and non-electrical holes
+
+A package may state `body.center.x/y` as typed millimeter coordinates relative to
+its footprint datum. Missing center means `(0, 0)`. Derived courtyard encloses
+that translated body and every pad, with the recorded margin. This supports a
+connector mating-face origin without changing an edge-placement distance.
+Manufacturer land generators may declare the cited `pad_numbers` permutation;
+numbering changes never move or resize the cited lands.
+
+`MECHANICAL` locator holes are not electrical part terminals. Derived KiCad NPTH
+pads have blank numbers, matching native KiCad serialization; geometry, drill,
+count and netlessness remain checked. SMT/THT footprint attributes follow the
+package mount type so native placement export retains assembly identity.

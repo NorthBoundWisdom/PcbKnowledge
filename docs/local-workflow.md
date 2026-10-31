@@ -320,3 +320,49 @@ keepout checks are conservative courtyard-envelope comparisons. See
 [ADR-025](adr/ADR-025-derived-board-handoff.md) for measurement scope. A3/A4 require
 review of the completed layout and all remaining findings; ordering and physical
 bring-up remain owner-only A5/A6 work.
+
+## Reference layout tools (ADR-026, D64)
+
+Stage 13 uses installed external processes, not catalog runtime dependencies.
+Unit tests use original synthetic fixtures and do not require these tools.
+`layout tools` reports each explicit path or PATH discovery and actual version;
+missing tools remain `NOT_FOUND` and execution is `NOT_RUN`.
+
+Verified on 2026-10-31: KiCad CLI and installed Python bridge 9.0.2,
+Temurin Java 25.0.5+8, Freerouting 2.5.0 (latest stable official release checked
+at first use). The release requires Java 25, which satisfies D64's 21-or-newer rule.
+
+- Freerouting: `https://github.com/freerouting/freerouting/releases/download/v2.5.0/freerouting-2.5.0.jar`
+  SHA-256 `f6f51bb02245e8e717f9359bd260cc9c5c0b1bc0acc8b7cb2cd5b8ffeb5de3c7`.
+- Java: `https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jre_x64_linux_hotspot_25.0.5_8.tar.gz`
+  SHA-256 `6fac98f0c8202efc3135a9e9e42aa61963ec42d1c5cbb40caf231e7b14a24ef6`.
+
+Download tools outside the repository, verify hashes, and select explicit paths.
+The KiCad Python interpreter must come from the installed KiCad environment; the
+catalog process never imports `pcbnew`. Its isolated subprocess handles native
+DSN/SES conversion and zone fill. KiCad project settings and generated rules stay
+unchanged. Freerouting uses one optimizer thread, sequential selection, fixed
+maximum 100 autorouter/20 optimizer passes, and disables GUI, API and analytics.
+A router success is not DRC acceptance: the final filled board is checked again.
+
+```bash
+python3 configs/pcbknowledge_agent.py --repo . layout tools \
+  --kicad /usr/bin/kicad-cli --kicad-python /usr/bin/python3 \
+  --java /tmp/pcbknowledge-tools/jdk-25.0.5+8-jre/bin/java \
+  --freerouting /tmp/pcbknowledge-tools/freerouting-2.5.0.jar
+python3 configs/pcbknowledge_agent.py --repo . layout run build/g1-intent.json \
+  --bundle build/bundle/COMMIT.bundle.json --graph evals/golden-designs/g1.block-graph.json \
+  --output build/reference-g1 --kicad-python /usr/bin/python3 \
+  --java /tmp/pcbknowledge-tools/jdk-25.0.5+8-jre/bin/java \
+  --freerouting /tmp/pcbknowledge-tools/freerouting-2.5.0.jar
+```
+
+Each run needs a fresh output directory; stale fabrication files cannot pass.
+Read `report.json`, then inspect `fabrication/top.svg` and `bottom.svg` and the
+routed KiCad board. Inspect USB access, mounting clearances, pin-1 markers,
+decoupling, oscillator loop and test access. Zero violations and unconnected
+items are required; unresolved layout checks retain their individual reasons.
+The position CSV uses KiCad top-view coordinates (positive X right, Y up) and
+counterclockwise degrees; bottom-side rotation is not an assembly instruction for
+this TOP-only profile. JLCPCB's assembly preview must be reviewed against pin 1
+and the source drawing before ordering; do not add unrecorded rotation offsets.

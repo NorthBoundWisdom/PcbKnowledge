@@ -211,15 +211,13 @@ class Catalog:
         pins = unique(part['pins'], 'number', 'part pin number')
         if part['pin_evidence']['basis'] == 'STANDARD_CONVENTION' and len(pins) != 2:
             raise ValueError('Standard terminal convention requires exactly two electrical pins')
-        pads = {p['number'] for p in derive_footprint(package)['pads']}
+        pads = {p['number'] for p in derive_footprint(package)['pads'] if p['kind'] != 'MECHANICAL'}
         mechanical = 'mechanical.mounting-hole' in part['roles']
         for field in ('pin_evidence', 'identity_evidence'):
             if part[field].get('basis') == 'ENGINEERING_DEFAULT' and not mechanical:
                 raise ValueError('Engineering-default identity is mechanical-only')
         if not pins and not mechanical:
             raise ValueError('Electrical parts require pins')
-        if mechanical:
-            pads = {p['number'] for p in derive_footprint(package)['pads'] if p['kind'] != 'MECHANICAL'}
         if set(pins) != pads:
             raise ValueError(f'Pin/pad coverage mismatch: {part["id"]}')
         from .gpio import validate_part_functions

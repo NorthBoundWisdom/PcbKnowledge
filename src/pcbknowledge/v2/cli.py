@@ -101,6 +101,17 @@ def synthesis_parser(groups):
 
 def layout_parsers(groups):
     actions = groups.add_parser('layout').add_subparsers(dest='action', required=True)
+    tools = actions.add_parser('tools')
+    run = actions.add_parser('run')
+    run.add_argument('intent', type=Path)
+    run.add_argument('--bundle', type=Path, required=True)
+    run.add_argument('--graph', type=Path, required=True)
+    run.add_argument('--output', type=Path, default=Path('build/reference-layout'))
+    run.add_argument('--grid-mm', type=float, default=.5)
+    run.add_argument('--max-states', type=int, default=200000)
+    for command in (tools, run):
+        for name in ('kicad', 'java', 'freerouting', 'kicad-python'):
+            command.add_argument('--' + name, type=Path)
     export = actions.add_parser('export')
     export.add_argument('--bundle', type=Path, required=True)
     export.add_argument('--graph', type=Path, required=True)
@@ -237,6 +248,16 @@ def checked_layout(arguments, snapshot):
 
 
 def layout_command(arguments, root, snapshot):
+    if arguments.action in ('tools', 'run'):
+        from .layout_tools import locate_tools
+        tools = locate_tools(**{name: getattr(arguments, name)
+                                for name in ('kicad', 'java', 'freerouting', 'kicad_python')})
+        if arguments.action == 'tools':
+            return tools
+        from .layout_pipeline import run_layout
+        return run_layout(load_document(arguments.intent), snapshot, load_document(arguments.graph),
+                          arguments.output, tools, root=root, grid_mm=arguments.grid_mm,
+                          max_states=arguments.max_states)
     output = derived_path(root, arguments.output)
     if arguments.action == 'export':
         path = export_handoff(load_document(arguments.intent), snapshot, load_document(arguments.graph), output)

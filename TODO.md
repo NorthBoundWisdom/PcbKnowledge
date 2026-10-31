@@ -110,6 +110,8 @@ answer here.
 | D64 | Layout tools | KiCad 9 or 10 `kicad-cli` (the owner has 10.0.6 at `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`), Java 21 or newer, and the latest stable Freerouting release jar. Record the exact Freerouting version and jar SHA-256 in `docs/local-workflow.md` at first use; run it single-threaded with fixed passes. Outputs must work on KiCad 9 and 10 |
 | D65 | Corpus themes (fixed order, chosen by the reviewing agent under delegation) | T1 adjustable DC-DC supply with digital setpoint and readback; T2 single-cell Li-ion charger with boost to 5 V; T3 brushed DC motor H-bridge with encoder input; T4 bipolar stepper driver; T5 DAC signal generator with op-amp output stage; T6 OLED and keypad user-interface board; T7 CAN bus node; T8 Wi-Fi module carrier with USB programming; T9 thermocouple measurement with cold-junction sensing; T10 class-D audio amplifier. Take themes in this order; do not reshape a theme to reuse existing blocks |
 
+| D66 | Reference layout knowledge corrections | Replace impossible center-origin proximity proxies with the electrically relevant source-mapped pins, retaining every numerical limit and loop/GROUP check. Use GCT USB4110-GF-A with a typed mating-face datum and Abracon ABMM2-8.000MHZ-18-T to make physical placement possible; cited source values and native geometry checks remain authoritative. |
+
 ## Stage 0 — Course correction (complete)
 
 Stop expanding the old design, remove dead weight, align instructions.

@@ -57,7 +57,7 @@ def pad_geometry_result(footprint, derived):
         return 'NOT_CHECKABLE', 'Unsupported physical pad geometry'
     for pad in derived['pads']:
         expected = expected_geometry(pad, footprint)
-        candidates = actual[pad['number']]
+        candidates = actual['' if pad['kind'] == 'MECHANICAL' else pad['number']]
         index = next((i for i, candidate in enumerate(candidates) if matches(candidate, expected)), None)
         if index is None:
             return 'FAIL', 'Physical pad geometry differs from derived package authority'

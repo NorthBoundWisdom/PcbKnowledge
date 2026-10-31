@@ -55,6 +55,22 @@
               "$ref": "unknown.schema.json"
             }
           ]
+        },
+        "center": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "$ref": "quantity.schema.json"
+            },
+            "y": {
+              "$ref": "quantity.schema.json"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
