@@ -1,0 +1,93 @@
+{
+  "category": "power.input",
+  "checks": [],
+  "components": [
+    {
+      "ref": "J1",
+      "select": {
+        "part": "part:wurth-61300411121"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-61300411121"
+    }
+  ],
+  "id": "block:t1-input",
+  "layout": [
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Connector access.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "J1"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "J1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "J1.pin:2",
+        "J1.pin:3",
+        "J1.pin:4"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 current boundary.",
+        "unit": "A",
+        "value": 1
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 13.2,
+        "min": 10.8,
+        "note": "Original T1 power boundary.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_OUT",
+      "name": "VIN"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "12V+/-10% external isolated adapter, current limited1A. Pin1VIN,2..4GND; reverse polarity outside brief.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

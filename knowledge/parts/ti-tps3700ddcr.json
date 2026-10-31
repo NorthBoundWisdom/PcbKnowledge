@@ -1,0 +1,86 @@
+{
+  "id": "part:ti-tps3700ddcr",
+  "identity_evidence": {
+    "page": 23,
+    "source": "source:ti-tps3700"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "TPS3700DDCR",
+  "package": "package:ti-tps3700ddcr",
+  "parameters": {
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps3700"
+      },
+      "max": 18,
+      "min": 1.8,
+      "unit": "V"
+    },
+    "reference_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 6,
+        "source": "source:ti-tps3700"
+      },
+      "max": 0.404,
+      "min": 0.396,
+      "note": "Positive-going threshold, VDD1.8V/18V test rows; falling threshold .387.. .400V separately.",
+      "typ": 0.4,
+      "unit": "V"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 4,
+    "source": "source:ti-tps3700"
+  },
+  "pins": [
+    {
+      "name": "OUTA",
+      "number": "1",
+      "type": "OPEN_DRAIN"
+    },
+    {
+      "name": "GND",
+      "number": "2",
+      "type": "GROUND"
+    },
+    {
+      "name": "INA+",
+      "number": "3",
+      "type": "ANALOG"
+    },
+    {
+      "name": "INB-",
+      "number": "4",
+      "type": "ANALOG"
+    },
+    {
+      "name": "VDD",
+      "number": "5",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "OUTB",
+      "number": "6",
+      "type": "OPEN_DRAIN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "VIN-powered supervisor; outputs wired-OR clamp buck EN for control UV/output OV. Startup450us max; output indeterminate belowPOR.",
+    "verified_by": []
+  },
+  "roles": [
+    "supervisor.voltage-window"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "DRAFT"
+}

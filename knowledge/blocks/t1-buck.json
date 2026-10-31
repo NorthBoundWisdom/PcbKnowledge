@@ -1,0 +1,449 @@
+{
+  "category": "power.switching",
+  "checks": [],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-tps562208ddcr"
+      }
+    },
+    {
+      "ref": "L1",
+      "select": {
+        "part": "part:wurth-74437349047"
+      }
+    },
+    {
+      "ref": "RT",
+      "select": {
+        "part": "part:yageo-rc0603fr-0730kl"
+      }
+    },
+    {
+      "ref": "RB",
+      "select": {
+        "part": "part:yageo-rc0603fr-075k1l"
+      }
+    },
+    {
+      "ref": "RD",
+      "select": {
+        "part": "part:yageo-rc0603fr-0715kl"
+      }
+    },
+    {
+      "ref": "CB",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "CH",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "RBLEED",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "CI1",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CI2",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CI3",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO1",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO2",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO3",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO4",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO5",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:ti-tps562201"
+    },
+    {
+      "page": 13,
+      "source": "source:ti-tps562201"
+    },
+    {
+      "page": 14,
+      "source": "source:ti-tps562201"
+    },
+    {
+      "page": 1,
+      "source": "source:wurth-74437349047"
+    }
+  ],
+  "id": "block:t1-buck",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "CH",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "CB",
+      "target": "U1.pin:6"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 4
+      },
+      "subject": "RT",
+      "target": "U1.pin:4"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 4
+      },
+      "subject": "RB",
+      "target": "U1.pin:4"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 8
+      },
+      "subject": "L1",
+      "target": "U1.pin:2"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 power-route floor; neckdown/fab/current review required.",
+        "unit": "mm",
+        "value": 0.6
+      },
+      "net": "VIN"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 power-route floor; neckdown/fab/current review required.",
+        "unit": "mm",
+        "value": 0.6
+      },
+      "net": "VREG"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 power-route floor; neckdown/fab/current review required.",
+        "unit": "mm",
+        "value": 0.6
+      },
+      "net": "SW"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 6
+      },
+      "subject": "CI1",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 6
+      },
+      "subject": "CI2",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 6
+      },
+      "subject": "CI3",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 9
+      },
+      "subject": "CO1",
+      "target": "L1.pin:2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 9
+      },
+      "subject": "CO2",
+      "target": "L1.pin:2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 9
+      },
+      "subject": "CO3",
+      "target": "L1.pin:2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 9
+      },
+      "subject": "CO4",
+      "target": "L1.pin:2"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 9
+      },
+      "subject": "CO5",
+      "target": "L1.pin:2"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "U1.pin:3",
+        "CH.pin:1",
+        "CI1.pin:1",
+        "CI2.pin:1",
+        "CI3.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:1",
+        "RB.pin:2",
+        "CH.pin:2",
+        "RBLEED.pin:2",
+        "CI1.pin:2",
+        "CI2.pin:2",
+        "CI3.pin:2",
+        "CO1.pin:2",
+        "CO2.pin:2",
+        "CO3.pin:2",
+        "CO4.pin:2",
+        "CO5.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "U1.pin:2",
+        "CB.pin:2",
+        "L1.pin:1"
+      ],
+      "name": "SW"
+    },
+    {
+      "connect": [
+        "U1.pin:6",
+        "CB.pin:1"
+      ],
+      "name": "BOOT"
+    },
+    {
+      "connect": [
+        "port:VREG",
+        "L1.pin:2",
+        "RT.pin:1",
+        "RBLEED.pin:1",
+        "CO1.pin:1",
+        "CO2.pin:1",
+        "CO3.pin:1",
+        "CO4.pin:1",
+        "CO5.pin:1"
+      ],
+      "name": "VREG"
+    },
+    {
+      "connect": [
+        "U1.pin:4",
+        "RT.pin:2",
+        "RB.pin:1",
+        "RD.pin:2"
+      ],
+      "name": "FB"
+    },
+    {
+      "connect": [
+        "port:SETPOINT",
+        "RD.pin:1"
+      ],
+      "name": "SETPOINT"
+    },
+    {
+      "connect": [
+        "port:ENABLE",
+        "U1.pin:5"
+      ],
+      "name": "ENABLE"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 current boundary.",
+        "unit": "A",
+        "value": 0.507
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 6.1,
+        "min": 2.5,
+        "note": "Original T1 power boundary.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VREG"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "SETPOINT"
+    },
+    {
+      "kind": "INPUT",
+      "name": "ENABLE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "2.5..6V requested post-shunt,.5A max load, not constant-current. Mandatory injection/LC/safety interval checks in checks.py pending production integration.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

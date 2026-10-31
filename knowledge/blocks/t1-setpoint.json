@@ -1,0 +1,172 @@
+{
+  "category": "power.reference",
+  "checks": [],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-dac60501zdgsr"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CR1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "CR2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:ti-dac60501"
+    },
+    {
+      "page": 21,
+      "source": "source:ti-dac60501"
+    },
+    {
+      "page": 23,
+      "source": "source:ti-dac60501"
+    }
+  ],
+  "id": "block:t1-setpoint",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "C1",
+      "target": "U1.pin:1"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "CR1",
+      "target": "U1.pin:10"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "CR2",
+      "target": "U1.pin:10"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:1",
+        "U1.pin:5",
+        "C1.pin:1",
+        "C2.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:4",
+        "U1.pin:7",
+        "C1.pin:2",
+        "C2.pin:2",
+        "CR1.pin:2",
+        "CR2.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:SCL",
+        "U1.pin:6"
+      ],
+      "name": "SCL"
+    },
+    {
+      "connect": [
+        "port:SDA",
+        "U1.pin:8"
+      ],
+      "name": "SDA"
+    },
+    {
+      "connect": [
+        "port:SETPOINT",
+        "U1.pin:2"
+      ],
+      "name": "SETPOINT"
+    },
+    {
+      "connect": [
+        "U1.pin:10",
+        "CR1.pin:1",
+        "CR2.pin:1"
+      ],
+      "name": "REF"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SCL"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SDA"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "SETPOINT"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "DAC60501Z, I2C address0x48, gain0x0101, data12bit<<4; NC3/9 open. Output/readback validated before enable.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

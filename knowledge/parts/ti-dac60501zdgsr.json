@@ -1,0 +1,168 @@
+{
+  "id": "part:ti-dac60501zdgsr",
+  "identity_evidence": {
+    "page": 38,
+    "source": "source:ti-dac60501"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "DAC60501ZDGSR",
+  "package": "package:ti-dac60501zdgsr",
+  "parameters": {
+    "bus_frequency": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 10,
+        "source": "source:ti-dac60501"
+      },
+      "max": 1000000,
+      "note": "I2C fast-mode plus maximum SCL frequency.",
+      "unit": "Hz"
+    },
+    "input_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "min": 1.62,
+      "unit": "V"
+    },
+    "input_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "max": 0.45,
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "max": 5.5,
+      "min": 2.7,
+      "unit": "V"
+    },
+    "quiescent_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 8,
+        "source": "source:ti-dac60501"
+      },
+      "max": 0.002,
+      "note": "Normal mode internal reference enabled full-scale code SPI static.",
+      "typ": 0.0015,
+      "unit": "A"
+    },
+    "reference_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 21,
+        "source": "source:ti-dac60501"
+      },
+      "note": "Internal reference nominal; REF-DIV=1 on3.3V supply.",
+      "typ": 2.5,
+      "unit": "V"
+    },
+    "resolution": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-dac60501"
+      },
+      "note": "Resolution bits, not accuracy.",
+      "unit": "1",
+      "value": 12
+    },
+    "temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-dac60501"
+      },
+      "max": 125,
+      "min": -40,
+      "unit": "degC"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-dac60501"
+  },
+  "pins": [
+    {
+      "name": "VDD",
+      "number": "1",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "VOUT",
+      "number": "2",
+      "type": "ANALOG"
+    },
+    {
+      "name": "NC",
+      "number": "3",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "AGND",
+      "number": "4",
+      "type": "GROUND"
+    },
+    {
+      "name": "SPI2C",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "SCLK/SCL",
+      "number": "6",
+      "type": "INPUT"
+    },
+    {
+      "name": "SYNC/A0",
+      "number": "7",
+      "type": "INPUT"
+    },
+    {
+      "name": "SDIN/SDA",
+      "number": "8",
+      "type": "BIDIRECTIONAL"
+    },
+    {
+      "name": "NC",
+      "number": "9",
+      "type": "NO_CONNECT"
+    },
+    {
+      "name": "VREFIO",
+      "number": "10",
+      "type": "ANALOG"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "verified_by": []
+  },
+  "roles": [
+    "dac.i2c"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "DRAFT"
+}

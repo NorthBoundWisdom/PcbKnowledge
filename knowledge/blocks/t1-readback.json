@@ -1,0 +1,298 @@
+{
+  "category": "sensor.current",
+  "checks": [
+    {
+      "calculator": "shunt_resistor",
+      "inputs": {
+        "current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D48 full protected-input current budget, including downstream regulator and external loads.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "power_rating": {
+          "bound": "max",
+          "component": "R1",
+          "parameter": "power_rating"
+        },
+        "resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "sense_limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 19,
+            "source": "source:ti-ina219"
+          },
+          "note": "D48 firmware selects PG1:PG0=01, PGA /2, +/-80 mV. Configuration table specifies ADC full-scale range, not measurement accuracy.",
+          "unit": "V",
+          "value": 0.08
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D48 nonnegative shunt range or power margin.",
+          "unit": "V",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "voltage_margin"
+      }
+    },
+    {
+      "calculator": "shunt_resistor",
+      "inputs": {
+        "current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D48 full protected-input current budget, including downstream regulator and external loads.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "power_rating": {
+          "bound": "max",
+          "component": "R1",
+          "parameter": "power_rating"
+        },
+        "resistance": {
+          "component": "R1",
+          "parameter": "resistance"
+        },
+        "sense_limit": {
+          "basis": "DATASHEET",
+          "conditions": {},
+          "evidence": {
+            "page": 19,
+            "source": "source:ti-ina219"
+          },
+          "note": "D48 firmware selects PG1:PG0=01, PGA /2, +/-80 mV. Configuration table specifies ADC full-scale range, not measurement accuracy.",
+          "unit": "V",
+          "value": 0.08
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D48 nonnegative shunt range or power margin.",
+          "unit": "W",
+          "value": 0
+        },
+        "operator": "GE",
+        "output": "power_margin"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-ina219aidcnr"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "R1",
+      "select": {
+        "part": "part:yageo-rl1206fr-070r1l"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 3,
+      "source": "source:ti-ina219"
+    },
+    {
+      "page": 19,
+      "source": "source:ti-ina219"
+    },
+    {
+      "page": 27,
+      "source": "source:ti-ina219"
+    },
+    {
+      "page": 10,
+      "source": "source:ti-ina219"
+    },
+    {
+      "page": 14,
+      "source": "source:ti-ina219"
+    }
+  ],
+  "id": "block:t1-readback",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D48 G2 placement/width floor; physical routing remains separately checked.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C1",
+      "target": "U1.pin:4"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D48 G2 placement/width floor; physical routing remains separately checked.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "R1",
+      "target": "U1"
+    },
+    {
+      "kind": "KELVIN",
+      "sense_nets": [
+        "SENSE_IN",
+        "SENSE_OUT"
+      ],
+      "target": "R1"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D48 G2 placement/width floor; physical routing remains separately checked.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "SENSE_IN"
+    },
+    {
+      "kind": "NET_WIDTH_MIN",
+      "min_width": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D48 G2 placement/width floor; physical routing remains separately checked.",
+        "unit": "mm",
+        "value": 0.3
+      },
+      "net": "SENSE_OUT"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:4",
+        "C1.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:3",
+        "U1.pin:7",
+        "U1.pin:8",
+        "C1.pin:2"
+      ],
+      "name": "GND"
+    },
+    {
+      "connect": [
+        "port:SENSE_IN",
+        "R1.pin:1",
+        "U1.pin:1"
+      ],
+      "name": "SENSE_IN"
+    },
+    {
+      "connect": [
+        "port:SENSE_OUT",
+        "R1.pin:2",
+        "U1.pin:2"
+      ],
+      "name": "SENSE_OUT"
+    },
+    {
+      "connect": [
+        "port:SDA",
+        "U1.pin:6"
+      ],
+      "name": "SDA"
+    },
+    {
+      "connect": [
+        "port:SCL",
+        "U1.pin:5"
+      ],
+      "name": "SCL"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 current boundary.",
+        "unit": "A",
+        "value": 0.5
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 6,
+        "min": 2.5,
+        "note": "Original T1 power boundary.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VDD"
+    },
+    {
+      "kind": "POWER_IN",
+      "name": "SENSE_IN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "SENSE_OUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    },
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "SDA"
+    },
+    {
+      "kind": "INPUT",
+      "name": "SCL"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "INA2190x40 output-side monitor, +/-80mV shunt range;.1ohm±1%,.5A. Voltage measured at load after shunt. Existing checked component facts preserved.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

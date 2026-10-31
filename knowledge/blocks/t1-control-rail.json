@@ -1,0 +1,251 @@
+{
+  "category": "power.linear",
+  "checks": [
+    {
+      "calculator": "ldo_dissipation",
+      "inputs": {
+        "ambient": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Maximum bench ambient.",
+          "unit": "degC",
+          "value": 40
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 13.2,
+          "min": 10.8,
+          "note": "T1 adapter range.",
+          "unit": "V"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Explicit33.6mA ledger including preload;35mA engineering allocation constrains all operating modes.",
+          "unit": "A",
+          "value": 0.035
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.43,
+          "min": 3.17,
+          "note": "Independent settled-DC engineering voltage window; source p6 accuracy tested at10mA. Four1k preload resistors enforce minimum regulated load.",
+          "unit": "V"
+        },
+        "quiescent_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Source p6 maximum applied as conservative engineering bound.",
+          "unit": "A",
+          "value": 0.0005
+        },
+        "thermal_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Provisional application thermal model; not JEDEC prediction or measured board.",
+          "unit": "degC/W",
+          "value": 180
+        }
+      },
+      "require": {
+        "limit": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Conservative design target below source125C maximum.",
+          "unit": "degC",
+          "value": 110
+        },
+        "operator": "LE",
+        "output": "junction_temperature"
+      }
+    }
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:st-ldl1117s33r"
+      }
+    },
+    {
+      "ref": "CI1",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CI2",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO1",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CO2",
+      "select": {
+        "part": "part:kemet-c0805c106k3pactu"
+      }
+    },
+    {
+      "ref": "CH",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    },
+    {
+      "ref": "RLOAD1",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "RLOAD2",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "RLOAD3",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    },
+    {
+      "ref": "RLOAD4",
+      "select": {
+        "part": "part:yageo-rc0603fr-071kl"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 6,
+      "source": "source:st-ldl1117"
+    },
+    {
+      "page": 8,
+      "source": "source:st-ldl1117"
+    }
+  ],
+  "id": "block:t1-control-rail",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 4
+      },
+      "subject": "CI1",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 4
+      },
+      "subject": "CO1",
+      "target": "U1.pin:2"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "U1.pin:3",
+        "CI1.pin:1",
+        "CI2.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:VDD",
+        "U1.pin:2",
+        "CO1.pin:1",
+        "CO2.pin:1",
+        "CH.pin:1",
+        "RLOAD1.pin:1",
+        "RLOAD2.pin:1",
+        "RLOAD3.pin:1",
+        "RLOAD4.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:1",
+        "CI1.pin:2",
+        "CI2.pin:2",
+        "CO1.pin:2",
+        "CO2.pin:2",
+        "CH.pin:2",
+        "RLOAD1.pin:2",
+        "RLOAD2.pin:2",
+        "RLOAD3.pin:2",
+        "RLOAD4.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {
+    "output_current": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 current boundary.",
+        "unit": "A",
+        "value": 0.035
+      },
+      "quantity": "current",
+      "required": true
+    },
+    "output_voltage": {
+      "fixed": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.43,
+        "min": 3.17,
+        "note": "Original T1 power boundary.",
+        "unit": "V"
+      },
+      "quantity": "voltage",
+      "required": true
+    }
+  },
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "POWER_OUT",
+      "name": "VDD"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "35mA engineering budget includes four1k preload resistors; regulated minload12.535mA at3.17V. Startup is outside regulated accuracy. Explicit load ledger and180C/W PCB thermal envelope, not measured values.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

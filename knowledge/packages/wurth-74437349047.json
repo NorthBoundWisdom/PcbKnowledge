@@ -1,0 +1,272 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "max": 5,
+      "min": 4.6,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "max": 6.9,
+      "min": 6.3,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "max": 7.6,
+      "min": 7,
+      "note": "Overall span including terminals, not only6.6mm molded body.",
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "Original allowance.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-74437349047"
+    }
+  ],
+  "explicit_pads": [
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-74437349047"
+        },
+        "unit": "mm",
+        "value": 3.5
+      },
+      "kind": "SMD",
+      "number": "1",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis aligned original lands.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-74437349047"
+        },
+        "unit": "mm",
+        "value": 2.95
+      },
+      "x": {
+        "basis": "CALCULATED",
+        "calculator": "geometry_affine",
+        "conditions": {},
+        "inputs": {
+          "dimension": {
+            "basis": "CALCULATED",
+            "calculator": "geometry_affine",
+            "conditions": {},
+            "inputs": {
+              "dimension": {
+                "basis": "DATASHEET",
+                "conditions": {},
+                "evidence": {
+                  "page": 1,
+                  "source": "source:wurth-74437349047"
+                },
+                "unit": "mm",
+                "value": 2.95
+              },
+              "factor": {
+                "basis": "ENGINEERING_DEFAULT",
+                "conditions": {},
+                "note": "Signed halfspan mathematical convention.",
+                "unit": "1",
+                "value": -1
+              },
+              "offset": {
+                "basis": "DATASHEET",
+                "conditions": {},
+                "evidence": {
+                  "page": 1,
+                  "source": "source:wurth-74437349047"
+                },
+                "unit": "mm",
+                "value": 8.4
+              }
+            },
+            "unit": "mm",
+            "value": 5.45
+          },
+          "factor": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Signed halfspan mathematical convention.",
+            "unit": "1",
+            "value": -0.5
+          },
+          "offset": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Centered coordinate origin.",
+            "unit": "mm",
+            "value": 0
+          }
+        },
+        "unit": "mm",
+        "value": -2.725
+      },
+      "y": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Centered coordinate origin.",
+        "unit": "mm",
+        "value": 0
+      }
+    },
+    {
+      "height": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-74437349047"
+        },
+        "unit": "mm",
+        "value": 3.5
+      },
+      "kind": "SMD",
+      "number": "2",
+      "rotation": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Axis aligned original lands.",
+        "unit": "deg",
+        "value": 0
+      },
+      "shape": "RECT",
+      "width": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 1,
+          "source": "source:wurth-74437349047"
+        },
+        "unit": "mm",
+        "value": 2.95
+      },
+      "x": {
+        "basis": "CALCULATED",
+        "calculator": "geometry_affine",
+        "conditions": {},
+        "inputs": {
+          "dimension": {
+            "basis": "CALCULATED",
+            "calculator": "geometry_affine",
+            "conditions": {},
+            "inputs": {
+              "dimension": {
+                "basis": "DATASHEET",
+                "conditions": {},
+                "evidence": {
+                  "page": 1,
+                  "source": "source:wurth-74437349047"
+                },
+                "unit": "mm",
+                "value": 2.95
+              },
+              "factor": {
+                "basis": "ENGINEERING_DEFAULT",
+                "conditions": {},
+                "note": "Signed halfspan mathematical convention.",
+                "unit": "1",
+                "value": -1
+              },
+              "offset": {
+                "basis": "DATASHEET",
+                "conditions": {},
+                "evidence": {
+                  "page": 1,
+                  "source": "source:wurth-74437349047"
+                },
+                "unit": "mm",
+                "value": 8.4
+              }
+            },
+            "unit": "mm",
+            "value": 5.45
+          },
+          "factor": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Signed halfspan mathematical convention.",
+            "unit": "1",
+            "value": 0.5
+          },
+          "offset": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Centered coordinate origin.",
+            "unit": "mm",
+            "value": 0
+          }
+        },
+        "unit": "mm",
+        "value": 2.725
+      },
+      "y": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Centered coordinate origin.",
+        "unit": "mm",
+        "value": 0
+      }
+    }
+  ],
+  "family": "POWER_INDUCTOR_7X7",
+  "id": "package:wurth-74437349047",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Source land geometry; underbody restricted strip2.5mm must prohibit vias/traces. Constraint proposal required before release.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      }
+    ],
+    "mpns": [
+      "74437349047"
+    ]
+  },
+  "verification": "DRAFT"
+}

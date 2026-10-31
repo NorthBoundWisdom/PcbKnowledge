@@ -1,0 +1,69 @@
+{
+  "category": "interface.header",
+  "checks": [],
+  "components": [
+    {
+      "ref": "J1",
+      "select": {
+        "part": "part:wurth-61300411121"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 1,
+      "source": "source:wurth-61300411121"
+    }
+  ],
+  "id": "block:t1-output",
+  "layout": [
+    {
+      "edge": "RIGHT",
+      "kind": "EDGE_PLACEMENT",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Output connector access.",
+        "unit": "mm",
+        "value": 5
+      },
+      "subject": "J1"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VOUT",
+        "J1.pin:1"
+      ],
+      "name": "VOUT"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "J1.pin:2",
+        "J1.pin:3",
+        "J1.pin:4"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VOUT"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Pin1positive output,2..4GND; resistive/electronic load0..0.5A, no backdrive or parallel supplies.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

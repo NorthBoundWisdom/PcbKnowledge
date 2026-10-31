@@ -1,0 +1,66 @@
+{
+  "id": "part:yageo-rt0603brd0768k1l",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:yageo-rt0603brd0768k1l"
+  },
+  "manufacturer": "Yageo",
+  "mpn": "RT0603BRD0768K1L",
+  "package": "package:yageo-rt0603brd0768k1l",
+  "parameters": {
+    "power_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rt0603brd0768k1l"
+      },
+      "max": 0.1,
+      "note": "At70degC.",
+      "unit": "W"
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:yageo-rt0603brd0768k1l"
+      },
+      "max": 68168.09999999999,
+      "min": 68031.9,
+      "typ": 68100,
+      "unit": "ohm"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal component: terminals numbered 1 and 2.",
+    "page": 1,
+    "source": "source:yageo-rt0603brd0768k1l"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Exact manufacturer individual specsheet p1; new identity DRAFT.",
+    "verified_by": []
+  },
+  "roles": [
+    "resistor"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "DRAFT"
+}

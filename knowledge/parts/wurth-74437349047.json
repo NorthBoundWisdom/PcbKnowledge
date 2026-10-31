@@ -1,0 +1,79 @@
+{
+  "id": "part:wurth-74437349047",
+  "identity_evidence": {
+    "page": 1,
+    "source": "source:wurth-74437349047"
+  },
+  "manufacturer": "Wurth Elektronik",
+  "mpn": "74437349047",
+  "package": "package:wurth-74437349047",
+  "parameters": {
+    "current_rating": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "max": 6.2,
+      "note": "Performance rated current at40K rise; source test PCB40mm-wide105um copper, not board guarantee.",
+      "unit": "A"
+    },
+    "inductance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "max": 5.64e-06,
+      "min": 3.76e-06,
+      "note": "100kHz10mA; not all-bias guarantee.",
+      "typ": 4.7e-06,
+      "unit": "H"
+    },
+    "resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 1,
+        "source": "source:wurth-74437349047"
+      },
+      "max": 0.0308,
+      "note": "20degC DCR.",
+      "typ": 0.028,
+      "unit": "ohm"
+    }
+  },
+  "pin_evidence": {
+    "basis": "STANDARD_CONVENTION",
+    "convention": "Unpolarized two-terminal inductor: terminals numbered1 and2.",
+    "page": 1,
+    "source": "source:wurth-74437349047"
+  },
+  "pins": [
+    {
+      "name": "1",
+      "number": "1",
+      "type": "PASSIVE"
+    },
+    {
+      "name": "2",
+      "number": "2",
+      "type": "PASSIVE"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "6.2A performance rating at40K rise uses40mm wide105um copper test;7.5A/14.6A saturation are TYPICAL only. Application current/thermal qualification remains required.",
+    "verified_by": []
+  },
+  "roles": [
+    "passive.inductor"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "UNKNOWN"
+  },
+  "verification": "DRAFT"
+}

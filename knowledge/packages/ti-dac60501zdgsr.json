@@ -1,0 +1,124 @@
+{
+  "body": {
+    "height": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "max": 1.1,
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "max": 3.1,
+      "min": 2.9,
+      "unit": "mm"
+    },
+    "width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "max": 3.1,
+      "min": 2.9,
+      "unit": "mm"
+    }
+  },
+  "courtyard_margin": {
+    "basis": "ENGINEERING_DEFAULT",
+    "conditions": {},
+    "note": "D8 nominal allowance around body and derived lands.",
+    "unit": "mm",
+    "value": 0.25
+  },
+  "density": "COMPACT",
+  "drawing": {
+    "lead_length": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "max": 0.7,
+      "min": 0.4,
+      "unit": "mm"
+    },
+    "lead_span": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "max": 5.05,
+      "min": 4.75,
+      "unit": "mm"
+    },
+    "lead_width": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "max": 0.27,
+      "min": 0.17,
+      "unit": "mm"
+    },
+    "pin_count": 10,
+    "pitch": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      },
+      "unit": "mm",
+      "value": 0.5
+    }
+  },
+  "evidence": [
+    {
+      "page": 45,
+      "source": "source:ti-dac60501"
+    }
+  ],
+  "family": "VSSOP-10",
+  "generator": "gullwing_two_side",
+  "id": "package:ti-dac60501zdgsr",
+  "mount_type": "SMT",
+  "pin1": "1",
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Original derived gull-wing lands, top-view pin1 upper-left. COMPACT VSSOP fillets for copper gap.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.package.v2",
+  "scope": {
+    "basis": "DATASHEET",
+    "evidence": [
+      {
+        "page": 38,
+        "source": "source:ti-dac60501"
+      },
+      {
+        "page": 45,
+        "source": "source:ti-dac60501"
+      }
+    ],
+    "mpns": [
+      "DAC60501ZDGSR"
+    ]
+  },
+  "verification": "DRAFT"
+}

@@ -1,0 +1,56 @@
+{
+  "category": "ui.button",
+  "checks": [],
+  "components": [
+    {
+      "ref": "SW1",
+      "select": {
+        "part": "part:omron-b3f-1000"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 2,
+      "source": "source:omron-b3f"
+    }
+  ],
+  "id": "block:t1-inhibit",
+  "layout": [],
+  "nets": [
+    {
+      "connect": [
+        "port:ENABLE",
+        "SW1.pin:1",
+        "SW1.pin:2"
+      ],
+      "name": "ENABLE"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "SW1.pin:3",
+        "SW1.pin:4"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "BIDIRECTIONAL",
+      "name": "ENABLE"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Normally-open pushbutton directly clamps ENABLE toGND while held; not a latching emergency-stop or protective safety device.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

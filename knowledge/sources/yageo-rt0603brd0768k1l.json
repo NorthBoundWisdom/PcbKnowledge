@@ -1,0 +1,20 @@
+{
+  "accessed_on": "2026-10-31",
+  "bytes": 55855,
+  "id": "source:yageo-rt0603brd0768k1l",
+  "license_class": "PUBLIC_REFERENCE",
+  "media_type": "application/pdf",
+  "pages": 1,
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Official public manufacturer reference; original evidence local only.",
+    "verified_by": []
+  },
+  "publisher": "YAGEO",
+  "revision": "Generated2026-10-31",
+  "schema": "pcbknowledge.source.v2",
+  "sha256": "d9d578ee49e46546a46a3ad3bbb90db59c315049d87684148f390977e3d22e6d",
+  "title": "RT0603BRD0768K1L manufacturer specification",
+  "url": "https://www.yageogroup.com/component-documentation/download/specsheet/RT0603BRD0768K1L",
+  "verification": "DRAFT"
+}

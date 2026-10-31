@@ -43,6 +43,13 @@
         "Q4"
       ]
     },
+    "dac.i2c": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
+      ]
+    },
     "diode.schottky": {
       "queries": [
         "Q1",
@@ -164,6 +171,13 @@
       "queries": [
         "Q1",
         "Q4"
+      ]
+    },
+    "supervisor.voltage-window": {
+      "queries": [
+        "Q1",
+        "Q4",
+        "Q5"
       ]
     },
     "switch.button": {

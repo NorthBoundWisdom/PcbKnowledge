@@ -1,0 +1,209 @@
+{
+  "category": "power.protection",
+  "checks": [],
+  "components": [
+    {
+      "ref": "U1",
+      "select": {
+        "part": "part:ti-tps3700ddcr"
+      }
+    },
+    {
+      "ref": "RUVT",
+      "select": {
+        "part": "part:yageo-rt0603brd0768k1l"
+      }
+    },
+    {
+      "ref": "RUVB",
+      "select": {
+        "part": "part:yageo-rt0603brd0710kl"
+      }
+    },
+    {
+      "ref": "ROVT",
+      "select": {
+        "part": "part:yageo-rc0603fr-07150kl"
+      }
+    },
+    {
+      "ref": "ROVB",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "RE",
+      "select": {
+        "part": "part:yageo-rc0603fr-074k7l"
+      }
+    },
+    {
+      "ref": "RP",
+      "select": {
+        "part": "part:yageo-rc0603fr-0710kl"
+      }
+    },
+    {
+      "ref": "C1",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "page": 4,
+      "source": "source:ti-tps3700"
+    },
+    {
+      "page": 6,
+      "source": "source:ti-tps3700"
+    },
+    {
+      "page": 7,
+      "source": "source:ti-tps3700"
+    }
+  ],
+  "id": "block:t1-hardware-gate",
+  "layout": [
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 2
+      },
+      "subject": "C1",
+      "target": "U1.pin:5"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 4
+      },
+      "subject": "RUVT",
+      "target": "U1.pin:3"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original T1 placement distance, not thermal guarantee.",
+        "unit": "mm",
+        "value": 4
+      },
+      "subject": "ROVT",
+      "target": "U1.pin:4"
+    }
+  ],
+  "nets": [
+    {
+      "connect": [
+        "port:VIN",
+        "U1.pin:5",
+        "C1.pin:1"
+      ],
+      "name": "VIN"
+    },
+    {
+      "connect": [
+        "port:VDD",
+        "RUVT.pin:1"
+      ],
+      "name": "VDD"
+    },
+    {
+      "connect": [
+        "port:VREG",
+        "ROVT.pin:1"
+      ],
+      "name": "VREG"
+    },
+    {
+      "connect": [
+        "RUVT.pin:2",
+        "RUVB.pin:1",
+        "U1.pin:3"
+      ],
+      "name": "UV"
+    },
+    {
+      "connect": [
+        "ROVT.pin:2",
+        "ROVB.pin:1",
+        "U1.pin:4"
+      ],
+      "name": "OV"
+    },
+    {
+      "connect": [
+        "port:REQUEST",
+        "RE.pin:1"
+      ],
+      "name": "REQUEST"
+    },
+    {
+      "connect": [
+        "port:ENABLE",
+        "RE.pin:2",
+        "RP.pin:1",
+        "U1.pin:1",
+        "U1.pin:6"
+      ],
+      "name": "ENABLE"
+    },
+    {
+      "connect": [
+        "port:GND",
+        "U1.pin:2",
+        "RUVB.pin:2",
+        "ROVB.pin:2",
+        "RP.pin:2",
+        "C1.pin:2"
+      ],
+      "name": "GND"
+    }
+  ],
+  "parameters": {},
+  "ports": [
+    {
+      "kind": "POWER_IN",
+      "name": "VIN"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "VDD"
+    },
+    {
+      "kind": "ANALOG",
+      "name": "VREG"
+    },
+    {
+      "kind": "INPUT",
+      "name": "REQUEST"
+    },
+    {
+      "kind": "OUTPUT",
+      "name": "ENABLE"
+    },
+    {
+      "kind": "GROUND",
+      "name": "GND"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "Always-VIN-powered UV/OV outputs wired-OR clamp EN; MCU REQUEST through4.7k and EN10k pulldown. Comparator is nonlatching: oscillatory OVP retry remains possible if host hangs.",
+    "verified_by": []
+  },
+  "schema": "pcbknowledge.block.v2",
+  "verification": "DRAFT"
+}

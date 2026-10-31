@@ -1,0 +1,221 @@
+{
+  "bootstrap_supplies": [
+    {
+      "bootstrap_pin": "6",
+      "capacitance_nominal": {
+        "basis": "DATASHEET",
+        "conditions": {},
+        "evidence": {
+          "page": 14,
+          "source": "source:ti-tps562201"
+        },
+        "note": "Nominal ceramic0.1uF recommendation,not guaranteed DC-biased minimum.",
+        "unit": "F",
+        "value": 1e-07
+      },
+      "capacitor_role": "capacitor.ceramic",
+      "charge_path": "INTERNAL_REGULATOR_DIODE",
+      "evidence": [
+        {
+          "page": 3,
+          "source": "source:ti-tps562201"
+        },
+        {
+          "page": 9,
+          "source": "source:ti-tps562201"
+        },
+        {
+          "page": 14,
+          "source": "source:ti-tps562201"
+        }
+      ],
+      "ground_pin": "1",
+      "kind": "FLOATING_BOOTSTRAP_SUPPLY",
+      "supply_pin": "3",
+      "switch_pin": "2"
+    }
+  ],
+  "id": "part:ti-tps562208ddcr",
+  "identity_evidence": {
+    "page": 26,
+    "source": "source:ti-tps562201"
+  },
+  "manufacturer": "Texas Instruments",
+  "mpn": "TPS562208DDCR",
+  "package": "package:ti-tps562208ddcr",
+  "parameters": {
+    "current_limit": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps562201"
+      },
+      "max": 4,
+      "min": 2.4,
+      "note": "DC current; VOUT1.05V L2.2uH VIN12V TJ-40..125C.",
+      "typ": 3.2,
+      "unit": "A"
+    },
+    "duty_cycle": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 17,
+        "source": "source:ti-tps562201"
+      },
+      "max": 0.75,
+      "note": "Maximum recommended operating duty cycle.",
+      "unit": "1"
+    },
+    "frequency": {
+      "basis": "DATASHEET",
+      "conditions": {
+        "input_voltage": {
+          "unit": "V",
+          "value": 12
+        },
+        "output_current": {
+          "unit": "A",
+          "value": 1
+        }
+      },
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps562201"
+      },
+      "note": "Typical at VOUT3.3V, not a guaranteed bound.",
+      "typ": 580000,
+      "unit": "Hz"
+    },
+    "input_high_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps562201"
+      },
+      "min": 1.6,
+      "note": "EN high-level requirement.",
+      "unit": "V"
+    },
+    "input_low_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps562201"
+      },
+      "max": 0.8,
+      "note": "EN low-level requirement.",
+      "unit": "V"
+    },
+    "input_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps562201"
+      },
+      "max": 17,
+      "min": 4.5,
+      "unit": "V"
+    },
+    "junction_temperature": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps562201"
+      },
+      "max": 125,
+      "min": -40,
+      "unit": "degC"
+    },
+    "output_current": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 12,
+        "source": "source:ti-tps562201"
+      },
+      "max": 2,
+      "note": "Application capability; duty, magnetic and thermal checks required.",
+      "unit": "A"
+    },
+    "reference_voltage": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 5,
+        "source": "source:ti-tps562201"
+      },
+      "max": 0.787,
+      "min": 0.749,
+      "note": "VOUT1.05V continuous-mode test only; not a guaranteed all-setpoint bound for2.5..6V injected feedback.",
+      "typ": 0.768,
+      "unit": "V"
+    },
+    "thermal_resistance": {
+      "basis": "DATASHEET",
+      "conditions": {},
+      "evidence": {
+        "page": 4,
+        "source": "source:ti-tps562201"
+      },
+      "note": "DDC RthetaJA characterization.",
+      "typ": 90.8,
+      "unit": "degC/W"
+    }
+  },
+  "pin_evidence": {
+    "basis": "DATASHEET",
+    "page": 3,
+    "source": "source:ti-tps562201"
+  },
+  "pins": [
+    {
+      "name": "GND",
+      "number": "1",
+      "type": "GROUND"
+    },
+    {
+      "name": "SW",
+      "number": "2",
+      "type": "POWER_OUT"
+    },
+    {
+      "name": "VIN",
+      "number": "3",
+      "type": "POWER_IN"
+    },
+    {
+      "name": "VFB",
+      "number": "4",
+      "type": "ANALOG"
+    },
+    {
+      "name": "EN",
+      "number": "5",
+      "type": "INPUT"
+    },
+    {
+      "name": "VBST",
+      "number": "6",
+      "type": "POWER_IN"
+    }
+  ],
+  "provenance": {
+    "created_by": "agent:/root/research_fixed_themes",
+    "notes": "TPS562208 FCCM p1, not Eco-mode201. Signed reverse inductor current at light load must be modeled; source frequency is typical only.",
+    "verified_by": []
+  },
+  "roles": [
+    "regulator.switching.buck"
+  ],
+  "schema": "pcbknowledge.part.v2",
+  "sourcing": {
+    "lifecycle": "ACTIVE"
+  },
+  "verification": "DRAFT"
+}
