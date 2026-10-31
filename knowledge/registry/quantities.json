@@ -45,6 +45,9 @@
     "temperature": {
       "unit": "degC"
     },
+    "temperature_coefficient": {
+      "unit": "1/degC"
+    },
     "thermal_dissipation": {
       "unit": "W/K"
     },
