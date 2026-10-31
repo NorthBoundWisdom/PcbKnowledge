@@ -1,0 +1,52 @@
+{
+  "attempts": [
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_reference_layout/t5_author_one",
+      "checks": 107,
+      "graph_sha256": "7b120d5ed069e4759ee470741aa724fe23b5a2b5f07ff5d895f00d839d7452cd",
+      "reference_equivalent": true,
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_match": false
+    },
+    {
+      "a2": false,
+      "agent": "agent:/root/implement_reference_layout/t5_author_two",
+      "checks": 81,
+      "graph_sha256": "ccc57b54d588a9c677ed4bcf4acf86468185a98d3b784fc4d336256b2fa460fc",
+      "reference_equivalent": false,
+      "reviewer_verdict": "NOT_EQUIVALENT",
+      "status": "REFUSED",
+      "structural_match": false
+    },
+    {
+      "a2": true,
+      "agent": "agent:/root/implement_reference_layout/t5_author_three",
+      "checks": 107,
+      "graph_sha256": "b4b7988e921c5130f6353c6595b500eb96583f227b5054f852474287c43bc1d1",
+      "reference_equivalent": true,
+      "reviewer_verdict": "EQUIVALENT",
+      "status": "EXPANDED",
+      "structural_match": false
+    }
+  ],
+  "brief": "T5",
+  "bundle_commit": "e96f5ae2a30aa631ebd85069bf02ed2852ad9431",
+  "bundle_sha256": "096089704ce3ae439bb8a224337839a7432f248ae3980e0b6eedde0a5f29ae98",
+  "evaluation_engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602",
+  "format": "pcbknowledge.synthesis-result-metadata.v1",
+  "full_report_sha256": "aca1762057bbc9a91b593fb68a3dd88944e165ab555e520ad8a36c8332ad3b08",
+  "input_identity": {
+    "audit_sha256": "af4326a05b474151dfb156e426c54e3fb58b4ff5345fe90b2bbae229e81934ef",
+    "catalog_tree": "9a8098c14ca705cf1392a2235288ea454cdf0b4d",
+    "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+  },
+  "mode": "positive",
+  "passed": 2,
+  "reference_sha256": "2fda636c0de4977852d60a3721c884d0bc11f73f06d666789f11f284a55e67b5",
+  "reference_status": "EXPANDED",
+  "required": 2,
+  "status": "PASS",
+  "total": 3
+}

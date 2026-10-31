@@ -1,0 +1,845 @@
+{
+  "evidence": {
+    "bytes": 476706,
+    "format": "pcbknowledge.synthesis-cache.v1",
+    "sha256": "2fc4dc9afacce91f39dc4f35a216a5222fe4733491a4b0c9b200c06fbdb4c438",
+    "submission_hashes": [
+      {
+        "graph_sha256": "4b761e7cd835fda94d507344f06f25f8df336ace25cbfeda093c6d2d9b883b66",
+        "original_sha256": "648e614b44cfe937765f4a3ee3f2ee4cc6734122bb52d53186ce0d21d9084dd0"
+      },
+      {
+        "graph_sha256": "ccc57b54d588a9c677ed4bcf4acf86468185a98d3b784fc4d336256b2fa460fc",
+        "original_sha256": "38467ab289b32bb5c97ac415c3021e3aa1b914f0044ddad7263fe9b0a5024f58"
+      },
+      {
+        "graph_sha256": "ca34a493100c2327d0d18c841697b45d41bfd527951bcbe6b624aa5e47072b11",
+        "original_sha256": "43aa34d70dee5f65fbdbb2a390aec71c47e42c0566cbdebf8dcbe910fc3558a9"
+      }
+    ]
+  },
+  "graph": {
+    "brief": "T5",
+    "connections": [
+      {
+        "endpoints": [
+          {
+            "instance": "usb",
+            "port": "VBUS"
+          },
+          {
+            "instance": "protection",
+            "port": "VIN"
+          }
+        ],
+        "net": "USB_POWER"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "protection",
+            "port": "VOUT"
+          },
+          {
+            "instance": "ldo",
+            "port": "VIN"
+          },
+          {
+            "instance": "analog",
+            "port": "VDD"
+          }
+        ],
+        "net": "PROTECTED_5V"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "ldo",
+            "port": "VDD"
+          },
+          {
+            "instance": "mcu",
+            "port": "VDD"
+          },
+          {
+            "instance": "dac",
+            "port": "VDD"
+          },
+          {
+            "instance": "swd",
+            "port": "VREF"
+          },
+          {
+            "instance": "uart",
+            "port": "VREF"
+          }
+        ],
+        "net": "CONTROL_3V3"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "usb",
+            "port": "GND"
+          },
+          {
+            "instance": "protection",
+            "port": "GND"
+          },
+          {
+            "instance": "ldo",
+            "port": "GND"
+          },
+          {
+            "instance": "mcu",
+            "port": "GND"
+          },
+          {
+            "instance": "swd",
+            "port": "GND"
+          },
+          {
+            "instance": "uart",
+            "port": "GND"
+          },
+          {
+            "instance": "dac",
+            "port": "GND"
+          },
+          {
+            "instance": "analog",
+            "port": "GND"
+          },
+          {
+            "instance": "output",
+            "port": "GND"
+          }
+        ],
+        "net": "GND"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "SWDIO"
+          },
+          {
+            "instance": "swd",
+            "port": "SWDIO"
+          }
+        ],
+        "net": "SWDIO"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "SWCLK"
+          },
+          {
+            "instance": "swd",
+            "port": "SWCLK"
+          }
+        ],
+        "net": "SWCLK"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "NRST"
+          },
+          {
+            "instance": "swd",
+            "port": "NRST"
+          }
+        ],
+        "net": "NRST"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "UART_TX"
+          },
+          {
+            "instance": "uart",
+            "port": "TX"
+          }
+        ],
+        "net": "UART_TX"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "UART_RX"
+          },
+          {
+            "instance": "uart",
+            "port": "RX"
+          }
+        ],
+        "net": "UART_RX"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "SYNC"
+          },
+          {
+            "instance": "dac",
+            "port": "SYNC"
+          }
+        ],
+        "net": "DAC_SYNC"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "SCLK"
+          },
+          {
+            "instance": "dac",
+            "port": "SCLK"
+          }
+        ],
+        "net": "DAC_SCLK"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "mcu",
+            "port": "SDIN"
+          },
+          {
+            "instance": "dac",
+            "port": "SDIN"
+          }
+        ],
+        "net": "DAC_SDIN"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "dac",
+            "port": "DAC_OUT"
+          },
+          {
+            "instance": "analog",
+            "port": "IN"
+          }
+        ],
+        "net": "DAC_ANALOG"
+      },
+      {
+        "endpoints": [
+          {
+            "instance": "analog",
+            "port": "OUT"
+          },
+          {
+            "instance": "output",
+            "port": "OUT"
+          }
+        ],
+        "net": "WAVEFORM"
+      }
+    ],
+    "id": "t5-independent-two",
+    "instances": [
+      {
+        "block": "block:t5-usb-input",
+        "id": "usb",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Total USB input limit100 mA in all active modes.",
+            "unit": "A",
+            "value": 0.1
+          },
+          "output_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 5.25,
+            "min": 4.75,
+            "note": "USB5 V source operating envelope before PTC and distribution.",
+            "unit": "V"
+          },
+          "resistance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Owner decision D7.",
+            "unit": "ohm",
+            "value": 5100
+          }
+        },
+        "ports": [
+          {
+            "name": "VBUS",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "usb"
+        ]
+      },
+      {
+        "block": "block:t5-protected-input",
+        "id": "protection",
+        "parameters": {
+          "input_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 5.25,
+            "min": 4.75,
+            "note": "USB5 V source operating envelope before PTC and distribution.",
+            "unit": "V"
+          },
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Total USB input limit100 mA in all active modes.",
+            "unit": "A",
+            "value": 0.1
+          },
+          "output_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 5.25,
+            "min": 4.63,
+            "note": "Accepted local protected rail after actual PTC and50 mV total distribution allowance.",
+            "unit": "V"
+          },
+          "temperature": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Fixed23 degC still-air bench condition matching selected PTC hold-current source rating.",
+            "unit": "degC",
+            "value": 23
+          }
+        },
+        "ports": [
+          {
+            "name": "VIN",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "VOUT",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "protection"
+        ]
+      },
+      {
+        "block": "block:t5-control-rail",
+        "id": "ldo",
+        "parameters": {
+          "dac_current_budget": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "DAC4 mA accepted IC/dynamic base plus three actual SPI pull branches; allocation6 mA.",
+            "unit": "A",
+            "value": 0.006
+          },
+          "input_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 5.25,
+            "min": 4.63,
+            "note": "Accepted local protected rail after actual PTC and50 mV total distribution allowance.",
+            "unit": "V"
+          },
+          "mcu_current_budget": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "MCU15 mA accepted core/dynamic base plus three actual pull branches; allocation17 mA.",
+            "unit": "A",
+            "value": 0.017
+          },
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Proposed T5 operating decision; conditional model, not a source guarantee.",
+            "unit": "A",
+            "value": 0.05
+          },
+          "output_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 3.43,
+            "min": 3.17,
+            "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+            "unit": "V"
+          },
+          "swd_current_budget": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Actual external interface total current limit5 mA, including powered load and signal loading.",
+            "unit": "A",
+            "value": 0.005
+          },
+          "temperature": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Fixed23 degC still-air bench condition matching selected PTC hold-current source rating.",
+            "unit": "degC",
+            "value": 23
+          },
+          "uart_current_budget": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Actual external interface total current limit5 mA, including powered load and signal loading.",
+            "unit": "A",
+            "value": 0.005
+          }
+        },
+        "ports": [
+          {
+            "name": "VIN",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "VDD",
+            "type": "POWER_OUT"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "ldo"
+        ]
+      },
+      {
+        "block": "block:t5-controller",
+        "id": "mcu",
+        "parameters": {
+          "clock_frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Owner decision D7.",
+            "unit": "Hz",
+            "value": 8000000
+          },
+          "frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 1001,
+            "min": 0.999,
+            "note": "Actual waveform acceptance for commanded1..1000 Hz within0.1%; includes clock and DDS rounding.",
+            "unit": "Hz"
+          },
+          "input_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "MCU15 mA accepted core/dynamic base plus three actual pull branches; allocation17 mA.",
+            "unit": "A",
+            "value": 0.017
+          },
+          "input_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 3.43,
+            "min": 3.17,
+            "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+            "unit": "V"
+          },
+          "requested_frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 1000,
+            "min": 1,
+            "note": "Commanded range; actual acceptance includes0.1% frequency error.",
+            "unit": "Hz"
+          },
+          "sample_rate": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 50005,
+            "min": 49995,
+            "note": "Accepted actual50ksps interval; SPI/DDS clock containment must pass.",
+            "unit": "Hz"
+          }
+        },
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SWDIO",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SWCLK",
+            "type": "INPUT"
+          },
+          {
+            "name": "NRST",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "UART_TX",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "UART_RX",
+            "type": "INPUT"
+          },
+          {
+            "name": "SYNC",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "SCLK",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "SDIN",
+            "type": "OUTPUT"
+          }
+        ],
+        "requirements": [
+          "mcu"
+        ]
+      },
+      {
+        "block": "block:swd-header",
+        "id": "swd",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Actual external interface total current limit5 mA, including powered load and signal loading.",
+            "unit": "A",
+            "value": 0.005
+          }
+        },
+        "ports": [
+          {
+            "name": "VREF",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SWDIO",
+            "type": "BIDIRECTIONAL"
+          },
+          {
+            "name": "SWCLK",
+            "type": "OUTPUT"
+          },
+          {
+            "name": "NRST",
+            "type": "BIDIRECTIONAL"
+          }
+        ],
+        "requirements": [
+          "swd"
+        ]
+      },
+      {
+        "block": "block:uart-header",
+        "id": "uart",
+        "parameters": {
+          "output_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Actual external interface total current limit5 mA, including powered load and signal loading.",
+            "unit": "A",
+            "value": 0.005
+          }
+        },
+        "ports": [
+          {
+            "name": "VREF",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "TX",
+            "type": "INPUT"
+          },
+          {
+            "name": "RX",
+            "type": "OUTPUT"
+          }
+        ],
+        "requirements": [
+          "uart"
+        ]
+      },
+      {
+        "block": "block:t5-dac",
+        "id": "dac",
+        "parameters": {
+          "input_current": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "DAC4 mA accepted IC/dynamic base plus three actual SPI pull branches; allocation6 mA.",
+            "unit": "A",
+            "value": 0.006
+          },
+          "input_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 3.43,
+            "min": 3.17,
+            "note": "Accepted settled control rail; four physical preloads prove minimum10 mA. Not active during startup.",
+            "unit": "V"
+          }
+        },
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "SCLK",
+            "type": "INPUT"
+          },
+          {
+            "name": "SDIN",
+            "type": "INPUT"
+          },
+          {
+            "name": "SYNC",
+            "type": "INPUT"
+          },
+          {
+            "name": "DAC_OUT",
+            "type": "ANALOG"
+          }
+        ],
+        "requirements": [
+          "dac"
+        ]
+      },
+      {
+        "block": "block:t5-output-stage",
+        "id": "analog",
+        "parameters": {
+          "frequency": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 1001,
+            "min": 0.999,
+            "note": "Actual waveform acceptance for commanded1..1000 Hz within0.1%; includes clock and DDS rounding.",
+            "unit": "Hz"
+          },
+          "input_voltage": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 5.25,
+            "min": 4.63,
+            "note": "Accepted local protected rail after actual PTC and50 mV total distribution allowance.",
+            "unit": "V"
+          },
+          "sample_rate": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 50005,
+            "min": 49995,
+            "note": "Accepted actual50ksps interval; SPI/DDS clock containment must pass.",
+            "unit": "Hz"
+          },
+          "waveform_amplitude": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "max": 1,
+            "min": 0,
+            "note": "Configurable peak amplitude.",
+            "unit": "V"
+          },
+          "waveform_offset": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "Fixed commanded DC offset.",
+            "unit": "V",
+            "value": 1.25
+          }
+        },
+        "ports": [
+          {
+            "name": "VDD",
+            "type": "POWER_IN"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          },
+          {
+            "name": "IN",
+            "type": "ANALOG"
+          },
+          {
+            "name": "OUT",
+            "type": "ANALOG"
+          }
+        ],
+        "requirements": [
+          "analog"
+        ]
+      },
+      {
+        "block": "block:t5-output",
+        "id": "output",
+        "parameters": {},
+        "ports": [
+          {
+            "name": "OUT",
+            "type": "ANALOG"
+          },
+          {
+            "name": "GND",
+            "type": "GROUND"
+          }
+        ],
+        "requirements": [
+          "output"
+        ]
+      },
+      {
+        "block": "block:mounting-holes",
+        "id": "mounting",
+        "parameters": {
+          "clearance": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "T5 screw-head keepout diameter; no additional inflation.",
+            "unit": "mm",
+            "value": 6
+          },
+          "drill": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "T5 adopts the existing reviewed M3 non-plated mounting-hole block.",
+            "unit": "mm",
+            "value": 3.2
+          },
+          "length": {
+            "basis": "ENGINEERING_DEFAULT",
+            "conditions": {},
+            "note": "T5 hole-center offset from both adjacent board edges.",
+            "unit": "mm",
+            "value": 3.5
+          }
+        },
+        "ports": [],
+        "requirements": [
+          "mounting"
+        ]
+      }
+    ],
+    "interface_status": "PLANNED_BLOCK_CONTRACTS",
+    "pin_configurations": [
+      {
+        "initial_state": "HIGH",
+        "instance": "mcu",
+        "mode": "GPIO_PUSH_PULL",
+        "port": "SYNC"
+      },
+      {
+        "initial_state": "LOW",
+        "instance": "mcu",
+        "mode": "SPI1_SCK",
+        "port": "SCLK"
+      },
+      {
+        "initial_state": "LOW",
+        "instance": "mcu",
+        "mode": "SPI1_MOSI",
+        "port": "SDIN"
+      },
+      {
+        "initial_state": "HIGH",
+        "instance": "mcu",
+        "mode": "UART_TX",
+        "port": "UART_TX"
+      }
+    ],
+    "port_requirements": [
+      {
+        "function": "GPIO_PUSH_PULL",
+        "instance": "mcu",
+        "port": "SYNC"
+      },
+      {
+        "function": "SPI1_SCK",
+        "instance": "mcu",
+        "port": "SCLK"
+      },
+      {
+        "function": "SPI1_MOSI",
+        "instance": "mcu",
+        "port": "SDIN"
+      },
+      {
+        "function": "UART_TX",
+        "instance": "mcu",
+        "port": "UART_TX"
+      }
+    ],
+    "requirements": [
+      "waveform",
+      "closed_world",
+      "firmware_active_contract",
+      "firmware_memory",
+      "analog_applicability",
+      "power_applicability"
+    ],
+    "schema": "pcbknowledge.block-graph.v2",
+    "status": "DRAFT"
+  },
+  "receipt": {
+    "agent": "agent:/root/implement_reference_layout/t5_author_two",
+    "brief_sha256": "9bfa34d420bce15dfe335af3e0d7de810dd8df4e04415ae3f5990138b43f217e",
+    "bundle_commit": "e96f5ae2a30aa631ebd85069bf02ed2852ad9431",
+    "bundle_sha256": "096089704ce3ae439bb8a224337839a7432f248ae3980e0b6eedde0a5f29ae98",
+    "equivalence_review": "The scored second original graph genuinely refuses with INVALID_REFERENCE at graph: unsupported firmware pin configuration mode. First revision also genuinely refused for a descriptive undeclared initial_state. All three submitted original hashes survive; third revision was submitted concurrently and remains NOT_RUN, neither executed nor substituted for the scored second revision. Coverage READY does not establish A2.",
+    "format": "pcbknowledge.synthesis-receipt.v2",
+    "graph_sha256": "ccc57b54d588a9c677ed4bcf4acf86468185a98d3b784fc4d336256b2fa460fc",
+    "initial_packet_sha256": "35e5b74938f9cd8f951874101adc9a80273045fa3ed66d2b64472f0be039ff32",
+    "input_identity": {
+      "audit_sha256": "af4326a05b474151dfb156e426c54e3fb58b4ff5345fe90b2bbae229e81934ef",
+      "catalog_tree": "9a8098c14ca705cf1392a2235288ea454cdf0b4d",
+      "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+    },
+    "mode": "QUERY_MEDIATED",
+    "orchestrator": "agent:/root/implement_reference_layout",
+    "reference_accessed": false,
+    "reviewer": "agent:/root/implement_reference_layout/stage12_review",
+    "reviewer_verdict": "NOT_EQUIVALENT",
+    "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589",
+    "transcript_sha256": "0a1970840d1adefaf57ec247480651c7e1b2eb50a1176ea9841029fc73ea1954"
+  }
+}

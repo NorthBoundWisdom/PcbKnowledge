@@ -1,0 +1,306 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and parts resolve at AGENT_VERIFIED or better; expansion has no refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and ground pins connected and decoupled, no floating required input, calculator checks pass.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Placed and routed board satisfies the complete design-intent constraint set.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fab profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Gerber, drill, BOM and pick-and-place files generated and opened in an independent viewer.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabricated board passes rail, programming and required-function bring-up tests.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [],
+  "expected_refusal": {
+    "code": "UNSATISFIED_SELECTION",
+    "requirement": "rtd_interface"
+  },
+  "functions": [
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "USB-C 5 V sink power entry; no USB data or power delivery.",
+      "id": "power_input",
+      "parameters": {},
+      "part_preferences": [],
+      "requirements": [
+        "USB-C 5 V sink power entry; no USB data or power delivery."
+      ]
+    },
+    {
+      "category": "sensor.rtd",
+      "count": 1,
+      "description": "Four-wire PT100 excitation, independent differential sensing and calibrated temperature conversion.",
+      "id": "rtd_interface",
+      "parameters": {
+        "drive_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D99: original four-wire RTD operating requirement.",
+          "unit": "A",
+          "value": 0.0001
+        },
+        "io_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "D99: original four-wire RTD operating requirement.",
+          "unit": "V",
+          "value": 3.3
+        },
+        "sample_rate": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 10,
+          "note": "D99: minimum temperature readout rate.",
+          "unit": "Hz"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 100,
+          "min": 0,
+          "note": "D99: RTD conversion temperature interval.",
+          "unit": "degC"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Preserve 100 uA excitation, independent force/sense leads, 0–100 degC range, 0.5 degC absolute error budget and at least 10 temperature readings per second over 3.3 V UART."
+      ]
+    },
+    {
+      "category": "mechanical.mounting",
+      "count": 1,
+      "description": "Four non-plated M3 mounting holes, one near each board corner.",
+      "id": "mounting",
+      "parameters": {
+        "clearance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "N7 screw-head keepout diameter; no additional inflation.",
+          "unit": "mm",
+          "value": 6
+        },
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "N7 adopts the existing reviewed M3 non-plated mounting-hole block.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "length": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "N7 hole-center offset from both adjacent board edges.",
+          "unit": "mm",
+          "value": 3.5
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Use four 3.2 mm non-plated holes, each with a 6 mm screw-head keepout and center 3.5 mm from both adjacent board edges."
+      ]
+    }
+  ],
+  "id": "N7",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition requirement.",
+        "unit": "A",
+        "value": 0.5
+      },
+      "description": "5 V USB-C power input",
+      "id": "usb",
+      "signals": [
+        "VBUS",
+        "GND",
+        "CC1",
+        "CC2"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition requirement.",
+        "unit": "V",
+        "value": 5
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D99: original four-wire RTD competition requirement.",
+        "unit": "A",
+        "value": 0.0001
+      },
+      "description": "Four-wire PT100 connector with separate excitation and sense terminals.",
+      "id": "rtd",
+      "signals": [
+        "FORCE_POS",
+        "SENSE_POS",
+        "SENSE_NEG",
+        "FORCE_NEG"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D99: original four-wire RTD competition requirement.",
+        "unit": "V",
+        "value": 5
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D99: original four-wire RTD competition requirement.",
+        "unit": "A",
+        "value": 0.005
+      },
+      "description": "3.3 V UART temperature readout to an external host.",
+      "id": "uart",
+      "signals": [
+        "TX",
+        "RX",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D99: original four-wire RTD competition requirement.",
+        "unit": "V",
+        "value": 3.3
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "1 oz copper per D2; detailed stackup awaits the selected fab.; Single-side assembly",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic design requirement.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "usb",
+      "rtd",
+      "uart"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "note": "No component height limit.",
+      "status": "UNCONSTRAINED"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic competition requirement.",
+      "unit": "mm"
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 holes, one at each corner; preserve screw-head keepouts.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "N7 adopts the existing reviewed M3 non-plated mounting-hole block.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "N7 hole-center offset from both adjacent board edges.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "N7 screw-head keepout diameter; no additional inflation.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic competition requirement.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D99"
+  ],
+  "power": {
+    "rails": [],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition requirement.",
+          "unit": "A",
+          "value": 0.5
+        },
+        "description": "External regulated USB 5 V supply for the RTD interface board.",
+        "function": "power_input",
+        "id": "usb_5v",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition requirement.",
+          "unit": "V",
+          "value": 5
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Build a USB-powered four-wire PT100 measurement board for 0–100 degC. Use a 100 uA excitation current and independent sense leads so lead resistance is not substituted for sensor resistance. Report temperature over a 3.3 V UART at at least 10 readings per second, with an absolute error budget of 0.5 degC over the stated range. Do not substitute a thermistor, thermocouple, two-wire measurement or a generic voltage ADC without the required excitation and conversion function.",
+  "title": "Four-wire platinum RTD measurement interface"
+}

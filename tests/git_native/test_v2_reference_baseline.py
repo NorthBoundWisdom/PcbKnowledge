@@ -6,6 +6,7 @@ import unittest
 
 from pcbknowledge.serialization import canonical_json, read_json
 from pcbknowledge.v2.catalog import Catalog, selected_candidate
+from pcbknowledge.v2.audit import design_inputs, require_audit
 from pcbknowledge.v2.coverage import coverage, coverage_all
 from pcbknowledge.v2.expansion import expand
 
@@ -28,7 +29,12 @@ class ReferenceBaselineTests(unittest.TestCase):
         cls.catalog = Catalog(ROOT, ROOT/'schemas')
 
     def test_every_committed_positive_ready_and_t1_refused(self):
-        report = coverage_all(self.catalog)
+        require_audit(self.catalog)
+        _, briefs = design_inputs(ROOT)
+        paths = [*sorted((ROOT / 'evals/golden-designs').glob('*.block-graph.json')),
+                 *sorted((ROOT / 'evals/corpus/themes').glob('*.block-graph.json'))]
+        references = [read_json(path.read_bytes()) for path in paths]
+        report = coverage_all(self.catalog, briefs, references)
         rows = {row['brief']: row for row in report['briefs']}
         positives = {identity for identity, row in rows.items() if row['status'] == 'READY'}
         self.assertEqual(positives, {name.upper() for name in REFERENCE_HASHES})

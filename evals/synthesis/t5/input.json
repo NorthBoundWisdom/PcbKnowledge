@@ -1,0 +1,13 @@
+{
+  "brief": "T5",
+  "brief_sha256": "9bfa34d420bce15dfe335af3e0d7de810dd8df4e04415ae3f5990138b43f217e",
+  "bundle_commit": "e96f5ae2a30aa631ebd85069bf02ed2852ad9431",
+  "bundle_sha256": "096089704ce3ae439bb8a224337839a7432f248ae3980e0b6eedde0a5f29ae98",
+  "format": "pcbknowledge.synthesis-input-metadata.v1",
+  "input_identity": {
+    "audit_sha256": "af4326a05b474151dfb156e426c54e3fb58b4ff5345fe90b2bbae229e81934ef",
+    "catalog_tree": "9a8098c14ca705cf1392a2235288ea454cdf0b4d",
+    "engine_sha256": "49a7f742d24cc8843d27ca7857bd13f627f453ef9fa3d3808270a08de18ca602"
+  },
+  "skill_sha256": "196a27a12f72654399bc5a8c50d69dcc05bcb17d8289019f73eef61704c5b589"
+}

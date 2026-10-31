@@ -154,6 +154,7 @@ answer here.
 | D96 | Cycle 1 negative brief | N5 requires independent monitoring and 50 mA selective balancing of two series Li-ion cells at 3.0–4.2 V each, starting above 4.10 V and stopping below 4.05 V; external charging is outside this daughterboard. This tests an absent catalog function without substituting single-cell or pack-only monitoring. |
 | D97 | T2 alternative screening | Screen fixed 4.2 V BQ24074 charging plus TPS61023 boost against exact VARTA 56427201022 pack limits, replacing the provisional 4.160 V input only for this alternative. The pack temperature window remains 0–45 degC; the source-qualified NTC protection gap parks this candidate. |
 | D98 | T5 waveform operating envelope | Use USB 5 V / 100 mA at a 23 degC bench, nominal 1.25 V offset and 0–1 V peak for commanded 1–1000 Hz sine/triangle output (actual 0.999–1001 Hz). Allow amplitude error of 5% of commanded peak plus 25 mV, offset error of 25 mV and frequency error of 0.1%, into at least 10 kohm and at most 100 pF. Use nominal 50 ksps / 4 MHz SPI from 8 MHz HSE with 100 ppm uncertainty; inactive output may span zero to the supply. Analog residual and timing-edge applicability are explicit engineering conditions in the brief. Adopt D7 mounting: four 3.2 mm non-plated M3 holes, 6 mm screw-head envelopes and 3.5 mm edge offsets. |
+| D99 | Cycle 3 negative brief | N7 requires four-wire PT100 excitation at 100 uA, independent force/sense leads, 0–100 degC conversion with a 0.5 degC absolute error budget, and at least 10 readings per second over 3.3 V UART. A generic voltage ADC, thermistor or thermocouple block does not supply this complete missing catalog function. |
 | D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
 | D105 | BUCK_SW acquisition protocol | D91 uses synchronous PH/VIN differential acquisition at 1 GHz and 5 GS/s, full uncertainty intervals, source PH limits and explicit plateau/peak/time envelopes. The 0.40 V high-side drop and 0.55 V diode plateau allowances are engineering test budgets under D103 conditions; every observation stays NOT_RUN. |
 | D106 | Necessary distance audit | Use exact inscribed-disk lower bounds for center-based PLACE_NEAR only when an explicit KEEPOUT imposes projected courtyard exclusion. Follow the existing checker contract across surfaces, reject proven contradictions and leave unsupported or copper-edge cases unproved. |
@@ -862,7 +863,7 @@ Cycle 3, T5/T6 (Wisdom):
 
 Blocking CI fixture repair: resolve the conformance temporary directory before bundle creation, preserving production symlink rejection. The macOS failure on `759ec7b` reproduces with an aliased temporary root; all 17 conformance tests pass after normalization, including the internal-symlink negative. Successor macOS CI remains required.
 
-- [ ] T5 DAC signal generator to A2 with three fresh synthesis attempts.
+- [x] T5 DAC signal generator to A2 with three fresh synthesis attempts.
 Paired-supply foundation: source-declared positive/negative POWER_IN terminals retain their physical types; expansion qualifies the grounded return, exact nominal bypass and source paths. Independent review and 62 affected tests pass, including all seven preserved reference hashes; 204 records validate.
 Sampled-waveform calculator: 53 affected tests pass with exact selected-component and parameter bindings. Independent review fixed unenclosable decay and separated peak from cycle-mean residual bounds; 2,000 waveform comparisons support the conditional model. T5 operating predicates and source promotion remain pending.
 SPI/DDS scheduling: 57 affected tests pass with shared-clock rounding and accepted-interval checks. Independent review fixed omitted phase-word quantization in the sampling ratio and verified the integrated dispatcher; firmware edge placement and application bindings remain explicit requirements.
@@ -871,9 +872,14 @@ Physical budget checks: 74 affected tests pass for selected passive-path loss/cu
 CI repair: bind the T5 USB source to its existing 4.75–5.25 V envelope; preserve N1 refusal and
 G2 graph-replay tamper rejection after new MCU alternatives and HIGH states. Full gate passes 963/963.
 T5 reviewed reference: 216 records validate; 107 reconstructed checks pass with no refusal. Independent review verifies 12 scoped promotions, exact HIGH startup identity and the D7 mounting correction; all eight positive expansion pins pass, with seven earlier hashes unchanged.
-Application integration: 41 application/reference/GPIO/replay/evidence tests and 34 helper tests pass. The reference is conditionally eligible through A2 under D98; three fresh synthesis attempts are pending, and no A6 observation is claimed.
+Application integration: 41 application/reference/GPIO/replay/evidence tests and 34 helper tests pass. The reference reaches conditional A2 under D98; no A6 observation is claimed.
 T5 CI correction: fixed D98 USB voltage/current declarations preserve the 12 V negative; verified-alternative feasibility stays separate from selected-graph verification, and G2 LOW tampering is rejected by deterministic replay. Independent review and 50 affected tests pass; all eight positive hashes are unchanged.
-- [ ] T6 OLED and keypad board to A2 with three fresh synthesis attempts, then the cycle negative brief.
+T5 synthesis: three fresh authors on `e96f5ae` yield 2 PASS / 1 REFUSED, meeting the unchanged 2-of-3 threshold. Independent review authenticates 33 query responses and all five submitted originals; the failed second revision stays scored and the third stays NOT_RUN.
+Reference A2 and corpus threshold PASS do not make aggregate replay READY: it remains INCOMPLETE because the failed attempt is preserved. Successful parked exports each report 19 PASS / 30 FAIL / 4 NOT_CHECKABLE, with no A3 claim.
+- [ ] T6 OLED and keypad board to A2 (parked); then finish the cycle negative brief.
+T6 assembly qualification is parked after two interconnect approaches: the Wurth stack fails worst-case module-hole fit; the PRECI-DIP direct-solder option lacks sourced dimensional tolerances and a qualified support/separation stack.
+Panasonic EVQP0Q02Q resolves the key low-load source screen; no T6 A2 or synthesis result is claimed. N7 now tests the distinct absent four-wire RTD function; its three fresh attempts remain pending.
+
 
 ## Stage 17 — PcbAtlas consumer contract
 
@@ -919,6 +925,8 @@ session to wait for an answer.
 - T1: qualify a control-rail replacement with the full capacitor/load network. Recommended next design is TPS709 with a source-qualified 4.7 uF local output capacitor and an independently checked aggregate rail budget; preserve both 5 mA host limits and the 110 degC target.
 
 - T2: obtain a qualified temperature-window circuit and the exact pack NTC R(T) envelope. Recommended default is separately qualified hardware protection covering the pack 0–45 degC charge window, including tolerance and open/short behavior; do not widen the allowed temperature range.
+
+- T6: obtain source-qualified round-pin and module support/separation bounds. Recommended default is a directly soldered non-detachable OLED interface with documented tolerances and support geometry; preserve the complete OLED/four-key theme and do not invent maximum dimensions.
 
 ## Owner evidence list
 
