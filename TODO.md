@@ -40,9 +40,12 @@
   stage in two or three lines, mark the status `..._PARKED`, and start the next
   stage. Stop the session only when every remaining stage is parked or an
   escalation applies. Revisit parked stages at the start of each session.
-- **One implementing session at a time.** Do not run two implementing agents on
-  `main` in parallel; it produced duplicate rebased commits and an ancestry merge
-  in Stage 8. Reviewer and synthesis sub-agents inside one session are fine.
+- **One implementing session per developer, on disjoint work (D77).** Wisdom works
+  the queue. Ethan works the items marked `(ethan, #N)`, and the queue skips them.
+  Neither developer takes the other's items or edits the other's files. Rebase onto
+  `origin/main` before every push and never force-push. Do not run two sessions for
+  the same developer; it produced duplicate rebased commits and an ancestry merge in
+  Stage 8. Reviewer and synthesis sub-agents inside one session are fine.
 
 ## Owner decisions
 
@@ -130,6 +133,7 @@ answer here.
 | D74 | T1 conditional reference design | Use TPS562208 FCCM with DAC60501 feedback setpoint and INA219 voltage/current readback for 12 V nominal input and 2.5-6 V / 0.5 A external output. Include local loads and explicit control-rail/preload operating budgets; keep the new authority DRAFT until driven-clamp, bound-calculator and underbody routing checks are integrated. |
 | D75 | Strict A3 and queue order (reviewing agent, 2026-10-31) | A3 requires every constraint `PASS`, matching `layout_pipeline` and the A3 definition; `NOT_CHECKABLE` is reported as an open checker gap and no longer satisfies a stage exit. `owner_review_ready` stays an inspection aid and never advances an acceptance level. Stage 16 waits for Stages 13 and 14 to exit or park. |
 | D76 | External layout tools (owner decision, 2026-10-31) | Keep Freerouting and KiCad until G1 reproduces through Stage 13, then replace them with original code (Stage 13R), using KiCad results as the comparison oracle. Amends D63 and D64 in that order. Add no further Freerouting-specific adaptation beyond what the Stage 13 exit needs. |
+| D77 | Two developers (owner decision, 2026-10-31) | Wisdom owns the queue, the pipeline and routing files, ADR-027 and the router. Ethan owns GitHub issues #37-#40. Ethan's native writers, fill and DRC are built now as separate modules and are not wired into the acceptance path; Wisdom switches it after the Stage 13 exit, so D76's order holds. Wisdom's new decisions continue from D78; Ethan's use D100 upward. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -788,17 +792,21 @@ stage receipt until 13b reproduces it.
 
 ## Stage 13R — Replace external layout tools (D76)
 
-Starts after the Stage 13 exit and runs before Stage 14. Work in this order, one
-replacement at a time; each keeps the G1 board at its Stage 13 acceptance level.
+Wisdom's items start after the Stage 13 exit and run before Stage 14. Ethan's items
+may be built now (D77) but change no acceptance path until then. Switch one
+replacement at a time, in this order; each keeps the G1 board at its Stage 13
+acceptance level.
 
 - [ ] ADR-027 amending ADR-026: the original pipeline becomes the acceptance path, and
   KiCad becomes an optional comparison. Before the first board order, the owner still
   gets one independent check (the fab's DFM or opening the board in KiCad).
-- [ ] Original Gerber, drill and position writers. Compare layers, extents, drill counts
-  and positions with the KiCad exports for G1.
-- [ ] Original zone fill. Compare filled area and connectivity with KiCad on G1.
-- [ ] Original DRC for the D12 fab rules and connectivity. Every mutated synthetic board
-  must fail with the expected kind, and on G1 the findings must match KiCad's.
+- [ ] (ethan, #37) Original Gerber, drill and position writers. Compare layers, extents,
+  drill counts and positions with the KiCad exports for G1.
+- [ ] (ethan, #38) Original zone fill. Compare filled area and connectivity with KiCad on G1.
+- [ ] (ethan, #38) Original DRC for the D12 fab rules and connectivity. Every mutated
+  synthetic board must fail with the expected kind, and on G1 the findings must match KiCad's.
+- [ ] Switch `export_outputs`, zone fill and `run_drc` to the original code once #37 and
+  #38 are closed and the Stage 13 exit has passed.
 - [ ] Original deterministic router for two-layer boards, using the constraints in the
   intent. Compare completion, via count and copper length with the Freerouting result.
 - [ ] Delete the Freerouting, DSN/SES and KiCad bridge paths and the `fanout_*` and
@@ -816,13 +824,13 @@ and the existing tools stay in place.
   analog/digital separation for G3-G5) as constraint support, not per-design code.
 - [ ] Every layout or DRC failure that comes from knowledge (footprint, rule,
   constraint) is fixed in the catalog with a test, before tuning the placer.
-- [ ] Checker support for `GUARD_RING` (G3, G4) and `RETURN_PATH` (G3, G4, G5), proven
+- [ ] (ethan, #39) Checker support for `GUARD_RING` (G3, G4) and `RETURN_PATH` (G3, G4, G5), proven
   from routed copper with passing and failing fixtures. Both are unconditionally
   `NOT_CHECKABLE` today, so those designs cannot reach A3.
-- [ ] Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
+- [ ] (ethan, #40) Complete bring-up rail ranges for G1V1, G1V2, G2 and G5, all `UNKNOWN` on
   `c7948ee` (G1V1 leaves `LOGGER_3V3`, `MCU_VDDA`, `PROTECTED_5V` and `USB_VBUS`
   unresolved).
-- [ ] Reopen the G2 blocker: read the cited TPS5430 page and decide what the 1 mm limit
+- [ ] (ethan, #40) Reopen the G2 blocker: read the cited TPS5430 page and decide what the 1 mm limit
   measures. If the source means copper-to-copper distance, add a typed distance basis
   to the constraint, measure that, and record the decision with a D-number, keeping the
   number. If the source does not support that reading, keep the rule and escalate it.

@@ -29,8 +29,10 @@ current acceptance level of each golden design is in `TODO.md`.
   the blocker, park it and start the next stage. Stop only when every remaining
   stage is parked, at an `(escalate)` condition, or at a gate failure you cannot
   fix.
-- Run as the only implementing session on `main`. Sub-agents for review and
-  synthesis are expected.
+- Two developers work on `main` at once (D77). Skip every `TODO.md` item marked
+  `(ethan, #N)` and every GitHub issue titled `[Ethan]`; do not edit the modules
+  those issues create. Run one implementing session per developer. Sub-agents for
+  review and synthesis are expected.
 - **Commit and push; do not stop at commit.** You are not on the owner's computer,
   and only `origin/main` reaches the owner. This brief is standing authorization to
   commit and push to `main`. After each coherent commit group: run the affected tests,
