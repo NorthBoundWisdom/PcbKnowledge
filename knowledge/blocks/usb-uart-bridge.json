@@ -13,6 +13,12 @@
       "select": {
         "part": "part:kemet-c0603c104k5ractu"
       }
+    },
+    {
+      "ref": "C2",
+      "select": {
+        "part": "part:kemet-c0603c104k5ractu"
+      }
     }
   ],
   "evidence": [
@@ -44,11 +50,23 @@
       "max_distance": {
         "basis": "ENGINEERING_DEFAULT",
         "conditions": {},
-        "note": "D32 decoupling placement allowance; validate actual board layout.",
+        "note": "D71: one local 100 nF capacitor per joined supply pin; unchanged 3 mm allowance.",
         "unit": "mm",
         "value": 3
       },
       "subject": "C1",
+      "target": "U1.pin:4"
+    },
+    {
+      "kind": "PLACE_NEAR",
+      "max_distance": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "D71: one local 100 nF capacitor per joined supply pin; unchanged 3 mm allowance.",
+        "unit": "mm",
+        "value": 3
+      },
+      "subject": "C2",
       "target": "U1.pin:16"
     }
   ],
@@ -62,7 +80,8 @@
         "U1.pin:10",
         "U1.pin:11",
         "U1.pin:12",
-        "C1.pin:1"
+        "C1.pin:1",
+        "C2.pin:1"
       ],
       "name": "PWR3V3"
     },
@@ -71,7 +90,8 @@
         "port:GND",
         "U1.pin:1",
         "U1.pin:15",
-        "C1.pin:2"
+        "C1.pin:2",
+        "C2.pin:2"
       ],
       "name": "GND"
     },
@@ -157,9 +177,8 @@
   ],
   "provenance": {
     "created_by": "agent:/root/implement_pcbknowledge_brief/stage6_guards",
-    "notes": "Typed UART transmit requirement added by agent:/root/implement_pcbknowledge_brief/g2_mcu_switch_author. D69: pin anchors; same 3 mm.",
+    "notes": "D71 revision by agent:/root/implement_reference_layout/stage12_review: dedicated V3/VCC decoupling. Prior revision verification remains in Git; this revision awaits independent review.",
     "verified_by": [
-      "agent:/root/implement_pcbknowledge_brief/g2_source_review",
       "agent:/root/implement_reference_layout/placement_review"
     ]
   },
