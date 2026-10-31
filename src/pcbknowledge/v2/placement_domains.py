@@ -4,6 +4,8 @@ import math
 
 from .placement import EPSILON, GROUP_MAX_DISTANCE_MM, PlacementError, _rule_ok
 
+RANKING_BATCH_SIZE = 16
+
 
 class BoxDomain:
     def __init__(self, values):
@@ -92,6 +94,24 @@ class ClusterSearch:
             position = self.domains[ref].values[index][1]
             yield from self.solutions(remaining, {**chosen, ref: position})
 
+    def ranked_candidates(self, ref, masks):
+        """Rank finite batches without deleting any candidate from the search domain."""
+        others = {name: mask for name, mask in masks.items() if name != ref}
+        ranked, inspected = [], 0
+        for index in indices(masks[ref]):
+            if self.owner.states >= self.owner.budget:
+                raise PlacementError('Placement legal-branch budget exhausted', states=self.owner.states)
+            self.owner.spend_compatibility_work()
+            remaining = {other: mask & self.compatible(ref, index, other) for other, mask in others.items()}
+            if all(remaining.values()):
+                score = -sum(math.log1p(mask.bit_count()) for mask in remaining.values())
+                ranked.append((score, index, remaining))
+            inspected += 1
+            if inspected == RANKING_BATCH_SIZE:
+                yield from sorted(ranked)
+                ranked, inspected = [], 0
+        yield from sorted(ranked)
+
     def solutions(self, masks=None, chosen=None):
         masks = {ref: domain.full for ref, domain in self.domains.items()} if masks is None else masks
         chosen = {} if chosen is None else chosen
@@ -102,18 +122,7 @@ class ClusterSearch:
             yield from self.terminal_solutions(masks, chosen)
             return
         ref = min(masks, key=lambda name: (masks[name].bit_count(), name))
-        others = {name: mask for name, mask in masks.items() if name != ref}
-        ranked = []
-        for index in indices(masks[ref]):
-            if self.owner.states >= self.owner.budget:
-                raise PlacementError('Placement legal-branch budget exhausted', states=self.owner.states)
-            self.owner.spend_compatibility_work()
-            remaining = {other: mask & self.compatible(ref, index, other) for other, mask in others.items()}
-            if any(not mask for mask in remaining.values()):
-                continue
-            score = -sum(math.log1p(mask.bit_count()) for mask in remaining.values())
-            ranked.append((score, index, remaining))
-        for _, index, remaining in sorted(ranked):
+        for _, index, remaining in self.ranked_candidates(ref, masks):
             if self.owner.states >= self.owner.budget:
                 raise PlacementError('Placement legal-branch budget exhausted', states=self.owner.states)
             self.owner.states += 1
