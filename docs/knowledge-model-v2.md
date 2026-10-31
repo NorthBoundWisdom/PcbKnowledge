@@ -260,3 +260,11 @@ numbering changes never move or resize the cited lands.
 pads have blank numbers, matching native KiCad serialization; geometry, drill,
 count and netlessness remain checked. SMT/THT footprint attributes follow the
 package mount type so native placement export retains assembly identity.
+
+A part may declare an evidence-backed `bootstrap_supplies` topology for an internal
+regulator-and-diode charger. The exact bootstrap input remains `POWER_IN`; its
+sourced nominal ceramic capacitor must connect to the declared switch terminal.
+Expansion qualifies that pin only after ordinary input supply and ground paths
+are established. The same capacitor binding drives decoupling and the unchanged
+local placement rule. Neither the bootstrap nor switch net becomes a board power
+source, and unrelated supply inputs still require ordinary source paths.

@@ -189,6 +189,15 @@ def _validate_checks_and_closure(catalog, intent, parts, used):
 
 def _check_pin_support(ref, part, pin, key, ground, parts, connections, component_nets, add):
     if pin['type'] == 'POWER_IN':
+        from .bootstrap import decoupling
+        try:
+            bootstrap = decoupling(parts, connections, ref, pin['number'])
+        except ValueError:
+            bootstrap = False
+        if bootstrap is not None:
+            add('decoupling:' + ref + ':' + pin['number'], bootstrap,
+                'Floating bootstrap pin has its sourced capacitor to the exact switch reference')
+            return
         rail = connections.get(key)
         caps = [c for c, p in parts.items() if 'capacitor.ceramic' in p['roles']]
         passed = rail is not None and rail not in ground and any(

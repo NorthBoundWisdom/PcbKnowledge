@@ -350,6 +350,21 @@ class _Expansion:
                     if connected & self.powered:
                         self.powered.update(connected)
             changed = before != self.powered
+        bootstrap_pins = set()
+        if any(part.get('bootstrap_supplies') for part in self.parts.values()):
+            from .bootstrap import qualify
+            pin_nets = {key: self.resolved[node] for key, node in self.pin_nodes.items()}
+            try:
+                bootstrap_pins, receipts = qualify(
+                    self.parts, pin_nets, self.powered, self.source_grounds, self.catalog.evidence)
+                for receipt in receipts:
+                    self.intent['checks'].append({
+                        'id': 'bootstrap:' + receipt['component'] + ':' + receipt['pin'],
+                        'result': 'PASS', 'reason': receipt['reason'] + '; topology only'})
+            except ValueError as error:
+                self.intent['checks'].append({'id': 'bootstrap:topology', 'result': 'FAIL',
+                                              'reason': str(error)[:256]})
+                self.refuse('CHECK_FAILED', 'bootstrap:topology', error)
         for ref, part in self.parts.items():
             for pin in part['pins']:
                 if pin['type'] not in ('POWER_IN','GROUND'):
@@ -357,10 +372,12 @@ class _Expansion:
                 node = self.pin_nodes.get((ref,pin['number']))
                 net = self.resolved.get(node)
                 allowed = self.powered if pin['type']=='POWER_IN' else self.source_grounds
-                passed = net in allowed
+                bootstrap = pin['type'] == 'POWER_IN' and (ref, pin['number']) in bootstrap_pins
+                passed = net in allowed or bootstrap
                 identity = 'source:'+ref+':'+pin['number']
                 self.intent['checks'].append({'id':identity, 'result':'PASS' if passed else 'FAIL',
-                                         'reason':'Pin reaches a declared board power source'})
+                                         'reason': ('Source-backed floating bootstrap has powered charger'
+                                                   if bootstrap else 'Pin reaches a declared board power source')})
                 if not passed:
                     self.refuse('CHECK_FAILED', identity, 'Power or ground pin has no board-source path')
 

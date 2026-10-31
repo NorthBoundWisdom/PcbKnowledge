@@ -278,6 +278,67 @@
           "additionalProperties": false
         }
       ]
+    },
+    "bootstrap_supplies": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "properties": {
+          "bootstrap_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "switch_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "supply_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "ground_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "kind": {
+            "const": "FLOATING_BOOTSTRAP_SUPPLY"
+          },
+          "charge_path": {
+            "const": "INTERNAL_REGULATOR_DIODE"
+          },
+          "capacitor_role": {
+            "const": "capacitor.ceramic"
+          },
+          "capacitance_nominal": {
+            "$ref": "quantity.schema.json"
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "evidence.schema.json"
+            }
+          }
+        },
+        "required": [
+          "bootstrap_pin",
+          "switch_pin",
+          "supply_pin",
+          "ground_pin",
+          "kind",
+          "charge_path",
+          "capacitor_role",
+          "capacitance_nominal",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [

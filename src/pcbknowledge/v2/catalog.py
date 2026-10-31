@@ -198,6 +198,8 @@ class Catalog:
                 self._anchors(child)
 
     def _part(self, part):
+        from .bootstrap import validate_part
+        validate_part(part, self.evidence)
         package = self.get(part['package'], 'package')
         if part['mpn'] not in package['scope']['mpns']:
             raise ValueError(f'Part MPN is outside package drawing scope: {part["id"]}')
