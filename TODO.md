@@ -154,6 +154,7 @@ answer here.
 | D96 | Cycle 1 negative brief | N5 requires independent monitoring and 50 mA selective balancing of two series Li-ion cells at 3.0–4.2 V each, starting above 4.10 V and stopping below 4.05 V; external charging is outside this daughterboard. This tests an absent catalog function without substituting single-cell or pack-only monitoring. |
 | D104 | Copper-edge measurement scope | D90 compares exact exported solid SMT pad copper on a shared enabled layer and the same nonempty net. Rectangles and cardinal ovals/circles use exact rational threshold comparisons; drilled, unsupported or missing candidates return typed NOT_CHECKABLE instead of a center-distance fallback. |
 | D105 | BUCK_SW acquisition protocol | D91 uses synchronous PH/VIN differential acquisition at 1 GHz and 5 GS/s, full uncertainty intervals, source PH limits and explicit plateau/peak/time envelopes. The 0.40 V high-side drop and 0.55 V diode plateau allowances are engineering test budgets under D103 conditions; every observation stays NOT_RUN. |
+| D106 | Necessary distance audit | Use exact inscribed-disk lower bounds for center-based PLACE_NEAR only when an explicit KEEPOUT imposes projected courtyard exclusion. Follow the existing checker contract across surfaces, reject proven contradictions and leave unsupported or copper-edge cases unproved. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -747,10 +748,13 @@ windows for G1V1, G1V2 and G5 plus eight G2 DC nodes (D103).
   D105 binds a typed waveform protocol to PH8/GND6/VIN7; all nine G2 rails now have plans,
   with observations NOT_RUN. Source review checked matched TPS5430/SS14 bytes; missing
   protocols, contradictory peaks, inadequate acquisition and exact 10 ns boundaries refuse.
-- [ ] (ethan) Add a read-only `v2 validate` check that fails a `PLACE_NEAR` rule a footprint pair
+- [x] (ethan) Add a read-only `v2 validate` check that fails a `PLACE_NEAR` rule a footprint pair
   cannot meet, using the isolated geometric lower bound. This restores a useful catalog check
   deleted with the pipeline; it computes a bound and places nothing. Negative test: an impossible
   rule fails with both references named.
+  D106 checks exact necessary center-distance bounds under explicit projected KEEPOUT.
+  CLI audit: 32 graphs, 12 checked occurrences, 204 records VALID; contradictory real-catalog
+  mutation refuses with both references. Copper-edge and missing exclusion premises remain unproved.
 - [ ] (ethan) Test `layout check` on real exported boards. Using KiCad and Freerouting as external
   tools, make small original routed boards exercising each constraint kind, with vias, arcs and
   zones as a router really produces them. Report the `NOT_CHECKABLE` rate per kind. D100 refuses

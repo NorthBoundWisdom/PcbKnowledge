@@ -52,6 +52,7 @@ def audit_catalog(catalog, graphs=None, briefs=None):
     """Report orphan IDs; refusal fixtures can still demonstrate used selections."""
     from .expansion import dependency_closure, expand
     from .requirements import validate_package_requirements
+    from .layout_near_bounds import validate_near_bounds
 
     if graphs is None:
         graphs, loaded_briefs = design_inputs(catalog.root)
@@ -66,6 +67,7 @@ def audit_catalog(catalog, graphs=None, briefs=None):
     if any(graph['brief'] not in briefs for graph in graphs):
         raise ValueError('Preserved graph refers to a missing brief')
     reachable = set()
+    near_bounds_checked = 0
     for graph in graphs:
         catalog.structure(graph, 'block-graph.schema.json')
         roots = _selection_roots(catalog, graph)
@@ -74,6 +76,7 @@ def audit_catalog(catalog, graphs=None, briefs=None):
             # This pure projection discovers applied rules/fab dependencies. The
             # synthetic commit is an audit input, never an acceptance receipt.
             intent = expand(catalog, graph, brief, bundle_commit='0' * 40)
+            near_bounds_checked += validate_near_bounds(catalog, intent)
             roots.update(intent['dependencies'])
         reachable.update(dependency_closure(catalog, roots))
     audited = {identity for identity in catalog.records if identity.startswith(AUDITED_KINDS)}
@@ -81,6 +84,7 @@ def audit_catalog(catalog, graphs=None, briefs=None):
     return {
         'status': 'VALID' if not unreachable else 'INVALID',
         'graphs': len(graphs),
+        'near_bounds_checked': near_bounds_checked,
         'audited': len(audited),
         'reachable': sorted(audited & reachable),
         'unreachable': unreachable,

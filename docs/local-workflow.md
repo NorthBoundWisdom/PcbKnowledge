@@ -448,3 +448,19 @@ common copper layer. Exact supported outlines retain selected pin identities,
 layer, distance and limit. Unsupported outlines or absent eligible pairs return a
 typed reason; there is no center or different-net fallback. The C4-to-L1 rule has
 no same-net pair across its series ESR resistors and remains an open owner question.
+
+### Necessary distance audit
+
+`v2 validate` and bundle compilation apply D106 to expanded design graphs. An
+explicit `KEEPOUT` already excludes every other projected authoritative courtyard,
+regardless of copper surface. For a center-based `PLACE_NEAR` pair, the audit uses
+a disk inside each courtyard centered on the actual measurement point, including
+physical pin centers. The sum of radii and exclusion margin is a necessary distance
+lower bound under any rotation. Multiple eligible pads use the smallest radius.
+
+A bound strictly greater than the unchanged limit rejects validation with both
+references and the bound. Equality is not rejected. `near_bounds_checked` counts
+expanded graph/rule occurrences, not unique rules or feasible layouts. No exclusion
+premise, unsupported endpoints and `COPPER_EDGE` produce no proof; they retain their
+normal runtime checks. The audit neither places parts nor establishes joint layout
+feasibility, and does not impose a universal courtyard exclusion where none exists.
