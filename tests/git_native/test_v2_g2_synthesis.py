@@ -116,7 +116,8 @@ class FinalG2SynthesisTests(G2SynthesisTests):
         current = expand(catalog, attempt['graph'], brief, bundle_commit='0' * 40)
         crystal = next(c['ref'] for c in current['components'] if c['part'] == 'part:abracon-abmm2-8-18')
         mutations = ('signal', 'ground', 'check', 'loop', 'unrelated', 'evidence', 'scope_evidence',
-                     'kelvin_mapping', 'kelvin_evidence', 'copper_datum', 'copper_limit')
+                     'kelvin_mapping', 'kelvin_evidence', 'copper_datum', 'copper_limit',
+                     'can_anchor_missing', 'can_anchor_wrong', 'can_anchor_duplicate')
         for mutation in mutations:
             forged = copy.deepcopy(current)
             if mutation in ('signal', 'ground'):
@@ -138,6 +139,14 @@ class FinalG2SynthesisTests(G2SynthesisTests):
                     rule['datum'] = 'ORIGIN_PAD_CENTER'
                 else:
                     rule['max_distance']['value'] += .01
+            elif mutation.startswith('can_anchor_'):
+                anchor = {'source': 'source:st-rm0008', 'page': 185}
+                if mutation == 'can_anchor_missing':
+                    forged['evidence'].remove(anchor)
+                elif mutation == 'can_anchor_wrong':
+                    next(item for item in forged['evidence'] if item == anchor)['page'] = 184
+                else:
+                    forged['evidence'].append(copy.deepcopy(anchor))
             elif mutation == 'kelvin_mapping':
                 rule = next(c for c in forged['layout'] if c['kind'] == 'KELVIN')
                 rule['branches'].reverse()

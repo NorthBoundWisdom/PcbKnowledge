@@ -174,6 +174,24 @@ def _d90_copper_datum(test, expected, catalog):
         test.assertEqual(rule['max_distance']['value'], limit)
         rule['datum'] = 'COPPER_EDGE'
 
+def _can_capability_anchors(test, expected, catalog):
+    _one(test, [item for item in expected['components'] if item['part'] == 'part:st-stm32f103c8t6'])
+    part = catalog.get('part:st-stm32f103c8t6', 'part')
+    anchors = [{'source': 'source:st-stm32f103', 'page': 31},
+               {'source': 'source:st-stm32f103', 'page': 33},
+               {'source': 'source:st-rm0008', 'page': 185}]
+    for number, pin_name, function in (('32', 'PA11', 'CAN_RX'), ('33', 'PA12', 'CAN_TX')):
+        pin = _one(test, [item for item in part['pins'] if item['number'] == number])
+        test.assertEqual((pin['name'], pin['type']), (pin_name, 'BIDIRECTIONAL'))
+        capability = _one(test, [item for item in pin['functions'] if item['name'] == function])
+        test.assertEqual(capability['evidence'], anchors)
+    test.assertIn(anchors[0], expected['evidence'])
+    for anchor in anchors[1:]:
+        test.assertNotIn(anchor, expected['evidence'])
+        expected['evidence'].append(copy.deepcopy(anchor))
+    expected['evidence'].sort(key=lambda anchor: (anchor['source'], anchor['page']))
+
+
 def assert_reviewed_g2_projection(test, original, current, catalog):
     """Compare the complete intent after exactly the named reviewed changes; drop no fields."""
     _part_contract(test, catalog)
@@ -186,5 +204,6 @@ def assert_reviewed_g2_projection(test, original, current, catalog):
     _d70_package_scope(test, expected, catalog)
     _d80_kelvin(test, expected, catalog)
     _d90_copper_datum(test, expected, catalog)
+    _can_capability_anchors(test, expected, catalog)
     expected['bundle_commit'] = current['bundle_commit']
     test.assertEqual(expected, current)

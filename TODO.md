@@ -903,6 +903,7 @@ Cycle 3: T5 reference A2 and synthesis 2/3 meet the existing threshold; T6 remai
 Cycle 4, T7/T8 (Wisdom):
 
 CAN capability facts: independently verified STM32 PA11/32 CAN_RX and PA12/33 CAN_TX add only DS5319 p33 and RM0008 p185 evidence to five existing reference intents; every component, pin, net, check and constraint is unchanged. Canonical hash prefixes: T5 `47a92cd63892` → `3bb338e25cd7`; G1 `55cbaeb975b7` → `4504b6c60304`; G1V1 `d2299e2463da` → `41ae0357637d`; G1V2 `154a27a31d04` → `42436bb2a4ef`; G2 `30d522f03e34` → `cedf35a3c1a9`. Historical synthesis input and receipt hashes remain unchanged. Independent review and 26 affected tests pass; 216 records validate.
+Historical G2-to-current comparison now projects only the two reviewed CAN anchors after checking their exact pin/source mapping; complete-intent equality and historical hashes remain enforced. Fourteen affected tests pass, including missing, wrong and duplicate anchor refusals; successor CI must confirm the repair.
 
 ## Stage 17 — PcbAtlas consumer contract
 
