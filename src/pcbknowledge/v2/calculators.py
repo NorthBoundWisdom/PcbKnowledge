@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 
-from . import calculators_geometry
+from . import calculators_geometry, calculators_envelope
 from . import calculators_analog, calculators_drivers, calculators_power, calculators_protection
 
 
@@ -21,6 +21,7 @@ I2C_RC_RISE_FACTOR = 0.8473
 
 INPUT_UNITS = {
     **calculators_geometry.INPUT_UNITS,
+    **calculators_envelope.INPUT_UNITS,
     'ldo_headroom': {'input_voltage': 'V', 'output_voltage': 'V', 'dropout': 'V',
                      'input_current': 'A', 'series_resistance': 'ohm'},
     'ldo_dissipation': {'input_voltage': 'V', 'output_voltage': 'V', 'output_current': 'A',
@@ -109,6 +110,8 @@ def _input_bounds(name, inputs):
 def _calculate(name, inputs):
     """Return conservative interval outputs; never silently use a typical value."""
     b = _input_bounds(name, inputs)
+    if name in calculators_envelope.INPUT_UNITS:
+        return _calculate_envelope(name, inputs, b)
     if name in calculators_analog.INPUT_UNITS:
         return _calculate_analog(name, inputs, b)
     if name in calculators_drivers.INPUT_UNITS:
@@ -206,6 +209,16 @@ def _gpio_source_conditions(inputs, b):
         raise CalculationError('GPIO supply is outside its strict source-voltage domain')
     if b['source_current_rating'][1] > rating:
         raise CalculationError('GPIO requested source-current rating exceeds its source condition')
+
+
+def _calculate_envelope(name, inputs, b):
+    try:
+        result = _result(name, inputs, calculators_envelope.calculate(name, b))
+    except ValueError as error:
+        raise CalculationError(str(error)) from error
+    for value in result.values():
+        value['note'] = 'Conditional engineering interval; preserve source applicability and operating envelope.'
+    return result
 
 
 def _calculate_drivers(name, inputs, b):

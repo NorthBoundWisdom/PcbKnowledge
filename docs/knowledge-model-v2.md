@@ -303,3 +303,18 @@ ordinary source closure. An older constraint without branches remains valid but
 cannot establish a measured Kelvin result. Source-permitted filters are not
 forbidden by this direct-branch contract; unsupported filter topology remains
 NOT_CHECKABLE in the board checker. No numeric layout limits change.
+
+### Shared operating quantities
+
+Optional brief `parameter_bindings` declare one quantity and at least two exact
+`{function, parameter}` endpoints, each naming a unique function occurrence.
+A bound input is omitted from that function's local `parameters`; screening uses
+the shared declaration. Graph instance inputs must preserve the complete quantity,
+including conditions and provenance. Expansion records and reconstructs the binding
+checks and retains source closure. A mismatched consumer cannot pass A2.
+
+`dac_feedback_injection` and `supervisor_divider_threshold` evaluate declared
+operating intervals with exact rational arithmetic and outward-rounded outputs.
+Component resistance bounds, temperature coefficient (`1/degC`), temperature
+excursion, bias/leakage and usable ranges remain explicit inputs. Model success
+does not establish a manufacturer's applicability outside the cited test domain.

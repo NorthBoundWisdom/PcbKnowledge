@@ -600,6 +600,54 @@
         ],
         "additionalProperties": false
       }
+    },
+    "parameter_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "maxLength": 256
+          },
+          "value": {
+            "$ref": "quantity.schema.json"
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "function": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "parameter": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "function",
+                "parameter"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "value",
+          "endpoints"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [

@@ -222,7 +222,9 @@
               "trace_impedance_microstrip",
               "tps5430_output_ripple",
               "input_protection",
-              "tia_loop_total_capacitance"
+              "tia_loop_total_capacitance",
+              "dac_feedback_injection",
+              "supervisor_divider_threshold"
             ]
           },
           "inputs": {

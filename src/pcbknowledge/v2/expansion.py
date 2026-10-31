@@ -125,6 +125,8 @@ class _Expansion:
         unique(self.graph['connections'], 'net', 'graph net')
         from .electrical_bindings import validate_bindings
         validate_bindings(self.brief)
+        from .parameter_bindings import validate_bindings as validate_parameters
+        validate_parameters(self.brief, self.catalog)
 
     def check_power_requirements(self):
         for group in ('sources','rails'):
@@ -171,7 +173,8 @@ class _Expansion:
                 self.refuse('UNKNOWN_INPUT', 'functions.'+function['id'], 'Function category is not specified')
             elif function['category'] != block['category']:
                 self.refuse('CHECK_FAILED', iid+'.requirements', 'Block category does not satisfy the claimed function')
-            for name, expected in function['parameters'].items():
+            from .parameter_bindings import parameters_for
+            for name, expected in parameters_for(self.brief, function).items():
                 supplied = instance['parameters'].get(name, {})
                 if _numeric(expected) != _numeric(supplied):
                     self.refuse(
@@ -485,6 +488,8 @@ class _Expansion:
             self.validate_graph()
             self.check_power_requirements()
             self.resolve_instances()
+            from .parameter_bindings import check_bindings as check_parameters
+            check_parameters(self)
             self.unite_nets()
             from .gpio import configure_pins
             configure_pins(self)

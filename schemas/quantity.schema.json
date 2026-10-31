@@ -98,7 +98,9 @@
         "tps5430_output_ripple",
         "input_protection",
         "geometry_affine",
-        "tia_loop_total_capacitance"
+        "tia_loop_total_capacitance",
+        "dac_feedback_injection",
+        "supervisor_divider_threshold"
       ]
     },
     "inputs": {

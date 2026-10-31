@@ -13,7 +13,8 @@ def numeric(value):
 
 
 def function_parameters(brief, function):
-    parameters = dict(function['parameters'])
+    from .parameter_bindings import parameters_for
+    parameters = parameters_for(brief, function)
     for group in ('sources', 'rails'):
         for supply in brief['power'][group]:
             if supply.get('function') != function['id']:
@@ -136,6 +137,12 @@ def assess_brief(catalog, brief):
         validate_bindings(brief)
     except ValueError as error:
         results.append(refusal('INVALID_REFERENCE', 'electrical_bindings', str(error)))
+    from .parameter_bindings import validate_bindings as validate_parameters
+    try:
+        validate_parameters(brief, catalog)
+    except ValueError as error:
+        results.append(refusal('INVALID_REFERENCE', 'parameter_bindings', str(error)))
+        return results
     function_ids = [function['id'] for function in brief['functions']]
     if len(set(function_ids)) != len(function_ids):
         results.append(refusal('CHECK_FAILED', 'functions', 'Duplicate function identities'))
