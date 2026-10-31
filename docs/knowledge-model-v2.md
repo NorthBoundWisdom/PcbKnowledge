@@ -268,3 +268,25 @@ Expansion qualifies that pin only after ordinary input supply and ground paths
 are established. The same capacitor binding drives decoupling and the unchanged
 local placement rule. Neither the bootstrap nor switch net becomes a board power
 source, and unrelated supply inputs still require ordinary source paths.
+
+### Independent mask and paste openings
+
+Packages may bind `layer_apertures` to an existing, uniquely numbered physical copper pad.
+Each supplied `mask` or `paste` array replaces that pad's implicit opening on the front
+layer; geometry is expressed as exact quantities with explicit basis in the bound pad's
+local coordinates. Supported shapes are RECT, ROUND and OVAL with orthogonal rotations.
+Independent mask currently requires an SMD pad; paste-only through-hole bindings preserve
+both existing mask sides. Empty patterns, ambiguous physical bindings, overlapping
+same-layer bounding boxes and scalar paste-margin conflicts are refused. Existing scalar
+exposed-pad paste margins remain supported unchanged.
+
+Derived apertures have no electrical identity, net, drill or copper. KiCad export uses
+empty-number, netless, layer-only pads. Board identity matches these openings as a separate
+exact multiset, including their rigid front/back placement; added, missing or changed
+openings fail identity. Inherited nonzero mask or paste settings that would change these
+explicit openings are unsupported. Electrical pad counts and router copper are unchanged.
+
+Geometry support does not establish assembly capability. In particular, pin-in-paste
+process and stencil qualification remain prerequisites before a process-constrained
+package or design can reach manufacturing acceptance. The current aperture contract does
+not supply that qualification or authorize a manual-solder substitution.

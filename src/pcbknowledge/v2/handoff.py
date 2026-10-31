@@ -56,7 +56,7 @@ def _footprint(intent, component, catalog, position, connections):
                  ['property', 'Reference', component['ref'], ['at', '0', '0'], ['layer', 'F.Fab'],
                   ['effects', ['font', ['size', '1', '1'], ['thickness', '0.15']]]]])
     for node in tree:
-        if isinstance(node, list) and node[0] == 'pad':
+        if isinstance(node, list) and node[0] == 'pad' and node[1]:
             key = component['ref'], node[1]
             if key in connections:
                 code, name = connections[key]

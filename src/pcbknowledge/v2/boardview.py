@@ -140,11 +140,18 @@ def _footprint(node, nets, unsupported, paste, zero_overrides):
     origin = point(at)
     angle = number(at[2]) if len(at) > 2 else 0.0
     paste = _paste_settings(node, paste, legacy_ratio=True, zero_overrides=zero_overrides)
-    pads = {}
+    from .apertures import separate_aperture
+    pads, apertures = {}, []
     for pad in children(node, 'pad'):
-        pads.setdefault(pad[1], []).append(_pad(pad, origin, angle, nets, paste, zero_overrides))
+        parsed = _pad(pad, origin, angle, nets, paste, zero_overrides)
+        if separate_aperture(pad, parsed):
+            apertures.append(parsed)
+            continue
+        pads.setdefault(pad[1], []).append(parsed)
         if pad[3] not in ('rect', 'roundrect', 'circle', 'oval', 'trapezoid'):
             unsupported.append(f'{ref}: unsupported pad shape {pad[3]}')
+    if apertures and field(node, 'solder_mask_margin', ['0']) != ['0']:
+        raise ValueError('Inherited mask margin is unsupported for explicit apertures')
     courtyard = []
     edges = []
     for item in node[1:]:
@@ -163,7 +170,7 @@ def _footprint(node, nets, unsupported, paste, zero_overrides):
     if courtyard and not courtyard_closed:
         unsupported.append(f'{ref}: open or ambiguous courtyard')
     return ref, {'library': node[1], 'at': origin, 'rotation': angle, 'layer': field(node, 'layer', [''])[0],
-                 'pads': pads, 'bounds': bounds(courtyard), 'courtyard': courtyard,
+                 'pads': pads, 'apertures': apertures, 'bounds': bounds(courtyard), 'courtyard': courtyard,
                  'courtyard_closed': courtyard_closed}
 
 
@@ -284,6 +291,8 @@ def board_from_text(text):
             ref, footprint = _footprint(node, nets, unsupported, paste, zero_overrides)
             if ref in footprints:
                 raise ValueError('Duplicate footprint reference')
+            if footprint['apertures'] and field(setup, 'pad_to_mask_clearance', ['0']) != ['0']:
+                raise ValueError('Board mask margin is unsupported for explicit apertures')
             footprints[ref] = footprint
         return {'footprints': footprints, 'nets': nets, 'outline': _outline(root, unsupported),
                 'unsupported': unsupported, **_routing(root, nets, unsupported), **_board_requirements(root)}

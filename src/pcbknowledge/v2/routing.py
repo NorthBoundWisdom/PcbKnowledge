@@ -36,6 +36,9 @@ def _canonical_geometry(value, key=None):
         return round(value, 6)
     if isinstance(value, list):
         values = [_canonical_geometry(item) for item in value]
+        if key == 'apertures':
+            import json
+            return sorted(values, key=lambda item: json.dumps(item, sort_keys=True))
         return sorted(values) if key == 'layers' else values
     if isinstance(value, dict):
         return {name: _canonical_geometry(item, name) for name, item in value.items()}

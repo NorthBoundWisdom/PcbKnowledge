@@ -48,6 +48,9 @@ def identity_check(board, intent, catalog):
         actual = Counter({number: len(pads) for number, pads in footprint['pads'].items()})
         if expected != actual:
             return finding('IDENTITY', 'FAIL', 'Physical pad identities or multiplicities differ: ' + ref)
+        from .apertures import aperture_identity
+        if not aperture_identity(footprint, derived):
+            return finding('IDENTITY', 'FAIL', 'Layer aperture geometry differs: ' + ref)
         result, reason = pad_geometry_result(footprint, derived)
         if result != 'PASS':
             return finding('IDENTITY', result, reason + ': ' + ref)

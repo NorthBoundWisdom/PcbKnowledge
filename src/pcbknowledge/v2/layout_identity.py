@@ -21,6 +21,9 @@ def expected_geometry(pad, footprint):
     layers = {side + suffix for suffix in ('.Cu', '.Paste', '.Mask')}
     if pad['kind'] != 'SMD':
         layers = {'*.Cu', '*.Mask'}
+    for layer in pad.get('independent_layers', []):
+        layers.discard(side + '.' + layer)
+        layers.discard('*.' + layer)
     return {'at': transform(local, footprint['at'], footprint['rotation']),
             'size': [pad['width'], pad['height']], 'rotation': rotation, 'drill_size': drill,
             'layers': layers, 'paste_margin': pad.get('paste_margin', 0.0),

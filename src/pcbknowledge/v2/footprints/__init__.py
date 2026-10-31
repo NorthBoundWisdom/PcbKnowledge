@@ -11,6 +11,8 @@ import json
 import math
 from pathlib import Path
 
+from ..apertures import derive_apertures, export_apertures
+
 # Toe, heel, and side extensions beyond the rectangular lead contact.
 FILLETS = {
     'COMPACT': (0.15, 0.05, 0.025),
@@ -377,6 +379,9 @@ def derive_footprint(package):
                      max_x=_round(max(cx + bx, *(r[2] for r in rectangles)) + margin),
                      max_y=_round(max(cy + by, *(r[3] for r in rectangles)) + margin))
     derived = {'pads': pads, 'courtyard': courtyard, 'pin1': package['pin1']}
+    apertures = derive_apertures(package, pads)
+    if apertures:
+        derived['apertures'] = apertures
     derived['pin1_marker'] = pin1_marker(derived)
     return derived
 
@@ -458,6 +463,8 @@ def export_kicad(package):
         kind = {'SMD': 'smd', 'THROUGH_HOLE': 'thru_hole', 'MECHANICAL': 'np_thru_hole'}[pad['kind']]
         shape = {'RECT': 'rect', 'ROUND': 'circle', 'OVAL': 'oval'}[pad['shape']]
         layers = '"F.Cu" "F.Paste" "F.Mask"' if kind == 'smd' else '"*.Cu" "*.Mask"'
+        for layer in pad.get('independent_layers', []):
+            layers = layers.replace(f'"F.{layer}"', '').replace(f'"*.{layer}"', '').strip()
         drill = f' (drill {number(pad["drill"])})' if 'drill' in pad else ''
         if 'drill_width' in pad:
             drill = f' (drill oval {number(pad["drill_width"])} {number(pad["drill_height"])})'
@@ -467,6 +474,7 @@ def export_kicad(package):
             f'(at {number(pad["x"])} {number(pad["y"])} {number(pad["rotation"])}) '
             f'(size {number(pad["width"])} {number(pad["height"])}){drill} (layers {layers}){paste})'
         )
+    lines.extend(export_apertures(derived, number))
     lines.append(')')
     return '\n'.join(lines) + '\n'
 
