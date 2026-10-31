@@ -301,6 +301,9 @@ class Catalog:
         from .calculators import validate_inputs
         for check in block['checks']:
             validate_inputs(check['calculator'], check['inputs'], allow_parameters=True)
+            limit = check['require']['limit']
+            if set(limit) == {'parameter'} and limit['parameter'] not in block['parameters']:
+                raise ValueError('Dangling calculator limit parameter')
             for value in check['inputs'].values():
                 if set(value) == {'parameter'} and value['parameter'] not in block['parameters']:
                     raise ValueError('Dangling calculator block parameter')

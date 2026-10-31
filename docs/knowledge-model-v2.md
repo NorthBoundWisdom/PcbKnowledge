@@ -318,3 +318,20 @@ operating intervals with exact rational arithmetic and outward-rounded outputs.
 Component resistance bounds, temperature coefficient (`1/degC`), temperature
 excursion, bias/leakage and usable ranges remain explicit inputs. Model success
 does not establish a manufacturer's applicability outside the cited test domain.
+
+`control_rail_budget` binds actual preload resistors and individual load allocations.
+`monitor_input_load` includes signed input bias and bus loading.
+`fccm_buck_with_local_loads` uses a signed FCCM model, explicit effective inductance
+and capacitance bounds, and sustained reverse current in the discharge equilibrium.
+An unreachable discharge target refuses rather than using a zero-injection RC time.
+
+`output_shunt_budget` checks the actual shunt's temperature-adjusted resistance,
+sense voltage, power and output headroom. Its `attainable_voltage` is a continuously
+reachable control range, not an ordinary tolerance interval; a preceding feedback
+check must establish that range. `monitored_voltage` must cover downstream bus
+loading throughout operation. Shared input bindings connect those checks.
+
+A calculator requirement may use an exact `{parameter: name}` limit instead of a
+literal quantity. The parameter must be declared by the block; current values are
+resolved and rechecked during expansion and intent replay. Missing, unknown or
+wrong-unit limits cannot pass.

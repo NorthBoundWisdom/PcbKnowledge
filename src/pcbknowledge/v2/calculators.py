@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 
-from . import calculators_geometry, calculators_envelope
+from . import calculators_geometry, calculators_envelope, calculators_envelope_power, calculators_output
 from . import calculators_analog, calculators_drivers, calculators_power, calculators_protection
 
 
@@ -19,9 +19,15 @@ AREA_EXPONENT = 0.725
 MM_PER_MIL = 0.0254
 I2C_RC_RISE_FACTOR = 0.8473
 
+ENVELOPE_MODULES = {name: module for module in (calculators_envelope, calculators_envelope_power, calculators_output)
+                    for name in module.INPUT_UNITS}
+
+
 INPUT_UNITS = {
     **calculators_geometry.INPUT_UNITS,
     **calculators_envelope.INPUT_UNITS,
+    **calculators_envelope_power.INPUT_UNITS,
+    **calculators_output.INPUT_UNITS,
     'ldo_headroom': {'input_voltage': 'V', 'output_voltage': 'V', 'dropout': 'V',
                      'input_current': 'A', 'series_resistance': 'ohm'},
     'ldo_dissipation': {'input_voltage': 'V', 'output_voltage': 'V', 'output_current': 'A',
@@ -110,8 +116,8 @@ def _input_bounds(name, inputs):
 def _calculate(name, inputs):
     """Return conservative interval outputs; never silently use a typical value."""
     b = _input_bounds(name, inputs)
-    if name in calculators_envelope.INPUT_UNITS:
-        return _calculate_envelope(name, inputs, b)
+    if name in ENVELOPE_MODULES:
+        return _calculate_envelope(name, inputs, b, ENVELOPE_MODULES[name])
     if name in calculators_analog.INPUT_UNITS:
         return _calculate_analog(name, inputs, b)
     if name in calculators_drivers.INPUT_UNITS:
@@ -211,9 +217,9 @@ def _gpio_source_conditions(inputs, b):
         raise CalculationError('GPIO requested source-current rating exceeds its source condition')
 
 
-def _calculate_envelope(name, inputs, b):
+def _calculate_envelope(name, inputs, b, module=calculators_envelope):
     try:
-        result = _result(name, inputs, calculators_envelope.calculate(name, b))
+        result = _result(name, inputs, module.calculate(name, b))
     except ValueError as error:
         raise CalculationError(str(error)) from error
     for value in result.values():
@@ -296,7 +302,7 @@ def evaluate_check(check, parameters, components=None):
         requirement = check['require']
         value = outputs[requirement['output']]
         low, high = bounds(value, value['unit'], requirement['output'])
-        limit_low, limit_high = bounds(requirement['limit'], value['unit'], 'limit')
+        limit_low, limit_high = bounds(resolve(requirement['limit']), value['unit'], 'limit')
         if requirement['operator'] == 'LE':
             passed = high <= limit_low
         elif requirement['operator'] == 'GE':

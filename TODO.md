@@ -807,7 +807,11 @@ floating-point cancellation false PASS and the temperature-coefficient unit. T1
 remains REFUSED pending application/state checks and independently reviewed records.
 
 - [ ] (wisdom) Typed driven open-drain clamp validation with a negative test.
+Clamp blocker: TPS3700 has no maximum propagation bound for the 3.47 us brownout margin. Independent VIN-fed candidates lack a complete startup/POR proof (SGM8754) or start high-impedance (TS3121P); after two approaches, park qualification and continue the remaining T1 items.
+
 - [ ] (wisdom) Production operating-envelope and local-load calculator bindings.
+Calculator foundation: signed FCCM/local loads, preload budgets, reverse-current discharge, shunt headroom and live parameter limits pass 78 affected tests; 202 records and all seven reference hashes remain valid. Application bindings and clamp qualification are separate pending work.
+
 - [ ] (wisdom) Inductor underbody routing exclusion as a typed constraint with `layout check` support.
 - [ ] (wisdom) Independent verification and promotion of all T1 records and blocks to `AGENT_VERIFIED`.
 - [ ] (wisdom) Three fresh pinned synthesis attempts, then record T1 at A2.

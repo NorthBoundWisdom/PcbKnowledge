@@ -100,7 +100,11 @@
         "geometry_affine",
         "tia_loop_total_capacitance",
         "dac_feedback_injection",
-        "supervisor_divider_threshold"
+        "supervisor_divider_threshold",
+        "monitor_input_load",
+        "control_rail_budget",
+        "fccm_buck_with_local_loads",
+        "output_shunt_budget"
       ]
     },
     "inputs": {
