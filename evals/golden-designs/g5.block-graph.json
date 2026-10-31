@@ -561,5 +561,40 @@
     "sensitive_nets"
   ],
   "schema": "pcbknowledge.block-graph.v2",
-  "status": "DRAFT"
+  "status": "DRAFT",
+  "bringup": {
+    "prerequisites": [
+      "Measure the external supply and filtered analog rail before probing VREF. Verify the declared input voltage and reference-load bounds independently.",
+      "Check VREF independently after settling, including ADC and analog loads; absence of oscillation and probe loading must be checked. This window is an engineering test decision.",
+      "D103: measure the combined load of both thermistor divider branches, ADC input and probes; the total reference load must stay at or below 0.5 mA, not 0.5 mA per channel.",
+      "Record meter accuracy and probe uncertainty. The complete measurement uncertainty interval must lie within each test window; retain NOT_RUN until operating conditions and measurements are recorded."
+    ],
+    "rails": [
+      {
+        "at": "reference_U1.pin:1",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "input_voltage_max": {
+              "unit": "V",
+              "value": 3.4
+            },
+            "input_voltage_min": {
+              "unit": "V",
+              "value": 3.1994
+            },
+            "regulator_load_max": {
+              "unit": "A",
+              "value": 0.0005
+            }
+          },
+          "max": 2.65,
+          "min": 2.35,
+          "note": "D103 uses the matching D55/D73 TL431 circuit and operating envelope as an independent settled-DC test window.",
+          "unit": "V"
+        },
+        "reference_at": "reference_U1.pin:3"
+      }
+    ]
+  }
 }

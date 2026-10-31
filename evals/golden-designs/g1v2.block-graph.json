@@ -1,5 +1,224 @@
 {
   "brief": "G1V2",
+  "bringup": {
+    "prerequisites": [
+      "D103 conditional steady-state DC engineering test envelope, applying D67 to the actual selected parts and variant topology. Establish every numeric condition by measurement before interpreting a voltage window; unestablished conditions remain NOT_RUN.",
+      "Set ambient to 23 degC. Establish regulator junction temperature between 0 and 100 degC by a documented thermal measurement/model; ambient alone does not establish junction temperature. Stop on abnormal heating, PTC trip, or unstable readings.",
+      "Measure regulator total output load between 10 and 150 mA, including CH340C, its interface activity, all local loads, the monitor and headers; USB input current at most 160 mA and analog branch current at most 10 mA. The CH340C branch allocation is 20 mA within, not additional to, 150 mA. Below 10 mA, this test envelope is NOT_CHECKABLE.",
+      "Measure USB connector voltage between 4.75 and 5.25 V. Verify actual regulator input minus actual regulator output is at least 1.0 V throughout the steady-state test.",
+      "Establish actual operating PTC resistance at most 0.7 ohm, shunt resistance at most 0.101 ohm and analog series resistance at most 10.1 ohm. Include self-heating and temperature coefficient or measure operating voltage drop/current directly; the source resistance conditions are reference-temperature conditions.",
+      "Measure each separately modeled distribution segment drop at most 0.010 V: USB-to-regulator excluding PTC, regulator-to-logger excluding shunt, and logger-to-VDDA excluding the analog resistor. Probe source and remote load ends; do not assume zero copper drop.",
+      "Keep absolute VDD-to-VDDA difference at most 0.300 V during power-up and operation. Also verify steady-state logger-to-VDDA drop at most 0.120 V. Record startup and transient checks separately from these steady-state windows.",
+      "Record meter accuracy, probe/contact uncertainty and operating conditions. Pass only if the full measurement uncertainty interval lies inside the acceptance interval. Boundary overlap is inconclusive and requires retest; do not widen windows automatically.",
+      "Independently measure every listed rail window; passing one upstream window does not establish downstream compliance. In particular, an accepted regulator reading of 3.18 V does not imply the logger is at least 3.16 V.",
+      "Verify stable regulator operation and source test conditions: effective input capacitance at least 1 uF and output capacitance/ESR within source page 7 stability limits over bias and temperature. The source table header uses 4.7 uF output capacitance. Confirm settled DC with no oscillation. Each window is an independently measured engineering acceptance interval using separate accuracy, line and load limits for planning.",
+      "Verify CH340C VCC and V3 are joined in the selected external 3.3 V configuration. Independently measure both bridge_U1 pins 16 and 4 relative to pin 1 within the recorded 3.1-3.6 V operating range, including local distribution drop, and measure the complete branch current at most 20 mA. The source current table is at 25 degC and 3.3 V; measure the 20 mA engineering allocation directly at this 23 degC test condition rather than extrapolating the source-current table."
+    ],
+    "rails": [
+      {
+        "at": "protection_F1.pin:1",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 23
+            },
+            "input_current_max": {
+              "unit": "A",
+              "value": 0.16
+            }
+          },
+          "max": 5.25,
+          "min": 4.75,
+          "note": "D103 independently measured steady-state engineering test window for G1V2; establish all shared and numeric operating prerequisites.",
+          "unit": "V"
+        },
+        "reference_at": "ldo_U1.pin:1",
+        "supporting_evidence": []
+      },
+      {
+        "at": "ldo_U1.pin:3",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 23
+            },
+            "input_current_max": {
+              "unit": "A",
+              "value": 0.16
+            },
+            "ptc_resistance_max": {
+              "unit": "ohm",
+              "value": 0.7
+            },
+            "segment_drop_max": {
+              "unit": "V",
+              "value": 0.01
+            }
+          },
+          "max": 5.25,
+          "min": 4.62,
+          "note": "D103 independently measured steady-state engineering test window for G1V2; establish all shared and numeric operating prerequisites.",
+          "unit": "V"
+        },
+        "reference_at": "ldo_U1.pin:1",
+        "supporting_evidence": [
+          {
+            "page": 2,
+            "source": "source:eaton-pts1206"
+          }
+        ]
+      },
+      {
+        "at": "ldo_U1.pin:2",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 23
+            },
+            "TJ_max": {
+              "unit": "degC",
+              "value": 100
+            },
+            "TJ_min": {
+              "unit": "degC",
+              "value": 0
+            },
+            "regulator_headroom_min": {
+              "unit": "V",
+              "value": 1
+            },
+            "regulator_load_max": {
+              "unit": "A",
+              "value": 0.15
+            },
+            "regulator_load_min": {
+              "unit": "A",
+              "value": 0.01
+            }
+          },
+          "max": 3.42,
+          "min": 3.18,
+          "note": "D103 independently measured steady-state engineering test window for G1V2; establish all shared and numeric operating prerequisites.",
+          "unit": "V"
+        },
+        "reference_at": "ldo_U1.pin:1",
+        "supporting_evidence": [
+          {
+            "page": 6,
+            "source": "source:st-ldl1117"
+          },
+          {
+            "page": 7,
+            "source": "source:st-ldl1117"
+          }
+        ]
+      },
+      {
+        "at": "monitor_R1.pin:2",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 23
+            },
+            "regulator_load_max": {
+              "unit": "A",
+              "value": 0.15
+            },
+            "segment_drop_max": {
+              "unit": "V",
+              "value": 0.01
+            },
+            "shunt_resistance_max": {
+              "unit": "ohm",
+              "value": 0.101
+            }
+          },
+          "max": 3.42,
+          "min": 3.16,
+          "note": "D103 independently measured steady-state engineering test window for G1V2; establish all shared and numeric operating prerequisites.",
+          "unit": "V"
+        },
+        "reference_at": "ldo_U1.pin:1",
+        "supporting_evidence": [
+          {
+            "page": 6,
+            "source": "source:st-ldl1117"
+          },
+          {
+            "page": 1,
+            "source": "source:yageo-rl1206fr-070r1l"
+          },
+          {
+            "page": 9,
+            "source": "source:wch-ch340-v3d"
+          }
+        ]
+      },
+      {
+        "at": "mcu_C5.pin:1",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 23
+            },
+            "analog_current_max": {
+              "unit": "A",
+              "value": 0.01
+            },
+            "analog_drop_max": {
+              "unit": "V",
+              "value": 0.12
+            },
+            "analog_resistance_max": {
+              "unit": "ohm",
+              "value": 10.1
+            },
+            "segment_drop_max": {
+              "unit": "V",
+              "value": 0.01
+            },
+            "supply_difference_max": {
+              "unit": "V",
+              "value": 0.3
+            }
+          },
+          "max": 3.42,
+          "min": 3.04,
+          "note": "D103 independently measured steady-state engineering test window for G1V2; establish all shared and numeric operating prerequisites.",
+          "unit": "V"
+        },
+        "reference_at": "ldo_U1.pin:1",
+        "supporting_evidence": [
+          {
+            "page": 6,
+            "source": "source:st-ldl1117"
+          },
+          {
+            "page": 1,
+            "source": "source:yageo-rl1206fr-070r1l"
+          },
+          {
+            "page": 1,
+            "source": "source:yageo-rc0603fr-0710rl"
+          },
+          {
+            "page": 38,
+            "source": "source:st-stm32f103"
+          }
+        ]
+      }
+    ]
+  },
   "connections": [
     {
       "endpoints": [

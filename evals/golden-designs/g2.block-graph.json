@@ -1,5 +1,354 @@
 {
   "brief": "G2",
+  "bringup": {
+    "prerequisites": [
+      "D103 conditional steady-state DC plan for G2. Every hardware reading and prerequisite remains NOT_RUN until measured; establish each listed condition independently.",
+      "Use D34/D35 limits: total input current at most 500 mA, logic load at most 150 mA and each of three external loads at most 100 mA. Verify total current including converter losses; the sum of load nameplates is not an input-current measurement.",
+      "Set ambient to 40 degC per D45. Establish each device junction and lead temperature against its existing part and model limits, including the MCU lower ceiling. Ambient alone does not establish junction temperature. Stop on abnormal heating, tripped protection, oscillation or unstable readings.",
+      "Measure operating fuse, diode and shunt drops and both additional distribution losses. The D50 allocations and D41 hot-resistance factor are engineering models to check in this application, not measurements.",
+      "Use safe current-limited loads tolerating the protected supply envelope; external inductance is at most 100 mH. Initialize PA0, PA1 and PA9 LOW before output mode per D46, then deliberately establish the requested continuous ON state. Keep switching events and flyback outside the DC measurement interval.",
+      "Verify stable regulator operation and the actual capacitor, ESR, thermal and feedback-network conditions used by D49-D51. Measure each voltage window independently rather than deriving downstream compliance from an upstream pass.",
+      "Record instrument accuracy, probe/contact offsets, temperature and operating conditions. Pass only when the complete measurement uncertainty interval is inside the acceptance interval; boundary overlap requires retest, never automatic widening.",
+      "BUCK_SW at buck_U1.pin:8 relative to buck_U1.pin:6 is a switching waveform, not a steady DC rail. Its waveform acquisition, time-dependent bounds and overshoot criteria are undeclared, so it remains UNKNOWN. A DMM average or one plateau cannot establish its voltage envelope or complete range coverage.",
+      "ON-state relay and MOSFET windows do not prove controllability. Perform the separate OFF tests and record any stuck-low return or load that remains energized as a functional failure."
+    ],
+    "rails": [
+      {
+        "at": "input_J1.pin:1",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "input_current_max": {
+              "unit": "A",
+              "value": 0.5
+            }
+          },
+          "max": 12,
+          "min": 7.02,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Use the controlled 7.02-12 V test input to reserve 20 mV for the two downstream distribution segments. This test subset does not change the D34 7-12 V design input requirement."
+        ],
+        "reference_at": "input_J1.pin:2",
+        "supporting_evidence": []
+      },
+      {
+        "at": "protection_D1.pin:1",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "diode_drop_max": {
+              "unit": "V",
+              "value": 0.6
+            },
+            "fuse_resistance_max": {
+              "unit": "ohm",
+              "value": 0.156
+            },
+            "input_current_max": {
+              "unit": "A",
+              "value": 0.5
+            },
+            "segment_drop_max": {
+              "unit": "V",
+              "value": 0.01
+            }
+          },
+          "max": 12,
+          "min": 6.332,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Measure the post-diode rail directly. The graph protection output_voltage declaration describes the upstream adapter; it is not this measured rail window.",
+          "Establish the D50 operating diode drop and fuse resistance by measurement, including self-heating. Separately measure input-to-protected distribution loss excluding fuse and diode at no more than 10 mV.",
+          "The protected-rail lower budget is 7.02 - 0.6 - 0.5*0.156 - 0.010 = 6.332 V."
+        ],
+        "reference_at": "protection_C1.pin:2",
+        "supporting_evidence": [
+          {
+            "page": 2,
+            "source": "source:taiwansemi-ss14"
+          },
+          {
+            "page": 3,
+            "source": "source:littelfuse-451-453"
+          }
+        ]
+      },
+      {
+        "at": "buck_U1.pin:7",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "input_current_max": {
+              "unit": "A",
+              "value": 0.5
+            },
+            "segment_drop_max": {
+              "unit": "V",
+              "value": 0.01
+            },
+            "shunt_resistance_max": {
+              "unit": "ohm",
+              "value": 0.101
+            }
+          },
+          "max": 12,
+          "min": 6.2715,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Measure the buck VIN endpoint independently. Establish working shunt resistance at most 0.101 ohm and protected-to-load distribution loss excluding shunt at most 10 mV.",
+          "The controlled lower-bound budget is 7.02 - 0.6 - 0.5*0.156 - 0.010 - 0.5*0.101 - 0.010 = 6.2715 V; do not infer a pass from upstream measurements alone."
+        ],
+        "reference_at": "buck_U1.pin:6",
+        "supporting_evidence": [
+          {
+            "page": 1,
+            "source": "source:yageo-rl1206fr-070r1l"
+          }
+        ]
+      },
+      {
+        "at": "buck_L1.pin:2",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "output_ripple_max": {
+              "unit": "V",
+              "value": 0.05
+            },
+            "regulator_load_max": {
+              "unit": "A",
+              "value": 0.15
+            }
+          },
+          "max": 3.37,
+          "min": 3.17,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "This independent acceptance window lies inside the selected feedback-network interval 3.1658112750050518-3.379200164914451 V; do not widen it from a nominal 3.3 V declaration.",
+          "Measure settled DC and separately verify no oscillation and ripple no greater than 50 mV peak-to-peak. Lower loads may enter DCM; the full-load analytical ripple result alone does not establish measured lower-load behavior."
+        ],
+        "reference_at": "buck_C4.pin:2",
+        "supporting_evidence": [
+          {
+            "page": 5,
+            "source": "source:ti-tps5430"
+          }
+        ]
+      },
+      {
+        "at": "mcu_U1.pin:9",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "analog_current_max": {
+              "unit": "A",
+              "value": 0.01
+            },
+            "analog_drop_max": {
+              "unit": "V",
+              "value": 0.12
+            },
+            "analog_resistance_max": {
+              "unit": "ohm",
+              "value": 10.1
+            },
+            "segment_drop_max": {
+              "unit": "V",
+              "value": 0.01
+            },
+            "supply_difference_max": {
+              "unit": "V",
+              "value": 0.3
+            }
+          },
+          "max": 3.37,
+          "min": 3.05,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Measure VDDA against local VSSA. Independently establish logic-to-VDDA settled drop at most 0.120 V, analog load at most 10 mA, operating resistor at most 10.1 ohm and additional distribution loss at most 10 mV.",
+          "Verify absolute VDD-to-VDDA difference at most 0.300 V during startup and operation; steady-state measurements alone do not establish this transient condition."
+        ],
+        "reference_at": "mcu_U1.pin:8",
+        "supporting_evidence": [
+          {
+            "page": 38,
+            "source": "source:st-stm32f103"
+          },
+          {
+            "page": 1,
+            "source": "source:yageo-rc0603fr-0710rl"
+          }
+        ]
+      },
+      {
+        "at": "relay_U1.pin:16",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "TJ_max": {
+              "unit": "degC",
+              "value": 125
+            },
+            "collector_current_max": {
+              "unit": "A",
+              "value": 0.1
+            },
+            "duty_cycle": {
+              "unit": "1",
+              "value": 1
+            },
+            "input_high_min": {
+              "unit": "V",
+              "value": 2.7
+            }
+          },
+          "max": 2,
+          "min": 0,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Hold both relay channels continuously ON with each external load at no more than 100 mA and actual driver input at least 2.7 V. Wait for inductive current and voltage to settle before measuring collector-to-emitter voltage.",
+          "Use the existing D43 2 V collector-drop engineering model. This window does not apply to OFF, PWM, switching edges or flyback; do not substitute the source 1.2 V saturation test without establishing its 250 uA input-current condition.",
+          "Separately command OFF and verify load de-energization and return voltage recovery toward the load supply. An output remaining near ground while commanded OFF fails the functional check even if its ON reading met this window."
+        ],
+        "reference_at": "relay_U1.pin:8",
+        "supporting_evidence": [
+          {
+            "page": 6,
+            "source": "source:ti-uln2003a"
+          }
+        ]
+      },
+      {
+        "at": "relay_U1.pin:15",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "TJ_max": {
+              "unit": "degC",
+              "value": 125
+            },
+            "collector_current_max": {
+              "unit": "A",
+              "value": 0.1
+            },
+            "duty_cycle": {
+              "unit": "1",
+              "value": 1
+            },
+            "input_high_min": {
+              "unit": "V",
+              "value": 2.7
+            }
+          },
+          "max": 2,
+          "min": 0,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Hold both relay channels continuously ON with each external load at no more than 100 mA and actual driver input at least 2.7 V. Wait for inductive current and voltage to settle before measuring collector-to-emitter voltage.",
+          "Use the existing D43 2 V collector-drop engineering model. This window does not apply to OFF, PWM, switching edges or flyback; do not substitute the source 1.2 V saturation test without establishing its 250 uA input-current condition.",
+          "Separately command OFF and verify load de-energization and return voltage recovery toward the load supply. An output remaining near ground while commanded OFF fails the functional check even if its ON reading met this window."
+        ],
+        "reference_at": "relay_U1.pin:8",
+        "supporting_evidence": [
+          {
+            "page": 6,
+            "source": "source:ti-uln2003a"
+          }
+        ]
+      },
+      {
+        "at": "switch_Q1.pin:3",
+        "expected_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {
+            "TA": {
+              "unit": "degC",
+              "value": 40
+            },
+            "TJ_max": {
+              "unit": "degC",
+              "value": 125
+            },
+            "drain_current_max": {
+              "unit": "A",
+              "value": 0.1
+            },
+            "duty_cycle": {
+              "unit": "1",
+              "value": 1
+            },
+            "gate_voltage_min": {
+              "unit": "V",
+              "value": 2.5
+            },
+            "on_resistance_model_max": {
+              "unit": "ohm",
+              "value": 0.1995
+            }
+          },
+          "max": 0.02,
+          "min": 0,
+          "note": "D103 independently measured conditional DC acceptance window using the existing G2 operating models; establish shared and row prerequisites before judging the reading.",
+          "unit": "V"
+        },
+        "prerequisites": [
+          "Hold the low-side channel continuously ON; measure actual gate-to-source voltage at least 2.5 V and drain current at most 100 mA after the inductive load settles. Use local drain and source probes.",
+          "D41 uses 0.1995 ohm as the hot-resistance engineering model: 100 mA gives 19.95 mV, enclosed by this 20 mV window. Establish adequate millivolt measurement resolution and uncertainty before interpreting it.",
+          "This window excludes OFF, PWM, edges and flyback. Separately command OFF and verify current cessation and return voltage recovery; a permanent drain-source short must fail the OFF functional check."
+        ],
+        "reference_at": "switch_Q1.pin:2",
+        "supporting_evidence": [
+          {
+            "page": 2,
+            "source": "source:rohm-rq5e025tntl"
+          }
+        ]
+      }
+    ]
+  },
   "connections": [
     {
       "endpoints": [

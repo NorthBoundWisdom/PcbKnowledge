@@ -140,6 +140,7 @@ answer here.
 | D100 | RETURN_PATH measurement | On closed rectangular two-layer boards, require each straight signal segment including its full track-width corridor directly over one simple, hole-free filled polygon on the opposite copper layer and return net, with direct solid SMT return-pad contact. Offset is zero. Arcs, layer transitions, ambiguous fills, unmeasured pad-edge contact, possible intersecting drill apertures and via-only return connections remain NOT_CHECKABLE; this checks observed routes, not routing completion. |
 | D101 | GUARD_RING measurement | Measure all sensitive-net pad and track copper on every exposed F/B surface, including both faces of through-hole pads. Require one simple closed track cycle per surface, existing minimum width and exact copper clearance. Prove guard contact through solid SMT copper, explicit track endpoints and center-ended plated through-via annuli; include annular width where a drill intersects the ring. Unsupported curves, sensitive vias, filled copper, ambiguous contacts and physical drill interruptions remain NOT_CHECKABLE. |
 | D102 | TPS5430 distance datum escalation | Preserve all ten g2-buck PLACE_NEAR limits and their origin/pad-center metric. The official SLVS632L pages 3 and 23 viewed online do not define a copper-edge datum; cached-byte source verification remains blocked. Do not convert the six 1 mm input-capacitor limits or the other four rules on that evidence. Escalate the eight current courtyard conflicts for a clarified source datum or a separately authorized part/package change under D10. |
+| D103 | Remaining positive-design bring-up windows | Use independent conditional DC test windows at exact graph terminals. Match G1V1/G1V2 to D67 parts and budgets, remove the absent G1V1 shunt, and include variant loads in the existing total budget. Match G5 to D73 with both thermistor loads combined. For G2 retain D34/D45/D50 circuit limits, choose a 7.02 V bench input floor to budget two additional 10 mV distribution losses, and measure driver returns only in declared sustained-ON states. Keep BUCK_SW UNKNOWN until a supported switching-waveform acquisition and envelope contract exists. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -844,6 +845,11 @@ primitives retain their prior behavior.
   Bind windows at exact graph terminals as D67 and D73 do, from cited values or recorded
   decisions; do not copy a range from a similar design unless the part and conditions match.
   Hardware observations stay `NOT_RUN`. Add a negative test for a rail with a missing range.
+  D103 supplies complete declarations for G1V1/G1V2/G5 and eight G2 DC nodes. G2 remains
+  `UNKNOWN` solely at BUCK_SW: a switching node requires supported waveform limits,
+  acquisition bandwidth/rate, edge-duration treatment and probe uncertainty, not a DC
+  number or a change of net class. Its completion is blocked; all observations remain
+  `NOT_RUN`. Newly reused source context is not locally byte-verified in this workspace.
 - [ ] Every layout or DRC failure found in PcbAtlas or in developer KiCad or Freerouting
   tests that comes from knowledge
   (footprint, rule, constraint) is fixed in the catalog with a test, ahead of the queue.

@@ -12,12 +12,12 @@ from pcbknowledge.v2.expansion import expand
 ROOT = Path(__file__).resolve().parents[2]
 REFERENCE_HASHES = {
     'g1': '55cbaeb975b794a5e61eb5faf47c87257317855ae95b872449ba100849a12ce8',
-    'g1v1': '6dca67111fa659442a773a7bff8a29cfa63d418d21264ff724102d565e5341eb',
-    'g1v2': 'd37d979d5a5ed6e1e45848d5eefadc16ac6aa4d36871ba3c5eabac53564f0362',
-    'g2': '05cc21bb06aed443f3fe62b9c291b2a78f57bc22f3b5ba37e73eaef37bb7bc5c',
+    'g1v1': 'd2299e2463daca5ffac626a23b15b4f37359985e7cd1b83c989ccfb0f4282973',
+    'g1v2': '154a27a31d04a3ad08f3170033b46adef16022e1e8a2529e6cbb4e5c97d66ecf',
+    'g2': '5ea84314ae8bcac148326f627009a48dc6e45b31288c0006802a6b15b30706ce',
     'g3': 'e4081cac68a671af983b7d4d26a0d9f54f6b8d6606b66767bac2a0aae3671ab2',
     'g4': '54e16127e3886ac83d8aa36bfba1de8ac109f0d29defe08ef6e68d724b54f857',
-    'g5': '70733522f227058e5ed86e21df6d708e4bf84de10f31b647f7e2b185c5d67a58',
+    'g5': 'cef6251444ab2cf0e4a23fc9cf67cbb0a5bc33c511e363d5febe430671405600',
 }
 
 

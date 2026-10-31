@@ -133,6 +133,10 @@ class FuseRuleTests(unittest.TestCase):
                 graph = copy.deepcopy(original)
                 for instance in graph['instances']:
                     instance['id'] = prefix + instance['id']
+                for rail in graph.get('bringup', {}).get('rails', []):
+                    for key in ('at', 'reference_at'):
+                        if key in rail:
+                            rail[key] = prefix + rail[key]
                 for configuration in graph.get('pin_configurations', []):
                     configuration['instance'] = prefix + configuration['instance']
                 for net in graph['connections']:
