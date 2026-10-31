@@ -1,0 +1,611 @@
+{
+  "acceptance": [
+    {
+      "criterion": "All required blocks and selected parts resolve at AGENT_VERIFIED or better without refusal.",
+      "level": "A1",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "All power and return pins are connected and decoupled, required inputs have defined states, and current, logic, loss and thermal checks pass under the declared conditions.",
+      "level": "A2",
+      "owner": "PcbKnowledge",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "An actual placed and routed board satisfies every design-intent constraint.",
+      "level": "A3",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Zero DRC violations against the selected fabrication profile.",
+      "level": "A4",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "Fabrication files, BOM and pick-and-place files are generated and independently inspected.",
+      "level": "A5",
+      "owner": "PcbAtlas",
+      "status": "NOT_RUN"
+    },
+    {
+      "criterion": "At 15–35 degC, demonstrate forward and reverse motion, PWM/coast operation, disabled startup and correct host counting of both encoder channels. Verify the 0.25 A continuous and 0.60 A/100 ms fixture limits and report actual thermal observations. Interpret the 0.25 A continuous current as RMS including PWM ripple, not arithmetic mean.",
+      "level": "A6",
+      "owner": "Owner",
+      "status": "NOT_RUN"
+    }
+  ],
+  "constraints": [
+    {
+      "description": "ENGINEERING_DEFAULT: operate on an indoor open bench at 15–35 degC ambient, with natural convection and no heatsink or fan.",
+      "id": "environment"
+    },
+    {
+      "description": "ENGINEERING_DEFAULT: design for at most 100 degC estimated driver junction temperature at the stated continuous loads and 35 degC ambient. Record the selected source thermal model, copper assumptions and conduction/switching loss budget; an estimate is not a measured junction temperature.",
+      "id": "thermal"
+    },
+    {
+      "description": "ENGINEERING_DEFAULT: common-ground host outputs are LOW at 0–0.4 V and HIGH at 2.4 V to the 3.2–3.4 V logic rail, at up to 2 mA per control line. Host inputs accept LOW <=0.8 V and HIGH >=2.0 V and load each returned signal by at most 50 uA and 50 pF. Prove compatibility with selected devices; 5 V logic is not required.",
+      "id": "logic_contract"
+    },
+    {
+      "description": "ENGINEERING_DEFAULT permitted sequence: establish motor VM with passive drive disable asserted and all externally driven control pins held LOW; then establish VLOGIC while remaining disabled. Enable drive only after both rails are measured within their accepted intervals and the selected devices have completed source-qualified startup/reset/wake waits. Shutdown: assert disable while VM and VLOGIC remain present; wait until winding current has decayed to the qualified zero-current detection threshold and the motor is at rest; set all host-driven signal pins LOW, remove VLOGIC, then remove VM. Select and document waits from source limits or a qualified fixture measurement with explicit uncertainty and margin; no arbitrary fixed device timing is asserted. No control line may be HIGH while VLOGIC is absent; returned encoder/Hall signals are powered only by VLOGIC. The selected circuit must support this sequence without back-powering or energizing windings. Other sequences and hot plugging are outside scope.",
+      "id": "host_sequence"
+    },
+    {
+      "description": "ENGINEERING_DEFAULT: motor source plus an external shunt clamp maintain the declared input envelope for returned current up to 0.80 A and returned energy up to 0.10 J per event, with events at least 1 s apart. This is a finite test-fixture requirement, not an assumed sink capability of an ordinary bench supply. Supply and motor leads are each at most 0.3 m. Select local bypass/bulk storage for the driver; no motor hot plugging or external mechanical back-driving. Returned current and energy limits are distinct: neither is an unlimited-duration sink rating.",
+      "id": "bench_supply"
+    },
+    {
+      "description": "All motors, host controllers and test fixtures are external. Motor electrical bounds are acceptance conditions on the external fixture, not manufacturer facts about an unspecified motor. Preserve distinct motor outputs, logic signals and common-return connectivity.",
+      "id": "implementation"
+    },
+    {
+      "description": "ENGINEERING_DEFAULT external fixture: total rotating kinetic energy at the commanded operating speed is at most 0.020 J; stored energy in any spring or lifted load is zero. Stop by coasting before reversing; host waits for rest. The external motor is not mechanically driven by another actuator. Qualify inductive energy separately using winding current and inductance bounds.",
+      "id": "mechanical_energy"
+    }
+  ],
+  "functions": [
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "Motor supply connector and local bypass/bulk storage.",
+      "id": "motor_input",
+      "parameters": {
+        "clamp_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.8,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "A"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.8
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6,
+          "min": 5.5,
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V"
+        },
+        "return_event_interval": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 1,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "s"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Accept the complete stated motor-input voltage range and total current budget; select source-backed capacitor ratings and effective capacitance.",
+        "Use a clearly marked polarized connector. The external harness supplies correct polarity; reverse-polarity survival is not required."
+      ]
+    },
+    {
+      "category": "power.input",
+      "count": 1,
+      "description": "Host-provided logic power connector.",
+      "id": "logic_input",
+      "parameters": {
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "load_capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-11,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "F"
+        },
+        "output_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.05
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "output_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V"
+        },
+        "receiver_load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 5e-05,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "A"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "The 50 mA allocation covers all board logic, bias resistors and any powered external encoder. No onboard processor or USB interface is required."
+      ]
+    },
+    {
+      "category": "motor.h-bridge",
+      "count": 1,
+      "description": "One reversible brushed DC motor power stage.",
+      "id": "h_bridge",
+      "parameters": {
+        "clamp_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.8,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "A"
+        },
+        "differential_load_resistance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 10,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "ohm"
+        },
+        "drive_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.002,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "A"
+        },
+        "frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "Hz",
+          "value": 10000
+        },
+        "inductance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 0.01,
+          "min": 0.001,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "H"
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "input_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6,
+          "min": 5.5,
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V"
+        },
+        "junction_temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 100,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "degC"
+        },
+        "load_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.25
+        },
+        "peak_duration": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "s",
+          "value": 0.1
+        },
+        "return_event_interval": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 1,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "s"
+        },
+        "startup_interval": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 1,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "s"
+        },
+        "temperature": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 35,
+          "min": 15,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "degC"
+        },
+        "winding_peak_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.6
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Provide forward, reverse and high-impedance coast states with 0–100% PWM duty at 10 kHz. The host interface has three distinct controls: DRIVE_1, DRIVE_2 and ENABLE. ENABLE LOW must independently force both motor outputs to their disabled high-impedance state regardless of DRIVE_1/DRIVE_2; ENABLE HIGH permits the selected drive truth table. Passive defaults hold ENABLE LOW. A two-line safe command combination is not a substitute for independent ENABLE. The external host owns PWM and direction logic.",
+        "ENGINEERING_DEFAULT: support 0.25 A continuous winding current and at most 0.60 A for a 100 ms startup interval, repeated no more often than once per second. Reserve 0.20 A of the 0.80 A motor-source budget for board overhead and margin.",
+        "ENGINEERING_DEFAULT external motor fixture: winding resistance >=10 ohm over the operating temperature range, inductance 1–10 mH, and mechanical load chosen to stay within 0.25 A continuous. Host aborts a startup or stall after 100 ms and coasts to rest before reversing.",
+        "Document the recirculation path in every commanded state and source-qualified switching timing. No regenerative braking performance or indefinite short-circuit survival is required.",
+        "The 0.25 A continuous winding-current limit is an RMS cap for the continuous thermal budget, including PWM ripple; arithmetic-mean current is not a substitute for RMS. The separately allowed 0.60 A/100 ms startup pulse requires its own transient and repeated-start thermal check."
+      ]
+    },
+    {
+      "category": "interface.quadrature-encoder",
+      "count": 1,
+      "description": "Two-channel quadrature encoder input and host forwarding.",
+      "id": "encoder_input",
+      "parameters": {
+        "bus_frequency": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "Hz",
+          "value": 1000
+        },
+        "capacitance": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "F",
+          "value": 1e-10
+        },
+        "drive_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "A",
+          "value": 0.001
+        },
+        "input_current": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.02
+        },
+        "input_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V",
+          "value": 2.4
+        },
+        "input_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V",
+          "value": 0.4
+        },
+        "output_high_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 2
+        },
+        "output_low_voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "V",
+          "value": 0.8
+        },
+        "transition_interval": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "min": 0.0001,
+          "note": "Original synthetic operating requirement; parameter registration and executable binding require implementer review.",
+          "unit": "s"
+        }
+      },
+      "part_preferences": [],
+      "requirements": [
+        "Accept two external push-pull channels powered by VLOGIC: LOW <=0.4 V, HIGH >=2.4 V at 1 mA available drive per channel. Encoder supply allocation is 20 mA; remaining board logic allocation is 30 mA.",
+        "ENGINEERING_DEFAULT: at most 1000 cycles/s on each encoder channel, at least 100 us between successive quadrature transitions, cable <=0.3 m, total channel load <=100 pF. Preserve both channels independently and meet the host logic contract.",
+        "The external host counts transitions, determines direction and computes speed. An onboard quadrature decoder, speed-control loop, precision speed accuracy, differential encoder and index channel are not required."
+      ]
+    }
+  ],
+  "id": "T3",
+  "interfaces": [
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "A",
+        "value": 0.8
+      },
+      "description": "Regulated motor supply and common return.",
+      "id": "motor_power",
+      "signals": [
+        "VM",
+        "GND"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 6,
+        "min": 5.5,
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "A",
+        "value": 0.05
+      },
+      "description": "Logic supply plus common-ground host control; signal levels obey logic_contract.",
+      "id": "host",
+      "signals": [
+        "VLOGIC",
+        "GND",
+        "DRIVE_1",
+        "DRIVE_2",
+        "ENABLE",
+        "ENC_A",
+        "ENC_B"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "A",
+        "value": 0.6
+      },
+      "description": "External motor winding terminals; voltage field is the allowed differential operating magnitude, excluding source-qualified switching spikes.",
+      "id": "motor",
+      "signals": [
+        "MOTOR_A",
+        "MOTOR_B"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 6,
+        "min": -6,
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "V"
+      }
+    },
+    {
+      "current_limit": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "A",
+        "value": 0.02
+      },
+      "description": "External 3.3 V push-pull quadrature encoder; two signal inputs to this board, forwarded to the host.",
+      "id": "encoder",
+      "signals": [
+        "VLOGIC",
+        "GND",
+        "ENC_A",
+        "ENC_B"
+      ],
+      "voltage": {
+        "basis": "ENGINEERING_DEFAULT",
+        "conditions": {},
+        "max": 3.4,
+        "min": 0,
+        "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+        "unit": "V"
+      }
+    }
+  ],
+  "manufacturing": {
+    "assembly": "SINGLE_SIDE_TOP",
+    "copper": "ONE_OZ",
+    "layers": 2,
+    "note": "Larger passives are permitted for dissipation or voltage rating; through-hole connectors may be hand soldered.",
+    "preferred_passives": "0603",
+    "profile": "fab_profile:generic-two-layer-default",
+    "thickness": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+      "unit": "mm",
+      "value": 1.6
+    }
+  },
+  "mechanical": {
+    "edge_interfaces": [
+      "motor_power",
+      "host",
+      "motor",
+      "encoder"
+    ],
+    "height": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 20,
+      "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+      "unit": "mm"
+    },
+    "length": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 60,
+      "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+      "unit": "mm"
+    },
+    "mounting": [
+      {
+        "description": "Four non-plated M3 mounting holes.",
+        "drill": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "mm",
+          "value": 3.2
+        },
+        "edge_offset": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "mm",
+          "value": 3.5
+        },
+        "id": "mounting",
+        "keepout_diameter": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "mm",
+          "value": 6
+        }
+      }
+    ],
+    "width": {
+      "basis": "ENGINEERING_DEFAULT",
+      "conditions": {},
+      "max": 50,
+      "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+      "unit": "mm"
+    }
+  },
+  "origin": "SYNTHETIC",
+  "owner_decisions": [
+    "D65",
+    "D110"
+  ],
+  "power": {
+    "rails": [],
+    "sources": [
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.8
+        },
+        "description": "External regulated, current-limited bench source; its envelope includes energy returned by the motor.",
+        "function": "motor_input",
+        "id": "motor_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 6,
+          "min": 5.5,
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V"
+        }
+      },
+      {
+        "current_budget": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "A",
+          "value": 0.05
+        },
+        "description": "External host supplies regulated logic power; common ground with motor supply.",
+        "function": "logic_input",
+        "id": "logic_supply",
+        "voltage": {
+          "basis": "ENGINEERING_DEFAULT",
+          "conditions": {},
+          "max": 3.4,
+          "min": 3.2,
+          "note": "Original synthetic competition operating requirement; ENGINEERING_DEFAULT.",
+          "unit": "V"
+        }
+      }
+    ]
+  },
+  "schema": "pcbknowledge.design-brief.v2",
+  "status": "DRAFT",
+  "summary": "Build a small reversible motor module for a competition rover wheel. An external host generates PWM and reads quadrature encoder transitions; the board provides the H-bridge and electrical encoder interface.",
+  "title": "Encoder-equipped brushed DC motor module"
+}

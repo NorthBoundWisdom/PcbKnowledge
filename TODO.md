@@ -161,8 +161,9 @@ answer here.
 | D107 | Native-board arc return measurement | Prove a full-circle enclosure around each observed arc, with exact outward 1 nm radius rounding, full track width, one contacted opposite-layer return polygon and no possible physical holes. Unproved enclosures and signal layer transitions remain NOT_CHECKABLE. |
 
 | D108 | Consumer report binding | Version and validate owned reports against the selected bundle schemas; bind layout to actual board bytes and canonical intent, retain its full context in DRC, and distinguish bring-up plan coverage from observations. Digests identify inputs but are not signatures. |
-
 | D109 | Conformance evidence scope | Original fixture vectors test all registered constraint kinds with explicit expected PASS, FAIL or NOT_CHECKABLE results. An expectation match is not board acceptance; a separate real-bundle CLI replay tests the public input and report boundary. |
+| D110 | Cycle 2 motor modules | T3 uses 5.5–6 V, 0.25 A RMS continuous and 0.60 A/100 ms starts; T4 uses 8.5–12 V and nominal 0.25 A full-step regulation with 0.15–0.30 A settled and 0.35 A peak limits. Both use external 3.2–3.4 V hosts, specified passive loads, finite regeneration fixtures and 15–35 degC bench conditions; the original briefs define the complete operating inputs. |
+| D111 | Cycle 2 negative brief | N6 requires a 10.8–12 V three-phase sensored BLDC inverter with independent Hall inputs and host six-step commutation. Preserve that topology instead of substituting a brushed bridge or two-phase stepper; only actual pinned-catalog refusal evaluation can pass the negative case. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -858,6 +859,17 @@ N5 receipt: three fresh query-mediated authors on bundle `d1f1baa4fb7d319087a9e4
 New cache-only attempt descriptors and authenticated local import pass 30 affected tests; independent review fixed CRLF checkout and ancestor-alias handling. Historical replay remains intact; CI audits new metadata, while full replay requires the original local evidence.
 Cycle 1 gate `60cd99dc817d857b4d9a7c3544edf32075a31bce`: Python 3.12.14/Git 2.52.0; `for action in config build test package; do python3 configs/pcbknowledge_workflow.py "$action"; done`, `python3 configs/pcbknowledge_agent.py --repo . v2 validate` and all AGENTS section 10 guards pass. Build/Test each pass 823 tests with zero skips; 204 records validate and Package passes.
 Independent exit/park review passes 13 groups, including seven cited values and two pin maps. Reconciliation with Ethan `0b1f64a` passes 26 affected tests; T1/T2 stay below A2, while Cycle 3 is claimed for Wisdom.
+
+Cycle 2, T3/T4/N6 (Ethan):
+
+- [x] Original competition briefs and typed operating inputs, authored without catalog access.
+- [ ] T3 A2 and three fresh synthesis attempts: PARKED_SOURCE_QUALIFICATION.
+  DRV8833 and DRV8876 source resistance bounds do not cover the chosen voltage/thermal domain;
+  a steady passive-power bound does not close startup/coast energy or the actual board thermal model.
+- [ ] T4 A2 and three fresh synthesis attempts: PARKED_SOURCE_QUALIFICATION.
+  DRV8424 low-VREF accuracy and DRV8825 reference/scaling/blanking conditions do not yet prove
+  the retained hold/peak-current window. Keep the original limits; no universal infeasibility claim.
+- [ ] N6 three fresh query-mediated refusals, followed by independent review and the cycle gate.
 
 Cycle 3, T5/T6 (Wisdom):
 
