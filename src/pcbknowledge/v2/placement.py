@@ -8,7 +8,8 @@ remain the responsibility of the final layout checker and native DRC.
 import math
 
 from pcbknowledge.v2.boardview import children, field, transform
-from pcbknowledge.v2.footprints import derive_footprint
+from pcbknowledge.v2.footprints import derive_footprint, occupied_envelope
+from pcbknowledge.v2.placement_graphics import graphics, conflicts
 from pcbknowledge.v2.layout import EDGE_EQUALITY_TOLERANCE_MM, GROUP_MAX_DISTANCE_MM, quantity
 from pcbknowledge.v2.layout_board import limit
 from pcbknowledge.v2.layout_geometry import convex_hull, distance, overlap, polygon_area
@@ -55,6 +56,10 @@ def _validate_geometry(geometry):
     for ref, item in geometry.items():
         if not isinstance(ref, str) or not ref or '.pin:' in ref:
             raise PlacementError('Invalid component reference')
+        try:
+            occupied_envelope(item)
+        except ValueError as error:
+            raise PlacementError(str(error)) from error
         box = item['courtyard']
         values = [_finite(box[key], 'courtyard') for key in ('min_x', 'min_y', 'max_x', 'max_y')]
         if values[0] >= values[2] or values[1] >= values[3]:
@@ -82,8 +87,8 @@ def _points(endpoint, geometry, positions):
     return [[x + p[0], y + p[1]] for p in _local_points(endpoint, geometry, angle)]
 
 
-def _box(item, position):
-    box = item['courtyard']
+def _box(item, position, *, occupied=False):
+    box = occupied_envelope(item) if occupied else item['courtyard']
     x, y, angle = position
     points = [transform((a, b), (x, y), angle)
               for a in (box['min_x'], box['max_x']) for b in (box['min_y'], box['max_y'])]
@@ -167,7 +172,7 @@ def _axis_values(low, high, grid, exact):
 
 
 def _domain(ref, angle, geometry, rules, width, height, grid):
-    box = _box(geometry[ref], (0, 0, angle))
+    box = _box(geometry[ref], (0, 0, angle), occupied=True)
     lower, upper = [-box[0], -box[1]], [width - box[2], height - box[3]]
     exact = [[], []]
     for _, rule in rules:
@@ -230,17 +235,24 @@ def validate_positions(geometry, rules, positions, width, height):
     if set(positions) != set(geometry):
         raise PlacementError('Incomplete placement references')
     boxes = {}
+    graphic_positions = {}
     for ref, position in positions.items():
         if len(position) != 3 or position[2] not in (0, 90, 180, 270):
             raise PlacementError('Invalid top-side placement orientation')
         for value in position:
             _finite(value, 'placement coordinate')
-        box = _box(geometry[ref], position)
+        box = _box(geometry[ref], position, occupied=True)
         if box[0] < -EPSILON or box[1] < -EPSILON or box[2] > width + EPSILON or box[3] > height + EPSILON:
-            raise PlacementError('Courtyard outside board: ' + ref)
-        if any(overlap(box, previous) for previous in boxes.values()):
+            raise PlacementError('Courtyard or graphic outside board: ' + ref)
+        courtyard = _box(geometry[ref], position)
+        drawing = graphics(geometry[ref], position[2])
+        if any(overlap(courtyard, previous) for previous in boxes.values()):
             raise PlacementError('Courtyard collision: ' + ref)
-        boxes[ref] = box
+        if any(conflicts(drawing, position, other, positions[name])
+               for name, other in graphic_positions.items()):
+            raise PlacementError('Graphic collision: ' + ref)
+        boxes[ref] = courtyard
+        graphic_positions[ref] = drawing
     failed = [index for index, rule in _prepare_rules(rules, geometry)
               if not _rule_ok(rule, geometry, positions, width, height)]
     if failed:

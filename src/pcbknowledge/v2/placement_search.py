@@ -7,6 +7,7 @@ from .placement import (EPSILON, GROUP_MAX_DISTANCE_MM, PlacementError, _box, _d
                         _local_points, _prepare_rules, _priority, _ref, _refs, _rule_ok, _score,
                         _validate_geometry, validate_positions)
 from .layout_geometry import overlap
+from .placement_graphics import graphics, conflicts
 
 MAX_DOMAIN_CANDIDATES = 500000
 BEAM_WIDTH = 64
@@ -19,6 +20,8 @@ class GridSearch:
         self.geometry, self.width, self.height = geometry, width, height
         self.rules = [(index, rule, _refs(rule)) for index, rule in _prepare_rules(rules, geometry)]
         self.prepared = [(index, rule) for index, rule, _ in self.rules]
+        from .placement_feasibility import check_isolated_near_bounds
+        check_isolated_near_bounds(geometry, self.prepared)
         self.local_rules = {ref: [(index, rule, refs) for index, rule, refs in self.rules if ref in refs]
                             for ref in geometry}
         self.mechanical, self.grid, self.budget = set(mechanical), grid, budget
@@ -27,6 +30,7 @@ class GridSearch:
         self.compatibility_limit = min(MAX_COMPATIBILITY_WORK, budget * COMPATIBILITY_WORK_PER_BRANCH)
         self.failed, self.positions, self.boxes, self.best = set(), {}, {}, {}
         self.local_boxes, self.domains, self.points, self.margins = {}, {}, {}, {}
+        self.graphics = {}
         for _, rule, _ in self.rules:
             if rule['kind'] == 'KEEPOUT':
                 ref = rule['subject']
@@ -38,6 +42,7 @@ class GridSearch:
             available = 0
             for angle in (0, 90, 180, 270):
                 self.local_boxes[ref, angle] = _box(geometry[ref], (0, 0, angle))
+                self.graphics[ref, angle] = graphics(geometry[ref], angle)
                 xs, ys = _domain(ref, angle, geometry, self.prepared, width, height, grid)
                 if max(len(xs), len(ys)) > domain_budget:
                     raise PlacementError('Axis candidate domain exceeds deterministic budget')
@@ -104,6 +109,9 @@ class GridSearch:
             return _rule_ok(rule, self.geometry, {**self.positions, ref: position}, self.width, self.height)
         return True
 
+    def graphic_conflict(self, ref, position, other, point):
+        return conflicts(self.graphics[ref, position[2]], position, self.graphics[other, point[2]], point)
+
     def legal(self, ref, position):
         x, y, angle = position
         local = self.local_boxes[ref, angle]
@@ -112,6 +120,9 @@ class GridSearch:
             margin = max(self.margins.get(ref, 0), self.margins.get(other, 0))
             if overlap((box[0] - margin, box[1] - margin, box[2] + margin, box[3] + margin), previous):
                 return None
+        if any(self.graphic_conflict(ref, position, other, point)
+               for other, point in self.positions.items()):
+            return None
         for index, rule, refs in self.local_rules[ref]:
             if not self.rule_ok(ref, position, rule, refs):
                 self.failed.add(index)
@@ -223,7 +234,8 @@ class GridSearch:
             return False
         for solution in ClusterSearch(self, domains).solutions():
             self.positions.update(solution)
-            self.boxes.update({ref: _box(self.geometry[ref], position) for ref, position in solution.items()})
+            self.boxes.update({ref: _box(self.geometry[ref], position)
+                               for ref, position in solution.items()})
             valid = all(_rule_ok(rule, self.geometry, self.positions, self.width, self.height)
                         for _, rule, _ in self.rules)
             if valid and self.solve():

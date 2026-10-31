@@ -43,11 +43,17 @@ class DomainTests(unittest.TestCase):
         reordered = solve_geometry(dict(reversed(list(geometry.items()))), rules[::-1], .7, .7, grid_mm=.1)
         self.assertEqual(result, reordered)
 
-    def test_impossible_cluster_reports_search_exhaustion(self):
+    def test_impossible_isolated_pair_is_rejected_before_search(self):
         geometry = {ref: part(1) for ref in ('A', 'B', 'C')}
         rules = fixed('A', 2, 2) + [near('B', 'A', .2), near('C', 'A', .2)]
-        with self.assertRaisesRegex(PlacementError, 'Finite heuristic placement search exhausted'):
+        with self.assertRaisesRegex(PlacementError, 'Near constraint incompatible') as caught:
             solve_geometry(geometry, rules, 4, 4, grid_mm=.1)
+        self.assertEqual(caught.exception.constraints, (2,))
+
+    def test_joint_packing_exhaustion_remains_heuristic(self):
+        geometry = {ref: part(1) for ref in ('A', 'B', 'C')}
+        with self.assertRaisesRegex(PlacementError, 'Finite heuristic placement search exhausted'):
+            solve_geometry(geometry, [], 2, 1, grid_mm=.5)
 
     def test_group_bound_preserved_in_cluster(self):
         geometry = {ref: part(1) for ref in ('A', 'B', 'C')}

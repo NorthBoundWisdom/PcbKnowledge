@@ -113,6 +113,7 @@ answer here.
 | D66 | Reference layout knowledge corrections | Replace impossible center-origin proximity proxies with the electrically relevant source-mapped pins, retaining every numerical limit and loop/GROUP check. Use GCT USB4110-GF-A with a typed mating-face datum and Abracon ABMM2-8.000MHZ-18-T to make physical placement possible; cited source values and native geometry checks remain authoritative. |
 | D67 | G1 bring-up acceptance windows | Use independently measured conditional steady-state rail windows at exact graph-bound terminals, with load, thermal, resistance, distribution-drop, headroom, capacitance stability and uncertainty prerequisites. Keep all hardware observations and unmet conditions NOT_RUN. |
 | D68 | Power-only USB connector | Use GCT USB4125-GF-A-0190 for the power-only sink: the USB4110 recommended locators conflict with the unchanged 0.25 mm hole-clearance rule. The replacement has no NPTH locators and passes the same native coupon rules; retain USB4110 for the separate USB2 block and manually solder the four new shell stakes. |
+| D69 | Stage 14 physical anchors | Use source-mapped supply, driver-input and switched-return pins for six impossible center-origin proximity rules, retaining every 3 mm bound and GROUP/loop constraint. Keep the separate eight G2 buck conflicts unresolved until the existing physical-distance contract can be satisfied. |
 
 ## Stage 0 — Course correction (complete)
 
@@ -715,6 +716,12 @@ fabrication outputs generated and re-read. Record tool versions in the receipt.
   analog/digital separation for G3-G5) as constraint support, not per-design code.
 - [ ] Every layout or DRC failure that comes from knowledge (footprint, rule,
   constraint) is fixed in the catalog with a test, before tuning the placer.
+
+G2 parked: TPS5430 source page 3 requires input bypass within 1 mm of VIN/GND;
+the current strict courtyard and point-center metric cannot satisfy eight buck
+constraints even with terminal anchors (minimum 1.885/2.035 mm versus 1 mm,
+2.095 mm versus 2 mm, and 3.325 mm versus 3 mm). This is a knowledge/physical-distance
+modeling blocker; no bound or DRC rule was changed. Other designs continue.
 
 Exit: every positive golden design at A5 (reference).
 

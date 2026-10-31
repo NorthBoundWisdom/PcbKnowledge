@@ -61,7 +61,7 @@ class ClusterSearch:
         margin = max(self.owner.margins.get(ref, 0), self.owner.margins.get(other, 0))
         mask = self.domains[other].separate(box, margin)
         rules = self.pair_rules.get(frozenset((ref, other)), [])
-        if rules:
+        if rules or self.owner.geometry[ref].get('pin1_marker') or self.owner.geometry[other].get('pin1_marker'):
             for candidate in indices(mask):
                 self.owner.spend_compatibility_work()
                 point = self.domains[other].values[candidate][1]
@@ -71,7 +71,8 @@ class ClusterSearch:
                         return math.hypot(position[0] - point[0], position[1] - point[1]) <= (
                             GROUP_MAX_DISTANCE_MM + EPSILON)
                     return _rule_ok(rule, self.owner.geometry, placed, self.owner.width, self.owner.height)
-                if not all(passes(rule) for rule in rules):
+                if (self.owner.graphic_conflict(ref, position, other, point)
+                        or not all(passes(rule) for rule in rules)):
                     mask ^= 1 << candidate
         self.cache[key] = mask
         return mask

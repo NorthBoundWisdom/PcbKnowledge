@@ -354,8 +354,7 @@ def derive_footprint(package):
                 raise ValueError('Hole must fit its pad')
         elif hole_fields:
             raise ValueError('SMD pads cannot have drills')
-        if pad['rotation'] % 180:
-            width, height = height, width
+        width, height = rotated_pad_size(pad)
         rect = (pad['x'] - width / 2, pad['y'] - height / 2, pad['x'] + width / 2, pad['y'] + height / 2)
         for other in rectangles:
             if (min(rect[2], other[2]) - max(rect[0], other[0]) > 1e-8
@@ -377,7 +376,47 @@ def derive_footprint(package):
                      min_y=_round(min(cy - by, *(r[1] for r in rectangles)) - margin),
                      max_x=_round(max(cx + bx, *(r[2] for r in rectangles)) + margin),
                      max_y=_round(max(cy + by, *(r[3] for r in rectangles)) + margin))
-    return {'pads': pads, 'courtyard': courtyard, 'pin1': package['pin1']}
+    derived = {'pads': pads, 'courtyard': courtyard, 'pin1': package['pin1']}
+    derived['pin1_marker'] = pin1_marker(derived)
+    return derived
+
+
+def rotated_pad_size(pad, angle=0):
+    """Conservative axis-aligned rectangle bounds at any physical pad rotation."""
+    rotation = (pad['rotation'] + angle) % 360
+    if rotation % 90 == 0:
+        return ((pad['height'], pad['width']) if rotation % 180 else (pad['width'], pad['height']))
+    radians = math.radians(rotation)
+    cosine, sine = abs(math.cos(radians)), abs(math.sin(radians))
+    return (pad['width'] * cosine + pad['height'] * sine,
+            pad['width'] * sine + pad['height'] * cosine)
+
+
+def pin1_marker(derived):
+    """One graphic authority, retaining the original dot size and pad-corner offset."""
+    first = next(p for p in derived['pads'] if p['number'] == derived['pin1'])
+    width, height = rotated_pad_size(first)
+    return {'x': first['x'] - width / 2 - 0.25, 'y': first['y'] - height / 2 - 0.25,
+            'radius': 0.1, 'stroke': 0.1}
+
+
+def occupied_envelope(derived):
+    """Physical graphics envelope, separate from the unchanged authoritative courtyard."""
+    box = dict(derived['courtyard'])
+    marker = derived.get('pin1_marker')
+    if 'pin1_marker' in derived:
+        if not isinstance(marker, dict) or set(marker) != {'x', 'y', 'radius', 'stroke'}:
+            raise ValueError('Malformed pin1 marker')
+        if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
+               for v in marker.values()):
+            raise ValueError('Nonfinite pin1 marker')
+        if marker['radius'] <= 0 or marker['stroke'] < 0:
+            raise ValueError('Invalid pin1 marker extent')
+        extent = marker['radius'] + marker['stroke'] / 2
+        for axis in ('x', 'y'):
+            box['min_' + axis] = min(box['min_' + axis], marker[axis] - extent)
+            box['max_' + axis] = max(box['max_' + axis], marker[axis] + extent)
+    return box
 
 
 def footprint_name(package_or_id):
@@ -408,14 +447,12 @@ def export_kicad(package):
         f'(end {number(c["max_x"])} {number(c["max_y"])}) '
         '(stroke (width 0.05) (type default)) (fill none) (layer "F.CrtYd"))'
     )
-    # A marker outside pin 1's copper avoids confusing silkscreen with authority.
-    first = next(p for p in derived['pads'] if p['number'] == package['pin1'])
-    marker_x = first['x'] - first['width'] / 2 - 0.25
-    marker_y = first['y'] - first['height'] / 2 - 0.25
+    marker = derived['pin1_marker']
+    marker_x, marker_y = marker['x'], marker['y']
     lines.append(
         f'  (fp_circle (center {number(marker_x)} {number(marker_y)}) '
-        f'(end {number(marker_x + 0.1)} {number(marker_y)}) '
-        '(stroke (width 0.1) (type default)) (fill solid) (layer "F.SilkS"))'
+        f'(end {number(marker_x + marker["radius"])} {number(marker_y)}) '
+        f'(stroke (width {number(marker["stroke"])}) (type default)) (fill solid) (layer "F.SilkS"))'
     )
     for pad in derived['pads']:
         kind = {'SMD': 'smd', 'THROUGH_HOLE': 'thru_hole', 'MECHANICAL': 'np_thru_hole'}[pad['kind']]

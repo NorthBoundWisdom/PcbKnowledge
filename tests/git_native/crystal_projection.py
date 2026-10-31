@@ -91,6 +91,34 @@ def _d54_fuse(test, expected):
     expected['dependencies'].sort()
 
 
+def _d69_anchors(test, expected):
+    parts = {row['ref']: row['part'] for row in expected['components']}
+    mappings = {'part:panasonic-25svpf47m': ('1', 'part:kemet-c0603c104k5ractu'),
+                'part:rohm-rq5e025tntl': ('3', 'part:taiwansemi-ss14')}
+    changed = 0
+    for rule in expected['layout']:
+        if rule['kind'] != 'PLACE_NEAR' or rule['target'] not in parts:
+            continue
+        target, subject = rule['target'], rule['subject']
+        if parts[target] in mappings:
+            pin, subject_part = mappings[parts[target]]
+            test.assertEqual(parts[subject], subject_part)
+        elif parts[target] == 'part:ti-uln2003aipwr':
+            test.assertEqual(parts[subject], 'part:yageo-rc0603fr-0710kl')
+            nets = [net for net in expected['nets'] if any(p['ref'] == subject for p in net['pins'])]
+            pins = {p['pin'] for net in nets for p in net['pins']
+                    if p['ref'] == target and p['pin'] in ('1', '2')}
+            test.assertEqual(len(pins), 1)
+            pin = next(iter(pins))
+            test.assertIn(pin, ('1', '2'))
+        else:
+            continue
+        test.assertEqual(rule['max_distance']['value'], 3)
+        rule['target'] += '.pin:' + pin
+        changed += 1
+    test.assertEqual(changed, 4)
+
+
 def assert_reviewed_g2_projection(test, original, current, catalog):
     """Compare the complete intent after exactly the named reviewed changes; drop no fields."""
     _part_contract(test, catalog)
@@ -99,5 +127,6 @@ def assert_reviewed_g2_projection(test, original, current, catalog):
     expected = copy.deepcopy(original)
     _crystal(test, expected)
     _d54_fuse(test, expected)
+    _d69_anchors(test, expected)
     expected['bundle_commit'] = current['bundle_commit']
     test.assertEqual(expected, current)

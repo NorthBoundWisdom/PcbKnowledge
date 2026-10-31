@@ -382,3 +382,10 @@ Both paths are disabled: no narrowed trace is accepted by session preflight.
 Native footprint image aliases are accepted only for a trailing positive-integer
 variant whose complete non-outline DSN image matches the base; reference sets,
 physical placement, electrical images and final native geometry remain checked.
+
+Placement also checks the generated pin-1 ink: actual circle-to-circle and
+circle-to-pad collisions, including stroke extent and rotated pad bounds. The
+source courtyard remains unchanged; empty courtyard space is not treated as ink.
+A necessary endpoint-distance bound rejects isolated impossible proximity rules
+before search. It does not prove joint feasibility or convert search exhaustion
+into geometric impossibility.
