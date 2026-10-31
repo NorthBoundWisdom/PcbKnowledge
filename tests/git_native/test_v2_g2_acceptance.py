@@ -1,12 +1,13 @@
 """G2 reference power path, physical loads and adversarial acceptance checks."""
 import copy
 from pathlib import Path
+from types import SimpleNamespace
 import unittest
 
 from pcbknowledge.serialization import read_json
 from pcbknowledge.v2.audit import audit_catalog
 from pcbknowledge.v2.catalog import Catalog
-from pcbknowledge.v2.expansion import expand
+from pcbknowledge.v2.expansion import expand, validate_expansion
 from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -88,7 +89,11 @@ class G2AcceptanceTests(unittest.TestCase):
         self.assertNotIn('part:rohm-bd79124muf-ce2', self.catalog.records)
         altered = copy.deepcopy(result)
         altered['pin_configurations'][0]['initial_state'] = 'HIGH'
-        with self.assertRaises(ValueError):
+        bundle = SimpleNamespace(catalog=self.catalog, briefs={'G2': self.brief}, commit='a' * 40)
+        with self.assertRaisesRegex(ValueError, 'differs from deterministic'):
+            validate_expansion(bundle, altered, self.graph)
+        altered['pin_configurations'][0]['initial_state'] = 'UNDECLARED_STATE'
+        with self.assertRaisesRegex(ValueError, 'Unknown pin-states'):
             validate_intent(self.catalog, altered, bundle_commit='a' * 40)
 
     def test_unknown_operating_inputs_still_refuse(self):

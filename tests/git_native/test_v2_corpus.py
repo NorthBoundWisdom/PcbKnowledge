@@ -57,10 +57,20 @@ class CorpusTests(unittest.TestCase):
         self.assertTrue(any(item['code'] == 'UNSATISFIED_SELECTION' for item in result['refusals']))
 
     def test_unverified_selected_closure_is_ineligible(self):
-        self.catalog.get('block:mcu-core')['verification'] = 'DRAFT'
+        for block in self.catalog.search('block'):
+            if block['category'] == 'digital.mcu':
+                block['verification'] = 'DRAFT'
         refusals = assess_brief(self.catalog, self.brief)
         self.assertTrue(any(item['code'] == 'UNVERIFIED_RECORD' and item['path'] == 'functions.mcu'
                             for item in refusals))
+
+    def test_verified_alternative_preserves_feasibility_not_selected_graph_acceptance(self):
+        self.catalog.get('block:mcu-core')['verification'] = 'DRAFT'
+        self.assertEqual(self.catalog.get('block:t5-controller')['verification'], 'AGENT_VERIFIED')
+        self.assertFalse(any(item['path'] == 'functions.mcu' for item in assess_brief(self.catalog, self.brief)))
+        result = expand(self.catalog, self.graph, self.brief, bundle_commit='a' * 40)
+        self.assertEqual(result['status'], 'REFUSED')
+        self.assertTrue(any(item['code'] == 'UNVERIFIED_RECORD' for item in result['refusals']))
 
     def test_coverage_reports_graph_readiness_separately(self):
         bad = copy.deepcopy(self.graph)

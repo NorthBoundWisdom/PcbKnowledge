@@ -870,6 +870,7 @@ SPI source bindings: independently verified STM32 PA4/PA5/PA7 capabilities retai
 Physical budget checks: 74 affected tests pass for selected passive-path loss/current capacity, dual/quad effective capacitance, three pull branches plus base current, and four physical preloads/four consumer allocations. Independent review and dispatcher mutation tests pass; existing seven positive hashes remain unchanged.
 T5 reviewed reference: 216 records validate; 107 reconstructed checks pass with no refusal. Independent review verifies 12 scoped promotions, exact HIGH startup identity and the D7 mounting correction; all eight positive expansion pins pass, with seven earlier hashes unchanged.
 Application integration: 41 application/reference/GPIO/replay/evidence tests and 34 helper tests pass. The reference is conditionally eligible through A2 under D98; three fresh synthesis attempts are pending, and no A6 observation is claimed.
+T5 CI correction: fixed D98 USB voltage/current declarations preserve the 12 V negative; verified-alternative feasibility stays separate from selected-graph verification, and G2 LOW tampering is rejected by deterministic replay. Independent review and 50 affected tests pass; all eight positive hashes are unchanged.
 - [ ] T6 OLED and keypad board to A2 with three fresh synthesis attempts, then the cycle negative brief.
 
 ## Stage 17 — PcbAtlas consumer contract
