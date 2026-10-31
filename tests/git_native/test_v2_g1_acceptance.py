@@ -10,8 +10,8 @@ from pcbknowledge.v2.assembly import validate_assembly
 from pcbknowledge.v2.intent import validate_intent
 
 ROOT = Path(__file__).resolve().parents[2]
-# Stage 13 corrects physical anchors and replaces connector/crystal with reviewed manufacturer geometry.
-G1_CANONICAL_SHA256 = '848c96a98f1cd454ee9b76600c62cecdeb4484591a0bfd6392ea5544ddd83eff'
+# Stage 13 uses reviewed physical anchors, source-compatible power connector and conditional rail test windows.
+G1_CANONICAL_SHA256 = 'd85a38238a73bffd1f3bdab1e74aceea1adfe2a503d876ceed889d9e4dddb252'
 
 
 class GoldenAcceptanceTests(unittest.TestCase):

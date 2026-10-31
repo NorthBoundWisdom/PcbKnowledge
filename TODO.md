@@ -111,6 +111,8 @@ answer here.
 | D65 | Corpus themes (fixed order, chosen by the reviewing agent under delegation) | T1 adjustable DC-DC supply with digital setpoint and readback; T2 single-cell Li-ion charger with boost to 5 V; T3 brushed DC motor H-bridge with encoder input; T4 bipolar stepper driver; T5 DAC signal generator with op-amp output stage; T6 OLED and keypad user-interface board; T7 CAN bus node; T8 Wi-Fi module carrier with USB programming; T9 thermocouple measurement with cold-junction sensing; T10 class-D audio amplifier. Take themes in this order; do not reshape a theme to reuse existing blocks |
 
 | D66 | Reference layout knowledge corrections | Replace impossible center-origin proximity proxies with the electrically relevant source-mapped pins, retaining every numerical limit and loop/GROUP check. Use GCT USB4110-GF-A with a typed mating-face datum and Abracon ABMM2-8.000MHZ-18-T to make physical placement possible; cited source values and native geometry checks remain authoritative. |
+| D67 | G1 bring-up acceptance windows | Use independently measured conditional steady-state rail windows at exact graph-bound terminals, with load, thermal, resistance, distribution-drop, headroom, capacitance stability and uncertainty prerequisites. Keep all hardware observations and unmet conditions NOT_RUN. |
+| D68 | Power-only USB connector | Use GCT USB4125-GF-A-0190 for the power-only sink: the USB4110 recommended locators conflict with the unchanged 0.25 mm hole-clearance rule. The replacement has no NPTH locators and passes the same native coupon rules; retain USB4110 for the separate USB2 block and manually solder the four new shell stakes. |
 
 ## Stage 0 — Course correction (complete)
 
